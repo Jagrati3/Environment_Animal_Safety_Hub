@@ -4,154 +4,435 @@
   <meta charset="UTF-8" />
   <title>Feeding Awareness | EcoLife</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+<link rel="icon" type="image/png" href="/envirnoment-logo.png">
   <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
   <style>
     :root {
-      --green: #2e7d32;
-      --green-dark: #1b5e20;
-      --green-light: #e8f5e9;
-      --bg: #f4fbf6;
-      --card-bg: #ffffff;
-      --shadow: 0 15px 35px rgba(0,0,0,0.12);
+      --dark-green-1: #0C2415;
+      --dark-green-2: #143322;
+      --dark-green-3: #1E4530;
+      --accent-green: #2A9D8F;
+      --bright-green: #8AC926;
+      --warning-amber: #F4A261;
+      --light-text: #F8F9FA;
+      --card-bg: rgba(30, 69, 48, 0.7);
     }
 
     * {
       box-sizing: border-box;
       font-family: "Poppins", sans-serif;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
-      background: radial-gradient(circle at top, #f2fbf5, #eaf7ef);
-      color: #1a1a1a;
+      background: var(--dark-green-1);
+      color: var(--light-text);
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Subtle texture overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(42, 157, 143, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(138, 201, 38, 0.05) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ---------- NAVBAR ---------- */
+    .navbar-placeholder {
+      height: 80px;
+      background: rgba(12, 36, 21, 0.98);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--accent-green);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--bright-green), var(--accent-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links a {
+      color: var(--light-text);
+      text-decoration: none;
+      margin-left: 2rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 8px 16px;
+      border-radius: 6px;
+      background: rgba(42, 157, 143, 0.1);
+    }
+
+    .nav-links a:hover {
+      color: var(--bright-green);
+      background: rgba(138, 201, 38, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .nav-links a.active {
+      color: var(--bright-green);
+      background: rgba(138, 201, 38, 0.25);
+      border: 1px solid var(--bright-green);
     }
 
     /* ---------- HERO ---------- */
     .hero {
-      padding: 90px 20px 70px;
+      padding: 100px 20px 80px;
       text-align: center;
-      background: linear-gradient(135deg, #1b5e20, #2e7d32, #388e3c);
-      color: white;
-      border-bottom-left-radius: 40px;
-      border-bottom-right-radius: 40px;
+      background: linear-gradient(135deg, 
+        rgba(12, 36, 21, 0.9) 0%, 
+        rgba(20, 51, 34, 0.9) 100%);
+      position: relative;
+      z-index: 1;
+      border-bottom: 2px solid var(--accent-green);
     }
 
     .hero h1 {
-      font-size: 3rem;
-      margin-bottom: 10px;
+      font-size: 3.2rem;
+      margin-bottom: 20px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--bright-green), var(--accent-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
     .hero p {
-      opacity: 0.95;
       max-width: 700px;
-      margin: auto;
+      margin: 0 auto;
+      font-size: 1.2rem;
+      line-height: 1.8;
+      color: rgba(248, 249, 250, 0.9);
+      font-weight: 300;
+      padding: 1.5rem;
+      background: rgba(30, 69, 48, 0.4);
+      border-radius: 12px;
+      border-left: 4px solid var(--accent-green);
     }
 
     /* ---------- CONTAINER ---------- */
     .container {
-      max-width: 1100px;
-      margin: 50px auto 80px;
-      padding: 20px;
+      max-width: 1200px;
+      margin: 60px auto 80px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ---------- MAIN GRID ---------- */
+    .main-grid {
       display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 900px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     /* ---------- CARDS ---------- */
     .card {
       background: var(--card-bg);
       padding: 35px;
-      border-radius: 22px;
-      box-shadow: var(--shadow);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 20px;
+      border: 2px solid var(--accent-green);
+      backdrop-filter: blur(10px);
+      transition: all 0.4s ease;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
     }
 
     .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      transform: translateY(-8px);
+      border-color: var(--bright-green);
+      box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.5),
+        0 0 0 2px rgba(138, 201, 38, 0.2);
     }
 
     .card h2 {
-      color: var(--green);
+      color: var(--bright-green);
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 15px;
+      gap: 15px;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      font-weight: 600;
     }
 
     .card i {
-      font-size: 1.5rem;
-      color: var(--green);
+      font-size: 1.8rem;
+      color: var(--bright-green);
+      background: rgba(138, 201, 38, 0.15);
+      padding: 12px;
+      border-radius: 12px;
     }
 
     .card ul {
-      padding-left: 18px;
+      padding-left: 20px;
       margin: 0;
     }
 
     .card li {
-      margin-bottom: 10px;
-      line-height: 1.6;
+      margin-bottom: 15px;
+      line-height: 1.7;
+      color: rgba(248, 249, 250, 0.95);
+      font-size: 1.05rem;
+      position: relative;
+      padding-left: 10px;
     }
 
-    /* ---------- GRID ---------- */
-    .grid {
+    .card li::before {
+      content: '✓';
+      color: var(--bright-green);
+      font-weight: bold;
+      position: absolute;
+      left: -20px;
+    }
+
+    /* ---------- DOs & DON'Ts GRID ---------- */
+    .dos-donts-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin: 40px 0;
+    }
+
+    @media (max-width: 768px) {
+      .dos-donts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .dos-card {
+      border: 2px solid var(--bright-green);
+    }
+
+    .dos-card h2 {
+      color: var(--bright-green);
+    }
+
+    .donts-card {
+      border: 2px solid var(--warning-amber);
+    }
+
+    .donts-card h2 {
+      color: var(--warning-amber);
+    }
+
+    .donts-card i {
+      color: var(--warning-amber);
+      background: rgba(244, 162, 97, 0.15);
+    }
+
+    /* ---------- IMPORTANT NOTES ---------- */
+    .important-notes {
+      background: linear-gradient(145deg, 
+        rgba(30, 69, 48, 0.9) 0%, 
+        rgba(20, 51, 34, 0.95) 100%);
+      border-radius: 20px;
+      padding: 40px;
+      margin: 50px 0;
+      border: 2px solid var(--warning-amber);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .important-notes h2 {
+      color: var(--warning-amber);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      font-size: 2rem;
+    }
+
+    .important-notes .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 25px;
+    }
+
+    .note-item {
+      background: rgba(12, 36, 21, 0.6);
+      padding: 20px;
+      border-radius: 12px;
+      border-left: 4px solid var(--accent-green);
+    }
+
+    .note-item h3 {
+      color: var(--bright-green);
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    .note-item p {
+      color: rgba(248, 249, 250, 0.9);
+      line-height: 1.6;
+      font-size: 1rem;
     }
 
     /* ---------- BACK HOME ---------- */
     .back-home-wrapper {
       display: flex;
       justify-content: center;
-      margin-top: 30px;
+      margin-top: 60px;
     }
 
     .back-home-btn {
-      padding: 14px 32px;
-      background: var(--green);
-      color: #fff;
+      padding: 16px 40px;
+      background: linear-gradient(135deg, var(--accent-green), var(--bright-green));
+      color: var(--dark-green-1);
       border: none;
       border-radius: 30px;
-      font-size: 1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 25px rgba(42, 157, 143, 0.3);
     }
 
     .back-home-btn:hover {
-      background: var(--green-dark);
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(46,125,50,0.35);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(42, 157, 143, 0.5);
+      color: var(--light-text);
     }
 
     /* ---------- FOOTER ---------- */
     footer {
       text-align: center;
-      padding: 25px;
+      padding: 30px;
       font-size: 0.9rem;
-      color: #666;
+      color: rgba(248, 249, 250, 0.7);
+      background: var(--dark-green-1);
+      border-top: 2px solid var(--accent-green);
+      margin-top: 80px;
+      position: relative;
+      z-index: 1;
     }
 
     /* ---------- RESPONSIVE ---------- */
     @media (max-width: 768px) {
+      .navbar-placeholder {
+        padding: 0 1rem;
+        height: 70px;
+      }
+
+      .nav-links a {
+        margin-left: 1rem;
+        padding: 6px 12px;
+        font-size: 0.9rem;
+      }
+
+      .hero {
+        padding: 80px 20px 60px;
+      }
+
       .hero h1 {
         font-size: 2.2rem;
       }
 
       .hero p {
-        font-size: 0.95rem;
+        font-size: 1rem;
+        padding: 1rem;
+      }
+
+      .container {
+        margin: 40px auto 60px;
+        padding: 0 15px;
+      }
+
+      .card {
+        padding: 25px;
+      }
+
+      .card h2 {
+        font-size: 1.5rem;
+      }
+
+      .important-notes {
+        padding: 25px;
+      }
+
+      .important-notes h2 {
+        font-size: 1.7rem;
+      }
+
+      .back-home-btn {
+        padding: 14px 30px;
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .nav-links a {
+        margin-left: 0;
+        padding: 4px 8px;
+        font-size: 0.85rem;
+      }
+
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+
+      .main-grid,
+      .dos-donts-grid {
+        gap: 20px;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .card li {
+        font-size: 1rem;
       }
     }
   </style>
 </head>
 
 <body>
+
+  <!-- Navbar -->
+  <nav class="navbar-placeholder">
+    <div class="logo">🌿 EcoLife</div>
+    <div class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="extinct-animals.html">Extinct Animals</a>
+      <a href="feeding-awareness.html" class="active">Feeding Awareness</a>
+    </div>
+  </nav>
 
   <!-- HERO -->
   <section class="hero">
@@ -162,53 +443,87 @@
   <!-- CONTENT -->
   <section class="container">
 
-    <!-- SAFE FOOD -->
-    <div class="card">
-      <h2><i class="fa-solid fa-bowl-food"></i> Safe Food Guidelines</h2>
-      <ul>
-        <li>Provide clean water at all times</li>
-        <li>Feed animals fresh and cooked food</li>
-        <li>Use separate bowls for food and water</li>
-        <li>Feed at consistent and safe locations</li>
-      </ul>
+    <!-- SAFE FOOD GUIDELINES -->
+    <div class="main-grid">
+      <div class="card">
+        <h2><i class="fa-solid fa-bowl-food"></i> Safe Food Guidelines</h2>
+        <ul>
+          <li>Provide clean, fresh water at all times - change daily</li>
+          <li>Feed fresh, unseasoned, cooked food only</li>
+          <li>Use separate clean bowls for food and water</li>
+          <li>Feed at consistent times and safe locations</li>
+          <li>Store animal food properly to prevent contamination</li>
+          <li>Wash feeding bowls regularly with safe disinfectants</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2><i class="fa-solid fa-hand-holding-heart"></i> Animal Health Tips</h2>
+        <ul>
+          <li>Observe animals for signs of illness or injury</li>
+          <li>Keep feeding areas clean to prevent disease spread</li>
+          <li>Provide shelter along with food in extreme weather</li>
+          <li>Learn about local wildlife feeding requirements</li>
+          <li>Consult veterinarians for dietary recommendations</li>
+          <li>Monitor animal behavior for any unusual changes</li>
+        </ul>
+      </div>
     </div>
 
     <!-- DOs & DON'Ts -->
-    <div class="grid">
-      <div class="card">
-        <h2><i class="fa-solid fa-circle-check"></i> Do’s</h2>
+    <div class="dos-donts-grid">
+      <div class="card dos-card">
+        <h2><i class="fa-solid fa-circle-check"></i> Do's</h2>
         <ul>
           <li>Feed dogs plain rice, roti, or boiled vegetables</li>
-          <li>Offer fruits safe for animals (like apples, bananas)</li>
-          <li>Be calm and gentle while feeding</li>
+          <li>Offer safe fruits like apples, bananas, watermelon</li>
+          <li>Be calm and gentle while approaching animals</li>
+          <li>Feed in quiet areas away from traffic</li>
+          <li>Wash hands before and after handling animal food</li>
+          <li>Respect animal's space and feeding boundaries</li>
         </ul>
       </div>
 
-      <div class="card">
-        <h2><i class="fa-solid fa-circle-xmark"></i> Don’ts</h2>
+      <div class="card donts-card">
+        <h2><i class="fa-solid fa-circle-xmark"></i> Don'ts</h2>
         <ul>
-          <li>Do not give spicy or oily food</li>
-          <li>Avoid chocolate, onions, and junk food</li>
-          <li>Never tease or scare animals while feeding</li>
+          <li>Never give spicy, salty, or oily human food</li>
+          <li>Avoid chocolate, onions, grapes, and junk food</li>
+          <li>Don't tease or scare animals while feeding</li>
+          <li>Avoid feeding near busy roads or crowded areas</li>
+          <li>Don't force animals to eat if they're not hungry</li>
+          <li>Never leave plastic or harmful materials behind</li>
         </ul>
       </div>
     </div>
 
-    <!-- AWARENESS -->
-    <div class="card">
-      <h2><i class="fa-solid fa-lightbulb"></i> Responsible Feeding Tips</h2>
-      <ul>
-        <li>Feed animals away from busy roads</li>
-        <li>Respect local community and cleanliness</li>
-        <li>Encourage others to feed responsibly</li>
-        <li>Contact NGOs if an animal is injured or sick</li>
-      </ul>
+    <!-- IMPORTANT NOTES -->
+    <div class="important-notes">
+      <h2><i class="fa-solid fa-lightbulb"></i> Responsible Feeding Essentials</h2>
+      <div class="notes-grid">
+        <div class="note-item">
+          <h3>🛡️ Safety First</h3>
+          <p>Always prioritize your safety and the animal's comfort. Approach slowly, speak softly, and avoid sudden movements.</p>
+        </div>
+        <div class="note-item">
+          <h3>🌍 Environmental Care</h3>
+          <p>Clean up after feeding. Dispose of waste properly to keep the environment clean and prevent attracting pests.</p>
+        </div>
+        <div class="note-item">
+          <h3>🏘️ Community Respect</h3>
+          <p>Respect local residents and property owners. Feed in designated areas if available and follow community guidelines.</p>
+        </div>
+        <div class="note-item">
+          <h3>📞 Emergency Contacts</h3>
+          <p>Keep local animal rescue numbers handy. Contact NGOs or veterinarians if you notice sick, injured, or distressed animals.</p>
+        </div>
+      </div>
     </div>
 
     <!-- BACK HOME -->
     <div class="back-home-wrapper">
       <button class="back-home-btn" onclick="window.location.href='../index.html'">
-        ⬅ Back to Home
+        <i class="fa-solid fa-house"></i> Back to Home
       </button>
     </div>
 
@@ -217,6 +532,7 @@
   <footer>
     © 2026 EcoLife • Care with Kindness 💚
   </footer>
+
 <script>
 (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="ws110ZzXAkEnbVsIy9g8d";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
 </script>

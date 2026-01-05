@@ -656,17 +656,21 @@ const modalContent = {
         body: `
             <p>Give a loving home to a rescued animal. We have dogs, cats, and rabbits waiting for a family.</p>
             <p>Process involves: Application > House Visit > Adoption. All pets are vaccinated and sterilized.</p>
-            <a href="pet-adoption.html" class="btn btn-primary" style="margin-top:10px;">View Available Pets</a>
+            <a href="./pages/pet-adoption.html" class="btn btn-primary" style="margin-top:10px;">View Available Pets</a>
         `
     },
     'wildlife': {
-        icon: 'fa-shield-cat',
-        title: 'Wildlife Protection',
-        body: `
-            <p>We work to protect urban wildlife including birds, squirrels, and reptiles from urban hazards.</p>
-            <p>Learn how to coexist with nature and what to do if you spot wild animals in distress.</p>
-        `
-    },
+  icon: 'fa-shield-cat',
+  title: 'Wildlife Protection',
+  body: `
+    <p>We work to protect urban wildlife including birds, squirrels, and reptiles from urban hazards.</p>
+    <p>Learn how to coexist with nature and what to do if you spot wild animals in distress.</p>
+    <a href="./pages/wildlife.html" class="btn btn-primary" style="margin-top:10px;">
+      Learn More
+    </a>
+  `
+}
+,
     'feeding': {
         icon: 'fa-bowl-food',
         title: 'Stray Feeding Program',
@@ -678,6 +682,9 @@ const modalContent = {
                 <li>Use eco-friendly bowls or clean up afterwards.</li>
                 <li>Provide fresh water along with food.</li>
             </ul>
+            <a href="./pages/feeding.html" class="btn btn-primary" style="margin-top:10px;">
+      Join Us!
+    </a>
         `
     },
     'plastic': {

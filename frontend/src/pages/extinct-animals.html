@@ -4,45 +4,684 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Extinct Animals | EcoLife</title>
+<link rel="icon" type="image/png" href="/envirnoment-logo.png">
+  <!-- Page Specific CSS -->
+  <style>
+    /* ===========================
+       EXTINCT ANIMALS – DARK GREEN THEME
+       =========================== */
 
-  <!-- Global CSS -->
-  <link rel="stylesheet" href="../css/global/variables.css" />
-  <link rel="stylesheet" href="../css/style.css" />
-  <link rel="stylesheet" href="../css/components/navbar.css" />
-  <link rel="stylesheet" href="../css/components/footer.css" />
-  <link rel="stylesheet" href="../css/pages/extinct-animals.css" />
+    :root {
+      --dark-green-1: #0C2415;
+      --dark-green-2: #143322;
+      --dark-green-3: #1E4530;
+      --accent-green: #2A9D8F;
+      --bright-green: #8AC926;
+      --warning-amber: #F4A261;
+      --light-text: #F8F9FA;
+      --medium-gray: #6C757D;
+      --dark-shadow: rgba(12, 36, 21, 0.9);
+    }
+
+    /* ---------- BODY ---------- */
+    body {
+      background: var(--dark-green-1);
+      color: var(--light-text);
+      font-family: "Poppins", sans-serif;
+      overflow-x: hidden;
+      position: relative;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    /* Subtle texture overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(42, 157, 143, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(138, 201, 38, 0.05) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ---------- NAVBAR ---------- */
+    .navbar-placeholder {
+      height: 80px;
+      background: rgba(12, 36, 21, 0.98);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--accent-green);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--bright-green), var(--accent-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links a {
+      color: var(--light-text);
+      text-decoration: none;
+      margin-left: 2rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 8px 16px;
+      border-radius: 6px;
+      background: rgba(42, 157, 143, 0.1);
+    }
+
+    .nav-links a:hover {
+      color: var(--bright-green);
+      background: rgba(138, 201, 38, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .nav-links a.active {
+      color: var(--bright-green);
+      background: rgba(138, 201, 38, 0.25);
+      border: 1px solid var(--bright-green);
+    }
+
+    /* ---------- HERO ---------- */
+    .extinct-hero {
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      z-index: 1;
+      background: linear-gradient(135deg, 
+        rgba(12, 36, 21, 0.9) 0%, 
+        rgba(20, 51, 34, 0.9) 100%);
+    }
+
+    .hero-content {
+      max-width: 900px;
+      z-index: 2;
+    }
+
+    .extinct-title {
+      font-size: clamp(3rem, 6vw, 4rem);
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--bright-green), var(--accent-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .extinct-subtitle {
+      max-width: 700px;
+      margin: 0 auto;
+      font-size: 1.2rem;
+      line-height: 1.8;
+      color: rgba(248, 249, 250, 0.9);
+      font-weight: 300;
+      padding: 1.5rem;
+      background: rgba(30, 69, 48, 0.4);
+      border-radius: 12px;
+      border-left: 4px solid var(--accent-green);
+    }
+
+    /* ---------- TIMELINE SECTION ---------- */
+    .timeline-section {
+      padding: 5rem 2rem;
+      position: relative;
+      z-index: 1;
+      background: var(--dark-green-2);
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      color: var(--bright-green);
+      margin-bottom: 3rem;
+      font-weight: 700;
+      position: relative;
+      padding-bottom: 1rem;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(90deg, 
+        var(--dark-green-2), 
+        var(--accent-green), 
+        var(--dark-green-2));
+      border-radius: 2px;
+    }
+
+    .timeline {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      position: relative;
+    }
+
+    /* Vertical Timeline Line */
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 3px;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        var(--accent-green),
+        var(--bright-green),
+        transparent
+      );
+      opacity: 0.7;
+    }
+
+    .timeline-items {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      position: relative;
+    }
+
+    .timeline-item {
+      display: flex;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+    }
+
+    .timeline-item:nth-child(odd) {
+      justify-content: flex-start;
+      text-align: right;
+    }
+
+    .timeline-item:nth-child(even) {
+      justify-content: flex-end;
+      text-align: left;
+    }
+
+    .timeline-item.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .timeline-content {
+      background: var(--dark-green-3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      width: 45%;
+      border: 2px solid var(--accent-green);
+      transition: all 0.3s ease;
+      position: relative;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .timeline-item:nth-child(odd) .timeline-content {
+      margin-right: auto;
+      border-right: 4px solid var(--bright-green);
+    }
+
+    .timeline-item:nth-child(even) .timeline-content {
+      margin-left: auto;
+      border-left: 4px solid var(--bright-green);
+    }
+
+    .timeline-content:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+      border-color: var(--bright-green);
+    }
+
+    .timeline-year {
+      font-size: 1.3rem;
+      color: var(--bright-green);
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .timeline-year::before {
+      content: '⏳';
+      font-size: 1.2rem;
+    }
+
+    .timeline-text {
+      color: rgba(248, 249, 250, 0.95);
+      line-height: 1.7;
+      font-size: 1rem;
+      font-weight: 300;
+    }
+
+    /* Timeline marker */
+    .timeline-content::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 16px;
+      height: 16px;
+      background: var(--bright-green);
+      border-radius: 50%;
+      transform: translateY(-50%);
+      border: 3px solid var(--dark-green-2);
+      box-shadow: 0 0 10px rgba(138, 201, 38, 0.5);
+    }
+
+    .timeline-item:nth-child(odd) .timeline-content::after {
+      right: -38px;
+    }
+
+    .timeline-item:nth-child(even) .timeline-content::after {
+      left: -38px;
+    }
+
+    /* ---------- GRID SECTION ---------- */
+    .extinct-grid-section {
+      padding: 5rem 2rem;
+      position: relative;
+      z-index: 1;
+      background: var(--dark-green-3);
+    }
+
+    .extinct-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* ---------- CARD ---------- */
+    .extinct-card {
+      background: linear-gradient(145deg, 
+        rgba(30, 69, 48, 0.9) 0%, 
+        rgba(20, 51, 34, 0.95) 100%);
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      border: 2px solid var(--accent-green);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+      transition: all 0.4s ease;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .extinct-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--bright-green);
+      box-shadow: 
+        0 25px 60px rgba(0, 0, 0, 0.6),
+        0 0 0 2px rgba(138, 201, 38, 0.2);
+    }
+
+    /* ---------- IMAGE ---------- */
+    .card-image {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      filter: brightness(0.9) contrast(1.1);
+      transition: filter 0.4s ease, transform 0.6s ease;
+    }
+
+    .extinct-card:hover .card-image {
+      filter: brightness(1.1) contrast(1.2);
+      transform: scale(1.05);
+    }
+
+    /* ---------- CONTENT ---------- */
+    .extinct-content {
+      padding: 1.5rem;
+    }
+
+    .extinct-era {
+      display: inline-block;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: rgba(138, 201, 38, 0.15);
+      color: var(--bright-green);
+      margin-bottom: 1rem;
+      font-weight: 600;
+      border: 1px solid rgba(138, 201, 38, 0.3);
+    }
+
+    .extinct-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+      color: var(--light-text);
+    }
+
+    .extinct-desc {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: rgba(248, 249, 250, 0.9);
+      font-weight: 300;
+    }
+
+    /* ---------- MESSAGE SECTION ---------- */
+    .extinct-message {
+      text-align: center;
+      padding: 5rem 2rem;
+      position: relative;
+      z-index: 1;
+      background: var(--dark-green-2);
+      border-top: 2px solid var(--accent-green);
+      border-bottom: 2px solid var(--accent-green);
+    }
+
+    .extinct-message h2 {
+      font-size: 2.5rem;
+      color: var(--warning-amber);
+      margin-bottom: 2rem;
+      font-weight: 700;
+      position: relative;
+      padding-bottom: 1rem;
+    }
+
+    .extinct-message h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(90deg, 
+        var(--dark-green-2), 
+        var(--warning-amber), 
+        var(--dark-green-2));
+      border-radius: 2px;
+    }
+
+    .extinct-message p {
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.8;
+      color: rgba(248, 249, 250, 0.95);
+      font-size: 1.2rem;
+      font-weight: 300;
+      padding: 2rem;
+      background: rgba(30, 69, 48, 0.4);
+      border-radius: 12px;
+      border: 1px solid rgba(244, 162, 97, 0.3);
+    }
+
+    /* ---------- FOOTER ---------- */
+    .footer-placeholder {
+      background: var(--dark-green-1);
+      padding: 3rem 2rem;
+      border-top: 2px solid var(--accent-green);
+      text-align: center;
+      position: relative;
+      z-index: 100;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: rgba(248, 249, 250, 0.9);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 500;
+      background: rgba(42, 157, 143, 0.1);
+      border: 1px solid rgba(42, 157, 143, 0.2);
+    }
+
+    .footer-links a:hover {
+      color: var(--bright-green);
+      background: rgba(138, 201, 38, 0.15);
+      border-color: var(--bright-green);
+      transform: translateY(-2px);
+    }
+
+    .copyright {
+      color: rgba(248, 249, 250, 0.7);
+      font-size: 0.9rem;
+      font-weight: 300;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(42, 157, 143, 0.2);
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 1100px) {
+      .timeline::before {
+        left: 40px;
+      }
+      
+      .timeline-item {
+        justify-content: flex-start !important;
+        text-align: left !important;
+      }
+      
+      .timeline-content {
+        width: calc(100% - 80px);
+        margin-left: 80px !important;
+        border-left: 4px solid var(--bright-green) !important;
+        border-right: none !important;
+      }
+      
+      .timeline-item:nth-child(odd) .timeline-content::after,
+      .timeline-item:nth-child(even) .timeline-content::after {
+        left: -50px;
+        right: auto;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar-placeholder {
+        padding: 0 1rem;
+        height: 70px;
+      }
+
+      .nav-links a {
+        margin-left: 1rem;
+        padding: 6px 12px;
+        font-size: 0.9rem;
+      }
+
+      .extinct-hero {
+        min-height: 60vh;
+        padding: 3rem 1rem;
+      }
+
+      .hero-content {
+        padding: 2rem 0;
+      }
+
+      .extinct-title {
+        font-size: 2.2rem;
+      }
+
+      .extinct-subtitle {
+        font-size: 1.1rem;
+        padding: 1rem;
+      }
+
+      .timeline-section,
+      .extinct-grid-section,
+      .extinct-message {
+        padding: 3rem 1rem;
+      }
+
+      .section-title,
+      .extinct-message h2 {
+        font-size: 2rem;
+      }
+
+      .timeline {
+        padding: 1rem;
+      }
+
+      .timeline-content {
+        padding: 1.25rem;
+        width: calc(100% - 60px);
+        margin-left: 60px !important;
+      }
+
+      .timeline::before {
+        left: 30px;
+      }
+
+      .timeline-item:nth-child(odd) .timeline-content::after,
+      .timeline-item:nth-child(even) .timeline-content::after {
+        left: -45px;
+        width: 14px;
+        height: 14px;
+      }
+
+      .extinct-grid {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+        gap: 2rem;
+      }
+
+      .extinct-card {
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .card-image {
+        height: 220px;
+      }
+
+      .footer-placeholder {
+        padding: 2rem 1rem;
+      }
+
+      .footer-links {
+        gap: 1rem;
+      }
+
+      .footer-links a {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .extinct-title {
+        font-size: 1.8rem;
+      }
+      
+      .extinct-grid {
+        gap: 1.5rem;
+      }
+      
+      .timeline-content {
+        padding: 1rem;
+        width: calc(100% - 50px);
+        margin-left: 50px !important;
+      }
+
+      .timeline::before {
+        left: 25px;
+      }
+
+      .timeline-item:nth-child(odd) .timeline-content::after,
+      .timeline-item:nth-child(even) .timeline-content::after {
+        left: -40px;
+        width: 12px;
+        height: 12px;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .nav-links a {
+        margin-left: 0;
+        padding: 4px 8px;
+        font-size: 0.85rem;
+      }
+
+      .extinct-message p {
+        padding: 1.5rem;
+        font-size: 1rem;
+      }
+    }
+  </style>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
   <!-- Navbar -->
-  <nav class="navbar">
-    <!-- reuse your navbar -->
+  <nav class="navbar-placeholder">
+    <div class="logo">🌿 EcoLife</div>
+    <div class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="extinct-animals.html" class="active">Extinct Animals</a>
+      <a href="../pages/endangered-animals.html">Endangered</a>
+    </div>
   </nav>
 
   <!-- HERO -->
   <section class="extinct-hero">
-    <div class="overlay"></div>
     <div class="hero-content">
-      <h1>🦖 Extinct Animals</h1>
-      <p>They vanished forever — remember them, protect the living.</p>
+      <h1 class="extinct-title">🦖 Extinct Animals</h1>
+      <p class="extinct-subtitle">They vanished forever — remember them, protect the living. Explore the stories of creatures lost to time and learn how we can prevent further extinctions.</p>
     </div>
   </section>
 
   <!-- TIMELINE -->
   <section class="timeline-section">
-    <h2>📜 Timeline of Extinction</h2>
-    <div class="timeline" id="timeline"></div>
+    <h2 class="section-title">📜 Timeline of Extinction</h2>
+    <div class="timeline">
+      <div class="timeline-items" id="timeline">
+        <!-- Timeline items will be inserted here by JavaScript -->
+      </div>
+    </div>
   </section>
 
   <!-- GRID -->
   <section class="extinct-grid-section">
-    <h2>🦣 Lost Species</h2>
-    <div class="extinct-grid" id="extinctGrid"></div>
+    <h2 class="section-title">🦣 Lost Species</h2>
+    <div class="extinct-grid" id="extinctGrid">
+      <!-- Cards will be inserted here by JavaScript -->
+    </div>
   </section>
 
   <!-- MESSAGE -->
@@ -50,18 +689,158 @@
     <h2>⚠️ A Warning From History</h2>
     <p>
       These species were lost due to habitat destruction, hunting,
-      climate change, and human greed.  
-      Let their stories save others.
+      climate change, and human greed. Each extinction represents a broken link in our planet's ecosystem. 
+      Let their stories serve as a reminder of our responsibility to protect and preserve the remaining biodiversity.
     </p>
   </section>
 
   <!-- Footer -->
-  <footer class="eco-footer">
-    <!-- reuse footer -->
+  <footer class="footer-placeholder">
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="../index.html">Home</a>
+        <a href="extinct-animals.html">Extinct Animals</a>
+        <a href="../pages/endangered-animals.html">Endangered Species</a>
+      </div>
+      <p class="copyright">© 2026 EcoLife. All rights reserved. Dedicated to wildlife conservation and education.</p>
+    </div>
   </footer>
-<script>
+
+  <!-- JavaScript -->
+  <script>
+    // Sample data for extinct animals
+    const extinctAnimals = [
+      {
+        name: "Dodo",
+        era: "1662",
+        description: "Flightless bird native to Mauritius. Hunted to extinction by sailors and invasive species.",
+        image: "https://images.unsplash.com/photo-1551085254-e96b210db58a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        name: "Tasmanian Tiger",
+        era: "1936",
+        description: "Marsupial carnivore from Australia. Wiped out due to hunting and habitat loss.",
+        image: "https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        name: "Woolly Mammoth",
+        era: "2000 BC",
+        description: "Giant relative of elephants that lived during the Ice Age. Climate change and human hunting led to extinction.",
+        image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        name: "Passenger Pigeon",
+        era: "1914",
+        description: "Once the most abundant bird in North America. Hunted commercially to extinction.",
+        image: "https://images.unsplash.com/photo-1552728089-57bdde30beb3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        name: "Saber-toothed Cat",
+        era: "10,000 BC",
+        description: "Prehistoric predator with long canine teeth. Disappeared during the Quaternary extinction event.",
+        image: "https://images.unsplash.com/photo-1546182990-dffeafbe841d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        name: "Great Auk",
+        era: "1844",
+        description: "Flightless seabird hunted for its feathers, meat, and oil. Last pair killed in Iceland.",
+        image: "https://images.unsplash.com/photo-1555169062-013468b47731?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+      }
+    ];
+
+    // Sample timeline data
+    const timelineData = [
+      { year: "10,000 BC", text: "End of Ice Age - Mass extinction of megafauna including Woolly Mammoths and Saber-toothed Cats" },
+      { year: "1662", text: "Dodo becomes extinct on Mauritius island due to hunting and invasive species" },
+      { year: "1768", text: "Steller's Sea Cow hunted to extinction within 27 years of discovery" },
+      { year: "1914", text: "Last Passenger Pigeon 'Martha' dies in Cincinnati Zoo" },
+      { year: "1936", text: "Tasmanian Tiger declared extinct after last captive animal dies" },
+      { year: "2020", text: "Chinese Paddlefish officially declared extinct after not being seen since 2003" }
+    ];
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load timeline
+      const timelineContainer = document.getElementById('timeline');
+      
+      timelineData.forEach((item, index) => {
+        const timelineItem = document.createElement('div');
+        timelineItem.className = 'timeline-item';
+        timelineItem.innerHTML = `
+          <div class="timeline-content">
+            <div class="timeline-year">${item.year}</div>
+            <div class="timeline-text">${item.text}</div>
+          </div>
+        `;
+        timelineContainer.appendChild(timelineItem);
+        
+        // Immediately make timeline items visible
+        setTimeout(() => {
+          timelineItem.classList.add('active');
+        }, index * 200);
+      });
+
+      // Load extinct animals grid
+      const grid = document.getElementById('extinctGrid');
+      extinctAnimals.forEach((animal, index) => {
+        const card = document.createElement('div');
+        card.className = 'extinct-card';
+        card.innerHTML = `
+          <img src="${animal.image}" alt="${animal.name}" class="card-image">
+          <div class="extinct-content">
+            <span class="extinct-era">${animal.era}</span>
+            <h3 class="extinct-name">${animal.name}</h3>
+            <p class="extinct-desc">${animal.description}</p>
+          </div>
+        `;
+        grid.appendChild(card);
+        
+        // Immediately make cards visible
+        setTimeout(() => {
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, index * 100);
+      });
+
+      // Scroll reveal for timeline items
+      const timelineObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+          }
+        });
+      }, {
+        threshold: 0.1
+      });
+
+      // Observe all timeline items
+      document.querySelectorAll('.timeline-item').forEach((item) => {
+        timelineObserver.observe(item);
+      });
+
+      // Add scroll reveal for sections
+      const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, {
+        threshold: 0.1
+      });
+
+      // Observe sections
+      document.querySelectorAll('.timeline-section, .extinct-grid-section, .extinct-message').forEach(section => {
+        section.style.opacity = '1';
+        section.style.transform = 'translateY(0)';
+        sectionObserver.observe(section);
+      });
+    });
+  </script>
+
+      <script>
 (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="ws110ZzXAkEnbVsIy9g8d";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
 </script>
-  <script src="../js/pages/extinct-animals.js"></script>
 </body>
 </html>

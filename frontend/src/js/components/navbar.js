@@ -45,5 +45,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.body.classList.remove('menu-open');
             }
         });
+        // Dropdown toggle for mobile
+        const dropdowns = document.querySelectorAll('.nav-item-dropdown');
+        dropdowns.forEach(dropdown => {
+            const trigger = dropdown.querySelector('.dropdown-trigger');
+            if (trigger) {
+                trigger.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    dropdown.classList.toggle('active');
+                });
+            }
+        });
     }
 });

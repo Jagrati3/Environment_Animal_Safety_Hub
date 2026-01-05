@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kids Quiz Dashboard | EcoLife</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/png" href="/envirnoment-logo.png">
+  <!-- Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --green: #2e7d32;
+      --green-light: #4caf50;
+      --bg: #f4fbf6;
+      --white: #ffffff;
+      --dark: #1a1a1a;
+      --shadow: 0 15px 35px rgba(0,0,0,0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(to bottom, #eef8f1, #ffffff);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    /* ---------- HERO ---------- */
+    .hero {
+      text-align: center;
+      padding: 90px 20px 70px;
+      background: linear-gradient(135deg, #1b5e20, #2e7d32, #388e3c);
+      color: white;
+      border-bottom-left-radius: 45px;
+      border-bottom-right-radius: 45px;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .hero p {
+      max-width: 700px;
+      margin: auto;
+      opacity: 0.95;
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* ---------- CONTAINER ---------- */
+    .container {
+      max-width: 1200px;
+      margin: 50px auto 80px;
+      padding: 20px;
+    }
+
+    /* ---------- FILTER ---------- */
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 10px 22px;
+      border-radius: 30px;
+      border: 2px solid var(--green);
+      background: transparent;
+      color: var(--green);
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: var(--green);
+      color: white;
+      box-shadow: 0 10px 25px rgba(46,125,50,0.35);
+      transform: translateY(-2px);
+    }
+
+    /* ---------- GRID ---------- */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 30px;
+    }
+
+    /* ---------- CARD ---------- */
+    .card {
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+    }
+
+    .card-cover {
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.2rem;
+    }
+
+    .card-content {
+      padding: 20px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .card-header h3 {
+      font-size: 1.2rem;
+    }
+
+    .tag {
+      background: #e8f5e9;
+      color: var(--green);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .desc {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 12px;
+    }
+
+    .tech span {
+      font-size: 0.7rem;
+      background: #f1f1f1;
+      padding: 4px 8px;
+      border-radius: 8px;
+      margin-right: 5px;
+    }
+
+    /* ---------- FOOTER ---------- */
+    footer {
+      text-align: center;
+      padding: 25px;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media(max-width: 600px) {
+      .hero h1 { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>🎯 Kids Quiz Dashboard</h1>
+    <p>
+      Welcome to the Kids Learning Zone!  
+      Play fun quizzes & games to learn about animals, environment, plants, and sustainability 🌍
+    </p>
+  </section>
+
+  <div class="container">
+
+    <!-- FILTERS -->
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="quiz">Quizzes</button>
+      <button class="filter-btn" data-filter="game">Games</button>
+    </div>
+
+    <!-- GRID -->
+    <div class="grid" id="grid">
+
+      <!-- Eco Quiz -->
+      <a href="quiz.html" class="card" data-category="quiz">
+        <div class="card-cover" style="background:#2e7d32;color:white">
+          <i class="ri-leaf-line"></i>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <h3>Eco Quiz</h3>
+            <span class="tag">Quiz</span>
+          </div>
+          <p class="desc">Test your knowledge about environment & nature.</p>
+    
+        </div>
+      </a>
+
+    
+    </div>
+  </div>
+
+  <footer>
+    © 2026 EcoLife • Learn, Play & Protect Nature 💚
+  </footer>
+
+  <script>
+    const filterBtns = document.querySelectorAll(".filter-btn");
+    const cards = document.querySelectorAll(".card");
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        filterBtns.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        const filter = btn.dataset.filter;
+
+        cards.forEach(card => {
+          card.style.display =
+            filter === "all" || card.dataset.category === filter
+              ? "block"
+              : "none";
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
