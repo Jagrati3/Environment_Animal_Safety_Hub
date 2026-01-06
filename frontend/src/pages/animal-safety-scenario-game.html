@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Animal Safety Game | EcoLife</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root{
+  --green:#2e7d32;
+  --green-dark:#1b5e20;
+  --light:#e8f5e9;
+  --bg:#f4fbf6;
+  --wrong:#ffcdd2;
+}
+
+*{
+  box-sizing:border-box;
+  font-family:Poppins,system-ui;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+}
+
+/* ---------- HEADER ---------- */
+header{
+  background:linear-gradient(135deg,var(--green-dark),var(--green));
+  color:white;
+  text-align:center;
+  padding:28px 15px;
+}
+
+header p{
+  margin-top:6px;
+  opacity:.95;
+}
+
+/* ---------- GAME CONTAINER ---------- */
+.game-container{
+  max-width:750px;
+  margin:40px auto;
+  background:white;
+  padding:30px;
+  border-radius:24px;
+  box-shadow:0 20px 45px rgba(0,0,0,.12);
+}
+
+/* ---------- TOP INFO ---------- */
+.top-info{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:25px;
+  font-weight:600;
+  color:#333;
+}
+
+/* ---------- QUESTION ---------- */
+.scenario{
+  background:var(--light);
+  padding:18px 20px;
+  border-radius:18px;
+  font-size:1.15rem;
+  margin-bottom:25px;
+  line-height:1.5;
+}
+
+/* ---------- OPTIONS ---------- */
+.options{
+  display:grid;
+  gap:15px;
+}
+
+.option{
+  padding:16px 18px;
+  border-radius:16px;
+  background:#f7fbf8;
+  border:2px solid transparent;
+  cursor:pointer;
+  transition:.25s;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:1rem;
+}
+
+.option i{
+  color:var(--green);
+}
+
+.option:hover{
+  border-color:var(--green);
+  background:var(--light);
+  transform:scale(1.01);
+}
+
+.option.correct{
+  background:#c8e6c9;
+  border-color:var(--green);
+}
+
+.option.wrong{
+  background:var(--wrong);
+  border-color:#c62828;
+}
+
+/* ---------- FEEDBACK ---------- */
+.feedback{
+  margin-top:20px;
+  font-weight:600;
+  text-align:center;
+}
+
+/* ---------- BUTTONS ---------- */
+.center-btn{
+  display:flex;
+  justify-content:center;
+  gap:18px;
+  margin-top:25px;
+}
+
+.btn{
+  padding:12px 30px;
+  border:none;
+  border-radius:30px;
+  background:var(--green);
+  color:white;
+  cursor:pointer;
+  font-size:1rem;
+  box-shadow:0 6px 15px rgba(0,0,0,.15);
+}
+
+.btn.secondary{
+  background:#4caf50;
+}
+
+.btn:hover{
+  background:var(--green-dark);
+}
+
+/* ---------- RESULT ---------- */
+.result{
+  text-align:center;
+  font-size:1.4rem;
+  margin-top:30px;
+  font-weight:600;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:600px){
+  .game-container{
+    margin:20px;
+    padding:22px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🐾 Animal Safety Game</h1>
+  <p>Choose the safest & kindest action 🌱</p>
+</header>
+
+<div class="game-container">
+
+  <div class="top-info">
+    <div>Question: <span id="qNo">1</span>/5</div>
+    <div>Score: <span id="score">0</span></div>
+  </div>
+
+  <div class="scenario" id="scenarioText"></div>
+
+  <div class="options" id="options"></div>
+
+  <div class="feedback" id="feedback"></div>
+
+  <div class="center-btn" id="nextBtnBox" style="display:none">
+    <button class="btn" onclick="nextQuestion()">Next ➡</button>
+  </div>
+
+  <div class="result" id="result"></div>
+
+  <div class="center-btn" id="endBtns" style="display:none">
+    <button class="btn secondary" onclick="location.reload()">🔁 Play Again</button>
+    <button class="btn" onclick="location.href='kids-quiz-dashboard.html'">🏠 Dashboard</button>
+  </div>
+
+</div>
+
+<script>
+const scenarios = [
+  {
+    q:"You see an injured dog on the road. What should you do?",
+    options:[
+      "Ignore and walk away",
+      "Throw stones to move it",
+      "Call an animal rescue or adult for help",
+      "Try to lift it alone"
+    ],
+    correct:2
+  },
+  {
+    q:"A stray dog is sleeping peacefully. What is the right action?",
+    options:[
+      "Disturb it for fun",
+      "Let it rest quietly",
+      "Shout at it",
+      "Chase it away"
+    ],
+    correct:1
+  },
+  {
+    q:"You want to feed a stray animal. What is safe?",
+    options:[
+      "Chocolate or chips",
+      "Plastic-packed junk food",
+      "Proper food like rice or biscuits",
+      "Anything available"
+    ],
+    correct:2
+  },
+  {
+    q:"You see someone hurting an animal. What should you do?",
+    options:[
+      "Join them",
+      "Ignore it",
+      "Report to a trusted adult or authority",
+      "Record and laugh"
+    ],
+    correct:2
+  },
+  {
+    q:"A pet looks scared during fireworks. What helps?",
+    options:[
+      "Loud music",
+      "Comfort and quiet space",
+      "Teasing it",
+      "Leaving it outside"
+    ],
+    correct:1
+  }
+];
+
+let current = 0;
+let score = 0;
+let answered = false;
+
+const scenarioText = document.getElementById("scenarioText");
+const optionsDiv = document.getElementById("options");
+const feedback = document.getElementById("feedback");
+const scoreEl = document.getElementById("score");
+const qNo = document.getElementById("qNo");
+
+function loadQuestion(){
+  answered = false;
+  feedback.textContent="";
+  optionsDiv.innerHTML="";
+  document.getElementById("nextBtnBox").style.display="none";
+
+  const s = scenarios[current];
+  scenarioText.textContent = s.q;
+  qNo.textContent = current + 1;
+
+  s.options.forEach((opt,i)=>{
+    const div = document.createElement("div");
+    div.className="option";
+    div.innerHTML = `<i class="fa-solid fa-paw"></i> ${opt}`;
+    div.onclick = ()=>selectOption(div,i);
+    optionsDiv.appendChild(div);
+  });
+}
+
+function selectOption(el,index){
+  if(answered) return;
+  answered = true;
+
+  const correct = scenarios[current].correct;
+  const options = document.querySelectorAll(".option");
+
+  options[correct].classList.add("correct");
+
+  if(index === correct){
+    score++;
+    feedback.textContent="✅ Correct! Kind and safe choice.";
+  }else{
+    el.classList.add("wrong");
+    feedback.textContent="❌ Not safe. Always choose kindness.";
+  }
+
+  scoreEl.textContent = score;
+  document.getElementById("nextBtnBox").style.display="flex";
+}
+
+function nextQuestion(){
+  current++;
+  if(current < scenarios.length){
+    loadQuestion();
+  }else{
+    showResult();
+  }
+}
+
+function showResult(){
+  scenarioText.style.display="none";
+  optionsDiv.style.display="none";
+  feedback.style.display="none";
+  document.getElementById("nextBtnBox").style.display="none";
+
+  document.getElementById("result").innerHTML =
+    `🎉 Game Over!<br>You scored <strong>${score}</strong> out of ${scenarios.length}`;
+
+  document.getElementById("endBtns").style.display="flex";
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>

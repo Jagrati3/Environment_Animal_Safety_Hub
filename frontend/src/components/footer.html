@@ -1,0 +1,79 @@
+<!-- Newsletter Section -->
+<section class="newsletter-section">
+  <div class="newsletter-container">
+    <div class="newsletter-content">
+      <h2 class="newsletter-title">Stay Updated with Our Initiatives</h2>
+      <p class="newsletter-description">
+        Subscribe to receive updates about environmental awareness and animal safety campaigns
+      </p>
+      
+      <form class="newsletter-form" id="newsletterForm">
+        <div class="newsletter-input-group">
+          <input 
+            type="email" 
+            class="newsletter-email-input" 
+            placeholder="Enter your email address"
+            required
+            aria-label="Email address for newsletter subscription"
+          />
+          <button 
+            type="submit" 
+            class="newsletter-subscribe-btn"
+            aria-label="Subscribe to newsletter"
+          >
+            Subscribe
+          </button>
+        </div>
+        <div class="newsletter-message" id="newsletterMessage"></div>
+      </form>
+      
+      <p class="newsletter-privacy">
+        We respect your privacy. Unsubscribe at any time.
+      </p>
+    </div>
+
+    <div class="newsletter-icon">
+      <i class="fas fa-bell"></i>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const newsletterForm = document.getElementById('newsletterForm');
+    const newsletterMessage = document.getElementById('newsletterMessage');
+    
+    if (newsletterForm) {
+      newsletterForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const emailInput = this.querySelector('.newsletter-email-input');
+        const email = emailInput.value.trim();
+        
+        if (email) {
+          // Store email in localStorage (for UI-only implementation)
+          let subscribers = JSON.parse(localStorage.getItem('newsletterSubscribers') || '[]');
+          
+          if (!subscribers.includes(email)) {
+            subscribers.push(email);
+            localStorage.setItem('newsletterSubscribers', JSON.stringify(subscribers));
+            
+            // Show success message
+            newsletterMessage.textContent = '✓ Successfully subscribed! Thank you.';
+            newsletterMessage.className = 'newsletter-message success';
+            emailInput.value = '';
+            
+            // Clear message after 5 seconds
+            setTimeout(() => {
+              newsletterMessage.textContent = '';
+              newsletterMessage.className = 'newsletter-message';
+            }, 5000);
+          } else {
+            newsletterMessage.textContent = '📧 This email is already subscribed.';
+            newsletterMessage.className = 'newsletter-message info';
+          }
+        }
+      });
+    }
+  });
+</script>

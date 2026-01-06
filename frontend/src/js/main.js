@@ -842,6 +842,7 @@ document.getElementById("carbonForm").addEventListener("submit", function (e) {
   resultDiv.scrollIntoView({ behavior: "smooth", block: "center" });
 });
 
+
 const glossaryData = [
   {
     term: "Biodiversity",
@@ -870,8 +871,173 @@ const glossaryData = [
   {
     term: "Deforestation",
     definition: "Cutting down trees on a large scale, harming the environment."
+  },
+  {
+    term: "Composting",
+    definition: "Turning food and garden waste into nutrient-rich soil."
+  },
+  {
+    term: "E-Waste",
+    definition: "Discarded electronic devices like phones and computers."
+  },
+  {
+    term: "Zero-Waste",
+    definition: "A lifestyle aiming to produce no trash or landfill waste."
+  },
+  {
+    term: "Upcycling",
+    definition: "Turning old items into something new and useful."
+  },
+  {
+    term: "Energy Efficiency",
+    definition: "Using less energy to perform the same task."
+  },
+  {
+    term: "Greenhouse Gases",
+    definition: "Gases that trap heat in the atmosphere, causing global warming."
+  },
+  {
+    term: "Habitat Restoration",
+    definition: "Restoring damaged natural environments for wildlife."
+  },
+  {
+    term: "Endangered Species",
+    definition: "Animals or plants at risk of extinction."
+  },
+  {
+    term: "Water Footprint",
+    definition: "The amount of water used to produce goods or sustain a lifestyle."
+  },
+  {
+    term: "Air Quality",
+    definition: "A measure of how clean or polluted the air is."
+  },
+  {
+    term: "Pollution",
+    definition: "The presence of harmful substances in the environment."
+  },
+  {
+    term: "Acid Rain",
+    definition: "Rain containing pollutants that harm plants, animals, and buildings."
+  },
+  {
+    term: "Circular Economy",
+    definition: "An economic system focused on reusing and recycling resources."
+  },
+  {
+    term: "Organic Farming",
+    definition: "Farming without synthetic fertilizers or pesticides."
+  },
+  {
+    term: "Climate Resilience",
+    definition: "The ability to adapt and recover from climate-related changes."
+  },
+  {
+    term: "Carbon Neutral",
+    definition: "Balancing the amount of carbon emitted with actions that remove it."
+  },
+  {
+    term: "Eco-Friendly",
+    definition: "Products or actions that have a minimal impact on the environment."
+  },
+  {
+    term: "Rainwater Harvesting",
+    definition: "Collecting and storing rainwater for reuse."
+  },
+  {
+    term: "Sustainable Transport",
+    definition: "Travel methods that reduce environmental impact, like biking or public transit."
+  },
+  {
+    term: "Poaching",
+    definition: "Illegal hunting of animals, often threatening endangered species."
+  },
+  {
+    term: "Microplastics",
+    definition: "Tiny plastic particles that pollute oceans and harm wildlife."
+  },
+  {
+    term: "Carbon Tax",
+    definition: "A fee on companies for emitting greenhouse gases to encourage reduction."
+  },
+  {
+    term: "Green Bonds",
+    definition: "Investments that fund environmentally-friendly projects."
+  },
+  {
+    term: "Decarbonization",
+    definition: "Reducing carbon emissions in energy and industry."
+  },
+  {
+    term: "Sustainable Supply Chain",
+    definition: "A production system that minimizes environmental and social harm."
+  },
+  {
+    term: "Green Economy",
+    definition: "An economy that focuses on sustainable and environmentally-friendly growth."
+  },
+  {
+    term: "Urban Farming",
+    definition: "Growing food in cities to reduce transportation and waste."
+  },
+  {
+    term: "Plastic Pollution",
+    definition: "The accumulation of plastic products harming wildlife and the environment."
+  },
+  {
+    term: "Sustainable Fashion",
+    definition: "Clothing produced in environmentally-friendly and ethical ways."
+  },
+  {
+    term: "Green Jobs",
+    definition: "Jobs that contribute to environmental protection and sustainability."
+  },
+  {
+    term: "Eco-Tourism",
+    definition: "Travel that focuses on conserving nature and helping local communities."
+  },
+  {
+    term: "Carbon Offset",
+    definition: "Actions that compensate for carbon emissions, like planting trees."
+  },
+  {
+    term: "Climate Justice",
+    definition: "Fair treatment of all people regarding the impacts of climate change."
+  },
+  {
+    term: "Biodiversity Loss",
+    definition: "The reduction in the variety of life in ecosystems."
+  },
+  {
+    term: "Water Conservation",
+    definition: "Using water efficiently to prevent waste and preserve resources."
+  },
+  {
+    term: "Renewable Resources",
+    definition: "Resources that can be naturally replenished, like sunlight and wind."
+  },
+  {
+    term: "Non-Renewable Resources",
+    definition: "Resources that cannot be replaced easily, like fossil fuels."
+  },
+  {
+    term: "Eco-Innovation",
+    definition: "Creating new products or technologies that are environmentally friendly."
+  },
+  {
+    term: "Sustainable Cities",
+    definition: "Cities designed to reduce pollution, waste, and energy use."
+  },
+  {
+    term: "Climate Mitigation",
+    definition: "Actions taken to reduce or prevent greenhouse gas emissions."
+  },
+  {
+    term: "Climate Adaptation",
+    definition: "Adjusting to the effects of climate change to reduce harm."
   }
 ];
+
 
 const glossaryList = document.getElementById("glossaryList");
 const searchInput = document.getElementById("glossarySearch");

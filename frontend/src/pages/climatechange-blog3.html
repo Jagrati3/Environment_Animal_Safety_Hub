@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climate Change Made Easy to Understand | EcoLife</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Earth & Climate Theme */
+            --earth-blue: #2196F3;
+            --ocean-blue: #03A9F4;
+            --climate-orange: #FF9800;
+            --impact-red: #F44336;
+            --solution-green: #4CAF50;
+            --light-bg: #E3F2FD;
+            --card-bg: #FFFFFF;
+            --text-dark: #1565C0;
+            --text-light: #0D47A1;
+            --shadow: 0 15px 35px rgba(33, 150, 243, 0.1);
+            --shadow-heavy: 0 25px 50px rgba(33, 150, 243, 0.15);
+            --gradient-earth: linear-gradient(135deg, #2196F3, #03A9F4);
+            --gradient-warming: linear-gradient(135deg, #FF9800, #F44336);
+            --gradient-solution: linear-gradient(135deg, #4CAF50, #2E7D32);
+            --gradient-sky: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+            --border-radius: 20px;
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        }
+
+        [data-theme="dark"] {
+            /* Dark Climate Theme */
+            --earth-blue: #64B5F6;
+            --ocean-blue: #29B6F6;
+            --climate-orange: #FFB74D;
+            --impact-red: #EF5350;
+            --solution-green: #66BB6A;
+            --light-bg: #0D1B2A;
+            --card-bg: #1E2A3A;
+            --text-dark: #E3F2FD;
+            --text-light: #90CAF9;
+            --shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            --shadow-heavy: 0 25px 50px rgba(0, 0, 0, 0.4);
+            --gradient-earth: linear-gradient(135deg, #1565C0, #0D47A1);
+            --gradient-warming: linear-gradient(135deg, #E65100, #B71C1C);
+            --gradient-solution: linear-gradient(135deg, #2E7D32, #1B5E20);
+            --gradient-sky: linear-gradient(135deg, #1E2A3A, #0D1B2A);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--light-bg);
+            color: var(--text-dark);
+            line-height: 1.8;
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        /* Cloud Pattern Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M10,40 Q30,20 50,40 Q70,60 90,40" fill="none" stroke="%232196F3" stroke-width="0.5" opacity="0.1"/></svg>');
+            background-size: 100px 100px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        [data-theme="dark"] body::before {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M10,40 Q30,20 50,40 Q70,60 90,40" fill="none" stroke="%2364B5F6" stroke-width="0.5" opacity="0.05"/></svg>');
+        }
+
+        /* Theme Toggle */
+        .theme-toggle-container {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .theme-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 2px solid var(--earth-blue);
+            color: var(--earth-blue);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-toggle::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-earth);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover::before {
+            opacity: 0.1;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+            box-shadow: 0 15px 35px rgba(33, 150, 243, 0.2);
+        }
+
+        .theme-toggle i {
+            position: relative;
+            z-index: 2;
+        }
+
+        .theme-toggle .fa-sun {
+            display: none;
+        }
+
+        [data-theme="dark"] .theme-toggle .fa-sun {
+            display: block;
+        }
+
+        [data-theme="dark"] .theme-toggle .fa-moon {
+            display: none;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: var(--gradient-earth);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 40px 20px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(100, 181, 246, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(3, 169, 244, 0.2) 0%, transparent 50%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,50 Q50,100 0,50 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .hero-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 4.2rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 25px;
+            line-height: 1.2;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.95);
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-icons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            transition: var(--transition);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-icon:hover {
+            transform: translateY(-10px) scale(1.1);
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Main Content */
+        .content-section {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 100px 40px;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.2rem;
+            color: var(--earth-blue);
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100px;
+            height: 4px;
+            background: var(--gradient-earth);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 800px;
+            margin-bottom: 60px;
+        }
+
+        /* Climate Basics */
+        .basics-section {
+            background: var(--gradient-sky);
+            border-radius: var(--border-radius);
+            padding: 80px 40px;
+            margin: 80px 0;
+            box-shadow: inset 0 0 50px rgba(33, 150, 243, 0.1);
+        }
+
+        .basics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .basic-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 40px 35px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border-top: 5px solid;
+            text-align: center;
+        }
+
+        .basic-card.greenhouse {
+            border-top-color: var(--solution-green);
+        }
+
+        .basic-card.temperature {
+            border-top-color: var(--climate-orange);
+        }
+
+        .basic-card.human-impact {
+            border-top-color: var(--impact-red);
+        }
+
+        .basic-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .basic-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-sky);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 25px;
+            transition: var(--transition);
+        }
+
+        .basic-card.greenhouse .basic-icon {
+            background: var(--gradient-solution);
+            color: white;
+        }
+
+        .basic-card.temperature .basic-icon {
+            background: var(--gradient-warming);
+            color: white;
+        }
+
+        .basic-card.human-impact .basic-icon {
+            background: linear-gradient(135deg, #F44336, #D32F2F);
+            color: white;
+        }
+
+        .basic-card:hover .basic-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .basic-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .basic-facts {
+            list-style: none;
+            padding: 0;
+            margin: 25px 0;
+        }
+
+        .basic-facts li {
+            padding: 10px 0;
+            color: var(--text-light);
+            position: relative;
+            padding-left: 25px;
+            text-align: left;
+            border-bottom: 1px dashed rgba(33, 150, 243, 0.2);
+        }
+
+        .basic-facts li:last-child {
+            border-bottom: none;
+        }
+
+        .basic-facts li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--earth-blue);
+            font-size: 1.5rem;
+        }
+
+        /* Temperature Timeline */
+        .timeline-section {
+            margin: 100px 0;
+            position: relative;
+        }
+
+        .timeline-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            position: relative;
+        }
+
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 50px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--gradient-warming);
+            border-radius: 2px;
+            z-index: 1;
+        }
+
+        .timeline-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 40px 40px 40px 120px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            z-index: 2;
+            margin-left: 50px;
+        }
+
+        .timeline-card:hover {
+            transform: translateX(10px);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .timeline-year {
+            position: absolute;
+            left: -60px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100px;
+            height: 100px;
+            background: var(--gradient-warming);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            z-index: 3;
+            box-shadow: 0 10px 25px rgba(255, 152, 0, 0.3);
+        }
+
+        .timeline-card h3 {
+            font-size: 1.6rem;
+            color: var(--climate-orange);
+            margin-bottom: 15px;
+        }
+
+        /* Impact Section */
+        .impact-section {
+            background: var(--gradient-warming);
+            border-radius: var(--border-radius);
+            padding: 80px 40px;
+            margin: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .impact-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.5;
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .impact-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 40px 30px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: var(--transition);
+        }
+
+        .impact-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .impact-icon {
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .impact-card h4 {
+            color: white;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        /* Solutions Section */
+        .solutions-section {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 60px 40px;
+            margin: 80px 0;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--solution-green);
+        }
+
+        .solutions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .solution-card {
+            padding: 35px 30px;
+            background: var(--gradient-sky);
+            border-radius: 15px;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--solution-green);
+        }
+
+        .solution-card h4 {
+            color: var(--solution-green);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+        }
+
+        /* Myths vs Facts */
+        .myths-section {
+            background: var(--gradient-earth);
+            border-radius: var(--border-radius);
+            padding: 80px 40px;
+            margin: 100px 0;
+        }
+
+        .myths-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .myth-fact {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .myth-fact:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .myth {
+            color: var(--impact-red);
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .fact {
+            color: var(--solution-green);
+            font-weight: 600;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Action Section */
+        .action-section {
+            text-align: center;
+            padding: 100px 40px;
+            background: var(--gradient-solution);
+            border-radius: var(--border-radius);
+            margin: 100px 0;
+        }
+
+        .action-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .action-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .action-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .action-icon {
+            font-size: 3.5rem;
+            color: var(--solution-green);
+            margin-bottom: 25px;
+            display: inline-block;
+            transition: var(--transition);
+        }
+
+        .action-card:hover .action-icon {
+            transform: scale(1.2);
+        }
+
+        /* Call to Action */
+        .cta-section {
+            background: var(--gradient-earth);
+            border-radius: var(--border-radius);
+            padding: 100px 40px;
+            margin: 100px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.3;
+            animation: float 20s linear infinite;
+        }
+
+        .cta-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-text {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 50px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-button {
+            padding: 18px 35px;
+            background: white;
+            color: var(--earth-blue);
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            gap: 20px;
+            background: var(--light-bg);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .cta-button.secondary:hover {
+            background: white;
+            color: var(--earth-blue);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--gradient-earth);
+            color: rgba(255, 255, 255, 0.9);
+            padding: 80px 40px 40px;
+            margin-top: 100px;
+            border-top-left-radius: var(--border-radius);
+            border-top-right-radius: var(--border-radius);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 60px;
+        }
+
+        .footer-column h3 {
+            color: white;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-column h3 i {
+            color: var(--ocean-blue);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        /* Cloud Animations */
+        .cloud {
+            position: fixed;
+            background: white;
+            border-radius: 50px;
+            opacity: 0;
+            pointer-events: none;
+            z-index: -1;
+            filter: blur(20px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero-title {
+                font-size: 3.5rem;
+            }
+            
+            .section-title {
+                font-size: 2.8rem;
+            }
+            
+            .timeline-container::before {
+                left: 40px;
+            }
+            
+            .timeline-card {
+                margin-left: 40px;
+                padding-left: 100px;
+            }
+            
+            .timeline-year {
+                left: -50px;
+                width: 80px;
+                height: 80px;
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .section-title {
+                font-size: 2.4rem;
+            }
+            
+            .content-section {
+                padding: 60px 20px;
+            }
+            
+            .hero-icons {
+                gap: 20px;
+            }
+            
+            .hero-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+            
+            .basics-grid,
+            .timeline-container::before {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline-container::before {
+                display: none;
+            }
+            
+            .timeline-card {
+                margin-left: 0;
+                padding: 40px;
+            }
+            
+            .timeline-year {
+                position: relative;
+                left: 0;
+                top: 0;
+                transform: none;
+                margin: 0 auto 20px;
+                width: 70px;
+                height: 70px;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-button {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .theme-toggle-container {
+                top: 20px;
+                right: 20px;
+            }
+            
+            .theme-toggle {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .cta-title {
+                font-size: 2.5rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle-container">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun"></i>
+        </button>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Climate Change Made Easy to Understand</h1>
+            <p class="hero-subtitle">
+                Breaking down the science, impacts, and solutions of climate change into simple, 
+                understandable concepts for everyone.
+            </p>
+            
+            <div class="hero-icons">
+                <div class="hero-icon">
+                    <i class="fas fa-globe-americas"></i>
+                </div>
+                <div class="hero-icon">
+                    <i class="fas fa-thermometer-half"></i>
+                </div>
+                <div class="hero-icon">
+                    <i class="fas fa-industry"></i>
+                </div>
+                <div class="hero-icon">
+                    <i class="fas fa-hand-holding-heart"></i>
+                </div>
+            </div>
+            
+            <p style="color: rgba(255, 255, 255, 0.9); font-size: 1.1rem; max-width: 800px; margin: 0 auto;">
+                <i class="fas fa-info-circle"></i> No science degree required – just an open mind and concern for our planet.
+            </p>
+        </div>
+    </section>
+
+    <!-- Climate Basics -->
+    <section class="basics-section" id="basics">
+        <h2 class="section-title" style="color: var(--earth-blue); text-align: center;">Climate Change Basics</h2>
+        <p class="section-subtitle" style="color: var(--text-light); text-align: center;">
+            Understanding these three simple concepts is the key to understanding climate change.
+        </p>
+        
+        <div class="basics-grid">
+            <!-- Greenhouse Effect -->
+            <div class="basic-card greenhouse">
+                <div class="basic-icon">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <h3>The Greenhouse Effect</h3>
+                <p>Earth's natural blanket that keeps us warm. But we're making it too thick!</p>
+                
+                <ul class="basic-facts">
+                    <li>Like a car parked in the sun</li>
+                    <li>Natural gases trap heat</li>
+                    <li>Essential for life on Earth</li>
+                    <li>Human activities intensify it</li>
+                    <li>Main gas: Carbon Dioxide (CO₂)</li>
+                </ul>
+                
+                <div style="background: rgba(76, 175, 80, 0.1); padding: 15px; border-radius: 10px; margin-top: 20px;">
+                    <p style="color: var(--solution-green); font-size: 0.9rem;">
+                        <i class="fas fa-lightbulb"></i> 
+                        <strong>Simple Analogy:</strong> Imagine wearing too many blankets on a warm night.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Temperature Rise -->
+            <div class="basic-card temperature">
+                <div class="basic-icon">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <h3>Global Warming</h3>
+                <p>The Earth's average temperature is rising – and it's happening faster than ever.</p>
+                
+                <ul class="basic-facts">
+                    <li>1.1°C warmer since 1880</li>
+                    <li>Oceans absorbing most heat</li>
+                    <li>Polar regions warming fastest</li>
+                    <li>More extreme weather events</li>
+                    <li>Rising sea levels</li>
+                </ul>
+                
+                <div style="background: rgba(255, 152, 0, 0.1); padding: 15px; border-radius: 10px; margin-top: 20px;">
+                    <p style="color: var(--climate-orange); font-size: 0.9rem;">
+                        <i class="fas fa-lightbulb"></i> 
+                        <strong>Simple Analogy:</strong> Like a fever for our planet – small change, big effects.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Human Impact -->
+            <div class="basic-card human-impact">
+                <div class="basic-icon">
+                    <i class="fas fa-industry"></i>
+                </div>
+                <h3>Human Activities</h3>
+                <p>What we're doing that's changing the climate (and what we can do differently).</p>
+                
+                <ul class="basic-facts">
+                    <li>Burning fossil fuels</li>
+                    <li>Deforestation</li>
+                    <li>Industrial agriculture</li>
+                    <li>Transportation emissions</li>
+                    <li>Waste production</li>
+                </ul>
+                
+                <div style="background: rgba(244, 67, 54, 0.1); padding: 15px; border-radius: 10px; margin-top: 20px;">
+                    <p style="color: var(--impact-red); font-size: 0.9rem;">
+                        <i class="fas fa-lightbulb"></i> 
+                        <strong>Simple Analogy:</strong> Like smoking – we know it's harmful, but change is hard.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Temperature Timeline -->
+    <section class="timeline-section" id="timeline">
+        <h2 class="section-title">Climate Change Timeline</h2>
+        <p class="section-subtitle">
+            How we got here and where we're headed if we don't take action.
+        </p>
+        
+        <div class="timeline-container">
+            <!-- 1850s -->
+            <div class="timeline-card">
+                <div class="timeline-year">1850s</div>
+                <h3>The Industrial Revolution</h3>
+                <p>Widespread use of coal begins. Scientists first theorize that CO₂ could trap heat in the atmosphere.</p>
+                <p style="color: var(--text-light); margin-top: 15px;">
+                    <i class="fas fa-history" style="color: var(--climate-orange);"></i>
+                    <strong>Key Fact:</strong> Atmospheric CO₂ was about 280 parts per million.
+                </p>
+            </div>
+            
+            <!-- 1950s -->
+            <div class="timeline-card">
+                <div class="timeline-year">1950s</div>
+                <h3>The Great Acceleration</h3>
+                <p>Post-war boom leads to massive increase in fossil fuel use, deforestation, and industrial activities.</p>
+                <p style="color: var(--text-light); margin-top: 15px;">
+                    <i class="fas fa-chart-line" style="color: var(--climate-orange);"></i>
+                    <strong>Key Fact:</strong> Scientists begin measuring rising CO₂ levels at Mauna Loa observatory.
+                </p>
+            </div>
+            
+            <!-- 1980s -->
+            <div class="timeline-card">
+                <div class="timeline-year">1980s</div>
+                <h3>Climate Science Matures</h3>
+                <p>Clear evidence emerges of human-caused climate change. First international climate conferences held.</p>
+                <p style="color: var(--text-light); margin-top: 15px;">
+                    <i class="fas fa-microscope" style="color: var(--climate-orange);"></i>
+                    <strong>Key Fact:</strong> 1988 was the hottest year on record at the time.
+                </p>
+            </div>
+            
+            <!-- 2020s -->
+            <div class="timeline-card">
+                <div class="timeline-year">2020s</div>
+                <h3>Climate Emergency</h3>
+                <p>Record-breaking temperatures, extreme weather events, and scientific consensus on urgent action needed.</p>
+                <p style="color: var(--text-light); margin-top: 15px;">
+                    <i class="fas fa-exclamation-triangle" style="color: var(--climate-orange);"></i>
+                    <strong>Key Fact:</strong> CO₂ levels now exceed 420 ppm – highest in 4 million years.
+                </p>
+            </div>
+            
+            <!-- 2050 -->
+            <div class="timeline-card">
+                <div class="timeline-year">2050</div>
+                <h3>Two Possible Futures</h3>
+                <p>With action: Net-zero emissions, stable climate. Without action: 2°C+ warming, severe impacts.</p>
+                <p style="color: var(--text-light); margin-top: 15px;">
+                    <i class="fas fa-crossroads" style="color: var(--climate-orange);"></i>
+                    <strong>Key Fact:</strong> The choices we make today determine which future we get.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impacts Section -->
+    <section class="impact-section" id="impacts">
+        <h2 class="section-title" style="color: white; text-align: center;">What Climate Change Looks Like</h2>
+        <p class="section-subtitle" style="color: rgba(255, 255, 255, 0.95); text-align: center;">
+            These are the real-world effects we're already experiencing.
+        </p>
+        
+        <div class="impact-grid">
+            <div class="impact-card">
+                <div class="impact-icon">
+                    <i class="fas fa-water"></i>
+                </div>
+                <h4>Rising Sea Levels</h4>
+                <p style="color: rgba(255, 255, 255, 0.9);">Melting ice and expanding warm water threaten coastal communities worldwide.</p>
+            </div>
+            
+            <div class="impact-card">
+                <div class="impact-icon">
+                    <i class="fas fa-wind"></i>
+                </div>
+                <h4>Extreme Weather</h4>
+                <p style="color: rgba(255, 255, 255, 0.9);">More intense hurricanes, floods, droughts, and heatwaves becoming common.</p>
+            </div>
+            
+            <div class="impact-card">
+                <div class="impact-icon">
+                    <i class="fas fa-tree"></i>
+                </div>
+                <h4>Ecosystem Collapse</h4>
+                <p style="color: rgba(255, 255, 255, 0.9);">Coral bleaching, forest fires, and species extinction accelerating.</p>
+            </div>
+            
+            <div class="impact-card">
+                <div class="impact-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <h4>Food Security</h4>
+                <p style="color: rgba(255, 255, 255, 0.9);">Crop failures and fisheries disruption threatening global food supplies.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solutions Section -->
+    <section class="solutions-section" id="solutions">
+        <h2 class="section-title">Solutions That Actually Work</h2>
+        <p class="section-subtitle">
+            The good news: We have the technology and knowledge to solve this. Here's how.
+        </p>
+        
+        <div class="solutions-grid">
+            <div class="solution-card">
+                <h4><i class="fas fa-solar-panel"></i> Clean Energy Transition</h4>
+                <p>Switching to solar, wind, and other renewables is now cheaper than fossil fuels in most places.</p>
+            </div>
+            
+            <div class="solution-card">
+                <h4><i class="fas fa-car"></i> Sustainable Transportation</h4>
+                <p>Electric vehicles, public transit, biking, and walking reduce emissions and improve health.</p>
+            </div>
+            
+            <div class="solution-card">
+                <h4><i class="fas fa-leaf"></i> Nature-Based Solutions</h4>
+                <p>Protecting forests, restoring wetlands, and regenerative agriculture absorb carbon naturally.</p>
+            </div>
+            
+            <div class="solution-card">
+                <h4><i class="fas fa-recycle"></i> Circular Economy</h4>
+                <p>Redesigning systems to eliminate waste and keep materials in use reduces emissions dramatically.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Myths vs Facts -->
+    <section class="myths-section" id="myths">
+        <h2 class="section-title" style="color: white; text-align: center;">Myths vs Facts</h2>
+        <p class="section-subtitle" style="color: rgba(255, 255, 255, 0.95); text-align: center;">
+            Clearing up common misunderstandings about climate change.
+        </p>
+        
+        <div class="myths-container">
+            <div class="myth-fact">
+                <div class="myth">
+                    <i class="fas fa-times-circle"></i>
+                    <span>MYTH: "Climate has always changed naturally"</span>
+                </div>
+                <p style="color: rgba(255, 255, 255, 0.9);">While true, current changes are 10-100x faster than natural cycles, and perfectly match human CO₂ emissions.</p>
+                <div class="fact">
+                    <i class="fas fa-check-circle"></i>
+                    <span>FACT: Human activities are driving unprecedented rapid change</span>
+                </div>
+            </div>
+            
+            <div class="myth-fact">
+                <div class="myth">
+                    <i class="fas fa-times-circle"></i>
+                    <span>MYTH: "It's too expensive to fix"</span>
+                </div>
+                <p style="color: rgba(255, 255, 255, 0.9);">The cost of inaction is far higher. Every $1 spent on prevention saves $7 in future damages.</p>
+                <div class="fact">
+                    <i class="fas fa-check-circle"></i>
+                    <span>FACT: Climate action creates jobs and saves money long-term</span>
+                </div>
+            </div>
+            
+            <div class="myth-fact">
+                <div class="myth">
+                    <i class="fas fa-times-circle"></i>
+                    <span>MYTH: "One person can't make a difference"</span>
+                </div>
+                <p style="color: rgba(255, 255, 255, 0.9);">Individual actions create social norms, influence markets, and pressure governments to act.</p>
+                <div class="fact">
+                    <i class="fas fa-check-circle"></i>
+                    <span>FACT: Collective individual action drives systemic change</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Action Steps -->
+    <section class="action-section" id="actions">
+        <h2 class="section-title">What You Can Do Today</h2>
+        <p class="section-subtitle">
+            Practical steps that make a real difference – starting right now.
+        </p>
+        
+        <div class="action-cards">
+            <div class="action-card">
+                <div class="action-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <h3>Reduce Home Energy</h3>
+                <p>Switch to LED bulbs, use smart thermostats, improve insulation, and choose energy-efficient appliances.</p>
+            </div>
+            
+            <div class="action-card">
+                <div class="action-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <h3>Eat Climate-Friendly</h3>
+                <p>Reduce meat consumption, buy local seasonal produce, minimize food waste, and compost leftovers.</p>
+            </div>
+            
+            <div class="action-card">
+                <div class="action-icon">
+                    <i class="fas fa-vote-yea"></i>
+                </div>
+                <h3>Use Your Voice</h3>
+                <p>Contact elected officials, support climate policies, join local groups, and talk to friends and family.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section" id="cta">
+        <h2 class="cta-title">Join the Climate Solution</h2>
+        <p class="cta-text">
+            Understanding climate change is the first step. Taking action is the next. 
+            Together, we can build a sustainable future for generations to come.
+        </p>
+        
+        <div class="cta-buttons">
+            <button class="cta-button">
+                <i class="fas fa-download"></i>
+                <span>Download Action Guide</span>
+            </button>
+            <button class="cta-button secondary">
+                <i class="fas fa-calendar-check"></i>
+                <span>Join 30-Day Challenge</span>
+            </button>
+            <button class="cta-button secondary">
+                <i class="fas fa-hands-helping"></i>
+                <span>Find Local Group</span>
+            </button>
+        </div>
+        
+        <p style="color: rgba(255, 255, 255, 0.8); margin-top: 40px; font-size: 1rem;">
+            <i class="fas fa-globe-americas"></i> The climate needs all of us, and every action counts.
+        </p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3><i class="fas fa-book-open"></i> Climate Education</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-graduation-cap"></i> Beginner's Guide</a></li>
+                    <li><a href="#"><i class="fas fa-chart-line"></i> Latest Data</a></li>
+                    <li><a href="#"><i class="fas fa-video"></i> Educational Videos</a></li>
+                    <li><a href="#"><i class="fas fa-question-circle"></i> FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3><i class="fas fa-leaf"></i> EcoLife</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-arrow-left"></i> Back to Blog</a></li>
+                    <li><a href="#"><i class="fas fa-home"></i> Home Page</a></li>
+                    <li><a href="#"><i class="fas fa-book-open"></i> All Articles</a></li>
+                    <li><a href="#"><i class="fas fa-envelope"></i> Contact Team</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3><i class="fas fa-hands-helping"></i> Get Involved</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fab fa-facebook"></i> Climate Action Group</a></li>
+                    <li><a href="#"><i class="fab fa-instagram"></i> Daily Tips</a></li>
+                    <li><a href="#"><i class="fab fa-twitter"></i> Science Updates</a></li>
+                    <li><a href="#"><i class="fas fa-newspaper"></i> Monthly Newsletter</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p><i class="fas fa-globe-americas"></i> © 2026 EcoLife Climate Education Initiative <i class="fas fa-globe-americas"></i></p>
+            <p style="margin-top: 10px;">Science-based information for a climate-informed world.</p>
+            <p style="margin-top: 10px; font-size: 0.85rem;">
+                <i class="fas fa-seedling"></i> Knowledge is the first step toward action <i class="fas fa-seedling"></i>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        // Check for saved theme or system preference
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme) {
+            body.setAttribute('data-theme', savedTheme);
+        } else if (systemPrefersDark) {
+            body.setAttribute('data-theme', 'dark');
+        }
+        
+        // Toggle theme with animation
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Add animation
+            themeToggle.style.transform = 'rotate(360deg) scale(1.2)';
+            setTimeout(() => {
+                themeToggle.style.transform = '';
+            }, 300);
+            
+            // Create cloud animation
+            createClouds(3);
+        });
+        
+        // Create floating clouds
+        function createClouds(count) {
+            for (let i = 0; i < count; i++) {
+                const cloud = document.createElement('div');
+                cloud.className = 'cloud';
+                cloud.style.left = Math.random() * 100 + 'vw';
+                cloud.style.width = (50 + Math.random() * 100) + 'px';
+                cloud.style.height = '30px';
+                cloud.style.background = 'var(--light-bg)';
+                cloud.style.opacity = '0.5';
+                cloud.style.animation = `cloudFloat ${8 + Math.random() * 12}s ease-out forwards`;
+                document.body.appendChild(cloud);
+                
+                // Remove cloud after animation
+                setTimeout(() => {
+                    cloud.remove();
+                }, 20000);
+            }
+        }
+        
+        // Add cloud float animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes cloudFloat {
+                0% {
+                    transform: translateX(100vw) translateY(100vh);
+                    opacity: 0;
+                }
+                10% {
+                    opacity: 0.5;
+                }
+                90% {
+                    opacity: 0.5;
+                }
+                100% {
+                    transform: translateX(-100px) translateY(-100px);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    
+                    // Add staggered animation for cards
+                    if (entry.target.classList.contains('basic-card')) {
+                        const cards = document.querySelectorAll('.basic-card');
+                        const index = Array.from(cards).indexOf(entry.target);
+                        entry.target.style.transitionDelay = `${index * 0.15}s`;
+                    }
+                    
+                    if (entry.target.classList.contains('timeline-card')) {
+                        const cards = document.querySelectorAll('.timeline-card');
+                        const index = Array.from(cards).indexOf(entry.target);
+                        entry.target.style.transitionDelay = `${index * 0.2}s`;
+                    }
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all interactive elements
+        document.querySelectorAll('.basic-card, .timeline-card, .impact-card, .solution-card, .action-card, .myth-fact').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+        
+        // Add hover effects with cloud animation
+        document.querySelectorAll('.basic-card, .action-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                createClouds(1);
+            });
+        });
+        
+        // CTA Button functionality
+        document.querySelectorAll('.cta-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const buttonText = this.querySelector('span').textContent;
+                
+                // Add click feedback
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+                
+                // Create more clouds on click
+                createClouds(2);
+                
+                // Show feedback based on button
+                if (buttonText.includes('Download')) {
+                    alert('🌍 Downloading Climate Action Guide... Check your downloads folder!');
+                } else if (buttonText.includes('30-Day')) {
+                    alert('📅 Starting your 30-day climate challenge...');
+                } else if (buttonText.includes('Find')) {
+                    alert('🤝 Finding local climate action groups near you...');
+                }
+            });
+        });
+        
+        // Update theme button color based on scroll position
+        window.addEventListener('scroll', () => {
+            const scrollPercentage = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+            const toggle = document.querySelector('.theme-toggle');
+            
+            if (scrollPercentage < 20) {
+                toggle.style.borderColor = 'var(--earth-blue)';
+                toggle.style.color = 'var(--earth-blue)';
+            } else if (scrollPercentage < 40) {
+                toggle.style.borderColor = 'var(--ocean-blue)';
+                toggle.style.color = 'var(--ocean-blue)';
+            } else if (scrollPercentage < 60) {
+                toggle.style.borderColor = 'var(--climate-orange)';
+                toggle.style.color = 'var(--climate-orange)';
+            } else if (scrollPercentage < 80) {
+                toggle.style.borderColor = 'var(--impact-red)';
+                toggle.style.color = 'var(--impact-red)';
+            } else {
+                toggle.style.borderColor = 'var(--solution-green)';
+                toggle.style.color = 'var(--solution-green)';
+            }
+        });
+        
+        // Create initial clouds
+        setTimeout(() => {
+            createClouds(2);
+        }, 1000);
+        
+        // Periodic cloud creation
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                createClouds(1);
+            }
+        }, 5000);
+        
+        console.log("🌍 Climate Change Guide - Earth & Sky Theme with Cloud Animations");
+    </script>
+</body>
+</html>

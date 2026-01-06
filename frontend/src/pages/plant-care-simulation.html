@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Plant Care Game | EcoLife</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --green:#2e7d32;
+  --bg:#f4fbf6;
+  --card:#ffffff;
+}
+
+*{
+  box-sizing:border-box;
+  font-family:Poppins,system-ui;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+}
+
+/* HEADER */
+header{
+  background:linear-gradient(135deg,#1b5e20,#43a047);
+  color:white;
+  text-align:center;
+  padding:25px;
+}
+
+/* LAYOUT */
+.game-wrapper{
+  max-width:1100px;
+  margin:40px auto;
+  display:grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap:30px;
+  padding:20px;
+}
+
+/* INFO CARDS */
+.info-panel{
+  display:grid;
+  gap:15px;
+}
+
+.info-card{
+  background:var(--card);
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 12px 25px rgba(0,0,0,.12);
+  display:flex;
+  gap:12px;
+  transition:.3s;
+}
+
+.info-card:hover{
+  transform:translateY(-6px) scale(1.02);
+  box-shadow:0 20px 35px rgba(46,125,50,.25);
+}
+
+.info-icon{font-size:1.8rem;}
+
+.info-card h4{
+  margin:0;
+  color:var(--green);
+}
+
+.info-card p{
+  margin:6px 0 0;
+  font-size:.9rem;
+}
+
+/* GAME CARD */
+.game-card{
+  background:var(--card);
+  border-radius:24px;
+  padding:25px;
+  box-shadow:0 18px 40px rgba(0,0,0,.15);
+  text-align:center;
+}
+
+/* PLANT */
+.plant{
+  font-size:5.5rem;
+  margin:20px 0;
+  animation:float 2.5s ease-in-out infinite;
+  transition:.3s;
+}
+
+.plant:hover{transform:scale(1.1);}
+
+.glow{
+  filter:drop-shadow(0 0 14px rgba(46,125,50,.7));
+}
+
+/* STATUS */
+.status{
+  font-weight:600;
+  margin-bottom:15px;
+}
+
+/* METERS */
+.meter-wrap{margin-bottom:12px;}
+
+.meter{
+  background:#e0e0e0;
+  border-radius:20px;
+  overflow:hidden;
+  height:14px;
+}
+
+.meter span{
+  display:block;
+  height:100%;
+  background:linear-gradient(90deg,#66bb6a,#2e7d32);
+  transition:.4s;
+}
+
+/* ACTIONS */
+.actions{
+  display:flex;
+  gap:15px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+
+button{
+  padding:12px 22px;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  font-size:1rem;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:var(--green);
+  color:white;
+  transition:.3s;
+}
+
+button:hover{
+  transform:translateY(-4px) scale(1.05);
+  box-shadow:0 12px 28px rgba(46,125,50,.4);
+}
+
+.secondary{background:#4caf50;}
+.rest{background:#81c784;}
+.dashboard{background:#1b5e20;}
+.toggle{background:#00695c;}
+
+/* RESULT */
+.result{
+  margin-top:18px;
+  font-size:1.2rem;
+  font-weight:600;
+}
+
+/* FOOTER */
+.footer-btns{
+  margin-top:18px;
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+/* ANIMATION */
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+
+@media(max-width:900px){
+  .game-wrapper{grid-template-columns:1fr;}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🌱 Plant Care Simulation</h1>
+  <p>Learn plant care with fun & interaction</p>
+</header>
+
+<div class="game-wrapper">
+
+  <!-- INFO -->
+  <div class="info-panel">
+    <div class="info-card"><div class="info-icon">💧</div><div><h4>Water Carefully</h4><p>Too much water harms roots.</p></div></div>
+    <div class="info-card"><div class="info-icon">☀️</div><div><h4>Sunlight</h4><p>Helps plants grow strong.</p></div></div>
+    <div class="info-card"><div class="info-icon">😴</div><div><h4>Rest</h4><p>Balances excess water.</p></div></div>
+    <div class="info-card"><div class="info-icon">🌿</div><div><h4>Healthy Growth</h4><p>Balance is the key.</p></div></div>
+  </div>
+
+  <!-- GAME -->
+  <div class="game-card">
+    <h2>Your Plant</h2>
+
+    <div id="plant" class="plant">🌱</div>
+    <div id="status" class="status">Status: Growing</div>
+
+    <div class="meter-wrap">
+      💧 Water
+      <div class="meter"><span id="waterBar" style="width:40%"></span></div>
+    </div>
+
+    <div class="meter-wrap">
+      ☀️ Sunlight
+      <div class="meter"><span id="sunBar" style="width:40%"></span></div>
+    </div>
+
+    <div class="actions">
+      <button onclick="waterPlant()">💧 Water</button>
+      <button class="secondary" onclick="sunPlant()">☀️ Sunlight</button>
+      <button class="rest" onclick="restPlant()">😴 Rest</button>
+    </div>
+
+    <div id="result" class="result"></div>
+
+    <div class="footer-btns">
+      <button onclick="resetGame()">🔁 Reset</button>
+      <button class="dashboard" onclick="goDashboard()">🏠 Dashboard</button>
+      <button class="toggle" onclick="toggleMute()">🔊 Sound</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- AUDIO -->
+<audio id="bgMusic" loop src="https://cdn.pixabay.com/audio/2022/03/15/audio_eb4c55f7a1.mp3"></audio>
+<audio id="waterSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_5baf96e1df.mp3"></audio>
+<audio id="sunSound" src="https://cdn.pixabay.com/audio/2022/03/10/audio_57a4f3a86d.mp3"></audio>
+<audio id="winSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_48c3e43c21.mp3"></audio>
+<audio id="loseSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_9eafcb2d8c.mp3"></audio>
+
+<script>
+let water=2, sun=2, health=2, gameOver=false;
+let muted=false, musicOn=false;
+let audioUnlocked=false;
+
+const plant=document.getElementById("plant");
+const status=document.getElementById("status");
+const result=document.getElementById("result");
+const bgMusic=document.getElementById("bgMusic");
+
+/* 🔊 VOICE (FROM CODE 1) */
+function speak(text){
+  if(muted) return;
+  const msg = new SpeechSynthesisUtterance(text);
+  speechSynthesis.speak(msg);
+}
+
+/* 🔑 AUDIO UNLOCK */
+function unlockAudio(){
+  if(audioUnlocked) return;
+  document.querySelectorAll("audio").forEach(a=>{
+    a.volume=0.5;
+    a.play().then(()=>{
+      a.pause();
+      a.currentTime=0;
+    }).catch(()=>{});
+  });
+  audioUnlocked=true;
+}
+
+function playSound(id){
+  if(muted) return;
+  const s=document.getElementById(id);
+  s.currentTime=0;
+  s.play().catch(()=>{});
+}
+
+function update(){
+  document.getElementById("waterBar").style.width=(water*20)+"%";
+  document.getElementById("sunBar").style.width=(sun*20)+"%";
+  plant.classList.toggle("glow",health>=4);
+
+  if(health>=5){
+    plant.textContent="🌳";
+    status.textContent="Status: Healthy Plant 🌿";
+    result.textContent="🎉 You grew a healthy plant!";
+    playSound("winSound");
+    speak("Excellent! Your plant is healthy.");
+    gameOver=true;
+  }
+  else if(health<=0){
+    plant.textContent="🥀";
+    status.textContent="Status: Needs Care";
+    result.textContent="❌ Plant needs better care!";
+    playSound("loseSound");
+    speak("Oh no! The plant needs better care.");
+    gameOver=true;
+  }
+}
+
+function waterPlant(){
+  unlockAudio();
+  if(gameOver) return;
+  water++;
+  health+=(water<=3)?1:-1;
+  playSound("waterSound");
+  speak("Watering the plant.");
+  update();
+}
+
+function sunPlant(){
+  unlockAudio();
+  if(gameOver) return;
+  sun++;
+  health++;
+  playSound("sunSound");
+  speak("Giving sunlight to the plant.");
+  update();
+}
+
+function restPlant(){
+  unlockAudio();
+  if(gameOver) return;
+  water=Math.max(1,water-1);
+  health++;
+  playSound("sunSound");
+  speak("Let the plant rest.");
+  update();
+}
+
+function resetGame(){
+  unlockAudio();
+  water=2; sun=2; health=2; gameOver=false;
+  plant.textContent="🌱";
+  result.textContent="";
+  speak("Game restarted. Take care of your plant.");
+  update();
+}
+
+function toggleMute(){
+  unlockAudio();
+  muted=!muted;
+  result.textContent = muted ? "🔇 Sound Muted" : "🔊 Sound Enabled";
+}
+
+function toggleMusic(){
+  unlockAudio();
+  if(!musicOn){
+    bgMusic.volume=0.4;
+    bgMusic.play().then(()=>musicOn=true).catch(()=>{});
+  }else{
+    bgMusic.pause();
+    musicOn=false;
+  }
+}
+
+function goDashboard(){
+  window.location.href="kids-quiz-dashboard.html";
+}
+
+speak("Welcome! Take care of your plant.");
+update();
+</script>
+
+</body>
+</html>
