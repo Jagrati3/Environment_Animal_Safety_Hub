@@ -33,7 +33,6 @@
 
       <li><a href="pages/visual-mueseum.html" class="nav-link"><i class="fa-solid fa-landmark"></i> Virtual Museum</a></li>
       <li><a href="pages/animal-safety/endangered-animals.html" class="nav-link"><i class="fa-solid fa-paw"></i> Endangered Animals</a></li>
-      <li><a href="pages/report/sos.html" class="nav-link sos-link"><span class="sos-box">SOS</span> Emergency</a></li>
       <li><a href="pages/environment/environment.html" class="nav-link">Environment</a></li>
       <li><a href="pages/games/kids-zone.html" class="nav-link">Kids Zone</a></li>
       
@@ -45,40 +44,74 @@
           <li><a href="pages/report/report-dumping.html">Dumping Waste</a></li>
         </ul>
       </li>
-
+      
+      <li><a href="pages/report/sos.html" class="nav-link sos-link"><span class="sos-box">SOS</span> Emergency</a></li>
       <li><a href="pages/contact.html" class="nav-link">Contact</a></li>
-
-      <!-- Auth Section -->
-      <li class="nav-auth">
-        <div class="theme-toggle-btn" id="themeToggle" title="Toggle Dark Mode">
-          <i class="fa-solid fa-moon"></i>
-        </div>
-        
-        <!-- Guest View -->
-        <div class="auth-guest-only">
-          <a href="pages/Login.html" class="login-circle"><i class="fa-solid fa-user"></i></a>
-        </div>
-      </li>
     </ul>
+
+    <!-- Action Buttons Group -->
+    <div class="nav-actions" id="navActions">
+      <button class="theme-toggle-btn" id="themeToggle" title="Toggle Dark Mode" aria-label="Toggle Dark Mode">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+      
+      <!-- Guest View -->
+      <div class="auth-guest-only">
+        <a href="pages/Login.html" class="login-circle" aria-label="Login"><i class="fa-solid fa-user"></i></a>
+      </div>
+    </div>
   </div>
 </nav>
 
 <script>document.addEventListener('DOMContentLoaded', () => {
   const navToggle = document.getElementById('navToggle');
   const navLinks = document.getElementById('navLinks');
+  const navGroups = document.querySelectorAll('.nav-group');
 
   // Mobile Menu Toggle
   navToggle.addEventListener('click', () => {
     navLinks.classList.toggle('active');
+    navToggle.classList.toggle('active');
+    navToggle.setAttribute('aria-expanded', navLinks.classList.contains('active'));
   });
 
-  // Close mobile menu when clicking a link
+  // Close mobile menu when clicking a link (except dropdown toggles)
   document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-      if (!link.classList.contains('dropdown-toggle')) {
+    link.addEventListener('click', (e) => {
+      const parent = link.closest('.nav-group');
+      
+      // If it's a dropdown toggle on mobile
+      if (parent && window.innerWidth <= 768) {
+        e.preventDefault();
+        parent.classList.toggle('active');
+      } else if (!parent) {
+        // Regular link - close mobile menu
         navLinks.classList.remove('active');
+        navToggle.classList.remove('active');
       }
     });
+  });
+
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.navbar')) {
+      navLinks.classList.remove('active');
+      navToggle.classList.remove('active');
+      navGroups.forEach(group => group.classList.remove('active'));
+    }
+  });
+
+  // Handle window resize
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if (window.innerWidth > 768) {
+        navLinks.classList.remove('active');
+        navToggle.classList.remove('active');
+        navGroups.forEach(group => group.classList.remove('active'));
+      }
+    }, 250);
   });
 });
 </script>
