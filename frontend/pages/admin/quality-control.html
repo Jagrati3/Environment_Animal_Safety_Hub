@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Quality Control Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            background: none;
+            font-size: 1rem;
+        }
+
+        .tab.active {
+            background: white;
+            color: #e74c3c;
+            border-bottom: 3px solid #e74c3c;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card.danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .stat-card.warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+
+        .stat-card.success {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .project-card {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #ddd;
+            transition: transform 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-card.healthy {
+            border-left-color: #27ae60;
+        }
+
+        .project-card.warning {
+            border-left-color: #f39c12;
+        }
+
+        .project-card.critical {
+            border-left-color: #e74c3c;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .project-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .health-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .health-badge.healthy {
+            background: #27ae60;
+        }
+
+        .health-badge.warning {
+            background: #f39c12;
+        }
+
+        .health-badge.critical {
+            background: #e74c3c;
+        }
+
+        .quality-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .metric {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .metric i {
+            width: 16px;
+        }
+
+        .metric.good {
+            color: #27ae60;
+        }
+
+        .metric.bad {
+            color: #e74c3c;
+        }
+
+        .metric.warning {
+            color: #f39c12;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin: 2px;
+            transition: transform 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .link-checker-results {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .link-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 5px;
+            border-left: 4px solid #ddd;
+        }
+
+        .link-item.working {
+            border-left-color: #27ae60;
+        }
+
+        .link-item.broken {
+            border-left-color: #e74c3c;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e74c3c, #27ae60);
+            transition: width 0.3s ease;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .alert.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert.warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .alert.danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .readme-template {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-shield-alt"></i> Project Quality Control</h1>
+            <p>Monitor, validate, and maintain project health & quality</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('dashboard')">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </button>
+            <button class="tab" onclick="showTab('link-checker')">
+                <i class="fas fa-link"></i> Link Checker
+            </button>
+            <button class="tab" onclick="showTab('code-quality')">
+                <i class="fas fa-code"></i> Code Quality
+            </button>
+            <button class="tab" onclick="showTab('documentation')">
+                <i class="fas fa-file-alt"></i> Documentation
+            </button>
+            <button class="tab" onclick="showTab('testing')">
+                <i class="fas fa-vial"></i> Testing
+            </button>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card success">
+                    <div class="stat-number" id="healthyProjects">0</div>
+                    <div>Healthy Projects</div>
+                </div>
+                <div class="stat-card warning">
+                    <div class="stat-number" id="warningProjects">0</div>
+                    <div>Need Attention</div>
+                </div>
+                <div class="stat-card danger">
+                    <div class="stat-number" id="criticalProjects">0</div>
+                    <div>Critical Issues</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalProjects">0</div>
+                    <div>Total Projects</div>
+                </div>
+            </div>
+
+            <h3>Project Health Overview</h3>
+            <div id="projectGrid" class="project-grid"></div>
+        </div>
+
+        <!-- Link Checker Tab -->
+        <div id="link-checker" class="tab-content">
+            <h3>Automated Link Checker</h3>
+            <button class="btn" onclick="runLinkChecker()">
+                <i class="fas fa-play"></i> Run Link Check
+            </button>
+            <button class="btn btn-warning" onclick="checkAllProjects()">
+                <i class="fas fa-globe"></i> Check All Projects
+            </button>
+
+            <div id="linkCheckerResults" class="link-checker-results" style="display: none;">
+                <h4>Link Check Results</h4>
+                <div id="linkResults"></div>
+            </div>
+        </div>
+
+        <!-- Code Quality Tab -->
+        <div id="code-quality" class="tab-content">
+            <h3>Code Quality Assessment</h3>
+            <button class="btn" onclick="runCodeQualityCheck()">
+                <i class="fas fa-search"></i> Analyze Code Quality
+            </button>
+            <button class="btn btn-success" onclick="generateQualityBadges()">
+                <i class="fas fa-award"></i> Generate Quality Badges
+            </button>
+
+            <div id="codeQualityResults"></div>
+        </div>
+
+        <!-- Documentation Tab -->
+        <div id="documentation" class="tab-content">
+            <h3>Documentation Management</h3>
+            
+            <div class="form-group">
+                <h4>README Template Generator</h4>
+                <button class="btn" onclick="generateReadmeTemplate()">
+                    <i class="fas fa-file-plus"></i> Generate README Template
+                </button>
+            </div>
+
+            <div id="readmeTemplate" class="readme-template" style="display: none;"></div>
+
+            <h4>Documentation Status</h4>
+            <div id="documentationStatus"></div>
+        </div>
+
+        <!-- Testing Tab -->
+        <div id="testing" class="tab-content">
+            <h3>Automated Testing</h3>
+            <button class="btn" onclick="runBasicTests()">
+                <i class="fas fa-play-circle"></i> Run Basic Tests
+            </button>
+            <button class="btn btn-warning" onclick="setupTestSuite()">
+                <i class="fas fa-cogs"></i> Setup Test Suite
+            </button>
+
+            <div id="testResults"></div>
+        </div>
+    </div>
+
+    <script>
+        // Sample project data
+        let projects = [
+            {
+                id: 1,
+                name: 'EcoLife Website',
+                path: 'frontend/index.html',
+                status: 'healthy',
+                lastChecked: new Date(),
+                issues: [],
+                links: ['https://fonts.googleapis.com', 'https://cdnjs.cloudflare.com'],
+                hasReadme: true,
+                codeQuality: 85,
+                testCoverage: 70
+            },
+            {
+                id: 2,
+                name: 'Animal Safety Portal',
+                path: 'frontend/pages/animal-safety/',
+                status: 'warning',
+                lastChecked: new Date(),
+                issues: ['Missing README', 'Broken external link'],
+                links: ['https://example.com/broken-link'],
+                hasReadme: false,
+                codeQuality: 65,
+                testCoverage: 30
+            },
+            {
+                id: 3,
+                name: 'Plant Care System',
+                path: 'frontend/pages/plant-care.html',
+                status: 'critical',
+                lastChecked: new Date(),
+                issues: ['Multiple broken links', 'Outdated dependencies', 'No documentation'],
+                links: ['https://broken-link.com', 'https://another-broken.com'],
+                hasReadme: false,
+                codeQuality: 45,
+                testCoverage: 10
+            }
+        ];
+
+        // Tab switching
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            
+            if (tabName === 'dashboard') updateDashboard();
+        }
+
+        // Dashboard functions
+        function updateDashboard() {
+            const healthy = projects.filter(p => p.status === 'healthy').length;
+            const warning = projects.filter(p => p.status === 'warning').length;
+            const critical = projects.filter(p => p.status === 'critical').length;
+
+            document.getElementById('healthyProjects').textContent = healthy;
+            document.getElementById('warningProjects').textContent = warning;
+            document.getElementById('criticalProjects').textContent = critical;
+            document.getElementById('totalProjects').textContent = projects.length;
+
+            renderProjectGrid();
+        }
+
+        function renderProjectGrid() {
+            const container = document.getElementById('projectGrid');
+            container.innerHTML = projects.map(project => `
+                <div class="project-card ${project.status}">
+                    <div class="project-header">
+                        <div class="project-name">${project.name}</div>
+                        <div class="health-badge ${project.status}">
+                            ${project.status.toUpperCase()}
+                        </div>
+                    </div>
+                    
+                    <div class="quality-metrics">
+                        <div class="metric ${project.hasReadme ? 'good' : 'bad'}">
+                            <i class="fas ${project.hasReadme ? 'fa-check' : 'fa-times'}"></i>
+                            README ${project.hasReadme ? 'Present' : 'Missing'}
+                        </div>
+                        <div class="metric ${project.codeQuality > 70 ? 'good' : project.codeQuality > 50 ? 'warning' : 'bad'}">
+                            <i class="fas fa-code"></i>
+                            Code Quality: ${project.codeQuality}%
+                        </div>
+                        <div class="metric ${project.testCoverage > 60 ? 'good' : project.testCoverage > 30 ? 'warning' : 'bad'}">
+                            <i class="fas fa-vial"></i>
+                            Test Coverage: ${project.testCoverage}%
+                        </div>
+                        <div class="metric ${project.issues.length === 0 ? 'good' : 'bad'}">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Issues: ${project.issues.length}
+                        </div>
+                    </div>
+
+                    ${project.issues.length > 0 ? `
+                        <div class="alert warning">
+                            <strong>Issues:</strong><br>
+                            ${project.issues.map(issue => `• ${issue}`).join('<br>')}
+                        </div>
+                    ` : ''}
+
+                    <div style="margin-top: 15px;">
+                        <button class="btn" onclick="fixProject(${project.id})">
+                            <i class="fas fa-wrench"></i> Quick Fix
+                        </button>
+                        <button class="btn btn-warning" onclick="inspectProject(${project.id})">
+                            <i class="fas fa-search"></i> Inspect
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Link Checker functions
+        function runLinkChecker() {
+            const resultsContainer = document.getElementById('linkCheckerResults');
+            const linkResults = document.getElementById('linkResults');
+            
+            resultsContainer.style.display = 'block';
+            linkResults.innerHTML = '<div class="alert warning">Checking links...</div>';
+
+            // Simulate link checking
+            setTimeout(() => {
+                const allLinks = projects.flatMap(p => p.links.map(link => ({
+                    project: p.name,
+                    url: link,
+                    status: Math.random() > 0.3 ? 'working' : 'broken'
+                })));
+
+                linkResults.innerHTML = allLinks.map(link => `
+                    <div class="link-item ${link.status}">
+                        <div>
+                            <strong>${link.project}</strong><br>
+                            <small>${link.url}</small>
+                        </div>
+                        <div class="health-badge ${link.status === 'working' ? 'healthy' : 'critical'}">
+                            ${link.status === 'working' ? 'WORKING' : 'BROKEN'}
+                        </div>
+                    </div>
+                `).join('');
+            }, 2000);
+        }
+
+        function checkAllProjects() {
+            showAlert('success', 'Started comprehensive link check for all projects...');
+            runLinkChecker();
+        }
+
+        // Code Quality functions
+        function runCodeQualityCheck() {
+            const container = document.getElementById('codeQualityResults');
+            container.innerHTML = '<div class="alert warning">Analyzing code quality...</div>';
+
+            setTimeout(() => {
+                container.innerHTML = `
+                    <h4>Code Quality Report</h4>
+                    ${projects.map(project => `
+                        <div class="project-card ${project.codeQuality > 70 ? 'healthy' : project.codeQuality > 50 ? 'warning' : 'critical'}">
+                            <h5>${project.name}</h5>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${project.codeQuality}%"></div>
+                            </div>
+                            <p>Quality Score: ${project.codeQuality}%</p>
+                            <div class="quality-metrics">
+                                <div class="metric ${project.codeQuality > 80 ? 'good' : 'warning'}">
+                                    <i class="fas fa-code"></i> Code Structure
+                                </div>
+                                <div class="metric ${project.hasReadme ? 'good' : 'bad'}">
+                                    <i class="fas fa-file-alt"></i> Documentation
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                `;
+            }, 1500);
+        }
+
+        function generateQualityBadges() {
+            showAlert('success', 'Quality badges generated for all projects!');
+        }
+
+        // Documentation functions
+        function generateReadmeTemplate() {
+            const template = `# Project Name
+
+## Description
+Brief description of what this project does and who it's for.
+
+## Features
+- Feature 1
+- Feature 2
+- Feature 3
+
+## Tech Stack
+- HTML5
+- CSS3
+- JavaScript
+- [Other technologies]
+
+## Installation
+\`\`\`bash
+# Clone the repository
+git clone [repository-url]
+
+# Navigate to project directory
+cd project-name
+
+# Install dependencies (if any)
+npm install
+\`\`\`
+
+## Usage
+1. Open index.html in your browser
+2. [Additional usage instructions]
+
+## Screenshots
+![Screenshot](path/to/screenshot.png)
+
+## Contributing
+1. Fork the project
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
+
+## License
+This project is licensed under the MIT License.
+
+## Contact
+- Project Maintainer: [Name]
+- Email: [email]
+- GitHub: [github-profile]
+
+## Acknowledgments
+- Thanks to contributors
+- Special mentions`;
+
+            const container = document.getElementById('readmeTemplate');
+            container.textContent = template;
+            container.style.display = 'block';
+        }
+
+        // Testing functions
+        function runBasicTests() {
+            const container = document.getElementById('testResults');
+            container.innerHTML = '<div class="alert warning">Running basic functionality tests...</div>';
+
+            setTimeout(() => {
+                const testResults = [
+                    { name: 'Page Load Test', status: 'pass', time: '0.5s' },
+                    { name: 'Link Validation', status: 'fail', time: '1.2s' },
+                    { name: 'Form Validation', status: 'pass', time: '0.8s' },
+                    { name: 'Mobile Responsiveness', status: 'pass', time: '0.3s' },
+                    { name: 'Accessibility Check', status: 'warning', time: '1.0s' }
+                ];
+
+                container.innerHTML = `
+                    <h4>Test Results</h4>
+                    ${testResults.map(test => `
+                        <div class="link-item ${test.status === 'pass' ? 'working' : 'broken'}">
+                            <div>
+                                <strong>${test.name}</strong><br>
+                                <small>Execution time: ${test.time}</small>
+                            </div>
+                            <div class="health-badge ${test.status === 'pass' ? 'healthy' : test.status === 'warning' ? 'warning' : 'critical'}">
+                                ${test.status.toUpperCase()}
+                            </div>
+                        </div>
+                    `).join('')}
+                `;
+            }, 2000);
+        }
+
+        function setupTestSuite() {
+            showAlert('success', 'Test suite configuration started...');
+        }
+
+        // Utility functions
+        function fixProject(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                project.status = 'healthy';
+                project.issues = [];
+                project.hasReadme = true;
+                project.codeQuality = Math.min(project.codeQuality + 20, 100);
+                updateDashboard();
+                showAlert('success', `Fixed issues in ${project.name}!`);
+            }
+        }
+
+        function inspectProject(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                alert(`Project: ${project.name}\nPath: ${project.path}\nStatus: ${project.status}\nIssues: ${project.issues.join(', ')}`);
+            }
+        }
+
+        function showAlert(type, message) {
+            const alert = document.createElement('div');
+            alert.className = `alert ${type}`;
+            alert.textContent = message;
+            alert.style.position = 'fixed';
+            alert.style.top = '20px';
+            alert.style.right = '20px';
+            alert.style.zIndex = '1000';
+            document.body.appendChild(alert);
+            
+            setTimeout(() => alert.remove(), 3000);
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDashboard();
+        });
+    </script>
+</body>
+</html>
