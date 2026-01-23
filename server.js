@@ -2,6 +2,14 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
+// CORS Security Headers
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
+
 // Middleware to log all requests
 app.use((req, res, next) => {
     const timestamp = new Date().toISOString();
@@ -49,7 +57,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'frontend/index.html'));
 });
 
-const PORT = 8000;
+const PORT = 3000;
 app.listen(PORT, () => {
     console.log('\n' + '='.repeat(60));
     console.log(`🚀 Server running at http://localhost:${PORT}`);
