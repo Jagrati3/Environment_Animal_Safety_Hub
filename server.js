@@ -17,8 +17,12 @@ app.use((req, res, next) => {
     next();
 });
 
-// Serve static files from frontend directory
-app.use(express.static(path.join(__dirname, 'frontend')));
+// Static File Caching
+app.use(express.static(path.join(__dirname, 'frontend'), {
+    maxAge: '1d', // Cache for 1 day
+    etag: true,
+    lastModified: true
+}));
 
 // Disable directory listing
 app.use((req, res, next) => {
