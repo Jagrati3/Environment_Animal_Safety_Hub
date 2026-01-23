@@ -167,7 +167,6 @@ class QuizModule {
     this.index = (this.index + 1) % this.quizData.length;
     this.loadQuestion();
   }
-}
 
   handleError(message) {
     if (this.elements.question) {
