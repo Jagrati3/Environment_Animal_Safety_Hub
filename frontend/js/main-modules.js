@@ -25,15 +25,12 @@ class ModuleLoader {
       console.log('✅ All modules loaded successfully');
     } catch (error) {
       console.error('❌ Error loading modules:', error);
+      this.handleModuleError('Failed to load modules', error);
     }
   }
 
   async loadCoreModules() {
-    // These modules are essential and should load first
-    const coreModules = [
-      'utilities',
-      'scroll-controls'
-    ];
+    const coreModules = ['utilities', 'scroll-controls', 'error-handler'];
 
     for (const moduleName of coreModules) {
       try {
@@ -41,19 +38,13 @@ class ModuleLoader {
         this.modules[moduleName] = module.default;
       } catch (error) {
         console.warn(`Failed to load core module: ${moduleName}`, error);
+        this.handleModuleError(`Core module ${moduleName} failed`, error);
       }
     }
   }
 
   async loadComponentModules() {
-    // These modules enhance functionality
-    const componentModules = [
-      'quiz',
-      'dictionary', 
-      'environmental-effects',
-      'garden-game',
-      'survival-score'
-    ];
+    const componentModules = ['quiz', 'dictionary', 'environmental-effects', 'garden-game', 'survival-score'];
 
     for (const moduleName of componentModules) {
       try {
@@ -61,6 +52,7 @@ class ModuleLoader {
         this.modules[moduleName] = module.default;
       } catch (error) {
         console.warn(`Failed to load component module: ${moduleName}`, error);
+        // Don't break the app for non-critical components
       }
     }
   }
@@ -219,15 +211,28 @@ class ModuleLoader {
     return this.initialized;
   }
 
+  handleModuleError(message, error) {
+    console.error('ModuleLoader Error:', message, error);
+    
+    // Show user notification for critical errors
+    if (window.globalErrorHandler) {
+      window.globalErrorHandler.logError('Module Error', error);
+    }
+  }
+
   // Cleanup method
   destroy() {
-    Object.values(this.modules).forEach(module => {
-      if (module && typeof module.destroy === 'function') {
-        module.destroy();
-      }
-    });
-    this.modules = {};
-    this.initialized = false;
+    try {
+      Object.values(this.modules).forEach(module => {
+        if (module && typeof module.destroy === 'function') {
+          module.destroy();
+        }
+      });
+      this.modules = {};
+      this.initialized = false;
+    } catch (error) {
+      console.error('Error during cleanup:', error);
+    }
   }
 }
 
@@ -242,7 +247,14 @@ window.closeInfoModal = function() {
 
 // Initialize module loader when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  window.moduleLoader = new ModuleLoader();
+  try {
+    window.moduleLoader = new ModuleLoader();
+  } catch (error) {
+    console.error('Failed to initialize ModuleLoader:', error);
+    if (window.globalErrorHandler) {
+      window.globalErrorHandler.logError('Critical Error', error);
+    }
+  }
 });
 
 export default ModuleLoader;
