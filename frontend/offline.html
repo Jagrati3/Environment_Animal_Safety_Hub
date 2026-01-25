@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Offline | EcoLife</title>
+  <link rel="icon" type="image/png" href="assets/images/others/envirnoment-logo.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#22c55e">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <style>
+    :root {
+      --primary: #22c55e;
+      --primary-dark: #16a34a;
+      --bg-gradient-start: #0d1b0f;
+      --bg-gradient-end: #1a3d1f;
+      --text-light: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.7);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+      color: var(--text-light);
+      overflow: hidden;
+    }
+    
+    .offline-container {
+      text-align: center;
+      padding: 40px 24px;
+      max-width: 500px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .offline-icon {
+      position: relative;
+      margin-bottom: 32px;
+    }
+    
+    .offline-icon i {
+      font-size: 80px;
+      color: var(--primary);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    .offline-icon::after {
+      content: '';
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(34, 197, 94, 0.2) 0%, transparent 70%);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    @keyframes glow {
+      0% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+    }
+    
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--primary) 0%, #4ade80 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      line-height: 1.7;
+    }
+    
+    .offline-tips {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 32px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .offline-tips h3 {
+      font-size: 1rem;
+      color: var(--primary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .offline-tips ul {
+      list-style: none;
+      text-align: left;
+    }
+    
+    .offline-tips li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .offline-tips li:last-child {
+      border-bottom: none;
+    }
+    
+    .offline-tips li i {
+      color: var(--primary);
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+    
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border: none;
+      box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(34, 197, 94, 0.5);
+    }
+    
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+    
+    /* Floating background elements */
+    .bg-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .bg-element {
+      position: absolute;
+      font-size: 40px;
+      opacity: 0.1;
+      animation: float 10s ease-in-out infinite;
+    }
+    
+    .bg-element:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+    .bg-element:nth-child(2) { top: 20%; right: 10%; animation-delay: 2s; }
+    .bg-element:nth-child(3) { bottom: 20%; left: 15%; animation-delay: 4s; }
+    .bg-element:nth-child(4) { bottom: 10%; right: 20%; animation-delay: 1s; }
+    .bg-element:nth-child(5) { top: 50%; left: 5%; animation-delay: 3s; }
+    .bg-element:nth-child(6) { top: 40%; right: 5%; animation-delay: 5s; }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(10deg); }
+    }
+    
+    /* Status indicator */
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 32px;
+      padding: 10px 20px;
+      background: rgba(239, 68, 68, 0.1);
+      border-radius: 25px;
+      color: #ef4444;
+      font-size: 0.9rem;
+    }
+    
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #ef4444;
+      border-radius: 50%;
+      animation: blink 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    
+    .status-indicator.online {
+      background: rgba(34, 197, 94, 0.1);
+      color: var(--primary);
+    }
+    
+    .status-indicator.online .status-dot {
+      background: var(--primary);
+      animation: none;
+    }
+    
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      .subtitle {
+        font-size: 1rem;
+      }
+      
+      .offline-icon i {
+        font-size: 60px;
+      }
+      
+      .btn {
+        padding: 12px 24px;
+        font-size: 0.9rem;
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Background Elements -->
+  <div class="bg-elements">
+    <div class="bg-element"><i class="fa-solid fa-leaf"></i></div>
+    <div class="bg-element"><i class="fa-solid fa-paw"></i></div>
+    <div class="bg-element"><i class="fa-solid fa-tree"></i></div>
+    <div class="bg-element"><i class="fa-solid fa-seedling"></i></div>
+    <div class="bg-element"><i class="fa-solid fa-earth-americas"></i></div>
+    <div class="bg-element"><i class="fa-solid fa-recycle"></i></div>
+  </div>
+
+  <div class="offline-container">
+    <div class="offline-icon">
+      <i class="fa-solid fa-wifi-slash"></i>
+    </div>
+    
+    <h1>You're Offline</h1>
+    
+    <p class="subtitle">
+      It looks like you've lost your internet connection. Don't worry – some content is still available offline!
+    </p>
+    
+    <div class="offline-tips">
+      <h3><i class="fa-solid fa-lightbulb"></i> While You're Offline</h3>
+      <ul>
+        <li>
+          <i class="fa-solid fa-check-circle"></i>
+          <span>Previously visited pages are cached and available</span>
+        </li>
+        <li>
+          <i class="fa-solid fa-check-circle"></i>
+          <span>Saved articles can be read without connection</span>
+        </li>
+        <li>
+          <i class="fa-solid fa-check-circle"></i>
+          <span>Take eco-challenges – we'll sync when you're back online</span>
+        </li>
+        <li>
+          <i class="fa-solid fa-info-circle"></i>
+          <span>Check your WiFi or mobile data connection</span>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="action-buttons">
+      <button class="btn btn-primary" onclick="window.location.reload()">
+        <i class="fa-solid fa-rotate"></i> Try Again
+      </button>
+      <a href="index.html" class="btn btn-secondary">
+        <i class="fa-solid fa-home"></i> Go Home
+      </a>
+    </div>
+    
+    <div class="status-indicator" id="status-indicator">
+      <div class="status-dot"></div>
+      <span id="status-text">Checking connection...</span>
+    </div>
+  </div>
+
+  <script>
+    // Check network status
+    const statusIndicator = document.getElementById('status-indicator');
+    const statusText = document.getElementById('status-text');
+    
+    function updateStatus() {
+      if (navigator.onLine) {
+        statusIndicator.classList.add('online');
+        statusText.textContent = 'Connection restored! Redirecting...';
+        // Redirect to home page after a short delay
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1500);
+      } else {
+        statusIndicator.classList.remove('online');
+        statusText.textContent = 'No internet connection';
+      }
+    }
+    
+    // Listen for online/offline events
+    window.addEventListener('online', updateStatus);
+    window.addEventListener('offline', updateStatus);
+    
+    // Initial check
+    updateStatus();
+  </script>
+</body>
+
+</html>

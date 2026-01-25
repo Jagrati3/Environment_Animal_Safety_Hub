@@ -42,7 +42,7 @@ const storyData = {
     fullStory: `
       <div class="modal-story">
         <div class="story-hero">
-          <img src="../assets/images/others/rescue-cat.jpg" alt="Bella" onerror="this.src='../assets/images/others/placeholder.jpg'">
+          <img src="../assets/images/others/rescue-cat.jpg" alt="Bella" >
           <div class="story-overlay">
             <h1>Bella</h1>
             <p>Domestic Shorthair • Rescued January 2024</p>
@@ -74,7 +74,7 @@ const storyData = {
     fullStory: `
       <div class="modal-story">
         <div class="story-hero">
-          <img src="../assets/images/others/rescue-puppy.jpg" alt="Oliver" onerror="this.src='../assets/images/others/placeholder.jpg'">
+          <img src="../assets/images/others/rescue-puppy.jpg" alt="Oliver" >
           <div class="story-overlay">
             <h1>Oliver</h1>
             <p>Labrador Mix • Rescued February 2024</p>
@@ -106,7 +106,7 @@ const storyData = {
     fullStory: `
       <div class="modal-story">
         <div class="story-hero">
-          <img src="../assets/images/others/rescue-owl.jpg" alt="Luna" onerror="this.src='../assets/images/others/placeholder.jpg'">
+          <img src="../assets/images/others/rescue-owl.jpg" alt="Luna" >
           <div class="story-overlay">
             <h1>Luna</h1>
             <p>Great Horned Owl • Rescued April 2024</p>
@@ -138,7 +138,7 @@ const storyData = {
     fullStory: `
       <div class="modal-story">
         <div class="story-hero">
-          <img src="../assets/images/others/rescue-senior.jpg" alt="Charlie" onerror="this.src='../assets/images/others/placeholder.jpg'">
+          <img src="../assets/images/others/rescue-senior.jpg" alt="Charlie" >
           <div class="story-overlay">
             <h1>Charlie</h1>
             <p>Beagle Mix • Rescued December 2023</p>
@@ -170,7 +170,7 @@ const storyData = {
     fullStory: `
       <div class="modal-story">
         <div class="story-hero">
-          <img src="../assets/images/others/rescue-horse.jpg" alt="Ruby" onerror="this.src='../assets/images/others/placeholder.jpg'">
+          <img src="../assets/images/others/rescue-horse.jpg" alt="Ruby" >
           <div class="story-overlay">
             <h1>Ruby</h1>
             <p>Thoroughbred • Rescued June 2024</p>
@@ -202,7 +202,7 @@ const storyData = {
     fullStory: `
       <div class="modal-story">
         <div class="story-hero">
-          <img src="../assets/images/others/rescue-kitten.jpg" alt="Whiskers" onerror="this.src='../assets/images/others/placeholder.jpg'">
+          <img src="../assets/images/others/rescue-kitten.jpg" alt="Whiskers" >
           <div class="story-overlay">
             <h1>Whiskers</h1>
             <p>Tabby Kitten • Rescued May 2024</p>
@@ -234,7 +234,7 @@ const storyData = {
     fullStory: `
       <div class="modal-story">
         <div class="story-hero">
-          <img src="../assets/images/others/rescue-black-dog.jpg" alt="Shadow" onerror="this.src='../assets/images/others/placeholder.jpg'">
+          <img src="../assets/images/others/rescue-black-dog.jpg" alt="Shadow" >
           <div class="story-overlay">
             <h1>Shadow</h1>
             <p>Black Labrador • Rescued July 2024</p>
@@ -266,7 +266,7 @@ const storyData = {
     fullStory: `
       <div class="modal-story">
         <div class="story-hero">
-          <img src="../assets/images/others/rescue-monkey.jpg" alt="Mango" onerror="this.src='../assets/images/others/placeholder.jpg'">
+          <img src="../assets/images/others/rescue-monkey.jpg" alt="Mango" >
           <div class="story-overlay">
             <h1>Mango</h1>
             <p>Capuchin Monkey • Rescued August 2024</p>

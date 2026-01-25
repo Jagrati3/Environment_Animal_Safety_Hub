@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="../../assets/images/others/envirnoment-logo.png">
+    <title>Air Quality Dashboard | EcoLife</title>
+    <meta name="description"
+        content="Check real-time air quality index (AQI), pollutant levels, and weather conditions for your location. Stay informed about air pollution and protect your health." />
+    <meta name="keywords" content="air quality, AQI, pollution, PM2.5, PM10, NO2, weather, health, environment" />
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../../css/global/variables.css" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/components/navbar.css" />
+    <link rel="stylesheet" href="../../css/components/footer.css" />
+    <link rel="stylesheet" href="../../css/components/scrollBar.css" />
+    <link rel="stylesheet" href="../../css/global/accessibility.css" />
+    <link rel="stylesheet" href="../../css/pages/air-quality-dashboard.css" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Leaflet.js for Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- Skip Navigation Link -->
+    <a href="#main-content" class="skip-link" id="skip-to-main">Skip to main content</a>
+
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Navbar -->
+    <div id="navbar-container"></div>
+
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Hero Section -->
+        <section class="aqi-hero">
+            <div class="hero-bg-particles" id="hero-particles"></div>
+            <div class="hero-content" data-aos="fade-up">
+                <div class="hero-badge">
+                    <i class="fa-solid fa-wind"></i>
+                    <span>Real-Time Monitoring</span>
+                </div>
+                <h1 class="hero-title">
+                    Air Quality <span class="gradient-text">Dashboard</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Monitor real-time air quality, pollutant levels, and weather conditions.
+                    Make informed decisions about outdoor activities and protect your health.
+                </p>
+
+                <!-- Location Search -->
+                <div class="search-container">
+                    <div class="search-box">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <input type="text" id="city-search" placeholder="Search city or use current location..."
+                            autocomplete="off" />
+                        <button id="search-btn" class="search-btn" aria-label="Search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                        <button id="location-btn" class="location-btn" aria-label="Use current location">
+                            <i class="fa-solid fa-crosshairs"></i>
+                        </button>
+                    </div>
+                    <div id="search-suggestions" class="search-suggestions"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading State -->
+        <div class="loading-overlay" id="loading-overlay">
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Fetching air quality data...</p>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <section class="dashboard-section" id="dashboard-section">
+            <div class="dashboard-container">
+                <!-- Current Location Header -->
+                <div class="location-header" data-aos="fade-up">
+                    <div class="location-info">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <h2 id="current-location">Select a Location</h2>
+                    </div>
+                    <div class="last-updated">
+                        <i class="fa-solid fa-clock"></i>
+                        <span id="last-updated">--</span>
+                    </div>
+                </div>
+
+                <!-- Health Advisory Banner -->
+                <div class="health-advisory" id="health-advisory" data-aos="fade-up" data-aos-delay="100">
+                    <div class="advisory-icon">
+                        <i class="fa-solid fa-shield-heart"></i>
+                    </div>
+                    <div class="advisory-content">
+                        <h3 id="advisory-title">Health Advisory</h3>
+                        <p id="advisory-message">Search for a location to get health recommendations based on current
+                            air quality.</p>
+                    </div>
+                    <button class="advisory-close" id="advisory-close" aria-label="Close advisory">
+                        <i class="fa-solid fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Main AQI Display -->
+                <div class="aqi-main-card" data-aos="fade-up" data-aos-delay="150">
+                    <div class="aqi-gauge-container">
+                        <div class="aqi-gauge" id="aqi-gauge">
+                            <div class="gauge-ring">
+                                <svg viewBox="0 0 200 200">
+                                    <circle class="gauge-bg" cx="100" cy="100" r="85" />
+                                    <circle class="gauge-fill" id="gauge-fill" cx="100" cy="100" r="85" />
+                                </svg>
+                            </div>
+                            <div class="gauge-value">
+                                <span class="aqi-number" id="aqi-value">--</span>
+                                <span class="aqi-label">AQI</span>
+                            </div>
+                        </div>
+                        <div class="aqi-status" id="aqi-status">
+                            <span class="status-badge" id="status-badge">N/A</span>
+                            <p class="status-description" id="status-description">
+                                Select a location to view air quality information
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- AQI Scale Legend -->
+                    <div class="aqi-scale">
+                        <h4>Air Quality Index Scale</h4>
+                        <div class="scale-bar">
+                            <div class="scale-segment good" data-range="0-50">
+                                <span class="range">0-50</span>
+                                <span class="label">Good</span>
+                            </div>
+                            <div class="scale-segment moderate" data-range="51-100">
+                                <span class="range">51-100</span>
+                                <span class="label">Moderate</span>
+                            </div>
+                            <div class="scale-segment unhealthy-sensitive" data-range="101-150">
+                                <span class="range">101-150</span>
+                                <span class="label">Unhealthy (Sensitive)</span>
+                            </div>
+                            <div class="scale-segment unhealthy" data-range="151-200">
+                                <span class="range">151-200</span>
+                                <span class="label">Unhealthy</span>
+                            </div>
+                            <div class="scale-segment very-unhealthy" data-range="201-300">
+                                <span class="range">201-300</span>
+                                <span class="label">Very Unhealthy</span>
+                            </div>
+                            <div class="scale-segment hazardous" data-range="301+">
+                                <span class="range">301+</span>
+                                <span class="label">Hazardous</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid" data-aos="fade-up" data-aos-delay="200">
+                    <!-- Pollutant Cards -->
+                    <div class="stat-card pollutant-card">
+                        <div class="stat-icon pm25">
+                            <i class="fa-solid fa-smog"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">PM2.5</span>
+                            <span class="stat-value" id="pm25-value">--</span>
+                            <span class="stat-unit">µg/m³</span>
+                        </div>
+                        <div class="stat-indicator" id="pm25-indicator"></div>
+                    </div>
+
+                    <div class="stat-card pollutant-card">
+                        <div class="stat-icon pm10">
+                            <i class="fa-solid fa-cloud"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">PM10</span>
+                            <span class="stat-value" id="pm10-value">--</span>
+                            <span class="stat-unit">µg/m³</span>
+                        </div>
+                        <div class="stat-indicator" id="pm10-indicator"></div>
+                    </div>
+
+                    <div class="stat-card pollutant-card">
+                        <div class="stat-icon no2">
+                            <i class="fa-solid fa-atom"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">NO₂</span>
+                            <span class="stat-value" id="no2-value">--</span>
+                            <span class="stat-unit">µg/m³</span>
+                        </div>
+                        <div class="stat-indicator" id="no2-indicator"></div>
+                    </div>
+
+                    <div class="stat-card pollutant-card">
+                        <div class="stat-icon o3">
+                            <i class="fa-solid fa-sun"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">O₃ (Ozone)</span>
+                            <span class="stat-value" id="o3-value">--</span>
+                            <span class="stat-unit">µg/m³</span>
+                        </div>
+                        <div class="stat-indicator" id="o3-indicator"></div>
+                    </div>
+
+                    <div class="stat-card pollutant-card">
+                        <div class="stat-icon co">
+                            <i class="fa-solid fa-fire"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">CO</span>
+                            <span class="stat-value" id="co-value">--</span>
+                            <span class="stat-unit">µg/m³</span>
+                        </div>
+                        <div class="stat-indicator" id="co-indicator"></div>
+                    </div>
+
+                    <div class="stat-card pollutant-card">
+                        <div class="stat-icon so2">
+                            <i class="fa-solid fa-industry"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">SO₂</span>
+                            <span class="stat-value" id="so2-value">--</span>
+                            <span class="stat-unit">µg/m³</span>
+                        </div>
+                        <div class="stat-indicator" id="so2-indicator"></div>
+                    </div>
+                </div>
+
+                <!-- Weather Section -->
+                <div class="weather-section" data-aos="fade-up" data-aos-delay="250">
+                    <div class="section-header">
+                        <h3><i class="fa-solid fa-cloud-sun"></i> Current Weather</h3>
+                    </div>
+                    <div class="weather-grid">
+                        <div class="weather-main">
+                            <div class="weather-icon" id="weather-icon">
+                                <i class="fa-solid fa-cloud-sun"></i>
+                            </div>
+                            <div class="weather-temp">
+                                <span class="temp-value" id="temp-value">--</span>
+                                <span class="temp-unit">°C</span>
+                            </div>
+                            <div class="weather-desc" id="weather-desc">--</div>
+                        </div>
+                        <div class="weather-details">
+                            <div class="weather-detail">
+                                <i class="fa-solid fa-droplet"></i>
+                                <span class="detail-label">Humidity</span>
+                                <span class="detail-value" id="humidity-value">--%</span>
+                            </div>
+                            <div class="weather-detail">
+                                <i class="fa-solid fa-wind"></i>
+                                <span class="detail-label">Wind Speed</span>
+                                <span class="detail-value" id="wind-value">-- m/s</span>
+                            </div>
+                            <div class="weather-detail">
+                                <i class="fa-solid fa-eye"></i>
+                                <span class="detail-label">Visibility</span>
+                                <span class="detail-value" id="visibility-value">-- km</span>
+                            </div>
+                            <div class="weather-detail">
+                                <i class="fa-solid fa-gauge-high"></i>
+                                <span class="detail-label">Pressure</span>
+                                <span class="detail-value" id="pressure-value">-- hPa</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map Section -->
+                <div class="map-section" data-aos="fade-up" data-aos-delay="300">
+                    <div class="section-header">
+                        <h3><i class="fa-solid fa-map-location-dot"></i> Pollution Heatmap</h3>
+                        <div class="map-controls">
+                            <button class="map-control-btn active" data-layer="aqi" id="layer-aqi">AQI</button>
+                            <button class="map-control-btn" data-layer="pm25" id="layer-pm25">PM2.5</button>
+                            <button class="map-control-btn" data-layer="temp" id="layer-temp">Temperature</button>
+                        </div>
+                    </div>
+                    <div class="map-container" id="pollution-map"></div>
+                    <div class="map-legend">
+                        <h4>Map Legend</h4>
+                        <div class="legend-items" id="map-legend-items">
+                            <div class="legend-item"><span class="legend-color good"></span> Good (0-50)</div>
+                            <div class="legend-item"><span class="legend-color moderate"></span> Moderate (51-100)</div>
+                            <div class="legend-item"><span class="legend-color unhealthy-sensitive"></span> Unhealthy
+                                for Sensitive (101-150)</div>
+                            <div class="legend-item"><span class="legend-color unhealthy"></span> Unhealthy (151-200)
+                            </div>
+                            <div class="legend-item"><span class="legend-color very-unhealthy"></span> Very Unhealthy
+                                (201-300)</div>
+                            <div class="legend-item"><span class="legend-color hazardous"></span> Hazardous (301+)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart Section -->
+                <div class="chart-section" data-aos="fade-up" data-aos-delay="350">
+                    <div class="section-header">
+                        <h3><i class="fa-solid fa-chart-line"></i> Pollutant Levels Overview</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="pollutant-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Activity Recommendations -->
+                <div class="activities-section" data-aos="fade-up" data-aos-delay="400">
+                    <div class="section-header">
+                        <h3><i class="fa-solid fa-person-running"></i> Activity Recommendations</h3>
+                    </div>
+                    <div class="activities-grid" id="activities-grid">
+                        <div class="activity-card">
+                            <div class="activity-icon outdoor">
+                                <i class="fa-solid fa-person-walking"></i>
+                            </div>
+                            <div class="activity-info">
+                                <h4>Outdoor Walking</h4>
+                                <span class="activity-status" id="walking-status">--</span>
+                            </div>
+                        </div>
+                        <div class="activity-card">
+                            <div class="activity-icon running">
+                                <i class="fa-solid fa-person-running"></i>
+                            </div>
+                            <div class="activity-info">
+                                <h4>Jogging/Running</h4>
+                                <span class="activity-status" id="jogging-status">--</span>
+                            </div>
+                        </div>
+                        <div class="activity-card">
+                            <div class="activity-icon cycling">
+                                <i class="fa-solid fa-person-biking"></i>
+                            </div>
+                            <div class="activity-info">
+                                <h4>Cycling</h4>
+                                <span class="activity-status" id="cycling-status">--</span>
+                            </div>
+                        </div>
+                        <div class="activity-card">
+                            <div class="activity-icon playing">
+                                <i class="fa-solid fa-children"></i>
+                            </div>
+                            <div class="activity-info">
+                                <h4>Outdoor Playing (Kids)</h4>
+                                <span class="activity-status" id="playing-status">--</span>
+                            </div>
+                        </div>
+                        <div class="activity-card">
+                            <div class="activity-icon sensitive">
+                                <i class="fa-solid fa-lungs"></i>
+                            </div>
+                            <div class="activity-info">
+                                <h4>Sensitive Groups</h4>
+                                <span class="activity-status" id="sensitive-status">--</span>
+                            </div>
+                        </div>
+                        <div class="activity-card">
+                            <div class="activity-icon mask">
+                                <i class="fa-solid fa-mask-face"></i>
+                            </div>
+                            <div class="activity-info">
+                                <h4>Mask Recommended</h4>
+                                <span class="activity-status" id="mask-status">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health Tips Section -->
+                <div class="health-tips-section" data-aos="fade-up" data-aos-delay="450">
+                    <div class="section-header">
+                        <h3><i class="fa-solid fa-lightbulb"></i> Health Tips</h3>
+                    </div>
+                    <div class="tips-grid" id="tips-grid">
+                        <div class="tip-card">
+                            <div class="tip-icon">
+                                <i class="fa-solid fa-house"></i>
+                            </div>
+                            <h4>Stay Indoors</h4>
+                            <p>When AQI is high, limit outdoor activities and keep windows closed.</p>
+                        </div>
+                        <div class="tip-card">
+                            <div class="tip-icon">
+                                <i class="fa-solid fa-filter"></i>
+                            </div>
+                            <h4>Use Air Purifiers</h4>
+                            <p>Consider using HEPA air purifiers indoors to improve air quality.</p>
+                        </div>
+                        <div class="tip-card">
+                            <div class="tip-icon">
+                                <i class="fa-solid fa-mask-face"></i>
+                            </div>
+                            <h4>Wear N95 Masks</h4>
+                            <p>Use N95 or N99 masks outdoors when AQI exceeds 150.</p>
+                        </div>
+                        <div class="tip-card">
+                            <div class="tip-icon">
+                                <i class="fa-solid fa-glass-water"></i>
+                            </div>
+                            <h4>Stay Hydrated</h4>
+                            <p>Drink plenty of water to help your body flush out toxins.</p>
+                        </div>
+                        <div class="tip-card">
+                            <div class="tip-icon">
+                                <i class="fa-solid fa-leaf"></i>
+                            </div>
+                            <h4>Add Indoor Plants</h4>
+                            <p>Plants like snake plant and peace lily help purify indoor air.</p>
+                        </div>
+                        <div class="tip-card">
+                            <div class="tip-icon">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <h4>Plan Activities Wisely</h4>
+                            <p>Exercise early morning when pollution levels are typically lower.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="cta-section" data-aos="fade-up">
+            <div class="cta-container">
+                <div class="cta-content">
+                    <h2>Help Combat Air Pollution</h2>
+                    <p>Join our community in taking action against air pollution. Together, we can create cleaner air
+                        for everyone.</p>
+                    <div class="cta-buttons">
+                        <a href="../community/community-hub.html" class="btn btn-primary">
+                            <i class="fa-solid fa-users"></i> Join Community
+                        </a>
+                        <a href="climate-awareness.html" class="btn btn-secondary">
+                            <i class="fa-solid fa-book"></i> Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Leaflet.js -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- AOS Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Common Scripts -->
+    <script src="../../js/navbar.js"></script>
+    <script src="../../js/footer.js"></script>
+    <script src="../../js/theme.js"></script>
+
+    <!-- Page Script -->
+    <script src="../../js/air-quality-dashboard.js"></script>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true
+        });
+    </script>
+</body>
+
+</html>

@@ -6,6 +6,9 @@
     <title>Project Quality Control Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ======================
+           BASE STYLES & RESET
+        ====================== */
         * {
             margin: 0;
             padding: 0;
@@ -14,310 +17,868 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #afffd0;
             min-height: 100vh;
             padding: 20px;
+            color: #333;
+            line-height: 1.6;
         }
 
+        /* ======================
+           CONTAINER & LAYOUT
+        ====================== */
         .container {
             max-width: 1400px;
             margin: 0 auto;
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
             overflow: hidden;
+            animation: fadeIn 0.5s ease;
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ======================
+           HEADER
+        ====================== */
         .header {
             background: linear-gradient(135deg, #e74c3c, #c0392b);
             color: white;
-            padding: 30px;
+            padding: 40px 30px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: patternMove 20s linear infinite;
+        }
+
+        @keyframes patternMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(30px, 30px); }
         }
 
         .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ======================
+           TABS
+        ====================== */
         .tabs {
             display: flex;
-            background: #f5f5f5;
-            border-bottom: 1px solid #ddd;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
         }
 
         .tab {
-            flex: 1;
-            padding: 15px;
+            flex: 0 0 auto;
+            padding: 18px 25px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
             background: none;
             font-size: 1rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.8);
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            min-width: 180px;
+        }
+
+        .tab:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateY(-2px);
         }
 
         .tab.active {
             background: white;
             color: #e74c3c;
             border-bottom: 3px solid #e74c3c;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.2);
         }
 
+        .tab i {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .tab:hover i {
+            transform: scale(1.2);
+        }
+
+        /* ======================
+           TAB CONTENT
+        ====================== */
         .tab-content {
             display: none;
-            padding: 30px;
+            padding: 35px;
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .tab-content.active {
             display: block;
         }
 
+        /* ======================
+           STATS GRID
+        ====================== */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
         }
 
         .stat-card {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: white;
             color: white;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 25px;
+            border-radius: 15px;
             text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            border-left: 6px solid transparent;
         }
 
-        .stat-card.danger {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
         }
 
-        .stat-card.warning {
-            background: linear-gradient(135deg, #f39c12, #e67e22);
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
         }
 
         .stat-card.success {
             background: linear-gradient(135deg, #27ae60, #2ecc71);
+            border-left-color: #2ecc71;
+        }
+
+        .stat-card.warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            border-left-color: #e67e22;
+        }
+
+        .stat-card.danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border-left-color: #c0392b;
+        }
+
+        .stat-card.info {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            border-left-color: #2980b9;
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            opacity: 0.9;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: -1px;
         }
 
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* ======================
+           PROJECT GRID & CARDS
+        ====================== */
         .project-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
         }
 
         .project-card {
-            background: #f9f9f9;
-            border-radius: 10px;
-            padding: 20px;
-            border-left: 4px solid #ddd;
-            transition: transform 0.3s;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 6px solid #ddd;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
         }
 
         .project-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #ddd;
         }
 
         .project-card.healthy {
             border-left-color: #27ae60;
         }
 
+        .project-card.healthy::before {
+            background: linear-gradient(90deg, #27ae60, #2ecc71);
+        }
+
         .project-card.warning {
             border-left-color: #f39c12;
+        }
+
+        .project-card.warning::before {
+            background: linear-gradient(90deg, #f39c12, #e67e22);
         }
 
         .project-card.critical {
             border-left-color: #e74c3c;
         }
 
+        .project-card.critical::before {
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+        }
+
         .project-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
+            align-items: flex-start;
+            margin-bottom: 20px;
         }
 
         .project-name {
-            font-size: 1.2rem;
-            font-weight: 600;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2c3e50;
+            line-height: 1.3;
         }
 
         .health-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            padding: 6px 16px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 700;
             color: white;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-transform: uppercase;
         }
 
         .health-badge.healthy {
-            background: #27ae60;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
         }
 
         .health-badge.warning {
-            background: #f39c12;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
         }
 
         .health-badge.critical {
-            background: #e74c3c;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
         }
 
+        /* ======================
+           QUALITY METRICS
+        ====================== */
         .quality-metrics {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin: 15px 0;
+            gap: 15px;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
         }
 
         .metric {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
+            gap: 12px;
+            font-size: 0.95rem;
+            padding: 10px;
+            border-radius: 8px;
+            background: white;
+            transition: all 0.2s ease;
+        }
+
+        .metric:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
         .metric i {
-            width: 16px;
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
         }
 
         .metric.good {
             color: #27ae60;
-        }
-
-        .metric.bad {
-            color: #e74c3c;
+            border-left: 4px solid #27ae60;
         }
 
         .metric.warning {
             color: #f39c12;
+            border-left: 4px solid #f39c12;
         }
 
+        .metric.bad {
+            color: #e74c3c;
+            border-left: 4px solid #e74c3c;
+        }
+
+        /* ======================
+           BUTTONS
+        ====================== */
         .btn {
             background: linear-gradient(135deg, #e74c3c, #c0392b);
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
+            padding: 12px 24px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 0.9rem;
-            margin: 2px;
-            transition: transform 0.3s;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.2);
         }
 
         .btn:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
         }
 
         .btn-success {
             background: linear-gradient(135deg, #27ae60, #2ecc71);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.2);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.3);
         }
 
         .btn-warning {
             background: linear-gradient(135deg, #f39c12, #e67e22);
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.2);
         }
 
-        .form-group {
-            margin-bottom: 20px;
+        .btn-warning:hover {
+            box-shadow: 0 8px 25px rgba(243, 156, 18, 0.3);
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
+        .btn-info {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
         }
 
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
+        .btn-info:hover {
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
         }
 
-        .link-checker-results {
-            background: #f8f9fa;
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.9rem;
             border-radius: 8px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* ======================
+           ALERTS & MESSAGES
+        ====================== */
+        .alert {
             padding: 20px;
-            margin: 20px 0;
+            border-radius: 10px;
+            margin: 15px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .alert i {
+            font-size: 1.3rem;
+            margin-top: 2px;
+        }
+
+        .alert.success {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            color: #155724;
+            border: 2px solid #b8dfc4;
+        }
+
+        .alert.warning {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            color: #856404;
+            border: 2px solid #ffe493;
+        }
+
+        .alert.danger {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            color: #721c24;
+            border: 2px solid #f1b0b7;
+        }
+
+        .alert.info {
+            background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+            color: #0c5460;
+            border: 2px solid #abdde5;
+        }
+
+        /* ======================
+           LINK CHECKER
+        ====================== */
+        .link-checker-results {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid #dee2e6;
         }
 
         .link-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px;
-            margin: 5px 0;
+            padding: 15px;
+            margin: 10px 0;
             background: white;
-            border-radius: 5px;
-            border-left: 4px solid #ddd;
+            border-radius: 8px;
+            border-left: 5px solid #ddd;
+            transition: all 0.2s ease;
+        }
+
+        .link-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
 
         .link-item.working {
             border-left-color: #27ae60;
+            background: linear-gradient(to right, rgba(39, 174, 96, 0.05), white);
         }
 
         .link-item.broken {
             border-left-color: #e74c3c;
+            background: linear-gradient(to right, rgba(231, 76, 60, 0.05), white);
         }
 
+        .link-item.warning {
+            border-left-color: #f39c12;
+            background: linear-gradient(to right, rgba(243, 156, 18, 0.05), white);
+        }
+
+        /* ======================
+           PROGRESS BARS
+        ====================== */
         .progress-bar {
             width: 100%;
-            height: 20px;
+            height: 25px;
             background: #f0f0f0;
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
-            margin: 10px 0;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #e74c3c, #27ae60);
-            transition: width 0.3s ease;
+            background: linear-gradient(90deg, #e74c3c, #f39c12, #27ae60);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
 
-        .alert {
-            padding: 15px;
-            border-radius: 5px;
-            margin: 10px 0;
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255,255,255,0.4), 
+                transparent);
+            animation: shimmer 2s infinite;
         }
 
-        .alert.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
-        .alert.warning {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeaa7;
-        }
-
-        .alert.danger {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
+        /* ======================
+           README TEMPLATE
+        ====================== */
         .readme-template {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            padding: 20px;
-            font-family: 'Courier New', monospace;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 25px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
             white-space: pre-line;
+            line-height: 1.6;
+            margin: 20px 0;
+            overflow-x: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
+
+        .readme-template::selection {
+            background: rgba(0, 122, 204, 0.3);
+        }
+
+        /* ======================
+           FORMS
+        ====================== */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* ======================
+           HEADINGS & TYPOGRAPHY
+        ====================== */
+        h3 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            border-radius: 2px;
+        }
+
+        h4 {
+            color: #34495e;
+            margin: 20px 0 15px 0;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        h5 {
+            color: #2c3e50;
+            margin: 15px 0 10px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* ======================
+           SECTION SPACING
+        ====================== */
+        .section-spacing {
+            margin: 30px 0;
+        }
+
+        /* ======================
+           TOOLTIPS
+        ====================== */
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2c3e50;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            z-index: 1000;
+            margin-bottom: 5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        /* ======================
+           RESPONSIVE DESIGN
+        ====================== */
+        @media (max-width: 1200px) {
+            .container {
+                margin: 10px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tab {
+                min-width: 160px;
+                padding: 15px 20px;
+                font-size: 0.95rem;
+            }
+            
+            .tab i {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .header p {
+                font-size: 1.1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .tab-content {
+                padding: 25px;
+            }
+            
+            .quality-metrics {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .tab {
+                min-width: 140px;
+                padding: 12px 15px;
+                font-size: 0.9rem;
+                gap: 8px;
+            }
+            
+            .tab i {
+                font-size: 1rem;
+            }
+            
+            .project-card {
+                padding: 20px;
+            }
+        }
+
+        /* ======================
+           ANIMATIONS & EFFECTS
+        ====================== */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .slide-up {
+            animation: slideUp 0.3s ease;
+        }
+
+        /* ======================
+           UTILITY CLASSES
+        ====================== */
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .text-left { text-align: left; }
+        
+        .mb-1 { margin-bottom: 10px; }
+        .mb-2 { margin-bottom: 20px; }
+        .mb-3 { margin-bottom: 30px; }
+        .mb-4 { margin-bottom: 40px; }
+        
+        .mt-1 { margin-top: 10px; }
+        .mt-2 { margin-top: 20px; }
+        .mt-3 { margin-top: 30px; }
+        .mt-4 { margin-top: 40px; }
+        
+        .flex { display: flex; }
+        .flex-center { display: flex; align-items: center; justify-content: center; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+        .flex-column { display: flex; flex-direction: column; }
+        
+        .w-100 { width: 100%; }
+        .h-100 { height: 100%; }
+        
+        .hidden { display: none; }
+        .visible { display: block; }
+        
+        .rounded-sm { border-radius: 5px; }
+        .rounded { border-radius: 10px; }
+        .rounded-lg { border-radius: 15px; }
+        .rounded-xl { border-radius: 20px; }
+        
+        .shadow-sm { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .shadow { box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .shadow-lg { box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        .shadow-xl { box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        
+        .cursor-pointer { cursor: pointer; }
+        .cursor-help { cursor: help; }
+        .cursor-not-allowed { cursor: not-allowed; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-shield-alt"></i> Project Quality Control</h1>
-            <p>Monitor, validate, and maintain project health & quality</p>
+            <h1><i class="fas fa-shield-alt"></i> Project Quality Control Dashboard</h1>
+            <p>Monitor, validate, and maintain project health & quality metrics in real-time</p>
         </div>
 
         <div class="tabs">
@@ -342,20 +903,24 @@
         <div id="dashboard" class="tab-content active">
             <div class="stats-grid">
                 <div class="stat-card success">
+                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
                     <div class="stat-number" id="healthyProjects">0</div>
-                    <div>Healthy Projects</div>
+                    <div class="stat-label">Healthy Projects</div>
                 </div>
                 <div class="stat-card warning">
+                    <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
                     <div class="stat-number" id="warningProjects">0</div>
-                    <div>Need Attention</div>
+                    <div class="stat-label">Need Attention</div>
                 </div>
                 <div class="stat-card danger">
+                    <div class="stat-icon"><i class="fas fa-times-circle"></i></div>
                     <div class="stat-number" id="criticalProjects">0</div>
-                    <div>Critical Issues</div>
+                    <div class="stat-label">Critical Issues</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card info">
+                    <div class="stat-icon"><i class="fas fa-project-diagram"></i></div>
                     <div class="stat-number" id="totalProjects">0</div>
-                    <div>Total Projects</div>
+                    <div class="stat-label">Total Projects</div>
                 </div>
             </div>
 
@@ -365,61 +930,88 @@
 
         <!-- Link Checker Tab -->
         <div id="link-checker" class="tab-content">
-            <h3>Automated Link Checker</h3>
-            <button class="btn" onclick="runLinkChecker()">
-                <i class="fas fa-play"></i> Run Link Check
-            </button>
-            <button class="btn btn-warning" onclick="checkAllProjects()">
-                <i class="fas fa-globe"></i> Check All Projects
-            </button>
+            <h3>Automated Link Validation System</h3>
+            <p class="mb-3">Check all external links across your projects for broken or outdated URLs.</p>
+            
+            <div class="btn-group">
+                <button class="btn pulse" onclick="runLinkChecker()">
+                    <i class="fas fa-play"></i> Run Link Check
+                </button>
+                <button class="btn btn-warning" onclick="checkAllProjects()">
+                    <i class="fas fa-globe"></i> Check All Projects
+                </button>
+                <button class="btn btn-info" onclick="showAlert('info', 'Advanced link analysis started...')">
+                    <i class="fas fa-chart-line"></i> Advanced Analysis
+                </button>
+            </div>
 
-            <div id="linkCheckerResults" class="link-checker-results" style="display: none;">
-                <h4>Link Check Results</h4>
-                <div id="linkResults"></div>
+            <div id="linkCheckerResults" class="link-checker-results hidden">
+                <h4><i class="fas fa-search"></i> Link Check Results</h4>
+                <div id="linkResults" class="mt-2"></div>
             </div>
         </div>
 
         <!-- Code Quality Tab -->
         <div id="code-quality" class="tab-content">
             <h3>Code Quality Assessment</h3>
-            <button class="btn" onclick="runCodeQualityCheck()">
-                <i class="fas fa-search"></i> Analyze Code Quality
-            </button>
-            <button class="btn btn-success" onclick="generateQualityBadges()">
-                <i class="fas fa-award"></i> Generate Quality Badges
-            </button>
+            <p class="mb-3">Analyze code structure, best practices, and performance metrics.</p>
+            
+            <div class="btn-group">
+                <button class="btn" onclick="runCodeQualityCheck()">
+                    <i class="fas fa-search"></i> Analyze Code Quality
+                </button>
+                <button class="btn btn-success" onclick="generateQualityBadges()">
+                    <i class="fas fa-award"></i> Generate Quality Badges
+                </button>
+                <button class="btn btn-warning" onclick="showAlert('warning', 'Performance analysis in progress...')">
+                    <i class="fas fa-tachometer-alt"></i> Performance Check
+                </button>
+            </div>
 
-            <div id="codeQualityResults"></div>
+            <div id="codeQualityResults" class="mt-4"></div>
         </div>
 
         <!-- Documentation Tab -->
         <div id="documentation" class="tab-content">
             <h3>Documentation Management</h3>
+            <p class="mb-3">Manage and generate project documentation with templates and validation.</p>
             
             <div class="form-group">
-                <h4>README Template Generator</h4>
-                <button class="btn" onclick="generateReadmeTemplate()">
-                    <i class="fas fa-file-plus"></i> Generate README Template
-                </button>
+                <h4><i class="fas fa-file-plus"></i> README Template Generator</h4>
+                <div class="btn-group">
+                    <button class="btn" onclick="generateReadmeTemplate()">
+                        <i class="fas fa-file-code"></i> Generate README Template
+                    </button>
+                    <button class="btn btn-success" onclick="showAlert('success', 'Documentation exported successfully!')">
+                        <i class="fas fa-download"></i> Export Documentation
+                    </button>
+                </div>
             </div>
 
-            <div id="readmeTemplate" class="readme-template" style="display: none;"></div>
+            <div id="readmeTemplate" class="readme-template hidden"></div>
 
-            <h4>Documentation Status</h4>
-            <div id="documentationStatus"></div>
+            <h4><i class="fas fa-clipboard-check"></i> Documentation Status</h4>
+            <div id="documentationStatus" class="mt-2"></div>
         </div>
 
         <!-- Testing Tab -->
         <div id="testing" class="tab-content">
-            <h3>Automated Testing</h3>
-            <button class="btn" onclick="runBasicTests()">
-                <i class="fas fa-play-circle"></i> Run Basic Tests
-            </button>
-            <button class="btn btn-warning" onclick="setupTestSuite()">
-                <i class="fas fa-cogs"></i> Setup Test Suite
-            </button>
+            <h3>Automated Testing Suite</h3>
+            <p class="mb-3">Run comprehensive tests to ensure project functionality and reliability.</p>
+            
+            <div class="btn-group">
+                <button class="btn" onclick="runBasicTests()">
+                    <i class="fas fa-play-circle"></i> Run Basic Tests
+                </button>
+                <button class="btn btn-warning" onclick="setupTestSuite()">
+                    <i class="fas fa-cogs"></i> Setup Test Suite
+                </button>
+                <button class="btn btn-success" onclick="showAlert('success', 'Running comprehensive test suite...')">
+                    <i class="fas fa-bolt"></i> Run All Tests
+                </button>
+            </div>
 
-            <div id="testResults"></div>
+            <div id="testResults" class="mt-4"></div>
         </div>
     </div>
 
@@ -526,12 +1118,15 @@
                         </div>
                     ` : ''}
 
-                    <div style="margin-top: 15px;">
-                        <button class="btn" onclick="fixProject(${project.id})">
+                    <div class="btn-group">
+                        <button class="btn btn-small" onclick="fixProject(${project.id})">
                             <i class="fas fa-wrench"></i> Quick Fix
                         </button>
-                        <button class="btn btn-warning" onclick="inspectProject(${project.id})">
+                        <button class="btn btn-small btn-warning" onclick="inspectProject(${project.id})">
                             <i class="fas fa-search"></i> Inspect
+                        </button>
+                        <button class="btn btn-small btn-info" onclick="showAlert('info', 'Opening detailed view...')">
+                            <i class="fas fa-chart-bar"></i> Details
                         </button>
                     </div>
                 </div>
@@ -543,8 +1138,8 @@
             const resultsContainer = document.getElementById('linkCheckerResults');
             const linkResults = document.getElementById('linkResults');
             
-            resultsContainer.style.display = 'block';
-            linkResults.innerHTML = '<div class="alert warning">Checking links...</div>';
+            resultsContainer.classList.remove('hidden');
+            linkResults.innerHTML = '<div class="alert warning"><i class="fas fa-spinner fa-spin"></i> Checking links across all projects...</div>';
 
             // Simulate link checking
             setTimeout(() => {
@@ -558,13 +1153,16 @@
                     <div class="link-item ${link.status}">
                         <div>
                             <strong>${link.project}</strong><br>
-                            <small>${link.url}</small>
+                            <small class="text-muted">${link.url}</small>
                         </div>
                         <div class="health-badge ${link.status === 'working' ? 'healthy' : 'critical'}">
+                            <i class="fas ${link.status === 'working' ? 'fa-check' : 'fa-times'}"></i>
                             ${link.status === 'working' ? 'WORKING' : 'BROKEN'}
                         </div>
                     </div>
                 `).join('');
+                
+                showAlert('success', `Link check completed. Found ${allLinks.filter(l => l.status === 'broken').length} broken links.`);
             }, 2000);
         }
 
@@ -576,29 +1174,39 @@
         // Code Quality functions
         function runCodeQualityCheck() {
             const container = document.getElementById('codeQualityResults');
-            container.innerHTML = '<div class="alert warning">Analyzing code quality...</div>';
+            container.innerHTML = '<div class="alert warning"><i class="fas fa-spinner fa-spin"></i> Analyzing code quality across all projects...</div>';
 
             setTimeout(() => {
                 container.innerHTML = `
-                    <h4>Code Quality Report</h4>
-                    ${projects.map(project => `
-                        <div class="project-card ${project.codeQuality > 70 ? 'healthy' : project.codeQuality > 50 ? 'warning' : 'critical'}">
-                            <h5>${project.name}</h5>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: ${project.codeQuality}%"></div>
-                            </div>
-                            <p>Quality Score: ${project.codeQuality}%</p>
-                            <div class="quality-metrics">
-                                <div class="metric ${project.codeQuality > 80 ? 'good' : 'warning'}">
-                                    <i class="fas fa-code"></i> Code Structure
+                    <h4><i class="fas fa-chart-bar"></i> Code Quality Report</h4>
+                    <div class="project-grid">
+                        ${projects.map(project => `
+                            <div class="project-card ${project.codeQuality > 70 ? 'healthy' : project.codeQuality > 50 ? 'warning' : 'critical'}">
+                                <h5>${project.name}</h5>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${project.codeQuality}%"></div>
                                 </div>
-                                <div class="metric ${project.hasReadme ? 'good' : 'bad'}">
-                                    <i class="fas fa-file-alt"></i> Documentation
+                                <p>Quality Score: <strong>${project.codeQuality}%</strong></p>
+                                <div class="quality-metrics">
+                                    <div class="metric ${project.codeQuality > 80 ? 'good' : 'warning'}">
+                                        <i class="fas fa-code"></i> Code Structure
+                                    </div>
+                                    <div class="metric ${project.hasReadme ? 'good' : 'bad'}">
+                                        <i class="fas fa-file-alt"></i> Documentation
+                                    </div>
+                                    <div class="metric ${project.testCoverage > 60 ? 'good' : 'warning'}">
+                                        <i class="fas fa-vial"></i> Test Coverage
+                                    </div>
+                                    <div class="metric ${project.issues.length === 0 ? 'good' : 'bad'}">
+                                        <i class="fas fa-bug"></i> Issues
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    `).join('')}
+                        `).join('')}
+                    </div>
                 `;
+                
+                showAlert('success', 'Code quality analysis completed successfully!');
             }, 1500);
         }
 
@@ -614,15 +1222,15 @@
 Brief description of what this project does and who it's for.
 
 ## Features
-- Feature 1
-- Feature 2
-- Feature 3
+- Feature 1: Description of feature
+- Feature 2: Description of feature  
+- Feature 3: Description of feature
 
 ## Tech Stack
 - HTML5
-- CSS3
-- JavaScript
-- [Other technologies]
+- CSS3 (with modern features like Flexbox/Grid)
+- JavaScript (ES6+)
+- [Other technologies like frameworks, libraries]
 
 ## Installation
 \`\`\`bash
@@ -639,38 +1247,60 @@ npm install
 ## Usage
 1. Open index.html in your browser
 2. [Additional usage instructions]
+3. [Configuration options]
+
+## Project Structure
+\`\`\`
+project-name/
+├── index.html
+├── css/
+│   └── style.css
+├── js/
+│   └── main.js
+├── assets/
+│   └── images/
+└── README.md
+\`\`\`
 
 ## Screenshots
 ![Screenshot](path/to/screenshot.png)
 
 ## Contributing
+Contributions are welcome! Please follow these steps:
 1. Fork the project
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
+2. Create your feature branch (\`git checkout -b feature/AmazingFeature\`)
+3. Commit your changes (\`git commit -m 'Add some AmazingFeature'\`)
+4. Push to the branch (\`git push origin feature/AmazingFeature\`)
 5. Open a Pull Request
 
+## Code Quality
+[![Code Quality](https://img.shields.io/badge/Code_Quality-A-green)]()
+[![Test Coverage](https://img.shields.io/badge/Test_Coverage-85%25-green)]()
+
 ## License
-This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Contact
-- Project Maintainer: [Name]
-- Email: [email]
-- GitHub: [github-profile]
+- Project Maintainer: [Your Name]
+- Email: [your-email@example.com]
+- GitHub: [@yourusername](https://github.com/yourusername)
 
 ## Acknowledgments
-- Thanks to contributors
-- Special mentions`;
+- Thanks to all contributors
+- Special thanks to [Name/Organization] for inspiration/support
+- Icons/Fonts credits`;
 
             const container = document.getElementById('readmeTemplate');
             container.textContent = template;
-            container.style.display = 'block';
+            container.classList.remove('hidden');
+            
+            showAlert('success', 'README template generated successfully!');
         }
 
         // Testing functions
         function runBasicTests() {
             const container = document.getElementById('testResults');
-            container.innerHTML = '<div class="alert warning">Running basic functionality tests...</div>';
+            container.innerHTML = '<div class="alert warning"><i class="fas fa-spinner fa-spin"></i> Running basic functionality tests...</div>';
 
             setTimeout(() => {
                 const testResults = [
@@ -678,23 +1308,31 @@ This project is licensed under the MIT License.
                     { name: 'Link Validation', status: 'fail', time: '1.2s' },
                     { name: 'Form Validation', status: 'pass', time: '0.8s' },
                     { name: 'Mobile Responsiveness', status: 'pass', time: '0.3s' },
-                    { name: 'Accessibility Check', status: 'warning', time: '1.0s' }
+                    { name: 'Accessibility Check', status: 'warning', time: '1.0s' },
+                    { name: 'Cross-browser Compatibility', status: 'pass', time: '1.5s' },
+                    { name: 'Performance Metrics', status: 'pass', time: '0.9s' },
+                    { name: 'Security Headers', status: 'warning', time: '0.7s' }
                 ];
 
                 container.innerHTML = `
-                    <h4>Test Results</h4>
-                    ${testResults.map(test => `
-                        <div class="link-item ${test.status === 'pass' ? 'working' : 'broken'}">
-                            <div>
-                                <strong>${test.name}</strong><br>
-                                <small>Execution time: ${test.time}</small>
+                    <h4><i class="fas fa-vial"></i> Test Results</h4>
+                    <div class="link-checker-results">
+                        ${testResults.map(test => `
+                            <div class="link-item ${test.status === 'pass' ? 'working' : test.status === 'warning' ? 'warning' : 'broken'}">
+                                <div>
+                                    <strong>${test.name}</strong><br>
+                                    <small class="text-muted">Execution time: ${test.time}</small>
+                                </div>
+                                <div class="health-badge ${test.status === 'pass' ? 'healthy' : test.status === 'warning' ? 'warning' : 'critical'}">
+                                    <i class="fas ${test.status === 'pass' ? 'fa-check' : test.status === 'warning' ? 'fa-exclamation' : 'fa-times'}"></i>
+                                    ${test.status.toUpperCase()}
+                                </div>
                             </div>
-                            <div class="health-badge ${test.status === 'pass' ? 'healthy' : test.status === 'warning' ? 'warning' : 'critical'}">
-                                ${test.status.toUpperCase()}
-                            </div>
-                        </div>
-                    `).join('')}
+                        `).join('')}
+                    </div>
                 `;
+                
+                showAlert('success', 'Basic tests completed successfully!');
             }, 2000);
         }
 
@@ -710,29 +1348,49 @@ This project is licensed under the MIT License.
                 project.issues = [];
                 project.hasReadme = true;
                 project.codeQuality = Math.min(project.codeQuality + 20, 100);
+                project.testCoverage = Math.min(project.testCoverage + 15, 100);
                 updateDashboard();
-                showAlert('success', `Fixed issues in ${project.name}!`);
+                showAlert('success', `Fixed all issues in ${project.name}! Project is now healthy.`);
             }
         }
 
         function inspectProject(projectId) {
             const project = projects.find(p => p.id === projectId);
             if (project) {
-                alert(`Project: ${project.name}\nPath: ${project.path}\nStatus: ${project.status}\nIssues: ${project.issues.join(', ')}`);
+                const message = `
+                    Project: ${project.name}
+                    Path: ${project.path}
+                    Status: ${project.status}
+                    Code Quality: ${project.codeQuality}%
+                    Test Coverage: ${project.testCoverage}%
+                    Issues: ${project.issues.length > 0 ? project.issues.join(', ') : 'None'}
+                    Last Checked: ${project.lastChecked.toLocaleString()}
+                `;
+                alert(message);
             }
         }
 
         function showAlert(type, message) {
             const alert = document.createElement('div');
-            alert.className = `alert ${type}`;
-            alert.textContent = message;
+            alert.className = `alert ${type} slide-up`;
+            alert.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-times-circle' : type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'}"></i>
+                <div>${message}</div>
+            `;
             alert.style.position = 'fixed';
             alert.style.top = '20px';
             alert.style.right = '20px';
-            alert.style.zIndex = '1000';
+            alert.style.zIndex = '10000';
+            alert.style.minWidth = '300px';
+            alert.style.maxWidth = '400px';
+            alert.style.boxShadow = '0 10px 30px rgba(0,0,0,0.2)';
             document.body.appendChild(alert);
             
-            setTimeout(() => alert.remove(), 3000);
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                alert.style.transform = 'translateX(20px)';
+                setTimeout(() => alert.remove(), 300);
+            }, 3000);
         }
 
         // Initialize dashboard

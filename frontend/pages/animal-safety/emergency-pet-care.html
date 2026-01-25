@@ -350,5 +350,87 @@
       loadComponent('share-modal-container', '../../components/share-modal.html');
       loadComponent('cursor-container', '../../components/cursor.html');
     </script>
+          <script src="../../js/components/navbar-loader.js"></script>
+    <script src="../../js/components/footer-loader.js"></script>
+    
+    <!-- Load Components Script -->
+    <script>
+      // Simple component loader
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded, loading components...');
+        
+        // Load Navbar
+        fetch('../../components/navbar.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load navbar');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('navbar-container').innerHTML = data;
+            console.log('Navbar loaded successfully');
+            // Initialize navbar scripts if any
+            if (typeof initNavbar === 'function') {
+              initNavbar();
+            }
+          })
+          .catch(error => {
+            console.error('Error loading navbar:', error);
+            document.getElementById('navbar-container').innerHTML = 
+              '<div style="padding: 20px; background: #f8d7da; color: #721c24;">Navbar failed to load</div>';
+          });
+        
+        // Load Footer
+        fetch('../../components/footer.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load footer');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('footer-container').innerHTML = data;
+            console.log('Footer loaded successfully');
+            // Initialize footer scripts if any
+            if (typeof initFooter === 'function') {
+              initFooter();
+            }
+          })
+          .catch(error => {
+            console.error('Error loading footer:', error);
+            document.getElementById('footer-container').innerHTML = 
+              '<div style="padding: 20px; background: #f8d7da; color: #721c24; text-align: center;">Footer failed to load</div>';
+          });
+        
+        // Load Share Modal
+        fetch('../../components/share-modal.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load share modal');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('share-modal-container').innerHTML = data;
+            console.log('Share modal loaded successfully');
+          })
+          .catch(error => {
+            console.error('Error loading share modal:', error);
+          });
+        
+        // Initialize AOS
+        AOS.init({
+          duration: 800,
+          once: true,
+          offset: 100
+        });
+        
+        // Load cursor if function exists
+        if (typeof loadCursor === 'function') {
+          loadCursor();
+        }
+      });
+    </script>
   </body>
 </html>

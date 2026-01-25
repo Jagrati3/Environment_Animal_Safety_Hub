@@ -86,20 +86,58 @@ wasteManagementQuiz.showResult = function() {
 // Initialize quiz on page load
 wasteManagementQuiz.initializeQuiz();
 
-// Global functions for HTML onclick handlers
-window.startQuiz = () => wasteManagementQuiz.startQuiz();
-window.resumeSavedQuiz = () => wasteManagementQuiz.resumeQuiz();
-window.nextQuestion = () => wasteManagementQuiz.nextQuestion();
-window.pauseQuiz = () => {
-  clearInterval(wasteManagementQuiz.timer);
-  wasteManagementQuiz.timer = null;
-  wasteManagementQuiz.saveProgress();
-  document.getElementById('pauseBtn').style.display = 'none';
-  document.getElementById('resumeBtn').style.display = 'inline-block';
-  alert("Quiz paused! Click resume to continue.");
-};
-window.resumeCurrentQuiz = () => {
-  document.getElementById('resumeBtn').style.display = 'none';
-  document.getElementById('pauseBtn').style.display = 'inline-block';
-  wasteManagementQuiz.startTimer();
-};
+// Add event listeners for quiz interactions
+document.addEventListener('DOMContentLoaded', () => {
+  // Start quiz button
+  const startBtn = document.getElementById('startQuizBtn');
+  if (startBtn) {
+    startBtn.addEventListener('click', () => wasteManagementQuiz.startQuiz());
+  }
+
+  // Resume saved quiz button
+  const resumeSavedBtn = document.getElementById('resumeSavedQuizBtn');
+  if (resumeSavedBtn) {
+    resumeSavedBtn.addEventListener('click', () => wasteManagementQuiz.resumeQuiz());
+  }
+
+  // Next question button
+  const nextBtn = document.getElementById('nextQuestionBtn');
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => wasteManagementQuiz.nextQuestion());
+  }
+
+  // Pause button
+  const pauseBtn = document.getElementById('pauseBtn');
+  if (pauseBtn) {
+    pauseBtn.addEventListener('click', () => {
+      clearInterval(wasteManagementQuiz.timer);
+      wasteManagementQuiz.timer = null;
+      wasteManagementQuiz.saveProgress();
+      pauseBtn.style.display = 'none';
+      document.getElementById('resumeBtn').style.display = 'inline-block';
+      alert("Quiz paused! Click resume to continue.");
+    });
+  }
+
+  // Resume button
+  const resumeBtn = document.getElementById('resumeBtn');
+  if (resumeBtn) {
+    resumeBtn.addEventListener('click', () => {
+      resumeBtn.style.display = 'none';
+      document.getElementById('pauseBtn').style.display = 'inline-block';
+      wasteManagementQuiz.startTimer();
+    });
+  }
+
+  // Play again button
+  const playAgainBtn = document.getElementById('playAgainBtn');
+  if (playAgainBtn) {
+    playAgainBtn.addEventListener('click', () => location.reload());
+  }
+
+  // Back button
+  const backBtn = document.getElementById('backBtn');
+  if (backBtn) {
+    backBtn.addEventListener('click', () => window.location.href = '../games/kids-zone.html');
+  }
+});
