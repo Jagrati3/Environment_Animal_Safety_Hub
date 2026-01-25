@@ -7,62 +7,80 @@
  * Extends BaseQuiz for common functionality while providing animal-specific questions and configuration.
  */
 
-// Quiz configuration
-const quizConfig = {
-  questions: [
-    {q: "What should you do first when you find an injured animal?", o: ["Pick it up immediately", "Approach slowly and assess", "Run away", "Call friends"], a: 1},
-    {q: "How should you treat a snake bite on an animal?", o: ["Suck out the venom", "Apply ice and keep calm", "Cut the wound", "Give alcohol"], a: 1},
-    {q: "What are signs of poisoning in animals?", o: ["Excessive drooling and vomiting", "Happy and playful", "Sleeping normally", "Eating well"], a: 0},
-    {q: "How to stop bleeding from a wound?", o: ["Apply pressure with clean cloth", "Pour water on it", "Rub dirt in", "Leave it alone"], a: 0},
-    {q: "When should you seek professional help for an injured animal?", o: ["Always, even for minor injuries", "Only if it's bleeding heavily", "Never, handle it yourself", "Only if it's a pet"], a: 0},
-    {q: "What is the first step for animal CPR?", o: ["Check for breathing", "Start compressions", "Give mouth-to-mouth", "Call vet immediately"], a: 0},
-    {q: "How to treat a burn on an animal?", o: ["Apply butter or oil", "Cool with water for 10-20 minutes", "Cover with bandage tightly", "Ignore it"], a: 1},
-    {q: "What to do if an animal has a broken bone?", o: ["Move it to a safe place and immobilize", "Pick it up and carry", "Let it walk", "Apply heat"], a: 0},
-    {q: "Signs that an animal is choking?", o: ["Coughing and pawing at mouth", "Sleeping peacefully", "Eating normally", "Running around"], a: 0},
-    {q: "What NOT to do when helping an injured wild animal?", o: ["Feed it", "Handle it gently", "Keep distance if aggressive", "Call wildlife experts"], a: 0}
-  ],
-  timeLimit: 180, // 3 minutes
-  progressKey: 'animalFirstAidQuizProgress',
-  iconClass: 'fa-solid fa-heart',
-  elements: {
-    startScreen: document.getElementById('startScreen'),
-    quizScreen: document.getElementById('quizScreen'),
-    resultScreen: document.getElementById('resultScreen'),
-    questionEl: document.getElementById('question'),
-    optionsEl: document.getElementById('options'),
-    timeEl: document.getElementById('time'),
-    scoreEl: document.getElementById('score'),
-    remarkEl: document.getElementById('remark')
-  }
+// DOM elements
+const elements = {
+  startScreen: document.getElementById('startScreen'),
+  quizScreen: document.getElementById('quizScreen'),
+  resultScreen: document.getElementById('resultScreen'),
+  questionEl: document.getElementById('question'),
+  optionsEl: document.getElementById('options'),
+  timeEl: document.getElementById('time'),
+  scoreEl: document.getElementById('score'),
+  remarkEl: document.getElementById('remark')
 };
 
-// Create quiz instance
-const animalFirstAidQuiz = new BaseQuiz(quizConfig);
+// Load quiz data and create instance
+let animalFirstAidQuiz = null;
 
-// Override showResult for custom remarks
-animalFirstAidQuiz.showResult = function() {
-  // Call parent method
-  BaseQuiz.prototype.showResult.call(this);
+async function loadAnimalFirstAidQuiz() {
+  try {
+    const response = await fetch('../../assets/data/quiz-data.json');
+    if (!response.ok) {
+      throw new Error('Failed to load quiz data');
+    }
+    const data = await response.json();
+    const quizData = data.quizzes.find(q => q.id === 'animal-first-aid');
+    if (!quizData) {
+      throw new Error('Animal first aid quiz data not found');
+    }
 
-  // Custom remarks for animal first aid
-  let remark = "";
-  if (this.score >= 8) {
-    remark = "🌟 Animal Hero!";
-  } else if (this.score >= 5) {
-    remark = "👍 Good Effort!";
-  } else {
-    remark = "🐾 Keep Learning!";
+    const quizConfig = {
+      questions: quizData.questions,
+      timeLimit: quizData.timeLimit,
+      progressKey: quizData.progressKey,
+      iconClass: quizData.iconClass,
+      elements: elements
+    };
+
+    animalFirstAidQuiz = new BaseQuiz(quizConfig);
+
+    // Override showResult for custom remarks
+    animalFirstAidQuiz.showResult = function() {
+      // Call parent method
+      BaseQuiz.prototype.showResult.call(this);
+
+      // Custom remarks for animal first aid
+      let remark = "";
+      if (this.score >= 8) {
+        remark = "🌟 Animal Hero!";
+      } else if (this.score >= 5) {
+        remark = "👍 Good Effort!";
+      } else {
+        remark = "🐾 Keep Learning!";
+      }
+
+      if (this.elements.remarkEl) {
+        this.elements.remarkEl.textContent = remark;
+      }
+    };
+
+    animalFirstAidQuiz.initializeQuiz();
+  } catch (error) {
+    console.error('Error loading animal first aid quiz:', error);
+    alert('Failed to load quiz data. Please try again later.');
   }
-
-  if (this.elements.remarkEl) {
-    this.elements.remarkEl.textContent = remark;
-  }
-};
-
-// Initialize quiz on page load
-animalFirstAidQuiz.initializeQuiz();
+}
 
 // Global functions for HTML onclick handlers
-window.startQuiz = () => animalFirstAidQuiz.startQuiz();
-window.resumeQuiz = () => animalFirstAidQuiz.resumeQuiz();
-window.nextQuestion = () => animalFirstAidQuiz.nextQuestion();
+window.startQuiz = () => {
+  if (animalFirstAidQuiz) animalFirstAidQuiz.startQuiz();
+};
+window.resumeQuiz = () => {
+  if (animalFirstAidQuiz) animalFirstAidQuiz.resumeQuiz();
+};
+window.nextQuestion = () => {
+  if (animalFirstAidQuiz) animalFirstAidQuiz.nextQuestion();
+};
+
+// Load quiz on page load
+document.addEventListener('DOMContentLoaded', loadAnimalFirstAidQuiz);

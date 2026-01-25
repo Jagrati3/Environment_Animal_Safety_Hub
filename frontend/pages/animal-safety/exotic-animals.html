@@ -615,29 +615,9 @@
     </main>
 
     <!-- Footer -->
-    <div id="footer-placeholder"></div>
+    <div id="footer-container"></div>
 
-    <!-- Share Modal -->
-    <div id="share-modal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <h3>Share This Page</h3>
-        <div class="share-buttons">
-          <button class="share-btn facebook" data-platform="facebook">
-            <i class="fab fa-facebook-f"></i> Facebook
-          </button>
-          <button class="share-btn twitter" data-platform="twitter">
-            <i class="fab fa-twitter"></i> Twitter
-          </button>
-          <button class="share-btn whatsapp" data-platform="whatsapp">
-            <i class="fab fa-whatsapp"></i> WhatsApp
-          </button>
-          <button class="share-btn linkedin" data-platform="linkedin">
-            <i class="fab fa-linkedin-in"></i> LinkedIn
-          </button>
-        </div>
-      </div>
-    </div>
+   
 
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -645,5 +625,88 @@
     <script src="../../js/components/footer-loader.js"></script>
     <script src="../../js/components/share-modal.js"></script>
     <script src="../../js/pages/animal-safety/exotic-animals.js"></script>
+
+          <script src="../../js/components/navbar-loader.js"></script>
+    <script src="../../js/components/footer-loader.js"></script>
+    
+    <!-- Load Components Script -->
+    <script>
+      // Simple component loader
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded, loading components...');
+        
+        // Load Navbar
+        fetch('../../components/navbar.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load navbar');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('navbar-container').innerHTML = data;
+            console.log('Navbar loaded successfully');
+            // Initialize navbar scripts if any
+            if (typeof initNavbar === 'function') {
+              initNavbar();
+            }
+          })
+          .catch(error => {
+            console.error('Error loading navbar:', error);
+            document.getElementById('navbar-container').innerHTML = 
+              '<div style="padding: 20px; background: #f8d7da; color: #721c24;">Navbar failed to load</div>';
+          });
+        
+        // Load Footer
+        fetch('../../components/footer.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load footer');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('footer-container').innerHTML = data;
+            console.log('Footer loaded successfully');
+            // Initialize footer scripts if any
+            if (typeof initFooter === 'function') {
+              initFooter();
+            }
+          })
+          .catch(error => {
+            console.error('Error loading footer:', error);
+            document.getElementById('footer-container').innerHTML = 
+              '<div style="padding: 20px; background: #f8d7da; color: #721c24; text-align: center;">Footer failed to load</div>';
+          });
+        
+        // Load Share Modal
+        fetch('../../components/share-modal.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load share modal');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('share-modal-container').innerHTML = data;
+            console.log('Share modal loaded successfully');
+          })
+          .catch(error => {
+            console.error('Error loading share modal:', error);
+          });
+        
+        // Initialize AOS
+        AOS.init({
+          duration: 800,
+          once: true,
+          offset: 100
+        });
+        
+        // Load cursor if function exists
+        if (typeof loadCursor === 'function') {
+          loadCursor();
+        }
+      });
+    </script>
   </body>
 </html>

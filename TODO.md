@@ -1,28 +1,14 @@
-- [ ] Extract hardcoded configs from individual quiz JS files
-- [ ] Move questions, time limits, icons to `quiz-config.json`
-- [ ] Update the following quiz files:
-  - [ ] `environment-awareness-quiz.js`
-  - [ ] `animal-first-aid-quiz.js`
-  - [ ] `waste-management-quiz.js`
-  - [ ] `climate-change-quiz.js`
-  - [ ] `sustainable-gardening-quiz.js`
-  - [ ] `water-conservation-quiz.js`
-  - [ ] `plant-care-quiz.js`
-  - [ ] `animal-communication-quiz.js`
-  - [ ] `pet-travel-quiz.js`
-  - [ ] `soil-land-protection-quiz.js`
-=======
-### 5. Migrate Existing Quiz Configurations
-- [x] Extract hardcoded configs from individual quiz JS files
-- [x] Move questions, time limits, icons to `quiz-config.json`
-- [x] Update the following quiz files:
-  - [x] `environment-awareness-quiz.js`
-  - [ ] `animal-first-aid-quiz.js`
-  - [ ] `waste-management-quiz.js`
-  - [ ] `climate-change-quiz.js`
-  - [ ] `sustainable-gardening-quiz.js`
-  - [ ] `water-conservation-quiz.js`
-  - [ ] `plant-care-quiz.js`
-  - [ ] `animal-communication-quiz.js`
-  - [ ] `pet-travel-quiz.js`
-  - [ ] `soil-land-protection-quiz.js`
+# Quiz Data Extraction Task
+
+## Overview
+Extract hardcoded quiz data from JavaScript files to external JSON files for better maintainability.
+
+## Steps
+- [x] Update quiz-data.json with missing quiz data (waste-management, animal-first-aid, climate-change, sustainable-gardening, etc.)
+- [x] Modify pollution-awareness-quiz.js to load data asynchronously
+- [x] Modify waste-management-quiz.js to load data asynchronously
+- [ ] Modify animal-first-aid-quiz.js to load data asynchronously
+- [ ] Modify climate-change-quiz.js to load data asynchronously
+- [ ] Modify sustainable-gardening-quiz.js to load data asynchronously
+- [ ] Check and update other quiz JS files if needed
+- [ ] Test that quizzes load data correctly and handle errors
