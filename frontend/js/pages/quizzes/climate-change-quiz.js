@@ -77,7 +77,35 @@ climateChangeQuiz.showResult = function() {
 // Initialize quiz on page load
 climateChangeQuiz.initializeQuiz();
 
-// Global functions for HTML onclick handlers
-window.startQuiz = () => climateChangeQuiz.startQuiz();
-window.resumeQuiz = () => climateChangeQuiz.resumeQuiz();
-window.nextQuestion = () => climateChangeQuiz.nextQuestion();
+// Add event listeners for quiz interactions
+document.addEventListener('DOMContentLoaded', () => {
+  // Start quiz button
+  const startBtn = document.getElementById('startQuizBtn');
+  if (startBtn) {
+    startBtn.addEventListener('click', () => climateChangeQuiz.startQuiz());
+  }
+
+  // Resume quiz button
+  const resumeBtn = document.getElementById('resumeQuizBtn');
+  if (resumeBtn) {
+    resumeBtn.addEventListener('click', () => climateChangeQuiz.resumeQuiz());
+  }
+
+  // Next question button
+  const nextBtn = document.getElementById('nextQuestionBtn');
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => climateChangeQuiz.nextQuestion());
+  }
+
+  // Play again button
+  const playAgainBtn = document.getElementById('playAgainBtn');
+  if (playAgainBtn) {
+    playAgainBtn.addEventListener('click', () => location.reload());
+  }
+
+  // Back button
+  const backBtn = document.getElementById('backBtn');
+  if (backBtn) {
+    backBtn.addEventListener('click', () => window.location.href = '../games/kids-zone.html');
+  }
+});

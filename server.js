@@ -106,10 +106,7 @@ app.use(handleErrors);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
-    console.log('\n' + '='.repeat(60));
     console.log(`🚀 Server running at http://localhost:${PORT}`);
-    console.log('='.repeat(60));
-    console.log('📋 Available APIs:');
     console.log(`📁 Category Management: http://localhost:${PORT}/category-management`);
     console.log(`🔍 Quality Control: http://localhost:${PORT}/quality-control`);
     console.log(`🏆 Contributor Recognition: http://localhost:${PORT}/contributor-recognition`);
