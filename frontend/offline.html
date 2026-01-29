@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Offline | EcoLife</title>
+  <link rel="icon" type="image/png" href="assets/images/others/environment-logo.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#22c55e">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <style>
+    :root {
+      --primary: #22c55e;
+      --primary-dark: #16a34a;
+      --primary-light: #86efac;
+      --bg-gradient-start: #0d1b0f;
+      --bg-gradient-end: #1a3d1f;
+      --text-light: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.7);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+      color: var(--text-light);
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .offline-container {
+      text-align: center;
+      padding: 40px 24px;
+      max-width: 520px;
+      position: relative;
+      z-index: 1;
+      animation: fadeIn 0.8s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .offline-icon {
+      position: relative;
+      margin-bottom: 36px;
+    }
+    
+    .offline-icon i {
+      font-size: 85px;
+      color: var(--primary);
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+    
+    .offline-icon::after {
+      content: '';
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(34, 197, 94, 0.25) 0%, transparent 70%);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: glow 3s ease-in-out infinite alternate;
+      z-index: -1;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      25% { transform: scale(1.05) rotate(-5deg); }
+      50% { transform: scale(1.08) rotate(5deg); }
+      75% { transform: scale(1.05) rotate(-3deg); }
+    }
+    
+    @keyframes glow {
+      0% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.3); }
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, var(--primary) 0%, #4ade80 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+    
+    .subtitle {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin-bottom: 36px;
+      line-height: 1.7;
+      max-width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .offline-tips {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 28px;
+      margin-bottom: 36px;
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+    
+    .offline-tips:hover {
+      transform: translateY(-5px);
+    }
+    
+    .offline-tips h3 {
+      font-size: 1.1rem;
+      color: var(--primary-light);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      letter-spacing: 0.5px;
+    }
+    
+    .offline-tips ul {
+      list-style: none;
+      text-align: left;
+    }
+    
+    .offline-tips li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 12px 0;
+      font-size: 1rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.3s ease;
+    }
+    
+    .offline-tips li:hover {
+      color: var(--text-light);
+      transform: translateX(5px);
+    }
+    
+    .offline-tips li:last-child {
+      border-bottom: none;
+    }
+    
+    .offline-tips li i {
+      color: var(--primary);
+      flex-shrink: 0;
+      margin-top: 4px;
+      font-size: 1.1rem;
+    }
+    
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 32px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      outline: none;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.5);
+      opacity: 0;
+      border-radius: 100%;
+      transform: scale(1, 1) translate(-50%);
+      transform-origin: 50% 50%;
+    }
+    
+    .btn:focus:not(:active)::after {
+      animation: ripple 1s ease-out;
+    }
+    
+    @keyframes ripple {
+      0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(20, 20);
+        opacity: 0;
+      }
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(34, 197, 94, 0.5);
+    }
+    
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(5px);
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-3px);
+    }
+    
+    /* Floating background elements */
+    .bg-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .bg-element {
+      position: absolute;
+      font-size: 50px;
+      opacity: 0.07;
+      animation: float 15s ease-in-out infinite;
+    }
+    
+    .bg-element:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+    .bg-element:nth-child(2) { top: 15%; right: 8%; animation-delay: 3s; }
+    .bg-element:nth-child(3) { bottom: 25%; left: 10%; animation-delay: 6s; }
+    .bg-element:nth-child(4) { bottom: 15%; right: 15%; animation-delay: 2s; }
+    .bg-element:nth-child(5) { top: 55%; left: 3%; animation-delay: 4s; }
+    .bg-element:nth-child(6) { top: 45%; right: 3%; animation-delay: 8s; }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+      33% { transform: translateY(-25px) rotate(5deg) scale(1.05); }
+      66% { transform: translateY(15px) rotate(-5deg) scale(0.95); }
+    }
+    
+    /* Status indicator */
+    .status-indicator {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 36px;
+      padding: 20px;
+      background: rgba(239, 68, 68, 0.08);
+      border-radius: 20px;
+      color: #ef4444;
+      font-size: 0.95rem;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      backdrop-filter: blur(5px);
+      transition: all 0.5s ease;
+    }
+    
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background: #ef4444;
+      border-radius: 50%;
+      animation: blink 1.5s ease-in-out infinite;
+      box-shadow: 0 0 10px #ef4444;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    
+    .status-indicator.online {
+      background: rgba(34, 197, 94, 0.08);
+      color: var(--primary);
+      border-color: rgba(34, 197, 94, 0.2);
+    }
+    
+    .status-indicator.online .status-dot {
+      background: var(--primary);
+      animation: none;
+      box-shadow: 0 0 10px var(--primary);
+    }
+    
+    .countdown-container {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      color: var(--primary);
+    }
+    
+    .countdown {
+      font-weight: 700;
+      font-size: 1.2rem;
+      min-width: 30px;
+      text-align: center;
+    }
+    
+    .status-indicator.online .countdown-container {
+      display: flex;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+    
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+      border-radius: 2px;
+      transition: width 1s linear;
+    }
+    
+    @media (max-width: 600px) {
+      .offline-container {
+        padding: 30px 20px;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .subtitle {
+        font-size: 1rem;
+        max-width: 100%;
+      }
+      
+      .offline-icon i {
+        font-size: 70px;
+      }
+      
+      .offline-tips {
+        padding: 22px;
+      }
+      
+      .btn {
+        padding: 14px 26px;
+        font-size: 0.95rem;
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+      
+      .bg-element {
+        font-size: 35px;
+      }
+    }
+    
+    /* Connection animation */
+    .connection-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+    
+    .connection-animation.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .connection-animation-content {
+      text-align: center;
+      animation: pulse 2s infinite;
+    }
+    
+    .connection-animation i {
+      font-size: 80px;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+    
+    .connection-animation h2 {
+      font-size: 2rem;
+      color: white;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  
+  <!-- Background Elements -->
+  <div class="bg-elements">
+    <div class="bg-element"><i class="fa-solid fa-leaf"></i></div>
+    <div class="bg-element"><i class="fa-solid fa-paw"></i></div>
+    <div class="bg-element"><i class="fa-solid fa-tree"></i></div>
+    <div class="bg-element"><i class="fa-solid fa-seedling"></i></div>
+    <div class="bg-element"><i class="fa-solid fa-earth-americas"></i></div>
+    <div class="bg-element"><i class="fa-solid fa-recycle"></i></div>
+  </div>
+  
+  <!-- Connection animation overlay -->
+  <div class="connection-animation" id="connection-animation">
+    <div class="connection-animation-content">
+      <i class="fa-solid fa-wifi"></i>
+      <h2>Connection Restored!</h2>
+      <p>Redirecting to EcoLife...</p>
+    </div>
+  </div>
+
+  <div class="offline-container">
+    <div class="offline-icon">
+      <i class="fa-solid fa-wifi-slash"></i>
+    </div>
+    
+    <h1>You're Offline</h1>
+    
+    <p class="subtitle">
+      It looks like you've lost your internet connection. Don't worry – some content is still available offline!
+    </p>
+    
+    <div class="offline-tips">
+      <h3><i class="fa-solid fa-lightbulb"></i> While You're Offline</h3>
+      <ul>
+        <li>
+          <i class="fa-solid fa-check-circle"></i>
+          <span>Previously visited pages are cached and available</span>
+        </li>
+        <li>
+          <i class="fa-solid fa-check-circle"></i>
+          <span>Saved articles can be read without connection</span>
+        </li>
+        <li>
+          <i class="fa-solid fa-check-circle"></i>
+          <span>Take eco-challenges – we'll sync when you're back online</span>
+        </li>
+        <li>
+          <i class="fa-solid fa-info-circle"></i>
+          <span>Check your WiFi or mobile data connection</span>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="action-buttons">
+      <button class="btn btn-primary" onclick="window.location.reload()">
+        <i class="fa-solid fa-rotate"></i> Try Again
+      </button>
+      <a href="index.html" class="btn btn-secondary">
+        <i class="fa-solid fa-home"></i> Go Home
+      </a>
+    </div>
+    
+    <div class="status-indicator" id="status-indicator">
+      <div class="status-row">
+        <div class="status-dot"></div>
+        <span id="status-text">No internet connection</span>
+      </div>
+      
+      <div class="countdown-container" id="countdown-container">
+        <span>Redirecting in</span>
+        <div class="countdown" id="countdown">5</div>
+        <span>seconds</span>
+      </div>
+      
+      <div class="progress-bar">
+        <div class="progress" id="progress-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Check network status
+    const statusIndicator = document.getElementById('status-indicator');
+    const statusText = document.getElementById('status-text');
+    const countdownContainer = document.getElementById('countdown-container');
+    const countdownElement = document.getElementById('countdown');
+    const progressBar = document.getElementById('progress-bar');
+    const connectionAnimation = document.getElementById('connection-animation');
+    
+    let countdownTimer;
+    let countdownValue = 6; // 5-6 seconds as requested
+    let progressInterval;
+    
+    function updateStatus() {
+      if (navigator.onLine) {
+        // Connection restored
+        statusIndicator.classList.add('online');
+        statusText.textContent = 'Connection restored!';
+        countdownContainer.style.display = 'flex';
+        
+        // Show connection animation
+        connectionAnimation.classList.add('active');
+        
+        // Start countdown
+        startCountdown();
+      } else {
+        // Still offline
+        statusIndicator.classList.remove('online');
+        statusText.textContent = 'No internet connection';
+        countdownContainer.style.display = 'none';
+        
+        // Hide connection animation
+        connectionAnimation.classList.remove('active');
+        
+        // Clear any existing timers
+        if (countdownTimer) clearInterval(countdownTimer);
+        if (progressInterval) clearInterval(progressInterval);
+      }
+    }
+    
+    function startCountdown() {
+      // Reset countdown value
+      countdownValue = 6;
+      countdownElement.textContent = countdownValue;
+      progressBar.style.width = '0%';
+      
+      // Clear previous timers if any
+      if (countdownTimer) clearInterval(countdownTimer);
+      if (progressInterval) clearInterval(progressInterval);
+      
+      // Start countdown
+      countdownTimer = setInterval(() => {
+        countdownValue--;
+        countdownElement.textContent = countdownValue;
+        
+        // Update progress bar (6 seconds total)
+        progressBar.style.width = `${(6 - countdownValue) * (100/6)}%`;
+        
+        if (countdownValue <= 0) {
+          clearInterval(countdownTimer);
+          // Redirect to home page
+          window.location.href = 'index.html';
+        }
+      }, 1000);
+      
+      // Smooth progress bar animation
+      let progress = 0;
+      progressInterval = setInterval(() => {
+        progress += 100/600; // 600 = 6 seconds * 100ms interval
+        progressBar.style.width = `${progress}%`;
+        
+        if (progress >= 100) {
+          clearInterval(progressInterval);
+        }
+      }, 100);
+    }
+    
+    // Listen for online/offline events
+    window.addEventListener('online', updateStatus);
+    window.addEventListener('offline', updateStatus);
+    
+    // Initial check
+    updateStatus();
+    
+    // Add ripple effect to buttons
+    document.querySelectorAll('.btn').forEach(button => {
+      button.addEventListener('click', function(e) {
+        // Create ripple
+        const ripple = document.createElement('span');
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size/2;
+        const y = e.clientY - rect.top - size/2;
+        
+        ripple.style.cssText = `
+          position: absolute;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.7);
+          transform: scale(0);
+          animation: ripple-animation 0.6s linear;
+          width: ${size}px;
+          height: ${size}px;
+          top: ${y}px;
+          left: ${x}px;
+        `;
+        
+        this.appendChild(ripple);
+        
+        // Remove ripple after animation
+        setTimeout(() => {
+          ripple.remove();
+        }, 600);
+      });
+    });
+    
+    // Add custom ripple animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes ripple-animation {
+        to {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+
+</html>

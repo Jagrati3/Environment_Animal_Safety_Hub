@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eat Local Month Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Merriweather:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4a7c3d;
+            --secondary: #8bb174;
+            --accent: #ff8c42;
+            --light: #f8f9f2;
+            --dark: #2c3e2a;
+            --earth: #a67c52;
+            --success: #5cb85c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark);
+            background-color: var(--light);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(rgba(44, 62, 42, 0.9), rgba(44, 62, 42, 0.95)), 
+                        url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center 30%;
+            color: white;
+            padding: 70px 0 50px;
+            text-align: center;
+            border-radius: 0 0 30px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--light);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .tagline {
+            font-size: 1.4rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-weight: 300;
+            font-family: 'Merriweather', serif;
+        }
+        
+        /* Challenge Intro */
+        .challenge-intro {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+        
+        .challenge-title {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .challenge-title:after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 4px;
+            background-color: var(--accent);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .challenge-subtitle {
+            font-size: 1.5rem;
+            color: var(--earth);
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+        
+        .challenge-description {
+            max-width: 850px;
+            margin: 0 auto 50px;
+            background-color: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border-top: 5px solid var(--secondary);
+            font-size: 1.1rem;
+        }
+        
+        /* Stats Section */
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 50px 0 70px;
+        }
+        
+        .stat-box {
+            background: white;
+            border-radius: 15px;
+            padding: 30px 25px;
+            width: 240px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-box:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: var(--primary);
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+        
+        .stat-value {
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 1.2rem;
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        /* Benefits Section */
+        .benefits-section {
+            background-color: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            margin: 60px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.3rem;
+            color: var(--primary);
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent);
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 35px;
+        }
+        
+        .benefit-card {
+            background: var(--light);
+            padding: 30px;
+            border-radius: 12px;
+            border-left: 5px solid var(--secondary);
+            transition: transform 0.3s ease;
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .benefit-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4rem;
+        }
+        
+        .benefit-card h3 i {
+            color: var(--accent);
+        }
+        
+        /* Local Guide */
+        .local-guide {
+            background-color: #f0f5e9;
+            border-radius: 20px;
+            padding: 50px 40px;
+            margin: 60px 0;
+        }
+        
+        .guide-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .guide-item {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .guide-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        /* Action Section */
+        .action-section {
+            text-align: center;
+            padding: 70px 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 25px;
+            margin: 60px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-section:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            opacity: 0.1;
+        }
+        
+        .action-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .start-button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 22px 55px;
+            font-size: 1.6rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 35px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .start-button:hover {
+            background-color: #ff7a2e;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+        }
+        
+        .counter {
+            font-size: 1.4rem;
+            margin: 30px 0;
+            font-weight: 600;
+        }
+        
+        /* Seasonal Calendar */
+        .seasonal-calendar {
+            background-color: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            margin: 60px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .season-card {
+            background: var(--light);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .season-title {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .season-produce {
+            list-style-type: none;
+        }
+        
+        .season-produce li {
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+        }
+        
+        .season-produce li:last-child {
+            border-bottom: none;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 50px 0;
+            margin-top: 60px;
+            color: var(--dark);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            background-color: #f0f5e9;
+        }
+        
+        .impact-statement {
+            font-size: 1.2rem;
+            margin-top: 25px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .challenge-title {
+                font-size: 2.3rem;
+            }
+            
+            .stat-box {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .benefits-grid, .guide-grid, .calendar-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .benefits-section, .local-guide, .seasonal-calendar {
+                padding: 40px 25px;
+            }
+            
+            .action-section {
+                padding: 50px 25px;
+            }
+        }
+        
+        .highlight {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .farm-icon {
+            display: inline-block;
+            margin: 0 5px;
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content container">
+            <div class="logo">
+                <i class="fas fa-tractor"></i>
+            </div>
+            <h1>Eat Local Challenge</h1>
+            <p class="tagline">Support local farmers, reduce food miles, and rediscover the flavors of your region for 30 days</p>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="challenge-intro">
+            <h1 class="challenge-title">Eat Local Month</h1>
+            <h2 class="challenge-subtitle">30 days • Intermediate Level</h2>
+            
+            <div class="challenge-description">
+                <p>Only eat locally-sourced food for 30 days. This intermediate challenge will transform your relationship with food, connect you with your local food community, and significantly reduce the carbon footprint of your meals. Discover seasonal flavors, support regional farmers, and learn about sustainable food systems.</p>
+            </div>
+            
+            <div class="counter">
+                <p><i class="fas fa-users"></i> <span id="participant-count">445</span> people are eating locally this month</p>
+            </div>
+        </section>
+        
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-value">30</div>
+                <div class="stat-label">Days of Local Eating</div>
+            </div>
+            
+            <div class="stat-box">
+                <div class="stat-value">445</div>
+                <div class="stat-label">Participants</div>
+            </div>
+            
+            <div class="stat-box">
+                <div class="stat-value">55%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+            
+            <div class="stat-box">
+                <div class="stat-value">15kg</div>
+                <div class="stat-label">Avg. CO₂ Saved</div>
+            </div>
+        </div>
+        
+        <section class="benefits-section">
+            <h2 class="section-title">Benefits of Eating Local</h2>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <h3><i class="fas fa-truck-moving"></i> Reduce Food Miles</h3>
+                    <p>The average meal travels 1,500 miles to reach your plate. Local food travels less than 100 miles, reducing transportation emissions by 95%.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <h3><i class="fas fa-seedling"></i> Fresher, More Nutritious</h3>
+                    <p>Local food is harvested at peak ripeness and reaches you faster, retaining more nutrients and flavor compared to transported produce.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <h3><i class="fas fa-hand-holding-usd"></i> Support Local Economy</h3>
+                    <p>For every $100 spent at a local farm, $68 stays in the local economy compared to $43 at chain stores.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <h3><i class="fas fa-leaf"></i> Seasonal Eating</h3>
+                    <p>Eating with the seasons connects you to natural cycles, reduces energy for storage, and provides variety throughout the year.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="local-guide">
+            <h2 class="section-title">How to Eat Local</h2>
+            
+            <div class="guide-grid">
+                <div class="guide-item">
+                    <div class="guide-icon">
+                        <i class="fas fa-shopping-basket"></i>
+                    </div>
+                    <h3>Farmers Markets</h3>
+                    <p>Visit weekly farmers markets for fresh, seasonal produce directly from growers.</p>
+                </div>
+                
+                <div class="guide-item">
+                    <div class="guide-icon">
+                        <i class="fas fa-warehouse"></i>
+                    </div>
+                    <h3>CSA Subscriptions</h3>
+                    <p>Join a Community Supported Agriculture program for regular boxes of local produce.</p>
+                </div>
+                
+                <div class="guide-item">
+                    <div class="guide-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <h3>Local Food Co-ops</h3>
+                    <p>Shop at cooperatives that prioritize locally-sourced products from regional producers.</p>
+                </div>
+                
+                <div class="guide-item">
+                    <div class="guide-icon">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <h3>Local Food Directories</h3>
+                    <p>Use apps and websites to find farms, markets, and restaurants serving local food.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="seasonal-calendar">
+            <h2 class="section-title">Seasonal Eating Guide</h2>
+            <p style="text-align: center; margin-bottom: 30px;">Eating with the seasons ensures freshness and supports natural growing cycles</p>
+            
+            <div class="calendar-grid">
+                <div class="season-card">
+                    <h3 class="season-title"><i class="fas fa-sun farm-icon"></i> Summer</h3>
+                    <ul class="season-produce">
+                        <li>Tomatoes</li>
+                        <li>Corn</li>
+                        <li>Berries</li>
+                        <li>Zucchini</li>
+                        <li>Peaches</li>
+                    </ul>
+                </div>
+                
+                <div class="season-card">
+                    <h3 class="season-title"><i class="fas fa-wind farm-icon"></i> Fall</h3>
+                    <ul class="season-produce">
+                        <li>Apples</li>
+                        <li>Pumpkins</li>
+                        <li>Root Vegetables</li>
+                        <li>Kale</li>
+                        <li>Grapes</li>
+                    </ul>
+                </div>
+                
+                <div class="season-card">
+                    <h3 class="season-title"><i class="fas fa-snowflake farm-icon"></i> Winter</h3>
+                    <ul class="season-produce">
+                        <li>Winter Squash</li>
+                        <li>Potatoes</li>
+                        <li>Citrus</li>
+                        <li>Brussels Sprouts</li>
+                        <li>Leeks</li>
+                    </ul>
+                </div>
+                
+                <div class="season-card">
+                    <h3 class="season-title"><i class="fas fa-seedling farm-icon"></i> Spring</h3>
+                    <ul class="season-produce">
+                        <li>Asparagus</li>
+                        <li>Strawberries</li>
+                        <li>Peas</li>
+                        <li>Radishes</li>
+                        <li>Leafy Greens</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section class="action-section">
+            <div class="action-content">
+                <h2 class="section-title" style="color: white;">Ready to Eat Local?</h2>
+                <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto 20px;">Join hundreds of participants rediscovering regional flavors and reducing their food footprint.</p>
+                <p style="font-size: 1.1rem; max-width: 800px; margin: 0 auto;">For 30 days, choose food with a face and a place <span class="highlight" style="color: #ffd8b5;">instead of food with just a barcode</span>.</p>
+                
+                <button class="start-button" id="start-challenge">
+                    <i class="fas fa-play-circle"></i> Start 30-Day Challenge
+                </button>
+                
+                <div class="counter" id="join-message"></div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>Eat Local Month Challenge &copy; 2026 | Supporting Sustainable Food Systems</p>
+            <p class="impact-statement">
+                <i class="fas fa-leaf"></i> 
+                Collective impact: <span id="total-co2">6,675</span> kg CO₂ saved and <span id="farmers-supported">890</span> local farmers supported
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const participantCount = document.getElementById('participant-count');
+            const joinMessage = document.getElementById('join-message');
+            const startButton = document.getElementById('start-challenge');
+            const totalCO2 = document.getElementById('total-co2');
+            const farmersSupported = document.getElementById('farmers-supported');
+            
+            // Initial values
+            let participants = 445;
+            let co2Saved = participants * 15; // 15kg per participant
+            let farmers = participants * 2; // Estimated 2 farmers per participant
+            
+            // Update displays
+            totalCO2.textContent = co2Saved.toLocaleString();
+            farmersSupported.textContent = farmers.toLocaleString();
+            
+            // Start challenge functionality
+            startButton.addEventListener('click', function() {
+                // Increase participant count
+                participants++;
+                participantCount.textContent = participants.toLocaleString();
+                
+                // Update impact metrics
+                co2Saved = participants * 15;
+                farmers = participants * 2;
+                totalCO2.textContent = co2Saved.toLocaleString();
+                farmersSupported.textContent = farmers.toLocaleString();
+                
+                // Success message
+                const messages = [
+                    "Welcome to the local food movement!",
+                    "Your journey to local eating begins now!",
+                    "You've joined the farm-to-table revolution!",
+                    "Get ready to taste your region!"
+                ];
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                
+                joinMessage.innerHTML = `<i class="fas fa-check-circle" style="color: var(--success)"></i> ${randomMessage} You are participant #${participants.toLocaleString()}`;
+                
+                // Change button
+                startButton.innerHTML = '<i class="fas fa-check"></i> Challenge Started!';
+                startButton.style.backgroundColor = '#5cb85c';
+                startButton.disabled = true;
+                
+                // Show confirmation
+                alert("Eat Local Month Challenge started!\n\nYou'll receive a local food guide via email including:\n1. Farmers markets in your area\n2. Seasonal produce calendar\n3. Local food sourcing tips\n4. Recipe ideas for local ingredients\n\nEnjoy discovering your local foodscape!");
+            });
+            
+            // Simulate live participant updates
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    const newParticipants = Math.floor(Math.random() * 3) + 1;
+                    participants += newParticipants;
+                    participantCount.textContent = participants.toLocaleString();
+                    
+                    // Update impact metrics
+                    co2Saved = participants * 15;
+                    farmers = participants * 2;
+                    totalCO2.textContent = co2Saved.toLocaleString();
+                    farmersSupported.textContent = farmers.toLocaleString();
+                }
+            }, 10000);
+        });
+    </script>
+</body>
+</html>

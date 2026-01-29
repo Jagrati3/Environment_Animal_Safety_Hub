@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cold Shower Challenge - 14 Days Intermediate</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #1e88e5;
+            --dark-blue: #1565c0;
+            --light-blue: #e3f2fd;
+            --accent-blue: #4fc3f7;
+            --text-dark: #263238;
+            --text-light: #546e7a;
+            --success: #00c853;
+            --warning: #ff9800;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e3f2fd 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+            color: white;
+            padding: 50px 20px;
+            text-align: center;
+            border-radius: 0 0 25px 25px;
+            box-shadow: 0 10px 30px rgba(30, 136, 229, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%234fc3f7' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.1;
+        }
+        
+        .challenge-badge {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .challenge-title {
+            font-size: 3.2rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            letter-spacing: -0.5px;
+        }
+        
+        .challenge-subtitle {
+            font-size: 1.6rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+        
+        .challenge-description {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            line-height: 1.8;
+            opacity: 0.95;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .stat-box {
+            background-color: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            flex: 1;
+            min-width: 200px;
+            max-width: 250px;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-8px);
+            background-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-value {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 60px 0;
+        }
+        
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .challenge-title {
+                font-size: 2.5rem;
+            }
+        }
+        
+        .challenge-card {
+            background-color: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .challenge-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--dark-blue);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--light-blue);
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent-blue);
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .benefit-item {
+            background-color: var(--light-blue);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .benefit-item:hover {
+            background-color: #bbdefb;
+            transform: translateY(-3px);
+        }
+        
+        .benefit-icon {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+        }
+        
+        .benefit-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark-blue);
+        }
+        
+        .how-it-works ol {
+            padding-left: 25px;
+            margin-top: 15px;
+        }
+        
+        .how-it-works li {
+            margin-bottom: 20px;
+            padding-left: 10px;
+            position: relative;
+        }
+        
+        .how-it-works li::before {
+            content: counter(list-item);
+            position: absolute;
+            left: -30px;
+            top: -5px;
+            background-color: var(--primary-blue);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .progress-container {
+            margin-top: 30px;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background-color: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-blue));
+            width: 0%;
+            border-radius: 6px;
+            transition: width 1.5s ease-in-out;
+        }
+        
+        .cta-section {
+            text-align: center;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, white 0%, var(--light-blue) 100%);
+            border-radius: 25px;
+            margin: 60px 0;
+            box-shadow: 0 15px 35px rgba(30, 136, 229, 0.1);
+            border: 1px solid rgba(30, 136, 229, 0.1);
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            color: var(--dark-blue);
+            margin-bottom: 20px;
+        }
+        
+        .cta-description {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: var(--text-light);
+        }
+        
+        .start-button {
+            background: linear-gradient(to right, var(--primary-blue), var(--dark-blue));
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(30, 136, 229, 0.3);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .start-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(30, 136, 229, 0.4);
+            background: linear-gradient(to right, var(--dark-blue), #0d47a1);
+        }
+        
+        .testimonials {
+            margin: 60px 0;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .testimonial-card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--accent-blue);
+            transition: transform 0.3s ease;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .quote {
+            font-style: italic;
+            margin-bottom: 20px;
+            color: var(--text-light);
+            position: relative;
+        }
+        
+        .quote::before {
+            content: "“";
+            font-size: 4rem;
+            color: var(--light-blue);
+            position: absolute;
+            top: -20px;
+            left: -10px;
+            font-family: serif;
+            opacity: 0.5;
+        }
+        
+        .author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--light-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+        
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .author-name {
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+        
+        .author-details {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        .faq-section {
+            margin: 60px 0;
+        }
+        
+        .faq-container {
+            margin-top: 30px;
+        }
+        
+        .faq-item {
+            background-color: white;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .faq-question {
+            padding: 20px;
+            font-weight: 600;
+            color: var(--dark-blue);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: var(--text-light);
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 0 20px 20px;
+            max-height: 300px;
+        }
+        
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+            border-top: 1px solid #e0e0e0;
+            margin-top: 60px;
+            background-color: white;
+        }
+        
+        .social-icons {
+            margin: 25px 0;
+        }
+        
+        .social-icons a {
+            display: inline-block;
+            margin: 0 12px;
+            color: var(--primary-blue);
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+            width: 45px;
+            height: 45px;
+            line-height: 45px;
+            border-radius: 50%;
+            background-color: var(--light-blue);
+        }
+        
+        .social-icons a:hover {
+            transform: translateY(-5px);
+            background-color: var(--primary-blue);
+            color: white;
+        }
+        
+        .countdown {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 40px auto;
+            max-width: 600px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .countdown-title {
+            text-align: center;
+            color: var(--dark-blue);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+        
+        .countdown-item {
+            background: linear-gradient(135deg, var(--light-blue) 0%, #bbdefb 100%);
+            border-radius: 12px;
+            padding: 15px;
+            min-width: 80px;
+        }
+        
+        .countdown-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--dark-blue);
+        }
+        
+        .countdown-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+        
+        .difficulty-badge {
+            display: inline-block;
+            background: linear-gradient(to right, #ff9800, #ffb74d);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="challenge-badge">14 DAY CHALLENGE</div>
+            <h1 class="challenge-title">Cold Shower Challenge</h1>
+            <p class="challenge-subtitle">End your showers with 30 seconds of cold water for 14 days<span class="difficulty-badge">INTERMEDIATE</span></p>
+            <p class="challenge-description">
+                Boost your immunity, increase energy, and save energy by ending every shower with 30 seconds of cold water for two weeks. Join hundreds taking the plunge!
+            </p>
+            
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="stat-value">678</div>
+                    <div class="stat-label">Participants</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">65%</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">5kg</div>
+                    <div class="stat-label">CO₂ Saved</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="countdown">
+            <h3 class="countdown-title">Next challenge starts in:</h3>
+            <div class="countdown-timer">
+                <div class="countdown-item">
+                    <div class="countdown-value" id="days">07</div>
+                    <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="hours">12</div>
+                    <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="minutes">45</div>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="seconds">30</div>
+                    <div class="countdown-label">Seconds</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="challenge-card">
+                <h2 class="section-title">Benefits of Cold Showers</h2>
+                <p>Taking cold showers for just 30 seconds at the end of your shower can provide surprising benefits:</p>
+                
+                <div class="benefits-grid">
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fas fa-shield-virus"></i></div>
+                        <div class="benefit-title">Boost Immunity</div>
+                        <p>Cold exposure increases white blood cell count</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fas fa-bolt"></i></div>
+                        <div class="benefit-title">Increase Energy</div>
+                        <p>Cold water stimulates alertness and circulation</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fas fa-leaf"></i></div>
+                        <div class="benefit-title">Save Energy</div>
+                        <p>Less hot water means lower energy consumption</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fas fa-brain"></i></div>
+                        <div class="benefit-title">Mental Toughness</div>
+                        <p>Builds resilience and discipline</p>
+                    </div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Challenge Completion Rate</span>
+                        <span>65%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" id="success-progress"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="challenge-card">
+                <h2 class="section-title">How It Works</h2>
+                <div class="how-it-works">
+                    <ol>
+                        <li><strong>Take your normal warm shower</strong> - Cleanse and relax as you normally would</li>
+                        <li><strong>Gradually reduce temperature</strong> - Slowly turn the dial to cooler water</li>
+                        <li><strong>30 seconds of cold water</strong> - End your shower with 30 seconds of cold water (as cold as you can handle)</li>
+                        <li><strong>Track your progress</strong> - Log each day and note how you feel</li>
+                        <li><strong>Build up over time</strong> - Try increasing cold exposure by 5 seconds each day</li>
+                        <li><strong>Join the community</strong> - Share your experiences and get support</li>
+                    </ol>
+                    
+                    <div style="margin-top: 30px; padding: 20px; background-color: var(--light-blue); border-radius: 12px;">
+                        <h3 style="color: var(--dark-blue); margin-bottom: 10px;"><i class="fas fa-lightbulb"></i> Pro Tip</h3>
+                        <p>Focus on your breathing when the cold water hits. Take deep, controlled breaths to manage the initial shock. It gets easier with practice!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cta-section">
+            <h2 class="cta-title">Take the Cold Water Plunge!</h2>
+            <p class="cta-description">
+                Join 678 participants who have built mental resilience and improved their health with just 30 seconds of cold water at the end of their showers. 
+                The challenge is only 14 days - you can do this!
+            </p>
+            <button class="start-button" id="joinChallenge">
+                <i class="fas fa-tint"></i> Start Cold Shower Challenge
+            </button>
+            <p style="margin-top: 15px; color: var(--text-light); font-size: 0.95rem;">Free to join • No equipment needed • Starts immediately</p>
+        </div>
+        
+        <div class="testimonials">
+            <h2 class="section-title">Challenger Experiences</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p class="quote">"The first few days were tough, but by day 7 I actually looked forward to the cold blast. My energy levels throughout the day are noticeably higher now."</p>
+                    <div class="author">
+                        <div class="avatar">MK</div>
+                        <div class="author-info">
+                            <div class="author-name">Marcus K.</div>
+                            <div class="author-details">Completed challenge 3 times</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="quote">"I used to get sick every winter. Since doing this challenge, I've noticed I'm more resilient to colds. Plus, my skin feels better with less hot water exposure!"</p>
+                    <div class="author">
+                        <div class="avatar">SJ</div>
+                        <div class="author-info">
+                            <div class="author-name">Sophia J.</div>
+                            <div class="author-details">45 days consecutive</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="quote">"The mental benefits surprised me most. Starting my day by voluntarily doing something uncomfortable gave me confidence that carried through my entire day."</p>
+                    <div class="author">
+                        <div class="avatar">TR</div>
+                        <div class="author-info">
+                            <div class="author-name">Thomas R.</div>
+                            <div class="author-details">Intermediate challenger</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="faq-section">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Is 30 seconds of cold water really enough to see benefits?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Yes! Research shows that even brief cold exposure can stimulate the immune system and increase alertness. The 30-second timeframe makes the challenge accessible while still providing benefits.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Can I do this if I have health concerns?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        If you have heart conditions, circulation issues, or are pregnant, consult your doctor before starting. For most people, ending a shower with cool water is safe, but listen to your body.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        What's the best time of day for a cold shower?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Most participants prefer morning showers to boost energy for the day. However, you can adapt this to your schedule. Some find an evening cool-down shower helps with sleep.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How much energy does this actually save?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Reducing your hot shower time by 30 seconds daily can save approximately 5kg of CO₂ over 14 days. If continued for a year, that's over 130kg of CO₂ saved per person!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <p>© 2026 Cold Shower Challenge. All rights reserved.</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">Build mental resilience and save energy, 30 seconds at a time.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Animate progress bar
+        document.addEventListener('DOMContentLoaded', function() {
+            const progressBar = document.getElementById('success-progress');
+            setTimeout(() => {
+                progressBar.style.width = '65%';
+            }, 500);
+            
+            // Countdown timer
+            function updateCountdown() {
+                const now = new Date();
+                const nextMonday = new Date();
+                
+                // Set to next Monday at 8:00 AM
+                nextMonday.setDate(now.getDate() + ((7 - now.getDay() + 1) % 7 || 7));
+                nextMonday.setHours(8, 0, 0, 0);
+                
+                const diff = nextMonday - now;
+                
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            }
+            
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
+            
+            // FAQ accordion
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                question.addEventListener('click', () => {
+                    // Close other open items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle current item
+                    item.classList.toggle('active');
+                });
+            });
+            
+            // Join challenge button
+            document.getElementById('joinChallenge').addEventListener('click', function() {
+                // Button animation
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+                
+                // Show confirmation
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: rgba(0,0,0,0.7);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 1000;
+                `;
+                
+                modal.innerHTML = `
+                    <div style="background: white; padding: 40px; border-radius: 20px; max-width: 500px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
+                        <div style="font-size: 4rem; color: var(--primary-blue); margin-bottom: 20px;">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h2 style="color: var(--dark-blue); margin-bottom: 15px;">Challenge Accepted!</h2>
+                        <p style="margin-bottom: 25px; color: var(--text-light);">You've joined the Cold Shower Challenge! Check your email for your starter guide and daily tracking sheet.</p>
+                        <button id="closeModal" style="background: var(--primary-blue); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: 600; cursor: pointer;">Get Started</button>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                
+                document.getElementById('closeModal').addEventListener('click', function() {
+                    document.body.removeChild(modal);
+                });
+                
+                // Close modal when clicking outside
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        document.body.removeChild(modal);
+                    }
+                });
+            });
+            
+            // Add hover effects to cards
+            const cards = document.querySelectorAll('.challenge-card, .testimonial-card, .benefit-item');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.cursor = 'pointer';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

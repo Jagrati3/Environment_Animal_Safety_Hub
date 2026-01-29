@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero-Waste Month Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: #333;
+            background-color: #f9fdf8;
+            line-height: 1.6;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: #2a5c3d;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: #2a5c3d;
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .challenge-header {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .challenge-title {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        
+        .challenge-subtitle {
+            font-size: 1.4rem;
+            color: #4a7c59;
+            margin-bottom: 30px;
+        }
+        
+        .challenge-description {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            font-size: 1.1rem;
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid #4a7c59;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .stat-box {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            width: 220px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #2a5c3d;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: #666;
+        }
+        
+        .highlight {
+            color: #e76f51;
+            font-weight: 600;
+        }
+        
+        .action-section {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: #edf7ea;
+            border-radius: 20px;
+            margin: 40px 0;
+        }
+        
+        .start-button {
+            background-color: #2a5c3d;
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(42, 92, 61, 0.3);
+        }
+        
+        .start-button:hover {
+            background-color: #e76f51;
+            transform: scale(1.05);
+        }
+        
+        .principles-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 50px 0;
+        }
+        
+        .principle {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        
+        .principle i {
+            font-size: 2.5rem;
+            color: #4a7c59;
+            margin-bottom: 15px;
+        }
+        
+        .principle h3 {
+            margin-bottom: 15px;
+        }
+        
+        .progress-container {
+            margin: 50px auto;
+            max-width: 800px;
+        }
+        
+        .progress-bar {
+            height: 30px;
+            background-color: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #4a7c59;
+            width: 45%;
+            border-radius: 15px;
+            transition: width 1s ease;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+        
+        .counter {
+            font-size: 1.2rem;
+            margin: 20px 0;
+            color: #2a5c3d;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .challenge-title {
+                font-size: 2.2rem;
+            }
+            
+            .stat-box {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .principles-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-seedling"></i>
+            </div>
+            <h1>Zero-Waste Lifestyle</h1>
+            <p class="tagline">Join thousands of people committed to reducing waste and protecting our planet</p>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="challenge-header">
+            <h1 class="challenge-title">Zero-Waste Month Challenge</h1>
+            <h2 class="challenge-subtitle">30 days • Expert Level</h2>
+            
+            <div class="challenge-description">
+                <p>Aim for zero landfill waste for 30 days. Learn to compost, recycle properly, and refuse what you can't reuse. This challenge will transform your relationship with waste and help you develop sustainable habits that last a lifetime.</p>
+            </div>
+            
+            <div class="counter">
+                <p><i class="fas fa-users"></i> <span id="participant-count">543</span> people are participating right now</p>
+            </div>
+        </section>
+        
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-value">30</div>
+                <div class="stat-label">Days of Challenge</div>
+            </div>
+            
+            <div class="stat-box">
+                <div class="stat-value">543</div>
+                <div class="stat-label">Active Participants</div>
+            </div>
+            
+            <div class="stat-box">
+                <div class="stat-value">45%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+            
+            <div class="stat-box">
+                <div class="stat-value">25kg</div>
+                <div class="stat-label">CO₂ Saved Avg.</div>
+            </div>
+        </div>
+        
+        <section class="progress-container">
+            <h2>Community Progress</h2>
+            <p>Current success rate of all participants:</p>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            
+            <div class="progress-label">
+                <span>0%</span>
+                <span>45% Success Rate</span>
+                <span>100%</span>
+            </div>
+        </section>
+        
+        <section class="principles-container">
+            <div class="principle">
+                <i class="fas fa-recycle"></i>
+                <h3>Recycle Properly</h3>
+                <p>Learn what can and cannot be recycled in your area. Clean and sort materials correctly to ensure they get a second life.</p>
+            </div>
+            
+            <div class="principle">
+                <i class="fas fa-leaf"></i>
+                <h3>Compost Organics</h3>
+                <p>Turn food scraps and yard waste into nutrient-rich compost for your garden instead of sending it to landfill.</p>
+            </div>
+            
+            <div class="principle">
+                <i class="fas fa-ban"></i>
+                <h3>Refuse Single-Use</h3>
+                <p>Say no to disposable items like plastic bags, straws, and packaging. Choose reusable alternatives instead.</p>
+            </div>
+            
+            <div class="principle">
+                <i class="fas fa-redo"></i>
+                <h3>Reuse Creatively</h3>
+                <p>Find new purposes for items before discarding them. Repurpose containers, repair items, and donate what you no longer need.</p>
+            </div>
+        </section>
+        
+        <section class="action-section">
+            <h2>Ready to Make a Difference?</h2>
+            <p>Join the <span class="highlight">Zero-Waste Month Challenge</span> today and start your journey toward a sustainable lifestyle.</p>
+            <p>You'll receive daily tips, track your progress, and connect with a community of like-minded people.</p>
+            
+            <button class="start-button" id="start-challenge">
+                <i class="fas fa-play-circle"></i> Start 30-Day Challenge
+            </button>
+            
+            <p class="counter" id="join-message"></p>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>Zero-Waste Month Challenge &copy; 2026 | Join the movement to reduce landfill waste</p>
+            <p><i class="fas fa-globe-americas"></i> Making a difference, one waste-free day at a time</p>
+        </div>
+    </footer>
+
+    <script>
+        // Animate the progress bar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Progress bar animation
+            const progressFill = document.getElementById('progress-fill');
+            setTimeout(() => {
+                progressFill.style.width = '45%';
+            }, 300);
+            
+            // Participant counter animation
+            let participantCount = 543;
+            const participantElement = document.getElementById('participant-count');
+            const joinMessage = document.getElementById('join-message');
+            
+            // Start challenge button functionality
+            const startButton = document.getElementById('start-challenge');
+            startButton.addEventListener('click', function() {
+                // Increase participant count
+                participantCount++;
+                participantElement.textContent = participantCount;
+                
+                // Update join message
+                joinMessage.innerHTML = `<i class="fas fa-check-circle"></i> Welcome to the challenge! You are participant #${participantCount}`;
+                
+                // Change button text and style
+                startButton.innerHTML = '<i class="fas fa-check"></i> Challenge Started!';
+                startButton.style.backgroundColor = '#4a7c59';
+                startButton.disabled = true;
+                
+                // Show alert
+                alert('Congratulations! You\'ve joined the Zero-Waste Month Challenge. Check your email for Day 1 instructions.');
+            });
+            
+            // Simulate participant count increasing every few seconds
+            setInterval(() => {
+                // Randomly add participants occasionally
+                if (Math.random() > 0.7) {
+                    participantCount++;
+                    participantElement.textContent = participantCount;
+                }
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

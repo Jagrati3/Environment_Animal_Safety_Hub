@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../assets/images/others/envirnoment-logo.png">
+  <title>Green Habits Tracker | 30-Day Eco-Challenge | EcoLife</title>
+  <meta name="description"
+    content="Track your eco-friendly habits with our 30-Day Eco-Challenge Tracker. Join challenges like Plastic-Free Week, Meatless Mondays, and Zero-Waste Month!" />
+
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="../css/global/variables.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/components/navbar.css" />
+  <link rel="stylesheet" href="../css/components/footer.css" />
+  <link rel="stylesheet" href="../css/global/accessibility.css" />
+  <link rel="stylesheet" href="../css/pages/green-habits-tracker.css" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+  <!-- Confetti.js for celebrations -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+
+<body>
+  <!-- Skip Navigation Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- Main Content -->
+  <main id="main-content" role="main">
+    <!-- Hero Section -->
+    <section class="green-habits-hero">
+      <div class="hero-bg-animation">
+        <div class="floating-leaf leaf-1"><i class="fa-solid fa-leaf"></i></div>
+        <div class="floating-leaf leaf-2"><i class="fa-solid fa-seedling"></i></div>
+        <div class="floating-leaf leaf-3"><i class="fa-solid fa-leaf"></i></div>
+        <div class="floating-leaf leaf-4"><i class="fa-solid fa-leaf"></i></div>
+      </div>
+      <div class="hero-content" data-aos="fade-up">
+        <span class="hero-badge">
+          <i class="fa-solid fa-calendar-check"></i> 30-Day Challenge
+        </span>
+        <h1 class="hero-title">
+          Green <span class="gradient-text">Habits</span> Tracker
+        </h1>
+        <p class="hero-subtitle">
+          Build sustainable habits that make a real difference. Track your progress, 
+          earn streaks, and see your environmental impact grow!
+        </p>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number" id="totalUsers">2,847</span>
+            <span class="stat-label">Active Participants</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="totalChallenges">12</span>
+            <span class="stat-label">Challenges Available</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="totalImpact">45,230</span>
+            <span class="stat-label">kg CO₂ Saved</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- User Dashboard Section -->
+    <section class="user-dashboard" id="userDashboard" style="display: none;">
+      <div class="section-container">
+        <div class="dashboard-header" data-aos="fade-up">
+          <div class="user-greeting">
+            <h2>Welcome back, <span id="userName">Eco Warrior</span>! 🌱</h2>
+            <p>Here's your eco-journey progress</p>
+          </div>
+          <div class="streak-badge">
+            <i class="fa-solid fa-fire"></i>
+            <span id="currentStreak">0</span> day streak
+          </div>
+        </div>
+
+        <div class="dashboard-stats" data-aos="fade-up" data-aos-delay="100">
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-check-circle"></i></div>
+            <div class="stat-info">
+              <span class="stat-value" id="completedDays">0</span>
+              <span class="stat-title">Days Completed</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-trophy"></i></div>
+            <div class="stat-info">
+              <span class="stat-value" id="challengesCompleted">0</span>
+              <span class="stat-title">Challenges Done</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-leaf"></i></div>
+            <div class="stat-info">
+              <span class="stat-value" id="impactScore">0</span>
+              <span class="stat-title">Impact Points</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-medal"></i></div>
+            <div class="stat-info">
+              <span class="stat-value" id="badgesEarned">0</span>
+              <span class="stat-title">Badges Earned</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Challenge Progress -->
+        <div class="active-challenge-section" id="activeChallengeSection" data-aos="fade-up" data-aos-delay="200">
+          <h3>Your Active Challenge</h3>
+          <div class="active-challenge-card" id="activeChallengeCard">
+            <div class="challenge-progress-header">
+              <div class="challenge-info">
+                <span class="challenge-icon" id="activeChallengeIcon">🌿</span>
+                <div>
+                  <h4 id="activeChallengeName">No Active Challenge</h4>
+                  <p id="activeChallengeDesc">Start a challenge to begin your eco-journey!</p>
+                </div>
+              </div>
+              <div class="progress-circle" id="progressCircle">
+                <svg viewBox="0 0 100 100">
+                  <circle class="progress-bg" cx="50" cy="50" r="45"></circle>
+                  <circle class="progress-bar" cx="50" cy="50" r="45" id="progressBar"></circle>
+                </svg>
+                <span class="progress-text" id="progressText">0%</span>
+              </div>
+            </div>
+            <div class="challenge-calendar" id="challengeCalendar"></div>
+            <div class="daily-checkin">
+              <button class="checkin-btn" id="checkinBtn" disabled>
+                <i class="fa-solid fa-check"></i> Mark Today as Complete
+              </button>
+              <button class="skip-btn" id="skipBtn" disabled>
+                <i class="fa-solid fa-forward"></i> Skip Today
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Impact Summary -->
+        <div class="impact-summary" id="impactSummary" data-aos="fade-up" data-aos-delay="300">
+          <h3>Your Environmental Impact</h3>
+          <div class="impact-cards">
+            <div class="impact-card">
+              <i class="fa-solid fa-bottle-water"></i>
+              <span class="impact-value" id="plasticSaved">0</span>
+              <span class="impact-label">Plastic bottles avoided</span>
+            </div>
+            <div class="impact-card">
+              <i class="fa-solid fa-drumstick-bite"></i>
+              <span class="impact-value" id="meatSkipped">0</span>
+              <span class="impact-label">Meatless meals</span>
+            </div>
+            <div class="impact-card">
+              <i class="fa-solid fa-cloud"></i>
+              <span class="impact-value" id="co2Saved">0</span>
+              <span class="impact-label">kg CO₂ reduced</span>
+            </div>
+            <div class="impact-card">
+              <i class="fa-solid fa-tree"></i>
+              <span class="impact-value" id="treesEquivalent">0</span>
+              <span class="impact-label">Trees equivalent</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sign Up Prompt -->
+    <section class="signup-prompt" id="signupPrompt">
+      <div class="section-container">
+        <div class="signup-card" data-aos="fade-up">
+          <div class="signup-content">
+            <i class="fa-solid fa-user-plus"></i>
+            <h3>Start Your Eco Journey</h3>
+            <p>Enter your name to begin tracking your green habits and make a real environmental impact!</p>
+            <div class="signup-form">
+              <input type="text" id="userNameInput" placeholder="Enter your name..." maxlength="30" />
+              <button class="btn-signup" id="startJourneyBtn">
+                <i class="fa-solid fa-rocket"></i> Start My Journey
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Challenge Library Section -->
+    <section class="challenge-library" id="challengeLibrary">
+      <div class="section-container">
+        <div class="section-header" data-aos="fade-up">
+          <span class="section-tag">
+            <i class="fa-solid fa-book-open"></i> Challenge Library
+          </span>
+          <h2 class="section-title">Choose Your Eco-Challenge</h2>
+          <p class="section-subtitle">
+            Select from our curated list of environmental challenges. Start small and work your way up!
+          </p>
+        </div>
+
+        <!-- Difficulty Filter -->
+        <div class="difficulty-filter" data-aos="fade-up" data-aos-delay="100">
+          <button class="filter-btn active" data-filter="all">All Challenges</button>
+          <button class="filter-btn" data-filter="beginner">
+            <i class="fa-solid fa-seedling"></i> Beginner
+          </button>
+          <button class="filter-btn" data-filter="intermediate">
+            <i class="fa-solid fa-leaf"></i> Intermediate
+          </button>
+          <button class="filter-btn" data-filter="expert">
+            <i class="fa-solid fa-tree"></i> Expert
+          </button>
+        </div>
+
+        <!-- Challenge Cards Grid -->
+        <div class="challenges-grid" id="challengesGrid">
+          <!-- Challenges will be dynamically loaded here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Community Section -->
+    <section class="community-section">
+      <div class="section-container">
+        <div class="section-header" data-aos="fade-up">
+          <span class="section-tag">
+            <i class="fa-solid fa-users"></i> Community
+          </span>
+          <h2 class="section-title">Join the Movement</h2>
+          <p class="section-subtitle">
+            Connect with fellow eco-warriors taking the same challenges!
+          </p>
+        </div>
+
+        <div class="community-stats" data-aos="fade-up" data-aos-delay="100">
+          <div class="community-card">
+            <div class="leaderboard">
+              <h3><i class="fa-solid fa-ranking-star"></i> Top Eco Warriors This Week</h3>
+              <ul class="leaderboard-list" id="leaderboardList">
+                <!-- Leaderboard items will be loaded dynamically -->
+              </ul>
+            </div>
+          </div>
+          <div class="community-card">
+            <div class="tips-section">
+              <h3><i class="fa-solid fa-lightbulb"></i> Community Tips</h3>
+              <div class="tips-carousel" id="tipsCarousel">
+                <!-- Tips will be loaded dynamically -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Badges Section -->
+    <section class="badges-section">
+      <div class="section-container">
+        <div class="section-header" data-aos="fade-up">
+          <span class="section-tag">
+            <i class="fa-solid fa-award"></i> Achievements
+          </span>
+          <h2 class="section-title">Earn Eco Badges</h2>
+          <p class="section-subtitle">
+            Complete challenges to earn badges and showcase your environmental commitment!
+          </p>
+        </div>
+
+        <div class="badges-grid" id="badgesGrid" data-aos="fade-up" data-aos-delay="100">
+          <!-- Badges will be loaded dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Notification Settings Modal -->
+    <div class="modal-overlay" id="notificationModal">
+      <div class="modal-content">
+        <button class="modal-close" id="closeNotificationModal">&times;</button>
+        <h3><i class="fa-solid fa-bell"></i> Notification Settings</h3>
+        <p>Stay on track with daily reminders!</p>
+        <div class="notification-options">
+          <label class="toggle-option">
+            <input type="checkbox" id="browserNotifications" />
+            <span class="toggle-slider"></span>
+            <span>Browser Push Notifications</span>
+          </label>
+          <label class="toggle-option">
+            <input type="checkbox" id="emailReminders" />
+            <span class="toggle-slider"></span>
+            <span>Email Reminders</span>
+          </label>
+          <div class="reminder-time">
+            <label for="reminderTime">Reminder Time:</label>
+            <input type="time" id="reminderTime" value="09:00" />
+          </div>
+        </div>
+        <button class="btn-save" id="saveNotifications">Save Settings</button>
+      </div>
+    </div>
+
+    <!-- Challenge Complete Modal -->
+    <div class="modal-overlay" id="challengeCompleteModal">
+      <div class="modal-content celebration-modal">
+        <div class="celebration-icon">🎉</div>
+        <h3>Challenge Complete!</h3>
+        <p id="completionMessage">Congratulations! You've completed the challenge!</p>
+        <div class="impact-reveal" id="impactReveal">
+          <!-- Impact stats will be shown here -->
+        </div>
+        <div class="earned-badge" id="earnedBadge">
+          <!-- Badge will be shown here -->
+        </div>
+        <button class="btn-continue" id="continueBtn">Continue to Next Challenge</button>
+      </div>
+    </div>
+
+  </main>
+
+        <div id="footer-container"></div>
+    </script>
+          <script src="../js/components/navbar-loader.js"></script>
+    <script src="../js/components/footer-loader.js"></script>
+
+    <!-- Load Components Script -->
+    <script>
+      // Simple component loader
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded, loading components...');
+
+        // Load Navbar
+        fetch('../components/navbar.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load navbar');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('navbar-container').innerHTML = data;
+            console.log('Navbar loaded successfully');
+            // Initialize navbar scripts if any
+            if (typeof initNavbar === 'function') {
+              initNavbar();
+            }
+          })
+          .catch(error => {
+            console.error('Error loading navbar:', error);
+            document.getElementById('navbar-container').innerHTML = 
+              '<div style="padding: 20px; background: #f8d7da; color: #721c24;">Navbar failed to load</div>';
+          });
+
+        // Load Footer
+        fetch('../components/footer.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load footer');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('footer-container').innerHTML = data;
+            console.log('Footer loaded successfully');
+            // Initialize footer scripts if any
+            if (typeof initFooter === 'function') {
+              initFooter();
+            }
+          })
+          .catch(error => {
+            console.error('Error loading footer:', error);
+            document.getElementById('footer-container').innerHTML = 
+              '<div style="padding: 20px; background: #f8d7da; color: #721c24; text-align: center;">Footer failed to load</div>';
+          });
+
+        // Load Share Modal
+        fetch('../components/share-modal.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load share modal');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('share-modal-container').innerHTML = data;
+            console.log('Share modal loaded successfully');
+          })
+          .catch(error => {
+            console.error('Error loading share modal:', error);
+          });
+
+        // Initialize AOS
+        AOS.init({
+          duration: 800,
+          once: true,
+          offset: 100
+        });
+
+        // Load cursor if function exists
+        if (typeof loadCursor === 'function') {
+          loadCursor();
+        }
+      });
+    </script>
+  <!-- Notification Bell (Fixed) -->
+  <button class="notification-bell" id="notificationBell" title="Notification Settings">
+    <i class="fa-solid fa-bell"></i>
+  </button>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="../js/pages/green-habits-tracker.js"></script>
+  <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 100
+    });
+
+    // Load navbar component
+    fetch('../components/navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+        // Fix navbar links for subdirectory
+        const navLinks = document.querySelectorAll('.nav-link, .dropdown a');
+        navLinks.forEach(link => {
+          const href = link.getAttribute('href');
+          if (href && href.startsWith('pages/')) {
+            link.setAttribute('href', href.replace('pages/', ''));
+          } else if (href === 'index.html') {
+            link.setAttribute('href', '../index.html');
+          }
+        });
+      });
+  </script>
+</body>
+
+</html>

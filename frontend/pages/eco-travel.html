@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco-Travel Route Planner | EcoLife</title>
+    <meta name="description"
+        content="Find the most eco-friendly route. Compare CO2 emissions and health benefits of walking, biking, and public transit.">
+
+    <link rel="icon" type="image/png" href="../assets/images/others/envirnoment-logo.png">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../css/global/variables.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/components/navbar.css">
+    <link rel="stylesheet" href="../css/components/footer.css">
+    <link rel="stylesheet" href="../css/pages/eco-travel.css">
+    <link rel="stylesheet" href="../css/global/accessibility.css"> <!-- Added Accessibility -->
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div id="navbar-container"></div>
+
+    <main id="main-content">
+
+        <!-- Hero Section -->
+        <section class="eco-travel-hero">
+            <div class="hero-content">
+                <h1 class="hero-title">Eco-Travel Route Planner</h1>
+                <p class="hero-subtitle">Discover the greenest way to get there. Compare carbon footprints, track
+                    calories burned, and make every trip count for the planet.</p>
+
+                <!-- Search Box -->
+                <div class="search-container">
+                    <div class="input-group">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <input type="text" id="startLocation" class="search-input"
+                            placeholder="Start Location (e.g. Home)" value="My Location">
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-flag-checkered"></i>
+                        <input type="text" id="endLocation" class="search-input"
+                            placeholder="Destination (e.g. City Park)">
+                    </div>
+                    <button id="searchBtn" class="btn-search">Find Eco Route</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Map & Results Section -->
+        <section class="map-section">
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+
+            <div class="results-sidebar" id="resultsContainer">
+                <!-- Results will appear here -->
+                <div style="text-align: center; color: #666; padding: 40px;">
+                    <i class="fa-solid fa-route fa-3x" style="color: #ccc; margin-bottom: 20px;"></i>
+                    <p>Enter your destination to see eco-friendly travel options.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Carpool Promo -->
+        <section class="carpool-section">
+            <h2><i class="fa-solid fa-users"></i> Travel Together, Save More</h2>
+            <p>Connect with your community to share rides and reduce emissions even further.</p>
+            <a href="#" class="carpool-btn"><i class="fa-solid fa-car-side"></i> Find Carpool Buddies</a>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+<script>
+     document.addEventListener('DOMContentLoaded', function() {
+            fetch('../components/navbar.html')
+                .then(response => response.text())
+                .then(data => document.getElementById('navbar-container').innerHTML = data)
+                .catch(error => console.log('Navbar loading failed'));
+            
+            fetch('../components/footer.html')
+                .then(response => response.text())
+                .then(data => document.getElementById('footer-container').innerHTML = data)
+                .catch(error => console.log('Footer loading failed'));
+        });
+</script>
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Component Loader -->
+    <script src="../js/components/component-loader.js"></script>
+
+    <!-- Page Logic -->
+    <script src="../js/pages/eco-travel.js"></script>
+</body>
+
+</html>

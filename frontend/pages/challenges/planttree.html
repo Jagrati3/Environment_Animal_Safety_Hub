@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant a Tree Challenge - 30 Days Intermediate</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #2e7d32;
+            --dark-green: #1b5e20;
+            --light-green: #e8f5e9;
+            --accent-green: #4caf50;
+            --earth-brown: #8d6e63;
+            --sky-blue: #bbdefb;
+            --text-dark: #263238;
+            --text-light: #546e7a;
+            --success: #00c853;
+            --intermediate: #ff9800;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f1f8e9 0%, #e8f5e9 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(rgba(27, 94, 32, 0.9), rgba(27, 94, 32, 0.9)), url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: 0 0 30px 30px;
+            box-shadow: 0 10px 30px rgba(27, 94, 32, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .leaf-decoration {
+            position: absolute;
+            opacity: 0.1;
+        }
+        
+        .leaf-1 {
+            top: 10%;
+            left: 5%;
+            font-size: 80px;
+            transform: rotate(-15deg);
+        }
+        
+        .leaf-2 {
+            bottom: 10%;
+            right: 5%;
+            font-size: 100px;
+            transform: rotate(25deg);
+        }
+        
+        .leaf-3 {
+            top: 20%;
+            right: 10%;
+            font-size: 60px;
+            transform: rotate(10deg);
+        }
+        
+        .challenge-badge {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .challenge-title {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            letter-spacing: -0.5px;
+            font-family: 'Merriweather', serif;
+        }
+        
+        .challenge-subtitle {
+            font-size: 1.8rem;
+            font-weight: 300;
+            margin-bottom: 25px;
+            opacity: 0.95;
+        }
+        
+        .challenge-description {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            line-height: 1.8;
+            opacity: 0.95;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .stat-box {
+            background-color: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            flex: 1;
+            min-width: 200px;
+            max-width: 250px;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-8px);
+            background-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-value {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 60px 0;
+        }
+        
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .challenge-title {
+                font-size: 2.8rem;
+            }
+        }
+        
+        .content-card {
+            background-color: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+            border-top: 5px solid var(--accent-green);
+        }
+        
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--dark-green);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--light-green);
+            position: relative;
+            font-family: 'Merriweather', serif;
+        }
+        
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background-color: var(--earth-brown);
+        }
+        
+        .benefits-list {
+            list-style-type: none;
+        }
+        
+        .benefits-list li {
+            margin-bottom: 20px;
+            padding-left: 40px;
+            position: relative;
+        }
+        
+        .benefits-list li i {
+            color: var(--accent-green);
+            position: absolute;
+            left: 0;
+            top: 5px;
+            font-size: 1.5rem;
+            background-color: var(--light-green);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .how-it-works ol {
+            padding-left: 25px;
+            margin-top: 15px;
+        }
+        
+        .how-it-works li {
+            margin-bottom: 20px;
+            padding-left: 10px;
+            position: relative;
+        }
+        
+        .how-it-works li::before {
+            content: counter(list-item);
+            position: absolute;
+            left: -30px;
+            top: -5px;
+            background-color: var(--earth-brown);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .tree-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .tree-type {
+            background-color: var(--light-green);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid #c8e6c9;
+        }
+        
+        .tree-type:hover {
+            background-color: #c8e6c9;
+            transform: translateY(-3px);
+        }
+        
+        .tree-icon {
+            font-size: 2rem;
+            color: var(--dark-green);
+            margin-bottom: 10px;
+        }
+        
+        .progress-container {
+            margin-top: 30px;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background-color: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-green), var(--primary-green));
+            width: 0%;
+            border-radius: 6px;
+            transition: width 1.5s ease-in-out;
+        }
+        
+        .cta-section {
+            text-align: center;
+            padding: 60px 40px;
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            border-radius: 25px;
+            margin: 60px 0;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+        
+        .cta-title {
+            font-size: 2.8rem;
+            color: var(--dark-green);
+            margin-bottom: 20px;
+            font-family: 'Merriweather', serif;
+        }
+        
+        .cta-description {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+        
+        .start-button {
+            background: linear-gradient(to right, var(--primary-green), var(--dark-green));
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .start-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(46, 125, 50, 0.4);
+            background: linear-gradient(to right, var(--dark-green), #0a3a0e);
+        }
+        
+        .impact-section {
+            background-color: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 60px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .impact-card {
+            background-color: var(--light-green);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .impact-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .impact-icon {
+            font-size: 3rem;
+            color: var(--primary-green);
+            margin-bottom: 20px;
+        }
+        
+        .impact-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-green);
+            margin-bottom: 10px;
+        }
+        
+        .impact-text {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        
+        .testimonials {
+            margin: 60px 0;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .testimonial-card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--earth-brown);
+            transition: transform 0.3s ease;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .quote {
+            font-style: italic;
+            margin-bottom: 20px;
+            color: var(--text-light);
+            position: relative;
+            line-height: 1.8;
+        }
+        
+        .quote::before {
+            content: "“";
+            font-size: 4rem;
+            color: var(--light-green);
+            position: absolute;
+            top: -20px;
+            left: -10px;
+            font-family: serif;
+            opacity: 0.5;
+        }
+        
+        .author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--light-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--dark-green);
+        }
+        
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .author-name {
+            font-weight: 600;
+            color: var(--dark-green);
+        }
+        
+        .author-details {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        .faq-section {
+            margin: 60px 0;
+        }
+        
+        .faq-container {
+            margin-top: 30px;
+        }
+        
+        .faq-item {
+            background-color: white;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .faq-question {
+            padding: 20px;
+            font-weight: 600;
+            color: var(--dark-green);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 0 20px 20px;
+            max-height: 300px;
+        }
+        
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+            border-top: 1px solid #e0e0e0;
+            margin-top: 60px;
+            background-color: white;
+        }
+        
+        .social-icons {
+            margin: 25px 0;
+        }
+        
+        .social-icons a {
+            display: inline-block;
+            margin: 0 12px;
+            color: var(--primary-green);
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+            width: 45px;
+            height: 45px;
+            line-height: 45px;
+            border-radius: 50%;
+            background-color: var(--light-green);
+        }
+        
+        .social-icons a:hover {
+            transform: translateY(-5px);
+            background-color: var(--primary-green);
+            color: white;
+        }
+        
+        .difficulty-badge {
+            display: inline-block;
+            background: linear-gradient(to right, #ff9800, #ffb74d);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .counter-section {
+            background-color: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px auto;
+            max-width: 800px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        
+        .counter-title {
+            color: var(--dark-green);
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+        
+        .counter {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 10px;
+        }
+        
+        .counter-subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+        
+        .tree-animation {
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .tree-graphic {
+            display: inline-block;
+            font-size: 5rem;
+            color: var(--primary-green);
+            animation: grow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes grow {
+            0% { transform: scale(0.9); }
+            100% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <i class="fas fa-leaf leaf-decoration leaf-1"></i>
+        <i class="fas fa-seedling leaf-decoration leaf-2"></i>
+        <i class="fas fa-tree leaf-decoration leaf-3"></i>
+        
+        <div class="container">
+            <div class="challenge-badge">30 DAY CHALLENGE</div>
+            <h1 class="challenge-title">Plant a Tree Challenge</h1>
+            <p class="challenge-subtitle">Plant at least one tree and care for it for 30 days<span class="difficulty-badge">INTERMEDIATE</span></p>
+            <p class="challenge-description">
+                Join our growing community and make a lasting impact on the planet. Plant a tree, nurture it for 30 days, and watch it grow while reducing your carbon footprint!
+            </p>
+            
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="stat-value">723</div>
+                    <div class="stat-label">Participants</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">88%</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">20kg</div>
+                    <div class="stat-label">CO₂ Saved</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="tree-animation">
+            <div class="tree-graphic">
+                <i class="fas fa-tree"></i>
+            </div>
+        </div>
+        
+        <div class="counter-section">
+            <h3 class="counter-title">Total Trees Planted by Our Community</h3>
+            <div class="counter" id="tree-counter">1,247</div>
+            <p class="counter-subtitle">and growing every day!</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="content-card">
+                <h2 class="section-title">Why Plant a Tree?</h2>
+                <ul class="benefits-list">
+                    <li>
+                        <i class="fas fa-wind"></i>
+                        <strong>Combat Climate Change</strong> - Trees absorb CO₂ and release oxygen
+                    </li>
+                    <li>
+                        <i class="fas fa-home"></i>
+                        <strong>Create Habitat</strong> - Provide shelter for birds, insects, and wildlife
+                    </li>
+                    <li>
+                        <i class="fas fa-heart"></i>
+                        <strong>Improve Mental Health</strong> - Connecting with nature reduces stress
+                    </li>
+                    <li>
+                        <i class="fas fa-tint"></i>
+                        <strong>Conserve Water</strong> - Trees help prevent water runoff and erosion
+                    </li>
+                    <li>
+                        <i class="fas fa-temperature-low"></i>
+                        <strong>Cool Your Surroundings</strong> - Trees provide shade and reduce temperatures
+                    </li>
+                </ul>
+                
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Challenge Completion Rate</span>
+                        <span>88%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" id="success-progress"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <h2 class="section-title">How It Works</h2>
+                <div class="how-it-works">
+                    <ol>
+                        <li><strong>Choose your tree</strong> - Select a species suitable for your climate and space</li>
+                        <li><strong>Plant it correctly</strong> - Follow planting guidelines for best survival chances</li>
+                        <li><strong>Water and care</strong> - Provide water, nutrients, and protection for 30 days</li>
+                        <li><strong>Document growth</strong> - Take weekly photos and track progress</li>
+                        <li><strong>Share with community</strong> - Join our group to share experiences and tips</li>
+                        <li><strong>Watch it thrive</strong> - Continue caring for your tree beyond the challenge</li>
+                    </ol>
+                    
+                    <h3 class="section-title" style="font-size: 1.4rem; margin-top: 30px;">Recommended Tree Types</h3>
+                    <div class="tree-types">
+                        <div class="tree-type">
+                            <div class="tree-icon"><i class="fas fa-tree"></i></div>
+                            <div>Oak</div>
+                        </div>
+                        <div class="tree-type">
+                            <div class="tree-icon"><i class="fas fa-leaf"></i></div>
+                            <div>Maple</div>
+                        </div>
+                        <div class="tree-type">
+                            <div class="tree-icon"><i class="fas fa-apple-alt"></i></div>
+                            <div>Fruit Trees</div>
+                        </div>
+                        <div class="tree-type">
+                            <div class="tree-icon"><i class="fas fa-feather-alt"></i></div>
+                            <div>Evergreen</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="impact-section">
+            <h2 class="section-title" style="text-align: center;">Environmental Impact</h2>
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <div class="impact-number">20kg</div>
+                    <div class="impact-text">of CO₂ absorbed per tree in 30 days</div>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <div class="impact-number">260L</div>
+                    <div class="impact-text">of water released into atmosphere daily</div>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="impact-number">30+</div>
+                    <div class="impact-text">species can call one tree home</div>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fas fa-temperature-low"></i>
+                    </div>
+                    <div class="impact-text">Cools air by up to 8°C in its vicinity</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cta-section">
+            <h2 class="cta-title">Plant Your Legacy Today</h2>
+            <p class="cta-description">
+                Join 723 participants who have planted trees and made a tangible difference in our environment. 
+                Your single tree will grow for decades, cleaning air, providing habitat, and leaving a positive legacy for future generations.
+            </p>
+            <button class="start-button" id="joinChallenge">
+                <i class="fas fa-seedling"></i> Start Tree Planting Challenge
+            </button>
+            <p style="margin-top: 15px; color: var(--text-light); font-size: 0.95rem;">Free to join • Guidance provided • Suitable for all spaces</p>
+        </div>
+        
+        <div class="testimonials">
+            <h2 class="section-title">Growing Stories from Our Community</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p class="quote">"I planted a maple tree in my backyard with my kids. Watching them check on 'their tree' every morning has been the most rewarding experience. We've named it Maple and it's grown 6 inches already!"</p>
+                    <div class="author">
+                        <div class="avatar">EK</div>
+                        <div class="author-info">
+                            <div class="author-name">Elena K.</div>
+                            <div class="author-details">Planted 3 trees</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="quote">"As someone living in an apartment, I didn't think I could participate. But the challenge helped me discover balcony-friendly dwarf fruit trees. My lemon tree is thriving and I get fresh lemons!"</p>
+                    <div class="author">
+                        <div class="avatar">JR</div>
+                        <div class="author-info">
+                            <div class="author-name">Jamal R.</div>
+                            <div class="author-details">Urban gardener</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="quote">"Our office team took this challenge together. We planted 5 trees around our building. Not only has it improved our workspace environment, but it's brought our team closer together with a shared purpose."</p>
+                    <div class="author">
+                        <div class="avatar">TC</div>
+                        <div class="author-info">
+                            <div class="author-name">TechCorp Team</div>
+                            <div class="author-details">Corporate challenge</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="faq-section">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        I don't have a garden. Can I still participate?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Absolutely! Many participants use pots on balconies, patios, or windowsills. Dwarf fruit trees, small ornamental trees, or even bonsai trees are excellent options for small spaces. You can also volunteer to plant trees in community spaces.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        What if my tree doesn't survive the 30 days?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Tree planting is a learning experience. If your first attempt doesn't succeed, you can try again with a new tree or different approach. Our community shares tips to improve survival rates. The important thing is participating and learning.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How much time does daily care require?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        For most trees, daily care involves just checking soil moisture and ensuring adequate water. This typically takes 5-10 minutes per day. Weekly, you might spend 15-20 minutes checking for pests or providing nutrients.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Is 20kg of CO₂ really saved by one tree in 30 days?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, a young tree can absorb approximately 5-6kg of CO₂ per year, which averages to about 20kg over its first 30 days of active growth when properly cared for. As the tree matures, it will absorb significantly more - up to 22kg per year when fully grown.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-pinterest"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p>© 2026 Plant a Tree Challenge. All rights reserved.</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">"The best time to plant a tree was 20 years ago. The second best time is now." - Chinese Proverb</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Animate progress bar
+        document.addEventListener('DOMContentLoaded', function() {
+            const progressBar = document.getElementById('success-progress');
+            setTimeout(() => {
+                progressBar.style.width = '88%';
+            }, 500);
+            
+            // Animated tree counter
+            const treeCounter = document.getElementById('tree-counter');
+            let currentCount = 723;
+            const targetCount = 1247;
+            const increment = Math.ceil((targetCount - currentCount) / 100);
+            
+            const updateCounter = () => {
+                if (currentCount < targetCount) {
+                    currentCount += increment;
+                    if (currentCount > targetCount) currentCount = targetCount;
+                    treeCounter.textContent = currentCount.toLocaleString();
+                    setTimeout(updateCounter, 20);
+                }
+            };
+            
+            setTimeout(updateCounter, 1000);
+            
+            // FAQ accordion
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                question.addEventListener('click', () => {
+                    // Close other open items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle current item
+                    item.classList.toggle('active');
+                });
+            });
+            
+            // Join challenge button
+            document.getElementById('joinChallenge').addEventListener('click', function() {
+                // Button animation
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+                
+                // Show confirmation modal
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: rgba(0,0,0,0.7);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 1000;
+                `;
+                
+                modal.innerHTML = `
+                    <div style="background: white; padding: 40px; border-radius: 20px; max-width: 500px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
+                        <div style="font-size: 4rem; color: var(--primary-green); margin-bottom: 20px;">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <h2 style="color: var(--dark-green); margin-bottom: 15px;">Your Tree Planting Journey Begins!</h2>
+                        <p style="margin-bottom: 25px; color: var(--text-light); line-height: 1.7;">Welcome to the Plant a Tree Challenge! Check your email for your planting guide, tree selection tips, and access to our community of green-thumbed participants.</p>
+                        <button id="closeModal" style="background: var(--primary-green); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: 600; cursor: pointer;">Let's Get Planting!</button>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                
+                document.getElementById('closeModal').addEventListener('click', function() {
+                    document.body.removeChild(modal);
+                });
+                
+                // Close modal when clicking outside
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        document.body.removeChild(modal);
+                    }
+                });
+            });
+            
+            // Add hover effects to cards
+            const cards = document.querySelectorAll('.content-card, .testimonial-card, .impact-card, .tree-type');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.cursor = 'pointer';
+                });
+            });
+            
+            // Animate tree icon on hover
+            const treeIcon = document.querySelector('.tree-graphic');
+            treeIcon.addEventListener('mouseenter', function() {
+                this.style.animation = 'grow 0.5s ease-in-out infinite alternate';
+            });
+            
+            treeIcon.addEventListener('mouseleave', function() {
+                this.style.animation = 'grow 2s ease-in-out infinite alternate';
+            });
+        });
+    </script>
+</body>
+</html>

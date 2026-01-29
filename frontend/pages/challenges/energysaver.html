@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Saver Week Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2e8b57;
+            --secondary-color: #3cb371;
+            --energy-color: #ffd700;
+            --energy-secondary: #ffaa00;
+            --accent-color: #00a8ff;
+            --light-color: #f0fff0;
+            --dark-color: #1a472a;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --card-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9fdf9;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), #266e4a);
+            color: white;
+            padding: 2.5rem 0;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "⚡💡";
+            position: absolute;
+            font-size: 6rem;
+            opacity: 0.1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .difficulty-badge {
+            display: inline-block;
+            background-color: rgba(46, 204, 113, 0.9);
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .energy-target {
+            background: rgba(255, 215, 0, 0.15);
+            border: 2px solid var(--energy-color);
+            border-radius: 15px;
+            padding: 1rem 2rem;
+            display: inline-block;
+            margin-top: 1rem;
+            position: relative;
+            z-index: 1;
+            font-weight: bold;
+        }
+        
+        .challenge-info {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+        
+        .info-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 1.8rem;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            min-width: 180px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid var(--energy-color);
+        }
+        
+        .info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(255, 215, 0, 0.15);
+        }
+        
+        .info-card i {
+            font-size: 2.8rem;
+            color: var(--energy-color);
+            margin-bottom: 1rem;
+        }
+        
+        .info-card .number {
+            font-size: 2.4rem;
+            font-weight: bold;
+            color: var(--dark-color);
+            margin-bottom: 0.3rem;
+        }
+        
+        .info-card .label {
+            font-size: 1rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        
+        .challenge-description {
+            background-color: white;
+            border-radius: 20px;
+            padding: 2.8rem;
+            margin: 2.5rem 0;
+            box-shadow: var(--card-shadow);
+            border-left: 5px solid var(--energy-color);
+        }
+        
+        .description-text {
+            font-size: 1.2rem;
+            margin-bottom: 1.8rem;
+            color: #444;
+            line-height: 1.8;
+        }
+        
+        .target-section {
+            background: linear-gradient(135deg, #fff8e1, #fffde7);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 2px dashed var(--energy-secondary);
+        }
+        
+        .target-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .target-icon {
+            font-size: 2rem;
+            color: var(--energy-secondary);
+        }
+        
+        .progress-container {
+            margin-top: 1.5rem;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-bar {
+            height: 25px;
+            background-color: #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--energy-color), var(--energy-secondary));
+            width: 0%;
+            transition: width 1s ease-in-out;
+            border-radius: 12px;
+        }
+        
+        .energy-tips {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.8rem;
+            margin-top: 2.5rem;
+        }
+        
+        .tip-card {
+            background-color: #f9f9f9;
+            padding: 1.8rem;
+            border-radius: 15px;
+            border: 1px solid #e8f5e8;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tip-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--energy-color);
+        }
+        
+        .tip-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tip-card h3 {
+            color: var(--dark-color);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .savings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .savings-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+        }
+        
+        .savings-icon {
+            font-size: 2rem;
+            color: var(--energy-color);
+            margin-bottom: 1rem;
+        }
+        
+        .challenge-actions {
+            text-align: center;
+            margin: 3rem 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(to right, var(--energy-color), var(--energy-secondary));
+            color: #333;
+            padding: 1.3rem 3.5rem;
+            font-size: 1.3rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
+            color: #222;
+        }
+        
+        .btn i {
+            margin-right: 10px;
+        }
+        
+        .tracker-section {
+            background-color: white;
+            border-radius: 20px;
+            padding: 2.8rem;
+            margin: 2.5rem 0;
+            box-shadow: var(--card-shadow);
+            display: none;
+        }
+        
+        .tracker-title {
+            text-align: center;
+            color: var(--dark-color);
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+        }
+        
+        .day-tracker {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+        
+        .day {
+            flex: 1;
+            min-width: 120px;
+            background-color: #f5f5f5;
+            padding: 1.5rem 0.8rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .day:hover {
+            border-color: var(--energy-color);
+        }
+        
+        .day.active {
+            background-color: var(--energy-color);
+            color: #333;
+            transform: scale(1.05);
+        }
+        
+        .day.completed {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .day-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .appliance-tracker {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.8rem;
+            margin-top: 2rem;
+        }
+        
+        .appliance-card {
+            background-color: #f9f9f9;
+            padding: 1.8rem;
+            border-radius: 15px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+        
+        .appliance-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .appliance-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .appliance-icon {
+            font-size: 2rem;
+            color: var(--accent-color);
+            background: rgba(0, 168, 255, 0.1);
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .appliance-name {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .appliance-wattage {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .usage-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+        
+        .usage-slider {
+            flex-grow: 1;
+            margin-right: 1rem;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+        }
+        
+        .usage-display {
+            font-weight: bold;
+            color: var(--primary-color);
+            min-width: 60px;
+        }
+        
+        .impact-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 3.5rem 2.5rem;
+            border-radius: 20px;
+            margin: 2.5rem 0;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .impact-title {
+            font-size: 2.2rem;
+            margin-bottom: 2.5rem;
+        }
+        
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .impact-item {
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 1.8rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s;
+        }
+        
+        .impact-item:hover {
+            transform: translateY(-8px);
+        }
+        
+        .impact-number {
+            font-size: 2.8rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .impact-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .monitor-section {
+            background-color: white;
+            border-radius: 20px;
+            padding: 2.8rem;
+            margin: 2.5rem 0;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .energy-meter {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 1.5rem;
+            text-align: center;
+            border: 3px solid var(--energy-color);
+        }
+        
+        .meter-reading {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: var(--dark-color);
+            margin: 1rem 0;
+        }
+        
+        .meter-label {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .comparison-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 2rem;
+            height: 200px;
+        }
+        
+        .chart-bar {
+            width: 60px;
+            background: var(--accent-color);
+            border-radius: 5px 5px 0 0;
+            position: relative;
+        }
+        
+        .chart-bar.before {
+            background: #ff6b6b;
+        }
+        
+        .chart-bar.after {
+            background: var(--primary-color);
+        }
+        
+        .chart-label {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .energy-habits {
+            background-color: #e8f5e9;
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin: 2.5rem 0;
+            border-left: 5px solid var(--primary-color);
+        }
+        
+        .habit-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .habit-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .habit-checkbox {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        
+        .habit-checkbox.checked {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 2.5rem 0;
+            margin-top: 3rem;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .challenge-info {
+                gap: 1rem;
+            }
+            
+            .info-card {
+                min-width: 140px;
+                padding: 1.5rem;
+            }
+            
+            .day-tracker {
+                flex-direction: column;
+            }
+            
+            .day {
+                min-width: 100%;
+            }
+            
+            .comparison-chart {
+                gap: 20px;
+            }
+            
+            .chart-bar {
+                width: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                ⚡💡
+            </div>
+            <h1>Energy Saver Week Challenge</h1>
+            <p class="tagline">Reduce your energy consumption by 30% for one week. Every watt counts!</p>
+            <div class="difficulty-badge">Beginner</div>
+            <div class="energy-target">
+                <i class="fas fa-bullseye"></i> Goal: Reduce energy use by 30%
+            </div>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="challenge-info">
+            <div class="info-card">
+                <i class="fas fa-calendar-alt"></i>
+                <div class="number">7 days</div>
+                <div class="label">Challenge Duration</div>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-user-friends"></i>
+                <div class="number">1,876</div>
+                <div class="label">Participants</div>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-trophy"></i>
+                <div class="number">82%</div>
+                <div class="label">Success Rate</div>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-cloud"></i>
+                <div class="number">15kg</div>
+                <div class="label">CO₂ Saved Per Person</div>
+            </div>
+        </section>
+        
+        <section class="challenge-description">
+            <h2>Take the 7-Day Energy Saving Challenge</h2>
+            <p class="description-text">
+                For the next 7 days, you'll aim to reduce your household energy consumption by 30%. 
+                This challenge focuses on simple changes that make a big difference in your energy bills 
+                and carbon footprint. From turning off lights to optimizing appliance use, every small action counts!
+            </p>
+            <p class="description-text">
+                This beginner-friendly challenge helps you become more aware of your energy habits and 
+                teaches practical strategies that can save you hundreds of dollars annually. Join nearly 
+                2,000 participants who are making their homes more energy efficient!
+            </p>
+            
+            <div class="target-section">
+                <div class="target-header">
+                    <div class="target-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div>
+                        <h3>Your 30% Reduction Goal</h3>
+                        <p>Achieve this by making small changes to your daily energy habits</p>
+                    </div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Current Reduction</span>
+                        <span id="reductionPercent">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="reductionProgress"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="energy-tips">
+                <div class="tip-card">
+                    <h3><i class="fas fa-lightbulb"></i> Lighting</h3>
+                    <p>Switch to LED bulbs, use natural light during day, turn off lights when leaving rooms.</p>
+                    <div class="savings-grid">
+                        <div class="savings-card">
+                            <div class="savings-icon"><i class="fas fa-money-bill-wave"></i></div>
+                            <div>Save up to $75/year</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-thermometer-half"></i> Heating/Cooling</h3>
+                    <p>Adjust thermostat by 1-2°C, use programmable thermostats, seal drafts around windows.</p>
+                    <div class="savings-grid">
+                        <div class="savings-card">
+                            <div class="savings-icon"><i class="fas fa-money-bill-wave"></i></div>
+                            <div>Save up to $180/year</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-plug"></i> Electronics</h3>
+                    <p>Unplug devices when not in use, use power strips, enable energy-saving modes.</p>
+                    <div class="savings-grid">
+                        <div class="savings-card">
+                            <div class="savings-icon"><i class="fas fa-money-bill-wave"></i></div>
+                            <div>Save up to $100/year</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="challenge-actions">
+            <button id="startChallenge" class="btn">
+                <i class="fas fa-bolt"></i> Start Challenge
+            </button>
+            <p style="margin-top: 1rem; color: #666;">Click above to begin your 7-day energy saving journey!</p>
+        </section>
+        
+        <section class="tracker-section" id="trackerSection">
+            <h2 class="tracker-title">Your Energy Saver Tracker</h2>
+            
+            <div class="day-tracker" id="dayTracker">
+                <!-- Days will be generated by JavaScript -->
+            </div>
+            
+            <h3 style="margin: 1.5rem 0 2rem; text-align: center;">Daily Appliance Usage Control</h3>
+            <div class="appliance-tracker" id="applianceTracker">
+                <!-- Appliance controls will be generated by JavaScript -->
+            </div>
+            
+            <div style="text-align: center; margin-top: 2.5rem;">
+                <button id="completeDay" class="btn" style="background: linear-gradient(to right, var(--primary-color), var(--secondary-color)); color: white;">
+                    <i class="fas fa-check-circle"></i> Complete Today's Energy Saving
+                </button>
+            </div>
+        </section>
+        
+        <section class="impact-section">
+            <h2 class="impact-title">Your Energy Saving Impact</h2>
+            <div class="impact-grid">
+                <div class="impact-item">
+                    <div class="impact-number" id="kwhSaved">0</div>
+                    <div class="impact-label">kWh Energy Saved</div>
+                </div>
+                <div class="impact-item">
+                    <div class="impact-number" id="co2Saved">0</div>
+                    <div class="impact-label">Kilograms of CO₂ Saved</div>
+                </div>
+                <div class="impact-item">
+                    <div class="impact-number" id="moneySaved">$0</div>
+                    <div class="impact-label">Money Saved</div>
+                </div>
+                <div class="impact-item">
+                    <div class="impact-number" id="reductionAchieved">0%</div>
+                    <div class="impact-label">Overall Reduction</div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="monitor-section">
+            <h2><i class="fas fa-chart-line"></i> Energy Usage Monitor</h2>
+            <p>Track your daily energy consumption compared to your baseline:</p>
+            
+            <div class="energy-meter">
+                <div class="meter-label">Today's Energy Usage</div>
+                <div class="meter-reading" id="dailyUsage">0 kWh</div>
+                <div class="meter-label">
+                    <span id="usageComparison">Same as baseline</span>
+                    <div id="usageTrend" style="font-size: 1.5rem; margin-top: 0.5rem;"></div>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 2.5rem; text-align: center;">Before vs. After Comparison</h3>
+            <div class="comparison-chart">
+                <div class="chart-bar before" id="beforeBar" style="height: 180px;">
+                    <div class="chart-label">Before</div>
+                </div>
+                <div class="chart-bar after" id="afterBar" style="height: 126px;">
+                    <div class="chart-label">After</div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 3rem; color: #666;">
+                <p>Target: Reduce energy consumption by 30% (from 30 kWh/day to 21 kWh/day)</p>
+            </div>
+        </section>
+        
+        <section class="energy-habits">
+            <h2><i class="fas fa-clipboard-check"></i> Daily Energy-Saving Habits</h2>
+            <p>Check off each habit you practice today:</p>
+            
+            <div class="habit-list" id="habitList">
+                <!-- Habits will be generated by JavaScript -->
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button id="checkHabits" class="btn" style="padding: 1rem 2rem; font-size: 1.1rem;">
+                    <i class="fas fa-check-double"></i> Update Habits Progress
+                </button>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>Energy Saver Week Challenge &copy; 2026 | Join thousands saving energy and money</p>
+            <p style="margin-top: 1rem; opacity: 0.8;">
+                <i class="fas fa-globe-americas"></i> Every watt saved powers a brighter, greener future.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Challenge start button
+            const startBtn = document.getElementById('startChallenge');
+            const trackerSection = document.getElementById('trackerSection');
+            
+            // Day tracker element
+            const dayTracker = document.getElementById('dayTracker');
+            
+            // Appliance tracker element
+            const applianceTracker = document.getElementById('applianceTracker');
+            
+            // Habit list element
+            const habitList = document.getElementById('habitList');
+            
+            // Complete day button
+            const completeDayBtn = document.getElementById('completeDay');
+            
+            // Impact elements
+            const kwhSavedElement = document.getElementById('kwhSaved');
+            const co2SavedElement = document.getElementById('co2Saved');
+            const moneySavedElement = document.getElementById('moneySaved');
+            const reductionAchievedElement = document.getElementById('reductionAchieved');
+            const reductionPercentElement = document.getElementById('reductionPercent');
+            const reductionProgressElement = document.getElementById('reductionProgress');
+            const dailyUsageElement = document.getElementById('dailyUsage');
+            const usageComparisonElement = document.getElementById('usageComparison');
+            const usageTrendElement = document.getElementById('usageTrend');
+            
+            // Chart elements
+            const beforeBar = document.getElementById('beforeBar');
+            const afterBar = document.getElementById('afterBar');
+            
+            // Challenge state
+            let challengeStarted = localStorage.getItem('energyChallengeStarted') === 'true';
+            let currentDay = parseInt(localStorage.getItem('energyCurrentDay')) || 1;
+            let completedDays = JSON.parse(localStorage.getItem('energyCompletedDays')) || [];
+            let totalKwhSaved = parseFloat(localStorage.getItem('energyTotalKwhSaved')) || 0;
+            let totalCO2Saved = parseFloat(localStorage.getItem('energyTotalCO2Saved')) || 0;
+            let totalMoneySaved = parseFloat(localStorage.getItem('energyTotalMoneySaved')) || 0;
+            let overallReduction = parseFloat(localStorage.getItem('energyOverallReduction')) || 0;
+            
+            // Appliances with typical wattage and usage
+            const appliances = [
+                { id: 1, name: "Lights", icon: "fas fa-lightbulb", wattage: 60, usage: 50, baseline: 5 },
+                { id: 2, name: "Refrigerator", icon: "fas fa-snowflake", wattage: 150, usage: 80, baseline: 24 },
+                { id: 3, name: "Heating/Cooling", icon: "fas fa-thermometer-half", wattage: 3500, usage: 60, baseline: 8 },
+                { id: 4, name: "TV & Electronics", icon: "fas fa-tv", wattage: 150, usage: 70, baseline: 4 },
+                { id: 5, name: "Computer", icon: "fas fa-laptop", wattage: 100, usage: 60, baseline: 6 },
+                { id: 6, name: "Washing Machine", icon: "fas fa-soap", wattage: 500, usage: 30, baseline: 1 },
+                { id: 7, name: "Dishwasher", icon: "fas fa-hand-sparkles", wattage: 1200, usage: 40, baseline: 1.5 },
+                { id: 8, name: "Water Heater", icon: "fas fa-shower", wattage: 4500, usage: 20, baseline: 3 }
+            ];
+            
+            // Daily energy-saving habits
+            const habits = [
+                { id: 1, name: "Turned off lights when leaving rooms", checked: false },
+                { id: 2, name: "Used natural light instead of artificial", checked: false },
+                { id: 3, name: "Unplugged unused electronics", checked: false },
+                { id: 4, name: "Adjusted thermostat by 1-2°C", checked: false },
+                { id: 5, name: "Used energy-saving mode on appliances", checked: false },
+                { id: 6, name: "Washed clothes in cold water", checked: false },
+                { id: 7, name: "Air-dried dishes instead of using heat dry", checked: false },
+                { id: 8, name: "Took shorter showers", checked: false }
+            ];
+            
+            // Initialize day tracker
+            function initializeDayTracker() {
+                dayTracker.innerHTML = '';
+                
+                for (let i = 1; i <= 7; i++) {
+                    const dayElement = document.createElement('div');
+                    dayElement.className = 'day';
+                    
+                    if (i === currentDay && challengeStarted) {
+                        dayElement.classList.add('active');
+                    } else if (completedDays.includes(i)) {
+                        dayElement.classList.add('completed');
+                    }
+                    
+                    dayElement.innerHTML = `
+                        <div class="day-number">${i}</div>
+                        <div>Day ${i}</div>
+                        <div style="font-size: 0.8rem; margin-top: 0.5rem;">
+                            ${getDayFocus(i)}
+                        </div>
+                    `;
+                    
+                    dayElement.addEventListener('click', function() {
+                        if (challengeStarted && completedDays.includes(i)) {
+                            setCurrentDay(i);
+                        }
+                    });
+                    
+                    dayTracker.appendChild(dayElement);
+                }
+            }
+            
+            // Get focus for each day
+            function getDayFocus(day) {
+                const focuses = [
+                    "Lighting",
+                    "Heating/Cooling",
+                    "Electronics",
+                    "Kitchen",
+                    "Laundry",
+                    "Water Heating",
+                    "Overall"
+                ];
+                return focuses[day - 1] || "Energy Saving";
+            }
+            
+            // Initialize appliance tracker
+            function initializeApplianceTracker() {
+                applianceTracker.innerHTML = '';
+                
+                appliances.forEach(appliance => {
+                    const cardElement = document.createElement('div');
+                    cardElement.className = 'appliance-card';
+                    
+                    cardElement.innerHTML = `
+                        <div class="appliance-header">
+                            <div class="appliance-icon">
+                                <i class="${appliance.icon}"></i>
+                            </div>
+                            <div>
+                                <div class="appliance-name">${appliance.name}</div>
+                                <div class="appliance-wattage">${appliance.wattage}W • ${appliance.baseline}h baseline</div>
+                            </div>
+                        </div>
+                        <div class="usage-controls">
+                            <div class="usage-slider">
+                                <input type="range" 
+                                       id="slider-${appliance.id}" 
+                                       min="0" 
+                                       max="100" 
+                                       value="${appliance.usage}"
+                                       class="appliance-slider">
+                            </div>
+                            <div class="usage-display" id="display-${appliance.id}">${appliance.usage}%</div>
+                        </div>
+                        <div style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
+                            Daily kWh: <span id="kwh-${appliance.id}">${calculateKwh(appliance).toFixed(1)}</span>
+                        </div>
+                    `;
+                    
+                    // Add event listener to slider
+                    const slider = cardElement.querySelector(`#slider-${appliance.id}`);
+                    const display = cardElement.querySelector(`#display-${appliance.id}`);
+                    const kwhDisplay = cardElement.querySelector(`#kwh-${appliance.id}`);
+                    
+                    slider.addEventListener('input', function() {
+                        const value = this.value;
+                        display.textContent = `${value}%`;
+                        appliance.usage = parseInt(value);
+                        kwhDisplay.textContent = calculateKwh(appliance).toFixed(1);
+                        updateDailyUsage();
+                    });
+                    
+                    applianceTracker.appendChild(cardElement);
+                });
+            }
+            
+            // Calculate kWh for an appliance
+            function calculateKwh(appliance) {
+                // kWh = (wattage * hours * usage%) / 1000
+                return (appliance.wattage * appliance.baseline * (appliance.usage / 100)) / 1000;
+            }
+            
+            // Calculate total daily kWh
+            function calculateTotalDailyKwh() {
+                let total = 0;
+                appliances.forEach(appliance => {
+                    total += calculateKwh(appliance);
+                });
+                return total;
+            }
+            
+            // Update daily usage display
+            function updateDailyUsage() {
+                const dailyKwh = calculateTotalDailyKwh();
+                dailyUsageElement.textContent = `${dailyKwh.toFixed(1)} kWh`;
+                
+                // Baseline is 30 kWh (typical household daily usage)
+                const baseline = 30;
+                const reduction = ((baseline - dailyKwh) / baseline) * 100;
+                
+                if (dailyKwh < baseline) {
+                    usageComparisonElement.textContent = `${reduction.toFixed(1)}% less than baseline`;
+                    usageComparisonElement.style.color = "var(--primary-color)";
+                    usageTrendElement.innerHTML = `<i class="fas fa-arrow-down" style="color: var(--primary-color);"></i> Saving energy!`;
+                } else if (dailyKwh > baseline) {
+                    usageComparisonElement.textContent = `${Math.abs(reduction).toFixed(1)}% more than baseline`;
+                    usageComparisonElement.style.color = "#ff6b6b";
+                    usageTrendElement.innerHTML = `<i class="fas fa-arrow-up" style="color: #ff6b6b;"></i> Using more energy`;
+                } else {
+                    usageComparisonElement.textContent = "Same as baseline";
+                    usageComparisonElement.style.color = "#666";
+                    usageTrendElement.innerHTML = "";
+                }
+                
+                // Update chart
+                updateChart(dailyKwh);
+                
+                // Update reduction progress
+                updateReductionProgress(reduction);
+            }
+            
+            // Update chart visualization
+            function updateChart(dailyKwh) {
+                const baseline = 30;
+                const target = 21; // 30% reduction
+                
+                // Calculate bar heights (max 200px)
+                const beforeHeight = 180; // Baseline
+                const afterHeight = Math.max(50, (dailyKwh / baseline) * 180);
+                const targetHeight = (target / baseline) * 180;
+                
+                beforeBar.style.height = `${beforeHeight}px`;
+                afterBar.style.height = `${afterHeight}px`;
+                
+                // Update labels
+                beforeBar.querySelector('.chart-label').innerHTML = `Before<br>${baseline} kWh`;
+                afterBar.querySelector('.chart-label').innerHTML = `Today<br>${dailyKwh.toFixed(1)} kWh`;
+                
+                // Color code based on performance
+                if (dailyKwh <= target) {
+                    afterBar.style.background = "var(--primary-color)";
+                } else if (dailyKwh < baseline) {
+                    afterBar.style.background = "var(--energy-secondary)";
+                } else {
+                    afterBar.style.background = "#ff6b6b";
+                }
+            }
+            
+            // Update reduction progress
+            function updateReductionProgress(reduction) {
+                const targetReduction = 30;
+                const progress = Math.min(100, (reduction / targetReduction) * 100);
+                
+                reductionPercentElement.textContent = `${Math.max(0, reduction).toFixed(1)}%`;
+                reductionProgressElement.style.width = `${Math.max(0, progress)}%`;
+                
+                // Color code progress bar
+                if (reduction >= targetReduction) {
+                    reductionProgressElement.style.background = "linear-gradient(90deg, var(--primary-color), var(--secondary-color))";
+                } else if (reduction > 0) {
+                    reductionProgressElement.style.background = "linear-gradient(90deg, var(--energy-color), var(--energy-secondary))";
+                } else {
+                    reductionProgressElement.style.background = "#ff6b6b";
+                }
+            }
+            
+            // Initialize habit list
+            function initializeHabitList() {
+                habitList.innerHTML = '';
+                
+                habits.forEach(habit => {
+                    const habitElement = document.createElement('div');
+                    habitElement.className = 'habit-item';
+                    
+                    habitElement.innerHTML = `
+                        <div class="habit-checkbox ${habit.checked ? 'checked' : ''}" 
+                             id="habit-${habit.id}">
+                            ${habit.checked ? '<i class="fas fa-check"></i>' : ''}
+                        </div>
+                        <div>${habit.name}</div>
+                    `;
+                    
+                    // Add click event to checkbox
+                    const checkbox = habitElement.querySelector(`#habit-${habit.id}`);
+                    checkbox.addEventListener('click', function() {
+                        habit.checked = !habit.checked;
+                        this.classList.toggle('checked');
+                        this.innerHTML = habit.checked ? '<i class="fas fa-check"></i>' : '';
+                    });
+                    
+                    habitList.appendChild(habitElement);
+                });
+            }
+            
+            // Set current day
+            function setCurrentDay(day) {
+                currentDay = day;
+                localStorage.setItem('energyCurrentDay', currentDay);
+                initializeDayTracker();
+                
+                // Reset habits for new day
+                habits.forEach(habit => {
+                    habit.checked = false;
+                });
+                initializeHabitList();
+                
+                // Update display
+                updateDailyUsage();
+            }
+            
+            // Complete current day
+            function completeCurrentDay() {
+                if (!challengeStarted) return;
+                
+                // Calculate today's savings
+                const dailyKwh = calculateTotalDailyKwh();
+                const baseline = 30;
+                const dailyKwhSaved = baseline - dailyKwh;
+                const dailyCO2Saved = dailyKwhSaved * 0.4; // 0.4kg CO2 per kWh
+                const dailyMoneySaved = dailyKwhSaved * 0.15; // $0.15 per kWh
+                const dailyReduction = ((baseline - dailyKwh) / baseline) * 100;
+                
+                // Check if at least some reduction was achieved
+                if (dailyKwhSaved > 0) {
+                    // Mark day as completed
+                    if (!completedDays.includes(currentDay)) {
+                        completedDays.push(currentDay);
+                        localStorage.setItem('energyCompletedDays', JSON.stringify(completedDays));
+                        
+                        // Update overall totals
+                        totalKwhSaved += dailyKwhSaved;
+                        totalCO2Saved += dailyCO2Saved;
+                        totalMoneySaved += dailyMoneySaved;
+                        
+                        // Calculate overall reduction (average of completed days)
+                        overallReduction = (overallReduction * (completedDays.length - 1) + dailyReduction) / completedDays.length;
+                        
+                        // Save to localStorage
+                        localStorage.setItem('energyTotalKwhSaved', totalKwhSaved);
+                        localStorage.setItem('energyTotalCO2Saved', totalCO2Saved);
+                        localStorage.setItem('energyTotalMoneySaved', totalMoneySaved);
+                        localStorage.setItem('energyOverallReduction', overallReduction);
+                        
+                        // Update impact display
+                        updateImpactDisplay();
+                        
+                        // Move to next day if not all days completed
+                        if (currentDay < 7) {
+                            setCurrentDay(currentDay + 1);
+                        } else {
+                            // Challenge completed
+                            alert("Congratulations! You've completed the Energy Saver Week Challenge!");
+                            completeDayBtn.textContent = "Challenge Complete!";
+                            completeDayBtn.disabled = true;
+                            
+                            // Show celebration
+                            showCelebration();
+                        }
+                    }
+                } else {
+                    alert("Please reduce your energy usage below baseline (30 kWh) to complete this day.");
+                }
+            }
+            
+            // Update impact display
+            function updateImpactDisplay() {
+                kwhSavedElement.textContent = totalKwhSaved.toFixed(1);
+                co2SavedElement.textContent = totalCO2Saved.toFixed(1);
+                moneySavedElement.textContent = `$${totalMoneySaved.toFixed(2)}`;
+                reductionAchievedElement.textContent = `${overallReduction.toFixed(1)}%`;
+            }
+            
+            // Show celebration
+            function showCelebration() {
+                // Create confetti effect
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 150,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                }
+            }
+            
+            // Start challenge
+            startBtn.addEventListener('click', function() {
+                challengeStarted = true;
+                localStorage.setItem('energyChallengeStarted', 'true');
+                
+                trackerSection.style.display = 'block';
+                startBtn.textContent = "Challenge Started!";
+                startBtn.disabled = true;
+                startBtn.style.background = "#888";
+                
+                // Initialize trackers
+                initializeDayTracker();
+                initializeApplianceTracker();
+                initializeHabitList();
+                
+                // Load existing data
+                updateImpactDisplay();
+                updateDailyUsage();
+                
+                // Scroll to tracker
+                trackerSection.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Complete day button
+            completeDayBtn.addEventListener('click', completeCurrentDay);
+            
+            // Update habits button
+            const checkHabitsBtn = document.getElementById('checkHabits');
+            checkHabitsBtn.addEventListener('click', function() {
+                const checkedHabits = habits.filter(h => h.checked).length;
+                alert(`Great! You've practiced ${checkedHabits} out of ${habits.length} energy-saving habits today.`);
+            });
+            
+            // Load existing challenge if already started
+            if (challengeStarted) {
+                trackerSection.style.display = 'block';
+                startBtn.textContent = "Challenge Started!";
+                startBtn.disabled = true;
+                startBtn.style.background = "#888";
+                
+                initializeDayTracker();
+                initializeApplianceTracker();
+                initializeHabitList();
+                updateImpactDisplay();
+                updateDailyUsage();
+            } else {
+                trackerSection.style.display = 'none';
+            }
+            
+            // Initialize for display
+            initializeDayTracker();
+            updateChart(30); // Show baseline chart
+        });
+    </script>
+</body>
+</html>

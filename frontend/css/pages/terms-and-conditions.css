@@ -21,6 +21,7 @@
 
 /* ===== VARIABLES ===== */
 :root {
+  --navbar-height: 80px;
   --primary: #2ecc71;
   --primary-dark: #27ae60;
   --primary-light: rgba(46, 204, 113, 0.1);
@@ -64,9 +65,12 @@ body {
   transition: var(--transition);
   min-height: 100vh;
 }
+html, body {
+    overflow-x: hidden;
+}
 
 .container {
-  max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 20px;
 }
@@ -184,6 +188,15 @@ h1 {
   max-width: 600px;
   margin: 0 auto;
 }
+/* Fix navbar overlapping content */
+.terms-section {
+    scroll-margin-top: 100px;
+}
+.container {
+    width: 100vw;
+}
+
+
 
 /* ===== QUICK NAV - STICKY ===== */
 .quick-nav {
@@ -194,10 +207,15 @@ h1 {
   border-radius: var(--radius);
   border: 1px solid var(--border);
   position: sticky;
-  top: 80px;
-  z-index: 999;
+  top: calc(var(--navbar-height) + 10px);
+  z-index: 50;
+  
   transition: var(--transition);
   max-width: 1000px;
+}
+/* Prevent anchor jump from hiding content under fixed navbar */
+.terms-section {
+  scroll-margin-top: calc(var(--navbar-height) + 20px);
 }
 
 .quick-nav.collapsed {

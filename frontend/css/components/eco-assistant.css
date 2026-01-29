@@ -1,0 +1,108 @@
+/* Eco Assistant Floating Button */
+.eco-assistant-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.eco-assistant-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color, #2ecc71), var(--secondary-color, #27ae60));
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.eco-assistant-btn:hover {
+    transform: scale(1.1);
+}
+
+.eco-assistant-btn:active {
+    transform: scale(0.95);
+}
+
+.eco-assistant-btn i {
+    font-size: 24px;
+    color: white;
+    z-index: 2;
+}
+
+/* Pulse animation when listening */
+.eco-assistant-btn.listening::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    animation: eco-pulse 1.5s infinite;
+}
+
+@keyframes eco-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+/* Chat/Feedback Bubble */
+.eco-assistant-feedback {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 15px 15px 5px 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    max-width: 300px;
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+    pointer-events: none;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    margin-bottom: 10px;
+}
+
+.eco-assistant-feedback.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: all;
+}
+
+.eco-assistant-feedback h4 {
+    margin: 0 0 5px 0;
+    color: var(--primary-color, #2ecc71);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.eco-assistant-feedback p {
+    margin: 0;
+    color: #333;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Dark Mode Support */
+[data-theme="dark"] .eco-assistant-feedback {
+    background: #2d2d2d;
+    border-color: #404040;
+}
+
+[data-theme="dark"] .eco-assistant-feedback p {
+    color: #e0e0e0;
+}

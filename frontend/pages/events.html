@@ -116,14 +116,7 @@
             </div>
         </section>
 
-        <!-- Calendar Section -->
-        <section class="calendar-section" aria-label="Event Calendar">
-            <div class="container">
-                <div class="calendar-container">
-                    <div id="calendar" class="calendar" role="application" aria-label="Interactive event calendar"></div>
-                </div>
-            </div>
-        </section>
+      
 
         <!-- Upcoming Events Section -->
         <section class="upcoming-events" aria-label="Upcoming Events">
@@ -220,6 +213,97 @@
 
     <script src="../js/pages/event-calendar-data.js"></script>
     <script src="../js/pages/event-calendar.js"></script>
+    <script>
+/* ================= SAMPLE UPCOMING EVENTS ================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+    const upcomingGrid = document.getElementById("upcomingEventsGrid");
+
+    // If real data is empty, show sample events
+    const sampleEvents = [
+        {
+            title: "Tree Plantation Drive",
+            date: "16 March 2026",
+            location: "Mumbai",
+            type: "Tree Planting",
+            icon: "🌳",
+            description: "Join us to plant trees and make the city greener."
+        },
+        {
+            title: "Beach Clean-up Drive",
+            date: "20 March 2026",
+            location: "Chennai",
+            type: "Clean-up",
+            icon: "🧹",
+            description: "Help clean beaches and protect marine life."
+        },
+        {
+            title: "Stray Animal Care Camp",
+            date: "22 March 2026",
+            location: "Pune",
+            type: "Volunteer",
+            icon: "🐾",
+            description: "Learn basic care and first aid for stray animals."
+        },
+        {
+            title: "Waste Segregation Workshop",
+            date: "25 March 2026",
+            location: "Delhi",
+            type: "Workshop",
+            icon: "♻️",
+            description: "Hands-on workshop on waste management practices."
+        },
+        {
+            title: "Climate Awareness Seminar",
+            date: "28 March 2026",
+            location: "Bangalore",
+            type: "Education",
+            icon: "🌍",
+            description: "Understand climate change and how to fight it."
+        },
+        {
+            title: "Urban Gardening Session",
+            date: "30 March 2026",
+            location: "Hyderabad",
+            type: "Workshop",
+            icon: "🌱",
+            description: "Grow plants easily in small urban spaces."
+        },
+        {
+            title: "Bird Feeding Awareness",
+            date: "05 April 2026",
+            location: "Pune",
+            type: "Volunteer",
+            icon: "🐦",
+            description: "Learn safe and responsible bird feeding."
+        }
+    ];
+
+    // Render sample events
+    upcomingGrid.innerHTML = "";
+    sampleEvents.forEach(event => {
+        const card = document.createElement("div");
+        card.className = "event-card";
+
+        card.innerHTML = `
+            <div class="event-icon">${event.icon}</div>
+            <h3 class="event-title">${event.title}</h3>
+            <p class="event-date"><i class="fas fa-calendar"></i> ${event.date}</p>
+            <p class="event-location"><i class="fas fa-map-marker-alt"></i> ${event.location}</p>
+            <p class="event-type">${event.type}</p>
+            <p class="event-description">${event.description}</p>
+            <button class="rsvp-btn">Book Event</button>
+        `;
+
+        card.querySelector(".rsvp-btn").addEventListener("click", () => {
+            alert("✅ Event booked successfully!");
+        });
+
+        upcomingGrid.appendChild(card);
+    });
+});
+</script>
+
 
     <!-- AOS Animation -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

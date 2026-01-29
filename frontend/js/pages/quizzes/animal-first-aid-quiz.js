@@ -4,65 +4,53 @@
  * An interactive quiz focused on proper first aid procedures for injured animals.
  * Tests knowledge of emergency response, wound treatment, and when to seek professional help.
  *
- * Extends BaseQuiz for common functionality while providing animal-specific questions and configuration.
+ * Uses QuizLoader for unified loading and initialization.
+ *
+ * @author Environment Animal Safety Hub Team
+ * @version 3.0.0
+ * @since 2024
  */
 
-// Quiz configuration
-const quizConfig = {
-  questions: [
-    {q: "What should you do first when you find an injured animal?", o: ["Pick it up immediately", "Approach slowly and assess", "Run away", "Call friends"], a: 1},
-    {q: "How should you treat a snake bite on an animal?", o: ["Suck out the venom", "Apply ice and keep calm", "Cut the wound", "Give alcohol"], a: 1},
-    {q: "What are signs of poisoning in animals?", o: ["Excessive drooling and vomiting", "Happy and playful", "Sleeping normally", "Eating well"], a: 0},
-    {q: "How to stop bleeding from a wound?", o: ["Apply pressure with clean cloth", "Pour water on it", "Rub dirt in", "Leave it alone"], a: 0},
-    {q: "When should you seek professional help for an injured animal?", o: ["Always, even for minor injuries", "Only if it's bleeding heavily", "Never, handle it yourself", "Only if it's a pet"], a: 0},
-    {q: "What is the first step for animal CPR?", o: ["Check for breathing", "Start compressions", "Give mouth-to-mouth", "Call vet immediately"], a: 0},
-    {q: "How to treat a burn on an animal?", o: ["Apply butter or oil", "Cool with water for 10-20 minutes", "Cover with bandage tightly", "Ignore it"], a: 1},
-    {q: "What to do if an animal has a broken bone?", o: ["Move it to a safe place and immobilize", "Pick it up and carry", "Let it walk", "Apply heat"], a: 0},
-    {q: "Signs that an animal is choking?", o: ["Coughing and pawing at mouth", "Sleeping peacefully", "Eating normally", "Running around"], a: 0},
-    {q: "What NOT to do when helping an injured wild animal?", o: ["Feed it", "Handle it gently", "Keep distance if aggressive", "Call wildlife experts"], a: 0}
-  ],
-  timeLimit: 180, // 3 minutes
-  progressKey: 'animalFirstAidQuizProgress',
-  iconClass: 'fa-solid fa-heart',
-  elements: {
-    startScreen: document.getElementById('startScreen'),
-    quizScreen: document.getElementById('quizScreen'),
-    resultScreen: document.getElementById('resultScreen'),
-    questionEl: document.getElementById('question'),
-    optionsEl: document.getElementById('options'),
-    timeEl: document.getElementById('time'),
-    scoreEl: document.getElementById('score'),
-    remarkEl: document.getElementById('remark')
+// Create quiz loader with custom overrides
+const animalFirstAidLoader = new QuizLoader('animal-first-aid', {
+  customOverrides: {
+    // Custom showResult for animal first aid remarks
+    showResult: function() {
+      // Call parent method
+      BaseQuiz.prototype.showResult.call(this);
+
+      // Custom remarks for animal first aid
+      let remark = "";
+      if (this.score >= 8) {
+        remark = "🌟 Animal Hero!";
+      } else if (this.score >= 5) {
+        remark = "👍 Good Effort!";
+      } else {
+        remark = "🐾 Keep Learning!";
+      }
+
+      if (this.config.elements.remarkEl) {
+        this.config.elements.remarkEl.textContent = remark;
+      }
+    }
   }
-};
-
-// Create quiz instance
-const animalFirstAidQuiz = new BaseQuiz(quizConfig);
-
-// Override showResult for custom remarks
-animalFirstAidQuiz.showResult = function() {
-  // Call parent method
-  BaseQuiz.prototype.showResult.call(this);
-
-  // Custom remarks for animal first aid
-  let remark = "";
-  if (this.score >= 8) {
-    remark = "🌟 Animal Hero!";
-  } else if (this.score >= 5) {
-    remark = "👍 Good Effort!";
-  } else {
-    remark = "🐾 Keep Learning!";
-  }
-
-  if (this.elements.remarkEl) {
-    this.elements.remarkEl.textContent = remark;
-  }
-};
-
-// Initialize quiz on page load
-animalFirstAidQuiz.initializeQuiz();
+});
 
 // Global functions for HTML onclick handlers
-window.startQuiz = () => animalFirstAidQuiz.startQuiz();
-window.resumeQuiz = () => animalFirstAidQuiz.resumeQuiz();
-window.nextQuestion = () => animalFirstAidQuiz.nextQuestion();
+window.startQuiz = () => {
+  const quiz = animalFirstAidLoader.getQuiz();
+  if (quiz) quiz.startQuiz();
+};
+window.resumeQuiz = () => {
+  const quiz = animalFirstAidLoader.getQuiz();
+  if (quiz) quiz.resumeQuiz();
+};
+window.nextQuestion = () => {
+  const quiz = animalFirstAidLoader.getQuiz();
+  if (quiz) quiz.nextQuestion();
+};
+
+// Load quiz on page load
+document.addEventListener('DOMContentLoaded', () => {
+  animalFirstAidLoader.loadQuiz();
+});

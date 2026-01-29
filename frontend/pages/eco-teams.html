@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../assets/images/others/envirnoment-logo.png">
+  <title>Eco-Teams | Group Challenges & Leaderboards | EcoLife</title>
+  <meta name="description"
+    content="Join or create Eco-Teams to compete in sustainability challenges. Track collective impact with team dashboards and leaderboards." />
+
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="../css/global/variables.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/components/navbar.css" />
+  <link rel="stylesheet" href="../css/components/footer.css" />
+  <link rel="stylesheet" href="../css/pages/eco-teams.css" />
+  <link rel="stylesheet" href="../css/global/accessibility.css" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+  <!-- Chart.js for Statistics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Canvas Confetti for Celebrations -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+</head>
+
+<body>
+  <div id="cursor-container"></div>
+
+  <!-- Skip Navigation Link for Keyboard Users -->
+  <a href="#main-content" class="skip-link" id="skip-to-main">Skip to main content</a>
+
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <div id="navbar-container"></div>
+
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">
+        <i class="fas fa-moon"></i>
+    </button>
+
+  <!-- Main Content -->
+  <main id="main-content" role="main">
+
+    <!-- Hero Section -->
+    <section class="eco-teams-hero" aria-label="Eco-Teams Hero">
+      <div class="hero-particles" id="heroParticles"></div>
+      <div class="hero-content" data-aos="fade-up">
+        <div class="hero-badge">
+          <i class="fa-solid fa-users"></i>
+          <span>Team Up for the Planet</span>
+        </div>
+        <h1 class="hero-title">
+          <span class="gradient-text">Eco-Teams</span> Challenge
+        </h1>
+        <p class="hero-subtitle">
+          Create or join teams, compete in sustainability challenges, and make a collective impact on our planet.
+        </p>
+        <div class="hero-cta">
+          <button class="btn btn-primary btn-glow" id="createTeamBtn">
+            <i class="fa-solid fa-plus"></i> Create Team
+          </button>
+          <button class="btn btn-secondary" id="joinTeamBtn">
+            <i class="fa-solid fa-user-plus"></i> Join Team
+          </button>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span class="stat-number" id="totalTeams">156</span>
+            <span class="stat-label">Active Teams</span>
+          </div>
+          <div class="hero-stat">
+            <span class="stat-number" id="totalMembers">2,847</span>
+            <span class="stat-label">Members</span>
+          </div>
+          <div class="hero-stat">
+            <span class="stat-number" id="totalCO2">45.2T</span>
+            <span class="stat-label">CO₂ Saved</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Team Dashboard Section -->
+    <section class="team-dashboard-section" id="teamDashboard" data-aos="fade-up">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-tag">
+            <i class="fa-solid fa-chart-line"></i> Your Team Dashboard
+          </span>
+          <h2 class="section-title">Team Progress & Stats</h2>
+        </div>
+
+        <!-- My Team Card -->
+        <div class="my-team-card" id="myTeamCard">
+          <div class="team-header">
+            <div class="team-avatar">
+              <i class="fa-solid fa-leaf"></i>
+            </div>
+            <div class="team-info">
+              <h3 class="team-name" id="myTeamName">Green Warriors</h3>
+              <p class="team-type"><i class="fa-solid fa-users"></i> <span id="myTeamType">Family Team</span> • <span
+                  id="myTeamMembers">12</span> Members</p>
+            </div>
+            <div class="team-rank">
+              <span class="rank-badge">#<span id="myTeamRank">3</span></span>
+              <span class="rank-label">Global Rank</span>
+            </div>
+          </div>
+
+          <!-- Team Stats Grid -->
+          <div class="team-stats-grid">
+            <div class="stat-card stat-co2">
+              <div class="stat-icon">
+                <i class="fa-solid fa-cloud"></i>
+              </div>
+              <div class="stat-content">
+                <span class="stat-value" id="teamCO2Saved">1,250</span>
+                <span class="stat-unit">kg CO₂ Saved</span>
+              </div>
+              <div class="stat-trend positive">
+                <i class="fa-solid fa-arrow-up"></i> +15%
+              </div>
+            </div>
+
+            <div class="stat-card stat-trees">
+              <div class="stat-icon">
+                <i class="fa-solid fa-tree"></i>
+              </div>
+              <div class="stat-content">
+                <span class="stat-value" id="teamTreesPlanted">87</span>
+                <span class="stat-unit">Trees Planted</span>
+              </div>
+              <div class="stat-trend positive">
+                <i class="fa-solid fa-arrow-up"></i> +8%
+              </div>
+            </div>
+
+            <div class="stat-card stat-challenges">
+              <div class="stat-icon">
+                <i class="fa-solid fa-trophy"></i>
+              </div>
+              <div class="stat-content">
+                <span class="stat-value" id="teamChallengesWon">15</span>
+                <span class="stat-unit">Challenges Won</span>
+              </div>
+              <div class="stat-trend positive">
+                <i class="fa-solid fa-arrow-up"></i> +2
+              </div>
+            </div>
+
+            <div class="stat-card stat-streak">
+              <div class="stat-icon">
+                <i class="fa-solid fa-fire"></i>
+              </div>
+              <div class="stat-content">
+                <span class="stat-value" id="teamStreak">21</span>
+                <span class="stat-unit">Day Streak</span>
+              </div>
+              <div class="stat-trend">
+                <i class="fa-solid fa-fire-flame-curved"></i> On Fire!
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Chart -->
+          <div class="team-progress-section">
+            <div class="chart-container">
+              <canvas id="teamProgressChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Team Actions -->
+          <div class="team-actions">
+            <button class="btn btn-outline" id="inviteMembersBtn">
+              <i class="fa-solid fa-envelope"></i> Invite Members
+            </button>
+            <button class="btn btn-outline" id="viewChallengesBtn">
+              <i class="fa-solid fa-flag-checkered"></i> Active Challenges
+            </button>
+            <button class="btn btn-outline" id="teamSettingsBtn">
+              <i class="fa-solid fa-cog"></i> Settings
+            </button>
+          </div>
+        </div>
+
+        <!-- No Team State -->
+        <div class="no-team-card" id="noTeamCard" style="display: none;">
+          <div class="no-team-icon">
+            <i class="fa-solid fa-users-slash"></i>
+          </div>
+          <h3>You're not part of any team yet!</h3>
+          <p>Create your own team or join an existing one to start competing.</p>
+          <div class="no-team-actions">
+            <button class="btn btn-primary" onclick="openCreateTeamModal()">
+              <i class="fa-solid fa-plus"></i> Create Team
+            </button>
+            <button class="btn btn-secondary" onclick="openJoinTeamModal()">
+              <i class="fa-solid fa-user-plus"></i> Join Team
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Leaderboards Section -->
+    <section class="leaderboards-section" data-aos="fade-up">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-tag">
+            <i class="fa-solid fa-medal"></i> Leaderboards
+          </span>
+          <h2 class="section-title">Top Eco-Teams</h2>
+          <p class="section-subtitle">See how teams around the world are making an impact</p>
+        </div>
+
+        <!-- Leaderboard Categories -->
+        <div class="leaderboard-tabs">
+          <button class="leaderboard-tab active" data-category="all">
+            <i class="fa-solid fa-globe"></i> All Teams
+          </button>
+          <button class="leaderboard-tab" data-category="schools">
+            <i class="fa-solid fa-school"></i> Top Schools
+          </button>
+          <button class="leaderboard-tab" data-category="companies">
+            <i class="fa-solid fa-building"></i> Top Companies
+          </button>
+          <button class="leaderboard-tab" data-category="families">
+            <i class="fa-solid fa-house-chimney"></i> Top Families
+          </button>
+          <button class="leaderboard-tab" data-category="neighborhoods">
+            <i class="fa-solid fa-map-marker-alt"></i> Top Neighborhoods
+          </button>
+        </div>
+
+        <!-- Leaderboard Grid -->
+        <div class="leaderboard-container">
+          <!-- Podium -->
+          <div class="podium-section">
+            <div class="podium-card second" data-aos="fade-up" data-aos-delay="100">
+              <div class="podium-rank">2</div>
+              <div class="podium-avatar">
+                <i class="fa-solid fa-building"></i>
+              </div>
+              <h4 class="podium-name">TechCorp Employees</h4>
+              <p class="podium-type">Company</p>
+              <div class="podium-stats">
+                <span><i class="fa-solid fa-cloud"></i> 2,100 kg CO₂</span>
+                <span><i class="fa-solid fa-users"></i> 45 members</span>
+              </div>
+            </div>
+
+            <div class="podium-card first" data-aos="fade-up">
+              <div class="podium-crown">
+                <i class="fa-solid fa-crown"></i>
+              </div>
+              <div class="podium-rank">1</div>
+              <div class="podium-avatar">
+                <i class="fa-solid fa-school"></i>
+              </div>
+              <h4 class="podium-name">Grade 5-B Eco Squad</h4>
+              <p class="podium-type">School</p>
+              <div class="podium-stats">
+                <span><i class="fa-solid fa-cloud"></i> 3,500 kg CO₂</span>
+                <span><i class="fa-solid fa-users"></i> 32 members</span>
+              </div>
+            </div>
+
+            <div class="podium-card third" data-aos="fade-up" data-aos-delay="200">
+              <div class="podium-rank">3</div>
+              <div class="podium-avatar">
+                <i class="fa-solid fa-house-chimney"></i>
+              </div>
+              <h4 class="podium-name">Smith Family</h4>
+              <p class="podium-type">Family</p>
+              <div class="podium-stats">
+                <span><i class="fa-solid fa-cloud"></i> 1,800 kg CO₂</span>
+                <span><i class="fa-solid fa-users"></i> 6 members</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Leaderboard List -->
+          <div class="leaderboard-list" id="leaderboardList">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Active Challenges Section -->
+    <section class="challenges-section" data-aos="fade-up">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-tag">
+            <i class="fa-solid fa-flag-checkered"></i> Active Challenges
+          </span>
+          <h2 class="section-title">Team Challenges</h2>
+          <p class="section-subtitle">Compete with other teams in weekly sustainability challenges</p>
+        </div>
+
+        <div class="challenges-grid">
+          <!-- Challenge Card 1 -->
+          <div class="challenge-card active" data-aos="fade-up">
+            <div class="challenge-header">
+              <div class="challenge-icon">
+                <i class="fa-solid fa-tree"></i>
+              </div>
+              <div class="challenge-time">
+                <i class="fa-solid fa-clock"></i>
+                <span>3 days left</span>
+              </div>
+            </div>
+            <h3 class="challenge-title">Tree Planting Week</h3>
+            <p class="challenge-description">Plant as many trees as possible this week. Every tree counts!</p>
+            <div class="challenge-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 65%"></div>
+              </div>
+              <span class="progress-text">65% Complete • 87/134 Trees</span>
+            </div>
+            <div class="challenge-reward">
+              <i class="fa-solid fa-trophy"></i>
+              <span>Reward: Forest Guardian Badge + 500 XP</span>
+            </div>
+            <button class="btn btn-primary btn-sm">Log Progress</button>
+          </div>
+
+          <!-- Challenge Card 2 -->
+          <div class="challenge-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="challenge-header">
+              <div class="challenge-icon">
+                <i class="fa-solid fa-bicycle"></i>
+              </div>
+              <div class="challenge-time">
+                <i class="fa-solid fa-clock"></i>
+                <span>5 days left</span>
+              </div>
+            </div>
+            <h3 class="challenge-title">Zero Emissions Commute</h3>
+            <p class="challenge-description">Use bikes, walk, or public transport for your daily commute.</p>
+            <div class="challenge-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 40%"></div>
+              </div>
+              <span class="progress-text">40% Complete • 200/500 km</span>
+            </div>
+            <div class="challenge-reward">
+              <i class="fa-solid fa-trophy"></i>
+              <span>Reward: Clean Commuter Badge + 300 XP</span>
+            </div>
+            <button class="btn btn-primary btn-sm">Log Progress</button>
+          </div>
+
+          <!-- Challenge Card 3 -->
+          <div class="challenge-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="challenge-header">
+              <div class="challenge-icon">
+                <i class="fa-solid fa-droplet"></i>
+              </div>
+              <div class="challenge-time">
+                <i class="fa-solid fa-clock"></i>
+                <span>7 days left</span>
+              </div>
+            </div>
+            <h3 class="challenge-title">Water Conservation</h3>
+            <p class="challenge-description">Reduce water usage by 20% compared to last month.</p>
+            <div class="challenge-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 25%"></div>
+              </div>
+              <span class="progress-text">25% Complete • 5,000/20,000 L saved</span>
+            </div>
+            <div class="challenge-reward">
+              <i class="fa-solid fa-trophy"></i>
+              <span>Reward: Water Warrior Badge + 400 XP</span>
+            </div>
+            <button class="btn btn-primary btn-sm">Log Progress</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Team Members Section -->
+    <section class="team-members-section" data-aos="fade-up">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-tag">
+            <i class="fa-solid fa-user-group"></i> Team Members
+          </span>
+          <h2 class="section-title">Your Eco Warriors</h2>
+        </div>
+
+        <div class="members-grid" id="membersGrid">
+          <!-- Team members will be dynamically populated -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Create Team Modal -->
+  <div class="modal-overlay" id="createTeamModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeCreateTeamModal()">
+        <i class="fa-solid fa-times"></i>
+      </button>
+      <div class="modal-header">
+        <div class="modal-icon">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <h2>Create Your Eco-Team</h2>
+        <p>Start your sustainability journey together</p>
+      </div>
+      <form class="modal-form" id="createTeamForm">
+        <div class="form-group">
+          <label for="teamName">Team Name</label>
+          <input type="text" id="teamName" placeholder="e.g., Green Warriors" required>
+        </div>
+        <div class="form-group">
+          <label for="teamType">Team Type</label>
+          <select id="teamType" required>
+            <option value="">Select team type...</option>
+            <option value="family">Family</option>
+            <option value="school">School/Class</option>
+            <option value="company">Company/Organization</option>
+            <option value="neighborhood">Neighborhood</option>
+            <option value="friends">Friends Group</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="teamDescription">Description (Optional)</label>
+          <textarea id="teamDescription" placeholder="Tell others about your team's mission..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="teamPrivacy">Privacy Setting</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="privacy" value="public" checked>
+              <span class="radio-custom"></span>
+              <span class="radio-text">
+                <strong>Public</strong> - Anyone can find and join
+              </span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="privacy" value="private">
+              <span class="radio-custom"></span>
+              <span class="radio-text">
+                <strong>Private</strong> - Invite only
+              </span>
+            </label>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">
+          <i class="fa-solid fa-rocket"></i> Create Team
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Join Team Modal -->
+  <div class="modal-overlay" id="joinTeamModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeJoinTeamModal()">
+        <i class="fa-solid fa-times"></i>
+      </button>
+      <div class="modal-header">
+        <div class="modal-icon">
+          <i class="fa-solid fa-user-plus"></i>
+        </div>
+        <h2>Join an Eco-Team</h2>
+        <p>Enter an invite code or search for public teams</p>
+      </div>
+      <div class="modal-tabs">
+        <button class="modal-tab active" data-tab="code">Invite Code</button>
+        <button class="modal-tab" data-tab="search">Search Teams</button>
+      </div>
+      <div class="modal-tab-content" id="codeTab">
+        <form class="modal-form" id="joinByCodeForm">
+          <div class="form-group">
+            <label for="inviteCode">Invite Code</label>
+            <input type="text" id="inviteCode" placeholder="e.g., ECO-XXXX-XXXX" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">
+            <i class="fa-solid fa-check"></i> Join Team
+          </button>
+        </form>
+      </div>
+      <div class="modal-tab-content" id="searchTab" style="display: none;">
+        <div class="search-container">
+          <div class="search-input-wrapper">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" id="teamSearchInput" placeholder="Search for teams...">
+          </div>
+          <div class="team-search-results" id="teamSearchResults">
+            <!-- Search results will be populated here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invite Members Modal -->
+  <div class="modal-overlay" id="inviteModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeInviteModal()">
+        <i class="fa-solid fa-times"></i>
+      </button>
+      <div class="modal-header">
+        <div class="modal-icon">
+          <i class="fa-solid fa-envelope"></i>
+        </div>
+        <h2>Invite Team Members</h2>
+        <p>Share this code or link with friends to invite them</p>
+      </div>
+      <div class="invite-code-display">
+        <span id="teamInviteCode">ECO-GW2024-XYZ</span>
+        <button class="copy-btn" onclick="copyInviteCode()">
+          <i class="fa-solid fa-copy"></i>
+        </button>
+      </div>
+      <div class="invite-divider">
+        <span>or share via link</span>
+      </div>
+      <div class="invite-link-display">
+        <input type="text" readonly id="teamInviteLink" value="https://ecolife.com/join/ECO-GW2024-XYZ">
+        <button class="copy-btn" onclick="copyInviteLink()">
+          <i class="fa-solid fa-copy"></i>
+        </button>
+      </div>
+      <div class="share-buttons">
+        <button class="share-btn whatsapp" onclick="shareWhatsApp()">
+          <i class="fa-brands fa-whatsapp"></i>
+        </button>
+        <button class="share-btn twitter" onclick="shareTwitter()">
+          <i class="fa-brands fa-twitter"></i>
+        </button>
+        <button class="share-btn email" onclick="shareEmail()">
+          <i class="fa-solid fa-envelope"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-container" id="toastContainer"></div>
+
+        <div id="footer-container"></div>
+    </script>
+          <script src="../js/components/navbar-loader.js"></script>
+    <script src="../js/components/footer-loader.js"></script>
+
+    <!-- Load Components Script -->
+    <script>
+      // Simple component loader
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded, loading components...');
+
+        // Load Navbar
+        fetch('../components/navbar.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load navbar');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('navbar-container').innerHTML = data;
+            console.log('Navbar loaded successfully');
+            // Initialize navbar scripts if any
+            if (typeof initNavbar === 'function') {
+              initNavbar();
+            }
+          })
+          .catch(error => {
+            console.error('Error loading navbar:', error);
+            document.getElementById('navbar-container').innerHTML = 
+              '<div style="padding: 20px; background: #f8d7da; color: #721c24;">Navbar failed to load</div>';
+          });
+
+        // Load Footer
+        fetch('../components/footer.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load footer');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('footer-container').innerHTML = data;
+            console.log('Footer loaded successfully');
+            // Initialize footer scripts if any
+            if (typeof initFooter === 'function') {
+              initFooter();
+            }
+          })
+          .catch(error => {
+            console.error('Error loading footer:', error);
+            document.getElementById('footer-container').innerHTML = 
+              '<div style="padding: 20px; background: #f8d7da; color: #721c24; text-align: center;">Footer failed to load</div>';
+          });
+
+        // Load Share Modal
+        fetch('../components/share-modal.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load share modal');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('share-modal-container').innerHTML = data;
+            console.log('Share modal loaded successfully');
+          })
+          .catch(error => {
+            console.error('Error loading share modal:', error);
+          });
+
+        // Initialize AOS
+        AOS.init({
+          duration: 800,
+          once: true,
+          offset: 100
+        });
+
+        // Load cursor if function exists
+        if (typeof loadCursor === 'function') {
+          loadCursor();
+        }
+      });
+    </script>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="../js/components/navbar-loader.js"></script>
+  <script src="../js/pages/eco-teams.js"></script>
+  <script>
+    AOS.init({
+      duration: 800,
+      easing: 'ease-out-cubic',
+      once: true
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noise Pollution from Shipping Lanes - EcoLife</title>
+    <link rel="stylesheet" href="../css/global/variables.css">
+    <link rel="stylesheet" href="../css/global/utilities.css">
+    <link rel="stylesheet" href="../css/components/navbar.css">
+    <link rel="stylesheet" href="../css/components/footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Underwater Noise Animation Effects */
+        @keyframes wavePulse {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.8; }
+            25% { transform: scale(1.1) rotate(2deg); opacity: 1; }
+            50% { transform: scale(0.9) rotate(-2deg); opacity: 0.9; }
+            75% { transform: scale(1.05) rotate(1deg); opacity: 0.85; }
+        }
+
+        @keyframes soundWave {
+            0% { transform: scaleX(0); opacity: 1; }
+            50% { transform: scaleX(1); opacity: 0.7; }
+            100% { transform: scaleX(2); opacity: 0; }
+        }
+
+        @keyframes underwaterDistortion {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Level 3 Severity Indicator */
+        .severity-badge {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #ff0080, #8000ff, #0080ff);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 8px 32px rgba(128, 0, 255, 0.4);
+            animation: wavePulse 3s infinite;
+            z-index: 1000;
+            border: 3px solid #fff;
+        }
+
+        .severity-badge i {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        .noise-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background-size: 400% 400%;
+            animation: underwaterDistortion 6s ease-in-out infinite;
+            padding: 100px 20px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .noise-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .sound-wave {
+            position: absolute;
+            width: 4px;
+            height: 2px;
+            background: radial-gradient(circle, rgba(0, 128, 255, 0.6) 0%, rgba(128, 0, 255, 0.3) 70%);
+            border-radius: 50%;
+            animation: soundWave 4s linear infinite;
+        }
+
+        .sound-wave:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+        .sound-wave:nth-child(2) { left: 25%; top: 40%; animation-delay: 1s; }
+        .sound-wave:nth-child(3) { left: 40%; top: 60%; animation-delay: 2s; }
+        .sound-wave:nth-child(4) { left: 60%; top: 30%; animation-delay: 0.5s; }
+        .sound-wave:nth-child(5) { left: 80%; top: 50%; animation-delay: 1.5s; }
+
+        .noise-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(0, 128, 255, 0.8);
+            animation: wavePulse 2s infinite;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        .crisis-nav {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(15px);
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 20px;
+            border: 2px solid rgba(0, 128, 255, 0.3);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-tab {
+            padding: 15px 30px;
+            background: linear-gradient(45deg, rgba(0, 128, 255, 0.2), rgba(128, 0, 255, 0.3));
+            border: 2px solid rgba(0, 128, 255, 0.5);
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.4s;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-tab:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-tab:hover:before { left: 100%; }
+        .nav-tab:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0, 128, 255, 0.4); }
+        .nav-tab.active {
+            background: linear-gradient(45deg, #0080ff, #8000ff);
+            box-shadow: 0 0 30px rgba(0, 128, 255, 0.6);
+            transform: scale(1.05);
+        }
+
+        .content-section { display: none; margin: 30px 0; }
+        .content-section.active { display: block; animation: fadeInUp 0.6s ease-out; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .impact-card {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(26, 26, 46, 0.3));
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid rgba(0, 128, 255, 0.3);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .impact-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 128, 255, 0.4);
+            border-color: rgba(0, 128, 255, 0.8);
+        }
+
+        .impact-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0080ff, #8000ff, #ff0080);
+            background-size: 200% 100%;
+            animation: underwaterDistortion 3s ease-in-out infinite;
+        }
+
+        .marine-crisis {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(0, 0, 0, 0.6));
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #0080ff;
+        }
+
+        .crisis-level {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin: 10px 0;
+        }
+
+        .crisis-critical { background: linear-gradient(45deg, #ff0080, #ff4040); }
+        .crisis-severe { background: linear-gradient(45deg, #8000ff, #a000ff); }
+        .crisis-moderate { background: linear-gradient(45deg, #0080ff, #00a0ff); }
+
+        .frequency-visualizer {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .frequency-bar {
+            position: relative;
+            background: linear-gradient(to right, #00ff80, #ffff00, #ff8000, #ff0080);
+            height: 12px;
+            border-radius: 6px;
+            margin: 20px 0;
+            box-shadow: 0 0 20px rgba(0, 128, 255, 0.5);
+        }
+
+        .frequency-marker {
+            position: absolute;
+            width: 6px;
+            height: 20px;
+            background: #fff;
+            border-radius: 3px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+
+        .frequency-marker:hover {
+            transform: translateY(-50%) scale(1.3);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 1);
+        }
+
+        .chart-container {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid rgba(0, 128, 255, 0.3);
+        }
+
+        .action-button {
+            background: linear-gradient(45deg, #0080ff, #8000ff);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px;
+            box-shadow: 0 5px 15px rgba(0, 128, 255, 0.4);
+        }
+
+        .action-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 128, 255, 0.6);
+            background: linear-gradient(45deg, #00a0ff, #a000ff);
+        }
+
+        .noise-simulator {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(26, 26, 46, 0.4));
+            padding: 30px;
+            border-radius: 20px;
+            margin: 20px 0;
+            border: 2px solid rgba(0, 128, 255, 0.5);
+        }
+
+        .noise-slider {
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: linear-gradient(to right, #00ff80, #ffff00, #ff8000, #ff0080);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .noise-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #0080ff;
+            cursor: pointer;
+            border: 3px solid white;
+            box-shadow: 0 0 15px rgba(0, 128, 255, 0.8);
+        }
+
+        .marine-species {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid;
+        }
+
+        .status-stable { border-color: #00ff80; }
+        .status-stressed { border-color: #ffff00; }
+        .status-critical { border-color: #ff8000; }
+        .status-disrupted { border-color: #ff0080; }
+
+        @media (max-width: 768px) {
+            .noise-header h1 { font-size: 2.5rem; }
+            .impact-grid { grid-template-columns: 1fr; }
+            .nav-tabs { flex-direction: column; align-items: center; }
+            .severity-badge { position: relative; margin: 20px auto; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Severity Level Badge -->
+    <div class="severity-badge">
+        <i class="fas fa-water"></i>
+        LEVEL 3 CRISIS
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-leaf"></i>
+                <span>EcoLife</span>
+            </div>
+            <div class="nav-menu">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="climate-challenges.html" class="nav-link">Climate Issues</a>
+                <a href="noise-pollution-shipping.html" class="nav-link active">Noise Crisis</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="noise-header">
+        <div class="noise-particles">
+            <div class="sound-wave"></div>
+            <div class="sound-wave"></div>
+            <div class="sound-wave"></div>
+            <div class="sound-wave"></div>
+            <div class="sound-wave"></div>
+        </div>
+        <div class="container">
+            <h1><i class="fas fa-water"></i> Noise Pollution from Shipping Lanes</h1>
+            <p>Investigating how chronic underwater noise affects marine mammal communication, stress levels, and migration routes</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Navigation Tabs -->
+        <nav class="crisis-nav">
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-section="overview">
+                    <i class="fas fa-chart-line"></i> Crisis Overview
+                </button>
+                <button class="nav-tab" data-section="species">
+                    <i class="fas fa-fish"></i> Affected Species
+                </button>
+                <button class="nav-tab" data-section="simulator">
+                    <i class="fas fa-wave-square"></i> Noise Simulator
+                </button>
+                <button class="nav-tab" data-section="solutions">
+                    <i class="fas fa-shield-alt"></i> Solutions
+                </button>
+                <button class="nav-tab" data-section="data">
+                    <i class="fas fa-chart-bar"></i> Research Data
+                </button>
+            </div>
+        </nav>
+
+        <!-- Overview Section -->
+        <section class="content-section active" id="overview">
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <h3><i class="fas fa-volume-up"></i> Underwater Noise Crisis</h3>
+                    <p>Shipping traffic generates chronic low-frequency noise that travels thousands of kilometers underwater, disrupting marine mammal communication and behavior.</p>
+                    <div class="frequency-visualizer">
+                        <h4>Noise Frequency Spectrum</h4>
+                        <div class="frequency-bar">
+                            <div class="frequency-marker" style="left: 20%;" title="Whale communication (20-50 Hz)"></div>
+                            <div class="frequency-marker" style="left: 40%;" title="Shipping noise (50-200 Hz)"></div>
+                            <div class="frequency-marker" style="left: 70%;" title="Dolphin clicks (200k+ Hz)"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="impact-card">
+                    <h3><i class="fas fa-brain"></i> Communication Disruption</h3>
+                    <p>Marine mammals rely on sound for navigation, foraging, and social bonding. Shipping noise masks these vital acoustic signals.</p>
+                    <div class="chart-container">
+                        <canvas id="communicationChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <div class="impact-card">
+                    <h3><i class="fas fa-route"></i> Migration Route Changes</h3>
+                    <p>Chronic noise pollution forces marine mammals to alter their traditional migration patterns, increasing energy expenditure and exposure to threats.</p>
+                    <div class="chart-container">
+                        <canvas id="migrationChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <div class="impact-card">
+                    <h3><i class="fas fa-thermometer-full"></i> Key Statistics</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin: 10px 0; padding: 10px; background: rgba(0,128,255,0.2); border-radius: 8px;">
+                            <i class="fas fa-ship" style="color: #0080ff;"></i> 50,000+ commercial ships active daily
+                        </li>
+                        <li style="margin: 10px 0; padding: 10px; background: rgba(0,128,255,0.2); border-radius: 8px;">
+                            <i class="fas fa-volume-up" style="color: #8000ff;"></i> 10-20 dB increase in ocean noise since 1950
+                        </li>
+                        <li style="margin: 10px 0; padding: 10px; background: rgba(0,128,255,0.2); border-radius: 8px;">
+                            <i class="fas fa-fish" style="color: #ff0080;"></i> 80+ marine mammal species affected
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Species Section -->
+        <section class="content-section" id="species">
+            <h2><i class="fas fa-fish"></i> Marine Species Under Threat</h2>
+
+            <div class="marine-crisis">
+                <h3><i class="fas fa-ship"></i> Species Most Affected by Shipping Noise</h3>
+                <p>These marine mammals have evolved complex acoustic communication systems that are now severely disrupted by anthropogenic noise:</p>
+
+                <div class="impact-grid" style="margin-top: 20px;">
+                    <div class="marine-species status-critical">
+                        <div style="font-size: 2rem;">🐋</div>
+                        <div>
+                            <h4>Blue Whales (Global)</h4>
+                            <p><span class="crisis-level crisis-critical">CRITICAL</span></p>
+                            <p>Communication range reduced by 90% in major shipping lanes. Migration routes altered by 500+ km to avoid noise corridors.</p>
+                        </div>
+                    </div>
+
+                    <div class="marine-species status-critical">
+                        <div style="font-size: 2rem;">🐬</div>
+                        <div>
+                            <h4>Bottlenose Dolphins (Coastal)</h4>
+                            <p><span class="crisis-level crisis-critical">CRITICAL</span></p>
+                            <p>Social bonding calls masked by shipping noise, leading to 60% increase in stress-related behaviors and pod fragmentation.</p>
+                        </div>
+                    </div>
+
+                    <div class="marine-species status-severe">
+                        <div style="font-size: 2rem;">🦭</div>
+                        <div>
+                            <h4>Northern Fur Seals (Pacific)</h4>
+                            <p><span class="crisis-level crisis-severe">SEVERE</span></p>
+                            <p>Mating calls drowned out during breeding season, causing 40% decline in successful reproduction in noisy areas.</p>
+                        </div>
+                    </div>
+
+                    <div class="marine-species status-severe">
+                        <div style="font-size: 2rem;">🐋</div>
+                        <div>
+                            <h4>Humpback Whales (Atlantic)</h4>
+                            <p><span class="crisis-level crisis-severe">SEVERE</span></p>
+                            <p>Song complexity reduced by 70% near shipping routes. Feeding efficiency decreased by 50% due to communication disruption.</p>
+                        </div>
+                    </div>
+
+                    <div class="marine-species status-moderate">
+                        <div style="font-size: 2rem;">🐬</div>
+                        <div>
+                            <h4>Orca Pods (Global)</h4>
+                            <p><span class="crisis-level crisis-moderate">MODERATE</span></p>
+                            <p>Hunting coordination impaired by noise interference. Pod cohesion weakened, affecting survival rates.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3>Species Vulnerability by Noise Frequency</h3>
+                <canvas id="vulnerabilityChart" width="800" height="400"></canvas>
+            </div>
+        </section>
+
+        <!-- Simulator Section -->
+        <section class="content-section" id="simulator">
+            <div class="noise-simulator">
+                <h2><i class="fas fa-wave-square"></i> Underwater Noise Impact Simulator</h2>
+                <p>Adjust shipping traffic levels to see how noise pollution affects marine mammal behavior and communication.</p>
+
+                <div style="margin: 20px 0;">
+                    <label for="shippingTraffic">Shipping Traffic Intensity (ships per hour):</label>
+                    <input type="range" id="shippingTraffic" class="noise-slider" min="0" max="50" step="1" value="10">
+                    <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                        <span>Minimal (0)</span>
+                        <span id="currentTraffic">Current (10)</span>
+                        <span>Heavy Traffic (50+)</span>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Real-time Noise Impact Analysis</h3>
+                    <canvas id="noiseImpactChart" width="800" height="400"></canvas>
+                </div>
+
+                <div class="impact-grid" style="margin-top: 30px;">
+                    <div class="impact-card" id="communicationHealth">
+                        <h4><i class="fas fa-comments"></i> Communication Effectiveness</h4>
+                        <div id="commStatus" class="crisis-level crisis-moderate">Moderate Interference</div>
+                        <p id="commDescription">Some communication signals still effective but with reduced range.</p>
+                    </div>
+
+                    <div class="impact-card" id="stressLevels">
+                        <h4><i class="fas fa-brain"></i> Stress Response Level</h4>
+                        <div id="stressLevel" style="font-size: 2rem; color: #ffff00;">45%</div>
+                        <p id="stressDescription">Elevated cortisol levels detected in affected populations.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Solutions Section -->
+        <section class="content-section" id="solutions">
+            <h2><i class="fas fa-shield-alt"></i> Mitigation Solutions & Action Plans</h2>
+
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <h3><i class="fas fa-ship"></i> Shipping Industry Solutions</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin: 10px 0;">🛳️ Speed reduction in sensitive areas</li>
+                        <li style="margin: 10px 0;">🔊 Bubble curtain technology implementation</li>
+                        <li style="margin: 10px 0;">🗺️ Dynamic routing around migration corridors</li>
+                        <li style="margin: 10px 0;">📡 Real-time noise monitoring systems</li>
+                    </ul>
+                    <button class="action-button" onclick="joinShippingInitiative()">
+                        Join Shipping Initiative
+                    </button>
+                </div>
+
+                <div class="impact-card">
+                    <h3><i class="fas fa-microphone"></i> Acoustic Protection Zones</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin: 10px 0;">🏞️ Marine protected areas with noise limits</li>
+                        <li style="margin: 10px 0;">🎧 Underwater acoustic monitoring networks</li>
+                        <li style="margin: 10px 0;">🚫 Seasonal shipping restrictions</li>
+                        <li style="margin: 10px 0;">🌊 Artificial reef creation for acoustic barriers</li>
+                    </ul>
+                    <button class="action-button" onclick="supportProtectionZones()">
+                        Support Protection Zones
+                    </button>
+                </div>
+
+                <div class="impact-card">
+                    <h3><i class="fas fa-flask"></i> Research & Technology</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin: 10px 0;">🔬 Advanced noise modeling systems</li>
+                        <li style="margin: 10px 0;">📊 Marine mammal tracking technology</li>
+                        <li style="margin: 10px 0;">🎵 Bio-acoustic research funding</li>
+                        <li style="margin: 10px 0;">🤖 AI-powered noise prediction models</li>
+                    </ul>
+                    <button class="action-button" onclick="fundResearch()">
+                        Fund Research
+                    </button>
+                </div>
+
+                <div class="impact-card">
+                    <h3><i class="fas fa-gavel"></i> Policy & Regulation</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin: 10px 0;">📜 International noise pollution treaties</li>
+                        <li style="margin: 10px 0;">⚖️ Mandatory environmental impact assessments</li>
+                        <li style="margin: 10px 0;">💰 Economic incentives for quiet technologies</li>
+                        <li style="margin: 10px 0;">🌍 Global marine noise reduction targets</li>
+                    </ul>
+                    <button class="action-button" onclick="advocatePolicy()">
+                        Advocate Policy Change
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Research Data Section -->
+        <section class="content-section" id="data">
+            <h2><i class="fas fa-chart-bar"></i> Research Data & Global Impact</h2>
+
+            <div class="chart-container">
+                <h3>Ocean Noise Levels by Region (1950-2025)</h3>
+                <canvas id="globalNoiseChart" width="800" height="400"></canvas>
+            </div>
+
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <h3><i class="fas fa-globe"></i> Global Hotspots</h3>
+                    <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; margin: 10px 0;">
+                        <h4 style="color: #0080ff;">🌊 Critical Noise Corridors</h4>
+                        <ul style="list-style: none; padding: 0;">
+                            <li>🚢 North Atlantic Shipping Routes (200+ ships daily)</li>
+                            <li>🚢 Pacific Rim Trade Lanes (300+ ships daily)</li>
+                            <li>🚢 Suez Canal & Mediterranean (150+ ships daily)</li>
+                            <li>🚢 Panama Canal Routes (100+ ships daily)</li>
+                            <li>🚢 Arctic Shipping Routes (emerging threat)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="impact-card">
+                    <h3><i class="fas fa-clock"></i> Long-term Consequences</h3>
+                    <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; margin: 10px 0;">
+                        <div style="margin: 10px 0;">
+                            <strong>Communication Loss:</strong> 50-90% reduction in effective range
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <strong>Stress Impact:</strong> 200-500% increase in cortisol levels
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <strong>Migration Disruption:</strong> 20-50% increase in energy expenditure
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <strong>Population Effects:</strong> 15-40% decline in affected species
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Marine Noise Emergency Response</h3>
+                <p>🚨 Report marine mammal distress: 1-800-MARINE</p>
+                <p>🔗 <a href="#" style="color: #0080ff;">Ocean Noise Research Network</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="../js/noise-pollution-shipping.js"></script>
+</body>
+</html>

@@ -314,6 +314,34 @@ const resourcesData = [
                 </div>
             </div>
         `
+    },
+    {
+        id: 'microplastic-terrestrial-animals',
+        title: 'Microplastic Accumulation in Terrestrial Animals',
+        description: 'Investigate how microplastics enter land-based food chains and their impact on wildlife health and reproduction.',
+        type: 'article',
+        category: 'environment',
+        duration: '12 min read',
+        icon: 'fas fa-microscope',
+        featured: false,
+        content: `
+            <div class="resource-detail">
+                <div class="resource-info">
+                    <h4>The Invisible Threat to Terrestrial Wildlife</h4>
+                    <p>Explore the concerning rise of microplastic pollution in land-based ecosystems. This comprehensive article covers:</p>
+                    <ul>
+                        <li>Pathways of microplastic entry into terrestrial food chains</li>
+                        <li>Bioaccumulation and biomagnification processes</li>
+                        <li>Physiological impacts on wildlife health</li>
+                        <li>Reproductive and developmental consequences</li>
+                        <li>Prevention and mitigation strategies</li>
+                    </ul>
+                    <div class="resource-actions">
+                        <a href="microplastic-terrestrial-animals.html" class="btn-primary">Read Full Article</a>
+                    </div>
+                </div>
+            </div>
+        `
     }
 ];
 

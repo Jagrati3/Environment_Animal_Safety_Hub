@@ -50,7 +50,23 @@
 
   <body>
     <!-- Navbar -->
-    <div id="navbar-container"></div>
+    <div id="navbar-container">
+      <!-- Fallback navbar in case JavaScript fails -->
+      <nav class="temp-navbar" style="background: linear-gradient(135deg, #4CAF50, #2E7D32); padding: 1rem 2rem; color: white; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000;">
+        <div class="logo">
+          <a href="../../index.html" style="color: white; text-decoration: none; font-weight: 700; font-size: 1.5rem;">
+            <i class="fa-solid fa-leaf"></i> EcoLife
+          </a>
+        </div>
+        <div class="nav-links">
+          <a href="../../index.html" style="color: white; margin-left: 20px; text-decoration: none;">Home</a>
+          <a href="../virtual-garden.html" style="color: white; margin-left: 20px; text-decoration: none;">Virtual Garden</a>
+          <a href="../ecopedia.html" style="color: white; margin-left: 20px; text-decoration: none;">Ecopedia</a>
+          <a href="../animal-safety/animal-nutrition.html" style="color: white; margin-left: 20px; text-decoration: none; font-weight: bold;">Animal Nutrition</a>
+          <a href="../animal-safety/animal-therapy.html" style="color: white; margin-left: 20px; text-decoration: none;">Animal Therapy</a>
+        </div>
+      </nav>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero-section">
@@ -524,7 +540,28 @@
     </main>
 
     <!-- Footer -->
-    <div id="footer-placeholder"></div>
+    <div id="footer-placeholder">
+      <!-- Fallback footer in case JavaScript fails -->
+      <footer class="temp-footer" style="background: #2c3e50; color: white; padding: 2rem; text-align: center; margin-top: 3rem;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; margin-bottom: 2rem;">
+            <div style="flex: 1; min-width: 250px; margin-bottom: 1rem;">
+              <h3 style="color: #4CAF50;">EcoLife</h3>
+              <p>Promoting animal health through proper nutrition and care.</p>
+            </div>
+            <div style="flex: 1; min-width: 250px; margin-bottom: 1rem;">
+              <h4 style="color: #4CAF50;">Quick Links</h4>
+              <a href="../../index.html" style="color: white; display: block; margin-bottom: 0.5rem;">Home</a>
+              <a href="../virtual-garden.html" style="color: white; display: block; margin-bottom: 0.5rem;">Virtual Garden</a>
+              <a href="../ecopedia.html" style="color: white; display: block; margin-bottom: 0.5rem;">Ecopedia</a>
+              <a href="../animal-safety/animal-nutrition.html" style="color: white; display: block; margin-bottom: 0.5rem; font-weight: bold;">Animal Nutrition</a>
+            </div>
+          </div>
+          <hr style="border-color: #4CAF50; margin: 1rem 0;">
+          <p>&copy; 2024 EcoLife Animal Nutrition. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
 
     <!-- Share Modal -->
     <div id="share-modal" class="modal">
@@ -550,9 +587,54 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="../../js/components/navbar-loader.js"></script>
-    <script src="../../js/components/footer-loader.js"></script>
     <script src="../../js/components/share-modal.js"></script>
     <script src="../../js/pages/animal-safety/animal-nutrition.js"></script>
+    
+    <script>
+      // Initialize AOS
+      AOS.init({
+        duration: 800,
+        easing: 'ease-in-out',
+        once: true,
+        offset: 100
+      });
+
+      // Load Navbar and Footer
+      document.addEventListener('DOMContentLoaded', function() {
+        // Load Navbar
+        fetch('../../components/navbar.html')
+          .then(response => {
+            if (!response.ok) throw new Error('Navbar not found');
+            return response.text();
+          })
+          .then(html => {
+            document.getElementById('navbar-container').innerHTML = html;
+            // Remove the temporary navbar styles
+            const tempNav = document.querySelector('.temp-navbar');
+            if (tempNav) tempNav.style.display = 'none';
+          })
+          .catch(error => {
+            console.warn('Using fallback navbar:', error);
+            // Keep the fallback navbar visible
+          });
+
+        // Load Footer
+        fetch('../../components/footer.html')
+          .then(response => {
+            if (!response.ok) throw new Error('Footer not found');
+            return response.text();
+          })
+          .then(html => {
+            document.getElementById('footer-placeholder').innerHTML = html;
+            // Remove the temporary footer styles
+            const tempFooter = document.querySelector('.temp-footer');
+            if (tempFooter) tempFooter.style.display = 'none';
+          })
+          .catch(error => {
+            console.warn('Using fallback footer:', error);
+            // Keep the fallback footer visible
+          });
+      });
+    </script>
   </body>
 </html>

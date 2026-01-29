@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Citizen Science - Local Flora & Fauna Database. Log sightings of local plants, birds, and animals to create a living map of biodiversity in your community.">
+    <meta name="keywords"
+        content="citizen science, biodiversity, flora, fauna, wildlife, nature, conservation, species identification">
+    <title>Citizen Science – Flora & Fauna Database | EcoLife</title>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
+    <link rel="stylesheet" href="../../css/components/navbar.css" />
+    <link rel="stylesheet" href="../../css/components/footer.css" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/pages/community/citizen-science.css">
+</head>
+
+<body>
+
+        <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <div id="navbar-container"></div>
+    
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">
+        <i class="fas fa-moon"></i>
+    </button>
+    <!-- Animated Background -->
+    <div class="animated-background">
+        <div class="floating-particles"></div>
+        <div class="gradient-overlay"></div>
+    </div>
+
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-leaf"></i>
+                <span>Citizen Science Initiative</span>
+            </div>
+            <h1 class="hero-title">
+                <span class="title-gradient">Local Flora & Fauna</span>
+                <span class="title-secondary">Database</span>
+            </h1>
+            <p class="hero-description">
+                Join our community of nature observers! Log sightings of local plants, birds, and animals
+                to create a living map of biodiversity in your community. Your observations help track
+                migration patterns, blooming seasons, and the presence of invasive species.
+            </p>
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <i class="fas fa-binoculars"></i>
+                    <span class="stat-number" id="totalSightings">0</span>
+                    <span class="stat-label">Total Sightings</span>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-paw"></i>
+                    <span class="stat-number" id="totalSpecies">0</span>
+                    <span class="stat-label">Species Identified</span>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <span class="stat-number" id="totalContributors">0</span>
+                    <span class="stat-label">Contributors</span>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span class="stat-number" id="totalLocations">0</span>
+                    <span class="stat-label">Locations Covered</span>
+                </div>
+            </div>
+            <div class="hero-cta">
+                <button class="btn-primary" onclick="openSubmissionModal()">
+                    <i class="fas fa-plus-circle"></i>
+                    Log a Sighting
+                </button>
+                <button class="btn-secondary" onclick="scrollToSection('map')">
+                    <i class="fas fa-map"></i>
+                    Explore Map
+                </button>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="nature-illustration">
+                <div class="illustration-ring ring-1"></div>
+                <div class="illustration-ring ring-2"></div>
+                <div class="illustration-ring ring-3"></div>
+                <div class="floating-icons">
+                    <span class="float-icon bird"><i class="fas fa-dove"></i></span>
+                    <span class="float-icon flower"><i class="fas fa-seedling"></i></span>
+                    <span class="float-icon butterfly"><i class="fas fa-bug"></i></span>
+                    <span class="float-icon tree"><i class="fas fa-tree"></i></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Categories Section -->
+    <section class="categories-section" id="categories">
+        <div class="container">
+            <h2 class="section-title">Explore by Category</h2>
+            <div class="category-grid">
+                <div class="category-card" data-category="plants" onclick="filterByCategory('plants')">
+                    <div class="category-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Plants & Flora</h3>
+                    <p>Trees, flowers, shrubs, and more</p>
+                    <span class="category-count" id="plantsCount">0 sightings</span>
+                </div>
+                <div class="category-card" data-category="birds" onclick="filterByCategory('birds')">
+                    <div class="category-icon">
+                        <i class="fas fa-dove"></i>
+                    </div>
+                    <h3>Birds</h3>
+                    <p>Songbirds, raptors, waterbirds</p>
+                    <span class="category-count" id="birdsCount">0 sightings</span>
+                </div>
+                <div class="category-card" data-category="mammals" onclick="filterByCategory('mammals')">
+                    <div class="category-icon">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                    <h3>Mammals</h3>
+                    <p>Wild and semi-wild animals</p>
+                    <span class="category-count" id="mammalsCount">0 sightings</span>
+                </div>
+                <div class="category-card" data-category="insects" onclick="filterByCategory('insects')">
+                    <div class="category-icon">
+                        <i class="fas fa-bug"></i>
+                    </div>
+                    <h3>Insects & Butterflies</h3>
+                    <p>Pollinators and arthropods</p>
+                    <span class="category-count" id="insectsCount">0 sightings</span>
+                </div>
+                <div class="category-card" data-category="reptiles" onclick="filterByCategory('reptiles')">
+                    <div class="category-icon">
+                        <i class="fas fa-dragon"></i>
+                    </div>
+                    <h3>Reptiles & Amphibians</h3>
+                    <p>Snakes, lizards, frogs</p>
+                    <span class="category-count" id="reptilesCount">0 sightings</span>
+                </div>
+                <div class="category-card" data-category="aquatic" onclick="filterByCategory('aquatic')">
+                    <div class="category-icon">
+                        <i class="fas fa-fish"></i>
+                    </div>
+                    <h3>Aquatic Life</h3>
+                    <p>Fish, crustaceans, mollusks</p>
+                    <span class="category-count" id="aquaticCount">0 sightings</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Biodiversity Map Section -->
+    <section class="map-section" id="map">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-map-marked-alt"></i>
+                    Biodiversity Map
+                </h2>
+                <p class="section-subtitle">Explore recent sightings in your community</p>
+            </div>
+
+            <div class="map-controls">
+                <div class="filter-group">
+                    <label for="categoryFilter">Category:</label>
+                    <select id="categoryFilter" onchange="applyMapFilters()">
+                        <option value="all">All Categories</option>
+                        <option value="plants">Plants & Flora</option>
+                        <option value="birds">Birds</option>
+                        <option value="mammals">Mammals</option>
+                        <option value="insects">Insects & Butterflies</option>
+                        <option value="reptiles">Reptiles & Amphibians</option>
+                        <option value="aquatic">Aquatic Life</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="timeFilter">Time Range:</label>
+                    <select id="timeFilter" onchange="applyMapFilters()">
+                        <option value="all">All Time</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                        <option value="year">This Year</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="statusFilter">Verification:</label>
+                    <select id="statusFilter" onchange="applyMapFilters()">
+                        <option value="all">All Status</option>
+                        <option value="verified">Verified</option>
+                        <option value="pending">Pending Verification</option>
+                        <option value="needs-id">Needs Identification</option>
+                    </select>
+                </div>
+                <button class="btn-location" onclick="centerMapOnUser()">
+                    <i class="fas fa-crosshairs"></i>
+                    My Location
+                </button>
+            </div>
+
+            <div class="map-container">
+                <div id="biodiversityMap"></div>
+                <div class="map-legend">
+                    <h4>Legend</h4>
+                    <div class="legend-item">
+                        <span class="legend-marker plants"></span>
+                        <span>Plants</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-marker birds"></span>
+                        <span>Birds</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-marker mammals"></span>
+                        <span>Mammals</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-marker insects"></span>
+                        <span>Insects</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-marker reptiles"></span>
+                        <span>Reptiles</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-marker aquatic"></span>
+                        <span>Aquatic</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Sightings Section -->
+    <section class="sightings-section" id="sightings">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-binoculars"></i>
+                    Recent Sightings
+                </h2>
+                <p class="section-subtitle">Latest observations from our community</p>
+            </div>
+
+            <div class="sightings-toolbar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchSightings" placeholder="Search species, location...">
+                </div>
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="grid" onclick="toggleView('grid')">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button class="view-btn" data-view="list" onclick="toggleView('list')">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+                <div class="sort-dropdown">
+                    <select id="sortSightings" onchange="sortSightings()">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="most-verified">Most Verified</option>
+                        <option value="popular">Most Popular</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="sightings-grid" id="sightingsGrid">
+                <!-- Sightings will be dynamically populated -->
+            </div>
+
+            <div class="load-more">
+                <button class="btn-load-more" onclick="loadMoreSightings()">
+                    <i class="fas fa-plus"></i>
+                    Load More Sightings
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Species Wiki Section -->
+    <section class="wiki-section" id="wiki">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-book-open"></i>
+                    Species Wiki
+                </h2>
+                <p class="section-subtitle">Learn about the wildlife in your community</p>
+            </div>
+
+            <div class="wiki-search">
+                <div class="wiki-search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="wikiSearch" placeholder="Search for a species...">
+                </div>
+                <div class="wiki-alphabet">
+                    <button class="alpha-btn active" data-letter="all">All</button>
+                    <button class="alpha-btn" data-letter="A">A</button>
+                    <button class="alpha-btn" data-letter="B">B</button>
+                    <button class="alpha-btn" data-letter="C">C</button>
+                    <button class="alpha-btn" data-letter="D">D</button>
+                    <button class="alpha-btn" data-letter="E">E</button>
+                    <button class="alpha-btn" data-letter="F">F</button>
+                    <button class="alpha-btn" data-letter="G">G</button>
+                    <button class="alpha-btn" data-letter="H">H</button>
+                    <button class="alpha-btn" data-letter="I">I</button>
+                    <button class="alpha-btn" data-letter="J">J</button>
+                    <button class="alpha-btn" data-letter="K">K</button>
+                    <button class="alpha-btn" data-letter="L">L</button>
+                    <button class="alpha-btn" data-letter="M">M</button>
+                    <button class="alpha-btn" data-letter="N">N</button>
+                    <button class="alpha-btn" data-letter="O">O</button>
+                    <button class="alpha-btn" data-letter="P">P</button>
+                    <button class="alpha-btn" data-letter="Q">Q</button>
+                    <button class="alpha-btn" data-letter="R">R</button>
+                    <button class="alpha-btn" data-letter="S">S</button>
+                    <button class="alpha-btn" data-letter="T">T</button>
+                    <button class="alpha-btn" data-letter="U">U</button>
+                    <button class="alpha-btn" data-letter="V">V</button>
+                    <button class="alpha-btn" data-letter="W">W</button>
+                    <button class="alpha-btn" data-letter="X">X</button>
+                    <button class="alpha-btn" data-letter="Y">Y</button>
+                    <button class="alpha-btn" data-letter="Z">Z</button>
+                </div>
+            </div>
+
+            <div class="wiki-grid" id="wikiGrid">
+                <!-- Wiki entries will be dynamically populated -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Leaderboard Section -->
+    <section class="leaderboard-section" id="leaderboard">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-trophy"></i>
+                    Top Contributors
+                </h2>
+                <p class="section-subtitle">Our most active citizen scientists</p>
+            </div>
+
+            <div class="leaderboard-grid">
+                <div class="leaderboard-card top-observers">
+                    <h3><i class="fas fa-eye"></i> Top Observers</h3>
+                    <div class="leaderboard-list" id="topObservers">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+                <div class="leaderboard-card top-identifiers">
+                    <h3><i class="fas fa-microscope"></i> Top Identifiers</h3>
+                    <div class="leaderboard-list" id="topIdentifiers">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+                <div class="leaderboard-card recent-badges">
+                    <h3><i class="fas fa-medal"></i> Recent Badges</h3>
+                    <div class="badges-list" id="recentBadges">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Submission Modal -->
+    <div class="modal-overlay" id="submissionModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeSubmissionModal()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="modal-header">
+                <h2><i class="fas fa-camera"></i> Log a Sighting</h2>
+                <p>Share your wildlife observation with the community</p>
+            </div>
+
+            <form id="sightingForm" class="sighting-form">
+                <div class="form-progress">
+                    <div class="progress-step active" data-step="1">
+                        <span class="step-number">1</span>
+                        <span class="step-label">Photo</span>
+                    </div>
+                    <div class="progress-step" data-step="2">
+                        <span class="step-number">2</span>
+                        <span class="step-label">Details</span>
+                    </div>
+                    <div class="progress-step" data-step="3">
+                        <span class="step-number">3</span>
+                        <span class="step-label">Location</span>
+                    </div>
+                    <div class="progress-step" data-step="4">
+                        <span class="step-number">4</span>
+                        <span class="step-label">Submit</span>
+                    </div>
+                </div>
+
+                <!-- Step 1: Photo Upload -->
+                <div class="form-step active" data-step="1">
+                    <div class="upload-area" id="uploadArea">
+                        <input type="file" id="photoInput" accept="image/*" multiple hidden>
+                        <div class="upload-placeholder">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <h3>Upload Photos</h3>
+                            <p>Drag & drop or click to select</p>
+                            <span class="upload-hint">Max 5 photos, JPEG/PNG format</span>
+                        </div>
+                        <div class="upload-preview" id="uploadPreview"></div>
+                    </div>
+                    <button type="button" class="btn-camera" onclick="openCamera()">
+                        <i class="fas fa-camera"></i>
+                        Take Photo
+                    </button>
+                </div>
+
+                <!-- Step 2: Species Details -->
+                <div class="form-step" data-step="2">
+                    <div class="form-group">
+                        <label for="speciesCategory">Category *</label>
+                        <select id="speciesCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="plants">Plants & Flora</option>
+                            <option value="birds">Birds</option>
+                            <option value="mammals">Mammals</option>
+                            <option value="insects">Insects & Butterflies</option>
+                            <option value="reptiles">Reptiles & Amphibians</option>
+                            <option value="aquatic">Aquatic Life</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="speciesName">Species Name (if known)</label>
+                        <input type="text" id="speciesName" placeholder="e.g., House Sparrow">
+                        <span class="form-hint">Leave blank if unsure - others can help identify!</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quantity">Quantity Observed</label>
+                        <input type="number" id="quantity" min="1" value="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="behavior">Behavior/Activity</label>
+                        <select id="behavior">
+                            <option value="">Select Behavior</option>
+                            <option value="feeding">Feeding</option>
+                            <option value="resting">Resting</option>
+                            <option value="flying">Flying/Moving</option>
+                            <option value="nesting">Nesting/Breeding</option>
+                            <option value="blooming">Blooming (plants)</option>
+                            <option value="fruiting">Fruiting (plants)</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Additional Notes</label>
+                        <textarea id="description" rows="3" placeholder="Describe what you observed..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Step 3: Location & Time -->
+                <div class="form-step" data-step="3">
+                    <div class="form-group">
+                        <label>Location *</label>
+                        <div class="location-input-group">
+                            <button type="button" class="btn-geolocate" onclick="getCurrentLocation()">
+                                <i class="fas fa-crosshairs"></i>
+                                Use Current Location
+                            </button>
+                            <span class="or-divider">or</span>
+                            <input type="text" id="locationSearch" placeholder="Search for a location...">
+                        </div>
+                        <div id="locationMap" class="location-map"></div>
+                        <input type="hidden" id="latitude" required>
+                        <input type="hidden" id="longitude" required>
+                        <p class="location-display" id="locationDisplay">No location selected</p>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sightingDate">Date *</label>
+                            <input type="date" id="sightingDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sightingTime">Time *</label>
+                            <input type="time" id="sightingTime" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="habitat">Habitat Type</label>
+                        <select id="habitat">
+                            <option value="">Select Habitat</option>
+                            <option value="urban">Urban/City</option>
+                            <option value="suburban">Suburban</option>
+                            <option value="rural">Rural</option>
+                            <option value="forest">Forest/Woodland</option>
+                            <option value="grassland">Grassland/Meadow</option>
+                            <option value="wetland">Wetland/Marsh</option>
+                            <option value="water">Lake/River/Pond</option>
+                            <option value="coastal">Coastal/Beach</option>
+                            <option value="garden">Garden</option>
+                            <option value="park">Park</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Step 4: Review & Submit -->
+                <div class="form-step" data-step="4">
+                    <div class="review-section">
+                        <h3>Review Your Sighting</h3>
+                        <div class="review-preview" id="reviewPreview">
+                            <!-- Dynamically populated -->
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="agreeTerms" required>
+                                <span class="checkmark"></span>
+                                I confirm this is my own observation and the information is accurate
+                            </label>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="allowIdentification" checked>
+                                <span class="checkmark"></span>
+                                Allow community members to suggest species identification
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-navigation">
+                    <button type="button" class="btn-prev" onclick="prevStep()" style="display: none;">
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                    <button type="button" class="btn-next" onclick="nextStep()">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button type="submit" class="btn-submit" style="display: none;">
+                        <i class="fas fa-check"></i> Submit Sighting
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Species Detail Modal -->
+    <div class="modal-overlay" id="speciesModal">
+        <div class="modal-content species-detail">
+            <button class="modal-close" onclick="closeSpeciesModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="species-content" id="speciesContent">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Sighting Detail Modal -->
+    <div class="modal-overlay" id="sightingDetailModal">
+        <div class="modal-content sighting-detail">
+            <button class="modal-close" onclick="closeSightingDetailModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="sighting-content" id="sightingDetailContent">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Identification Suggestions Modal -->
+    <div class="modal-overlay" id="identificationModal">
+        <div class="modal-content identification-panel">
+            <button class="modal-close" onclick="closeIdentificationModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="identification-content" id="identificationContent">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div class="toast-container" id="toastContainer">
+        <!-- Toasts will be dynamically added -->
+    </div>
+    <!-- Footer -->
+    <div id="footer-container"></div>
+    </script>
+          <script src="../../js/components/navbar-loader.js"></script>
+    <script src="../../js/components/footer-loader.js"></script>
+
+    <!-- Load Components Script -->
+    <script>
+      // Simple component loader
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded, loading components...');
+
+        // Load Navbar
+        fetch('../../components/navbar.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load navbar');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('navbar-container').innerHTML = data;
+            console.log('Navbar loaded successfully');
+            // Initialize navbar scripts if any
+            if (typeof initNavbar === 'function') {
+              initNavbar();
+            }
+          })
+          .catch(error => {
+            console.error('Error loading navbar:', error);
+            document.getElementById('navbar-container').innerHTML = 
+              '<div style="padding: 20px; background: #f8d7da; color: #721c24;">Navbar failed to load</div>';
+          });
+
+        // Load Footer
+        fetch('../../components/footer.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load footer');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('footer-container').innerHTML = data;
+            console.log('Footer loaded successfully');
+            // Initialize footer scripts if any
+            if (typeof initFooter === 'function') {
+              initFooter();
+            }
+          })
+          .catch(error => {
+            console.error('Error loading footer:', error);
+            document.getElementById('footer-container').innerHTML = 
+              '<div style="padding: 20px; background: #f8d7da; color: #721c24; text-align: center;">Footer failed to load</div>';
+          });
+
+        // Load Share Modal
+        fetch('../../components/share-modal.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load share modal');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('share-modal-container').innerHTML = data;
+            console.log('Share modal loaded successfully');
+          })
+          .catch(error => {
+            console.error('Error loading share modal:', error);
+          });
+
+        // Initialize AOS
+        AOS.init({
+          duration: 800,
+          once: true,
+          offset: 100
+        });
+
+        // Load cursor if function exists
+        if (typeof loadCursor === 'function') {
+          loadCursor();
+        }
+      });
+    </script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+
+    <!-- Custom JS -->
+    <script src="../../js/pages/community/citizen-science.js"></script>
+</body>
+
+</html>

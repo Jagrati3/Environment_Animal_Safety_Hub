@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Dark Sky Conservation and Nocturnal Wildlife | EcoLife</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Learn about light pollution's impact on nocturnal animals and the importance of protecting natural night environments">
+  <link rel="icon" type="image/png" href="/envirnoment-logo.png">
+  <link rel="stylesheet" href="../../css/global/utilities.css" />
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/pages/dark-sky-conservation.css">
+    <link rel="stylesheet" href="../css/components/navbar.css" />
+    <link rel="stylesheet" href="../css/components/footer.css" />
+</head>
+
+<body>
+
+  <div id="cursor-container"></div>
+  <script src="../../js/components/loadComponents.js"></script>
+
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <div id="navbar-container"></div>
+
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">
+        <i class="fas fa-moon"></i>
+    </button>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1 style="padding-top: 50px;">🌙 Dark Sky Conservation and Nocturnal Wildlife</h1>
+    <p>Explore how light pollution disrupts nocturnal animals and discover the importance of protecting natural night environments.</p>
+  </section>
+
+  <!-- CONTENT -->
+  <section class="container">
+
+    <!-- Introduction -->
+    <div class="content-section">
+      <h2><i class="fas fa-moon"></i> Understanding Light Pollution</h2>
+      <p>Light pollution refers to the excessive or inappropriate use of artificial light that disrupts the natural darkness of the night sky. While artificial lighting has brought many benefits to human society, it has also created unintended consequences for wildlife, particularly nocturnal animals that depend on darkness for their survival.</p>
+    </div>
+
+    <!-- Impact on Nocturnal Animals -->
+    <div class="content-section">
+      <h2><i class="fas fa-owl"></i> Impact on Nocturnal Wildlife</h2>
+      <div class="impact-grid">
+        <div class="impact-card">
+          <i class="fas fa-bat"></i>
+          <h3>Bats</h3>
+          <p>Artificial lights disrupt bat navigation and feeding patterns. Many species avoid lit areas, reducing their foraging grounds and affecting their ability to control insect populations.</p>
+        </div>
+        <div class="impact-card">
+          <i class="fas fa-frog"></i>
+          <h3>Amphibians</h3>
+          <p>Nighttime breeding and migration patterns are disrupted. Tadpoles and frogs are particularly vulnerable to changes in their natural light cycles.</p>
+        </div>
+        <div class="impact-card">
+          <i class="fas fa-deer"></i>
+          <h3>Mammals</h3>
+          <p>Predator-prey relationships are altered as animals become more visible or change their activity patterns, leading to increased stress and altered behavior.</p>
+        </div>
+        <div class="impact-card">
+          <i class="fas fa-bug"></i>
+          <h3>Insects</h3>
+          <p>Moths and other nocturnal insects are attracted to artificial lights, leading to exhaustion, increased predation, and disruption of pollination cycles.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conservation Solutions -->
+    <div class="content-section">
+      <h2><i class="fas fa-shield-alt"></i> Conservation Solutions</h2>
+      <div class="solutions-list">
+        <div class="solution-item">
+          <h3>Smart Lighting</h3>
+          <p>Use LED lights with motion sensors and timers to reduce unnecessary illumination. Direct lights downward and use warm-colored lights that are less disruptive to wildlife.</p>
+        </div>
+        <div class="solution-item">
+          <h3>Dark Sky Reserves</h3>
+          <p>Support the establishment of International Dark Sky Places, protected areas where light pollution is minimized to preserve natural night environments.</p>
+        </div>
+        <div class="solution-item">
+          <h3>Community Action</h3>
+          <p>Participate in light pollution awareness campaigns, advocate for better lighting ordinances, and support organizations working to protect nocturnal habitats.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Section -->
+    <div class="content-section">
+      <h2><i class="fas fa-star"></i> Take Action</h2>
+      <div class="action-buttons">
+        <button class="action-btn" onclick="checkLocalLightPollution()">
+          <i class="fas fa-search"></i> Check Your Local Light Pollution
+        </button>
+        <button class="action-btn" onclick="joinDarkSkyMovement()">
+          <i class="fas fa-users"></i> Join Dark Sky Movement
+        </button>
+        <button class="action-btn" onclick="learnMore()">
+          <i class="fas fa-book"></i> Learn More Resources
+        </button>
+      </div>
+    </div>
+
+    <!-- Quiz Section -->
+    <div class="content-section">
+      <h2><i class="fas fa-brain"></i> Test Your Knowledge</h2>
+      <p>Take this quick quiz to learn more about dark sky conservation and nocturnal wildlife!</p>
+      <div id="quiz-container">
+        <div id="quiz-start">
+          <button class="quiz-btn" onclick="startQuiz()">Start Quiz</button>
+        </div>
+        <div id="quiz-questions" style="display: none;">
+          <div id="question-container"></div>
+          <div id="options-container"></div>
+          <button class="quiz-btn" id="next-btn" onclick="nextQuestion()" style="display: none;">Next</button>
+        </div>
+        <div id="quiz-results" style="display: none;">
+          <h3>Quiz Complete!</h3>
+          <p id="score-display"></p>
+          <button class="quiz-btn" onclick="restartQuiz()">Take Again</button>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+        <div id="footer-container"></div>
+    </script>
+          <script src="../js/components/navbar-loader.js"></script>
+    <script src="../js/components/footer-loader.js"></script>
+
+    <!-- Load Components Script -->
+    <script>
+      // Simple component loader
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded, loading components...');
+
+        // Load Navbar
+        fetch('../components/navbar.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load navbar');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('navbar-container').innerHTML = data;
+            console.log('Navbar loaded successfully');
+            // Initialize navbar scripts if any
+            if (typeof initNavbar === 'function') {
+              initNavbar();
+            }
+          })
+          .catch(error => {
+            console.error('Error loading navbar:', error);
+            document.getElementById('navbar-container').innerHTML = 
+              '<div style="padding: 20px; background: #f8d7da; color: #721c24;">Navbar failed to load</div>';
+          });
+
+        // Load Footer
+        fetch('../components/footer.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load footer');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('footer-container').innerHTML = data;
+            console.log('Footer loaded successfully');
+            // Initialize footer scripts if any
+            if (typeof initFooter === 'function') {
+              initFooter();
+            }
+          })
+          .catch(error => {
+            console.error('Error loading footer:', error);
+            document.getElementById('footer-container').innerHTML = 
+              '<div style="padding: 20px; background: #f8d7da; color: #721c24; text-align: center;">Footer failed to load</div>';
+          });
+
+        // Load Share Modal
+        fetch('../components/share-modal.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load share modal');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('share-modal-container').innerHTML = data;
+            console.log('Share modal loaded successfully');
+          })
+          .catch(error => {
+            console.error('Error loading share modal:', error);
+          });
+
+        // Initialize AOS
+        AOS.init({
+          duration: 800,
+          once: true,
+          offset: 100
+        });
+
+        // Load cursor if function exists
+        if (typeof loadCursor === 'function') {
+          loadCursor();
+        }
+      });
+    </script>
+
+  <script src="../js/pages/dark-sky-conservation.js"></script>
+</body>
+
+</html>

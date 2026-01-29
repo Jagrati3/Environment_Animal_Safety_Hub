@@ -1,72 +1,831 @@
-﻿
-:root{
-  --green:#2e7d32;
-  --light:#e8f5e9;
-  --bg:#f4fbf6;
-  --shadow:0 20px 40px rgba(0,0,0,.12);
+/* ============================================
+   Waste Management Quiz Styles
+   ============================================ */
+
+:root {
+    --primary-green: #2e7d32;
+    --light-green: #e8f5e9;
+    --accent-green: #4caf50;
+    --success-green: #66bb6a;
+    --dark-green: #1b5e20;
+    --background: #f4fbf6;
+    --card-bg: #ffffff;
+    --text-dark: #1a1a1a;
+    --text-light: #666666;
+    --border-color: #e0e0e0;
+    --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
+    --shadow-heavy: 0 12px 40px rgba(0, 0, 0, 0.15);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --border-radius: 20px;
+    --border-radius-sm: 10px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--background);
+    color: var(--text-dark);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding-top: 80px; /* Space for fixed navbar */
+}
+
+/* ============================================
+   Quiz Layout
+   ============================================ */
+
+.quiz-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    padding-top: 100px;
+    min-height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeInDown 0.8s ease-out;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    color: var(--primary-green);
+    margin-bottom: 15px;
+    padding-top: 50px;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-heavy);
+    padding: 40px;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    animation: slideUp 0.6s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, var(--primary-green), var(--success-green));
+}
+
+/* ============================================
+   Start Screen
+   ============================================ */
+
+#startScreen {
+    text-align: center;
+    animation: fadeIn 0.6s ease-out;
+}
+
+#startScreen h2 {
+    font-size: 2.2rem;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+#startScreen p {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin-bottom: 30px;
+}
+
+#startScreen button {
+    background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
+    color: white;
+    border: none;
+    padding: 16px 40px;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow-light);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px auto;
+}
+
+#startScreen button:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-medium);
+    background: linear-gradient(135deg, var(--dark-green), var(--primary-green));
+}
+
+#startScreen button:active {
+    transform: translateY(-1px);
+}
+
+/* Resume Section */
+#resumeSection {
+    background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+    border-radius: var(--border-radius-sm);
+    border: 2px solid var(--accent-green);
+    padding: 25px;
+    margin-top: 30px;
+    text-align: left;
+    animation: slideIn 0.5s ease-out;
+}
+
+#resumeSection h3 {
+    color: var(--primary-green);
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#resumeSection p {
+    color: var(--text-light);
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+#resumeSection button {
+    background: var(--accent-green);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+#resumeSection button:hover {
+    background: var(--primary-green);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-light);
+}
+
+/* ============================================
+   Quiz Screen
+   ============================================ */
+
+#quizScreen {
+    display: none;
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Timer */
+.timer {
+    background: linear-gradient(135deg, #fff3e0, #ffecb3);
+    padding: 12px 24px;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: #f57c00;
+    margin-bottom: 25px;
+    box-shadow: var(--shadow-light);
+}
+
+.timer i {
+    font-size: 1.2rem;
+}
+
+#time {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+/* Progress Bar */
+.progress-bar-container {
+    margin-bottom: 30px;
 }
 
 .progress-bar {
     width: 100%;
-    height: 10px;
-    background: #e0e0e0;
-    border-radius: 5px;
+    height: 12px;
+    background: linear-gradient(to right, #e0f7fa, #b2ebf2);
+    border-radius: 6px;
     overflow: hidden;
     margin-bottom: 10px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(to right, #66bb6a, #2e7d32);
+    background: linear-gradient(90deg, var(--success-green), var(--primary-green));
     width: 0%;
-    transition: width 0.3s ease;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-image: linear-gradient(
+        -45deg,
+        rgba(255, 255, 255, 0.2) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.2) 75%,
+        transparent 75%,
+        transparent
+    );
+    background-size: 50px 50px;
+    animation: move 2s linear infinite;
+}
+
+@keyframes move {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 50px 50px;
+    }
 }
 
 .progress-metrics {
-    font-size: 0.9rem;
-    color: #666;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    color: var(--text-light);
+    font-weight: 500;
 }
 
+/* Pause/Resume Buttons */
 .pause-resume-buttons {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 15px;
+    margin-bottom: 30px;
 }
 
 .btn-secondary {
-    background: #fff;
-    border: 2px solid #2e7d32;
-    color: #2e7d32;
-    padding: 10px 20px;
-    border-radius: 25px;
+    background: white;
+    border: 2px solid var(--accent-green);
+    color: var(--accent-green);
+    padding: 12px 28px;
+    border-radius: 50px;
     cursor: pointer;
     font-weight: 600;
+    font-size: 1rem;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--shadow-light);
 }
 
 .btn-secondary:hover {
-    background: #e8f5e9;
+    background: var(--light-green);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
 }
 
-/* RESULT */
-#resultScreen{display:none;text-align:center}
-.score{
-  font-size:3rem;
-  color:var(--green);
-  margin:10px 0;
+.btn-secondary:active {
+    transform: translateY(0);
 }
 
-/* BACK */
-.back-wrapper{
-  display:flex;
-  justify-content:center;
-  margin-top:40px;
+/* Question */
+.question {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: var(--text-dark);
+    line-height: 1.5;
+    padding: 20px;
+    background: linear-gradient(135deg, #f1f8e9, #e8f5e9);
+    border-radius: var(--border-radius-sm);
+    border-left: 5px solid var(--primary-green);
 }
 
-footer{
-  text-align:center;
-  padding:20px;
-  font-size:.9rem;
-  color:#666;
+/* Options */
+#options {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.option {
+    padding: 18px 24px;
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-align: left;
+    font-size: 1.1rem;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+}
+
+.option:hover {
+    border-color: var(--accent-green);
+    background: var(--light-green);
+    transform: translateX(5px);
+}
+
+.option.selected {
+    border-color: var(--primary-green);
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    box-shadow: var(--shadow-light);
+}
+
+.option.correct {
+    border-color: var(--success-green);
+    background: linear-gradient(135deg, #e8f5e9, #a5d6a7);
+    color: var(--dark-green);
+}
+
+.option.incorrect {
+    border-color: #ef5350;
+    background: linear-gradient(135deg, #ffebee, #ffcdd2);
+    color: #c62828;
+}
+
+.option-letter {
+    width: 40px;
+    height: 40px;
+    background: var(--accent-green);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.option.selected .option-letter {
+    background: var(--primary-green);
+}
+
+.option.correct .option-letter {
+    background: var(--success-green);
+}
+
+.option.incorrect .option-letter {
+    background: #ef5350;
+}
+
+.option-text {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.option-feedback {
+    position: absolute;
+    right: 20px;
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+/* Next Button */
+#quizScreen button {
+    background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow-light);
+    display: block;
+    margin: 20px auto 0;
+    min-width: 180px;
+}
+
+#quizScreen button:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-medium);
+    background: linear-gradient(135deg, var(--dark-green), var(--primary-green));
+}
+
+#quizScreen button:active:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+#quizScreen button:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* ============================================
+   Result Screen
+   ============================================ */
+
+#resultScreen {
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.8s ease-out;
+}
+
+#resultScreen h2 {
+    font-size: 2.5rem;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.score {
+    font-size: 4rem;
+    color: var(--primary-green);
+    margin: 20px 0;
+    font-weight: 800;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+#remark {
+    font-size: 1.3rem;
+    color: var(--text-light);
+    margin-bottom: 30px;
+    padding: 0 20px;
+    line-height: 1.6;
+}
+
+.result-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.result-buttons button:not(.whatsapp-btn) {
+    background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
+    color: white;
+    border: none;
+    padding: 15px 35px;
+    border-radius: 50px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    min-width: 200px;
+    box-shadow: var(--shadow-light);
+}
+
+.result-buttons button:not(.whatsapp-btn):hover {
+    background: linear-gradient(135deg, var(--dark-green), var(--primary-green));
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-medium);
+}
+
+/* ============================================
+   Back Button
+   ============================================ */
+
+.back-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+.back-wrapper button {
+    background: white;
+    border: 2px solid var(--accent-green);
+    color: var(--accent-green);
+    padding: 14px 35px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--shadow-light);
+}
+
+.back-wrapper button:hover {
+    background: var(--light-green);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-medium);
+}
+
+/* ============================================
+   WhatsApp Button
+   ============================================ */
+
+.whatsapp-btn {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: white;
+    border: none;
+    padding: 15px 35px;
+    border-radius: 50px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-width: 200px;
+    box-shadow: var(--shadow-light);
+}
+
+.whatsapp-btn:hover {
+    background: linear-gradient(135deg, #128C7E, #0A6E5E);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 60px;
+    }
+    
+    .quiz-container {
+        padding: 15px;
+        min-height: calc(100vh - 150px);
+    }
+    
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
+    }
+    
+    .card {
+        padding: 25px;
+        border-radius: 15px;
+    }
+    
+    #startScreen h2 {
+        font-size: 1.8rem;
+    }
+    
+    .question {
+        font-size: 1.2rem;
+        padding: 15px;
+    }
+    
+    .option {
+        padding: 15px 20px;
+        font-size: 1rem;
+    }
+    
+    .option-letter {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+    
+    .score {
+        font-size: 3rem;
+    }
+    
+    #remark {
+        font-size: 1.1rem;
+    }
+    
+    .result-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .result-buttons button,
+    .whatsapp-btn {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .back-wrapper button {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+    
+    .card {
+        padding: 20px 15px;
+    }
+    
+    #startScreen h2 {
+        font-size: 1.5rem;
+    }
+    
+    .timer {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+    
+    #time {
+        font-size: 1.2rem;
+    }
+    
+    .question {
+        font-size: 1.1rem;
+        padding: 12px;
+    }
+    
+    .option {
+        padding: 12px 15px;
+        gap: 10px;
+    }
+    
+    .option-letter {
+        width: 30px;
+        height: 30px;
+        font-size: 0.9rem;
+    }
+    
+    #quizScreen button,
+    #startScreen button {
+        width: 100%;
+        padding: 14px 20px;
+        font-size: 1rem;
+    }
+    
+    .score {
+        font-size: 2.5rem;
+    }
+}
+
+/* ============================================
+   Loading States
+   ============================================ */
+
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+    position: relative;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--primary-green);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* ============================================
+   Accessibility
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Focus Styles for Accessibility */
+button:focus,
+.option:focus {
+    outline: 3px solid var(--accent-green);
+    outline-offset: 3px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .card {
+        border: 2px solid var(--text-dark);
+    }
+    
+    .option {
+        border-width: 2px;
+    }
 }

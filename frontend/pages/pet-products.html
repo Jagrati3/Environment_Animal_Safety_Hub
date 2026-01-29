@@ -2,723 +2,109 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>Pet Products | EcoLife</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Eco-friendly products for pets and tips for sustainable pet care">
-  <link rel="icon" type="image/png" href="/envirnoment-logo.png">
-  <link rel="stylesheet" href="../../css/global/utilities.css" />
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="../css/pages/pet-products.css">
-  <link rel="stylesheet" href="../css/components/footer.css" />
-  <link rel="stylesheet" href="../css/components/navbar.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Barcode Scanner | EcoLife</title>
+    <link rel="icon" type="image/png" href="../assets/images/others/envirnoment-logo.png">
+    <meta name="description" content="Scan products to instantly see their environmental and ethical ratings." />
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../css/global/variables.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/components/navbar.css" />
+    <link rel="stylesheet" href="../css/components/footer.css" />
+    <link rel="stylesheet" href="../css/product-scanner.css" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 </head>
 
 <body>
+    <!-- Helper to load components -->
+    <div id="cursor-container"></div>
+    <script src="../js/components/loadComponents.js"></script>
 
-  <div id="cursor-container"></div>
-  <script src="../../js/components/loadComponents.js"></script>
+    <!-- Navbar Placeholder -->
+    <div id="navbar-container"></div>
 
-  <div id="navbar-container"></div>
+    <!-- Main Content -->
+    <main>
+        <section class="scanner-section">
+            <div class="scanner-header" data-aos="fade-up">
+                <h1 class="scanner-title"><i class="fa-solid fa-barcode"></i> Eco Scanner</h1>
+                <p class="scanner-subtitle">Scan a barcode to check its environmental impact & ethical rating.</p>
+            </div>
 
-  <!-- HERO -->
-  <section class="hero">
-    <h1>🛍️ Eco-Friendly Pet Products</h1>
-    <p>Sustainable products and tips for responsible pet care 💚</p>
-  </section>
+            <div class="scanner-container" data-aos="zoom-in">
+                <div id="reader"></div>
+                <p class="scan-instructions" style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
+                    Point your camera at a product barcode.
+                </p>
+                
+                <!-- Manual Input Option -->
+                <div class="manual-input" style="margin-top: 2rem; text-align: center;">
+                    <p style="margin-bottom: 0.5rem; color: #666;">Or enter barcode manually:</p>
+                    <input type="text" id="manualBarcode" placeholder="e.g., 4000539104671" 
+                           style="padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; width: 200px;">
+                    <button id="manualSubmit" style="margin-left: 0.5rem; padding: 0.5rem 1rem; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        Check Product
+                    </button>
+                </div>
+            </div>
 
-  <!-- CONTENT -->
-  <section class="container">
+            <div class="loading-spinner" id="loadingSpinner"></div>
 
-    <!-- Product Categories -->
-    <div class="categories-section">
-      <h2><i class="fas fa-th-large"></i> Product Categories</h2>
-      <div class="categories-grid">
-        <div class="category-card" onclick="showCategory('food')">
-          <i class="fas fa-utensils"></i>
-          <h3>Sustainable Food</h3>
-          <p>Eco-friendly nutrition options</p>
-        </div>
-        <div class="category-card" onclick="showCategory('toys')">
-          <i class="fas fa-gamepad"></i>
-          <h3>Eco Toys</h3>
-          <p>Biodegradable and recycled toys</p>
-        </div>
-        <div class="category-card" onclick="showCategory('bedding')">
-          <i class="fas fa-bed"></i>
-          <h3>Green Bedding</h3>
-          <p>Natural and sustainable beds</p>
-        </div>
-        <div class="category-card" onclick="showCategory('grooming')">
-          <i class="fas fa-spa"></i>
-          <h3>Natural Grooming</h3>
-          <p>Organic care products</p>
-        </div>
-        <div class="category-card" onclick="showCategory('waste')">
-          <i class="fas fa-recycle"></i>
-          <h3>Waste Solutions</h3>
-          <p>Eco-friendly waste management</p>
-        </div>
-        <div class="category-card" onclick="showCategory('accessories')">
-          <i class="fas fa-shopping-bag"></i>
-          <h3>Sustainable Accessories</h3>
-          <p>Eco-friendly collars and more</p>
-        </div>
-      </div>
-    </div>
+            <!-- Result Section -->
+            <div id="resultSection" class="result-section">
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <img id="productImage" src="" alt="Product" class="product-image" />
+                    </div>
 
-    <!-- Sustainable Food Section -->
-    <div id="food" class="product-section">
-      <div class="section-header">
-        <h2><i class="fas fa-utensils"></i> Sustainable Pet Food</h2>
-        <p>Choose food that supports both your pet's health and the environment</p>
-      </div>
+                    <div class="product-details">
+                        <h2 id="productName" class="product-name">Product Name</h2>
+                        <span id="productBrand" class="product-brand">Brand Name</span>
 
-      <div class="products-grid">
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-seedling"></i>
-          </div>
-          <h3>Plant-Based Pet Food</h3>
-          <p>Nutritionally complete foods made from sustainable plant ingredients</p>
-          <div class="product-features">
-            <span class="feature">Low carbon footprint</span>
-            <span class="feature">High in fiber</span>
-            <span class="feature">Grain-free options</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-          </div>
-        </div>
+                        <div class="scores-container" id="scoresContainer">
+                            <!-- Dynamically populated -->
+                        </div>
 
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-fish"></i>
-          </div>
-          <h3>Sustainable Seafood</h3>
-          <p>Wild-caught or farmed fish from certified sustainable sources</p>
-          <div class="product-features">
-            <span class="feature">Omega-3 rich</span>
-            <span class="feature">MSC certified</span>
-            <span class="feature">Traceable sourcing</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="far fa-leaf"></i>
-          </div>
-        </div>
+                        <div class="tags-container" id="tagsContainer">
+                            <!-- Dynamically populated -->
+                        </div>
 
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-bug"></i>
-          </div>
-          <h3>Insect-Based Protein</h3>
-          <p>High-protein alternative with minimal environmental impact</p>
-          <div class="product-features">
-            <span class="feature">Sustainable protein</span>
-            <span class="feature">Hypoallergenic</span>
-            <span class="feature">Low water usage</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-          </div>
-        </div>
+                        <div class="metrics-grid" id="metricsGrid">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+                </div>
 
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-recycle"></i>
-          </div>
-          <h3>Recycled Packaging</h3>
-          <p>Food packaged in recycled and recyclable materials</p>
-          <div class="product-features">
-            <span class="feature">Zero waste</span>
-            <span class="feature">BPA-free</span>
-            <span class="feature">Compostable bags</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="far fa-leaf"></i>
-          </div>
-        </div>
-      </div>
-    </div>
+                <div class="alternatives-section" id="alternativesSection" style="display: none;">
+                    <h3 class="alternatives-title">🌱 Better Alternatives</h3>
+                    <div class="alternatives-list" id="alternativesList">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-    <!-- Eco Toys Section -->
-    <div id="toys" class="product-section" style="display: none;">
-      <div class="section-header">
-        <h2><i class="fas fa-gamepad"></i> Eco-Friendly Toys</h2>
-        <p>Durable, safe toys made from sustainable materials</p>
-      </div>
-
-      <div class="products-grid">
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-tree"></i>
-          </div>
-          <h3>Natural Rubber Toys</h3>
-          <p>Made from 100% natural rubber, biodegradable and non-toxic</p>
-          <div class="product-features">
-            <span class="feature">Biodegradable</span>
-            <span class="feature">Non-toxic</span>
-            <span class="feature">Durable</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-recycle"></i>
-          </div>
-          <h3>Recycled Plastic Toys</h3>
-          <p>Made from recycled ocean plastics and post-consumer waste</p>
-          <div class="product-features">
-            <span class="feature">Recycled materials</span>
-            <span class="feature">Reduces plastic waste</span>
-            <span class="feature">Safe for pets</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="far fa-leaf"></i>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-seedling"></i>
-          </div>
-          <h3>Organic Cotton Toys</h3>
-          <p>Stuffed toys made from organic cotton and natural fillers</p>
-          <div class="product-features">
-            <span class="feature">Organic cotton</span>
-            <span class="feature">Natural dyes</span>
-            <span class="feature">Machine washable</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-cubes"></i>
-          </div>
-          <h3>Wooden Toys</h3>
-          <p>Sustainably sourced wood toys finished with natural oils</p>
-          <div class="product-features">
-            <span class="feature">Renewable wood</span>
-            <span class="feature">Non-toxic finish</span>
-            <span class="feature">Long-lasting</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="far fa-leaf"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Green Bedding Section -->
-    <div id="bedding" class="product-section" style="display: none;">
-      <div class="section-header">
-        <h2><i class="fas fa-bed"></i> Sustainable Bedding</h2>
-        <p>Comfortable, eco-friendly beds and bedding for your pets</p>
-      </div>
-
-      <div class="products-grid">
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-seedling"></i>
-          </div>
-          <h3>Organic Wool Beds</h3>
-          <p>Natural wool filling that's temperature-regulating and antimicrobial</p>
-          <div class="product-features">
-            <span class="feature">Temperature control</span>
-            <span class="feature">Antimicrobial</span>
-            <span class="feature">Hypoallergenic</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-recycle"></i>
-          </div>
-          <h3>Recycled Material Beds</h3>
-          <p>Made from recycled plastics and fabrics, fully customizable</p>
-          <div class="product-features">
-            <span class="feature">Recycled content</span>
-            <span class="feature">Waterproof</span>
-            <span class="feature">Machine washable</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="far fa-leaf"></i>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-tree"></i>
-          </div>
-          <h3>Bamboo Fiber Beds</h3>
-          <p>Ultra-soft bamboo fiber that's naturally antimicrobial and breathable</p>
-          <div class="product-features">
-            <span class="feature">Moisture-wicking</span>
-            <span class="feature">Antimicrobial</span>
-            <span class="feature">Sustainable bamboo</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-cloud"></i>
-          </div>
-          <h3>Natural Latex Beds</h3>
-          <p>Made from sustainable natural latex with organic cotton covers</p>
-          <div class="product-features">
-            <span class="feature">Supportive</span>
-            <span class="feature">Dust mite resistant</span>
-            <span class="feature">Biodegradable</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="far fa-leaf"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Natural Grooming Section -->
-    <div id="grooming" class="product-section" style="display: none;">
-      <div class="section-header">
-        <h2><i class="fas fa-spa"></i> Natural Grooming Products</h2>
-        <p>Gentle, natural products for your pet's grooming needs</p>
-      </div>
-
-      <div class="products-grid">
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-pump-soap"></i>
-          </div>
-          <h3>Organic Shampoos</h3>
-          <p>Made with organic ingredients, sulfate-free and pH balanced</p>
-          <div class="product-features">
-            <span class="feature">Organic ingredients</span>
-            <span class="feature">Sulfate-free</span>
-            <span class="feature">Gentle on skin</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-brush"></i>
-          </div>
-          <h3>Bamboo Brushes</h3>
-          <p>Sustainably sourced bamboo brushes that are naturally antimicrobial</p>
-          <div class="product-features">
-            <span class="feature">Renewable bamboo</span>
-            <span class="feature">Antimicrobial</span>
-            <span class="feature">Long-lasting</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-wind"></i>
-          </div>
-          <h3>Natural Deodorizers</h3>
-          <p>Essential oil-based sprays that neutralize odors naturally</p>
-          <div class="product-features">
-            <span class="feature">Essential oils</span>
-            <span class="feature">Alcohol-free</span>
-            <span class="feature">Pet-safe</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="far fa-leaf"></i>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-tooth"></i>
-          </div>
-          <h3>Natural Dental Care</h3>
-          <p>Organic toothpastes and chews made from natural ingredients</p>
-          <div class="product-features">
-            <span class="feature">Fluoride-free</span>
-            <span class="feature">Organic ingredients</span>
-            <span class="feature">Vet-approved</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Waste Solutions Section -->
-    <div id="waste" class="product-section" style="display: none;">
-      <div class="section-header">
-        <h2><i class="fas fa-recycle"></i> Eco-Friendly Waste Solutions</h2>
-        <p>Responsible waste management products for pet owners</p>
-      </div>
-
-      <div class="products-grid">
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-shopping-bag"></i>
-          </div>
-          <h3>Biodegradable Bags</h3>
-          <p>Compostable waste bags that break down naturally in 6-12 months</p>
-          <div class="product-features">
-            <span class="feature">Compostable</span>
-            <span class="feature">Leak-proof</span>
-            <span class="feature">Plant-based</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-toilet"></i>
-          </div>
-          <h3>Compostable Litter</h3>
-          <p>Plant-based litter that can be safely composted</p>
-          <div class="product-features">
-            <span class="feature">Compostable</span>
-            <span class="feature">Low dust</span>
-            <span class="feature">Biodegradable</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-recycle"></i>
-          </div>
-          <h3>Waste Digester</h3>
-          <p>Enzymatic waste treatment that reduces landfill contributions</p>
-          <div class="product-features">
-            <span class="feature">Reduces waste volume</span>
-            <span class="feature">Natural enzymes</span>
-            <span class="feature">Odor control</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="far fa-leaf"></i>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-seedling"></i>
-          </div>
-          <h3>Waste-to-Compost Systems</h3>
-          <p>Turn pet waste into nutrient-rich compost for gardens</p>
-          <div class="product-features">
-            <span class="feature">Creates compost</span>
-            <span class="feature">Reduces waste</span>
-            <span class="feature">Garden-friendly</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Sustainable Accessories Section -->
-    <div id="accessories" class="product-section" style="display: none;">
-      <div class="section-header">
-        <h2><i class="fas fa-shopping-bag"></i> Sustainable Accessories</h2>
-        <p>Eco-friendly collars, leashes, and other pet accessories</p>
-      </div>
-
-      <div class="products-grid">
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-link"></i>
-          </div>
-          <h3>Organic Cotton Collars</h3>
-          <p>Made from organic cotton with natural dyes and recycled hardware</p>
-          <div class="product-features">
-            <span class="feature">Organic cotton</span>
-            <span class="feature">Natural dyes</span>
-            <span class="feature">Adjustable</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-recycle"></i>
-          </div>
-          <h3>Recycled Material Leashes</h3>
-          <p>Strong, durable leashes made from recycled plastics and fabrics</p>
-          <div class="product-features">
-            <span class="feature">Recycled materials</span>
-            <span class="feature">Weather-resistant</span>
-            <span class="feature">Reflective strips</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="far fa-leaf"></i>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-tag"></i>
-          </div>
-          <h3>Bamboo ID Tags</h3>
-          <p>Laser-engraved bamboo tags that are lightweight and biodegradable</p>
-          <div class="product-features">
-            <span class="feature">Biodegradable</span>
-            <span class="feature">Laser engraved</span>
-            <span class="feature">Lightweight</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-image">
-            <i class="fas fa-tshirt"></i>
-          </div>
-          <h3>Organic Clothing</h3>
-          <p>Pet clothing made from organic cotton and recycled fibers</p>
-          <div class="product-features">
-            <span class="feature">Organic fabrics</span>
-            <span class="feature">Comfortable fit</span>
-            <span class="feature">Machine washable</span>
-          </div>
-          <div class="eco-rating">
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="fas fa-leaf"></i>
-            <i class="far fa-leaf"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Sustainable Tips -->
-    <div class="tips-section">
-      <h2><i class="fas fa-lightbulb"></i> Sustainable Pet Care Tips</h2>
-
-      <div class="tips-grid">
-        <div class="tip-card">
-          <i class="fas fa-shopping-cart"></i>
-          <h3>Smart Shopping</h3>
-          <ul>
-            <li>Buy products with minimal packaging</li>
-            <li>Choose durable items over disposable ones</li>
-            <li>Look for products made from recycled materials</li>
-            <li>Support companies with sustainable practices</li>
-            <li>Consider second-hand or thrifted items</li>
-          </ul>
-        </div>
-
-        <div class="tip-card">
-          <i class="fas fa-home"></i>
-          <h3>Home Sustainability</h3>
-          <ul>
-            <li>Use energy-efficient pet products</li>
-            <li>Opt for natural cleaning products</li>
-            <li>Recycle pet food packaging</li>
-            <li>Compost biodegradable waste</li>
-            <li>Choose LED pet lights and toys</li>
-          </ul>
-        </div>
-
-        <div class="tip-card">
-          <i class="fas fa-recycle"></i>
-          <h3>Reduce Waste</h3>
-          <ul>
-            <li>Use reusable water and food bowls</li>
-            <li>Choose products with refillable options</li>
-            <li>Repair items instead of replacing them</li>
-            <li>Donate used items to other pet owners</li>
-            <li>Properly dispose of hazardous materials</li>
-          </ul>
-        </div>
-
-        <div class="tip-card">
-          <i class="fas fa-users"></i>
-          <h3>Community Action</h3>
-          <ul>
-            <li>Join local eco-pet groups</li>
-            <li>Share sustainable tips with other owners</li>
-            <li>Participate in pet product recycling programs</li>
-            <li>Advocate for eco-friendly pet policies</li>
-            <li>Support sustainable pet businesses</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- Product Finder -->
-    <div class="finder-section">
-      <h2><i class="fas fa-search"></i> Find Eco-Friendly Products</h2>
-
-      <div class="finder-container">
-        <div class="finder-form">
-          <div class="form-group">
-            <label>Product Category:</label>
-            <select id="finder-category">
-              <option value="">All Categories</option>
-              <option value="food">Pet Food</option>
-              <option value="toys">Toys</option>
-              <option value="bedding">Bedding</option>
-              <option value="grooming">Grooming</option>
-              <option value="waste">Waste Management</option>
-              <option value="accessories">Accessories</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Material Preference:</label>
-            <select id="finder-material">
-              <option value="">Any Material</option>
-              <option value="organic">Organic/Natural</option>
-              <option value="recycled">Recycled</option>
-              <option value="biodegradable">Biodegradable</option>
-              <option value="sustainable">Sustainably Sourced</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Price Range:</label>
-            <select id="finder-price">
-              <option value="">Any Price</option>
-              <option value="budget">$ - Budget Friendly</option>
-              <option value="mid">$$ - Mid Range</option>
-              <option value="premium">$$$ - Premium</option>
-            </select>
-          </div>
-
-          <button class="btn-primary" onclick="findProducts()">Find Products</button>
-        </div>
-
-        <div class="finder-results" id="finder-results">
-          <p class="no-results">Use the filters above to find eco-friendly pet products!</p>
-        </div>
-      </div>
-    </div>
-
-  </section>
-
-  <div id="footer-container"></div>
-
-  <script src="../js/pages/pet-products.js"></script>
+    <!-- Scripts -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/pages/product-scanner.js"></script>
+    <script>
+        AOS.init();
+    </script>
 </body>
 
 </html>

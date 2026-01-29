@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident Reports Dashboard | EcoLife Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Component CSS files -->
+    <link rel="stylesheet" href="../../css/components/navbar.css">
+    <link rel="stylesheet" href="../../css/components/footer.css">
+    <link rel="stylesheet" href="../../css/global/variables.css">
+    
+    <style>
+        :root {
+            --primary-color: #2e7d32;
+            --primary-dark: #1b5e20;
+            --primary-light: #4caf50;
+            --secondary-color: #ff9800;
+            --bg-primary: #f8fff9;
+            --bg-secondary: #e8f5e9;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+            --info-color: #2196f3;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.12);
+            --border-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-primary);
+            padding-top: 80px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px 20px 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .container {
+            background: var(--bg-card);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #d32f2f, #b71c1c);
+            color: white;
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .page-header h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .page-header p {
+            margin: 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        /* Stats Summary */
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+            background: var(--bg-primary);
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .stat-card.urgent {
+            border-left: 4px solid var(--danger-color);
+        }
+
+        .stat-card.pending {
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .stat-card.resolved {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .stat-card.total {
+            border-left: 4px solid var(--info-color);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card.urgent .stat-icon { color: var(--danger-color); }
+        .stat-card.pending .stat-icon { color: var(--warning-color); }
+        .stat-card.resolved .stat-icon { color: var(--success-color); }
+        .stat-card.total .stat-icon { color: var(--info-color); }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Filters */
+        .filters-section {
+            padding: 1.5rem 2rem;
+            background: #f5f5f5;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .filters-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .filter-group label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            min-width: 150px;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: auto;
+        }
+
+        .filter-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Reports Table */
+        .reports-container {
+            padding: 2rem;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--primary-light);
+        }
+
+        .section-title h2 {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+        }
+
+        .section-title h2 i {
+            color: var(--primary-color);
+        }
+
+        .reports-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .reports-table th,
+        .reports-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .reports-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .reports-table tr:hover {
+            background: #f8fff9;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-pending { background: #fff3e0; color: #e65100; }
+        .status-under_review { background: #e3f2fd; color: #1565c0; }
+        .status-in_progress { background: #fff8e1; color: #f9a825; }
+        .status-resolved { background: #e8f5e9; color: #2e7d32; }
+        .status-closed { background: #f5f5f5; color: #616161; }
+        .status-rejected { background: #ffebee; color: #c62828; }
+
+        .urgency-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .urgency-low { background: #e8f5e9; color: #2e7d32; }
+        .urgency-medium { background: #fff8e1; color: #f9a825; }
+        .urgency-high { background: #fff3e0; color: #e65100; }
+        .urgency-critical { background: #ffebee; color: #c62828; }
+
+        .type-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .action-btn {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn.view {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .action-btn.view:hover {
+            background: #1565c0;
+            color: white;
+        }
+
+        .action-btn.status {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .action-btn.status:hover {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .action-btn.delete {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .action-btn.delete:hover {
+            background: #c62828;
+            color: white;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .pagination button {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination .page-info {
+            padding: 0.5rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .detail-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-section h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .detail-item {
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .detail-item label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-item span {
+            font-weight: 500;
+        }
+
+        .description-box {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            white-space: pre-wrap;
+        }
+
+        .status-update-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+
+        .status-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .note-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 80px;
+            margin-bottom: 1rem;
+            font-family: inherit;
+        }
+
+        .update-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .update-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--primary-light);
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .loading i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Refresh Button */
+        .refresh-btn {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .refresh-btn:hover {
+            background: var(--primary-dark);
+            transform: rotate(180deg) scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .filters-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .filter-group select,
+            .filter-group input {
+                width: 100%;
+            }
+
+            .reports-table {
+                font-size: 0.85rem;
+            }
+
+            .reports-table th,
+            .reports-table td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar will be loaded here -->
+    <div id="navbar-container"></div>
+
+    <!-- Main Content -->
+    <div class="main-content" style="padding-top: 20px;">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="header-content">
+                    <div class="page-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h1>Incident Reports Dashboard</h1>
+                    <p>Manage and review community incident reports</p>
+                </div>
+            </div>
+
+            <!-- Stats Summary -->
+            <div class="stats-summary" id="statsSummary">
+                <div class="stat-card total">
+                    <div class="stat-icon"><i class="fas fa-clipboard-list"></i></div>
+                    <div class="stat-value" id="totalReports">-</div>
+                    <div class="stat-label">Total Reports</div>
+                </div>
+                <div class="stat-card urgent">
+                    <div class="stat-icon"><i class="fas fa-exclamation-circle"></i></div>
+                    <div class="stat-value" id="urgentReports">-</div>
+                    <div class="stat-label">Urgent/Critical</div>
+                </div>
+                <div class="stat-card pending">
+                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                    <div class="stat-value" id="pendingReports">-</div>
+                    <div class="stat-label">Pending Review</div>
+                </div>
+                <div class="stat-card resolved">
+                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-value" id="resolvedReports">-</div>
+                    <div class="stat-label">Resolved</div>
+                </div>
+                <div class="stat-card" style="border-left: 4px solid #9c27b0;">
+                    <div class="stat-icon" style="color: #9c27b0;"><i class="fas fa-calendar-week"></i></div>
+                    <div class="stat-value" id="weekReports">-</div>
+                    <div class="stat-label">This Week</div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-section">
+                <div class="filters-row">
+                    <div class="filter-group">
+                        <label>Status</label>
+                        <select id="filterStatus">
+                            <option value="">All Statuses</option>
+                            <option value="pending">Pending</option>
+                            <option value="under_review">Under Review</option>
+                            <option value="in_progress">In Progress</option>
+                            <option value="resolved">Resolved</option>
+                            <option value="closed">Closed</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Incident Type</label>
+                        <select id="filterType">
+                            <option value="">All Types</option>
+                            <option value="cruelty">Animal Cruelty</option>
+                            <option value="injury">Injured Animal</option>
+                            <option value="stray">Stray Animal</option>
+                            <option value="hoarding">Animal Hoarding</option>
+                            <option value="illegal">Illegal Activities</option>
+                            <option value="environment">Environmental Hazard</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Urgency</label>
+                        <select id="filterUrgency">
+                            <option value="">All Urgencies</option>
+                            <option value="critical">Critical</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Start Date</label>
+                        <input type="date" id="filterStartDate">
+                    </div>
+                    <div class="filter-group">
+                        <label>End Date</label>
+                        <input type="date" id="filterEndDate">
+                    </div>
+                    <button class="filter-btn" onclick="applyFilters()">
+                        <i class="fas fa-filter"></i> Apply Filters
+                    </button>
+                </div>
+            </div>
+
+            <!-- Reports Table -->
+            <div class="reports-container">
+                <div class="section-title">
+                    <h2><i class="fas fa-list"></i> Incident Reports</h2>
+                </div>
+
+                <div id="loadingState" class="loading">
+                    <i class="fas fa-spinner"></i>
+                    <p>Loading reports...</p>
+                </div>
+
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <i class="fas fa-inbox"></i>
+                    <h3>No Reports Found</h3>
+                    <p>There are no incident reports matching your criteria.</p>
+                </div>
+
+                <table class="reports-table" id="reportsTable" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Location</th>
+                            <th>Urgency</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reportsTableBody">
+                        <!-- Reports will be populated here -->
+                    </tbody>
+                </table>
+
+                <div class="pagination" id="pagination" style="display: none;">
+                    <button id="prevPage" onclick="changePage(-1)">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <span class="page-info" id="pageInfo">Page 1 of 1</span>
+                    <button id="nextPage" onclick="changePage(1)">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Detail Modal -->
+    <div class="modal-overlay" id="reportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-alt"></i> Report Details</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Report details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded here -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Refresh Button -->
+    <button class="refresh-btn" onclick="loadReports()" title="Refresh Reports">
+        <i class="fas fa-sync-alt"></i>
+    </button>
+
+    <script>
+        // API Configuration
+        const API_BASE_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:5000/api'
+            : '/api';
+
+        // State
+        let currentPage = 1;
+        let totalPages = 1;
+        let currentFilters = {};
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNavbar();
+            loadFooter();
+            loadStatistics();
+            loadReports();
+        });
+
+        // Load navbar and footer
+        function loadNavbar() {
+            fetch('../../components/navbar.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('navbar-container').innerHTML = html;
+                })
+                .catch(error => console.error('Error loading navbar:', error));
+        }
+
+        function loadFooter() {
+            fetch('../../components/footer.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('footer-placeholder').innerHTML = html;
+                })
+                .catch(error => console.error('Error loading footer:', error));
+        }
+
+        // Load statistics
+        async function loadStatistics() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/reports/statistics`);
+                const result = await response.json();
+
+                if (result.success) {
+                    const stats = result.data;
+                    document.getElementById('totalReports').textContent = stats.total || 0;
+                    document.getElementById('weekReports').textContent = stats.recentWeek || 0;
+                    document.getElementById('pendingReports').textContent = 
+                        (stats.byStatus.pending || 0) + (stats.byStatus.under_review || 0);
+                    document.getElementById('resolvedReports').textContent = 
+                        (stats.byStatus.resolved || 0) + (stats.byStatus.closed || 0);
+                    document.getElementById('urgentReports').textContent = 
+                        (stats.byUrgency.high || 0) + (stats.byUrgency.critical || 0);
+                }
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+                // Set default values
+                ['totalReports', 'weekReports', 'pendingReports', 'resolvedReports', 'urgentReports']
+                    .forEach(id => document.getElementById(id).textContent = '0');
+            }
+        }
+
+        // Load reports
+        async function loadReports() {
+            const loadingState = document.getElementById('loadingState');
+            const emptyState = document.getElementById('emptyState');
+            const reportsTable = document.getElementById('reportsTable');
+            const pagination = document.getElementById('pagination');
+
+            loadingState.style.display = 'block';
+            reportsTable.style.display = 'none';
+            emptyState.style.display = 'none';
+            pagination.style.display = 'none';
+
+            try {
+                const params = new URLSearchParams({
+                    page: currentPage,
+                    limit: 20,
+                    ...currentFilters
+                });
+
+                const response = await fetch(`${API_BASE_URL}/admin/reports?${params}`);
+                const result = await response.json();
+
+                loadingState.style.display = 'none';
+
+                if (result.success && result.data.reports.length > 0) {
+                    renderReports(result.data.reports);
+                    totalPages = result.data.pagination.totalPages;
+                    updatePagination(result.data.pagination);
+                    reportsTable.style.display = 'table';
+                    pagination.style.display = 'flex';
+                } else {
+                    emptyState.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error loading reports:', error);
+                loadingState.style.display = 'none';
+                emptyState.innerHTML = `
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h3>Connection Error</h3>
+                    <p>Could not connect to the server. Please ensure the backend is running.</p>
+                    <button class="filter-btn" onclick="loadReports()" style="margin-top: 1rem;">
+                        <i class="fas fa-redo"></i> Retry
+                    </button>
+                `;
+                emptyState.style.display = 'block';
+            }
+        }
+
+        // Render reports table
+        function renderReports(reports) {
+            const tbody = document.getElementById('reportsTableBody');
+            tbody.innerHTML = reports.map(report => `
+                <tr>
+                    <td><code>${report._id.slice(-8)}</code></td>
+                    <td><span class="type-badge">${formatType(report.incidentType)}</span></td>
+                    <td>${truncate(report.location.address, 30)}</td>
+                    <td><span class="urgency-badge urgency-${report.incident.urgency}">${report.incident.urgency}</span></td>
+                    <td><span class="status-badge status-${report.status}">${formatStatus(report.status)}</span></td>
+                    <td>${formatDate(report.createdAt)}</td>
+                    <td>
+                        <button class="action-btn view" onclick="viewReport('${report._id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn status" onclick="openStatusModal('${report._id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete" onclick="deleteReport('${report._id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // View report details
+        async function viewReport(reportId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/reports/${reportId}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    const report = result.data;
+                    const modalBody = document.getElementById('modalBody');
+                    
+                    modalBody.innerHTML = `
+                        <div class="detail-section">
+                            <h4><i class="fas fa-info-circle"></i> Basic Information</h4>
+                            <div class="detail-grid">
+                                <div class="detail-item">
+                                    <label>Report ID</label>
+                                    <span>${report._id}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <label>Incident Type</label>
+                                    <span>${formatType(report.incidentType)}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <label>Status</label>
+                                    <span class="status-badge status-${report.status}">${formatStatus(report.status)}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <label>Urgency</label>
+                                    <span class="urgency-badge urgency-${report.incident.urgency}">${report.incident.urgency}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4><i class="fas fa-user"></i> Reporter Information</h4>
+                            <div class="detail-grid">
+                                <div class="detail-item">
+                                    <label>Name</label>
+                                    <span>${report.reporter.name || 'Anonymous'}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <label>Email</label>
+                                    <span>${report.reporter.email || 'Not provided'}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <label>Phone</label>
+                                    <span>${report.reporter.phone || 'Not provided'}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <label>Contact Preference</label>
+                                    <span>${report.reporter.contactPreference}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4><i class="fas fa-map-marker-alt"></i> Location</h4>
+                            <div class="detail-grid">
+                                <div class="detail-item" style="grid-column: span 2;">
+                                    <label>Address</label>
+                                    <span>${report.location.address}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <label>Incident Date</label>
+                                    <span>${formatDate(report.location.date)}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <label>Time</label>
+                                    <span>${report.location.time || 'Not specified'}</span>
+                                </div>
+                            </div>
+                            ${report.location.description ? `
+                                <div class="description-box" style="margin-top: 1rem;">
+                                    ${report.location.description}
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <div class="detail-section">
+                            <h4><i class="fas fa-paw"></i> Animal Information</h4>
+                            <div class="detail-grid">
+                                <div class="detail-item">
+                                    <label>Animal Type</label>
+                                    <span>${report.animals.type}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <label>Count</label>
+                                    <span>${report.animals.count}</span>
+                                </div>
+                            </div>
+                            ${report.animals.description ? `
+                                <div class="description-box" style="margin-top: 1rem;">
+                                    ${report.animals.description}
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <div class="detail-section">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Incident Description</h4>
+                            <div class="description-box">
+                                ${report.incident.description}
+                            </div>
+                            ${report.incident.additionalInfo ? `
+                                <div class="description-box" style="margin-top: 1rem;">
+                                    <strong>Additional Info:</strong><br>
+                                    ${report.incident.additionalInfo}
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        ${report.adminNotes && report.adminNotes.length > 0 ? `
+                            <div class="detail-section">
+                                <h4><i class="fas fa-sticky-note"></i> Admin Notes</h4>
+                                ${report.adminNotes.map(note => `
+                                    <div class="description-box" style="margin-bottom: 0.5rem;">
+                                        <small><strong>${note.addedBy}</strong> - ${formatDate(note.addedAt)}</small><br>
+                                        ${note.note}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+
+                        <div class="status-update-section">
+                            <h4><i class="fas fa-edit"></i> Update Status</h4>
+                            <select class="status-select" id="modalStatusSelect">
+                                <option value="pending" ${report.status === 'pending' ? 'selected' : ''}>Pending</option>
+                                <option value="under_review" ${report.status === 'under_review' ? 'selected' : ''}>Under Review</option>
+                                <option value="in_progress" ${report.status === 'in_progress' ? 'selected' : ''}>In Progress</option>
+                                <option value="resolved" ${report.status === 'resolved' ? 'selected' : ''}>Resolved</option>
+                                <option value="closed" ${report.status === 'closed' ? 'selected' : ''}>Closed</option>
+                                <option value="rejected" ${report.status === 'rejected' ? 'selected' : ''}>Rejected</option>
+                            </select>
+                            <textarea class="note-textarea" id="modalNote" placeholder="Add a note (optional)"></textarea>
+                            <button class="update-btn" onclick="updateStatus('${report._id}')">
+                                <i class="fas fa-save"></i> Update Status
+                            </button>
+                        </div>
+                    `;
+
+                    document.getElementById('reportModal').classList.add('active');
+                }
+            } catch (error) {
+                console.error('Error loading report details:', error);
+                alert('Error loading report details');
+            }
+        }
+
+        // Update report status
+        async function updateStatus(reportId) {
+            const status = document.getElementById('modalStatusSelect').value;
+            const note = document.getElementById('modalNote').value;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/reports/${reportId}/status`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        status,
+                        note: note || undefined,
+                        adminName: 'Admin'
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Status updated successfully!');
+                    closeModal();
+                    loadReports();
+                    loadStatistics();
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error updating status:', error);
+                alert('Error updating status');
+            }
+        }
+
+        // Delete report
+        async function deleteReport(reportId) {
+            if (!confirm('Are you sure you want to delete this report? This action cannot be undone.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/reports/${reportId}`, {
+                    method: 'DELETE'
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Report deleted successfully!');
+                    loadReports();
+                    loadStatistics();
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error deleting report:', error);
+                alert('Error deleting report');
+            }
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('reportModal').classList.remove('active');
+        }
+
+        // Apply filters
+        function applyFilters() {
+            currentFilters = {};
+            currentPage = 1;
+
+            const status = document.getElementById('filterStatus').value;
+            const type = document.getElementById('filterType').value;
+            const urgency = document.getElementById('filterUrgency').value;
+            const startDate = document.getElementById('filterStartDate').value;
+            const endDate = document.getElementById('filterEndDate').value;
+
+            if (status) currentFilters.status = status;
+            if (type) currentFilters.incidentType = type;
+            if (urgency) currentFilters.urgency = urgency;
+            if (startDate) currentFilters.startDate = startDate;
+            if (endDate) currentFilters.endDate = endDate;
+
+            loadReports();
+        }
+
+        // Pagination
+        function changePage(delta) {
+            currentPage += delta;
+            if (currentPage < 1) currentPage = 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+            loadReports();
+        }
+
+        function updatePagination(pagination) {
+            document.getElementById('pageInfo').textContent = 
+                `Page ${pagination.currentPage} of ${pagination.totalPages}`;
+            document.getElementById('prevPage').disabled = !pagination.hasPrevPage;
+            document.getElementById('nextPage').disabled = !pagination.hasNextPage;
+        }
+
+        // Helper functions
+        function formatType(type) {
+            const types = {
+                cruelty: 'Animal Cruelty',
+                injury: 'Injured Animal',
+                stray: 'Stray Animal',
+                hoarding: 'Animal Hoarding',
+                illegal: 'Illegal Activities',
+                environment: 'Environmental Hazard'
+            };
+            return types[type] || type;
+        }
+
+        function formatStatus(status) {
+            const statuses = {
+                pending: 'Pending',
+                under_review: 'Under Review',
+                in_progress: 'In Progress',
+                resolved: 'Resolved',
+                closed: 'Closed',
+                rejected: 'Rejected'
+            };
+            return statuses[status] || status;
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function truncate(str, length) {
+            if (str.length <= length) return str;
+            return str.substring(0, length) + '...';
+        }
+
+        // Close modal on outside click
+        document.getElementById('reportModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -131,7 +131,7 @@
     </div>
     <div class="question" id="question"></div>
     <div id="options"></div>
-    <button onclick="nextQuestion()">Next</button>
+    <button onclick="nextQuestion()" id="nextBtn">Next</button>
   </div>
 
   <!-- RESULT -->
@@ -157,66 +157,424 @@
 
 <!-- Footer placeholder -->
   <div id="footer-placeholder"></div>
-<script src="../../js/pages/quizzes/waste-management-quiz.js"></script>
+
+<!-- Inline JavaScript for Quiz -->
+<script>
+  // Quiz Questions Data
+  const quizQuestions = [
+    {
+      question: "Which bin should plastic bottles go in?",
+      options: ["Recycling", "General Waste", "Compost", "Hazardous Waste"],
+      correct: 0,
+      explanation: "Plastic bottles should go in the recycling bin as they can be processed and reused."
+    },
+    {
+      question: "What should you do with food waste?",
+      options: ["Throw in general waste", "Put in compost bin", "Burn it", "Flush down toilet"],
+      correct: 1,
+      explanation: "Food waste should be composted to create nutrient-rich soil for plants."
+    },
+    {
+      question: "Which of these is NOT recyclable?",
+      options: ["Glass bottles", "Pizza boxes with grease", "Aluminum cans", "Newspaper"],
+      correct: 1,
+      explanation: "Pizza boxes with grease stains cannot be recycled as the grease contaminates the paper recycling process."
+    },
+    {
+      question: "What does the 3Rs principle stand for?",
+      options: ["Reduce, Reuse, Recycle", "Read, Remember, Recite", "React, Respond, Recover", "Rest, Relax, Refresh"],
+      correct: 0,
+      explanation: "The 3Rs are Reduce (waste generation), Reuse (items), and Recycle (materials)."
+    },
+    {
+      question: "Which material takes the longest to decompose?",
+      options: ["Paper (2-6 weeks)", "Plastic bag (10-20 years)", "Glass (1 million years)", "Aluminum can (80-200 years)"],
+      correct: 2,
+      explanation: "Glass can take up to 1 million years to decompose, which is why recycling it is so important."
+    },
+    {
+      question: "What should you do with batteries?",
+      options: ["Throw in general waste", "Put in recycling bin", "Take to special collection point", "Bury in garden"],
+      correct: 2,
+      explanation: "Batteries contain hazardous materials and should be taken to special collection points for proper disposal."
+    },
+    {
+      question: "Which type of plastic is commonly recycled?",
+      options: ["PET (Type 1)", "PVC (Type 3)", "PS (Type 6)", "Other (Type 7)"],
+      correct: 0,
+      explanation: "PET (Type 1) plastic, used for water and soda bottles, is the most commonly recycled plastic."
+    },
+    {
+      question: "What is e-waste?",
+      options: ["Electronic waste", "Eco-friendly waste", "Edible waste", "Emergency waste"],
+      correct: 0,
+      explanation: "E-waste refers to discarded electronic devices like computers, phones, and appliances."
+    },
+    {
+      question: "Which of these should go in general waste?",
+      options: ["Plastic wrap", "Glass jars", "Cardboard boxes", "Metal cans"],
+      correct: 0,
+      explanation: "Plastic wrap is not typically recyclable and should go in general waste."
+    },
+    {
+      question: "What percentage of household waste can be composted?",
+      options: ["20-30%", "40-50%", "60-70%", "80-90%"],
+      correct: 1,
+      explanation: "Approximately 40-50% of household waste is organic material that can be composted."
+    }
+  ];
+
+  // Quiz Variables
+  let currentQuestion = 0;
+  let score = 0;
+  let timeLeft = 180; // 3 minutes in seconds
+  let timerInterval;
+  let quizPaused = false;
+  let selectedAnswer = null;
+  let quizStarted = false;
+  let startTime = null;
+  let totalTimeSpent = 0;
+
+  // DOM Elements
+  const startScreen = document.getElementById('startScreen');
+  const quizScreen = document.getElementById('quizScreen');
+  const resultScreen = document.getElementById('resultScreen');
+  const questionElement = document.getElementById('question');
+  const optionsElement = document.getElementById('options');
+  const scoreElement = document.getElementById('score');
+  const remarkElement = document.getElementById('remark');
+  const timeElement = document.getElementById('time');
+  const progressFill = document.getElementById('progressFill');
+  const questionsCompletedElement = document.getElementById('questionsCompleted');
+  const timeSpentElement = document.getElementById('timeSpent');
+  const pauseBtn = document.getElementById('pauseBtn');
+  const resumeBtn = document.getElementById('resumeBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  // Initialize Quiz
+  function initQuiz() {
+    // Check for saved quiz state
+    const savedQuiz = localStorage.getItem('wasteQuizState');
+    if (savedQuiz) {
+      const quizState = JSON.parse(savedQuiz);
+      if (quizState.currentQuestion > 0) {
+        document.getElementById('resumeSection').style.display = 'block';
+      }
+    }
+    
+    // Update time spent display
+    updateTimeSpentDisplay();
+  }
+
+  // Start Quiz
+  function startQuiz() {
+    quizStarted = true;
+    startTime = Date.now();
+    startScreen.style.display = 'none';
+    quizScreen.style.display = 'block';
+    
+    // Clear any saved state
+    localStorage.removeItem('wasteQuizState');
+    
+    // Start timer
+    startTimer();
+    
+    // Load first question
+    loadQuestion();
+  }
+
+  // Resume Saved Quiz
+  function resumeSavedQuiz() {
+    const savedQuiz = JSON.parse(localStorage.getItem('wasteQuizState'));
+    if (savedQuiz) {
+      currentQuestion = savedQuiz.currentQuestion;
+      score = savedQuiz.score;
+      timeLeft = savedQuiz.timeLeft;
+      totalTimeSpent = savedQuiz.totalTimeSpent || 0;
+      
+      startScreen.style.display = 'none';
+      quizScreen.style.display = 'block';
+      quizStarted = true;
+      startTime = Date.now() - (totalTimeSpent * 1000);
+      
+      startTimer();
+      loadQuestion();
+    }
+  }
+
+  // Start Timer
+  function startTimer() {
+    clearInterval(timerInterval);
+    timerInterval = setInterval(updateTimer, 1000);
+  }
+
+  // Update Timer
+  function updateTimer() {
+    if (!quizPaused) {
+      timeLeft--;
+      
+      // Update display
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timeElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      
+      // Update time spent
+      totalTimeSpent = Math.floor((Date.now() - startTime) / 1000);
+      updateTimeSpentDisplay();
+      
+      // Check if time's up
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        endQuiz();
+      }
+      
+      // Auto-save quiz state every 30 seconds
+      if (timeLeft % 30 === 0) {
+        saveQuizState();
+      }
+    }
+  }
+
+  // Update Time Spent Display
+  function updateTimeSpentDisplay() {
+    const minutes = Math.floor(totalTimeSpent / 60);
+    const seconds = totalTimeSpent % 60;
+    timeSpentElement.textContent = `Time Spent: ${minutes}m ${seconds}s`;
+  }
+
+  // Pause Quiz
+  function pauseQuiz() {
+    quizPaused = true;
+    pauseBtn.style.display = 'none';
+    resumeBtn.style.display = 'inline-block';
+    clearInterval(timerInterval);
+    saveQuizState();
+  }
+
+  // Resume Quiz
+  function resumeQuiz() {
+    quizPaused = false;
+    pauseBtn.style.display = 'inline-block';
+    resumeBtn.style.display = 'none';
+    startTimer();
+  }
+
+  // Save Quiz State
+  function saveQuizState() {
+    const quizState = {
+      currentQuestion: currentQuestion,
+      score: score,
+      timeLeft: timeLeft,
+      totalTimeSpent: totalTimeSpent,
+      timestamp: Date.now()
+    };
+    localStorage.setItem('wasteQuizState', JSON.stringify(quizState));
+  }
+
+  // Load Question
+  function loadQuestion() {
+    if (currentQuestion >= quizQuestions.length) {
+      endQuiz();
+      return;
+    }
+    
+    const question = quizQuestions[currentQuestion];
+    questionElement.textContent = question.question;
+    
+    // Clear previous options
+    optionsElement.innerHTML = '';
+    
+    // Add options
+    question.options.forEach((option, index) => {
+      const optionElement = document.createElement('div');
+      optionElement.className = 'option';
+      optionElement.innerHTML = `
+        <span class="option-letter">${String.fromCharCode(65 + index)}</span>
+        <span class="option-text">${option}</span>
+      `;
+      
+      optionElement.addEventListener('click', () => selectAnswer(index));
+      optionsElement.appendChild(optionElement);
+    });
+    
+    // Update progress
+    const progressPercentage = (currentQuestion / quizQuestions.length) * 100;
+    progressFill.style.width = `${progressPercentage}%`;
+    questionsCompletedElement.textContent = `Completed: ${currentQuestion}/${quizQuestions.length}`;
+    
+    // Reset selected answer
+    selectedAnswer = null;
+    nextBtn.disabled = true;
+  }
+
+  // Select Answer
+  function selectAnswer(index) {
+    // Remove previous selection
+    document.querySelectorAll('.option').forEach(option => {
+      option.classList.remove('selected');
+    });
+    
+    // Add selection to current option
+    document.querySelectorAll('.option')[index].classList.add('selected');
+    selectedAnswer = index;
+    nextBtn.disabled = false;
+  }
+
+  // Next Question
+  function nextQuestion() {
+    if (selectedAnswer === null) {
+      alert('Please select an answer before proceeding!');
+      return;
+    }
+    
+    // Check if answer is correct
+    const question = quizQuestions[currentQuestion];
+    const options = document.querySelectorAll('.option');
+    
+    if (selectedAnswer === question.correct) {
+      options[selectedAnswer].classList.add('correct');
+      score++;
+    } else {
+      options[selectedAnswer].classList.add('incorrect');
+      options[question.correct].classList.add('correct');
+    }
+    
+    // Show explanation
+    const explanationDiv = document.createElement('div');
+    explanationDiv.className = 'explanation';
+    explanationDiv.innerHTML = `<p><strong>Explanation:</strong> ${question.explanation}</p>`;
+    optionsElement.appendChild(explanationDiv);
+    
+    // Disable further selection
+    document.querySelectorAll('.option').forEach(option => {
+      option.style.pointerEvents = 'none';
+    });
+    
+    // Wait 2 seconds before next question
+    setTimeout(() => {
+      currentQuestion++;
+      
+      if (currentQuestion < quizQuestions.length) {
+        loadQuestion();
+      } else {
+        endQuiz();
+      }
+    }, 2000);
+  }
+
+  // End Quiz
+  function endQuiz() {
+    clearInterval(timerInterval);
+    quizScreen.style.display = 'none';
+    resultScreen.style.display = 'block';
+    
+    // Calculate score
+    const percentage = (score / quizQuestions.length) * 100;
+    scoreElement.textContent = `${score}/${quizQuestions.length}`;
+    
+    // Set remark based on score
+    let remark = '';
+    if (percentage >= 90) {
+      remark = "🎯 Waste Management Expert! You're a recycling superstar! 🌟";
+    } else if (percentage >= 70) {
+      remark = "👍 Great job! You know your waste management well!";
+    } else if (percentage >= 50) {
+      remark = "📚 Good effort! Keep learning about waste segregation!";
+    } else {
+      remark = "🌱 Room for improvement! Check out our waste management tips!";
+    }
+    
+    remarkElement.textContent = remark;
+    
+    // Save final results
+    const quizResults = {
+      score: score,
+      total: quizQuestions.length,
+      percentage: percentage,
+      timeSpent: totalTimeSpent,
+      date: new Date().toISOString()
+    };
+    localStorage.setItem('wasteQuizResults', JSON.stringify(quizResults));
+    
+    // Clear saved state
+    localStorage.removeItem('wasteQuizState');
+  }
+
+  // Restart Quiz
+  function restartQuiz() {
+    currentQuestion = 0;
+    score = 0;
+    timeLeft = 180;
+    totalTimeSpent = 0;
+    selectedAnswer = null;
+    quizStarted = false;
+    
+    startScreen.style.display = 'block';
+    quizScreen.style.display = 'none';
+    resultScreen.style.display = 'none';
+    
+    clearInterval(timerInterval);
+    localStorage.removeItem('wasteQuizState');
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', initQuiz);
+
+  // WhatsApp share functionality
+  function shareOnWhatsApp() {
+    const scoreElement = document.getElementById('score');
+    const remarkElement = document.getElementById('remark');
+    
+    if (!scoreElement || !remarkElement) {
+      alert('Please complete the quiz first!');
+      return;
+    }
+    
+    const scoreText = scoreElement.innerText || scoreElement.textContent;
+    const remarkText = remarkElement.innerText || remarkElement.textContent;
+    const currentUrl = window.location.href;
+    
+    // Create share message
+    const shareMessage = `♻️ *Waste Management Quiz Results* ♻️\n\n` +
+                       `🏆 *Score:* ${scoreText}\n` +
+                       `📝 *Remark:* ${remarkText}\n\n` +
+                       `🌍 I just tested my waste management knowledge!\n` +
+                       `How good are you at recycling and waste segregation? 🗑️\n\n` +
+                       `👉 Take the quiz here: ${currentUrl}\n\n` +
+                       `#WasteManagement #RecyclingQuiz #GoGreen #ZeroWaste #EcoLife`;
+    
+    const encodedMessage = encodeURIComponent(shareMessage);
+    const whatsappURL = `https://wa.me/?text=${encodedMessage}`;
+    
+    window.open(whatsappURL, '_blank', 'noopener,noreferrer');
+  }
+
+  // Add WhatsApp button event listener
+  document.addEventListener('DOMContentLoaded', function() {
+    const whatsappBtn = document.getElementById('whatsappShareBtn');
+    if (whatsappBtn) {
+      whatsappBtn.addEventListener('click', shareOnWhatsApp);
+    }
+    
+    // Also handle the Play Again button
+    const playAgainBtn = resultScreen.querySelector('button:not(.whatsapp-btn)');
+    if (playAgainBtn) {
+      playAgainBtn.addEventListener('click', restartQuiz);
+    }
+  });
+
+  // Make functions globally available
+  window.startQuiz = startQuiz;
+  window.resumeSavedQuiz = resumeSavedQuiz;
+  window.pauseQuiz = pauseQuiz;
+  window.resumeQuiz = resumeQuiz;
+  window.nextQuestion = nextQuestion;
+  window.shareOnWhatsApp = shareOnWhatsApp;
+</script>
 
 <script src="/frontend/js/components/footer-loader.js"></script>
 <script src="../../js/components/component-loader.js"></script>
-    <script src="../../js/components/navbar-loader.js"></script>
-    
-  <!-- WhatsApp Share JavaScript -->
-  <script>
-    // WhatsApp share functionality
-    function shareOnWhatsApp() {
-      const scoreElement = document.getElementById('score');
-      const remarkElement = document.getElementById('remark');
-      
-      if (!scoreElement || !remarkElement) {
-        alert('Please complete the quiz first!');
-        return;
-      }
-      
-      const scoreText = scoreElement.innerText || scoreElement.textContent;
-      const remarkText = remarkElement.innerText || remarkElement.textContent;
-      const quizTitle = 'Waste Management Quiz';
-      const currentUrl = window.location.href;
-      
-      // Create share message
-      const shareMessage = `♻️ *Waste Management Quiz Results* ♻️\n\n` +
-                         `🏆 *Score:* ${scoreText}\n` +
-                         `📝 *Remark:* ${remarkText}\n\n` +
-                         `🌍 I just tested my waste management knowledge!\n` +
-                         `How good are you at recycling and waste segregation? 🗑️\n\n` +
-                         `👉 Take the quiz here: ${currentUrl}\n\n` +
-                         `#WasteManagement #RecyclingQuiz #GoGreen #ZeroWaste #EcoLife`;
-      
-      const encodedMessage = encodeURIComponent(shareMessage);
-      const whatsappURL = `https://wa.me/?text=${encodedMessage}`;
-      
-      // Open WhatsApp in a new tab
-      window.open(whatsappURL, '_blank', 'noopener,noreferrer');
-    }
-    
-    // Add event listener when DOM is loaded
-    document.addEventListener('DOMContentLoaded', function() {
-      // Add click event to WhatsApp button
-      const whatsappBtn = document.getElementById('whatsappShareBtn');
-      if (whatsappBtn) {
-        whatsappBtn.addEventListener('click', shareOnWhatsApp);
-      }
-      
-      // Also handle dynamic clicks if button is added later
-      document.addEventListener('click', function(e) {
-        if (e.target && e.target.id === 'whatsappShareBtn') {
-          shareOnWhatsApp();
-        }
-        if (e.target && e.target.closest('#whatsappShareBtn')) {
-          shareOnWhatsApp();
-        }
-      });
-      
-      // Make function available globally
-      window.shareOnWhatsApp = shareOnWhatsApp;
-    });
-  </script>
+<script src="../../js/components/navbar-loader.js"></script>
+
 </body>
 </html>

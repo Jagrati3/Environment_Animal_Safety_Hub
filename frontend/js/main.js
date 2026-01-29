@@ -65,6 +65,18 @@ const MODAL_CONTENT = {
     body: `
       <p>Join our movement to combat climate change through local actions and global awareness.</p>
       <p>We organize weekly seminars, school programs, and policy advocacy campaigns to push for greener regulations.</p>
+      <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 15px; margin: 15px 0;">
+        <h4 style="color: #856404; margin: 0 0 10px 0;"><i class="fas fa-exclamation-triangle"></i> LEVEL 3 EMERGENCY</h4>
+        <p style="color: #856404; margin: 0;"><strong>Shipping Noise Pollution Crisis:</strong> Marine mammals face critical communication disruption from underwater shipping noise.</p>
+        <a href="./pages/noise-pollution-shipping.html" class="btn btn-warning" style="margin-top: 10px;">
+          <i class="fas fa-volume-up"></i> View Crisis Details
+        </a>
+      </div>
+      <h4>Climate Adaptation Resources:</h4>
+      <ul>
+        <li><a href="./pages/environment/climate-resilient-habitats.html" class="btn btn-primary" style="margin:5px;"> 🛡️ Climate-Resilient Habitats</a></li>
+        <li><a href="./pages/environment/climate-awareness.html" class="btn btn-primary" style="margin:5px;"> 🌡️ Climate Awareness</a></li>
+      </ul>
     `
   },
   'tree-plant': {
@@ -282,6 +294,10 @@ function initAdditionalFeatures() {
   // Wildlife features
   initWildlifeFilter();
   initFlipCards();
+
+  // Crisis alert systems
+  initNoiseCrisisAlert();
+  initIndigenousCrisisAlert();
 }
 
 // ===========================================
@@ -1446,6 +1462,15 @@ function initFlipCards() {
   });
 }
 
+/**
+ * Initialize noise pollution crisis alert system
+ * Manages Level 3 emergency alerts for shipping noise pollution
+ */
+function initNoiseCrisisAlert() {
+  // Initialize the crisis alert manager
+  window.noiseCrisisManager = new NoiseCrisisAlertManager();
+}
+
 // ===========================================
 // UTILITY FUNCTIONS
 // ===========================================
@@ -1503,6 +1528,180 @@ function isInViewport(element) {
 }
 
 // ===========================================
+// NOISE POLLUTION CRISIS ALERT SYSTEM
+// ===========================================
+
+/**
+ * Noise Pollution Crisis Alert Management
+ * Handles Level 3 emergency alerts for shipping noise pollution
+ */
+class NoiseCrisisAlertManager {
+  constructor() {
+    this.alertBanner = document.getElementById('noise-crisis-alert-banner');
+    this.isDismissed = this.getDismissedStatus();
+    this.init();
+  }
+
+  init() {
+    if (!this.isDismissed && this.shouldShowAlert()) {
+      this.showAlert();
+    }
+  }
+
+  shouldShowAlert() {
+    // Show alert on homepage and relevant pages
+    const currentPath = window.location.pathname;
+    const allowedPages = ['/', '/index.html', ''];
+    return allowedPages.some(page => currentPath.endsWith(page));
+  }
+
+  showAlert() {
+    if (this.alertBanner) {
+      // Add body class for layout adjustments
+      document.body.classList.add('noise-crisis-alert-shown');
+
+      // Show banner with animation
+      this.alertBanner.style.display = 'block';
+      this.alertBanner.style.animation = 'slideDown 0.5s ease-out';
+
+      // Announce to screen readers
+      this.announceToScreenReader('Level 3 Emergency: Shipping noise pollution crisis affecting marine mammals. Critical communication disruption detected.');
+    }
+  }
+
+  hideAlert() {
+    if (this.alertBanner) {
+      this.alertBanner.classList.add('closing');
+      document.body.classList.remove('noise-crisis-alert-shown');
+
+      setTimeout(() => {
+        this.alertBanner.style.display = 'none';
+        this.alertBanner.classList.remove('closing');
+      }, 500);
+    }
+  }
+
+  dismissAlert() {
+    this.setDismissedStatus(true);
+    this.hideAlert();
+  }
+
+  getDismissedStatus() {
+    return localStorage.getItem('noiseCrisisAlertDismissed') === 'true';
+  }
+
+  setDismissedStatus(dismissed) {
+    localStorage.setItem('noiseCrisisAlertDismissed', dismissed.toString());
+  }
+
+  announceToScreenReader(message) {
+    const liveRegion = document.getElementById('status-messages');
+    if (liveRegion) {
+      liveRegion.textContent = message;
+    }
+  }
+}
+
+// INDIGENOUS KNOWLEDGE LOSS CRISIS ALERT SYSTEM
+/**
+ * Indigenous Knowledge Loss Crisis Alert Management
+ * Handles the display and dismissal of Level 3 indigenous knowledge crisis alerts
+ */
+class IndigenousCrisisAlertManager {
+  constructor() {
+    this.alertBanner = document.getElementById('indigenous-crisis-alert-banner');
+    this.isDismissed = this.getDismissedState();
+
+    // Show alert if not dismissed and conditions are met
+    if (!this.isDismissed && this.shouldShowAlert()) {
+      this.showAlert();
+    }
+  }
+
+  shouldShowAlert() {
+    // Always show for Level 3 crisis (can add more complex logic later)
+    return true;
+  }
+
+  showAlert() {
+    if (this.alertBanner) {
+      // Add slide-in animation
+      this.alertBanner.style.display = 'block';
+      this.alertBanner.style.transform = 'translateY(-100%)';
+      this.alertBanner.style.transition = 'transform 0.5s ease-out';
+
+      // Trigger animation
+      setTimeout(() => {
+        this.alertBanner.style.transform = 'translateY(0)';
+      }, 100);
+
+      // Add body class for layout adjustments
+      document.body.classList.add('indigenous-crisis-alert-shown');
+
+      // Announce to screen readers
+      this.announceToScreenReader('Level 3 Emergency: Indigenous ecological knowledge loss crisis. Traditional conservation practices are disappearing, threatening biodiversity and ecosystem resilience.');
+    }
+  }
+
+  dismissAlert() {
+    if (this.alertBanner) {
+      // Add closing animation
+      this.alertBanner.classList.add('closing');
+      this.alertBanner.style.transform = 'translateY(-100%)';
+
+      // Remove body class
+      document.body.classList.remove('indigenous-crisis-alert-shown');
+
+      // Store dismissal state
+      this.setDismissedState(true);
+
+      // Remove the banner after animation completes
+      setTimeout(() => {
+        this.alertBanner.style.display = 'none';
+        this.alertBanner.classList.remove('closing');
+      }, 500);
+    }
+  }
+
+  getDismissedState() {
+    return localStorage.getItem('indigenousCrisisAlertDismissed') === 'true';
+  }
+
+  setDismissedState(dismissed) {
+    localStorage.setItem('indigenousCrisisAlertDismissed', dismissed.toString());
+  }
+
+  announceToScreenReader(message) {
+    const liveRegion = document.getElementById('status-messages');
+    if (liveRegion) {
+      liveRegion.textContent = message;
+    }
+  }
+}
+
+// Global function for close button
+function closeIndigenousCrisisAlert() {
+  if (window.indigenousCrisisManager) {
+    window.indigenousCrisisManager.dismissAlert();
+  }
+}
+
+// Global function for close button
+function closeNoiseCrisisAlert() {
+  if (window.noiseCrisisManager) {
+    window.noiseCrisisManager.dismissAlert();
+  }
+}
+
+/**
+ * Initialize indigenous knowledge loss crisis alert system
+ */
+function initIndigenousCrisisAlert() {
+  // Initialize the crisis alert manager
+  window.indigenousCrisisManager = new IndigenousCrisisAlertManager();
+}
+
+// ===========================================
 // CONSOLE LOGO & DEBUGGING
 // ===========================================
 
@@ -1516,6 +1715,114 @@ console.log(
   "%cBuilt with ❤️ for a greener future",
   "font-size: 14px;color: #666;"
 );
+
+// ===========================================
+// CRISIS ALERT FUNCTIONALITY
+// ===========================================
+
+/**
+ * Close the Level 3 Crisis Alert Banner
+ * Stores user preference in localStorage to prevent repeated display
+ */
+function closeCrisisAlert() {
+  const alertBanner = document.getElementById('crisisAlert');
+  if (alertBanner) {
+    // Add closing animation
+    alertBanner.classList.add('closing');
+    
+    // Remove crisis alert styling from body
+    document.body.classList.remove('crisis-alert-shown');
+    
+    // Remove the banner after animation completes
+    setTimeout(() => {
+      alertBanner.remove();
+    }, 500);
+    
+    // Store user preference (optional - can be removed if always want to show alert)
+    localStorage.setItem('fireCrisisAlertClosed', 'true');
+    
+    console.log('🚨 Crisis Alert Closed - User has been informed about Level 3 Fire Crisis');
+  }
+}
+
+/**
+ * Initialize Crisis Alert Banner
+ * Checks if user has previously dismissed the alert
+ */
+function initCrisisAlert() {
+  const alertClosed = localStorage.getItem('fireCrisisAlertClosed');
+  
+  // For Level 3 Crisis, show alert regardless of previous dismissal
+  // Remove the next 3 lines if you want to respect user's dismissal
+  if (alertClosed === 'true') {
+    // For emergency situations, we want to show the alert again after 24 hours
+    const dismissTime = localStorage.getItem('fireCrisisAlertDismissTime');
+    const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000);
+    
+    if (!dismissTime || parseInt(dismissTime) < oneDayAgo) {
+      localStorage.removeItem('fireCrisisAlertClosed');
+      localStorage.setItem('fireCrisisAlertDismissTime', Date.now().toString());
+    }
+  }
+  
+  // Show emergency notification after 5 seconds if user hasn't interacted
+  setTimeout(() => {
+    const alertBanner = document.getElementById('crisisAlert');
+    if (alertBanner && !alertBanner.classList.contains('closing')) {
+      showEmergencyNotification();
+    }
+  }, 5000);
+}
+
+/**
+ * Show additional emergency notification for Level 3 Crisis
+ */
+function showEmergencyNotification() {
+  // Create floating emergency notification
+  const notification = document.createElement('div');
+  notification.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(45deg, #8B0000, #FF0000);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(255, 0, 0, 0.6);
+    z-index: 2001;
+    animation: urgentPulse 2s infinite;
+    max-width: 300px;
+    font-weight: 600;
+  `;
+  
+  notification.innerHTML = `
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <i class="fas fa-fire" style="font-size: 1.2rem; animation: urgentFlash 1s infinite;"></i>
+      <div>
+        <strong>URGENT ACTION NEEDED</strong><br>
+        <small>Level 3 Fire Crisis - Wildlife at Risk</small>
+      </div>
+      <button onclick="this.parentElement.parentElement.remove()" style="background:none; border:none; color:white; font-size:1.2rem; cursor:pointer; padding: 5px;">×</button>
+    </div>
+  `;
+  
+  document.body.appendChild(notification);
+  
+  // Auto-remove after 10 seconds
+  setTimeout(() => {
+    if (notification.parentNode) {
+      notification.remove();
+    }
+  }, 10000);
+  
+  console.log('🔥 Emergency notification displayed - Level 3 Crisis requires immediate attention');
+}
+
+// Initialize crisis alert on page load
+document.addEventListener('DOMContentLoaded', initCrisisAlert);
+
+// Make closeCrisisAlert globally available
+window.closeCrisisAlert = closeCrisisAlert;
 
 // ===========================================
 // END OF MAIN.JS

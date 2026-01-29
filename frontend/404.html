@@ -1,116 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page Not Found - EcoLife</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Arial', sans-serif; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-        }
-        .error-container {
-            text-align: center;
-            background: white;
-            padding: 60px 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            max-width: 500px;
-            width: 90%;
-        }
-        .error-code {
-            font-size: 120px;
-            font-weight: bold;
-            color: #e74c3c;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-        .error-title {
-            font-size: 32px;
-            color: #2c3e50;
-            margin-bottom: 15px;
-        }
-        .error-message {
-            font-size: 18px;
-            color: #7f8c8d;
-            margin-bottom: 40px;
-            line-height: 1.6;
-        }
-        .btn-container {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .btn {
-            padding: 15px 30px;
-            border: none;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: bold;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(46, 204, 113, 0.3);
-        }
-        .btn-secondary {
-            background: transparent;
-            color: #3498db;
-            border: 2px solid #3498db;
-        }
-        .btn-secondary:hover {
-            background: #3498db;
-            color: white;
-            transform: translateY(-2px);
-        }
-        .eco-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-        }
-        @media (max-width: 600px) {
-            .error-code { font-size: 80px; }
-            .error-title { font-size: 24px; }
-            .error-container { padding: 40px 20px; }
-            .btn-container { flex-direction: column; align-items: center; }
-        }
-    </style>
-</head>
-<body>
-    <div class="error-container">
-        <div class="eco-icon">🌍</div>
-        <div class="error-code">404</div>
-        <h1 class="error-title">Oops! Page Not Found</h1>
-        <p class="error-message">
-            The page you're looking for seems to have wandered off into the wilderness. 
-            Let's get you back on the right path to save our planet!
-        </p>
-        <div class="btn-container">
-            <a href="/" class="btn btn-primary">🏠 Go Home</a>
-            <a href="javascript:history.back()" class="btn btn-secondary">← Go Back</a>
-        </div>
-    </div>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 - EcoLife</title>
 
-    <script>
-        // Add some interactivity
-        document.querySelector('.error-code').addEventListener('click', function() {
-            this.style.transform = 'rotate(360deg)';
-            this.style.transition = 'transform 0.5s ease';
-            setTimeout(() => {
-                this.style.transform = 'rotate(0deg)';
-            }, 500);
-        });
-    </script>
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: linear-gradient(135deg,#a8e063,#56ab2f);
+    overflow:hidden;
+}
+
+/* floating leaves */
+.leaf{
+    position:absolute;
+    font-size:30px;
+    animation: float 8s linear infinite;
+    opacity:0.6;
+}
+.leaf:nth-child(1){left:10%; animation-delay:0s;}
+.leaf:nth-child(2){left:30%; animation-delay:2s;}
+.leaf:nth-child(3){left:60%; animation-delay:4s;}
+.leaf:nth-child(4){left:80%; animation-delay:6s;}
+
+@keyframes float{
+    0%{top:100%; transform:rotate(0deg);}
+    100%{top:-10%; transform:rotate(360deg);}
+}
+
+.error-container{
+    background: rgba(255,255,255,0.9);
+    padding:60px 40px;
+    border-radius:25px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.2);
+    text-align:center;
+    max-width:500px;
+    width:90%;
+    backdrop-filter: blur(10px);
+    animation: pop 1s ease;
+}
+
+@keyframes pop{
+    from{transform:scale(0.8); opacity:0;}
+    to{transform:scale(1); opacity:1;}
+}
+
+.eco-icon{
+    font-size:70px;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+}
+
+.error-code{
+    font-size:120px;
+    color:#2ecc71;
+    text-shadow:3px 3px 10px rgba(0,0,0,0.1);
+    cursor:pointer;
+}
+
+.error-title{
+    font-size:32px;
+    color:#145a32;
+    margin:15px 0;
+}
+
+.error-message{
+    color:#2c3e50;
+    font-size:18px;
+    line-height:1.6;
+    margin-bottom:35px;
+}
+
+.btn-container{
+    display:flex;
+    gap:20px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+.btn{
+    padding:15px 35px;
+    border-radius:50px;
+    font-size:16px;
+    font-weight:bold;
+    text-decoration:none;
+    transition:0.3s;
+}
+
+.btn-primary{
+    background:linear-gradient(135deg,#27ae60,#2ecc71);
+    color:white;
+    box-shadow:0 10px 20px rgba(39,174,96,0.4);
+}
+
+.btn-primary:hover{
+    transform:translateY(-4px);
+    box-shadow:0 15px 30px rgba(39,174,96,0.6);
+}
+
+.btn-secondary{
+    border:2px solid #27ae60;
+    color:#27ae60;
+}
+
+.btn-secondary:hover{
+    background:#27ae60;
+    color:white;
+    transform:translateY(-4px);
+}
+
+@media(max-width:600px){
+    .error-code{font-size:80px;}
+    .error-title{font-size:24px;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="leaf">🍃</div>
+<div class="leaf">🍃</div>
+<div class="leaf">🍃</div>
+<div class="leaf">🍃</div>
+
+<div class="error-container">
+    <div class="eco-icon">🌱</div>
+    <div class="error-code">404</div>
+    <h1 class="error-title">Oops! Page Not Found</h1>
+    <p class="error-message">
+        Looks like this page went on a nature walk 🌿  
+        Don’t worry — let’s guide you back to a greener path.
+    </p>
+
+    <div class="btn-container">
+        <a href="/" class="btn btn-primary">🏡 Go Home</a>
+        <a href="javascript:history.back()" class="btn btn-secondary">↩ Go Back</a>
+    </div>
+</div>
+
+<script>
+const code = document.querySelector(".error-code");
+
+code.addEventListener("click",()=>{
+    code.style.transform="rotate(360deg)";
+    code.style.transition="0.6s";
+    setTimeout(()=>code.style.transform="rotate(0deg)",600);
+});
+</script>
+
 </body>
 </html>

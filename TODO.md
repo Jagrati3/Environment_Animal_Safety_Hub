@@ -1,28 +1,6 @@
-- [ ] Extract hardcoded configs from individual quiz JS files
-- [ ] Move questions, time limits, icons to `quiz-config.json`
-- [ ] Update the following quiz files:
-  - [ ] `environment-awareness-quiz.js`
-  - [ ] `animal-first-aid-quiz.js`
-  - [ ] `waste-management-quiz.js`
-  - [ ] `climate-change-quiz.js`
-  - [ ] `sustainable-gardening-quiz.js`
-  - [ ] `water-conservation-quiz.js`
-  - [ ] `plant-care-quiz.js`
-  - [ ] `animal-communication-quiz.js`
-  - [ ] `pet-travel-quiz.js`
-  - [ ] `soil-land-protection-quiz.js`
-=======
-### 5. Migrate Existing Quiz Configurations
-- [x] Extract hardcoded configs from individual quiz JS files
-- [x] Move questions, time limits, icons to `quiz-config.json`
-- [x] Update the following quiz files:
-  - [x] `environment-awareness-quiz.js`
-  - [ ] `animal-first-aid-quiz.js`
-  - [ ] `waste-management-quiz.js`
-  - [ ] `climate-change-quiz.js`
-  - [ ] `sustainable-gardening-quiz.js`
-  - [ ] `water-conservation-quiz.js`
-  - [ ] `plant-care-quiz.js`
-  - [ ] `animal-communication-quiz.js`
-  - [ ] `pet-travel-quiz.js`
-  - [ ] `soil-land-protection-quiz.js`
+# TODO: Fix Missing Configuration Fields in Quiz Data
+
+## Steps to Complete:
+- [x] Add missing fields (category, timeLimit, iconClass) to the "climate-change" quiz in frontend/assets/data/quiz-data.json
+- [x] Add missing fields (category, timeLimit, iconClass) to the "sustainable-gardening" quiz in frontend/assets/data/quiz-data.json
+- [x] Verify that all quizzes now have consistent structure matching BaseQuiz expectations

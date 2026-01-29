@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invasive Plant Species & Native Faunal Decline | EcoLife</title>
+    <link rel="icon" type="image/png" href="../../assets/images/others/FAVICON.png">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../css/global/variables.css">
+    <link rel="stylesheet" href="../../css/global/utilities.css">
+    <link rel="stylesheet" href="../../css/components/navbar.css">
+    <link rel="stylesheet" href="../../css/components/footer.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Meta tags -->
+    <meta name="description" content="Explore how invasive plant species disrupt ecosystems, alter habitat structures, nutrient cycles, and impact food availability for native animal species.">
+    <meta name="keywords" content="invasive species, native fauna, habitat alteration, nutrient cycles, food availability, ecological impact">
+
+    <style>
+        :root {
+            --primary-green: #22c55e;
+            --primary-blue: #3b82f6;
+            --primary-orange: #f97316;
+            --dark-green: #0f4f2f;
+            --light-green: #dcfce7;
+            --accent-blue: rgba(59, 130, 246, 0.1);
+            --accent-orange: rgba(249, 115, 22, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Background Animation */
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(45deg, var(--primary-green), var(--primary-blue));
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-30px) rotate(120deg); }
+            66% { transform: translateY(-15px) rotate(240deg); }
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #0f4f2f 0%, #22c55e 50%, #3b82f6 100%);
+            color: white;
+            padding: 120px 20px 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1.5" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.15)"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-green);
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-green), var(--primary-blue));
+            border-radius: 2px;
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .impact-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .impact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-green), var(--primary-blue));
+        }
+
+        .impact-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+            border-color: var(--primary-green);
+        }
+
+        .impact-icon {
+            font-size: 3rem;
+            color: var(--primary-green);
+            margin-bottom: 20px;
+        }
+
+        .impact-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--dark-green);
+            margin-bottom: 20px;
+        }
+
+        .impact-description {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .impact-examples {
+            background: var(--light-green);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .impact-examples h4 {
+            color: var(--dark-green);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .impact-examples ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .impact-examples li {
+            padding: 5px 0;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .impact-examples li::before {
+            content: '🌿';
+            position: absolute;
+            left: 0;
+        }
+
+        /* Case Studies */
+        .case-study {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            border-left: 5px solid var(--primary-blue);
+        }
+
+        .case-study h3 {
+            color: var(--dark-green);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .case-study p {
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        /* Statistics */
+        .stats-section {
+            background: linear-gradient(135deg, var(--dark-green) 0%, var(--primary-green) 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Solutions */
+        .solutions-section {
+            background: var(--light-green);
+            padding: 80px 20px;
+        }
+
+        .solutions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .solution-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .solution-icon {
+            font-size: 2.5rem;
+            color: var(--primary-green);
+            margin-bottom: 20px;
+        }
+
+        .solution-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--dark-green);
+            margin-bottom: 15px;
+        }
+
+        .solution-description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-green) 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .cta-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .cta-button.primary {
+            background: white;
+            color: var(--primary-green);
+        }
+
+        .cta-button.primary:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .cta-button.secondary:hover {
+            background: white;
+            color: var(--primary-green);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .impact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .solutions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div id="navbar-container"></div>
+
+    <!-- Floating Particles -->
+    <div class="floating-particles" id="particles"></div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-badge">🌿 Ecological Impact Study</div>
+        <h1 class="hero-title">Invasive Plant Species & Native Faunal Decline</h1>
+        <p class="hero-subtitle">
+            Understanding how invasive vegetation transforms ecosystems, disrupts nutrient cycles,
+            and threatens the survival of native animal species through altered food webs and habitat loss.
+        </p>
+    </section>
+
+    <!-- Introduction -->
+    <section class="content-section">
+        <h2 class="section-title">The Silent Invasion</h2>
+        <p style="text-align: center; font-size: 1.2rem; color: #666; max-width: 800px; margin: 0 auto 50px;">
+            Invasive plant species are one of the greatest threats to biodiversity worldwide. These non-native plants
+            outcompete native vegetation, fundamentally altering the structure and function of ecosystems. The consequences
+            for native animal populations are profound and often irreversible.
+        </p>
+
+        <div class="impact-grid">
+            <div class="impact-card">
+                <div class="impact-icon">🏠</div>
+                <h3 class="impact-title">Habitat Structure Alteration</h3>
+                <p class="impact-description">
+                    Invasive plants change the physical structure of habitats, affecting nesting sites, shelter,
+                    and movement corridors for native wildlife. Dense monocultures replace diverse native plant communities,
+                    reducing habitat complexity and biodiversity.
+                </p>
+                <div class="impact-examples">
+                    <h4>Key Impacts:</h4>
+                    <ul>
+                        <li>Loss of understory vegetation critical for small mammals</li>
+                        <li>Reduced canopy cover affecting bird nesting sites</li>
+                        <li>Changes in ground cover impacting reptile and amphibian habitats</li>
+                        <li>Alteration of riparian zones affecting aquatic-terrestrial linkages</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="impact-card">
+                <div class="impact-icon">🔄</div>
+                <h3 class="impact-title">Nutrient Cycle Disruption</h3>
+                <p class="impact-description">
+                    Invasive species often have different nutrient requirements and cycling patterns compared to native plants.
+                    This leads to changes in soil chemistry, decomposition rates, and nutrient availability that can cascade
+                    through entire food webs.
+                </p>
+                <div class="impact-examples">
+                    <h4>Key Impacts:</h4>
+                    <ul>
+                        <li>Altered soil pH and nutrient levels</li>
+                        <li>Changes in litter decomposition rates</li>
+                        <li>Modified mycorrhizal associations</li>
+                        <li>Disruption of nutrient uptake patterns</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="impact-card">
+                <div class="impact-icon">🍽️</div>
+                <h3 class="impact-title">Food Availability Reduction</h3>
+                <p class="impact-description">
+                    Native animals depend on specific plant species for food, whether directly as herbivores or indirectly
+                    through the insects and other organisms that inhabit native plants. Invasive species often provide
+                    inferior or no nutritional value to native fauna.
+                </p>
+                <div class="impact-examples">
+                    <h4>Key Impacts:</h4>
+                    <ul>
+                        <li>Loss of native plant food sources for herbivores</li>
+                        <li>Decline in insect populations dependent on native plants</li>
+                        <li>Reduced fruit and seed availability for frugivores</li>
+                        <li>Changes in plant phenology affecting seasonal food availability</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies -->
+    <section class="content-section">
+        <h2 class="section-title">Real-World Case Studies</h2>
+
+        <div class="case-study">
+            <h3>🐆 Kudzu in the Southeastern United States</h3>
+            <p>
+                The invasive Kudzu vine has blanketed millions of acres across the American Southeast, smothering native trees
+                and shrubs. This has led to a dramatic decline in native insect populations, which in turn has affected birds
+                and small mammals that depend on these insects for food. Studies show up to 50% reduction in native plant diversity
+                in heavily infested areas.
+            </p>
+            <p>
+                <strong>Faunal Impact:</strong> Significant declines in populations of native birds, butterflies, and small mammals
+                due to loss of both habitat structure and food sources.
+            </p>
+        </div>
+
+        <div class="case-study">
+            <h3>🌿 English Ivy in Pacific Northwest Forests</h3>
+            <p>
+                English Ivy forms dense ground covers that prevent native forest regeneration and alters soil nutrient cycling.
+                Research from the University of Washington shows that ivy invasion reduces native plant biomass by up to 70%
+                and changes soil microbial communities, affecting decomposition and nutrient availability.
+            </p>
+            <p>
+                <strong>Faunal Impact:</strong> Reduced populations of ground-nesting birds and small mammals, with cascading
+                effects on predators higher up the food chain.
+            </p>
+        </div>
+
+        <div class="case-study">
+            <h3>🌾 Cheatgrass in Western Rangelands</h3>
+            <p>
+                Cheatgrass has transformed millions of acres of sagebrush steppe into annual grasslands, fundamentally altering
+                fire regimes and nutrient cycling. This invasive grass increases fire frequency from once every 50-100 years
+                to every 3-5 years, preventing native perennials from regenerating.
+            </p>
+            <p>
+                <strong>Faunal Impact:</strong> Severe declines in sagebrush-dependent species including the Greater Sage-Grouse,
+                pronghorn antelope, and numerous small mammal species that rely on sagebrush for food and cover.
+            </p>
+        </div>
+    </section>
+
+    <!-- Statistics -->
+    <section class="stats-section">
+        <h2 style="font-size: 2.5rem; margin-bottom: 50px;">The Scale of the Problem</h2>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-number">50,000+</span>
+                <span class="stat-label">Invasive plant species worldwide</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">42%</span>
+                <span class="stat-label">Of threatened/endangered species affected by invasives</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">$120B</span>
+                <span class="stat-label">Annual economic cost of invasive species</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">500+</span>
+                <span class="stat-label">Native species driven extinct by invasives</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solutions -->
+    <section class="solutions-section">
+        <div class="content-section" style="padding: 0;">
+            <h2 class="section-title">Conservation Solutions</h2>
+            <div class="solutions-grid">
+                <div class="solution-card">
+                    <div class="solution-icon">🔬</div>
+                    <h3 class="solution-title">Early Detection & Monitoring</h3>
+                    <p class="solution-description">
+                        Implement systematic monitoring programs to detect invasive species before they become established.
+                        Use citizen science and remote sensing technologies for large-scale surveillance.
+                    </p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🌱</div>
+                    <h3 class="solution-title">Native Plant Restoration</h3>
+                    <p class="solution-description">
+                        Restore native plant communities through seeding, planting, and habitat management.
+                        Focus on creating resilient ecosystems that can resist future invasions.
+                    </p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">⚔️</div>
+                    <h3 class="solution-title">Targeted Removal Programs</h3>
+                    <p class="solution-description">
+                        Develop integrated pest management strategies combining mechanical, chemical, and biological
+                        control methods for effective invasive species removal.
+                    </p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">📚</div>
+                    <h3 class="solution-title">Public Education & Policy</h3>
+                    <p class="solution-description">
+                        Educate communities about invasive species and implement regulations to prevent introduction
+                        and spread of harmful plants through horticulture and trade.
+                    </p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🔗</div>
+                    <h3 class="solution-title">Ecosystem-Based Management</h3>
+                    <p class="solution-description">
+                        Adopt holistic approaches that consider entire ecosystems rather than focusing on individual
+                        species, addressing underlying causes of invasibility.
+                    </p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🤝</div>
+                    <h3 class="solution-title">International Cooperation</h3>
+                    <p class="solution-description">
+                        Work across borders to prevent the spread of invasive species through coordinated
+                        quarantine measures and information sharing.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <h2 class="cta-title">Join the Fight Against Invasive Species</h2>
+        <p class="cta-subtitle">
+            Every action counts in protecting our native ecosystems and the wildlife that depends on them.
+            Get involved in conservation efforts and help preserve biodiversity for future generations.
+        </p>
+        <div class="cta-buttons">
+            <a href="pages/community-action-hub.html" class="cta-button primary">
+                <i class="fas fa-users"></i> Join Community Action
+            </a>
+            <a href="pages/educational-resources.html" class="cta-button secondary">
+                <i class="fas fa-book"></i> Learn More
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <script>
+        // Load navbar and footer
+        fetch('../../components/navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar-container').innerHTML = data;
+            });
+
+        fetch('../../components/footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-container').innerHTML = data;
+            });
+
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (8 + Math.random() * 4) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        createParticles();
+    </script>
+</body>
+</html>

@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fire Regime Shifts and Wildlife Adaptation Failure - EcoLife</title>
+    <link rel="stylesheet" href="../css/global/variables.css">
+    <link rel="stylesheet" href="../css/global/utilities.css">
+    <link rel="stylesheet" href="../css/components/navbar.css">
+    <link rel="stylesheet" href="../css/components/footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(135deg, #8B0000 0%, #FF4500 50%, #FFB347 100%); 
+            color: white; 
+            overflow-x: hidden; 
+        }
+        
+        /* Fire Animation Effects */
+        @keyframes flicker {
+            0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+            25% { opacity: 0.8; transform: scale(1.05) rotate(1deg); }
+            50% { opacity: 0.9; transform: scale(0.95) rotate(-1deg); }
+            75% { opacity: 0.85; transform: scale(1.02) rotate(0.5deg); }
+        }
+        
+        @keyframes burnEffect {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes smokeRise {
+            0% { transform: translateY(100px) scale(0.5); opacity: 0; }
+            50% { opacity: 0.7; }
+            100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+        }
+
+        /* Level 3 Severity Indicator */
+        .severity-badge {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #ff0000, #ff6b35);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 8px 32px rgba(255, 0, 0, 0.4);
+            animation: flicker 3s infinite;
+            z-index: 1000;
+            border: 3px solid #fff;
+        }
+
+        .severity-badge i {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .fire-header {
+            background: linear-gradient(135deg, #8B0000 0%, #FF4500 100%);
+            background-size: 400% 400%;
+            animation: burnEffect 4s ease-in-out infinite;
+            padding: 100px 20px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fire-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .fire-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, #ff6b35 0%, #ff0000 70%);
+            border-radius: 50%;
+            animation: smokeRise 6s linear infinite;
+        }
+
+        .fire-particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .fire-particle:nth-child(2) { left: 25%; animation-delay: 1.5s; }
+        .fire-particle:nth-child(3) { left: 40%; animation-delay: 3s; }
+        .fire-particle:nth-child(4) { left: 60%; animation-delay: 4.5s; }
+        .fire-particle:nth-child(5) { left: 80%; animation-delay: 2s; }
+        
+        .fire-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(255, 107, 53, 0.8);
+            animation: flicker 2s infinite;
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        .crisis-nav {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(15px);
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 107, 53, 0.3);
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .nav-tab {
+            padding: 15px 30px;
+            background: linear-gradient(45deg, rgba(255, 107, 53, 0.2), rgba(139, 0, 0, 0.3));
+            border: 2px solid rgba(255, 107, 53, 0.5);
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.4s;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-tab:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .nav-tab:hover:before { left: 100%; }
+        .nav-tab:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(255, 107, 53, 0.4); }
+        .nav-tab.active { 
+            background: linear-gradient(45deg, #FF4500, #FF6B35);
+            box-shadow: 0 0 30px rgba(255, 107, 53, 0.6);
+            transform: scale(1.05);
+        }
+        
+        .content-section { display: none; margin: 30px 0; }
+        .content-section.active { display: block; animation: fadeInUp 0.6s ease-out; }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 25px 0;
+        }
+        
+        .impact-card {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(139, 0, 0, 0.3));
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .impact-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.4);
+            border-color: rgba(255, 107, 53, 0.8);
+        }
+        
+        .impact-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #FF4500, #FF6B35, #FFB347);
+            background-size: 200% 100%;
+            animation: burnEffect 3s ease-in-out infinite;
+        }
+        
+        .species-crisis {
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.8), rgba(0, 0, 0, 0.6));
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #ff0000;
+        }
+        
+        .crisis-level {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin: 10px 0;
+        }
+        
+        .crisis-critical { background: linear-gradient(45deg, #8B0000, #FF0000); }
+        .crisis-severe { background: linear-gradient(45deg, #FF4500, #FF6B35); }
+        .crisis-moderate { background: linear-gradient(45deg, #FF8C00, #FFB347); }
+        
+        .timeline-container {
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .timeline {
+            position: relative;
+            background: linear-gradient(to right, #ff4500, #ff6b35);
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+        }
+        
+        .timeline-point {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff0000;
+            border-radius: 50%;
+            border: 4px solid white;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+        }
+        
+        .timeline-point:hover {
+            transform: translateY(-50%) scale(1.3);
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.8);
+        }
+        
+        .chart-container {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid rgba(255, 107, 53, 0.3);
+        }
+        
+        .action-button {
+            background: linear-gradient(45deg, #FF4500, #FF6B35);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+        
+        .action-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.6);
+            background: linear-gradient(45deg, #FF6B35, #FFB347);
+        }
+        
+        .simulation-panel {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(139, 0, 0, 0.4));
+            padding: 30px;
+            border-radius: 20px;
+            margin: 20px 0;
+            border: 2px solid rgba(255, 107, 53, 0.5);
+        }
+        
+        .slider-container {
+            margin: 20px 0;
+        }
+        
+        .fire-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(to right, #90EE90, #FFD700, #FF6B35, #8B0000);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .fire-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #ff0000;
+            cursor: pointer;
+            border: 3px solid white;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+        }
+        
+        .species-status {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid;
+        }
+        
+        .status-stable { border-color: #4CAF50; }
+        .status-declining { border-color: #FF9800; }
+        .status-critical { border-color: #F44336; }
+        .status-extinct { border-color: #424242; }
+        
+        @media (max-width: 768px) {
+            .fire-header h1 { font-size: 2.5rem; }
+            .impact-grid { grid-template-columns: 1fr; }
+            .nav-tabs { flex-direction: column; align-items: center; }
+            .severity-badge { position: relative; margin: 20px auto; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Severity Level Badge -->
+    <div class="severity-badge">
+        <i class="fas fa-fire"></i>
+        LEVEL 3 CRISIS
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-leaf"></i>
+                <span>EcoLife</span>
+            </div>
+            <div class="nav-menu">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="climate-challenges.html" class="nav-link">Climate Issues</a>
+                <a href="fire-regime-shifts.html" class="nav-link active">Fire Crisis</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="fire-header">
+        <div class="fire-particles">
+            <div class="fire-particle"></div>
+            <div class="fire-particle"></div>
+            <div class="fire-particle"></div>
+            <div class="fire-particle"></div>
+            <div class="fire-particle"></div>
+        </div>
+        <div class="container">
+            <h1><i class="fas fa-fire"></i> Fire Regime Shifts & Wildlife Adaptation Failure</h1>
+            <p>Exploring how increased wildfire frequency disrupts species adapted to historical fire cycles, causing population collapse</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Navigation Tabs -->
+        <nav class="crisis-nav">
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-section="overview">
+                    <i class="fas fa-chart-line"></i> Crisis Overview
+                </button>
+                <button class="nav-tab" data-section="species">
+                    <i class="fas fa-paw"></i> Affected Species
+                </button>
+                <button class="nav-tab" data-section="simulation">
+                    <i class="fas fa-desktop"></i> Fire Simulation
+                </button>
+                <button class="nav-tab" data-section="solutions">
+                    <i class="fas fa-seedling"></i> Solutions
+                </button>
+                <button class="nav-tab" data-section="data">
+                    <i class="fas fa-chart-bar"></i> Research Data
+                </button>
+            </div>
+        </nav>
+
+        <!-- Overview Section -->
+        <section class="content-section active" id="overview">
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <h3><i class="fas fa-fire"></i> Historical Fire Cycles</h3>
+                    <p>Many ecosystems evolved with predictable fire patterns occurring every 20-100 years. Species developed specific adaptations for these natural cycles.</p>
+                    <div class="timeline-container">
+                        <h4>Traditional Fire Cycle (Pre-Climate Change)</h4>
+                        <div class="timeline">
+                            <div class="timeline-point" style="left: 20%;" title="Natural fire every 30-50 years"></div>
+                            <div class="timeline-point" style="left: 60%;" title="Regeneration period"></div>
+                            <div class="timeline-point" style="left: 90%;" title="Ecosystem maturity"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="impact-card">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Current Crisis</h3>
+                    <p>Climate change has increased fire frequency by 300-500% in many regions, overwhelming species' ability to adapt and recover.</p>
+                    <div class="timeline-container">
+                        <h4>Disrupted Fire Cycle (Current)</h4>
+                        <div class="timeline">
+                            <div class="timeline-point" style="left: 15%;" title="Frequent fires"></div>
+                            <div class="timeline-point" style="left: 35%;" title="No recovery time"></div>
+                            <div class="timeline-point" style="left: 55%;" title="Continuous burning"></div>
+                            <div class="timeline-point" style="left: 75%;" title="Ecosystem collapse"></div>
+                            <div class="timeline-point" style="left: 95%;" title="Species extinction"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="impact-card">
+                    <h3><i class="fas fa-skull"></i> Population Collapse</h3>
+                    <p>Species that once thrived with periodic fires are now facing extinction due to continuous fire pressure and habitat destruction.</p>
+                    <div class="chart-container">
+                        <canvas id="populationChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+                
+                <div class="impact-card">
+                    <h3><i class="fas fa-thermometer-full"></i> Key Statistics</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin: 10px 0; padding: 10px; background: rgba(255,107,53,0.2); border-radius: 8px;">
+                            <i class="fas fa-fire" style="color: #ff4500;"></i> 400% increase in fire frequency since 1970
+                        </li>
+                        <li style="margin: 10px 0; padding: 10px; background: rgba(255,107,53,0.2); border-radius: 8px;">
+                            <i class="fas fa-tree" style="color: #8b4513;"></i> 60% of fire-adapted forests showing decline
+                        </li>
+                        <li style="margin: 10px 0; padding: 10px; background: rgba(255,107,53,0.2); border-radius: 8px;">
+                            <i class="fas fa-paw" style="color: #ff6b35;"></i> 150+ species at risk of adaptation failure
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Species Section -->
+        <section class="content-section" id="species">
+            <h2><i class="fas fa-paw"></i> Species Under Threat</h2>
+            
+            <div class="species-crisis">
+                <h3><i class="fas fa-bear"></i> Fire-Dependent Species in Crisis</h3>
+                <p>These species evolved specific adaptations to historical fire cycles and are now struggling with increased fire frequency:</p>
+                
+                <div class="impact-grid" style="margin-top: 20px;">
+                    <div class="species-status status-critical">
+                        <div style="font-size: 2rem;">🐻</div>
+                        <div>
+                            <h4>Black Bears (Western North America)</h4>
+                            <p><span class="crisis-level crisis-critical">CRITICAL</span></p>
+                            <p>Population declined 65% due to habitat loss from frequent fires disrupting berry-producing plants and denning sites.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="species-status status-critical">
+                        <div style="font-size: 2rem;">🦎</div>
+                        <div>
+                            <h4>Fire Salamanders (Mediterranean)</h4>
+                            <p><span class="crisis-level crisis-critical">CRITICAL</span></p>
+                            <p>Once fire-resistant species now faces 80% population loss as increased fire frequency prevents soil moisture recovery.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="species-status status-declining">
+                        <div style="font-size: 2rem;">🦅</div>
+                        <div>
+                            <h4>Fire-adapted Raptors (Australia)</h4>
+                            <p><span class="crisis-level crisis-severe">SEVERE DECLINE</span></p>
+                            <p>Hunting grounds destroyed faster than they can regenerate, forcing birds into human-wildlife conflict zones.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="species-status status-declining">
+                        <div style="font-size: 2rem;">🌿</div>
+                        <div>
+                            <h4>Fire-following Plants (California)</h4>
+                            <p><span class="crisis-level crisis-severe">SEVERE DECLINE</span></p>
+                            <p>Chaparral species that require specific fire intervals for reproduction are being burned before reaching maturity.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="species-status status-extinct">
+                        <div style="font-size: 2rem;">🦜</div>
+                        <div>
+                            <h4>Ground-nesting Fire Birds</h4>
+                            <p><span class="crisis-level" style="background: #424242;">FUNCTIONALLY EXTINCT</span></p>
+                            <p>Multiple species have lost 95%+ of population due to inability to complete breeding cycles between fires.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <h3>Species Adaptation Timeline vs. Current Fire Frequency</h3>
+                <canvas id="adaptationChart" width="800" height="400"></canvas>
+            </div>
+        </section>
+
+        <!-- Simulation Section -->
+        <section class="content-section" id="simulation">
+            <div class="simulation-panel">
+                <h2><i class="fas fa-desktop"></i> Fire Frequency Impact Simulator</h2>
+                <p>Adjust the fire frequency slider to see how it affects wildlife populations over time.</p>
+                
+                <div class="slider-container">
+                    <label for="fireFrequency">Fire Frequency (fires per decade):</label>
+                    <input type="range" id="fireFrequency" class="fire-slider" min="0.5" max="10" step="0.5" value="2">
+                    <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                        <span>Historical (0.5)</span>
+                        <span id="currentFrequency">Current (2.0)</span>
+                        <span>Crisis (10+)</span>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <h3>Population Response Simulation</h3>
+                    <canvas id="simulationChart" width="800" height="400"></canvas>
+                </div>
+                
+                <div class="impact-grid" style="margin-top: 30px;">
+                    <div class="impact-card" id="ecosystemHealth">
+                        <h4><i class="fas fa-heartbeat"></i> Ecosystem Health</h4>
+                        <div id="healthStatus" class="crisis-level crisis-moderate">Moderate Stress</div>
+                        <p id="healthDescription">Some species showing adaptation stress but ecosystems still functioning.</p>
+                    </div>
+                    
+                    <div class="impact-card" id="speciesSurvival">
+                        <h4><i class="fas fa-shield-alt"></i> Species Survival Rate</h4>
+                        <div id="survivalRate" style="font-size: 2rem; color: #ff6b35;">75%</div>
+                        <p id="survivalDescription">Most fire-adapted species surviving but showing stress.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Solutions Section -->
+        <section class="content-section" id="solutions">
+            <h2><i class="fas fa-seedling"></i> Solutions & Action Plans</h2>
+            
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <h3><i class="fas fa-shield-alt"></i> Immediate Protection</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin: 10px 0;">🏥 Emergency wildlife corridors</li>
+                        <li style="margin: 10px 0;">🌊 Water source protection</li>
+                        <li style="margin: 10px 0;">🏠 Temporary habitat creation</li>
+                        <li style="margin: 10px 0;">🚁 Rapid response rescue teams</li>
+                    </ul>
+                    <button class="action-button" onclick="joinProtectionEffort()">
+                        Join Protection Effort
+                    </button>
+                </div>
+                
+                <div class="impact-card">
+                    <h3><i class="fas fa-leaf"></i> Ecosystem Restoration</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin: 10px 0;">🌱 Fire-resistant vegetation planting</li>
+                        <li style="margin: 10px 0;">💧 Soil moisture retention systems</li>
+                        <li style="margin: 10px 0;">🌳 Strategic firebreaks with native plants</li>
+                        <li style="margin: 10px 0;">🦋 Pollinator corridor creation</li>
+                    </ul>
+                    <button class="action-button" onclick="supportRestoration()">
+                        Support Restoration
+                    </button>
+                </div>
+                
+                <div class="impact-card">
+                    <h3><i class="fas fa-thermometer-half"></i> Climate Action</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin: 10px 0;">♻️ Reduce greenhouse gas emissions</li>
+                        <li style="margin: 10px 0;">🌍 Support renewable energy</li>
+                        <li style="margin: 10px 0;">🌲 Forest carbon sequestration</li>
+                        <li style="margin: 10px 0;">🏛️ Policy advocacy for fire management</li>
+                    </ul>
+                    <button class="action-button" onclick="takeClimateAction()">
+                        Take Climate Action
+                    </button>
+                </div>
+                
+                <div class="impact-card">
+                    <h3><i class="fas fa-microscope"></i> Research Support</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin: 10px 0;">📊 Fund adaptation studies</li>
+                        <li style="margin: 10px 0;">🧬 Genetic rescue programs</li>
+                        <li style="margin: 10px 0;">📡 Fire prediction technology</li>
+                        <li style="margin: 10px 0;">🎓 Citizen science participation</li>
+                    </ul>
+                    <button class="action-button" onclick="supportResearch()">
+                        Support Research
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Research Data Section -->
+        <section class="content-section" id="data">
+            <h2><i class="fas fa-chart-bar"></i> Research Data & Projections</h2>
+            
+            <div class="chart-container">
+                <h3>Fire Frequency Trends by Region (1950-2025)</h3>
+                <canvas id="trendsChart" width="800" height="400"></canvas>
+            </div>
+            
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <h3><i class="fas fa-globe"></i> Global Hotspots</h3>
+                    <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; margin: 10px 0;">
+                        <h4 style="color: #ff4500;">🔥 Extreme Risk Regions</h4>
+                        <ul style="list-style: none; padding: 0;">
+                            <li>🇺🇸 Western United States (500% increase)</li>
+                            <li>🇦🇺 Eastern Australia (400% increase)</li>
+                            <li>🇧🇷 Amazon Basin (350% increase)</li>
+                            <li>🇬🇷 Mediterranean Basin (450% increase)</li>
+                            <li>🇨🇦 Boreal Canada (600% increase)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="impact-card">
+                    <h3><i class="fas fa-clock"></i> Time to Adaptation Failure</h3>
+                    <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; margin: 10px 0;">
+                        <div style="margin: 10px 0;">
+                            <strong>Fast-breeding species:</strong> 5-10 years
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <strong>Medium-lived species:</strong> 10-25 years
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <strong>Long-lived species:</strong> 25-50 years
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <strong>Ecosystem-dependent species:</strong> 2-5 years
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Emergency Wildlife Response</h3>
+                <p>🚨 Report wildlife in fire zones: 1-800-WILDLIFE</p>
+                <p>🔗 <a href="#" style="color: #ff6b35;">Emergency Response Network</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="../js/fire-regime-shifts.js"></script>
+</body>
+</html>

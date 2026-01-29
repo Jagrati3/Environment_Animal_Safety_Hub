@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walk or Bike Week Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2e8b57;
+            --secondary-color: #3cb371;
+            --accent-color: #1e90ff;
+            --accent-secondary: #00ced1;
+            --light-color: #f0fff0;
+            --dark-color: #1a472a;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --card-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9fdf9;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2.5rem 0;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "🚲🚶‍♀️";
+            position: absolute;
+            font-size: 6rem;
+            opacity: 0.1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .difficulty-badge {
+            display: inline-block;
+            background-color: rgba(255, 193, 7, 0.9);
+            color: #856404;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .challenge-info {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+        
+        .info-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 1.8rem;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            min-width: 180px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid var(--accent-color);
+        }
+        
+        .info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .info-card i {
+            font-size: 2.8rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+        
+        .info-card .number {
+            font-size: 2.4rem;
+            font-weight: bold;
+            color: var(--dark-color);
+            margin-bottom: 0.3rem;
+        }
+        
+        .info-card .label {
+            font-size: 1rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        
+        .challenge-description {
+            background-color: white;
+            border-radius: 20px;
+            padding: 2.8rem;
+            margin: 2.5rem 0;
+            box-shadow: var(--card-shadow);
+            border-left: 5px solid var(--accent-color);
+        }
+        
+        .description-text {
+            font-size: 1.2rem;
+            margin-bottom: 1.8rem;
+            color: #444;
+            line-height: 1.8;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.8rem;
+            margin-top: 2.5rem;
+        }
+        
+        .benefit-card {
+            background-color: var(--light-color);
+            padding: 1.8rem;
+            border-radius: 15px;
+            border-left: 5px solid var(--accent-secondary);
+            transition: transform 0.3s;
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .benefit-card h3 {
+            color: var(--dark-color);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .tips-section {
+            background-color: white;
+            border-radius: 20px;
+            padding: 2.8rem;
+            margin: 2.5rem 0;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.8rem;
+            margin-top: 1.8rem;
+        }
+        
+        .tip-card {
+            background-color: #f9f9f9;
+            padding: 1.8rem;
+            border-radius: 15px;
+            border: 1px solid #e8f5e8;
+            transition: all 0.3s;
+        }
+        
+        .tip-card:hover {
+            background-color: #e8f5e8;
+            border-color: var(--secondary-color);
+        }
+        
+        .tip-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .challenge-actions {
+            text-align: center;
+            margin: 3rem 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(to right, var(--accent-color), var(--accent-secondary));
+            color: white;
+            padding: 1.3rem 3.5rem;
+            font-size: 1.3rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(30, 144, 255, 0.3);
+        }
+        
+        .btn i {
+            margin-right: 10px;
+        }
+        
+        .tracker-section {
+            background-color: white;
+            border-radius: 20px;
+            padding: 2.8rem;
+            margin: 2.5rem 0;
+            box-shadow: var(--card-shadow);
+            display: none;
+        }
+        
+        .tracker-title {
+            text-align: center;
+            color: var(--dark-color);
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+        }
+        
+        .day-tracker {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+        
+        .day {
+            flex: 1;
+            min-width: 120px;
+            background-color: #f5f5f5;
+            padding: 1.5rem 0.8rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .day:hover {
+            border-color: var(--accent-color);
+        }
+        
+        .day.active {
+            background-color: var(--accent-color);
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        .day.completed {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .day-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .transportation-tracker {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.8rem;
+            margin-top: 2rem;
+        }
+        
+        .transport-item {
+            background-color: #f9f9f9;
+            padding: 1.8rem;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+        
+        .transport-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .transport-item i {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+        }
+        
+        .transport-info {
+            flex-grow: 1;
+        }
+        
+        .transport-name {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .transport-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .impact-section {
+            background: linear-gradient(to right, var(--accent-color), var(--accent-secondary));
+            color: white;
+            padding: 3.5rem 2.5rem;
+            border-radius: 20px;
+            margin: 2.5rem 0;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .impact-title {
+            font-size: 2.2rem;
+            margin-bottom: 2.5rem;
+        }
+        
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .impact-item {
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 1.8rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s;
+        }
+        
+        .impact-item:hover {
+            transform: translateY(-8px);
+        }
+        
+        .impact-number {
+            font-size: 2.8rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .impact-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .route-planner {
+            background-color: white;
+            border-radius: 20px;
+            padding: 2.8rem;
+            margin: 2.5rem 0;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .route-planner h2 {
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .route-form {
+            display: grid;
+            gap: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .form-group input, .form-group select {
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.2);
+        }
+        
+        .route-result {
+            background-color: #f0f8ff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1.5rem;
+            display: none;
+        }
+        
+        .safety-section {
+            background-color: #fff8e1;
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin: 2.5rem 0;
+            border-left: 5px solid #ffc107;
+        }
+        
+        .safety-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .safety-tip {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 2.5rem 0;
+            margin-top: 3rem;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .challenge-info {
+                gap: 1rem;
+            }
+            
+            .info-card {
+                min-width: 140px;
+                padding: 1.5rem;
+            }
+            
+            .day-tracker {
+                flex-direction: column;
+            }
+            
+            .day {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                🚲🚶‍♀️
+            </div>
+            <h1>Walk or Bike Week Challenge</h1>
+            <p class="tagline">Replace car trips with walking or biking for one week. Good for you and the planet!</p>
+            <div class="difficulty-badge">Intermediate</div>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="challenge-info">
+            <div class="info-card">
+                <i class="fas fa-calendar-alt"></i>
+                <div class="number">7 days</div>
+                <div class="label">Challenge Duration</div>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-user-friends"></i>
+                <div class="number">892</div>
+                <div class="label">Participants</div>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-trophy"></i>
+                <div class="number">72%</div>
+                <div class="label">Success Rate</div>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-cloud"></i>
+                <div class="number">8kg</div>
+                <div class="label">CO₂ Saved Per Person</div>
+            </div>
+        </section>
+        
+        <section class="challenge-description">
+            <h2>Take the 7-Day Active Transportation Challenge</h2>
+            <p class="description-text">
+                For the next 7 days, you'll replace car trips with walking, biking, or other active transportation methods. 
+                Whether it's your commute to work, a trip to the grocery store, or visiting friends, find ways to leave the car behind.
+            </p>
+            <p class="description-text">
+                This intermediate-level challenge helps you build healthier habits, reduce your carbon footprint, 
+                save money on gas, and discover your community from a new perspective. Join nearly 900 participants 
+                who are making their journeys more sustainable!
+            </p>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <h3><i class="fas fa-heartbeat"></i> Health Benefits</h3>
+                    <p>Improve cardiovascular health, boost mood, increase energy levels, and maintain a healthy weight.</p>
+                </div>
+                <div class="benefit-card">
+                    <h3><i class="fas fa-leaf"></i> Environmental Impact</h3>
+                    <p>Reduce air pollution, decrease carbon emissions, and lower your ecological footprint.</p>
+                </div>
+                <div class="benefit-card">
+                    <h3><i class="fas fa-piggy-bank"></i> Financial Savings</h3>
+                    <p>Save on gas, parking fees, car maintenance, and potentially reduce insurance costs.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="tips-section">
+            <h2>Getting Started Tips</h2>
+            <p>Make your active transportation week successful with these practical tips:</p>
+            
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <h4><i class="fas fa-route"></i> Plan Your Routes</h4>
+                    <p>Use apps like Google Maps or Strava to find bike-friendly routes and walking paths.</p>
+                </div>
+                <div class="tip-card">
+                    <h4><i class="fas fa-bicycle"></i> Bike Maintenance</h4>
+                    <p>Ensure your bike is in good condition: check tires, brakes, and chain before starting.</p>
+                </div>
+                <div class="tip-card">
+                    <h4><i class="fas fa-umbrella"></i> Weather Preparation</h4>
+                    <p>Check the forecast and have rain gear, sunscreen, or layers ready for changing conditions.</p>
+                </div>
+                <div class="tip-card">
+                    <h4><i class="fas fa-shopping-bag"></i> Trip Combination</h4>
+                    <p>Combine errands into one trip and use a backpack or bike baskets to carry items.</p>
+                </div>
+                <div class="tip-card">
+                    <h4><i class="fas fa-clock"></i> Time Management</h4>
+                    <p>Allow extra time for your journeys, especially when first transitioning from driving.</p>
+                </div>
+                <div class="tip-card">
+                    <h4><i class="fas fa-water"></i> Stay Hydrated</h4>
+                    <p>Bring a water bottle, especially for longer bike rides or walks in warm weather.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="challenge-actions">
+            <button id="startChallenge" class="btn">
+                <i class="fas fa-play-circle"></i> Start Challenge
+            </button>
+            <p style="margin-top: 1rem; color: #666;">Click above to begin your 7-day active transportation journey!</p>
+        </section>
+        
+        <section class="tracker-section" id="trackerSection">
+            <h2 class="tracker-title">Your Active Transportation Tracker</h2>
+            
+            <div class="day-tracker" id="dayTracker">
+                <!-- Days will be generated by JavaScript -->
+            </div>
+            
+            <h3 style="margin: 1.5rem 0 2rem; text-align: center;">Today's Transportation Log</h3>
+            <div class="transportation-tracker" id="transportationTracker">
+                <!-- Transportation items will be generated by JavaScript -->
+            </div>
+            
+            <div style="text-align: center; margin-top: 2.5rem;">
+                <button id="completeDay" class="btn" style="background: linear-gradient(to right, var(--primary-color), var(--secondary-color));">
+                    <i class="fas fa-check-circle"></i> Log Today's Journeys
+                </button>
+            </div>
+        </section>
+        
+        <section class="impact-section">
+            <h2 class="impact-title">Your Environmental Impact</h2>
+            <div class="impact-grid">
+                <div class="impact-item">
+                    <div class="impact-number" id="totalKm">0</div>
+                    <div class="impact-label">Kilometers Traveled Green</div>
+                </div>
+                <div class="impact-item">
+                    <div class="impact-number" id="co2Saved">0</div>
+                    <div class="impact-label">Kilograms of CO₂ Saved</div>
+                </div>
+                <div class="impact-item">
+                    <div class="impact-number" id="caloriesBurned">0</div>
+                    <div class="impact-label">Calories Burned</div>
+                </div>
+                <div class="impact-item">
+                    <div class="impact-number" id="moneySaved">$0</div>
+                    <div class="impact-label">Money Saved on Gas</div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="route-planner">
+            <h2><i class="fas fa-map-marked-alt"></i> Route Planner</h2>
+            <p>Plan your walking or biking routes for the week:</p>
+            
+            <div class="route-form">
+                <div class="form-group">
+                    <label for="startLocation">Starting Point</label>
+                    <input type="text" id="startLocation" placeholder="Enter your starting address">
+                </div>
+                
+                <div class="form-group">
+                    <label for="endLocation">Destination</label>
+                    <input type="text" id="endLocation" placeholder="Enter your destination">
+                </div>
+                
+                <div class="form-group">
+                    <label for="transportMode">Transportation Mode</label>
+                    <select id="transportMode">
+                        <option value="bike">Bicycle</option>
+                        <option value="walk">Walking</option>
+                        <option value="ebike">E-Bike</option>
+                        <option value="public">Public Transit + Walking</option>
+                    </select>
+                </div>
+                
+                <button id="planRoute" class="btn" style="padding: 1rem; font-size: 1.1rem;">
+                    <i class="fas fa-route"></i> Calculate Route
+                </button>
+            </div>
+            
+            <div class="route-result" id="routeResult">
+                <h4>Route Details</h4>
+                <p id="routeDistance">Distance: Calculating...</p>
+                <p id="routeTime">Estimated Time: Calculating...</p>
+                <p id="routeCalories">Calories Burned: Calculating...</p>
+                <p id="routeCO2">CO₂ Saved: Calculating...</p>
+            </div>
+        </section>
+        
+        <section class="safety-section">
+            <h2><i class="fas fa-shield-alt"></i> Safety Tips</h2>
+            <p>Stay safe while walking or biking:</p>
+            
+            <div class="safety-grid">
+                <div class="safety-tip">
+                    <h4>Visibility</h4>
+                    <p>Wear bright or reflective clothing, especially at dawn, dusk, or night.</p>
+                </div>
+                <div class="safety-tip">
+                    <h4>Helmet Safety</h4>
+                    <p>Always wear a properly fitted helmet when biking.</p>
+                </div>
+                <div class="safety-tip">
+                    <h4>Follow Traffic Rules</h4>
+                    <p>Obey traffic signals, use bike lanes where available, and signal your turns.</p>
+                </div>
+                <div class="safety-tip">
+                    <h4>Be Predictable</h4>
+                    <p>Ride in a straight line, don't weave between parked cars.</p>
+                </div>
+                <div class="safety-tip">
+                    <h4>Stay Alert</h4>
+                    <p>Avoid distractions like phones or headphones in traffic.</p>
+                </div>
+                <div class="safety-tip">
+                    <h4>Lock Your Bike</h4>
+                    <p>Use a sturdy U-lock and secure both frame and wheels.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>Walk or Bike Week Challenge &copy; 2026 | Join the movement for healthier, greener transportation</p>
+            <p style="margin-top: 1rem; opacity: 0.8;">
+                <i class="fas fa-globe-americas"></i> Every journey counts towards a cleaner planet and healthier you.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Challenge start button
+            const startBtn = document.getElementById('startChallenge');
+            const trackerSection = document.getElementById('trackerSection');
+            
+            // Day tracker element
+            const dayTracker = document.getElementById('dayTracker');
+            
+            // Transportation tracker element
+            const transportationTracker = document.getElementById('transportationTracker');
+            
+            // Complete day button
+            const completeDayBtn = document.getElementById('completeDay');
+            
+            // Impact elements
+            const totalKmElement = document.getElementById('totalKm');
+            const co2SavedElement = document.getElementById('co2Saved');
+            const caloriesBurnedElement = document.getElementById('caloriesBurned');
+            const moneySavedElement = document.getElementById('moneySaved');
+            
+            // Route planner elements
+            const planRouteBtn = document.getElementById('planRoute');
+            const routeResult = document.getElementById('routeResult');
+            const routeDistance = document.getElementById('routeDistance');
+            const routeTime = document.getElementById('routeTime');
+            const routeCalories = document.getElementById('routeCalories');
+            const routeCO2 = document.getElementById('routeCO2');
+            
+            // Challenge state
+            let challengeStarted = localStorage.getItem('walkBikeChallengeStarted') === 'true';
+            let currentDay = parseInt(localStorage.getItem('walkBikeCurrentDay')) || 1;
+            let completedDays = JSON.parse(localStorage.getItem('walkBikeCompletedDays')) || [];
+            let totalKm = parseFloat(localStorage.getItem('walkBikeTotalKm')) || 0;
+            let totalCO2 = parseFloat(localStorage.getItem('walkBikeTotalCO2')) || 0;
+            let totalCalories = parseInt(localStorage.getItem('walkBikeTotalCalories')) || 0;
+            let totalMoneySaved = parseFloat(localStorage.getItem('walkBikeTotalMoneySaved')) || 0;
+            
+            // Transportation options
+            const transportationOptions = [
+                { id: 1, name: "Work Commute", type: "commute", icon: "fas fa-briefcase", distance: 0 },
+                { id: 2, name: "Grocery Shopping", type: "errand", icon: "fas fa-shopping-cart", distance: 0 },
+                { id: 3, name: "School Run", type: "family", icon: "fas fa-school", distance: 0 },
+                { id: 4, name: "Social Visit", type: "social", icon: "fas fa-users", distance: 0 },
+                { id: 5, name: "Exercise/Leisure", type: "exercise", icon: "fas fa-running", distance: 0 },
+                { id: 6, name: "Other Errands", type: "errand", icon: "fas fa-tasks", distance: 0 }
+            ];
+            
+            // Initialize day tracker
+            function initializeDayTracker() {
+                dayTracker.innerHTML = '';
+                
+                for (let i = 1; i <= 7; i++) {
+                    const dayElement = document.createElement('div');
+                    dayElement.className = 'day';
+                    
+                    if (i === currentDay && challengeStarted) {
+                        dayElement.classList.add('active');
+                    } else if (completedDays.includes(i)) {
+                        dayElement.classList.add('completed');
+                    }
+                    
+                    dayElement.innerHTML = `
+                        <div class="day-number">${i}</div>
+                        <div>Day ${i}</div>
+                        <div style="font-size: 0.8rem; margin-top: 0.5rem;">
+                            ${getDayTheme(i)}
+                        </div>
+                    `;
+                    
+                    dayElement.addEventListener('click', function() {
+                        if (challengeStarted && completedDays.includes(i)) {
+                            setCurrentDay(i);
+                        }
+                    });
+                    
+                    dayTracker.appendChild(dayElement);
+                }
+            }
+            
+            // Get theme for each day
+            function getDayTheme(day) {
+                const themes = [
+                    "Short Trips",
+                    "Work Commute",
+                    "Errand Day",
+                    "Long Distance",
+                    "Rain or Shine",
+                    "Weekend Adventure",
+                    "Celebration Day"
+                ];
+                return themes[day - 1] || "Active Day";
+            }
+            
+            // Initialize transportation tracker
+            function initializeTransportationTracker() {
+                transportationTracker.innerHTML = '';
+                
+                transportationOptions.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'transport-item';
+                    
+                    itemElement.innerHTML = `
+                        <i class="${item.icon}"></i>
+                        <div class="transport-info">
+                            <div class="transport-name">${item.name}</div>
+                            <div style="margin-bottom: 0.5rem;">
+                                <small>Distance (km):</small>
+                                <input type="number" id="distance-${item.id}" 
+                                       value="${item.distance}" 
+                                       min="0" 
+                                       max="100" 
+                                       step="0.1"
+                                       style="width: 80px; padding: 5px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                            <div class="transport-stats">
+                                <div class="stat">
+                                    <div class="stat-value" id="co2-${item.id}">${calculateCO2(item.distance).toFixed(1)}</div>
+                                    <div class="stat-label">kg CO₂</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value" id="calories-${item.id}">${calculateCalories(item.distance)}</div>
+                                    <div class="stat-label">Calories</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value" id="money-${item.id}">$${calculateMoney(item.distance).toFixed(2)}</div>
+                                    <div class="stat-label">Saved</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Add event listener to distance input
+                    const distanceInput = itemElement.querySelector(`#distance-${item.id}`);
+                    distanceInput.addEventListener('input', function() {
+                        const distance = parseFloat(this.value) || 0;
+                        item.distance = distance;
+                        
+                        // Update stats
+                        document.getElementById(`co2-${item.id}`).textContent = calculateCO2(distance).toFixed(1);
+                        document.getElementById(`calories-${item.id}`).textContent = calculateCalories(distance);
+                        document.getElementById(`money-${item.id}`).textContent = `$${calculateMoney(distance).toFixed(2)}`;
+                    });
+                    
+                    transportationTracker.appendChild(itemElement);
+                });
+            }
+            
+            // Calculate CO2 savings (car emits ~0.12kg CO2 per km)
+            function calculateCO2(distance) {
+                return distance * 0.12;
+            }
+            
+            // Calculate calories burned (walking: ~50 cal/km, biking: ~30 cal/km)
+            function calculateCalories(distance) {
+                return Math.round(distance * 40); // Average of walking and biking
+            }
+            
+            // Calculate money saved (car costs ~$0.15 per km including gas and maintenance)
+            function calculateMoney(distance) {
+                return distance * 0.15;
+            }
+            
+            // Set current day
+            function setCurrentDay(day) {
+                currentDay = day;
+                localStorage.setItem('walkBikeCurrentDay', currentDay);
+                initializeDayTracker();
+                
+                // Reset distances for new day
+                transportationOptions.forEach(item => {
+                    item.distance = 0;
+                });
+                
+                initializeTransportationTracker();
+            }
+            
+            // Complete current day
+            function completeCurrentDay() {
+                if (!challengeStarted) return;
+                
+                // Calculate totals for today
+                let dailyKm = 0;
+                let dailyCO2 = 0;
+                let dailyCalories = 0;
+                let dailyMoney = 0;
+                
+                transportationOptions.forEach(item => {
+                    dailyKm += item.distance;
+                    dailyCO2 += calculateCO2(item.distance);
+                    dailyCalories += calculateCalories(item.distance);
+                    dailyMoney += calculateMoney(item.distance);
+                });
+                
+                // Check if at least some distance was logged
+                if (dailyKm > 0) {
+                    // Mark day as completed
+                    if (!completedDays.includes(currentDay)) {
+                        completedDays.push(currentDay);
+                        localStorage.setItem('walkBikeCompletedDays', JSON.stringify(completedDays));
+                        
+                        // Update overall totals
+                        totalKm += dailyKm;
+                        totalCO2 += dailyCO2;
+                        totalCalories += dailyCalories;
+                        totalMoneySaved += dailyMoney;
+                        
+                        // Save to localStorage
+                        localStorage.setItem('walkBikeTotalKm', totalKm);
+                        localStorage.setItem('walkBikeTotalCO2', totalCO2);
+                        localStorage.setItem('walkBikeTotalCalories', totalCalories);
+                        localStorage.setItem('walkBikeTotalMoneySaved', totalMoneySaved);
+                        
+                        // Update impact display
+                        updateImpactDisplay();
+                        
+                        // Move to next day if not all days completed
+                        if (currentDay < 7) {
+                            setCurrentDay(currentDay + 1);
+                        } else {
+                            // Challenge completed
+                            alert("Congratulations! You've completed the Walk or Bike Week Challenge!");
+                            completeDayBtn.textContent = "Challenge Complete!";
+                            completeDayBtn.disabled = true;
+                            
+                            // Show celebration
+                            showCelebration();
+                        }
+                    }
+                } else {
+                    alert("Please log at least some distance for one of your trips to complete this day.");
+                }
+            }
+            
+            // Update impact display
+            function updateImpactDisplay() {
+                totalKmElement.textContent = totalKm.toFixed(1);
+                co2SavedElement.textContent = totalCO2.toFixed(1);
+                caloriesBurnedElement.textContent = totalCalories;
+                moneySavedElement.textContent = `$${totalMoneySaved.toFixed(2)}`;
+            }
+            
+            // Show celebration
+            function showCelebration() {
+                // Create confetti effect
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 150,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                }
+            }
+            
+            // Start challenge
+            startBtn.addEventListener('click', function() {
+                challengeStarted = true;
+                localStorage.setItem('walkBikeChallengeStarted', 'true');
+                
+                trackerSection.style.display = 'block';
+                startBtn.textContent = "Challenge Started!";
+                startBtn.disabled = true;
+                startBtn.style.background = "#888";
+                
+                // Initialize trackers
+                initializeDayTracker();
+                initializeTransportationTracker();
+                
+                // Load existing data
+                updateImpactDisplay();
+                
+                // Scroll to tracker
+                trackerSection.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Complete day button
+            completeDayBtn.addEventListener('click', completeCurrentDay);
+            
+            // Route planner
+            planRouteBtn.addEventListener('click', function() {
+                const start = document.getElementById('startLocation').value;
+                const end = document.getElementById('endLocation').value;
+                const mode = document.getElementById('transportMode').value;
+                
+                if (!start || !end) {
+                    alert("Please enter both starting point and destination.");
+                    return;
+                }
+                
+                // Show route result
+                routeResult.style.display = 'block';
+                
+                // Calculate random distances for demo (in real app, use Google Maps API)
+                const distance = (Math.random() * 15 + 1).toFixed(1); // 1-16 km
+                const time = (distance * (mode === 'walk' ? 12 : 5)).toFixed(0); // minutes
+                const calories = Math.round(distance * (mode === 'walk' ? 50 : 30));
+                const co2 = (distance * 0.12).toFixed(1);
+                
+                routeDistance.textContent = `Distance: ${distance} km`;
+                routeTime.textContent = `Estimated Time: ${time} minutes`;
+                routeCalories.textContent = `Calories Burned: ${calories}`;
+                routeCO2.textContent = `CO₂ Saved: ${co2} kg`;
+            });
+            
+            // Load existing challenge if already started
+            if (challengeStarted) {
+                trackerSection.style.display = 'block';
+                startBtn.textContent = "Challenge Started!";
+                startBtn.disabled = true;
+                startBtn.style.background = "#888";
+                
+                initializeDayTracker();
+                initializeTransportationTracker();
+                updateImpactDisplay();
+            } else {
+                trackerSection.style.display = 'none';
+            }
+            
+            // Initialize day tracker for display
+            initializeDayTracker();
+        });
+    </script>
+</body>
+</html>

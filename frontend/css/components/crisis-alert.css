@@ -1,0 +1,229 @@
+/* Crisis Alert Banner - Level 3 Emergency Styling */
+
+@keyframes urgentFlash {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0.7; }
+}
+
+@keyframes urgentPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 69, 0, 0.5); }
+  50% { transform: scale(1.02); box-shadow: 0 0 30px rgba(255, 69, 0, 0.8); }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-100%); opacity: 0; }
+}
+
+.crisis-alert-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(135deg, #8B0000 0%, #FF4500 50%, #FF6B35 100%);
+  background-size: 200% 200%;
+  animation: urgentFlash 3s infinite, slideDown 0.5s ease-out;
+  z-index: 2000;
+  border-bottom: 3px solid #ff0000;
+  box-shadow: 0 5px 25px rgba(255, 0, 0, 0.6);
+}
+
+.crisis-alert-banner.closing {
+  animation: slideUp 0.5s ease-in forwards;
+}
+
+.crisis-alert-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 15px 20px;
+  gap: 20px;
+}
+
+.crisis-icon {
+  flex-shrink: 0;
+  font-size: 2rem;
+  color: #fff;
+  animation: urgentFlash 2s infinite;
+}
+
+.crisis-text {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.crisis-level {
+  font-weight: 900;
+  font-size: 1.1rem;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  letter-spacing: 1px;
+}
+
+.crisis-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.crisis-action {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #fff;
+  opacity: 0.9;
+  font-style: italic;
+}
+
+.crisis-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-shrink: 0;
+}
+
+.crisis-btn {
+  background: linear-gradient(45deg, #fff, #ffddcc);
+  color: #8B0000;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: urgentPulse 2s infinite;
+}
+
+.crisis-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.5);
+  color: #FF0000;
+}
+
+.crisis-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  color: #fff;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.crisis-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg) scale(1.1);
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Navbar adjustment when crisis alert is shown */
+body.crisis-alert-shown .navbar {
+  top: 80px;
+}
+
+body.crisis-alert-shown #main-content {
+  margin-top: 80px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .crisis-alert-content {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+    text-align: center;
+  }
+  
+  .crisis-text {
+    text-align: center;
+  }
+  
+  .crisis-level {
+    font-size: 1rem;
+  }
+  
+  .crisis-title {
+    font-size: 0.9rem;
+  }
+  
+  .crisis-action {
+    font-size: 0.8rem;
+  }
+  
+  .crisis-btn {
+    padding: 10px 15px;
+    font-size: 0.8rem;
+  }
+  
+  body.crisis-alert-shown .navbar {
+    top: 120px;
+  }
+  
+  body.crisis-alert-shown #main-content {
+    margin-top: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .crisis-alert-content {
+    padding: 10px;
+  }
+  
+  .crisis-actions {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .crisis-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  body.crisis-alert-shown .navbar {
+    top: 140px;
+  }
+  
+  body.crisis-alert-shown #main-content {
+    margin-top: 140px;
+  }
+}
+
+/* Additional urgency animations for Level 3 */
+.crisis-urgent-text {
+  animation: urgentFlash 1.5s infinite;
+}
+
+.pulse {
+  animation: urgentPulse 1s infinite;
+}
+
+/* Emergency notification dot */
+.emergency-dot {
+  width: 12px;
+  height: 12px;
+  background: #ff0000;
+  border-radius: 50%;
+  animation: urgentFlash 1s infinite;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+}

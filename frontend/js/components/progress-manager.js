@@ -34,6 +34,7 @@ class ProgressManager {
    * @property {number} remainingTime - Remaining time in seconds
    * @property {number} timestamp - Last save timestamp
    * @property {string} version - Progress data version
+   * @property {QuizQuestion[]} quizQuestions - Array of quiz questions
    */
 
   /**
@@ -43,6 +44,7 @@ class ProgressManager {
    * @param {number[]} progressData.answers - Array of selected answers
    * @param {number} progressData.score - Current score
    * @param {number} progressData.remainingTime - Remaining time in seconds
+   * @param {QuizQuestion[]} progressData.quizQuestions - Array of quiz questions
    * @returns {boolean} True if save was successful
    */
   saveProgress(progressData) {
@@ -53,6 +55,7 @@ class ProgressManager {
         answers: progressData.answers || [],
         score: progressData.score || 0,
         remainingTime: progressData.remainingTime || 0,
+        quizQuestions: progressData.quizQuestions || [],
         timestamp: Date.now(),
         version: this.currentVersion
       };
@@ -147,7 +150,7 @@ class ProgressManager {
     if (!progress || typeof progress !== 'object') return false;
 
     // Required fields
-    const requiredFields = ['quizId', 'currentIndex', 'answers', 'score', 'remainingTime', 'timestamp', 'version'];
+    const requiredFields = ['quizId', 'currentIndex', 'answers', 'score', 'remainingTime', 'timestamp', 'version', 'quizQuestions'];
     for (const field of requiredFields) {
       if (!(field in progress)) return false;
     }
@@ -186,6 +189,8 @@ class ProgressManager {
 }
 
 // Export for use in other files
+export default ProgressManager;
+
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = ProgressManager;
 }

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plastic-Free Week Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2e8b57;
+            --secondary-color: #3cb371;
+            --light-color: #f0fff0;
+            --dark-color: #1a472a;
+            --accent-color: #ffcc00;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9fdf9;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .challenge-info {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .info-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            min-width: 180px;
+            transition: transform 0.3s;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .info-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.8rem;
+        }
+        
+        .info-card .number {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+        
+        .info-card .label {
+            font-size: 1rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        
+        .challenge-description {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow);
+        }
+        
+        .description-text {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: #444;
+        }
+        
+        .tips-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .tip-card {
+            background-color: var(--light-color);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 5px solid var(--secondary-color);
+        }
+        
+        .tip-card h3 {
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .challenge-actions {
+            text-align: center;
+            margin: 3rem 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.2rem 3rem;
+            font-size: 1.3rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: var(--shadow);
+        }
+        
+        .btn:hover {
+            background-color: var(--dark-color);
+            transform: scale(1.05);
+        }
+        
+        .tracker-section {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow);
+        }
+        
+        .tracker-title {
+            text-align: center;
+            color: var(--dark-color);
+            margin-bottom: 2rem;
+        }
+        
+        .day-tracker {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .day {
+            flex: 1;
+            min-width: 120px;
+            background-color: #f5f5f5;
+            padding: 1.2rem 0.5rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .day.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .day.completed {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .day-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .plastic-tracker {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .plastic-item {
+            background-color: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .plastic-item i {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+        
+        .stats-section {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .stats-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .stat-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .resources-section {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow);
+        }
+        
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .resource-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .resource-card:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-5px);
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .challenge-info {
+                gap: 1rem;
+            }
+            
+            .info-card {
+                min-width: 140px;
+            }
+            
+            .day-tracker {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-leaf"></i>
+            </div>
+            <h1>Plastic-Free Week Challenge</h1>
+            <p class="tagline">Go one week without using any single-use plastics. Carry reusable bags, bottles, and containers.</p>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="challenge-info">
+            <div class="info-card">
+                <i class="fas fa-calendar-alt"></i>
+                <div class="number">7 days</div>
+                <div class="label">Challenge Duration</div>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-user-friends"></i>
+                <div class="number">1,247</div>
+                <div class="label">Participants</div>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-trophy"></i>
+                <div class="number">78%</div>
+                <div class="label">Success Rate</div>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-cloud"></i>
+                <div class="number">3.5kg</div>
+                <div class="label">CO₂ Saved Per Person</div>
+            </div>
+        </section>
+        
+        <section class="challenge-description">
+            <h2>Take the Challenge</h2>
+            <p class="description-text">
+                Welcome to the Plastic-Free Week Challenge! For the next 7 days, you'll avoid all single-use plastics. 
+                This means saying no to plastic bags, bottles, straws, cutlery, packaging, and any other disposable plastic items.
+                Instead, you'll use reusable alternatives that are better for our planet.
+            </p>
+            <p class="description-text">
+                This beginner-friendly challenge will help you develop sustainable habits that reduce plastic pollution,
+                conserve resources, and lower your carbon footprint. You'll join over 1,200 participants who are making
+                a difference one day at a time!
+            </p>
+            
+            <div class="tips-list">
+                <div class="tip-card">
+                    <h3><i class="fas fa-shopping-bag"></i> Reusable Bags</h3>
+                    <p>Keep reusable bags in your car, backpack, or by your door so you never forget them when shopping.</p>
+                </div>
+                <div class="tip-card">
+                    <h3><i class="fas fa-wine-bottle"></i> Water Bottles</h3>
+                    <p>Carry a refillable water bottle and coffee cup to avoid disposable containers.</p>
+                </div>
+                <div class="tip-card">
+                    <h3><i class="fas fa-utensils"></i> Food Containers</h3>
+                    <p>Bring your own containers for takeout and leftovers to avoid plastic packaging.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="challenge-actions">
+            <button id="startChallenge" class="btn">
+                <i class="fas fa-play-circle"></i> Start Challenge
+            </button>
+            <p style="margin-top: 1rem; color: #666;">Click above to begin your plastic-free week!</p>
+        </section>
+        
+        <section class="tracker-section" id="trackerSection" style="display: none;">
+            <h2 class="tracker-title">Your Plastic-Free Week Tracker</h2>
+            
+            <div class="day-tracker" id="dayTracker">
+                <!-- Days will be generated by JavaScript -->
+            </div>
+            
+            <h3 style="margin: 1.5rem 0;">Today's Plastic Avoidance Checklist</h3>
+            <div class="plastic-tracker" id="plasticTracker">
+                <!-- Plastic items will be generated by JavaScript -->
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button id="completeDay" class="btn" style="background-color: var(--secondary-color);">
+                    <i class="fas fa-check-circle"></i> Mark Today Complete
+                </button>
+            </div>
+        </section>
+        
+        <section class="stats-section">
+            <h2 class="stats-title">Collective Impact</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalParticipants">1,247</div>
+                    <div class="stat-label">Total Participants</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="plasticSaved">4,365</div>
+                    <div class="stat-label">Plastic Items Saved</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="co2Saved">4.4</div>
+                    <div class="stat-label">Tons of CO₂ Saved</div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="resources-section">
+            <h2>Helpful Resources</h2>
+            <p>Make your plastic-free week easier with these resources:</p>
+            
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <h3><i class="fas fa-book"></i> Plastic-Free Guide</h3>
+                    <p>Download our comprehensive guide to avoiding single-use plastics in everyday situations.</p>
+                </div>
+                <div class="resource-card">
+                    <h3><i class="fas fa-store"></i> Zero-Waste Stores</h3>
+                    <p>Find stores in your area that offer package-free shopping and bulk items.</p>
+                </div>
+                <div class="resource-card">
+                    <h3><i class="fas fa-users"></i> Community Support</h3>
+                    <p>Join our online community to share tips and get support during your challenge.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>Plastic-Free Week Challenge &copy; 2026 | Join the movement to reduce plastic pollution</p>
+            <p style="margin-top: 1rem; opacity: 0.8;">
+                <i class="fas fa-globe-americas"></i> One week can change your habits, changed habits can change the world.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Challenge start button
+            const startBtn = document.getElementById('startChallenge');
+            const trackerSection = document.getElementById('trackerSection');
+            
+            // Day tracker element
+            const dayTracker = document.getElementById('dayTracker');
+            
+            // Plastic tracker element
+            const plasticTracker = document.getElementById('plasticTracker');
+            
+            // Complete day button
+            const completeDayBtn = document.getElementById('completeDay');
+            
+            // Stats elements
+            const totalParticipants = document.getElementById('totalParticipants');
+            const plasticSaved = document.getElementById('plasticSaved');
+            const co2Saved = document.getElementById('co2Saved');
+            
+            // Challenge state
+            let challengeStarted = false;
+            let currentDay = 1;
+            let completedDays = [];
+            let totalPlasticItemsSaved = 4365;
+            
+            // Plastic items to avoid
+            const plasticItems = [
+                { id: 1, name: "Plastic Bags", icon: "fas fa-shopping-bag", checked: false },
+                { id: 2, name: "Plastic Bottles", icon: "fas fa-wine-bottle", checked: false },
+                { id: 3, name: "Plastic Straws", icon: "fas fa-cocktail", checked: false },
+                { id: 4, name: "Plastic Packaging", icon: "fas fa-box-open", checked: false },
+                { id: 5, name: "Plastic Cutlery", icon: "fas fa-utensils", checked: false },
+                { id: 6, name: "Coffee Cup Lids", icon: "fas fa-coffee", checked: false }
+            ];
+            
+            // Initialize day tracker
+            function initializeDayTracker() {
+                dayTracker.innerHTML = '';
+                
+                for (let i = 1; i <= 7; i++) {
+                    const dayElement = document.createElement('div');
+                    dayElement.className = 'day';
+                    
+                    if (i === currentDay && challengeStarted) {
+                        dayElement.classList.add('active');
+                    } else if (completedDays.includes(i)) {
+                        dayElement.classList.add('completed');
+                    }
+                    
+                    dayElement.innerHTML = `
+                        <div class="day-number">${i}</div>
+                        <div>Day ${i}</div>
+                    `;
+                    
+                    dayElement.addEventListener('click', function() {
+                        if (challengeStarted && completedDays.includes(i)) {
+                            setCurrentDay(i);
+                        }
+                    });
+                    
+                    dayTracker.appendChild(dayElement);
+                }
+            }
+            
+            // Initialize plastic tracker
+            function initializePlasticTracker() {
+                plasticTracker.innerHTML = '';
+                
+                plasticItems.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'plastic-item';
+                    
+                    itemElement.innerHTML = `
+                        <i class="${item.icon}"></i>
+                        <div style="flex-grow: 1;">
+                            <h4 style="margin-bottom: 5px;">${item.name}</h4>
+                            <p style="font-size: 0.9rem; color: #666;">Avoid using this today</p>
+                        </div>
+                        <input type="checkbox" id="plastic-${item.id}" ${item.checked ? 'checked' : ''} style="transform: scale(1.5);">
+                    `;
+                    
+                    const checkbox = itemElement.querySelector(`#plastic-${item.id}`);
+                    checkbox.addEventListener('change', function() {
+                        item.checked = this.checked;
+                    });
+                    
+                    plasticTracker.appendChild(itemElement);
+                });
+            }
+            
+            // Set current day
+            function setCurrentDay(day) {
+                currentDay = day;
+                initializeDayTracker();
+                
+                // Reset plastic items for new day
+                plasticItems.forEach(item => {
+                    item.checked = false;
+                });
+                
+                initializePlasticTracker();
+            }
+            
+            // Complete current day
+            function completeCurrentDay() {
+                if (!challengeStarted) return;
+                
+                // Check if at least 3 plastic items are avoided
+                const checkedItems = plasticItems.filter(item => item.checked).length;
+                
+                if (checkedItems >= 3) {
+                    // Mark day as completed
+                    if (!completedDays.includes(currentDay)) {
+                        completedDays.push(currentDay);
+                        
+                        // Update stats
+                        totalPlasticItemsSaved += checkedItems * 2; // Each item avoided counts as 2 saved
+                        plasticSaved.textContent = totalPlasticItemsSaved;
+                        
+                        // Update CO2 saved (0.8kg per day completed)
+                        const newCO2 = (4.4 + (completedDays.length * 0.8)).toFixed(1);
+                        co2Saved.textContent = newCO2;
+                        
+                        // Move to next day if not all days completed
+                        if (currentDay < 7) {
+                            setCurrentDay(currentDay + 1);
+                        } else {
+                            // Challenge completed
+                            alert("Congratulations! You've completed the Plastic-Free Week Challenge!");
+                            completeDayBtn.textContent = "Challenge Complete!";
+                            completeDayBtn.disabled = true;
+                        }
+                    }
+                } else {
+                    alert("Please check off at least 3 plastic items you avoided today to complete this day.");
+                }
+            }
+            
+            // Start challenge
+            startBtn.addEventListener('click', function() {
+                challengeStarted = true;
+                trackerSection.style.display = 'block';
+                startBtn.textContent = "Challenge Started!";
+                startBtn.disabled = true;
+                startBtn.style.backgroundColor = "#888";
+                
+                // Initialize trackers
+                initializeDayTracker();
+                initializePlasticTracker();
+                
+                // Scroll to tracker
+                trackerSection.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Complete day button
+            completeDayBtn.addEventListener('click', completeCurrentDay);
+            
+            // Initialize stats with animation
+            function animateStats() {
+                // Animate participant count
+                let participants = 1247;
+                const participantsInterval = setInterval(() => {
+                    participants += 3;
+                    totalParticipants.textContent = participants;
+                    
+                    if (participants >= 1300) {
+                        clearInterval(participantsInterval);
+                    }
+                }, 100);
+                
+                // Animate plastic saved count
+                let plasticCount = 4200;
+                const plasticInterval = setInterval(() => {
+                    plasticCount += 11;
+                    plasticSaved.textContent = plasticCount;
+                    
+                    if (plasticCount >= 4365) {
+                        clearInterval(plasticInterval);
+                    }
+                }, 50);
+            }
+            
+            // Start animations after page load
+            setTimeout(animateStats, 1000);
+            
+            // Initialize day tracker for display
+            initializeDayTracker();
+        });
+    </script>
+</body>
+</html>

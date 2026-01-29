@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Warrior Week Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Quicksand:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2a9dcc;
+            --secondary: #4ab7e2;
+            --accent: #ff9a3d;
+            --light: #f0f9ff;
+            --dark: #1a6b8c;
+            --ocean: #0077b6;
+            --fresh: #90e0ef;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: #333;
+            background-color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(to bottom, rgba(26, 107, 140, 0.95), rgba(42, 157, 204, 0.9)), 
+                        url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center 40%;
+            color: white;
+            padding: 80px 0 60px;
+            text-align: center;
+            border-radius: 0 0 30px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .water-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="%23ffffff"></path></svg>');
+            background-size: 1200px 100px;
+            opacity: 0.1;
+        }
+        
+        .logo {
+            font-size: 4.5rem;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-weight: 300;
+            font-family: 'Quicksand', sans-serif;
+        }
+        
+        /* Challenge Intro */
+        .challenge-intro {
+            text-align: center;
+            padding: 70px 0 50px;
+            position: relative;
+        }
+        
+        .water-droplets {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .droplet {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--fresh);
+            border-radius: 50% 50% 50% 0;
+            opacity: 0.1;
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            to { transform: translateY(100vh); }
+        }
+        
+        .challenge-title {
+            font-size: 3.5rem;
+            color: var(--ocean);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+            z-index: 2;
+        }
+        
+        .challenge-title:after {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 6px;
+            background: linear-gradient(to right, var(--primary), var(--fresh));
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 3px;
+        }
+        
+        .challenge-subtitle {
+            font-size: 1.6rem;
+            color: var(--dark);
+            margin-bottom: 25px;
+            font-weight: 700;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .challenge-description {
+            max-width: 850px;
+            margin: 0 auto 50px;
+            background-color: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 119, 182, 0.1);
+            border-top: 5px solid var(--fresh);
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+        }
+        
+        .challenge-description:before {
+            content: "💧";
+            position: absolute;
+            top: -25px;
+            right: -25px;
+            background: var(--primary);
+            color: white;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            opacity: 0.8;
+        }
+        
+        /* Stats Section */
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 60px 0 80px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .stat-box {
+            background: white;
+            border-radius: 20px;
+            padding: 35px 25px;
+            width: 250px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 119, 182, 0.12);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 5px solid var(--secondary);
+        }
+        
+        .stat-box:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--fresh));
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 45px rgba(0, 119, 182, 0.2);
+        }
+        
+        .stat-value {
+            font-size: 3.8rem;
+            font-weight: 800;
+            color: var(--ocean);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1.3rem;
+            color: var(--dark);
+            font-weight: 700;
+        }
+        
+        /* Water Facts */
+        .facts-section {
+            background-color: white;
+            border-radius: 25px;
+            padding: 70px 50px;
+            margin: 70px 0;
+            box-shadow: 0 15px 40px rgba(0, 119, 182, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .facts-section:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(to right, var(--primary), var(--secondary), var(--fresh));
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.6rem;
+            color: var(--ocean);
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 6px;
+            background: linear-gradient(to right, var(--primary), var(--fresh));
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 3px;
+        }
+        
+        .facts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        
+        .fact-card {
+            background: var(--light);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid var(--primary);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        
+        .fact-card:hover {
+            transform: translateY(-8px);
+        }
+        
+        .fact-card h3 {
+            color: var(--ocean);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+        }
+        
+        .fact-card h3 i {
+            color: var(--accent);
+        }
+        
+        /* Tips Section */
+        .tips-section {
+            background: linear-gradient(135deg, var(--light), #e3f2fd);
+            border-radius: 25px;
+            padding: 60px 50px;
+            margin: 70px 0;
+        }
+        
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 35px;
+            margin-top: 50px;
+        }
+        
+        .tip-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 119, 182, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tip-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 119, 182, 0.15);
+        }
+        
+        .tip-card:before {
+            content: "💧";
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 5rem;
+            opacity: 0.1;
+        }
+        
+        .tip-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            height: 80px;
+            width: 80px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        
+        /* Action Section */
+        .action-section {
+            text-align: center;
+            padding: 80px 40px;
+            background: linear-gradient(135deg, var(--primary), var(--ocean));
+            color: white;
+            border-radius: 30px;
+            margin: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-section:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            opacity: 0.15;
+        }
+        
+        .action-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .start-button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 25px 65px;
+            font-size: 1.8rem;
+            font-weight: 800;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 40px;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            letter-spacing: 1px;
+        }
+        
+        .start-button:hover {
+            background-color: #ff8a1a;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+        }
+        
+        .counter {
+            font-size: 1.6rem;
+            margin: 35px 0;
+            font-weight: 700;
+        }
+        
+        /* Weekly Plan */
+        .weekly-plan {
+            background-color: white;
+            border-radius: 25px;
+            padding: 70px 50px;
+            margin: 70px 0;
+            box-shadow: 0 15px 40px rgba(0, 119, 182, 0.1);
+        }
+        
+        .plan-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .plan-day {
+            background: var(--light);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border-top: 5px solid var(--secondary);
+        }
+        
+        .day-title {
+            color: var(--ocean);
+            margin-bottom: 15px;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .day-tip {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        
+        .day-details {
+            font-size: 0.95rem;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 60px 0;
+            margin-top: 80px;
+            color: var(--dark);
+            border-top: 1px solid rgba(0, 119, 182, 0.2);
+            background-color: #e3f2fd;
+        }
+        
+        .impact-statement {
+            font-size: 1.4rem;
+            margin-top: 30px;
+            color: var(--ocean);
+            font-weight: 800;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .challenge-title {
+                font-size: 2.6rem;
+            }
+            
+            .stat-box {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .facts-grid, .tips-grid, .plan-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .facts-section, .tips-section, .weekly-plan {
+                padding: 40px 25px;
+            }
+            
+            .action-section {
+                padding: 60px 25px;
+            }
+        }
+        
+        .highlight {
+            color: var(--accent);
+            font-weight: 800;
+        }
+        
+        .water-icon {
+            display: inline-block;
+            margin: 0 8px;
+            color: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="water-wave"></div>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-tint"></i>
+            </div>
+            <h1>Water Warrior Week</h1>
+            <p class="tagline">Join thousands in the fight to conserve our planet's most precious resource</p>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="challenge-intro">
+            <div class="water-droplets" id="droplet-container"></div>
+            
+            <h1 class="challenge-title">Water Warrior Week</h1>
+            <h2 class="challenge-subtitle">7 days • Beginner Level</h2>
+            
+            <div class="challenge-description">
+                <p>Reduce water usage by 20% for one week. Every drop matters! This beginner-friendly challenge will teach you simple yet effective water-saving habits that can become lifelong practices. Track your water usage, discover where you can save, and join a community committed to preserving our planet's freshwater resources.</p>
+            </div>
+            
+            <div class="counter">
+                <p><i class="fas fa-users"></i> <span id="participant-count">1,654</span> water warriors conserving together</p>
+            </div>
+        </section>
+        
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-value">7</div>
+                <div class="stat-label">Days to Save Water</div>
+            </div>
+            
+            <div class="stat-box">
+                <div class="stat-value">1,654</div>
+                <div class="stat-label">Water Warriors</div>
+            </div>
+            
+            <div class="stat-box">
+                <div class="stat-value">80%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+            
+            <div class="stat-box">
+                <div class="stat-value">20%</div>
+                <div class="stat-label">Usage Reduction Goal</div>
+            </div>
+        </div>
+        
+        <section class="facts-section">
+            <h2 class="section-title">Why Water Conservation Matters</h2>
+            
+            <div class="facts-grid">
+                <div class="fact-card">
+                    <h3><i class="fas fa-globe-americas"></i> Global Water Crisis</h3>
+                    <p>2.2 billion people lack access to safely managed drinking water. By 2025, half the world's population will be living in water-stressed areas.</p>
+                </div>
+                
+                <div class="fact-card">
+                    <h3><i class="fas fa-shower"></i> Household Water Use</h3>
+                    <p>The average American family uses more than 300 gallons of water per day at home. 70% of this is used indoors, primarily in bathrooms.</p>
+                </div>
+                
+                <div class="fact-card">
+                    <h3><i class="fas fa-hamburger"></i> Virtual Water</h3>
+                    <p>It takes 1,847 gallons of water to produce 1 pound of beef. A single almond requires 1.1 gallons of water to grow.</p>
+                </div>
+                
+                <div class="fact-card">
+                    <h3><i class="fas fa-industry"></i> Energy Connection</h3>
+                    <p>8% of global energy generation is used for pumping, treating, and transporting water. Saving water saves energy too!</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="tips-section">
+            <h2 class="section-title">Easy Water-Saving Tips</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 20px; font-size: 1.2rem;">Small changes can add up to big savings. Try these simple strategies during your Water Warrior Week:</p>
+            
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-faucet"></i>
+                    </div>
+                    <h3>Shorter Showers</h3>
+                    <p>Cut your shower time by just 2 minutes to save up to 10 gallons of water per shower.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-tooth"></i>
+                    </div>
+                    <h3>Turn Off Tap</h3>
+                    <p>Don't let the water run while brushing teeth or washing hands. Save 4 gallons per minute.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3>Full Loads Only</h3>
+                    <p>Run dishwashers and washing machines only when full. Save 15-45 gallons per load.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-wine-bottle"></i>
+                    </div>
+                    <h3>Reuse Water</h3>
+                    <p>Collect shower warm-up water for plants. Reuse pasta water for garden watering.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="weekly-plan">
+            <h2 class="section-title">Your Water Warrior Week Plan</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 20px;">Follow this daily guide to reduce your water usage by 20%</p>
+            
+            <div class="plan-grid">
+                <div class="plan-day">
+                    <h3 class="day-title"><i class="fas fa-search water-icon"></i> Day 1: Audit</h3>
+                    <div class="day-tip">Track Your Usage</div>
+                    <p class="day-details">Note all water activities today to establish your baseline usage.</p>
+                </div>
+                
+                <div class="plan-day">
+                    <h3 class="day-title"><i class="fas fa-shower water-icon"></i> Day 2-3: Bathroom</h3>
+                    <div class="day-tip">Shorter Showers</div>
+                    <p class="day-details">Time your showers and aim to reduce by 2 minutes each.</p>
+                </div>
+                
+                <div class="plan-day">
+                    <h3 class="day-title"><i class="fas fa-utensils water-icon"></i> Day 4-5: Kitchen</h3>
+                    <div class="day-tip">Smart Washing</div>
+                    <p class="day-details">Only run full dishwasher loads and wash veggies in a bowl.</p>
+                </div>
+                
+                <div class="plan-day">
+                    <h3 class="day-title"><i class="fas fa-leaf water-icon"></i> Day 6-7: Outdoor</h3>
+                    <div class="day-tip">Garden Wisdom</div>
+                    <p class="day-details">Water plants in early morning and use collected rainwater.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="action-section">
+            <div class="action-content">
+                <h2 class="section-title" style="color: white;">Ready to Become a Water Warrior?</h2>
+                <p style="font-size: 1.4rem; max-width: 800px; margin: 0 auto 20px;">Join thousands of participants making a tangible difference in water conservation.</p>
+                <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto;">For just 7 days, <span class="highlight" style="color: #ffd1a8;">every drop you save makes a difference</span> in our global water future.</p>
+                
+                <button class="start-button" id="start-challenge">
+                    <i class="fas fa-play-circle"></i> Start 7-Day Challenge
+                </button>
+                
+                <div class="counter" id="join-message"></div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>Water Warrior Week Challenge &copy; 2026 | Every Drop Counts Initiative</p>
+            <p class="impact-statement">
+                <i class="fas fa-tint"></i> 
+                Collective impact: <span id="total-water">33,080</span> gallons saved this week and counting
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create water droplets
+            const dropletContainer = document.getElementById('droplet-container');
+            for (let i = 0; i < 15; i++) {
+                const droplet = document.createElement('div');
+                droplet.className = 'droplet';
+                droplet.style.left = `${Math.random() * 100}%`;
+                droplet.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                droplet.style.animationDelay = `${Math.random() * 5}s`;
+                dropletContainer.appendChild(droplet);
+            }
+            
+            // Elements
+            const participantCount = document.getElementById('participant-count');
+            const joinMessage = document.getElementById('join-message');
+            const startButton = document.getElementById('start-challenge');
+            const totalWater = document.getElementById('total-water');
+            
+            // Initial values
+            let participants = 1654;
+            let waterSaved = participants * 20; // 20 gallons per participant per week
+            
+            // Update displays
+            totalWater.textContent = waterSaved.toLocaleString();
+            
+            // Start challenge functionality
+            startButton.addEventListener('click', function() {
+                // Increase participant count
+                participants++;
+                participantCount.textContent = participants.toLocaleString();
+                
+                // Update water saved
+                waterSaved = participants * 20;
+                totalWater.textContent = waterSaved.toLocaleString();
+                
+                // Success message
+                const messages = [
+                    "Welcome to the Water Warriors!",
+                    "Your water-saving week begins now!",
+                    "You've joined the conservation movement!",
+                    "Get ready to save every drop!"
+                ];
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                
+                joinMessage.innerHTML = `<i class="fas fa-check-circle" style="color: #4ab7e2"></i> ${randomMessage} You are Water Warrior #${participants.toLocaleString()}`;
+                
+                // Change button
+                startButton.innerHTML = '<i class="fas fa-check"></i> Challenge Started!';
+                startButton.style.backgroundColor = '#4ab7e2';
+                startButton.disabled = true;
+                
+                // Show confirmation
+                alert("Water Warrior Week started!\n\nYou'll receive daily water-saving tips via email including:\n1. Water usage tracking sheet\n2. Daily conservation challenges\n3. Progress monitoring tools\n4. Community support from fellow Water Warriors\n\nRemember: Every drop counts!");
+            });
+            
+            // Simulate live participant updates
+            setInterval(() => {
+                if (Math.random() > 0.6) {
+                    const newParticipants = Math.floor(Math.random() * 5) + 1;
+                    participants += newParticipants;
+                    participantCount.textContent = participants.toLocaleString();
+                    
+                    // Update water saved
+                    waterSaved = participants * 20;
+                    totalWater.textContent = waterSaved.toLocaleString();
+                }
+            }, 8000);
+            
+            // Add more droplets periodically
+            setInterval(() => {
+                const droplet = document.createElement('div');
+                droplet.className = 'droplet';
+                droplet.style.left = `${Math.random() * 100}%`;
+                droplet.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                dropletContainer.appendChild(droplet);
+                
+                // Remove droplets after animation completes
+                setTimeout(() => {
+                    if (dropletContainer.contains(droplet)) {
+                        dropletContainer.removeChild(droplet);
+                    }
+                }, 15000);
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

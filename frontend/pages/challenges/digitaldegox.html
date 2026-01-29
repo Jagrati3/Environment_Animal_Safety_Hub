@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Detox Weekend Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Source+Code+Pro:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #7b9acc;
+            --accent: #ff6b6b;
+            --light: #f0f5ff;
+            --dark: #1a2238;
+            --success: #4caf50;
+            --gray: #6b7280;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            background-color: var(--light);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            color: white;
+            padding: 60px 0 40px;
+            text-align: center;
+            border-radius: 0 0 30px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: 
+                radial-gradient(circle at 25% 25%, white 2px, transparent 2px),
+                radial-gradient(circle at 75% 75%, white 2px, transparent 2px);
+            background-size: 50px 50px;
+        }
+        
+        .logo {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .tagline {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto 25px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        /* Challenge Intro */
+        .challenge-intro {
+            text-align: center;
+            padding: 50px 0 40px;
+        }
+        
+        .challenge-title {
+            font-size: 2.8rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .challenge-subtitle {
+            font-size: 1.4rem;
+            color: var(--gray);
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+        
+        .challenge-description {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid var(--accent);
+        }
+        
+        /* Stats Section */
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin: 40px 0 60px;
+        }
+        
+        .stat-box {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            width: 220px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 4px solid var(--primary);
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--gray);
+        }
+        
+        /* Benefits Section */
+        .benefits-section {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            margin: 50px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 40px;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .benefit-card {
+            background: var(--light);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .benefit-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .benefit-card h3 i {
+            color: var(--accent);
+        }
+        
+        /* Action Section */
+        .action-section {
+            text-align: center;
+            padding: 60px 30px;
+            background: linear-gradient(135deg, var(--light), white);
+            border-radius: 25px;
+            margin: 50px 0;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .start-button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(74, 111, 165, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .start-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(74, 111, 165, 0.4);
+        }
+        
+        .start-button:active {
+            transform: translateY(-2px);
+        }
+        
+        .counter {
+            font-size: 1.3rem;
+            margin: 25px 0;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        /* Weekend Plan */
+        .weekend-plan {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 50px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+        
+        .plan-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .plan-day {
+            background: var(--light);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .day-title {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .day-activities {
+            list-style-type: none;
+        }
+        
+        .day-activities li {
+            padding: 10px 0;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+        }
+        
+        .day-activities li:last-child {
+            border-bottom: none;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 50px;
+            color: var(--gray);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .impact-statement {
+            font-size: 1.1rem;
+            margin-top: 20px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .challenge-title {
+                font-size: 2.2rem;
+            }
+            
+            .stat-box {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .benefits-grid, .plan-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .weekend-plan, .benefits-section {
+                padding: 30px 20px;
+            }
+        }
+        
+        .highlight {
+            color: var(--accent);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-pattern"></div>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-power-off"></i>
+            </div>
+            <h1>Digital Wellness Challenge</h1>
+            <p class="tagline">Reconnect with the offline world, reduce e-waste, and save energy one weekend at a time</p>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="challenge-intro">
+            <h1 class="challenge-title">Digital Detox Weekend</h1>
+            <h2 class="challenge-subtitle">3 days • Beginner Level</h2>
+            
+            <div class="challenge-description">
+                <p>Unplug from screens for one weekend. Reduce e-waste awareness and energy consumption. This beginner-friendly challenge helps you break free from digital overload, reconnect with yourself and your surroundings, and understand the environmental impact of our always-on digital lives.</p>
+            </div>
+            
+            <div class="counter">
+                <p><i class="fas fa-users"></i> <span id="participant-count">1,534</span> people have taken this challenge</p>
+            </div>
+        </section>
+        
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-value">3</div>
+                <div class="stat-label">Days of Detox</div>
+            </div>
+            
+            <div class="stat-box">
+                <div class="stat-value">1,534</div>
+                <div class="stat-label">Participants</div>
+            </div>
+            
+            <div class="stat-box">
+                <div class="stat-value">68%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+            
+            <div class="stat-box">
+                <div class="stat-value">2kg</div>
+                <div class="stat-label">Avg. CO₂ Saved</div>
+            </div>
+        </div>
+        
+        <section class="benefits-section">
+            <h2 class="section-title">Why Digital Detox Matters</h2>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <h3><i class="fas fa-bolt"></i> Energy Savings</h3>
+                    <p>Powering down devices for a weekend reduces electricity consumption significantly. One smartphone charger left plugged in uses ~0.26W constantly.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <h3><i class="fas fa-recycle"></i> E-Waste Awareness</h3>
+                    <p>Reducing screen time extends device lifespan, delaying when they become e-waste. The world generates ~50 million tons of e-waste annually.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <h3><i class="fas fa-brain"></i> Mental Clarity</h3>
+                    <p>Constant notifications fragment attention. A digital break can improve focus, reduce anxiety, and enhance creativity.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <h3><i class="fas fa-heart"></i> Better Sleep</h3>
+                    <p>Blue light from screens disrupts melatonin production. Unplugging before bed improves sleep quality and overall health.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="weekend-plan">
+            <h2 class="section-title">Your Detox Weekend Plan</h2>
+            
+            <div class="plan-grid">
+                <div class="plan-day">
+                    <h3 class="day-title">Friday Evening</h3>
+                    <ul class="day-activities">
+                        <li>Charge all devices to 100%</li>
+                        <li>Set up auto-responders</li>
+                        <li>Plan offline activities</li>
+                        <li>Digital sunset at 8 PM</li>
+                    </ul>
+                </div>
+                
+                <div class="plan-day">
+                    <h3 class="day-title">Saturday</h3>
+                    <ul class="day-activities">
+                        <li>Morning without phone</li>
+                        <li>Outdoor activity</li>
+                        <li>Read a physical book</li>
+                        <li>Evening board games</li>
+                    </ul>
+                </div>
+                
+                <div class="plan-day">
+                    <h3 class="day-title">Sunday</h3>
+                    <ul class="day-activities">
+                        <li>Analog journaling</li>
+                        <li>Nature walk</li>
+                        <li>Creative hobby time</li>
+                        <li>Reflect on experience</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section class="action-section">
+            <h2 class="section-title">Ready to Unplug?</h2>
+            <p>Join thousands who have rediscovered the joy of offline moments and reduced their digital footprint.</p>
+            <p>This weekend, choose presence over pixels and <span class="highlight">save energy while you recharge yourself</span>.</p>
+            
+            <button class="start-button" id="start-challenge">
+                <i class="fas fa-play-circle"></i> Start Weekend Challenge
+            </button>
+            
+            <div class="counter" id="join-message"></div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>Digital Detox Weekend Challenge &copy; 2026 | Part of the Digital Wellness Initiative</p>
+            <p class="impact-statement">
+                <i class="fas fa-leaf"></i> 
+                Based on average participation: <span id="total-co2">3,068</span> kg CO₂ saved and counting
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const participantCount = document.getElementById('participant-count');
+            const joinMessage = document.getElementById('join-message');
+            const startButton = document.getElementById('start-challenge');
+            const totalCO2 = document.getElementById('total-co2');
+            
+            // Initial values
+            let participants = 1534;
+            let co2Saved = participants * 2; // 2kg per participant
+            
+            // Update total CO2 display
+            totalCO2.textContent = co2Saved.toLocaleString();
+            
+            // Start challenge functionality
+            startButton.addEventListener('click', function() {
+                // Increase participant count
+                participants++;
+                participantCount.textContent = participants.toLocaleString();
+                
+                // Update CO2 total
+                co2Saved = participants * 2;
+                totalCO2.textContent = co2Saved.toLocaleString();
+                
+                // Success message
+                const messages = [
+                    "Welcome! Your detox starts now.",
+                    "Enjoy your screen-free weekend!",
+                    "You've joined the digital detox movement.",
+                    "Get ready to reconnect with the real world!"
+                ];
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                
+                joinMessage.innerHTML = `<i class="fas fa-check-circle" style="color: var(--success)"></i> ${randomMessage} You are participant #${participants.toLocaleString()}`;
+                
+                // Change button
+                startButton.innerHTML = '<i class="fas fa-check"></i> Challenge Started!';
+                startButton.style.background = 'linear-gradient(135deg, var(--success), #66bb6a)';
+                startButton.disabled = true;
+                
+                // Show confirmation
+                alert("Digital Detox Weekend started!\n\nYou'll receive a preparation guide via email. Remember to:\n1. Inform friends/family\n2. Plan alternative activities\n3. Fully charge devices before starting\n\nEnjoy your unplugged weekend!");
+            });
+            
+            // Simulate live participant updates
+            setInterval(() => {
+                if (Math.random() > 0.8) {
+                    participants += Math.floor(Math.random() * 3) + 1;
+                    participantCount.textContent = participants.toLocaleString();
+                    
+                    // Update CO2 total
+                    co2Saved = participants * 2;
+                    totalCO2.textContent = co2Saved.toLocaleString();
+                }
+            }, 8000);
+        });
+    </script>
+</body>
+</html>

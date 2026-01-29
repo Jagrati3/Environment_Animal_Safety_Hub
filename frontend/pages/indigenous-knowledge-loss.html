@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loss of Indigenous Ecological Knowledge - Level 3 Crisis - EcoLife</title>
+    <link rel="stylesheet" href="../css/global/variables.css">
+    <link rel="stylesheet" href="../css/global/utilities.css">
+    <link rel="stylesheet" href="../css/components/navbar.css">
+    <link rel="stylesheet" href="../css/components/footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #2D5016 0%, #4A7C59 50%, #8B7355 100%);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Knowledge Fading Animation Effects */
+        @keyframes knowledgeFade {
+            0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+            25% { opacity: 0.7; transform: scale(1.02) rotate(0.5deg); }
+            50% { opacity: 0.5; transform: scale(0.98) rotate(-0.5deg); }
+            75% { opacity: 0.6; transform: scale(1.01) rotate(0.2deg); }
+        }
+
+        @keyframes earthPulse {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes wisdomRise {
+            0% { transform: translateY(100px) scale(0.8); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-50px) scale(1.2); opacity: 0; }
+        }
+
+        /* Level 3 Severity Indicator */
+        .severity-badge {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #8B4513, #CD853F);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 8px 32px rgba(139, 69, 19, 0.4);
+            animation: knowledgeFade 4s infinite;
+            z-index: 1001;
+            border: 3px solid #fff;
+        }
+
+        .severity-badge i {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        .earth-header {
+            background: linear-gradient(135deg, #2D5016 0%, #4A7C59 100%);
+            background-size: 400% 400%;
+            animation: earthPulse 6s ease-in-out infinite;
+            padding: 100px 20px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wisdom-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .wisdom-particle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle, #CD853F 0%, #8B4513 70%);
+            border-radius: 50%;
+            animation: wisdomRise 8s linear infinite;
+            opacity: 0.6;
+        }
+
+        .wisdom-particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .wisdom-particle:nth-child(2) { left: 25%; animation-delay: 2s; }
+        .wisdom-particle:nth-child(3) { left: 40%; animation-delay: 4s; }
+        .wisdom-particle:nth-child(4) { left: 60%; animation-delay: 1s; }
+        .wisdom-particle:nth-child(5) { left: 80%; animation-delay: 3s; }
+        .wisdom-particle:nth-child(6) { left: 15%; animation-delay: 5s; }
+        .wisdom-particle:nth-child(7) { left: 35%; animation-delay: 1.5s; }
+        .wisdom-particle:nth-child(8) { left: 55%; animation-delay: 3.5s; }
+
+        .earth-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(205, 133, 63, 0.8);
+            animation: knowledgeFade 3s infinite;
+        }
+
+        .earth-header p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        .crisis-nav {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(15px);
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 20px;
+            border: 2px solid rgba(205, 133, 63, 0.3);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-tab {
+            padding: 15px 30px;
+            background: linear-gradient(45deg, rgba(205, 133, 63, 0.2), rgba(45, 80, 22, 0.3));
+            border: 2px solid rgba(205, 133, 63, 0.5);
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.4s;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-tab:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-tab:hover:before { left: 100%; }
+        .nav-tab:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(205, 133, 63, 0.4); }
+        .nav-tab.active {
+            background: linear-gradient(45deg, #CD853F, #8B4513);
+            box-shadow: 0 0 30px rgba(205, 133, 63, 0.6);
+            transform: scale(1.05);
+        }
+
+        .content-section { display: none; margin: 30px 0; }
+        .content-section.active { display: block; animation: fadeInUp 0.6s ease-out; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .impact-card {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(45, 80, 22, 0.3));
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid rgba(205, 133, 63, 0.3);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .impact-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(205, 133, 63, 0.4);
+            border-color: rgba(205, 133, 63, 0.8);
+        }
+
+        .impact-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #CD853F, #8B4513, #4A7C59);
+            background-size: 200% 100%;
+            animation: earthPulse 4s ease-in-out infinite;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(45, 80, 22, 0.8), rgba(0, 0, 0, 0.6));
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid rgba(205, 133, 63, 0.4);
+            margin: 15px 0;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #CD853F;
+            margin-bottom: 10px;
+        }
+
+        .chart-container {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border: 2px solid rgba(205, 133, 63, 0.3);
+        }
+
+        .calculator-section {
+            background: linear-gradient(135deg, rgba(74, 124, 89, 0.8), rgba(0, 0, 0, 0.6));
+            padding: 30px;
+            border-radius: 20px;
+            margin: 25px 0;
+            border: 2px solid rgba(205, 133, 63, 0.4);
+        }
+
+        .calculator-input {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .input-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(205, 133, 63, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .calculate-btn {
+            background: linear-gradient(45deg, #CD853F, #8B4513);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(205, 133, 63, 0.4);
+        }
+
+        .result-display {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            border-left: 4px solid #CD853F;
+        }
+
+        .practice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .practice-card {
+            background: linear-gradient(135deg, rgba(139, 115, 85, 0.8), rgba(0, 0, 0, 0.6));
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid rgba(205, 133, 63, 0.3);
+            transition: all 0.3s;
+        }
+
+        .practice-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(205, 133, 63, 0.3);
+        }
+
+        .action-framework {
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.8), rgba(0, 0, 0, 0.6));
+            padding: 30px;
+            border-radius: 20px;
+            margin: 25px 0;
+            border: 2px solid rgba(205, 133, 63, 0.4);
+        }
+
+        .action-step {
+            display: flex;
+            align-items: flex-start;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid #CD853F;
+        }
+
+        .action-number {
+            background: #CD853F;
+            color: #2D5016;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .earth-header h1 { font-size: 2.5rem; }
+            .nav-tabs { 
+                gap: 10px; 
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .nav-tab { 
+                padding: 10px 15px; 
+                font-size: 0.8rem;
+                min-width: auto;
+                flex: 1;
+                max-width: 150px;
+            }
+            .impact-grid { grid-template-columns: 1fr; }
+            .calculator-input { flex-direction: column; }
+            .calculator-input .input-group { min-width: auto; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo">
+                <i class="fas fa-leaf"></i>
+                EcoLife
+            </a>
+            <ul class="nav-links">
+                <li><a href="../index.html" class="nav-link">Home</a></li>
+                <li><a href="animal-protection.html" class="nav-link">Animals</a></li>
+                <li><a href="education-awareness.html" class="nav-link">Education</a></li>
+                <li><a href="get-involved.html" class="nav-link">Get Involved</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Level 3 Severity Badge -->
+    <div class="severity-badge">
+        <i class="fas fa-exclamation-triangle"></i>
+        LEVEL 3 CRISIS
+    </div>
+
+    <!-- Header Section -->
+    <header class="earth-header">
+        <div class="wisdom-particles">
+            <div class="wisdom-particle"></div>
+            <div class="wisdom-particle"></div>
+            <div class="wisdom-particle"></div>
+            <div class="wisdom-particle"></div>
+            <div class="wisdom-particle"></div>
+            <div class="wisdom-particle"></div>
+            <div class="wisdom-particle"></div>
+            <div class="wisdom-particle"></div>
+        </div>
+        <div class="container">
+            <h1>Loss of Indigenous Ecological Knowledge</h1>
+            <p>The Silent Crisis Eroding Biodiversity Management & Ecosystem Resilience</p>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <section class="crisis-nav">
+        <div class="container">
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="showSection('overview')">Crisis Overview</button>
+                <button class="nav-tab" onclick="showSection('biodiversity')">Biodiversity Impact</button>
+                <button class="nav-tab" onclick="showSection('resilience')">Ecosystem Resilience</button>
+                <button class="nav-tab" onclick="showSection('practices')">Traditional Practices</button>
+                <button class="nav-tab" onclick="showSection('restoration')">Restoration Initiatives</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Crisis Overview Section -->
+    <section id="overview" class="content-section active container">
+        <h2 style="text-align: center; margin-bottom: 30px; color: #CD853F;">The Knowledge Crisis</h2>
+
+        <div class="impact-grid">
+            <div class="impact-card">
+                <h3><i class="fas fa-language"></i> Language Extinction</h3>
+                <p>70% of indigenous languages lost in the past century, taking with them embedded ecological knowledge of local ecosystems, species identification, and sustainable resource management practices.</p>
+            </div>
+
+            <div class="impact-card">
+                <h3><i class="fas fa-globe-americas"></i> Territory Coverage</h3>
+                <p>Indigenous peoples manage 22% of Earth's land surface, including biodiversity hotspots with 36% more bird species than surrounding areas.</p>
+            </div>
+
+            <div class="impact-card">
+                <h3><i class="fas fa-seedling"></i> Biodiversity Hotspots</h3>
+                <p>Traditional territories contain higher species diversity and serve as genetic reservoirs for climate adaptation and ecosystem resilience.</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-number">400+</div>
+            <p>Indigenous groups in the Amazon alone, each holding unique ecological knowledge</p>
+        </div>
+
+        <div class="chart-container">
+            <h3 style="text-align: center; margin-bottom: 20px;">Knowledge Erosion Timeline</h3>
+            <canvas id="knowledgeTimelineChart" width="400" height="200"></canvas>
+        </div>
+    </section>
+
+    <!-- Biodiversity Impact Section -->
+    <section id="biodiversity" class="content-section container">
+        <h2 style="text-align: center; margin-bottom: 30px; color: #CD853F;">Biodiversity Management Impact</h2>
+
+        <div class="calculator-section">
+            <h3><i class="fas fa-calculator"></i> Biodiversity Impact Calculator</h3>
+            <p>Calculate the projected impact of indigenous knowledge loss on species diversity and ecosystem health.</p>
+
+            <div class="calculator-input">
+                <div class="input-group">
+                    <label for="knowledgeLoss">Knowledge Loss Percentage (%)</label>
+                    <input type="range" id="knowledgeLoss" min="0" max="100" value="50" oninput="updateKnowledgeValue()">
+                    <span id="knowledgeValue">50%</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="ecosystemType">Ecosystem Type</label>
+                    <select id="ecosystemType">
+                        <option value="rainforest">Rainforest</option>
+                        <option value="savanna">Savanna</option>
+                        <option value="arctic">Arctic</option>
+                        <option value="coral">Coral Reef</option>
+                        <option value="wetland">Wetland</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="timeframe">Time Frame (Years)</label>
+                    <input type="number" id="timeframe" value="50" min="10" max="100">
+                </div>
+            </div>
+
+            <button class="calculate-btn" onclick="calculateBiodiversityImpact()">
+                <i class="fas fa-chart-line"></i> Calculate Impact
+            </button>
+
+            <div id="biodiversityResult" class="result-display" style="display: none;">
+                <h4>Projected Biodiversity Loss</h4>
+                <div id="impactResults"></div>
+            </div>
+        </div>
+
+        <div class="impact-grid">
+            <div class="impact-card">
+                <h3><i class="fas fa-dna"></i> Species Identification</h3>
+                <p>Traditional taxonomic knowledge enables precise identification of species, subspecies, and ecological relationships that modern science often misses.</p>
+            </div>
+
+            <div class="impact-card">
+                <h3><i class="fas fa-fire"></i> Fire Management</h3>
+                <p>Indigenous fire practices create mosaic landscapes that enhance biodiversity and prevent catastrophic wildfires.</p>
+            </div>
+
+            <div class="impact-card">
+                <h3><i class="fas fa-fish"></i> Resource Harvesting</h3>
+                <p>Sustainable harvesting techniques based on generational knowledge ensure long-term resource availability and ecosystem balance.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ecosystem Resilience Section -->
+    <section id="resilience" class="content-section container">
+        <h2 style="text-align: center; margin-bottom: 30px; color: #CD853F;">Ecosystem Resilience Assessment</h2>
+
+        <div class="chart-container">
+            <h3 style="text-align: center; margin-bottom: 20px;">Resilience Factors Comparison</h3>
+            <canvas id="resilienceRadarChart" width="400" height="300"></canvas>
+        </div>
+
+        <div class="impact-grid">
+            <div class="impact-card">
+                <h3><i class="fas fa-cloud-rain"></i> Climate Adaptation</h3>
+                <p>Traditional knowledge provides adaptive strategies for climate variability, extreme weather events, and changing seasonal patterns.</p>
+            </div>
+
+            <div class="impact-card">
+                <h3><i class="fas fa-shield-alt"></i> Disaster Response</h3>
+                <p>Indigenous early warning systems and recovery practices based on historical environmental patterns enhance community resilience.</p>
+            </div>
+
+            <div class="impact-card">
+                <h3><i class="fas fa-route"></i> Migration Corridors</h3>
+                <p>Knowledge of wildlife migration routes and seasonal movements ensures connectivity between habitats.</p>
+            </div>
+        </div>
+
+        <div class="calculator-section">
+            <h3><i class="fas fa-gauge"></i> Ecosystem Resilience Calculator</h3>
+            <p>Assess how knowledge loss affects ecosystem resilience across multiple factors.</p>
+
+            <div class="calculator-input">
+                <div class="input-group">
+                    <label for="climateKnowledge">Climate Adaptation Knowledge (% retained)</label>
+                    <input type="range" id="climateKnowledge" min="0" max="100" value="60" oninput="updateClimateValue()">
+                    <span id="climateValue">60%</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="speciesKnowledge">Species Relationship Knowledge (% retained)</label>
+                    <input type="range" id="speciesKnowledge" min="0" max="100" value="40" oninput="updateSpeciesValue()">
+                    <span id="speciesValue">40%</span>
+                </div>
+            </div>
+
+            <button class="calculate-btn" onclick="calculateResilience()">
+                <i class="fas fa-chart-pie"></i> Assess Resilience
+            </button>
+
+            <div id="resilienceResult" class="result-display" style="display: none;">
+                <h4>Ecosystem Resilience Score</h4>
+                <div id="resilienceResults"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Traditional Practices Section -->
+    <section id="practices" class="content-section container">
+        <h2 style="text-align: center; margin-bottom: 30px; color: #CD853F;">Traditional Ecological Practices</h2>
+
+        <div class="practice-grid">
+            <div class="practice-card">
+                <h3><i class="fas fa-fire"></i> Controlled Burning</h3>
+                <p>Indigenous fire management creates habitat diversity, controls invasive species, and promotes regeneration of fire-adapted plants.</p>
+            </div>
+
+            <div class="practice-card">
+                <h3><i class="fas fa-seedling"></i> Seed Banking</h3>
+                <p>Traditional seed saving and cultivation practices preserve genetic diversity and adaption to local conditions.</p>
+            </div>
+
+            <div class="practice-card">
+                <h3><i class="fas fa-water"></i> Water Management</h3>
+                <p>Ancient water harvesting and conservation techniques ensure water availability during drought periods.</p>
+            </div>
+
+            <div class="practice-card">
+                <h3><i class="fas fa-leaf"></i> Plant Medicine</h3>
+                <p>Ethnobotanical knowledge of medicinal plants supports both human health and ecosystem balance.</p>
+            </div>
+
+            <div class="practice-card">
+                <h3><i class="fas fa-frog"></i> Seasonal Restrictions</h3>
+                <p>Hunting and gathering calendars respect breeding seasons and migration patterns of wildlife.</p>
+            </div>
+
+            <div class="practice-card">
+                <h3><i class="fas fa-mountain"></i> Sacred Sites</h3>
+                <p>Protected sacred areas serve as biodiversity refuges and cultural heritage preservation sites.</p>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3 style="text-align: center; margin-bottom: 20px;">Global Distribution of Traditional Practices</h3>
+            <canvas id="practicesMapChart" width="400" height="250"></canvas>
+        </div>
+    </section>
+
+    <!-- Restoration Initiatives Section -->
+    <section id="restoration" class="content-section container">
+        <h2 style="text-align: center; margin-bottom: 30px; color: #CD853F;">Restoration & Collaboration</h2>
+
+        <div class="action-framework">
+            <h3><i class="fas fa-hands-helping"></i> Emergency Action Framework</h3>
+
+            <div class="action-step">
+                <div class="action-number">1</div>
+                <div>
+                    <h4>Knowledge Documentation</h4>
+                    <p>Urgent recording and digital preservation of remaining traditional ecological knowledge before it disappears.</p>
+                </div>
+            </div>
+
+            <div class="action-step">
+                <div class="action-number">2</div>
+                <div>
+                    <h4>Community Partnerships</h4>
+                    <p>Establish collaborative programs between indigenous communities and conservation organizations.</p>
+                </div>
+            </div>
+
+            <div class="action-step">
+                <div class="action-number">3</div>
+                <div>
+                    <h4>Policy Integration</h4>
+                    <p>Include traditional knowledge in environmental policies, land management plans, and conservation strategies.</p>
+                </div>
+            </div>
+
+            <div class="action-step">
+                <div class="action-number">4</div>
+                <div>
+                    <h4>Education Programs</h4>
+                    <p>Integrate indigenous ecological knowledge into school curricula and public education programs.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="impact-grid">
+            <div class="impact-card">
+                <h3><i class="fas fa-graduation-cap"></i> Digital Archives</h3>
+                <p>Create secure digital repositories for traditional knowledge with appropriate cultural protocols and access controls.</p>
+            </div>
+
+            <div class="impact-card">
+                <h3><i class="fas fa-users"></i> Intergenerational Transfer</h3>
+                <p>Support programs that facilitate knowledge transfer from elders to younger generations.</p>
+            </div>
+
+            <div class="impact-card">
+                <h3><i class="fas fa-microscope"></i> Research Collaboration</h3>
+                <p>Joint research initiatives combining traditional knowledge with modern scientific methods.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>EcoLife</h3>
+                    <p>Protecting our planet, one action at a time.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="../index.html">Home</a>
+                    <a href="animal-protection.html">Animal Protection</a>
+                    <a href="education-awareness.html">Education</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 EcoLife. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="indigenous-knowledge-loss.js"></script>
+</body>
+</html>

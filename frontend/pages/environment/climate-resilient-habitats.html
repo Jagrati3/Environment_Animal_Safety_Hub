@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climate-Resilient Habitats | EcoLife</title>
+    <link rel="icon" type="image/png" href="../../assets/images/others/FAVICON.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../css/global/variables.css">
+    <link rel="stylesheet" href="../../css/global/utilities.css">
+    <link rel="stylesheet" href="../../css/components/navbar.css">
+    <link rel="stylesheet" href="../../css/components/footer.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Meta tags -->
+    <meta name="description" content="Learn how conservationists design ecosystems that can withstand extreme weather and climate variability. Explore strategies for creating climate-resilient habitats.">
+    <meta name="keywords" content="climate resilient habitats, ecosystem design, conservation, climate change adaptation, biodiversity">
+    
+    <style>
+        :root {
+            --primary-green: #22c55e;
+            --primary-blue: #3b82f6;
+            --primary-orange: #f97316;
+            --dark-green: #0f4f2f;
+            --light-green: #dcfce7;
+            --accent-blue: rgba(59, 130, 246, 0.1);
+            --accent-orange: rgba(249, 115, 22, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Background Animation */
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(45deg, var(--primary-green), var(--primary-blue));
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-30px) rotate(120deg); }
+            66% { transform: translateY(-15px) rotate(240deg); }
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #0f4f2f 0%, #22c55e 50%, #3b82f6 100%);
+            color: white;
+            padding: 120px 20px 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1.5" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.15)"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            border-radius: 50px;
+            margin-bottom: 30px;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #fff, #dcfce7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+            z-index: 2;
+            position: relative;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 30px 20px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #dcfce7;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Section Styling */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--dark-green);
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-green), var(--primary-blue));
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Principles Grid */
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .principle-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            border: 1px solid #e5e7eb;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .principle-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-green), var(--primary-blue), var(--primary-orange));
+        }
+
+        .principle-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .principle-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-orange));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            font-size: 2rem;
+            color: var(--primary-blue);
+        }
+
+        .principle-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark-green);
+            margin-bottom: 15px;
+        }
+
+        .principle-description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Strategies Section */
+        .strategies-container {
+            background: linear-gradient(135deg, var(--light-green), rgba(59, 130, 246, 0.05));
+            border-radius: 30px;
+            padding: 60px;
+            margin: 50px 0;
+        }
+
+        .strategy-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 30px;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .strategy-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .strategy-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .strategy-content h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark-green);
+            margin-bottom: 10px;
+        }
+
+        .strategy-content p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Case Studies */
+        .case-studies {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .case-study {
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+        }
+
+        .case-study:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .case-study-image {
+            height: 250px;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            position: relative;
+        }
+
+        .case-study-content {
+            padding: 30px;
+        }
+
+        .case-study-location {
+            display: inline-block;
+            background: var(--accent-blue);
+            color: var(--primary-blue);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .case-study h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--dark-green);
+            margin-bottom: 15px;
+        }
+
+        .case-study p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .case-study-features {
+            list-style: none;
+        }
+
+        .case-study-features li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .case-study-features li i {
+            color: var(--primary-green);
+            width: 16px;
+        }
+
+        /* Interactive Elements */
+        .interactive-section {
+            background: linear-gradient(135deg, var(--dark-green), var(--primary-green));
+            color: white;
+            border-radius: 30px;
+            padding: 60px;
+            text-align: center;
+            margin: 80px 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: white;
+            color: var(--dark-green);
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 2px solid transparent;
+        }
+
+        .action-btn:hover {
+            background: transparent;
+            color: white;
+            border-color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+            }
+
+            .principles-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .case-studies {
+                grid-template-columns: 1fr;
+            }
+
+            .strategy-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .strategies-container {
+                padding: 40px 30px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-section {
+                padding: 100px 15px 60px;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 60px 0;
+            }
+
+            .principle-card,
+            .case-study-content {
+                padding: 25px;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Cursor Component -->
+    <div id="cursor-container"></div>
+    <script src="../../js/components/loadComponents.js"></script>
+
+    <!-- Navigation -->
+    <div id="navbar-container"></div>
+
+    <!-- Floating Particles -->
+    <div class="floating-particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s; top: 20%;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 2s; top: 60%;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 4s; top: 30%;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 1s; top: 70%;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 3s; top: 40%;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 5s; top: 80%;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 1.5s; top: 15%;"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-badge">
+            <i class="fas fa-shield-alt"></i> Climate Adaptation & Resilience
+        </div>
+        <h1 class="hero-title">Climate-Resilient Habitats</h1>
+        <p class="hero-subtitle">
+            Discover how conservationists design ecosystems that can withstand extreme weather and climate variability, 
+            protecting biodiversity and ensuring ecosystem survival in an uncertain climate future 🌿
+        </p>
+
+        <div class="hero-stats">
+            <div class="stat-card">
+                <div class="stat-icon">🌡️</div>
+                <div class="stat-value">+1.5°C</div>
+                <div class="stat-label">Target Adaptation Threshold</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🦎</div>
+                <div class="stat-value">75%</div>
+                <div class="stat-label">Species Need Habitat Corridors</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🌳</div>
+                <div class="stat-value">30%</div>
+                <div class="stat-label">Habitat Diversity Increases</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💧</div>
+                <div class="stat-value">40%</div>
+                <div class="stat-label">Water Resilience Improvement</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Principles Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Core Principles of Resilient Habitat Design</h2>
+                <p class="section-subtitle">
+                    Understanding the fundamental concepts that guide conservationists in creating ecosystems 
+                    capable of adapting to climate change challenges.
+                </p>
+            </div>
+
+            <div class="principles-grid">
+                <div class="principle-card fade-in">
+                    <div class="principle-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3 class="principle-title">Connectivity & Corridors</h3>
+                    <p class="principle-description">
+                        Creating connected landscapes that allow species to migrate between habitats as climate 
+                        conditions change. Wildlife corridors enable genetic diversity and population resilience.
+                    </p>
+                </div>
+
+                <div class="principle-card fade-in">
+                    <div class="principle-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3 class="principle-title">Diversity & Redundancy</h3>
+                    <p class="principle-description">
+                        Incorporating multiple species that perform similar ecological functions, ensuring 
+                        ecosystem services continue even if some species are lost to climate impacts.
+                    </p>
+                </div>
+
+                <div class="principle-card fade-in">
+                    <div class="principle-icon">
+                        <i class="fas fa-water"></i>
+                    </div>
+                    <h3 class="principle-title">Water Security</h3>
+                    <p class="principle-description">
+                        Designing habitats with sustainable water sources and natural water retention systems 
+                        to survive droughts and extreme precipitation events.
+                    </p>
+                </div>
+
+                <div class="principle-card fade-in">
+                    <div class="principle-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="principle-title">Adaptive Management</h3>
+                    <p class="principle-description">
+                        Implementing flexible management strategies that can be adjusted based on monitoring 
+                        data and changing environmental conditions.
+                    </p>
+                </div>
+
+                <div class="principle-card fade-in">
+                    <div class="principle-icon">
+                        <i class="fas fa-thermometer-half"></i>
+                    </div>
+                    <h3 class="principle-title">Microclimate Variation</h3>
+                    <p class="principle-description">
+                        Creating diverse microclimates within habitats to provide refugia for species during 
+                        extreme weather events and gradual climate shifts.
+                    </p>
+                </div>
+
+                <div class="principle-card fade-in">
+                    <div class="principle-icon">
+                        <i class="fas fa-recycle"></i>
+                    </div>
+                    <h3 class="principle-title">Natural Infrastructure</h3>
+                    <p class="principle-description">
+                        Utilizing natural systems like wetlands, forests, and grasslands as infrastructure 
+                        to provide flood control, carbon storage, and climate regulation.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Implementation Strategies Section -->
+    <section class="section" style="background: #f9fafb;">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Implementation Strategies</h2>
+                <p class="section-subtitle">
+                    Practical approaches that conservationists use to create climate-resilient ecosystems 
+                    in the face of environmental uncertainty.
+                </p>
+            </div>
+
+            <div class="strategies-container fade-in">
+                <div class="strategy-item">
+                    <div class="strategy-number">1</div>
+                    <div class="strategy-content">
+                        <h3>Climate Envelope Modeling</h3>
+                        <p>Using predictive models to identify how species' suitable habitat ranges will shift under different climate scenarios, allowing for proactive habitat protection and creation in future suitable areas.</p>
+                    </div>
+                </div>
+
+                <div class="strategy-item">
+                    <div class="strategy-number">2</div>
+                    <div class="strategy-content">
+                        <h3>Assisted Migration Programs</h3>
+                        <p>Carefully managed relocation of species to new habitats that will become suitable under future climate conditions, helping them establish before conditions become critical.</p>
+                    </div>
+                </div>
+
+                <div class="strategy-item">
+                    <div class="strategy-number">3</div>
+                    <div class="strategy-content">
+                        <h3>Habitat Restoration with Climate Projection</h3>
+                        <p>Restoring degraded ecosystems using plant and animal species selected for their tolerance to predicted future climate conditions rather than current ones.</p>
+                    </div>
+                </div>
+
+                <div class="strategy-item">
+                    <div class="strategy-number">4</div>
+                    <div class="strategy-content">
+                        <h3>Multi-functional Landscape Design</h3>
+                        <p>Creating landscapes that serve multiple purposes: biodiversity conservation, carbon sequestration, flood control, and sustainable resource extraction for local communities.</p>
+                    </div>
+                </div>
+
+                <div class="strategy-item">
+                    <div class="strategy-number">5</div>
+                    <div class="strategy-content">
+                        <h3>Early Warning and Monitoring Systems</h3>
+                        <p>Implementing comprehensive monitoring networks using sensors, satellite imagery, and citizen science to track ecosystem health and trigger rapid response protocols.</p>
+                    </div>
+                </div>
+
+                <div class="strategy-item">
+                    <div class="strategy-number">6</div>
+                    <div class="strategy-content">
+                        <h3>Community-Based Conservation</h3>
+                        <p>Engaging local communities as partners in habitat management, incorporating traditional ecological knowledge and providing economic incentives for conservation activities.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Success Stories Worldwide</h2>
+                <p class="section-subtitle">
+                    Real-world examples of climate-resilient habitat projects that are making a difference 
+                    in protecting biodiversity and ecosystem services.
+                </p>
+            </div>
+
+            <div class="case-studies">
+                <div class="case-study fade-in">
+                    <div class="case-study-image">
+                        🌊
+                    </div>
+                    <div class="case-study-content">
+                        <div class="case-study-location">Netherlands</div>
+                        <h3>Room for the River Program</h3>
+                        <p>A revolutionary approach to flood management that gave rivers space to flood naturally while creating diverse wetland habitats that support wildlife and protect communities.</p>
+                        <ul class="case-study-features">
+                            <li><i class="fas fa-check"></i> 34 project locations across the country</li>
+                            <li><i class="fas fa-check"></i> Enhanced flood protection for 4 million people</li>
+                            <li><i class="fas fa-check"></i> Created 15,000 hectares of new nature areas</li>
+                            <li><i class="fas fa-check"></i> Improved water quality and biodiversity</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="case-study fade-in">
+                    <div class="case-study-image">
+                        🌲
+                    </div>
+                    <div class="case-study-content">
+                        <div class="case-study-location">Yellowstone to Yukon</div>
+                        <h3>Y2Y Conservation Initiative</h3>
+                        <p>A massive transboundary conservation effort creating connected habitats across the Rocky Mountains to allow wildlife movement as climate zones shift northward.</p>
+                        <ul class="case-study-features">
+                            <li><i class="fas fa-check"></i> 1.2 million km² of protected landscape</li>
+                            <li><i class="fas fa-check"></i> Wildlife corridors for grizzly bears and wolves</li>
+                            <li><i class="fas fa-check"></i> Cross-border collaboration (US-Canada)</li>
+                            <li><i class="fas fa-check"></i> Climate adaptation for 20+ species</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="case-study fade-in">
+                    <div class="case-study-image">
+                        🐨
+                    </div>
+                    <div class="case-study-content">
+                        <div class="case-study-location">Australia</div>
+                        <h3>Great Eastern Ranges Initiative</h3>
+                        <p>Connecting fragmented habitats along Australia's eastern coast to create climate corridors that allow species to migrate to more suitable climates as temperatures rise.</p>
+                        <ul class="case-study-features">
+                            <li><i class="fas fa-check"></i> 3,600 km of connected landscapes</li>
+                            <li><i class="fas fa-check"></i> Protects 30% of Australia's plant species</li>
+                            <li><i class="fas fa-check"></i> Koala and other wildlife corridors</li>
+                            <li><i class="fas fa-check"></i> Fire resilience planning integrated</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="case-study fade-in">
+                    <div class="case-study-image">
+                        🐘
+                    </div>
+                    <div class="case-study-content">
+                        <div class="case-study-location">Kenya-Tanzania</div>
+                        <h3>Amboseli-Tsavo Ecosystem</h3>
+                        <p>Community-conserved landscapes that maintain wildlife corridors while providing sustainable livelihoods for Maasai communities facing increasing climate variability.</p>
+                        <ul class="case-study-features">
+                            <li><i class="fas fa-check"></i> 6,000 km² of conserved landscape</li>
+                            <li><i class="fas fa-check"></i> Elephant migration routes protected</li>
+                            <li><i class="fas fa-check"></i> Drought-resilient water sources</li>
+                            <li><i class="fas fa-check"></i> Community ownership model</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Section -->
+    <section class="interactive-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 style="color: white; margin-bottom: 20px;">Take Action for Climate-Resilient Habitats</h2>
+                <p style="color: rgba(255,255,255,0.9); font-size: 1.2rem;">
+                    Join the global movement to create ecosystems that can survive and thrive in our changing climate. 
+                    Every action counts in building a resilient future for wildlife and communities.
+                </p>
+            </div>
+
+            <div class="action-buttons">
+                <a href="../conservation/habitat-restoration.html" class="action-btn">
+                    <i class="fas fa-hammer"></i>
+                    Start a Restoration Project
+                </a>
+                <a href="../education/climate-science.html" class="action-btn">
+                    <i class="fas fa-graduation-cap"></i>
+                    Learn Climate Science
+                </a>
+                <a href="../community/climate-action.html" class="action-btn">
+                    <i class="fas fa-users"></i>
+                    Join a Community
+                </a>
+                <a href="../tools/habitat-planning.html" class="action-btn">
+                    <i class="fas fa-map"></i>
+                    Use Planning Tools
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Scripts -->
+    <script src="../../js/global/theme.js"></script>
+    <script>
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all elements with fade-in class
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Dynamic particle generation
+        function createParticles() {
+            const particlesContainer = document.querySelector('.floating-particles');
+            const particleCount = Math.min(window.innerWidth / 100, 20);
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (6 + Math.random() * 4) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Initialize particles on load
+        window.addEventListener('load', createParticles);
+
+        // Header scroll effect
+        let lastScrollY = window.scrollY;
+        window.addEventListener('scroll', () => {
+            const heroSection = document.querySelector('.hero-section');
+            const scrollY = window.scrollY;
+            
+            if (heroSection) {
+                const parallaxSpeed = 0.5;
+                heroSection.style.transform = `translateY(${scrollY * parallaxSpeed}px)`;
+            }
+            
+            lastScrollY = scrollY;
+        });
+
+        // Add loading states for better UX
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+
+        // Error handling for missing components
+        window.addEventListener('error', (e) => {
+            console.warn('Resource loading error:', e.filename, e.lineno);
+        });
+    </script>
+</body>
+</html>

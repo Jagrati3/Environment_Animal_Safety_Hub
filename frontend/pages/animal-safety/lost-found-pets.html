@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lost & Found Pets | EcoLife - Reunite Pets with Their Families</title>
+    <link rel="icon" type="image/png" href="/envirnoment-logo.png">
+    <meta name="description"
+        content="Report lost pets or found animals. Help reunite pets with their families through our verified alert system." />
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../../css/global/variables.css" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/components/navbar.css" />
+    <link rel="stylesheet" href="../../css/components/footer.css" />
+    <link rel="stylesheet" href="../../css/pages/animal-safety/lost-found.css" />
+    <link rel="stylesheet" href="../../css/components/scrollBar.css" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="cursor-container"></div>
+    <script src="../../js/components/loadComponents.js"></script>
+
+        
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <div id="navbar-container"></div>
+
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Hero Section -->
+    <section class="lost-found-hero">
+        <div class="hero-bg">
+            <div class="hero-shape shape-1"></div>
+            <div class="hero-shape shape-2"></div>
+            <div class="hero-shape shape-3"></div>
+        </div>
+
+        <div class="hero-container">
+            <div class="hero-content" data-aos="fade-right" data-aos-duration="1000">
+                <span class="hero-badge">
+                    <i class="fa-solid fa-bell"></i> Lost & Found Alert System
+                </span>
+                <h1>
+                    Help <span class="gradient-text">Reunite</span> Pets with Their Families
+                </h1>
+                <p>
+                    Report lost pets or found animals. Our verified alert system helps reunite pets with their owners
+                    quickly and safely.
+                </p>
+
+                <div class="hero-stats">
+                    <div class="hero-stat" data-aos="fade-up" data-aos-delay="0">
+                        <span class="hero-stat-number" data-count="250">0</span>
+                        <span class="stat-label">Pets Reunited</span>
+                    </div>
+                    <div class="hero-stat" data-aos="fade-up" data-aos-delay="100">
+                        <span class="hero-stat-number" data-count="45">0</span>
+                        <span class="stat-label">Active Alerts</span>
+                    </div>
+                    <div class="hero-stat" data-aos="fade-up" data-aos-delay="200">
+                        <span class="hero-stat-number" data-count="24">0</span>
+                        <span class="stat-label">Avg Hours to Reunite</span>
+                    </div>
+                </div>
+
+                <div class="hero-cta">
+                    <a href="#report-lost" class="btn btn-primary">
+                        <i class="fa-solid fa-exclamation-triangle"></i> Report Lost Pet
+                    </a>
+                    <a href="#report-found" class="btn btn-secondary">
+                        <i class="fa-solid fa-paw"></i> Report Found Pet
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-image" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+                <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=600" alt="Lost Pet" />
+                <div class="alert-badge urgent">
+                    <i class="fa-solid fa-bell"></i> 45 Active Alerts
+                </div>
+            </div>
+        </div>
+
+        <!-- Wave Divider -->
+        <div class="wave-divider">
+            <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z"
+                    fill="var(--bg-color)" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- Quick Filter Section -->
+    <section class="quick-filter-section">
+        <div class="section-container">
+            <div class="quick-filter-box" data-aos="fade-up">
+                <h3>
+                    <i class="fa-solid fa-filter"></i> Filter Alerts
+                </h3>
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label>Alert Type</label>
+                        <select id="alertType">
+                            <option value="">All Alerts</option>
+                            <option value="lost">Lost Pets</option>
+                            <option value="found">Found Pets</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Species</label>
+                        <select id="species">
+                            <option value="">All Species</option>
+                            <option value="dog">🐕 Dogs</option>
+                            <option value="cat">🐱 Cats</option>
+                            <option value="bird">🐦 Birds</option>
+                            <option value="other">🐾 Others</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Location</label>
+                        <input type="text" id="location" placeholder="Enter city or area" />
+                    </div>
+                    <div class="filter-group">
+                        <label>Urgency</label>
+                        <select id="urgency">
+                            <option value="">All</option>
+                            <option value="critical">Critical (24h)</option>
+                            <option value="urgent">Urgent (3 days)</option>
+                            <option value="normal">Normal</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary search-btn" onclick="filterAlerts()">
+                        <i class="fa-solid fa-search"></i> Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Alert Tabs -->
+    <section class="alerts-section">
+        <div class="section-container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-tag">
+                    <i class="fa-solid fa-bell"></i> Active Alerts
+                </span>
+                <h2 class="section-title">Recent Lost & Found Reports</h2>
+                <p class="section-subtitle">
+                    Help us reunite these pets with their families. If you have any information, please contact the
+                    reporter.
+                </p>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="alert-tabs" data-aos="fade-up">
+                <button class="alert-tab active" data-tab="all">All Alerts</button>
+                <button class="alert-tab" data-tab="lost">Lost Pets</button>
+                <button class="alert-tab" data-tab="found">Found Pets</button>
+                <button class="alert-tab" data-tab="reunited">Reunited</button>
+            </div>
+
+            <!-- Alerts Grid -->
+            <div class="alerts-grid" id="alertsGrid">
+                <!-- Lost Pet Alert 1 -->
+                <div class="alert-card lost" data-category="lost" >
+                    <div class="alert-image">
+                        <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400" alt="Lost Dog" />
+                        <div class="alert-badges">
+                            <span class="badge badge-lost">Lost</span>
+                            <span class="badge badge-urgent">Urgent</span>
+                        </div>
+                        <div class="alert-date">
+                            <i class="fa-solid fa-clock"></i> 2 hours ago
+                        </div>
+                    </div>
+                    <div class="alert-info">
+                        <div class="alert-header">
+                            <h3>Max</h3>
+                            <span class="alert-species">
+                                <i class="fa-solid fa-dog"></i> Golden Retriever
+                            </span>
+                        </div>
+                        <div class="alert-details">
+                            <div class="detail-item">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>Last seen: Connaught Place, Delhi</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fa-solid fa-calendar"></i>
+                                <span>Missing since: Jan 24, 2026</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fa-solid fa-info-circle"></i>
+                                <span>Wearing blue collar with tag</span>
+                            </div>
+                        </div>
+                        <div class="alert-description">
+                            <p>Friendly golden retriever, responds to "Max". Last seen near India Gate. Please contact
+                                if found.</p>
+                        </div>
+                        <div class="alert-footer">
+                            <button class="btn btn-primary btn-sm" onclick="openContactModal('max')">
+                                <i class="fa-solid fa-envelope"></i> Contact Reporter
+                            </button>
+                            <button class="btn btn-outline btn-sm" onclick="shareAlert('max')">
+                                <i class="fa-solid fa-share"></i> Share
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Found Pet Alert 2 -->
+                <div class="alert-card found" data-category="found" >
+                    <div class="alert-image">
+                        <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400" alt="Found Cat" />
+                        <div class="alert-badges">
+                            <span class="badge badge-found">Found</span>
+                        </div>
+                        <div class="alert-date">
+                            <i class="fa-solid fa-clock"></i> 5 hours ago
+                        </div>
+                    </div>
+                    <div class="alert-info">
+                        <div class="alert-header">
+                            <h3>Found Cat</h3>
+                            <span class="alert-species">
+                                <i class="fa-solid fa-cat"></i> Persian Cat
+                            </span>
+                        </div>
+                        <div class="alert-details">
+                            <div class="detail-item">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>Found at: Bandra West, Mumbai</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fa-solid fa-calendar"></i>
+                                <span>Found on: Jan 24, 2026</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fa-solid fa-info-circle"></i>
+                                <span>White Persian, very friendly</span>
+                            </div>
+                        </div>
+                        <div class="alert-description">
+                            <p>Found this beautiful white Persian cat near Linking Road. Seems well-cared for. Owner
+                                please contact.</p>
+                        </div>
+                        <div class="alert-footer">
+                            <button class="btn btn-primary btn-sm" onclick="openContactModal('found-cat-1')">
+                                <i class="fa-solid fa-envelope"></i> Contact Finder
+                            </button>
+                            <button class="btn btn-outline btn-sm" onclick="shareAlert('found-cat-1')">
+                                <i class="fa-solid fa-share"></i> Share
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lost Pet Alert 3 -->
+                <div class="alert-card lost" data-category="lost" >
+                    <div class="alert-image">
+                        <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=400"
+                            alt="Lost Puppy" />
+                        <div class="alert-badges">
+                            <span class="badge badge-lost">Lost</span>
+                            <span class="badge badge-critical">Critical</span>
+                        </div>
+                        <div class="alert-date">
+                            <i class="fa-solid fa-clock"></i> 1 day ago
+                        </div>
+                    </div>
+                    <div class="alert-info">
+                        <div class="alert-header">
+                            <h3>Bruno</h3>
+                            <span class="alert-species">
+                                <i class="fa-solid fa-dog"></i> German Shepherd Puppy
+                            </span>
+                        </div>
+                        <div class="alert-details">
+                            <div class="detail-item">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>Last seen: Koramangala, Bangalore</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fa-solid fa-calendar"></i>
+                                <span>Missing since: Jan 23, 2026</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fa-solid fa-info-circle"></i>
+                                <span>3 months old, microchipped</span>
+                            </div>
+                        </div>
+                        <div class="alert-description">
+                            <p>German Shepherd puppy, very young and scared. Reward offered for safe return. Please
+                                help!</p>
+                        </div>
+                        <div class="alert-footer">
+                            <button class="btn btn-primary btn-sm" onclick="openContactModal('bruno')">
+                                <i class="fa-solid fa-envelope"></i> Contact Reporter
+                            </button>
+                            <button class="btn btn-outline btn-sm" onclick="shareAlert('bruno')">
+                                <i class="fa-solid fa-share"></i> Share
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reunited Alert 4 -->
+                <div class="alert-card reunited" data-category="reunited" >
+                    <div class="alert-image">
+                        <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=400"
+                            alt="Reunited Cat" />
+                        <div class="alert-badges">
+                            <span class="badge badge-reunited">Reunited</span>
+                        </div>
+                        <div class="alert-date">
+                            <i class="fa-solid fa-clock"></i> 2 days ago
+                        </div>
+                    </div>
+                    <div class="alert-info">
+                        <div class="alert-header">
+                            <h3>Luna</h3>
+                            <span class="alert-species">
+                                <i class="fa-solid fa-cat"></i> British Shorthair
+                            </span>
+                        </div>
+                        <div class="alert-details">
+                            <div class="detail-item">
+                                <i class="fa-solid fa-heart"></i>
+                                <span>Successfully reunited with owner!</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>Found in: Jaipur</span>
+                            </div>
+                        </div>
+                        <div class="alert-description">
+                            <p>Thank you to everyone who helped! Luna is back home safe and sound. ❤️</p>
+                        </div>
+                        <div class="alert-footer">
+                            <div class="success-message">
+                                <i class="fa-solid fa-check-circle"></i> Happy Ending!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Load More Button -->
+            <div class="load-more-wrapper" data-aos="fade-up">
+                <button class="btn btn-outline load-more-btn">
+                    <i class="fa-solid fa-rotate"></i> Load More Alerts
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Report Lost Pet Section -->
+    <section id="report-lost" class="report-section">
+        <div class="section-container">
+            <div class="report-content">
+                <div class="report-info" data-aos="fade-right">
+                    <span class="section-tag">
+                        <i class="fa-solid fa-exclamation-triangle"></i> Report Lost Pet
+                    </span>
+                    <h2 class="section-title">Lost Your Pet?</h2>
+                    <p class="section-desc">
+                        Fill out this form to create an alert. Our community will help you find your beloved pet.
+                    </p>
+
+                    <div class="report-features">
+                        <div class="feature-item">
+                            <i class="fa-solid fa-bell"></i>
+                            <span>Instant alert to local community</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa-solid fa-shield-check"></i>
+                            <span>Verified and moderated listings</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa-solid fa-envelope"></i>
+                            <span>Secure messaging with responders</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="report-form-wrapper" data-aos="fade-left">
+                    <form class="report-form" id="lostPetForm">
+                        <h3><i class="fa-solid fa-paw"></i> Lost Pet Report</h3>
+
+                        <div class="form-group">
+                            <label for="lostPetName">Pet Name *</label>
+                            <input type="text" id="lostPetName" required placeholder="Enter pet's name" />
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="lostSpecies">Species *</label>
+                                <select id="lostSpecies" required>
+                                    <option value="">Select species</option>
+                                    <option value="dog">Dog</option>
+                                    <option value="cat">Cat</option>
+                                    <option value="bird">Bird</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="lostBreed">Breed</label>
+                                <input type="text" id="lostBreed" placeholder="Enter breed" />
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="lostAge">Age</label>
+                                <input type="text" id="lostAge" placeholder="e.g., 2 years" />
+                            </div>
+                            <div class="form-group">
+                                <label for="lostGender">Gender</label>
+                                <select id="lostGender">
+                                    <option value="">Select gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lostLocation">Last Seen Location *</label>
+                            <input type="text" id="lostLocation" required placeholder="Enter specific location" />
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="lostDate">Date Lost *</label>
+                                <input type="date" id="lostDate" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="lostTime">Time (approx)</label>
+                                <input type="time" id="lostTime" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lostDescription">Description & Identifying Features *</label>
+                            <textarea id="lostDescription" rows="4" required
+                                placeholder="Describe your pet, any unique markings, collar, tags, etc."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lostPhotos">Upload Photos (up to 5)</label>
+                            <input type="file" id="lostPhotos" accept="image/*" multiple />
+                            <small>Clear photos help identify your pet faster</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contactName">Your Name *</label>
+                            <input type="text" id="contactName" required placeholder="Enter your name" />
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contactPhone">Phone Number *</label>
+                                <input type="tel" id="contactPhone" required placeholder="Enter phone number" />
+                            </div>
+                            <div class="form-group">
+                                <label for="contactEmail">Email *</label>
+                                <input type="email" id="contactEmail" required placeholder="Enter email" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" required />
+                                <span class="checkbox-custom"></span>
+                                <span>I confirm this information is accurate and agree to the <a href="#">Terms of
+                                        Service</a> *</span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block btn-lg">
+                            <i class="fa-solid fa-bell"></i> Submit Lost Pet Alert
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Report Found Pet Section -->
+    <section id="report-found" class="report-section alt-bg">
+        <div class="section-container">
+            <div class="report-content reverse">
+                <div class="report-form-wrapper" data-aos="fade-right">
+                    <form class="report-form" id="foundPetForm">
+                        <h3><i class="fa-solid fa-paw"></i> Found Pet Report</h3>
+
+                        <div class="form-group">
+                            <label for="foundSpecies">Species *</label>
+                            <select id="foundSpecies" required>
+                                <option value="">Select species</option>
+                                <option value="dog">Dog</option>
+                                <option value="cat">Cat</option>
+                                <option value="bird">Bird</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="foundBreed">Breed (if known)</label>
+                            <input type="text" id="foundBreed" placeholder="Enter breed" />
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="foundAge">Approximate Age</label>
+                                <input type="text" id="foundAge" placeholder="e.g., young, adult" />
+                            </div>
+                            <div class="form-group">
+                                <label for="foundGender">Gender</label>
+                                <select id="foundGender">
+                                    <option value="">Select gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="unknown">Unknown</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="foundLocation">Found Location *</label>
+                            <input type="text" id="foundLocation" required placeholder="Enter specific location" />
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="foundDate">Date Found *</label>
+                                <input type="date" id="foundDate" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="foundTime">Time (approx)</label>
+                                <input type="time" id="foundTime" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="foundDescription">Description *</label>
+                            <textarea id="foundDescription" rows="4" required
+                                placeholder="Describe the pet, any collar, tags, or identifying features..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="foundPhotos">Upload Photos (up to 5)</label>
+                            <input type="file" id="foundPhotos" accept="image/*" multiple />
+                            <small>Photos help owners identify their pets</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="foundContactName">Your Name *</label>
+                            <input type="text" id="foundContactName" required placeholder="Enter your name" />
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="foundContactPhone">Phone Number *</label>
+                                <input type="tel" id="foundContactPhone" required placeholder="Enter phone number" />
+                            </div>
+                            <div class="form-group">
+                                <label for="foundContactEmail">Email *</label>
+                                <input type="email" id="foundContactEmail" required placeholder="Enter email" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Current Status *</label>
+                            <div class="radio-group">
+                                <label class="radio-item">
+                                    <input type="radio" name="foundStatus" value="with-me" checked />
+                                    <span class="radio-custom"></span>
+                                    Pet is with me
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="foundStatus" value="at-shelter" />
+                                    <span class="radio-custom"></span>
+                                    Taken to shelter
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" required />
+                                <span class="checkbox-custom"></span>
+                                <span>I confirm this information is accurate and agree to the <a href="#">Terms of
+                                        Service</a> *</span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block btn-lg">
+                            <i class="fa-solid fa-bell"></i> Submit Found Pet Alert
+                        </button>
+                    </form>
+                </div>
+
+                <div class="report-info" data-aos="fade-left">
+                    <span class="section-tag">
+                        <i class="fa-solid fa-paw"></i> Report Found Pet
+                    </span>
+                    <h2 class="section-title">Found a Pet?</h2>
+                    <p class="section-desc">
+                        Help reunite a lost pet with their family. Submit a found pet report and we'll help find the
+                        owner.
+                    </p>
+
+                    <div class="report-features">
+                        <div class="feature-item">
+                            <i class="fa-solid fa-search"></i>
+                            <span>Match with lost pet reports</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa-solid fa-users"></i>
+                            <span>Notify potential owners</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa-solid fa-heart"></i>
+                            <span>Make a difference in a pet's life</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Safety Tips Section -->
+    <section class="safety-tips-section">
+        <div class="section-container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-tag">
+                    <i class="fa-solid fa-shield-check"></i> Safety First
+                </span>
+                <h2 class="section-title">Safety Tips</h2>
+                <p class="section-subtitle">
+                    Important guidelines to ensure safe reunions and prevent scams.
+                </p>
+            </div>
+
+            <div class="tips-grid">
+                <div class="tip-card" >
+                    <div class="tip-icon">
+                        <i class="fa-solid fa-shield-check"></i>
+                    </div>
+                    <h3>Verify Identity</h3>
+                    <p>Always ask for proof of ownership (photos, vet records, microchip info) before handing over a
+                        pet.</p>
+                </div>
+
+                <div class="tip-card" >
+                    <div class="tip-icon">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <h3>Meet in Public</h3>
+                    <p>Arrange meetings in public places like parks or vet clinics. Never share your home address
+                        initially.</p>
+                </div>
+
+                <div class="tip-card" >
+                    <div class="tip-icon">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                    <h3>Use Our Messaging</h3>
+                    <p>Communicate through our secure messaging system. Don't share personal contact details
+                        immediately.</p>
+                </div>
+
+                <div class="tip-card" >
+                    <div class="tip-icon">
+                        <i class="fa-solid fa-flag"></i>
+                    </div>
+                    <h3>Report Suspicious Activity</h3>
+                    <p>If something feels wrong, report it to our team immediately. We verify all listings.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Stories -->
+    <section class="success-stories-section">
+        <div class="section-container">
+            <div class="section-header" >
+                <span class="section-tag">
+                    <i class="fa-solid fa-heart"></i> Happy Reunions
+                </span>
+                <h2 class="section-title">Success Stories</h2>
+                <p class="section-subtitle">
+                    Heartwarming stories of pets reunited with their families.
+                </p>
+            </div>
+
+            <div class="stories-grid">
+                <div class="story-card" >
+                    <div class="story-image">
+                        <img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=400" alt="Reunion" />
+                    </div>
+                    <div class="story-content">
+                        <div class="story-header">
+                            <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Priya" />
+                            <div>
+                                <h4>Priya Sharma</h4>
+                                <span>Reunited with Max</span>
+                            </div>
+                        </div>
+                        <p>"Max was found within 6 hours! Thanks to this amazing platform and the kind person who found
+                            him. Forever grateful!"</p>
+                        <div class="story-date">
+                            <i class="fa-solid fa-calendar"></i> Reunited 2 weeks ago
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story-card" >
+                    <div class="story-image">
+                        <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=400" alt="Reunion" />
+                    </div>
+                    <div class="story-content">
+                        <div class="story-header">
+                            <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Rahul" />
+                            <div>
+                                <h4>Rahul Verma</h4>
+                                <span>Reunited with Luna</span>
+                            </div>
+                        </div>
+                        <p>"Luna was missing for 3 days. The alert system helped spread the word quickly. She's back
+                            home safe!"</p>
+                        <div class="story-date">
+                            <i class="fa-solid fa-calendar"></i> Reunited 1 month ago
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story-card" >
+                    <div class="story-image">
+                        <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400" alt="Reunion" />
+                    </div>
+                    <div class="story-content">
+                        <div class="story-header">
+                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Ananya" />
+                            <div>
+                                <h4>Ananya Singh</h4>
+                                <span>Reunited with Buddy</span>
+                            </div>
+                        </div>
+                        <p>"Found Buddy through a found pet alert. The secure messaging made it easy to verify and
+                            arrange the reunion!"</p>
+                        <div class="story-date">
+                            <i class="fa-solid fa-calendar"></i> Reunited 3 months ago
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Modal -->
+    <div class="contact-modal" id="contactModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeContactModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="modal-body">
+                <h3><i class="fa-solid fa-envelope"></i> Send Secure Message</h3>
+                <p>Your contact information will only be shared after the reporter approves your message.</p>
+
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="senderName">Your Name *</label>
+                        <input type="text" id="senderName" required placeholder="Enter your name" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senderEmail">Your Email *</label>
+                        <input type="email" id="senderEmail" required placeholder="Enter your email" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senderPhone">Your Phone *</label>
+                        <input type="tel" id="senderPhone" required placeholder="Enter your phone" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message *</label>
+                        <textarea id="message" rows="4" required
+                            placeholder="Provide details about the pet or your sighting..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fa-solid fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-container"></div>
+    </script>
+          <script src="../../js/components/navbar-loader.js"></script>
+    <script src="../../js/components/footer-loader.js"></script>
+
+    <!-- Load Components Script -->
+    <script>
+      // Simple component loader
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded, loading components...');
+
+        // Load Navbar
+        fetch('../../components/navbar.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load navbar');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('navbar-container').innerHTML = data;
+            console.log('Navbar loaded successfully');
+            // Initialize navbar scripts if any
+            if (typeof initNavbar === 'function') {
+              initNavbar();
+            }
+          })
+          .catch(error => {
+            console.error('Error loading navbar:', error);
+            document.getElementById('navbar-container').innerHTML = 
+              '<div style="padding: 20px; background: #f8d7da; color: #721c24;">Navbar failed to load</div>';
+          });
+
+        // Load Footer
+        fetch('../../components/footer.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load footer');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('footer-container').innerHTML = data;
+            console.log('Footer loaded successfully');
+            // Initialize footer scripts if any
+            if (typeof initFooter === 'function') {
+              initFooter();
+            }
+          })
+          .catch(error => {
+            console.error('Error loading footer:', error);
+            document.getElementById('footer-container').innerHTML = 
+              '<div style="padding: 20px; background: #f8d7da; color: #721c24; text-align: center;">Footer failed to load</div>';
+          });
+
+        // Load Share Modal
+        fetch('../../components/share-modal.html')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to load share modal');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('share-modal-container').innerHTML = data;
+            console.log('Share modal loaded successfully');
+          })
+          .catch(error => {
+            console.error('Error loading share modal:', error);
+          });
+
+        // Initialize AOS
+        AOS.init({
+          duration: 800,
+          once: true,
+          offset: 100
+        });
+
+        // Load cursor if function exists
+        if (typeof loadCursor === 'function') {
+          loadCursor();
+        }
+      });
+    </script>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/global/theme-toggle.js"></script>
+    <script>
+(function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="ws110ZzXAkEnbVsIy9g8d";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+</script>
+
+ <script src="/frontend/js/components/footer-loader.js"></script>
+<script src="../js/components/component-loader.js"></script>
+
+  <script src="../js/components/navbar-loader.js"></script>
+  
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../../js/pages/animal-safety/lost-found.js"></script>
+    <script src="../../js/components/theme.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30-Day Clothing Fast Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700;800&family=Lora:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3a506b;
+            --secondary: #5c7c9c;
+            --accent: #e76f51;
+            --light: #f8f9fa;
+            --dark: #1c2541;
+            --eco: #4a9c7d;
+            --text: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Raleway', sans-serif;
+            color: var(--text);
+            background-color: var(--light);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(rgba(28, 37, 65, 0.9), rgba(28, 37, 65, 0.95)), 
+                        url('https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0 60px;
+            text-align: center;
+            border-radius: 0 0 30px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 10px, white 10px, white 20px);
+        }
+        
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .tagline {
+            font-size: 1.4rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-weight: 300;
+            font-family: 'Lora', serif;
+        }
+        
+        /* Challenge Intro */
+        .challenge-intro {
+            text-align: center;
+            padding: 70px 0 50px;
+        }
+        
+        .challenge-title {
+            font-size: 3.2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .challenge-title:after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 4px;
+            background-color: var(--accent);
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .challenge-subtitle {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+        
+        .challenge-description {
+            max-width: 850px;
+            margin: 0 auto 50px;
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid var(--accent);
+            font-size: 1.1rem;
+            position: relative;
+        }
+        
+        .challenge-description:before {
+            content: "♻️";
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        /* Stats Section */
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 60px 0 80px;
+        }
+        
+        .stat-box {
+            background: white;
+            border-radius: 15px;
+            padding: 35px 25px;
+            width: 250px;
+            text-align: center;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            border-top: 5px solid var(--secondary);
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        .stat-value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 1.2rem;
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        /* Fast Fashion Facts */
+        .facts-section {
+            background-color: white;
+            border-radius: 20px;
+            padding: 70px 50px;
+            margin: 70px 0;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 4px;
+            background-color: var(--accent);
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .facts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        
+        .fact-card {
+            background: var(--light);
+            padding: 30px;
+            border-radius: 12px;
+            border-left: 5px solid var(--eco);
+            transition: transform 0.3s ease;
+        }
+        
+        .fact-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .fact-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4rem;
+        }
+        
+        .fact-card h3 i {
+            color: var(--accent);
+        }
+        
+        /* Alternatives Section */
+        .alternatives-section {
+            background-color: #f0f4f8;
+            border-radius: 20px;
+            padding: 60px 50px;
+            margin: 70px 0;
+        }
+        
+        .alternatives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 35px;
+            margin-top: 50px;
+        }
+        
+        .alternative-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .alternative-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .alternative-icon {
+            font-size: 2.8rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            height: 80px;
+            width: 80px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        
+        /* Action Section */
+        .action-section {
+            text-align: center;
+            padding: 80px 40px;
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            color: white;
+            border-radius: 25px;
+            margin: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-section:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            opacity: 0.1;
+        }
+        
+        .action-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .start-button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 25px 60px;
+            font-size: 1.7rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 40px;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            letter-spacing: 1px;
+        }
+        
+        .start-button:hover {
+            background-color: #ff5c33;
+            transform: translateY(-7px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .counter {
+            font-size: 1.5rem;
+            margin: 35px 0;
+            font-weight: 600;
+        }
+        
+        /* Capsule Section */
+        .capsule-section {
+            background-color: white;
+            border-radius: 20px;
+            padding: 60px 50px;
+            margin: 70px 0;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+        }
+        
+        .capsule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .capsule-tip {
+            background: var(--light);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            border-top: 4px solid var(--secondary);
+        }
+        
+        .capsule-tip h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 60px 0;
+            margin-top: 80px;
+            color: var(--text);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            background-color: #f0f4f8;
+        }
+        
+        .impact-statement {
+            font-size: 1.3rem;
+            margin-top: 30px;
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .challenge-title {
+                font-size: 2.4rem;
+            }
+            
+            .stat-box {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .facts-grid, .alternatives-grid, .capsule-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .facts-section, .alternatives-section, .capsule-section {
+                padding: 40px 25px;
+            }
+            
+            .action-section {
+                padding: 60px 25px;
+            }
+        }
+        
+        .highlight {
+            color: var(--accent);
+            font-weight: 700;
+        }
+        
+        .fashion-icon {
+            display: inline-block;
+            margin: 0 8px;
+            color: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-pattern"></div>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-tshirt"></i>
+            </div>
+            <h1>Fashion Detox Challenge</h1>
+            <p class="tagline">Break free from fast fashion consumption and rediscover the value of what's already in your closet</p>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="challenge-intro">
+            <h1 class="challenge-title">30-Day Clothing Fast</h1>
+            <h2 class="challenge-subtitle">30 days • Intermediate Level</h2>
+            
+            <div class="challenge-description">
+                <p>No new clothes for 30 days. This intermediate challenge helps you appreciate what you already own, break shopping habits, and reduce the environmental impact of fast fashion. Discover your personal style beyond trends, learn clothing care and repair, and understand the true cost of our clothing consumption.</p>
+            </div>
+            
+            <div class="counter">
+                <p><i class="fas fa-users"></i> <span id="participant-count">567</span> people are fasting from fast fashion</p>
+            </div>
+        </section>
+        
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-value">30</div>
+                <div class="stat-label">Days Without Shopping</div>
+            </div>
+            
+            <div class="stat-box">
+                <div class="stat-value">567</div>
+                <div class="stat-label">Participants</div>
+            </div>
+            
+            <div class="stat-box">
+                <div class="stat-value">75%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+            
+            <div class="stat-box">
+                <div class="stat-value">35kg</div>
+                <div class="stat-label">Avg. CO₂ Saved</div>
+            </div>
+        </div>
+        
+        <section class="facts-section">
+            <h2 class="section-title">The Fast Fashion Problem</h2>
+            
+            <div class="facts-grid">
+                <div class="fact-card">
+                    <h3><i class="fas fa-tint"></i> Water Waste</h3>
+                    <p>The fashion industry uses 93 billion cubic meters of water annually - enough for 5 million people's consumption. A single cotton t-shirt requires 2,700 liters of water to produce.</p>
+                </div>
+                
+                <div class="fact-card">
+                    <h3><i class="fas fa-smog"></i> Carbon Footprint</h3>
+                    <p>Fashion accounts for 10% of global carbon emissions - more than international flights and maritime shipping combined. Fast fashion garments are worn only 7 times on average.</p>
+                </div>
+                
+                <div class="fact-card">
+                    <h3><i class="fas fa-trash"></i> Clothing Waste</h3>
+                    <p>85% of textiles end up in landfills each year. The equivalent of one garbage truck of clothes is burned or dumped every second globally.</p>
+                </div>
+                
+                <div class="fact-card">
+                    <h3><i class="fas fa-industry"></i> Human Impact</h3>
+                    <p>Fast fashion relies on cheap labor, with many workers earning less than $3/day. The industry employs 1 in 6 people globally, often in poor working conditions.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="alternatives-section">
+            <h2 class="section-title">Sustainable Alternatives</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 20px; font-size: 1.1rem;">During your 30-day fast, explore these sustainable fashion practices instead of shopping</p>
+            
+            <div class="alternatives-grid">
+                <div class="alternative-card">
+                    <div class="alternative-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h3>Clothing Swap</h3>
+                    <p>Organize or join clothing swaps with friends to refresh your wardrobe without buying new items.</p>
+                </div>
+                
+                <div class="alternative-card">
+                    <div class="alternative-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3>Upcycle & Repair</h3>
+                    <p>Learn basic mending skills or transform old clothes into new pieces through creative upcycling.</p>
+                </div>
+                
+                <div class="alternative-card">
+                    <div class="alternative-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <h3>Secondhand First</h3>
+                    <p>After the fast, prioritize thrift stores, consignment shops, and online secondhand platforms.</p>
+                </div>
+                
+                <div class="alternative-card">
+                    <div class="alternative-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Closet Audit</h3>
+                    <p>Rediscover forgotten items in your closet and create new outfits with what you already own.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="capsule-section">
+            <h2 class="section-title">Capsule Wardrobe Tips</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 20px;">Create a versatile wardrobe with fewer, higher-quality pieces</p>
+            
+            <div class="capsule-grid">
+                <div class="capsule-tip">
+                    <h3>The 30-Wear Test</h3>
+                    <p>Before buying any clothing item, ask yourself: Will I wear this at least 30 times? If not, reconsider the purchase.</p>
+                </div>
+                
+                <div class="capsule-tip">
+                    <h3>Quality Over Quantity</h3>
+                    <p>Invest in well-made, timeless pieces that will last for years rather than trendy items that quickly wear out.</p>
+                </div>
+                
+                <div class="capsule-tip">
+                    <h3>Mix & Match</h3>
+                    <p>Build your wardrobe around complementary colors and styles that can be mixed to create multiple outfits.</p>
+                </div>
+                
+                <div class="capsule-tip">
+                    <h3>Seasonal Rotation</h3>
+                    <p>Store off-season clothing to keep your closet manageable and rediscover items when seasons change.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="action-section">
+            <div class="action-content">
+                <h2 class="section-title" style="color: white;">Ready to Break the Cycle?</h2>
+                <p style="font-size: 1.3rem; max-width: 800px; margin: 0 auto 20px;">Join hundreds of participants breaking free from fast fashion and discovering mindful consumption.</p>
+                <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto;">For 30 days, choose <span class="highlight" style="color: #ffb8a8;">creativity over consumption</span> and <span class="highlight" style="color: #ffb8a8;">quality over quantity</span>.</p>
+                
+                <button class="start-button" id="start-challenge">
+                    <i class="fas fa-play-circle"></i> Start 30-Day Fast
+                </button>
+                
+                <div class="counter" id="join-message"></div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>30-Day Clothing Fast Challenge &copy; 2026 | Promoting Conscious Fashion Consumption</p>
+            <p class="impact-statement">
+                <i class="fas fa-leaf"></i> 
+                Collective impact: <span id="total-co2">19,845</span> kg CO₂ saved and <span id="garments-saved">11,340</span> garments kept from landfills
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const participantCount = document.getElementById('participant-count');
+            const joinMessage = document.getElementById('join-message');
+            const startButton = document.getElementById('start-challenge');
+            const totalCO2 = document.getElementById('total-co2');
+            const garmentsSaved = document.getElementById('garments-saved');
+            
+            // Initial values
+            let participants = 567;
+            let co2Saved = participants * 35; // 35kg per participant
+            let garments = participants * 20; // Estimated 20 garments saved per participant
+            
+            // Update displays
+            totalCO2.textContent = co2Saved.toLocaleString();
+            garmentsSaved.textContent = garments.toLocaleString();
+            
+            // Start challenge functionality
+            startButton.addEventListener('click', function() {
+                // Increase participant count
+                participants++;
+                participantCount.textContent = participants.toLocaleString();
+                
+                // Update impact metrics
+                co2Saved = participants * 35;
+                garments = participants * 20;
+                totalCO2.textContent = co2Saved.toLocaleString();
+                garmentsSaved.textContent = garments.toLocaleString();
+                
+                // Success message
+                const messages = [
+                    "Welcome to mindful fashion consumption!",
+                    "Your clothing fast begins now!",
+                    "You've joined the slow fashion movement!",
+                    "Get ready to rediscover your wardrobe!"
+                ];
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                
+                joinMessage.innerHTML = `<i class="fas fa-check-circle" style="color: #4a9c7d"></i> ${randomMessage} You are participant #${participants.toLocaleString()}`;
+                
+                // Change button
+                startButton.innerHTML = '<i class="fas fa-check"></i> Fast Started!';
+                startButton.style.backgroundColor = '#4a9c7d';
+                startButton.disabled = true;
+                
+                // Show confirmation
+                alert("30-Day Clothing Fast started!\n\nYou'll receive daily support via email including:\n1. Outfit inspiration from your existing wardrobe\n2. Clothing care and repair tutorials\n3. Mindful shopping guidelines for after the fast\n4. Community support from fellow participants\n\nEnjoy your fashion freedom!");
+            });
+            
+            // Simulate live participant updates
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    const newParticipants = Math.floor(Math.random() * 4) + 1;
+                    participants += newParticipants;
+                    participantCount.textContent = participants.toLocaleString();
+                    
+                    // Update impact metrics
+                    co2Saved = participants * 35;
+                    garments = participants * 20;
+                    totalCO2.textContent = co2Saved.toLocaleString();
+                    garmentsSaved.textContent = garments.toLocaleString();
+                }
+            }, 12000);
+        });
+    </script>
+</body>
+</html>

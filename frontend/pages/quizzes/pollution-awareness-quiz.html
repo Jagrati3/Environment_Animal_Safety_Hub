@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pollution Awareness Quiz | EcoLife</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<link rel="stylesheet" href="../../css/pages/quizzes/quiz.css">
+<link rel="stylesheet" href="../../css/pages/quizzes/pollution-awareness-quiz.css">
+<link rel="stylesheet" href="../../css/global/utilities.css" />
+  <link rel="stylesheet" href="../../css/components/footer.css" />
+  <link rel="stylesheet" href="../../css/components/navbar.css" />
+
+  <!-- WhatsApp Button CSS -->
+  <style>
+    .whatsapp-btn {
+      background-color: #25D366;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-width: 200px;
+    }
+
+    .whatsapp-btn:hover {
+      background-color: #128C7E;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+    }
+
+    .whatsapp-btn i {
+      font-size: 18px;
+    }
+
+    #resultScreen button:not(.whatsapp-btn) {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 10px;
+      min-width: 200px;
+    }
+
+    #resultScreen button:not(.whatsapp-btn):hover {
+      background-color: #45a049;
+      transform: translateY(-2px);
+    }
+
+    .result-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .result-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .result-buttons button {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="cursor-container"></div>
+<script src="../../js/components/loadComponents.js"></script>
+
+  <div id="navbar-container"></div>
+
+<div class="hero">
+  <h1>🌫️ Pollution Awareness Quiz</h1>
+  <p>Learn about pollution types & how to protect our planet 🌍</p>
+</div>
+
+<div class="card">
+
+  <!-- START -->
+  <div id="startScreen">
+    <h2>Ready to Fight Pollution?</h2>
+    <p>10 questions • 3 minutes</p>
+    <button id="startQuizBtn">Start Quiz</button>
+
+    <!-- Resume Section -->
+    <div id="resumeSection" style="display: none; margin-top: 20px; padding: 15px; background: #f0f8ff; border-radius: 8px; border: 2px solid #4CAF50;">
+      <h3 style="color: #2E7D32; margin-bottom: 10px;">📚 Resume Your Previous Quiz</h3>
+      <p style="margin-bottom: 15px; color: #555;">You have an unfinished quiz. Would you like to continue where you left off?</p>
+      <button id="resumeSavedQuizBtn" style="background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">Resume Quiz</button>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quizScreen">
+    <div class="timer">⏳ Time Left: <span id="time">03:00</span></div>
+    <div class="progress-bar-container">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="progress-metrics">
+        <span id="timeSpent">Time Spent: 0s</span> | <span id="questionsCompleted">Completed: 0/10</span>
+      </div>
+    </div>
+    <div class="pause-resume-buttons">
+      <button class="btn-secondary" id="pauseBtn">⏸️ Pause</button>
+      <button class="btn-secondary" id="resumeBtn" style="display:none;">▶️ Resume</button>
+    </div>
+    <div class="question" id="question"></div>
+    <div id="options"></div>
+    <button id="nextQuestionBtn">Next</button>
+  </div>
+
+  <!-- RESULT -->
+  <div id="resultScreen">
+    <h2>🎉 Quiz Completed!</h2>
+    <div class="score" id="score"></div>
+    <p id="remark"></p>
+
+    <div class="result-buttons">
+      <button id="playAgainBtn">Play Again</button>
+      <!-- WhatsApp Share Button Added Here -->
+      <button class="whatsapp-btn" id="whatsappShareBtn">
+        <i class="fab fa-whatsapp"></i> Share Score
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<div class="back-wrapper">
+  <button id="backBtn">⬅ Back to Dashboard</button>
+</div>
+
+<!-- Footer placeholder -->
+  <div id="footer-placeholder"></div>
+<script src="../../js/components/progress-manager.js"></script>
+<script src="../../js/components/quiz-base.js"></script>
+<script src="../../js/pages/quizzes/pollution-awareness-quiz.js"></script>
+
+<script src="../../js/components/footer-loader.js"></script>
+<script src="../../js/components/component-loader.js"></script>
+    <script src="../../js/components/navbar-loader.js"></script>
+
+  <!-- WhatsApp Share JavaScript -->
+  <script>
+    // WhatsApp share functionality
+    function shareOnWhatsApp() {
+      const scoreElement = document.getElementById('score');
+      const remarkElement = document.getElementById('remark');
+
+      if (!scoreElement || !remarkElement) {
+        alert('Please complete the quiz first!');
+        return;
+      }
+
+      const scoreText = scoreElement.innerText || scoreElement.textContent;
+      const remarkText = remarkElement.innerText || remarkElement.textContent;
+      const quizTitle = 'Pollution Awareness Quiz';
+      const currentUrl = window.location.href;
+
+      // Create share message
+      const shareMessage = `🌫️ *Pollution Awareness Quiz Results* 🌫️\n\n` +
+                         `🏆 *Score:* ${scoreText}\n` +
+                         `📝 *Remark:* ${remarkText}\n\n` +
+                         `🌍 I just tested my pollution knowledge!\n` +
+                         `How much do you know about air, water, and soil pollution? 🏭\n\n` +
+                         `👉 Take the quiz here: ${currentUrl}\n\n` +
+                         `#PollutionAwareness #CleanAir #SaveWater #EcoLife`;
+
+      const encodedMessage = encodeURIComponent(shareMessage);
+      const whatsappURL = `https://wa.me/?text=${encodedMessage}`;
+
+      // Open WhatsApp in a new tab
+      window.open(whatsappURL, '_blank', 'noopener,noreferrer');
+    }
+
+    // Add event listener when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add click event to WhatsApp button
+      const whatsappBtn = document.getElementById('whatsappShareBtn');
+      if (whatsappBtn) {
+        whatsappBtn.addEventListener('click', shareOnWhatsApp);
+      }
+
+      // Also handle dynamic clicks if button is added later
+      document.addEventListener('click', function(e) {
+        if (e.target && e.target.id === 'whatsappShareBtn') {
+          shareOnWhatsApp();
+        }
+        if (e.target && e.target.closest('#whatsappShareBtn')) {
+          shareOnWhatsApp();
+        }
+      });
+
+      // Make function available globally
+      window.shareOnWhatsApp = shareOnWhatsApp;
+    });
+  </script>
+</body>
+</html>

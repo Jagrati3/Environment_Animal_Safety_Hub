@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="../../assets/images/others/envirnoment-logo.png">
+    <title>Eco-Swap - Sustainable Marketplace | EcoLife</title>
+    <meta name="description"
+        content="Join the circular economy! Trade, swap, or give away items you no longer need. Reduce waste and save money." />
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../../css/global/variables.css" />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/components/navbar.css" />
+    <link rel="stylesheet" href="../../css/components/footer.css" />
+    <link rel="stylesheet" href="../../css/components/scrollBar.css" />
+    <link rel="stylesheet" href="../../css/pages/community/eco-swap.css" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Navbar -->
+    <div id="navbar-container"></div>
+
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+
+        <!-- Hero Section -->
+        <section class="eco-swap-hero">
+            <div class="hero-overlay"></div>
+            <div class="hero-content" data-aos="fade-up">
+                <div class="hero-badge">
+                    <i class="fas fa-recycle"></i> Circular Economy
+                </div>
+                <h1 class="hero-title">
+                    <span class="gradient-text">Eco-Swap</span> Marketplace
+                </h1>
+                <p class="hero-subtitle">
+                    Give items a second life. Trade, swap, or give away what you don't need.
+                    Join the sustainable sharing economy today!
+                </p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-box"></i>
+                        <span class="stat-number" id="totalItems">1,247</span>
+                        <span class="stat-label">Items Listed</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-users"></i>
+                        <span class="stat-number" id="totalUsers">3,892</span>
+                        <span class="stat-label">Active Users</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-leaf"></i>
+                        <span class="stat-number" id="wasteReduced">12.5T</span>
+                        <span class="stat-label">Waste Reduced</span>
+                    </div>
+                </div>
+                <div class="hero-cta">
+                    <button class="btn btn-primary" id="createListingBtn">
+                        <i class="fas fa-plus"></i> List an Item
+                    </button>
+                    <a href="#marketplace" class="btn btn-secondary">
+                        <i class="fas fa-search"></i> Browse Items
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Safety Guide Banner -->
+        <section class="safety-banner" data-aos="fade-up">
+            <div class="container">
+                <div class="safety-content">
+                    <div class="safety-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="safety-text">
+                        <h3>Stay Safe While Trading</h3>
+                        <p>Meet in public places, bring a friend, and trust your instincts.</p>
+                    </div>
+                    <button class="btn btn-outline" id="safetyGuideBtn">
+                        <i class="fas fa-book"></i> Safety Guide
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filter & Search Section -->
+        <section id="marketplace" class="marketplace-section">
+            <div class="container">
+                <div class="marketplace-header" data-aos="fade-up">
+                    <h2 class="section-title">Browse Marketplace</h2>
+                    <p class="section-subtitle">Find what you need, share what you don't</p>
+                </div>
+
+                <!-- Filters -->
+                <div class="filters-container" data-aos="fade-up" data-aos-delay="100">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search" class="search"  placeholder="Search items..." />
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="categoryFilter">
+                            <i class="fas fa-tag"></i> Category
+                        </label>
+                        <select id="categoryFilter">
+                            <option value="all">All Categories</option>
+                            <option value="clothing">Clothing</option>
+                            <option value="books">Books</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="home-garden">Home & Garden</option>
+                            <option value="kids-toys">Kids & Toys</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="typeFilter">
+                            <i class="fas fa-exchange-alt"></i> Type
+                        </label>
+                        <select id="typeFilter">
+                            <option value="all">All Types</option>
+                            <option value="free">Give Away (Free)</option>
+                            <option value="swap">Swap/Trade</option>
+                            <option value="sell">For Sale</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="sortFilter">
+                            <i class="fas fa-sort"></i> Sort By
+                        </label>
+                        <select id="sortFilter">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Items Grid -->
+                <div class="items-grid" id="itemsGrid">
+                    <!-- Items will be dynamically loaded here -->
+                </div>
+
+                <!-- Load More Button -->
+                <div class="load-more-container" data-aos="fade-up">
+                    <button class="btn btn-outline" id="loadMoreBtn">
+                        <i class="fas fa-chevron-down"></i> Load More Items
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="how-it-works-section">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <h2 class="section-title">How Eco-Swap Works</h2>
+                    <p class="section-subtitle">Start trading in 3 simple steps</p>
+                </div>
+
+                <div class="steps-container">
+                    <div class="step-card" data-aos="fade-up" data-aos-delay="0">
+                        <div class="step-number">01</div>
+                        <div class="step-icon">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <h3>List Your Item</h3>
+                        <p>Take photos, add details, and choose: Give Away, Swap, or Sell</p>
+                    </div>
+
+                    <div class="step-connector" data-aos="fade-up" data-aos-delay="100">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+
+                    <div class="step-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="step-number">02</div>
+                        <div class="step-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h3>Connect & Negotiate</h3>
+                        <p>Chat with interested users and arrange the exchange</p>
+                    </div>
+
+                    <div class="step-connector" data-aos="fade-up" data-aos-delay="300">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+
+                    <div class="step-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="step-number">03</div>
+                        <div class="step-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3>Complete Exchange</h3>
+                        <p>Meet safely, exchange items, and help the planet!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Impact Section -->
+        <section class="impact-section" data-aos="fade-up">
+            <div class="container">
+                <div class="impact-content">
+                    <div class="impact-text">
+                        <h2>Your Impact Matters</h2>
+                        <p>Every item you share prevents waste and reduces carbon emissions. Together, we're building a
+                            sustainable future.</p>
+                        <div class="impact-stats">
+                            <div class="impact-stat">
+                                <i class="fas fa-tree"></i>
+                                <span class="impact-number">2,450</span>
+                                <span class="impact-label">Trees Saved</span>
+                            </div>
+                            <div class="impact-stat">
+                                <i class="fas fa-water"></i>
+                                <span class="impact-number">15,000L</span>
+                                <span class="impact-label">Water Conserved</span>
+                            </div>
+                            <div class="impact-stat">
+                                <i class="fas fa-smog"></i>
+                                <span class="impact-number">8.2T</span>
+                                <span class="impact-label">CO₂ Reduced</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="impact-visual">
+                        <div class="circular-economy-diagram">
+                            <div class="circle-item">
+                                <i class="fas fa-recycle"></i>
+                                <span>Reuse</span>
+                            </div>
+                            <div class="circle-item">
+                                <i class="fas fa-sync"></i>
+                                <span>Reduce</span>
+                            </div>
+                            <div class="circle-item">
+                                <i class="fas fa-leaf"></i>
+                                <span>Sustain</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Create Listing Modal -->
+    <div id="createListingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-plus-circle"></i> List Your Item</h2>
+                <button class="modal-close" id="closeCreateModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="createListingForm">
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="itemTitle">Item Title *</label>
+                            <input type="text" id="itemTitle" required placeholder="e.g., Vintage Leather Jacket" />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="itemCategory">Category *</label>
+                            <select id="itemCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="clothing">Clothing</option>
+                                <option value="books">Books</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="home-garden">Home & Garden</option>
+                                <option value="kids-toys">Kids & Toys</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="itemType">Transaction Type *</label>
+                            <select id="itemType" required>
+                                <option value="">Select Type</option>
+                                <option value="free">Give Away (Free)</option>
+                                <option value="swap">Swap/Trade</option>
+                                <option value="sell">For Sale</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row" id="priceRow" style="display: none;">
+                        <div class="form-group">
+                            <label for="itemPrice">Price (₹)</label>
+                            <input type="number" id="itemPrice" min="0" placeholder="Enter price" />
+                        </div>
+                        <div class="form-group">
+                            <label for="itemCondition">Condition *</label>
+                            <select id="itemCondition" required>
+                                <option value="">Select Condition</option>
+                                <option value="new">New</option>
+                                <option value="like-new">Like New</option>
+                                <option value="good">Good</option>
+                                <option value="fair">Fair</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="itemDescription">Description *</label>
+                            <textarea id="itemDescription" required rows="4"
+                                placeholder="Describe your item, its condition, and any other relevant details..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="itemImages">Upload Images (Max 5) *</label>
+                            <div class="image-upload-container">
+                                <input type="file" id="itemImages" accept="image/*" multiple />
+                                <div class="upload-placeholder">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>Click or drag images here</p>
+                                    <span>Supports: JPG, PNG, WebP (Max 5MB each)</span>
+                                </div>
+                                <div id="imagePreview" class="image-preview"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="itemLocation">Location *</label>
+                            <input type="text" id="itemLocation" required placeholder="e.g., Mumbai, Maharashtra" />
+                        </div>
+                        <div class="form-group">
+                            <label for="contactMethod">Contact Method *</label>
+                            <select id="contactMethod" required>
+                                <option value="">Select Method</option>
+                                <option value="chat">In-App Chat</option>
+                                <option value="phone">Phone</option>
+                                <option value="email">Email</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" id="cancelCreateBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check"></i> Publish Listing
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item Detail Modal -->
+    <div id="itemDetailModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="detailItemTitle">Item Details</h2>
+                <button class="modal-close" id="closeDetailModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="itemDetailContent">
+                <!-- Content will be dynamically loaded -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Safety Guide Modal -->
+    <div id="safetyGuideModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-shield-alt"></i> Safety Guide</h2>
+                <button class="modal-close" id="closeSafetyModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="safety-guide-content">
+                    <div class="safety-tip">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h3>Meet in Public Places</h3>
+                        <p>Always meet in well-lit, public locations like cafes, shopping malls, or community centers.
+                        </p>
+                    </div>
+                    <div class="safety-tip">
+                        <i class="fas fa-user-friends"></i>
+                        <h3>Bring a Friend</h3>
+                        <p>Never meet alone. Bring a friend or family member with you for added security.</p>
+                    </div>
+                    <div class="safety-tip">
+                        <i class="fas fa-sun"></i>
+                        <h3>Daytime Meetings</h3>
+                        <p>Schedule exchanges during daylight hours when possible.</p>
+                    </div>
+                    <div class="safety-tip">
+                        <i class="fas fa-phone"></i>
+                        <h3>Share Your Plans</h3>
+                        <p>Let someone know where you're going, who you're meeting, and when you'll be back.</p>
+                    </div>
+                    <div class="safety-tip">
+                        <i class="fas fa-eye"></i>
+                        <h3>Inspect Items Carefully</h3>
+                        <p>Check items thoroughly before completing the exchange. Don't feel pressured.</p>
+                    </div>
+                    <div class="safety-tip">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Trust Your Instincts</h3>
+                        <p>If something feels wrong, cancel the meeting. Your safety comes first.</p>
+                    </div>
+                    <div class="safety-tip">
+                        <i class="fas fa-ban"></i>
+                        <h3>Avoid Sharing Personal Info</h3>
+                        <p>Don't share your home address, financial details, or sensitive personal information.</p>
+                    </div>
+                    <div class="safety-tip">
+                        <i class="fas fa-flag"></i>
+                        <h3>Report Suspicious Activity</h3>
+                        <p>If you encounter suspicious behavior, report it to our team immediately.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../../js/components/navbar.js"></script>
+    <script src="../../js/components/footer.js"></script>
+    <script src="../../js/pages/community/eco-swap.js"></script>
+     <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 800,
+      once: true
+    });
+
+    // Load Navbar
+    fetch('../../components/navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+        // Fix navbar links for this page location
+        const navLinks = document.querySelectorAll('#navbar-container a');
+        navLinks.forEach(link => {
+          const href = link.getAttribute('href');
+          if (href && !href.startsWith('http') && !href.startsWith('#')) {
+            if (href.startsWith('index.html')) {
+              link.setAttribute('href', '../../' + href);
+            } else if (href.startsWith('pages/')) {
+              link.setAttribute('href', '../../' + href);
+            }
+          }
+        });
+      });
+
+    // Load Footer
+    fetch('../../components/footer.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('footer-container').innerHTML = data;
+      });
+  </script>
+</body>
+
+</html>

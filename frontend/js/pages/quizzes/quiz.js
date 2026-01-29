@@ -7,6 +7,60 @@ let quizData = null;
  */
 let questions = [];
 
+// Fallback questions in case JSON loading fails
+const FALLBACK_QUESTIONS = [
+  {
+    q: "What helps reduce pollution?",
+    o: ["Planting trees 🌳", "Burning waste 🔥", "Cutting forests 🪓", "Throwing trash 🗑️"],
+    a: 0
+  },
+  {
+    q: "Which energy is renewable?",
+    o: ["Coal ⛽", "Solar ☀️", "Oil 🚢", "Gas 💨"],
+    a: 1
+  },
+  {
+    q: "Why recycle waste?",
+    o: ["Increase trash 🚯", "Save resources ♻️", "Pollute water 💧", "Waste money 💸"],
+    a: 1
+  },
+  {
+    q: "Which animal is endangered?",
+    o: ["Dog 🐕", "Cat 🐈", "Tiger 🐅", "Cow 🐄"],
+    a: 2
+  },
+  {
+    q: "Best way to save water?",
+    o: ["Leave taps open 🚰", "Fix leaks 🔧", "Waste water 🚿", "Ignore 🙄"],
+    a: 1
+  },
+  {
+    q: "What gas causes global warming?",
+    o: ["Oxygen 🌬️", "Carbon dioxide 🌫️", "Nitrogen ✗", "Hydrogen 🎈"],
+    a: 1
+  },
+  {
+    q: "What protects wildlife?",
+    o: ["Deforestation 🪵", "Conservation 🏞️", "Hunting 🔫", "Pollution 🏭"],
+    a: 1
+  },
+  {
+    q: "Which bin for plastic?",
+    o: ["Green 🟢", "Blue 🔵", "Red 🔴", "Black ⛑️"],
+    a: 1
+  },
+  {
+    q: "What harms oceans?",
+    o: ["Clean water 🌊", "Plastic waste 🗃️", "Fish 🐟", "Coral 🪸"],
+    a: 1
+  },
+  {
+    q: "Best transport to reduce pollution?",
+    o: ["Car 🚗", "Bus 🚌", "Cycle 🚲", "Plane ✈️"],
+    a: 2
+  }
+];
+
 /**
  * Load questions from the quiz data JSON file
  */
@@ -18,114 +72,12 @@ async function loadQuizData() {
       questions = data.quizzes[0].questions; // Load questions from first quiz
     } else {
       // Fallback to hardcoded questions if JSON fails
-      questions = [
-        {
-          q: "What helps reduce pollution?",
-          o: ["Planting trees 🌳", "Burning waste 🔥", "Cutting forests 🪓", "Throwing trash 🗑️"],
-          a: 0
-        },
-        {
-          q: "Which energy is renewable?",
-          o: ["Coal ⛽", "Solar ☀️", "Oil 🚢", "Gas 💨"],
-          a: 1
-        },
-        {
-          q: "Why recycle waste?",
-          o: ["Increase trash 🚯", "Save resources ♻️", "Pollute water 💧", "Waste money 💸"],
-          a: 1
-        },
-        {
-          q: "Which animal is endangered?",
-          o: ["Dog 🐕", "Cat 🐈", "Tiger 🐅", "Cow 🐄"],
-          a: 2
-        },
-        {
-          q: "Best way to save water?",
-          o: ["Leave taps open 🚰", "Fix leaks 🔧", "Waste water 🚿", "Ignore 🙄"],
-          a: 1
-        },
-        {
-          q: "What gas causes global warming?",
-          o: ["Oxygen 🌬️", "Carbon dioxide 🌫️", "Nitrogen ✗", "Hydrogen 🎈"],
-          a: 1
-        },
-        {
-          q: "What protects wildlife?",
-          o: ["Deforestation 🪵", "Conservation 🏞️", "Hunting 🔫", "Pollution 🏭"],
-          a: 1
-        },
-        {
-          q: "Which bin for plastic?",
-          o: ["Green 🟢", "Blue 🔵", "Red 🔴", "Black ⛑️"],
-          a: 1
-        },
-        {
-          q: "What harms oceans?",
-          o: ["Clean water 🌊", "Plastic waste 🗃️", "Fish 🐟", "Coral 🪸"],
-          a: 1
-        },
-        {
-          q: "Best transport to reduce pollution?",
-          o: ["Car 🚗", "Bus 🚌", "Cycle 🚲", "Plane ✈️"],
-          a: 2
-        }
-      ];
+      questions = FALLBACK_QUESTIONS;
     }
   } catch (error) {
     console.error('Failed to load quiz data:', error);
     // Fallback to hardcoded questions
-    questions = [
-      {
-        q: "What helps reduce pollution?",
-        o: ["Planting trees 🌳", "Burning waste 🔥", "Cutting forests 🪓", "Throwing trash 🗑️"],
-        a: 0
-      },
-      {
-        q: "Which energy is renewable?",
-        o: ["Coal ⛽", "Solar ☀️", "Oil 🚢", "Gas 💨"],
-        a: 1
-      },
-      {
-        q: "Why recycle waste?",
-        o: ["Increase trash 🚯", "Save resources ♻️", "Pollute water 💧", "Waste money 💸"],
-        a: 1
-      },
-      {
-        q: "Which animal is endangered?",
-        o: ["Dog 🐕", "Cat 🐈", "Tiger 🐅", "Cow 🐄"],
-        a: 2
-      },
-      {
-        q: "Best way to save water?",
-        o: ["Leave taps open 🚰", "Fix leaks 🔧", "Waste water 🚿", "Ignore 🙄"],
-        a: 1
-      },
-      {
-        q: "What gas causes global warming?",
-        o: ["Oxygen 🌬️", "Carbon dioxide 🌫️", "Nitrogen ✗", "Hydrogen 🎈"],
-        a: 1
-      },
-      {
-        q: "What protects wildlife?",
-        o: ["Deforestation 🪵", "Conservation 🏞️", "Hunting 🔫", "Pollution 🏭"],
-        a: 1
-      },
-      {
-        q: "Which bin for plastic?",
-        o: ["Green 🟢", "Blue 🔵", "Red 🔴", "Black ⛑️"],
-        a: 1
-      },
-      {
-        q: "What harms oceans?",
-        o: ["Clean water 🌊", "Plastic waste 🗃️", "Fish 🐟", "Coral 🪸"],
-        a: 1
-      },
-      {
-        q: "Best transport to reduce pollution?",
-        o: ["Car 🚗", "Bus 🚌", "Cycle 🚲", "Plane ✈️"],
-        a: 2
-      }
-    ];
+    questions = FALLBACK_QUESTIONS;
   }
 }
 
@@ -179,52 +131,9 @@ let timer = null;      // Timer interval reference
 let answers = [];      // User's selected answers
 
 // ===== PROGRESS PERSISTENCE =====
-/**
- * localStorage key for saving quiz progress
- * @type {string}
- */
-const PROGRESS_KEY = 'quizProgress';
-
-/**
- * Save current quiz progress to localStorage
- */
-function saveProgress() {
-  const progress = {
-    currentIndex: index,
-    answers: answers,
-    score: score,
-    remainingTime: seconds,
-    timestamp: Date.now(),
-    quizQuestions: quiz, // Store the current quiz questions
-    quizId: 'kids-eco-quiz'
-  };
-  localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
-}
-
-/**
- * Load saved quiz progress from localStorage
- * @returns {boolean} True if progress was loaded successfully
- */
-function loadProgress() {
-  const saved = localStorage.getItem(PROGRESS_KEY);
-  if (saved) {
-    const progress = JSON.parse(saved);
-    index = progress.currentIndex || 0;
-    answers = progress.answers || [];
-    score = progress.score || 0;
-    seconds = progress.remainingTime || 0;
-    quiz = progress.quizQuestions || []; // Load saved quiz questions
-    return true;
-  }
-  return false;
-}
-
-/**
- * Clear saved quiz progress from localStorage
- */
-function clearProgress() {
-  localStorage.removeItem(PROGRESS_KEY);
-}
+// Import and initialize ProgressManager
+import ProgressManager from '../../components/progress-manager.js';
+const progressManager = new ProgressManager('kids-eco-quiz');
 
 // ===== DOM ELEMENT REFERENCES =====
 /**
@@ -249,7 +158,7 @@ async function initializeQuiz() {
   await loadQuizData();
 
   // Check for existing progress on page load
-  if (loadProgress()) {
+  if (progressManager.canResume()) {
     const resumeSection = document.getElementById('resumeSection');
     if (resumeSection) {
       resumeSection.style.display = 'block';
@@ -268,7 +177,7 @@ function startQuiz() {
   const timeSelect = document.getElementById('timeSelect');
 
   // Clear any existing progress when starting new quiz
-  clearProgress();
+  progressManager.clearProgress();
 
   // Select 10 random questions
   quiz = [...questions].sort(() => 0.5 - Math.random()).slice(0, 10);
@@ -294,8 +203,14 @@ function startQuiz() {
  * Resume a previously saved quiz session
  */
 function resumeQuiz() {
-  if (loadProgress()) {
-    // Questions are already loaded from saved progress
+  const progress = progressManager.loadProgress();
+  if (progress) {
+    // Restore quiz state from saved progress
+    index = progress.currentIndex;
+    answers = progress.answers;
+    score = progress.score;
+    seconds = progress.remainingTime;
+    quiz = progress.quizQuestions;
 
     // Transition to quiz screen
     startScreen.style.display = "none";
@@ -410,7 +325,13 @@ function selectOption(element, optionIndex) {
   answers[index] = optionIndex;
 
   // Save progress after each answer selection
-  saveProgress();
+  progressManager.saveProgress({
+    currentIndex: index,
+    answers: answers,
+    score: score,
+    remainingTime: seconds,
+    quizQuestions: quiz
+  });
 }
 
 // ===== QUESTION NAVIGATION =====
@@ -448,7 +369,7 @@ function nextQuestion() {
 function showResult() {
   // Stop timer and clear saved progress
   clearInterval(timer);
-  clearProgress();
+  progressManager.clearProgress();
 
   // Transition screens with loading animation
   quizScreen.style.display = "none";

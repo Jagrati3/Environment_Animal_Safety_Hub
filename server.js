@@ -24,6 +24,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // API Routes with validation
 const { validate } = require('./backend/middleware/validation');
 
+
 app.use('/api/quiz', require('./backend/routes/quiz'));
 app.use('/api/animals', require('./backend/routes/animals'));
 app.use('/api/users', require('./backend/routes/users'));
@@ -113,13 +114,10 @@ app.use(handleErrors);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
-    console.log('\n' + '='.repeat(60));
     console.log(`🚀 Server running at http://localhost:${PORT}`);
-    console.log('='.repeat(60));
-    console.log('📋 Available APIs:');
     console.log(`📁 Category Management: http://localhost:${PORT}/category-management`);
     console.log(`🔍 Quality Control: http://localhost:${PORT}/quality-control`);
-    console.log(`🏆 Contributor Recognition: http://localhost:${PORT}/contributor-recognition`);
+    // console.log(`🏆 Contributor Recognition: http://localhost:${PORT}/contributor-recognition`);
     console.log(`🏠 Main Site: http://localhost:${PORT}`);
     console.log('\n🚀 REST API Endpoints:');
     console.log(`📝 Reports: http://localhost:${PORT}/api/reports`);
