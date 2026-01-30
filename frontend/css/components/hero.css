@@ -284,71 +284,62 @@
 
 .hero-3d-img {
   width: 100%;
-  height: auto;
-  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4));
-  transform-style: preserve-3d;
-  transition: transform 0.3s ease;
+  height: 400px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
 }
 
-.floating-animation {
-  animation: float-3d 6s ease-in-out infinite;
-}
-
-@keyframes float-3d {
-
-  0%,
-  100% {
-    transform: translateY(0) rotateX(0) rotateY(0);
-  }
-
-  50% {
-    transform: translateY(-20px) rotateX(2deg) rotateY(-2deg);
-  }
-}
-
-/* Floating Badges */
-.floating-badge {
+/* Hero Stats Widget */
+.hero-stats-widget {
   position: absolute;
+  bottom: 20px;
+  left: -40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
   background: rgba(255, 255, 255, 0.95);
-  padding: 12px 20px;
-  border-radius: 50px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  animation: float 5s ease-in-out infinite;
+  z-index: 10;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  min-width: 200px;
+}
+
+.stat-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-weight: 600;
-  color: #1b5e20;
-  z-index: 10;
-  animation: float-badge 5s ease-in-out infinite;
+  gap: 15px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.floating-badge i {
-  color: #4CAF50;
-  font-size: 1.2rem;
+.stat-item:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
-.badge-1 {
-  top: 10%;
-  right: -20px;
-  animation-delay: 1s;
+.stat-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--heading-color, #2E7D32);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(46, 125, 50, 0.3);
 }
 
-@keyframes float-badge {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-/* Hero Image Badge - Legacy support or Update */
-.hero-image-badge {
-  display: none;
-  /* Hiding old badge in favor of new floating ones */
+.stat-text {
+  font-weight: 700;
+  color: #333;
+  font-size: 0.9rem;
+  white-space: nowrap;
 }
 
 /* Scroll Indicator */
@@ -412,7 +403,7 @@
   }
 
   .hero-image-wrapper img {
-    height: 450px;
+    height: 380px;
   }
 }
 
@@ -453,10 +444,12 @@
     height: 400px;
   }
 
-  .hero-image-badge {
+  .hero-stats-widget {
     left: 50%;
     transform: translateX(-50%);
-    bottom: -20px;
+    bottom: -40px;
+    width: 90%;
+    max-width: 300px;
   }
 }
 
@@ -494,7 +487,7 @@
   }
 
   .hero-image-wrapper img {
-    height: 300px;
+    height: 280px;
   }
 
   .scroll-indicator {
