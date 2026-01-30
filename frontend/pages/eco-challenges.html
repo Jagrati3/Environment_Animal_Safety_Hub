@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Challenge Generator - EWOC</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/pages/eco-challenges.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <i class="fa-solid fa-leaf"></i>
+                <span>EWOC</span>
+            </a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="../index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="./about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="./get-involved.html" class="nav-link">Get Involved</a></li>
+                <li class="nav-item"><a href="./contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="challenges-hero">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <i class="fa-solid fa-trophy"></i>
+                Eco Challenge Generator
+            </h1>
+            <p class="hero-subtitle">Complete daily challenges, earn points, and compete with the global community!</p>
+            
+            <div class="user-stats">
+                <div class="stat-card">
+                    <i class="fa-solid fa-fire"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="userStreak">0</span>
+                        <span class="stat-label">Day Streak</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fa-solid fa-star"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="userPoints">0</span>
+                        <span class="stat-label">Total Points</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fa-solid fa-medal"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="userRank">-</span>
+                        <span class="stat-label">Global Rank</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fa-solid fa-check-circle"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="completedChallenges">0</span>
+                        <span class="stat-label">Completed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="challenges-main">
+        <div class="container">
+            
+            <!-- Challenge Tabs -->
+            <div class="challenge-tabs">
+                <button class="tab-btn active" data-type="daily">
+                    <i class="fa-solid fa-sun"></i>
+                    Daily Challenges
+                </button>
+                <button class="tab-btn" data-type="weekly">
+                    <i class="fa-solid fa-calendar-week"></i>
+                    Weekly Challenges
+                </button>
+                <button class="tab-btn" data-type="monthly">
+                    <i class="fa-solid fa-calendar"></i>
+                    Monthly Challenges
+                </button>
+                <button class="tab-btn" data-type="custom">
+                    <i class="fa-solid fa-plus"></i>
+                    Create Custom
+                </button>
+            </div>
+
+            <!-- Challenges Grid -->
+            <div class="challenges-section">
+                <div class="section-header">
+                    <h2 id="challengesTitle">Today's Challenges</h2>
+                    <div class="timer-container">
+                        <i class="fa-solid fa-clock"></i>
+                        <span id="challengeTimer">Resets in 12:34:56</span>
+                    </div>
+                </div>
+
+                <div class="challenges-grid" id="challengesGrid">
+                    <!-- Challenges will be dynamically loaded -->
+                </div>
+            </div>
+
+            <!-- Leaderboard Section -->
+            <div class="leaderboard-section">
+                <div class="section-header">
+                    <h2>
+                        <i class="fa-solid fa-trophy"></i>
+                        Leaderboard
+                    </h2>
+                    <div class="leaderboard-tabs">
+                        <button class="leaderboard-tab active" data-scope="global">Global</button>
+                        <button class="leaderboard-tab" data-scope="friends">Friends</button>
+                        <button class="leaderboard-tab" data-scope="weekly">This Week</button>
+                    </div>
+                </div>
+
+                <div class="leaderboard-container">
+                    <div class="leaderboard-table" id="leaderboardTable">
+                        <!-- Leaderboard will be dynamically loaded -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Achievement Badges -->
+            <div class="achievements-section">
+                <div class="section-header">
+                    <h2>
+                        <i class="fa-solid fa-award"></i>
+                        Your Achievements
+                    </h2>
+                </div>
+
+                <div class="achievements-grid" id="achievementsGrid">
+                    <!-- Achievements will be dynamically loaded -->
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Challenge Detail Modal -->
+    <div class="modal" id="challengeModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="modal-header" id="modalHeader">
+                <!-- Dynamic content -->
+            </div>
+
+            <div class="modal-body" id="modalBody">
+                <!-- Dynamic content -->
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelBtn">Cancel</button>
+                <button class="btn-primary" id="completeBtn">
+                    <i class="fa-solid fa-check"></i>
+                    Mark as Complete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Challenge Modal -->
+    <div class="modal" id="customChallengeModal">
+        <div class="modal-content">
+            <button class="modal-close" id="customModalClose">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="modal-header">
+                <h2>
+                    <i class="fa-solid fa-plus-circle"></i>
+                    Create Custom Challenge
+                </h2>
+                <p>Design your own eco-friendly challenge!</p>
+            </div>
+
+            <div class="modal-body">
+                <form id="customChallengeForm">
+                    <div class="form-group">
+                        <label for="challengeName">Challenge Name</label>
+                        <input type="text" id="challengeName" placeholder="e.g., Zero Waste Lunch Day" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="challengeDescription">Description</label>
+                        <textarea id="challengeDescription" rows="4" placeholder="Describe your challenge..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="challengeCategory">Category</label>
+                        <select id="challengeCategory" required>
+                            <option value="">Select a category</option>
+                            <option value="food">Food & Diet</option>
+                            <option value="waste">Waste Reduction</option>
+                            <option value="transport">Transportation</option>
+                            <option value="energy">Energy Saving</option>
+                            <option value="water">Water Conservation</option>
+                            <option value="community">Community Action</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="challengeDifficulty">Difficulty</label>
+                            <select id="challengeDifficulty" required>
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="challengeDuration">Duration</label>
+                            <select id="challengeDuration" required>
+                                <option value="1">1 Day</option>
+                                <option value="3">3 Days</option>
+                                <option value="7">1 Week</option>
+                                <option value="30">1 Month</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="challengePoints">Estimated Points</label>
+                        <input type="number" id="challengePoints" value="50" min="10" max="500" step="10" required>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelCustomBtn">Cancel</button>
+                <button class="btn-primary" id="createCustomBtn">
+                    <i class="fa-solid fa-plus"></i>
+                    Create Challenge
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>EWOC</h3>
+                <p>Endangered Wildlife Organization & Conservation</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="./about.html">About</a></li>
+                    <li><a href="./contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Follow Us</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 EWOC. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../theme-toggle.js"></script>
+    <script src="../js/pages/eco-challenges.js"></script>
+</body>
+</html>

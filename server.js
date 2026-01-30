@@ -37,7 +37,10 @@ app.use('/api/foster', require('./backend/routes/foster'));
 app.use('/api/volunteers', require('./backend/routes/volunteers'));
 app.use('/api/donations', require('./backend/routes/donations'));
 app.use('/api/payments', require('./backend/routes/payments'));
-app.use('/api/indigenous-knowledge', require('./backend/routes/indigenous-knowledge'));
+app.use('/api/photos', require('./backend/routes/photos'));
+app.use('/api/species', require('./backend/routes/species'));
+app.use('/api/carbon-offsets', require('./backend/routes/carbon-offsets'));
+app.use('/api/eco-challenges', require('./backend/routes/eco-challenges'));
 
 // Middleware to log all requests
 app.use((req, res, next) => {
@@ -128,6 +131,8 @@ app.listen(PORT, () => {
     console.log(`🏠 Foster Management: http://localhost:${PORT}/api/foster`);
     console.log(`💊 Medical Records: http://localhost:${PORT}/api/medical-records`);
     console.log(`👥 Volunteer Management: http://localhost:${PORT}/api/volunteers`);
+    console.log(`📸 Photo Analysis: http://localhost:${PORT}/api/photos`);
+    console.log(`🦁 Species Profiles: http://localhost:${PORT}/api/species`);
     console.log('='.repeat(60));
     console.log('📊 Request Logs:');
     console.log('='.repeat(60));

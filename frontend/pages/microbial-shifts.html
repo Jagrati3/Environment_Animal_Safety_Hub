@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microbial Community Shifts in Polluted Habitats - Environment & Animal Safety Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/pages/microbial-shifts.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-bacteria"></i>
+                <span>Microbial Shifts</span>
+            </div>
+            <div class="nav-links">
+                <a href="#overview" class="nav-link">Overview</a>
+                <a href="#simulator" class="nav-link">Pollution Simulator</a>
+                <a href="#diversity" class="nav-link">Diversity Calculator</a>
+                <a href="#cycling" class="nav-link">Nutrient Cycling</a>
+                <a href="#case-studies" class="nav-link">Case Studies</a>
+                <a href="#remediation" class="nav-link">Remediation</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <i class="fas fa-microscope"></i>
+                    Microbial Community Shifts in Polluted Habitats
+                </h1>
+                <p class="hero-subtitle">
+                    Explore how pollution disrupts the invisible foundation of life at the base of food webs
+                </p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">99%</div>
+                        <div class="stat-label">Microbial Species Unknown</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">90%</div>
+                        <div class="stat-label">Ecosystem Functions Affected</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Years for Recovery</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="microbial-network">
+                    <div class="network-node bacteria" style="--delay: 0s"></div>
+                    <div class="network-node fungi" style="--delay: 0.5s"></div>
+                    <div class="network-node archaea" style="--delay: 1s"></div>
+                    <div class="network-node protists" style="--delay: 1.5s"></div>
+                    <div class="network-connection"></div>
+                    <div class="network-connection"></div>
+                    <div class="network-connection"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview" class="content-section">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-atom"></i>
+                The Microbial Foundation
+            </h2>
+            <div class="overview-grid">
+                <div class="overview-card">
+                    <div class="card-icon">
+                        <i class="fas fa-recycle"></i>
+                    </div>
+                    <h3>Nutrient Cycling</h3>
+                    <p>Microorganisms drive the cycling of essential nutrients like nitrogen, phosphorus, and carbon, making them available for plants and animals.</p>
+                </div>
+                <div class="overview-card">
+                    <div class="card-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Decomposition</h3>
+                    <p>Bacteria and fungi break down organic matter, recycling nutrients and maintaining soil fertility and water quality.</p>
+                </div>
+                <div class="overview-card">
+                    <div class="card-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Pathogen Control</h3>
+                    <p>Beneficial microbes compete with harmful pathogens, protecting plants, animals, and humans from disease.</p>
+                </div>
+                <div class="overview-card">
+                    <div class="card-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3>Plant Symbiosis</h3>
+                    <p>Mycorrhizal fungi and nitrogen-fixing bacteria form essential partnerships with plants for nutrient uptake.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pollution Impact Simulator -->
+    <section id="simulator" class="content-section simulator-section">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-flask"></i>
+                Pollution Impact Simulator
+            </h2>
+            <div class="simulator-container">
+                <div class="simulator-controls">
+                    <div class="control-group">
+                        <label for="pollutantType">Pollutant Type:</label>
+                        <select id="pollutantType">
+                            <option value="heavy-metals">Heavy Metals</option>
+                            <option value="organic">Organic Pollutants</option>
+                            <option value="nutrients">Nutrient Pollution</option>
+                            <option value="plastics">Microplastics</option>
+                            <option value="acid">Acid Rain</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="concentration">Concentration (mg/L):</label>
+                        <input type="range" id="concentration" min="0" max="1000" value="50">
+                        <span id="concentrationValue">50 mg/L</span>
+                    </div>
+                    <div class="control-group">
+                        <label for="exposureTime">Exposure Time:</label>
+                        <select id="exposureTime">
+                            <option value="acute">Acute (hours)</option>
+                            <option value="chronic">Chronic (months)</option>
+                            <option value="long-term">Long-term (years)</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="environmentType">Environment:</label>
+                        <select id="environmentType">
+                            <option value="soil">Soil</option>
+                            <option value="freshwater">Freshwater</option>
+                            <option value="marine">Marine</option>
+                            <option value="sediment">Sediment</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="simulator-results">
+                    <div class="result-metrics">
+                        <div class="metric">
+                            <h4>Diversity Impact</h4>
+                            <div class="metric-bar">
+                                <div id="diversityBar" class="bar-fill"></div>
+                            </div>
+                            <span id="diversityValue">85%</span>
+                        </div>
+                        <div class="metric">
+                            <h4>Functional Loss</h4>
+                            <div class="metric-bar">
+                                <div id="functionBar" class="bar-fill"></div>
+                            </div>
+                            <span id="functionValue">20%</span>
+                        </div>
+                        <div class="metric">
+                            <h4>Recovery Time</h4>
+                            <div class="recovery-display">
+                                <span id="recoveryTime">6 months</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="impact-description">
+                        <h4>Predicted Effects:</h4>
+                        <p id="impactDescription">Moderate impact on microbial diversity with some functional redundancy maintaining ecosystem processes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Microbial Diversity Calculator -->
+    <section id="diversity" class="content-section diversity-section">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-calculator"></i>
+                Microbial Diversity Calculator
+            </h2>
+            <div class="calculator-container">
+                <div class="calculator-inputs">
+                    <div class="species-inputs">
+                        <h4>Species Abundance Data</h4>
+                        <div class="species-list" id="speciesList">
+                            <div class="species-item">
+                                <input type="text" placeholder="Species name" class="species-name">
+                                <input type="number" placeholder="0" class="species-count" min="0">
+                                <button class="remove-species" onclick="removeSpecies(this)">×</button>
+                            </div>
+                        </div>
+                        <button class="add-species-btn" onclick="addSpecies()">
+                            <i class="fas fa-plus"></i> Add Species
+                        </button>
+                    </div>
+                    <div class="diversity-controls">
+                        <button class="calculate-btn" onclick="calculateDiversity()">
+                            <i class="fas fa-calculator"></i> Calculate Diversity
+                        </button>
+                        <button class="reset-btn" onclick="resetCalculator()">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+                <div class="calculator-results">
+                    <div class="diversity-metrics">
+                        <div class="metric-card">
+                            <h4>Species Richness</h4>
+                            <div class="metric-value" id="richnessValue">0</div>
+                            <p>Number of different species</p>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Shannon Diversity (H')</h4>
+                            <div class="metric-value" id="shannonValue">0.00</div>
+                            <p>Accounts for abundance and evenness</p>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Simpson Diversity (1-D)</h4>
+                            <div class="metric-value" id="simpsonValue">0.00</div>
+                            <p>Probability of sampling different species</p>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Evenness (E)</h4>
+                            <div class="metric-value" id="evennessValue">0.00</div>
+                            <p>How evenly species are distributed</p>
+                        </div>
+                    </div>
+                    <div class="diversity-chart">
+                        <canvas id="diversityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nutrient Cycling Simulator -->
+    <section id="cycling" class="content-section cycling-section">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-sync-alt"></i>
+                Nutrient Cycling Disruptions
+            </h2>
+            <div class="cycling-simulator">
+                <div class="cycling-diagram">
+                    <div class="cycling-process">
+                        <div class="process-node organic-matter">
+                            <i class="fas fa-tree"></i>
+                            <span>Organic Matter</span>
+                        </div>
+                        <div class="process-arrow">↓</div>
+                        <div class="process-node decomposition">
+                            <i class="fas fa-bacteria"></i>
+                            <span>Decomposition</span>
+                            <div class="process-rate" id="decompRate">100%</div>
+                        </div>
+                        <div class="process-arrow">→</div>
+                        <div class="process-node nutrients">
+                            <i class="fas fa-atom"></i>
+                            <span>Nutrients</span>
+                        </div>
+                        <div class="process-arrow">→</div>
+                        <div class="process-node plants">
+                            <i class="fas fa-seedling"></i>
+                            <span>Plants</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cycling-controls">
+                    <div class="control-group">
+                        <label for="pollutionLevel">Pollution Level:</label>
+                        <input type="range" id="pollutionLevel" min="0" max="100" value="0">
+                        <span id="pollutionLevelValue">0%</span>
+                    </div>
+                    <div class="cycling-impacts">
+                        <div class="impact-item">
+                            <h4>Nitrogen Cycle</h4>
+                            <div class="impact-bar">
+                                <div id="nitrogenBar" class="impact-fill"></div>
+                            </div>
+                            <span id="nitrogenImpact">Normal</span>
+                        </div>
+                        <div class="impact-item">
+                            <h4>Carbon Cycle</h4>
+                            <div class="impact-bar">
+                                <div id="carbonBar" class="impact-fill"></div>
+                            </div>
+                            <span id="carbonImpact">Normal</span>
+                        </div>
+                        <div class="impact-item">
+                            <h4>Phosphorus Cycle</h4>
+                            <div class="impact-bar">
+                                <div id="phosphorusBar" class="impact-fill"></div>
+                            </div>
+                            <span id="phosphorusImpact">Normal</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies -->
+    <section id="case-studies" class="content-section case-studies-section">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-book-open"></i>
+                Case Studies
+            </h2>
+            <div class="case-studies-grid">
+                <div class="case-study-card" onclick="showCaseStudy('minamata')">
+                    <div class="case-study-image">
+                        <i class="fas fa-industry"></i>
+                    </div>
+                    <h3>Minamata Bay - Mercury Pollution</h3>
+                    <p>Mercury contamination from industrial waste caused severe microbial community shifts and ecosystem collapse.</p>
+                    <div class="case-study-tags">
+                        <span class="tag">Heavy Metals</span>
+                        <span class="tag">Marine</span>
+                    </div>
+                </div>
+                <div class="case-study-card" onclick="showCaseStudy('gulf-oil')">
+                    <div class="case-study-image">
+                        <i class="fas fa-oil-can"></i>
+                    </div>
+                    <h3>Deepwater Horizon Oil Spill</h3>
+                    <p>Oil hydrocarbons dramatically altered microbial communities in the Gulf of Mexico, affecting decomposition and nutrient cycling.</p>
+                    <div class="case-study-tags">
+                        <span class="tag">Hydrocarbons</span>
+                        <span class="tag">Marine</span>
+                    </div>
+                </div>
+                <div class="case-study-card" onclick="showCaseStudy('dead-zone')">
+                    <div class="case-study-image">
+                        <i class="fas fa-water"></i>
+                    </div>
+                    <h3>Gulf of Mexico Dead Zone</h3>
+                    <p>Excess nutrients from agriculture created hypoxic conditions, shifting microbial communities and disrupting food webs.</p>
+                    <div class="case-study-tags">
+                        <span class="tag">Nutrients</span>
+                        <span class="tag">Freshwater</span>
+                    </div>
+                </div>
+                <div class="case-study-card" onclick="showCaseStudy('great-lakes')">
+                    <div class="case-study-image">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <h3>Great Lakes Microplastics</h3>
+                    <p>Microplastic pollution affects microbial colonization and potentially alters decomposition processes in freshwater ecosystems.</p>
+                    <div class="case-study-tags">
+                        <span class="tag">Plastics</span>
+                        <span class="tag">Freshwater</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Remediation Strategies -->
+    <section id="remediation" class="content-section remediation-section">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-tools"></i>
+                Remediation Strategies
+            </h2>
+            <div class="remediation-grid">
+                <div class="remediation-card" onclick="showRemediationDetail('bioremediation')">
+                    <div class="remediation-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <h3>Bioremediation</h3>
+                    <p>Using microorganisms to degrade pollutants and restore ecosystem functions.</p>
+                </div>
+                <div class="remediation-card" onclick="showRemediationDetail('bioaugmentation')">
+                    <div class="remediation-icon">
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <h3>Bioaugmentation</h3>
+                    <p>Adding specific microbial strains to enhance pollutant degradation.</p>
+                </div>
+                <div class="remediation-card" onclick="showRemediationDetail('phytoremediation')">
+                    <div class="remediation-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3>Phytoremediation</h3>
+                    <p>Using plants and their associated microbes to remove contaminants.</p>
+                </div>
+                <div class="remediation-card" onclick="showRemediationDetail('natural-attenuation')">
+                    <div class="remediation-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Natural Attenuation</h3>
+                    <p>Allowing natural microbial processes to reduce pollutant concentrations over time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Take Action for Microbial Conservation</h2>
+                <p>Understanding microbial communities is crucial for effective environmental protection and ecosystem restoration.</p>
+                <div class="cta-buttons">
+                    <button class="cta-btn primary" onclick="learnMore()">
+                        <i class="fas fa-graduation-cap"></i>
+                        Learn More
+                    </button>
+                    <button class="cta-btn secondary" onclick="supportResearch()">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        Support Research
+                    </button>
+                    <button class="cta-btn secondary" onclick="joinMonitoring()">
+                        <i class="fas fa-users"></i>
+                        Join Monitoring
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modals -->
+    <div id="caseStudyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="caseStudyContent"></div>
+        </div>
+    </div>
+
+    <div id="remediationModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="remediationContent"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>About This Tool</h4>
+                    <p>Educational resource for understanding microbial community responses to pollution and ecosystem restoration strategies.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#" onclick="learnMore()">Scientific Literature</a></li>
+                        <li><a href="#" onclick="supportResearch()">Research Funding</a></li>
+                        <li><a href="#" onclick="joinMonitoring()">Citizen Science</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Questions about microbial ecology and pollution impacts?</p>
+                    <a href="mailto:info@environmenthub.org">info@environmenthub.org</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Environment & Animal Safety Hub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/pages/microbial-shifts.js"></script>
+</body>
+</html>

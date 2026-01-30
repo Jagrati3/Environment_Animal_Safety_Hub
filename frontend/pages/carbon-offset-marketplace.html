@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Offset Marketplace | EcoLife</title>
+    <meta name="description" content="Browse and purchase verified carbon offset projects. Support reforestation, renewable energy, and conservation initiatives worldwide.">
+    <link rel="icon" type="image/png" href="../assets/images/others/FAVICON.png">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/components/navbar.css">
+    <link rel="stylesheet" href="../css/components/footer.css">
+    <link rel="stylesheet" href="../css/pages/carbon-offset-marketplace.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+
+    <div id="cursor-container"></div>
+
+    <!-- Navbar Container -->
+    <div id="navbar-container"></div>
+
+    <!-- Hero Section -->
+    <section class="marketplace-hero">
+        <div class="hero-particles" id="heroParticles"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fa-solid fa-leaf"></i>
+                <span>Carbon Offset Marketplace</span>
+            </div>
+            <h1 class="hero-title">
+                Offset Your <span class="gradient-text">Carbon Footprint</span>
+            </h1>
+            <p class="hero-subtitle">
+                Support verified environmental projects around the world and make a positive impact on our planet
+            </p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <i class="fa-solid fa-seedling"></i>
+                    <div class="stat-content">
+                        <span class="stat-number" data-count="2500000">0</span>
+                        <span class="stat-label">Tons CO₂ Offset</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fa-solid fa-users"></i>
+                    <div class="stat-content">
+                        <span class="stat-number" data-count="85000">0</span>
+                        <span class="stat-label">Active Users</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fa-solid fa-project-diagram"></i>
+                    <div class="stat-content">
+                        <span class="stat-number" data-count="150">0</span>
+                        <span class="stat-label">Active Projects</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Widget -->
+    <div class="cart-widget" id="cartWidget">
+        <button class="cart-button" id="cartButton">
+            <i class="fa-solid fa-shopping-cart"></i>
+            <span class="cart-count" id="cartCount">0</span>
+        </button>
+    </div>
+
+    <!-- Filter & Category Section -->
+    <section class="filter-section">
+        <div class="container">
+            <div class="category-tabs">
+                <button class="category-tab active" data-category="all">
+                    <i class="fa-solid fa-globe"></i>
+                    <span>All Projects</span>
+                </button>
+                <button class="category-tab" data-category="reforestation">
+                    <i class="fa-solid fa-tree"></i>
+                    <span>Reforestation</span>
+                </button>
+                <button class="category-tab" data-category="renewable-energy">
+                    <i class="fa-solid fa-bolt"></i>
+                    <span>Renewable Energy</span>
+                </button>
+                <button class="category-tab" data-category="wetland">
+                    <i class="fa-solid fa-water"></i>
+                    <span>Wetland Protection</span>
+                </button>
+                <button class="category-tab" data-category="solar">
+                    <i class="fa-solid fa-sun"></i>
+                    <span>Solar</span>
+                </button>
+                <button class="category-tab" data-category="wind">
+                    <i class="fa-solid fa-wind"></i>
+                    <span>Wind</span>
+                </button>
+            </div>
+
+            <div class="filter-controls">
+                <div class="search-box">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" id="projectSearch" placeholder="Search projects...">
+                </div>
+                <div class="filter-group">
+                    <select id="sortFilter">
+                        <option value="popular">Most Popular</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="impact">Highest Impact</option>
+                        <option value="rating">Top Rated</option>
+                    </select>
+                    <select id="certificationFilter">
+                        <option value="">All Certifications</option>
+                        <option value="gold-standard">Gold Standard</option>
+                        <option value="vcs">VCS</option>
+                        <option value="iso">ISO 14064</option>
+                        <option value="ccb">CCB Standards</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Grid -->
+    <section class="projects-section">
+        <div class="container">
+            <div class="projects-grid" id="projectsGrid">
+                <!-- Projects will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Details Modal -->
+    <div class="project-modal" id="projectModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="modal-header" id="modalHeader">
+                <!-- Header content -->
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-tabs">
+                    <button class="modal-tab-btn active" data-tab="overview">Overview</button>
+                    <button class="modal-tab-btn" data-tab="impact">Impact</button>
+                    <button class="modal-tab-btn" data-tab="verification">Verification</button>
+                    <button class="modal-tab-btn" data-tab="reviews">Reviews</button>
+                </div>
+
+                <div class="modal-tab-content active" id="overviewTab"></div>
+                <div class="modal-tab-content" id="impactTab"></div>
+                <div class="modal-tab-content" id="verificationTab"></div>
+                <div class="modal-tab-content" id="reviewsTab"></div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="purchase-section">
+                    <div class="quantity-selector">
+                        <label>Carbon Credits (tons CO₂)</label>
+                        <div class="quantity-controls">
+                            <button class="qty-btn" id="decreaseQty">-</button>
+                            <input type="number" id="quantity" value="1" min="1">
+                            <button class="qty-btn" id="increaseQty">+</button>
+                        </div>
+                    </div>
+                    <div class="total-price">
+                        <span>Total:</span>
+                        <span class="price-amount" id="totalPrice">$0</span>
+                    </div>
+                    <button class="add-to-cart-btn" id="addToCartBtn">
+                        <i class="fa-solid fa-cart-plus"></i>
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-modal-content">
+            <div class="cart-modal-header">
+                <h2>Shopping Cart</h2>
+                <button class="modal-close" id="cartModalClose">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <!-- Cart items will be loaded here -->
+            </div>
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>Total CO₂ Offset:</span>
+                    <span id="totalCO2">0 tons</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total Amount:</span>
+                    <span id="cartTotal">$0.00</span>
+                </div>
+                <button class="checkout-btn" id="checkoutBtn">
+                    <i class="fa-solid fa-credit-card"></i>
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Impact Dashboard Section -->
+    <section class="impact-dashboard">
+        <div class="container">
+            <h2>Global Impact</h2>
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fa-solid fa-tree"></i>
+                    </div>
+                    <div class="impact-info">
+                        <div class="impact-value" data-count="15000000">0</div>
+                        <div class="impact-label">Trees Planted</div>
+                    </div>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fa-solid fa-wind"></i>
+                    </div>
+                    <div class="impact-info">
+                        <div class="impact-value" data-count="500">0</div>
+                        <div class="impact-label">MW Renewable Energy</div>
+                    </div>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <div class="impact-info">
+                        <div class="impact-value" data-count="250000">0</div>
+                        <div class="impact-label">Communities Helped</div>
+                    </div>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fa-solid fa-earth-americas"></i>
+                    </div>
+                    <div class="impact-info">
+                        <div class="impact-value" data-count="75">0</div>
+                        <div class="impact-label">Countries Supported</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2>How It Works</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Browse Projects</h3>
+                    <p>Explore verified carbon offset projects across various categories</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Select & Purchase</h3>
+                    <p>Choose the amount of carbon credits you want to offset</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Get Certified</h3>
+                    <p>Receive your carbon offset certificate and track your impact</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3>Make Impact</h3>
+                    <p>Your contribution supports real environmental projects worldwide</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+
+    <!-- Scripts -->
+    <script src="../js/navbar.js"></script>
+    <script src="../js/footer.js"></script>
+    <script src="../js/theme-toggle.js"></script>
+    <script src="../js/pages/carbon-offset-marketplace.js"></script>
+    <script src="../js/particle-animation.js"></script>
+</body>
+
+</html>

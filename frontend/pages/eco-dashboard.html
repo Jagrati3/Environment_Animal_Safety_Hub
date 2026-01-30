@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Eco Score Dashboard</title>
+  <link rel="stylesheet" href="../css/eco-dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #e0ffe0 0%, #b2f7ef 100%);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    .dashboard-container {
+      max-width: 1100px;
+      margin: 32px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 32px 24px 48px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .score-section {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      justify-content: space-between;
+    }
+    .score-meter {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #2ecc40;
+      transition: color 0.3s;
+    }
+    .progress-charts {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .progress-chart {
+      width: 140px;
+      height: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #f7fff7;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(44,204,64,0.08);
+      margin-bottom: 8px;
+    }
+    .badges-section {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .badge {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #e0ffe0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 2px 8px rgba(44,204,64,0.08);
+    }
+    .eco-tip {
+      background: #b2f7ef;
+      border-radius: 12px;
+      padding: 16px 24px;
+      font-size: 1.1rem;
+      color: #00796b;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 8px rgba(44,204,64,0.08);
+    }
+    .goal-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: #f7fff7;
+      border-radius: 12px;
+      padding: 16px 24px;
+      box-shadow: 0 2px 8px rgba(44,204,64,0.08);
+    }
+    .confetti {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+    .export-btn {
+      background: #2ecc40;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: background 0.2s;
+    }
+    .export-btn:hover {
+      background: #27ae60;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container" id="eco-dashboard">
+    <section class="score-section">
+      <div>
+        <div style="font-size:1.2rem; color:#888;">Your Eco Score</div>
+        <div class="score-meter" id="eco-score">0</div>
+      </div>
+      <button class="export-btn" id="export-btn">Export as Image</button>
+    </section>
+
+    <section class="progress-charts" id="progress-charts">
+      <!-- Circular progress charts for each category -->
+    </section>
+
+    <section>
+      <canvas id="comparison-graph" height="120"></canvas>
+    </section>
+
+    <section class="badges-section" id="badges-section">
+      <!-- Achievement badges -->
+    </section>
+
+    <section class="eco-tip" id="eco-tip">
+      <!-- Daily eco tip -->
+    </section>
+
+    <section class="goal-section">
+      <div style="font-weight:bold;">Set Your Eco Goal</div>
+      <input type="number" id="goal-input" min="1" placeholder="Enter your goal score" style="width:160px; padding:6px; font-size:1rem;">
+      <div>Progress: <span id="goal-progress">0</span>%</div>
+      <button class="export-btn" id="set-goal-btn" style="background:#00bcd4;">Set Goal</button>
+    </section>
+  </div>
+  <canvas class="confetti" id="confetti-canvas"></canvas>
+  <script src="../js/eco-dashboard.js"></script>
+</body>
+</html>

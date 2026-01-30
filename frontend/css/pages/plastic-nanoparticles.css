@@ -1,0 +1,1200 @@
+/* Plastic Nanoparticles and Cellular Toxicity Page Styles */
+
+:root {
+    /* Nanoplastic Theme Colors */
+    --nanoplastic-primary: #6366f1;
+    --nanoplastic-secondary: #8b5cf6;
+    --nanoplastic-accent: #a855f7;
+    --nanoplastic-light: #f3f4f6;
+    --nanoplastic-dark: #4338ca;
+
+    /* Toxicity Colors */
+    --toxicity-critical: #dc2626;
+    --toxicity-high: #ea580c;
+    --toxicity-moderate: #f59e0b;
+    --toxicity-low: #22c55e;
+    --toxicity-none: #6b7280;
+
+    /* Cellular Colors */
+    --cell-membrane: #10b981;
+    --cytoplasm: #fef3c7;
+    --nucleus: #3b82f6;
+    --mitochondria: #ef4444;
+    --lysosome: #f97316;
+
+    /* Nanoparticle Colors */
+    --nanoparticle-ps: #7c3aed;
+    --nanoparticle-pe: #059669;
+    --nanoparticle-pvc: #dc2626;
+    --nanoparticle-pet: #ea580c;
+
+    /* Layout */
+    --container-max-width: 1200px;
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 2rem;
+    --spacing-lg: 3rem;
+    --spacing-xl: 4rem;
+
+    /* Typography */
+    --font-family: 'Poppins', sans-serif;
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-size-4xl: 2.25rem;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    line-height: 1.6;
+    color: #374151;
+    background: linear-gradient(135deg, var(--nanoplastic-light) 0%, #ffffff 100%);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+/* Navigation */
+.navbar {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.nav-container {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--nanoplastic-primary);
+}
+
+.nav-brand i {
+    color: var(--nanoplastic-secondary);
+}
+
+.nav-links {
+    display: flex;
+    gap: var(--spacing-lg);
+}
+
+.nav-link {
+    color: #6b7280;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--nanoplastic-primary);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--nanoplastic-primary);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+/* Hero Section */
+.hero {
+    padding: 120px 0 var(--spacing-xl) 0;
+    background: linear-gradient(135deg, var(--nanoplastic-primary) 0%, var(--nanoplastic-secondary) 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="60" cy="80" r="0.8" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="60" r="0.6" fill="rgba(255,255,255,0.1)"/></svg>');
+    animation: float 25s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+}
+
+.hero-container {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+    align-items: center;
+}
+
+.hero-title {
+    font-size: var(--font-size-4xl);
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.hero-title i {
+    color: var(--nanoplastic-accent);
+}
+
+.hero-subtitle {
+    font-size: var(--font-size-lg);
+    opacity: 0.9;
+    margin-bottom: var(--spacing-lg);
+}
+
+.hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-md);
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: var(--nanoplastic-accent);
+}
+
+.stat-label {
+    font-size: var(--font-size-sm);
+    opacity: 0.8;
+}
+
+/* Cellular Network Animation */
+.cellular-network {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+}
+
+.cell-membrane {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border: 3px solid var(--cell-membrane);
+    border-radius: 50%;
+    margin: 50px auto;
+    background: var(--cytoplasm);
+    overflow: hidden;
+}
+
+.nanoparticle {
+    position: absolute;
+    background: var(--nanoparticle-ps);
+    border-radius: 50%;
+    width: var(--size);
+    height: var(--size);
+    animation: nanoparticle-float 8s ease-in-out infinite;
+    animation-delay: var(--delay);
+}
+
+.nanoparticle:nth-child(1) {
+    top: 20px;
+    left: 20px;
+}
+
+.nanoparticle:nth-child(2) {
+    top: 150px;
+    right: 30px;
+}
+
+.nanoparticle:nth-child(3) {
+    bottom: 40px;
+    left: 60px;
+}
+
+.nanoparticle:nth-child(4) {
+    top: 80px;
+    right: 20px;
+}
+
+@keyframes nanoparticle-float {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px);
+        opacity: 0.6;
+    }
+    25% {
+        transform: translateY(-10px) translateX(5px);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translateY(-5px) translateX(-5px);
+        opacity: 1;
+    }
+    75% {
+        transform: translateY(5px) translateX(3px);
+        opacity: 0.8;
+    }
+}
+
+.organelle {
+    position: absolute;
+    border-radius: 50%;
+}
+
+.organelle.nucleus {
+    width: 40px;
+    height: 40px;
+    background: var(--nucleus);
+    top: 80px;
+    left: 80px;
+}
+
+.organelle.mitochondria {
+    width: 25px;
+    height: 15px;
+    background: var(--mitochondria);
+    border-radius: 10px;
+    top: 120px;
+    right: 50px;
+}
+
+.organelle.lysosome {
+    width: 15px;
+    height: 15px;
+    background: var(--lysosome);
+    bottom: 60px;
+    left: 100px;
+}
+
+/* Content Sections */
+.content-section {
+    padding: var(--spacing-xl) 0;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+}
+
+.content-section.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.section-title {
+    font-size: var(--font-size-3xl);
+    font-weight: 600;
+    color: var(--nanoplastic-primary);
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+.section-title i {
+    color: var(--nanoplastic-secondary);
+}
+
+/* Overview Section */
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.overview-card {
+    background: white;
+    padding: var(--spacing-lg);
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.overview-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--nanoplastic-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-md) auto;
+    font-size: var(--font-size-xl);
+    color: var(--nanoplastic-primary);
+}
+
+/* Cellular Uptake Simulator */
+.uptake-section {
+    background: white;
+    margin: var(--spacing-xl) 0;
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+}
+
+.uptake-simulator {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+    padding: var(--spacing-xl);
+}
+
+.uptake-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.control-group label {
+    font-weight: 500;
+    color: #374151;
+}
+
+.control-group select,
+.control-group input[type="range"] {
+    padding: var(--spacing-sm);
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: var(--font-size-base);
+}
+
+.control-group input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 3px;
+    outline: none;
+}
+
+.control-group input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--nanoplastic-primary);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.uptake-results {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.uptake-visualization {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cell-diagram {
+    position: relative;
+}
+
+.cell-membrane-animated {
+    width: 200px;
+    height: 200px;
+    border: 3px solid var(--cell-membrane);
+    border-radius: 50%;
+    background: var(--cytoplasm);
+    position: relative;
+    overflow: hidden;
+    animation: membrane-pulse 4s ease-in-out infinite;
+}
+
+@keyframes membrane-pulse {
+    0%, 100% { border-color: var(--cell-membrane); }
+    50% { border-color: var(--nanoplastic-secondary); }
+}
+
+.cytoplasm {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.organelle-small {
+    position: absolute;
+    border-radius: 50%;
+}
+
+.nucleus-small {
+    width: 30px;
+    height: 30px;
+    background: var(--nucleus);
+    top: 60px;
+    left: 60px;
+}
+
+.mitochondria-small {
+    width: 20px;
+    height: 12px;
+    background: var(--mitochondria);
+    border-radius: 6px;
+    top: 90px;
+    right: 40px;
+}
+
+.nanoparticle-particle {
+    position: absolute;
+    background: var(--nanoparticle-ps);
+    border-radius: 50%;
+    animation: particle-entry 6s ease-in-out infinite;
+}
+
+#particle1 {
+    width: 6px;
+    height: 6px;
+    top: 20px;
+    left: 20px;
+    animation-delay: 0s;
+}
+
+#particle2 {
+    width: 4px;
+    height: 4px;
+    top: 140px;
+    right: 25px;
+    animation-delay: 2s;
+}
+
+#particle3 {
+    width: 5px;
+    height: 5px;
+    bottom: 35px;
+    left: 50px;
+    animation-delay: 4s;
+}
+
+@keyframes particle-entry {
+    0% {
+        transform: translateX(-50px);
+        opacity: 0;
+    }
+    20% {
+        transform: translateX(0px);
+        opacity: 1;
+    }
+    80% {
+        transform: translateX(0px);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(50px);
+        opacity: 0;
+    }
+}
+
+.uptake-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-md);
+}
+
+.metric {
+    text-align: center;
+}
+
+.metric h4 {
+    font-size: var(--font-size-sm);
+    color: #6b7280;
+    margin-bottom: var(--spacing-sm);
+}
+
+.metric-bar {
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: var(--spacing-xs);
+}
+
+.bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--toxicity-low), var(--toxicity-moderate), var(--toxicity-high));
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.mechanism-display,
+.toxicity-indicator {
+    padding: var(--spacing-sm);
+    background: var(--nanoplastic-light);
+    border-radius: 6px;
+    font-weight: 600;
+    color: var(--nanoplastic-primary);
+}
+
+/* Cellular Toxicity Calculator */
+.toxicity-calculator {
+    background: white;
+    padding: var(--spacing-xl);
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+}
+
+.toxicity-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.toxicity-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.toxicity-checkboxes {
+    background: #f9fafb;
+    padding: var(--spacing-md);
+    border-radius: 8px;
+}
+
+.toxicity-checkboxes h4 {
+    color: var(--nanoplastic-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.checkbox-label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    cursor: pointer;
+}
+
+.checkbox-label input {
+    margin-right: var(--spacing-sm);
+}
+
+.toxicity-results {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.toxicity-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+}
+
+.metric-card {
+    background: #f9fafb;
+    padding: var(--spacing-md);
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+}
+
+.metric-card h4 {
+    color: var(--nanoplastic-primary);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-xs);
+}
+
+.metric-value {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: var(--nanoplastic-secondary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.metric-bar {
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.toxicity-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--toxicity-low), var(--toxicity-critical));
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+.toxicity-description {
+    background: #f9fafb;
+    padding: var(--spacing-md);
+    border-radius: 8px;
+    border-left: 4px solid var(--nanoplastic-primary);
+}
+
+.toxicity-description h4 {
+    color: var(--nanoplastic-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+/* Tissue Distribution Analyzer */
+.distribution-analyzer {
+    background: white;
+    padding: var(--spacing-xl);
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+}
+
+.organism-diagram {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.organism-body {
+    position: relative;
+    width: 250px;
+    height: 300px;
+}
+
+.organ {
+    position: absolute;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.organ:hover {
+    transform: scale(1.1);
+}
+
+.organ.liver {
+    width: 60px;
+    height: 40px;
+    background: #ef4444;
+    top: 80px;
+    left: 95px;
+    border-radius: 20px;
+}
+
+.organ.brain {
+    width: 50px;
+    height: 35px;
+    background: #8b5cf6;
+    top: 20px;
+    left: 100px;
+}
+
+.organ.kidney {
+    width: 35px;
+    height: 45px;
+    background: #06b6d4;
+    top: 120px;
+    right: 40px;
+}
+
+.organ.gill {
+    width: 70px;
+    height: 25px;
+    background: #10b981;
+    top: 60px;
+    left: 20px;
+    border-radius: 12px;
+}
+
+.organ.gut {
+    width: 40px;
+    height: 80px;
+    background: #f59e0b;
+    top: 140px;
+    left: 80px;
+    border-radius: 20px;
+}
+
+.organ.muscle {
+    width: 55px;
+    height: 35px;
+    background: #ec4899;
+    bottom: 60px;
+    left: 85px;
+    border-radius: 17px;
+}
+
+.accumulation-level {
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.accumulation-level::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: var(--nanoplastic-accent);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+}
+
+.distribution-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.bioaccumulation-display {
+    padding: var(--spacing-sm);
+    background: var(--nanoplastic-light);
+    border-radius: 6px;
+    font-weight: 600;
+    color: var(--nanoplastic-primary);
+    text-align: center;
+}
+
+/* Biomarkers Dashboard */
+.biomarkers-dashboard {
+    background: white;
+    padding: var(--spacing-xl);
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+}
+
+.biomarker-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.biomarkers-display {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.biomarker-chart {
+    height: 250px;
+}
+
+.biomarker-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+}
+
+.biomarker-item {
+    background: #f9fafb;
+    padding: var(--spacing-md);
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+}
+
+.biomarker-item h4 {
+    color: var(--nanoplastic-primary);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-xs);
+}
+
+.biomarker-value {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--toxicity-high);
+    margin-bottom: var(--spacing-xs);
+}
+
+.biomarker-item p {
+    font-size: var(--font-size-xs);
+    color: #6b7280;
+}
+
+/* Case Studies */
+.case-studies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.case-study-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.case-study-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.case-study-image {
+    height: 120px;
+    background: linear-gradient(135deg, var(--nanoplastic-primary), var(--nanoplastic-secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-3xl);
+    color: white;
+}
+
+.case-study-card h3 {
+    padding: var(--spacing-md) var(--spacing-md) 0;
+    color: var(--nanoplastic-primary);
+    font-size: var(--font-size-lg);
+}
+
+.case-study-card p {
+    padding: 0 var(--spacing-md) var(--spacing-md);
+    color: #6b7280;
+    font-size: var(--font-size-sm);
+}
+
+.case-study-tags {
+    padding: 0 var(--spacing-md) var(--spacing-md);
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.tag {
+    background: var(--nanoplastic-light);
+    color: var(--nanoplastic-primary);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+}
+
+/* Call to Action */
+.cta-section {
+    background: linear-gradient(135deg, var(--nanoplastic-dark) 0%, var(--nanoplastic-primary) 100%);
+    color: white;
+    padding: var(--spacing-xl) 0;
+    text-align: center;
+}
+
+.cta-content h2 {
+    font-size: var(--font-size-3xl);
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+}
+
+.cta-content p {
+    font-size: var(--font-size-lg);
+    opacity: 0.9;
+    margin-bottom: var(--spacing-lg);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.cta-btn {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: none;
+    border-radius: 8px;
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    transition: all 0.3s ease;
+}
+
+.cta-btn.primary {
+    background: white;
+    color: var(--nanoplastic-primary);
+}
+
+.cta-btn.primary:hover {
+    background: var(--nanoplastic-light);
+    transform: translateY(-2px);
+}
+
+.cta-btn.secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.cta-btn.secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: var(--spacing-xl);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: var(--shadow-xl);
+}
+
+.close {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    font-size: var(--font-size-xl);
+    font-weight: bold;
+    color: #6b7280;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: var(--nanoplastic-primary);
+}
+
+/* Footer */
+.footer {
+    background: #1f2937;
+    color: white;
+    padding: var(--spacing-xl) 0 var(--spacing-md) 0;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.footer-section h4 {
+    color: white;
+    margin-bottom: var(--spacing-md);
+}
+
+.footer-section p {
+    color: #9ca3af;
+    margin-bottom: var(--spacing-sm);
+}
+
+.footer-section ul {
+    list-style: none;
+}
+
+.footer-section ul li {
+    margin-bottom: var(--spacing-xs);
+}
+
+.footer-section ul li a {
+    color: #9ca3af;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+    color: var(--nanoplastic-accent);
+}
+
+.footer-bottom {
+    border-top: 1px solid #374151;
+    padding-top: var(--spacing-md);
+    text-align: center;
+    color: #9ca3af;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: var(--spacing-lg);
+    }
+
+    .hero-stats {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--spacing-sm);
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .uptake-simulator,
+    .toxicity-calculator,
+    .distribution-analyzer,
+    .biomarkers-dashboard {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+
+    .uptake-metrics {
+        grid-template-columns: 1fr;
+    }
+
+    .toxicity-metrics,
+    .biomarker-details {
+        grid-template-columns: 1fr;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: var(--font-size-3xl);
+    }
+
+    .section-title {
+        font-size: var(--font-size-2xl);
+    }
+
+    .overview-grid,
+    .case-studies-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .organism-body {
+        width: 200px;
+        height: 240px;
+    }
+
+    .organ {
+        font-size: 10px;
+    }
+}
+
+/* Animation Classes */
+.fade-in {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--nanoplastic-primary);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--nanoplastic-secondary);
+}

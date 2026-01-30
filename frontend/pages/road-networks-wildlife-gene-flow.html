@@ -12,19 +12,53 @@
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Global Styles -->
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/pwa.css">
+  
+  <!-- Component Styles -->
+  <link rel="stylesheet" href="../css/components/navbar.css">
+  <link rel="stylesheet" href="../css/components/footer.css">
 
   <!-- Page-specific Styles -->
   <link rel="stylesheet" href="../css/pages/road-networks-wildlife-gene-flow.css">
 
   <!-- Theme Toggle -->
   <script src="../theme-toggle.js"></script>
+
+  <!-- Component CSS (Extracted from first file) -->
+  <style>
+    /* Extracted component styles from the first file */
+    body { font-family: 'Poppins', sans-serif; margin: 0; background: #f8f9fa; }
+    
+    .download-btn { 
+      background: #4CAF50; 
+      color: white; 
+      padding: 8px 15px; 
+      border: none; 
+      border-radius: 5px; 
+      text-decoration: none; 
+      font-size: 0.9rem; 
+      margin-left: auto; 
+      transition: all 0.3s; 
+      min-height: 44px; 
+      display: flex; 
+      align-items: center; 
+    }
+    .download-btn:hover { 
+      background: #45a049; 
+      transform: translateY(-1px); 
+    }
+
+    @media (max-width: 768px) {
+      .download-btn { margin: 15px 0 0; }
+    }
+  </style>
 </head>
 <body>
   <!-- Navigation -->
@@ -387,21 +421,51 @@
   <script src="../js/main.js"></script>
   <script src="../js/pages/road-networks-wildlife-gene-flow.js"></script>
 
-  <!-- Load components -->
+  <!-- Component Scripts (Extracted from first file) -->
   <script>
-    // Load navbar
+    // Load navbar and footer from first file
     fetch('../components/navbar.html')
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById('navbar-container').innerHTML = data;
+      .then(r => r.text())
+      .then(html => {
+        document.getElementById('navbar-container').innerHTML = html;
+      });
+    
+    fetch('../components/footer.html')
+      .then(r => r.text())
+      .then(html => {
+        document.getElementById('footer-container').innerHTML = html;
       });
 
-    // Load footer
-    fetch('../components/footer.html')
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById('footer-container').innerHTML = data;
-      });
+    // Search functionality from first file
+    document.addEventListener('DOMContentLoaded', function() {
+      const resourceSearch = document.getElementById('resourceSearch');
+      if (resourceSearch) {
+        resourceSearch.addEventListener('input', function(e) {
+          const searchTerm = e.target.value.toLowerCase();
+          const resourceItems = document.querySelectorAll('.resource-item');
+          
+          resourceItems.forEach(item => {
+            const title = item.querySelector('h3').textContent.toLowerCase();
+            const description = item.querySelector('p').textContent.toLowerCase();
+            
+            if (title.includes(searchTerm) || description.includes(searchTerm)) {
+              item.style.display = 'flex';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        });
+      }
+    });
+
+    // Download functionality from first file
+    function downloadResource(filename) {
+      // Simulate download
+      alert(`Downloading ${filename}... This is a demo - actual files would be served from a server.`);
+      
+      // In a real implementation, this would trigger an actual download
+      // window.open(`/downloads/${filename}`, '_blank');
+    }
   </script>
 </body>
 </html>

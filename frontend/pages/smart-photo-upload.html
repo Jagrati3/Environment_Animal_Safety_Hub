@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Photo Upload | EcoLife</title>
+    <meta name="description" content="Upload wildlife photos and get instant AI analysis. Identify species, analyze behavior, and contribute to conservation efforts.">
+    <link rel="icon" type="image/png" href="../assets/images/others/FAVICON.png">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/components/navbar.css">
+    <link rel="stylesheet" href="../css/components/footer.css">
+    <link rel="stylesheet" href="../css/pages/smart-photo-upload.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+
+    <div id="cursor-container"></div>
+
+    <!-- Navbar Container -->
+    <div id="navbar-container"></div>
+
+    <!-- Hero Section -->
+    <section class="upload-hero" id="uploadHero">
+        <div class="hero-particles" id="heroParticles"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fa-solid fa-camera"></i>
+                <span>AI-Powered Photo Analysis</span>
+            </div>
+            <h1 class="hero-title">
+                Capture & <span class="gradient-text">Analyze Wildlife</span>
+            </h1>
+            <p class="hero-subtitle">
+                Upload photos of wildlife, plants, or environmental scenes. Our AI instantly identifies species, analyzes behavior, and provides conservation insights.
+            </p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <i class="fa-solid fa-images"></i>
+                    <div class="stat-content">
+                        <span class="stat-number" data-count="45000">0</span>
+                        <span class="stat-label">Photos Analyzed</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fa-solid fa-robot"></i>
+                    <div class="stat-content">
+                        <span class="stat-number" data-count="98">0</span>
+                        <span class="stat-label">% Accuracy</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fa-solid fa-dna"></i>
+                    <div class="stat-content">
+                        <span class="stat-number" data-count="8500">0</span>
+                        <span class="stat-label">Species Found</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Upload Section -->
+    <section class="upload-main">
+        <div class="upload-container">
+            <!-- Upload Area -->
+            <div class="upload-area-wrapper">
+                <div class="upload-tabs">
+                    <button class="tab-button active" data-tab="upload">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <span>Upload Photo</span>
+                    </button>
+                    <button class="tab-button" data-tab="camera">
+                        <i class="fa-solid fa-camera"></i>
+                        <span>Capture Live</span>
+                    </button>
+                    <button class="tab-button" data-tab="gallery">
+                        <i class="fa-solid fa-images"></i>
+                        <span>Your Gallery</span>
+                    </button>
+                </div>
+
+                <!-- Upload Tab -->
+                <div class="tab-content active" id="uploadTab">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                        </div>
+                        <h3>Drag & Drop Your Photo Here</h3>
+                        <p>or click to select from your device</p>
+                        <div class="supported-formats">
+                            Supported: JPG, PNG, WebP (Max 10MB)
+                        </div>
+                        <input type="file" id="fileInput" accept="image/*" hidden>
+                    </div>
+
+                    <!-- Preview Section -->
+                    <div class="preview-section" id="previewSection" style="display: none;">
+                        <div class="preview-wrapper">
+                            <div class="preview-image-container">
+                                <img id="previewImage" src="" alt="Preview">
+                                <button class="remove-button" id="removeButton">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                            <div class="preview-info">
+                                <div class="file-details">
+                                    <p><strong>File:</strong> <span id="fileName"></span></p>
+                                    <p><strong>Size:</strong> <span id="fileSize"></span></p>
+                                </div>
+                                <button class="analyze-button" id="analyzeButton">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                    <span>Analyze with AI</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Camera Tab -->
+                <div class="tab-content" id="cameraTab">
+                    <div class="camera-container">
+                        <video id="cameraStream" autoplay playsinline></video>
+                        <canvas id="cameraCanvas" style="display: none;"></canvas>
+                        
+                        <div class="camera-controls">
+                            <button class="camera-button start-button" id="startCameraButton">
+                                <i class="fa-solid fa-video"></i>
+                                <span>Start Camera</span>
+                            </button>
+                            <button class="camera-button capture-button" id="captureButton" style="display: none;">
+                                <i class="fa-solid fa-circle"></i>
+                                <span>Capture</span>
+                            </button>
+                            <button class="camera-button stop-button" id="stopCameraButton" style="display: none;">
+                                <i class="fa-solid fa-stop"></i>
+                                <span>Stop Camera</span>
+                            </button>
+                        </div>
+
+                        <div class="camera-preview" id="cameraPreview" style="display: none;">
+                            <img id="capturedImage" src="" alt="Captured">
+                            <div class="camera-preview-actions">
+                                <button class="action-button" id="usePhotoButton">
+                                    <i class="fa-solid fa-check"></i>
+                                    Use Photo
+                                </button>
+                                <button class="action-button secondary" id="retakeButton">
+                                    <i class="fa-solid fa-rotate-left"></i>
+                                    Retake
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gallery Tab -->
+                <div class="tab-content" id="galleryTab">
+                    <div class="gallery-grid" id="galleryGrid">
+                        <div class="gallery-empty">
+                            <i class="fa-solid fa-image"></i>
+                            <p>No photos uploaded yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis Results Panel -->
+            <div class="analysis-panel" id="analysisPanel" style="display: none;">
+                <div class="analysis-header">
+                    <h2>AI Analysis Results</h2>
+                    <button class="close-button" id="closeAnalysis">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="analysis-content">
+                    <!-- Loading State -->
+                    <div class="loading-state" id="loadingState">
+                        <div class="loading-spinner">
+                            <div class="spinner"></div>
+                        </div>
+                        <p>Analyzing your photo with AI...</p>
+                    </div>
+
+                    <!-- Results State -->
+                    <div class="results-state" id="resultsState" style="display: none;">
+                        <!-- Species Detection -->
+                        <div class="analysis-section">
+                            <h3><i class="fa-solid fa-dna"></i> Species Detected</h3>
+                            <div class="species-cards" id="speciesCards"></div>
+                        </div>
+
+                        <!-- Behavior Analysis -->
+                        <div class="analysis-section">
+                            <h3><i class="fa-solid fa-eye"></i> Behavior Analysis</h3>
+                            <div class="behavior-content" id="behaviorContent"></div>
+                        </div>
+
+                        <!-- Environmental Context -->
+                        <div class="analysis-section">
+                            <h3><i class="fa-solid fa-earth-americas"></i> Environmental Context</h3>
+                            <div class="context-content" id="contextContent"></div>
+                        </div>
+
+                        <!-- Conservation Status -->
+                        <div class="analysis-section">
+                            <h3><i class="fa-solid fa-shield"></i> Conservation Status</h3>
+                            <div class="conservation-content" id="conservationContent"></div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="analysis-actions">
+                            <button class="action-button" id="downloadReportButton">
+                                <i class="fa-solid fa-download"></i>
+                                Download Report
+                            </button>
+                            <button class="action-button secondary" id="shareButton">
+                                <i class="fa-solid fa-share-nodes"></i>
+                                Share Analysis
+                            </button>
+                            <button class="action-button secondary" id="contributeButton">
+                                <i class="fa-solid fa-heart"></i>
+                                Contribute to Database
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Error State -->
+                    <div class="error-state" id="errorState" style="display: none;">
+                        <i class="fa-solid fa-exclamation-circle"></i>
+                        <p id="errorMessage">An error occurred during analysis. Please try again.</p>
+                        <button class="action-button" id="retryAnalysisButton">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            Retry
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <h2>How It Works</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-1"></i>
+                </div>
+                <h3>Upload or Capture</h3>
+                <p>Drag & drop a photo or capture one live using your device's camera</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-2"></i>
+                </div>
+                <h3>AI Analysis</h3>
+                <p>Our advanced AI analyzes the image and identifies species, behavior, and environment</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-3"></i>
+                </div>
+                <h3>Get Insights</h3>
+                <p>Receive detailed information about conservation status and ecological significance</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-4"></i>
+                </div>
+                <h3>Contribute & Learn</h3>
+                <p>Share your findings with our community and help advance conservation efforts</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tips Section -->
+    <section class="tips-section">
+        <h2>Tips for Better Analysis</h2>
+        <div class="tips-grid">
+            <div class="tip-card">
+                <i class="fa-solid fa-sun"></i>
+                <h4>Good Lighting</h4>
+                <p>Use natural sunlight for clearer images and better species identification</p>
+            </div>
+            <div class="tip-card">
+                <i class="fa-solid fa-focus"></i>
+                <h4>Clear Focus</h4>
+                <p>Ensure the subject is in focus and clearly visible in the frame</p>
+            </div>
+            <div class="tip-card">
+                <i class="fa-solid fa-ruler"></i>
+                <h4>Proper Framing</h4>
+                <p>Include the full subject and some environmental context when possible</p>
+            </div>
+            <div class="tip-card">
+                <i class="fa-solid fa-image"></i>
+                <h4>High Quality</h4>
+                <p>Use high-resolution photos for more accurate analysis and identification</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+
+    <!-- Scripts -->
+    <script src="../js/navbar.js"></script>
+    <script src="../js/footer.js"></script>
+    <script src="../js/theme-toggle.js"></script>
+    <script src="../js/pages/smart-photo-upload.js"></script>
+    <script src="../js/particle-animation.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animal Emotion Map - Understanding Animal Emotional Experiences | Environment & Animal Safety Hub</title>
+  <meta name="description" content="Interactive map exploring animal emotions: fear, hunger, pain, and safety. Click to see real animal situations tied to each emotion.">
+  <meta name="keywords" content="animal emotions, emotion map, animal psychology, fear in animals, animal pain, animal safety, emotional awareness">
+
+  <!-- Favicon -->
+  <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/pwa.css">
+  
+  <!-- Component Styles -->
+  <link rel="stylesheet" href="../css/components/navbar.css">
+  <link rel="stylesheet" href="../css/components/footer.css">
+
+  <!-- Page-specific Styles -->
+  <style>
+    :root {
+      --fear-color: #E74C3C;
+      --hunger-color: #F39C12;
+      --pain-color: #8E44AD;
+      --safety-color: #27AE60;
+      --neutral-bg: #F8F9FA;
+      --emotion-light: #FFEAA7;
+      --dark-text: #2C3E50;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: var(--neutral-bg);
+      color: var(--dark-text);
+      line-height: 1.6;
+    }
+
+    /* Hero Section */
+    .emotion-hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 100px 20px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .emotion-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+    }
+
+    .emotion-hero h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .hero-subtitle {
+      font-size: 1.3rem;
+      max-width: 800px;
+      margin: 0 auto 40px;
+      opacity: 0.95;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-instruction {
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+      padding: 15px 30px;
+      border-radius: 50px;
+      display: inline-block;
+      margin-top: 20px;
+      position: relative;
+      z-index: 1;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    /* Emotion Map Container */
+    .emotion-map-container {
+      max-width: 1400px;
+      margin: -40px auto 80px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Emotion Wheel */
+    .emotion-wheel {
+      position: relative;
+      width: 600px;
+      height: 600px;
+      margin: 0 auto;
+      transition: transform 0.5s ease;
+    }
+
+    @media (max-width: 768px) {
+      .emotion-wheel {
+        width: 400px;
+        height: 400px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .emotion-wheel {
+        width: 300px;
+        height: 300px;
+      }
+    }
+
+    .wheel-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px;
+      height: 200px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      border: 8px solid var(--neutral-bg);
+    }
+
+    .center-text {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .center-text h3 {
+      font-family: 'Fredoka One', cursive;
+      color: #667eea;
+      margin-bottom: 10px;
+      font-size: 1.5rem;
+    }
+
+    /* Emotion Segments */
+    .emotion-segment {
+      position: absolute;
+      width: 50%;
+      height: 50%;
+      transform-origin: 100% 100%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      border-radius: 100% 0 0 0;
+    }
+
+    .emotion-segment:hover {
+      transform: scale(1.05);
+      z-index: 5;
+    }
+
+    .segment-fear {
+      transform: rotate(0deg) skewX(-30deg);
+      background: linear-gradient(135deg, var(--fear-color), #C0392B);
+    }
+
+    .segment-hunger {
+      transform: rotate(90deg) skewX(-30deg);
+      background: linear-gradient(135deg, var(--hunger-color), #D35400);
+    }
+
+    .segment-pain {
+      transform: rotate(180deg) skewX(-30deg);
+      background: linear-gradient(135deg, var(--pain-color), #6C3483);
+    }
+
+    .segment-safety {
+      transform: rotate(270deg) skewX(-30deg);
+      background: linear-gradient(135deg, var(--safety-color), #229954);
+    }
+
+    .segment-content {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      transform: skewX(30deg) rotate(45deg);
+      top: -50%;
+      left: -50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .segment-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+    }
+
+    .segment-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 2rem;
+      margin-bottom: 10px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .segment-subtitle {
+      font-size: 1rem;
+      opacity: 0.9;
+      max-width: 200px;
+    }
+
+    /* Cases Container */
+    .cases-container {
+      max-width: 1200px;
+      margin: 80px auto;
+      padding: 0 20px;
+    }
+
+    .cases-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .cases-header h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 2.8rem;
+      color: #667eea;
+      margin-bottom: 20px;
+    }
+
+    .selected-emotion {
+      display: inline-block;
+      padding: 10px 30px;
+      border-radius: 50px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+
+    /* Cases Grid */
+    .cases-grid {
+      display: none;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .cases-grid.active {
+      display: grid;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Case Card */
+    .case-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .case-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .case-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+    }
+
+    .case-header {
+      padding: 25px;
+      color: white;
+      position: relative;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .case-header.fear-bg { background: linear-gradient(135deg, var(--fear-color), #C0392B); }
+    .case-header.hunger-bg { background: linear-gradient(135deg, var(--hunger-color), #D35400); }
+    .case-header.pain-bg { background: linear-gradient(135deg, var(--pain-color), #6C3483); }
+    .case-header.safety-bg { background: linear-gradient(135deg, var(--safety-color), #229954); }
+
+    .animal-icon {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 2.5rem;
+      opacity: 0.8;
+    }
+
+    .case-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .animal-type {
+      display: inline-block;
+      padding: 5px 15px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+    .case-content {
+      padding: 25px;
+    }
+
+    .situation {
+      background: var(--neutral-bg);
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      border-left: 4px solid;
+    }
+
+    .fear-border { border-color: var(--fear-color); }
+    .hunger-border { border-color: var(--hunger-color); }
+    .pain-border { border-color: var(--pain-color); }
+    .safety-border { border-color: var(--safety-color); }
+
+    .signs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .sign-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background: rgba(0,0,0,0.03);
+      border-radius: 10px;
+    }
+
+    .sign-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .fear-icon { background: var(--fear-color); }
+    .hunger-icon { background: var(--hunger-color); }
+    .pain-icon { background: var(--pain-color); }
+    .safety-icon { background: var(--safety-color); }
+
+    .help-tip {
+      background: linear-gradient(135deg, #FFEAA7, #FDCB6E);
+      padding: 20px;
+      border-radius: 15px;
+      margin-top: 20px;
+      border: 2px dashed #E17055;
+    }
+
+    /* Emotion Stats */
+    .emotion-stats {
+      max-width: 1200px;
+      margin: 60px auto;
+      padding: 40px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+
+    .stats-title {
+      font-family: 'Fredoka One', cursive;
+      color: #667eea;
+      font-size: 2.2rem;
+      margin-bottom: 40px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+    }
+
+    .stat-item {
+      padding: 25px;
+      border-radius: 15px;
+      color: white;
+      transition: transform 0.3s ease;
+    }
+
+    .stat-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-item.fear-stat { background: linear-gradient(135deg, var(--fear-color), #C0392B); }
+    .stat-item.hunger-stat { background: linear-gradient(135deg, var(--hunger-color), #D35400); }
+    .stat-item.pain-stat { background: linear-gradient(135deg, var(--pain-color), #6C3483); }
+    .stat-item.safety-stat { background: linear-gradient(135deg, var(--safety-color), #229954); }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin: 15px 0;
+    }
+
+    /* Empathy Exercise */
+    .empathy-exercise {
+      max-width: 1200px;
+      margin: 60px auto;
+      padding: 40px;
+      background: linear-gradient(135deg, #A3E4D7, #76D7C4);
+      border-radius: 20px;
+      color: #145A32;
+      text-align: center;
+    }
+
+    .exercise-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 2rem;
+      margin-bottom: 30px;
+    }
+
+    .empathy-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin: 40px 0;
+    }
+
+    .empathy-card {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      color: #2C3E50;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 3px solid transparent;
+    }
+
+    .empathy-card:hover {
+      transform: translateY(-10px);
+      border-color: #27AE60;
+    }
+
+    .empathy-card.active {
+      border-color: #27AE60;
+      background: #E8F6F3;
+    }
+
+    /* Action Section */
+    .action-section {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-radius: 20px;
+      margin: 60px auto;
+      max-width: 1200px;
+    }
+
+    .action-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .action-btn {
+      padding: 15px 30px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .action-btn.primary {
+      background: white;
+      color: #667eea;
+    }
+
+    .action-btn.secondary {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .emotion-hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .cases-header h2 {
+        font-size: 2rem;
+      }
+      
+      .signs-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+      
+      .action-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .emotion-hero {
+        padding: 80px 20px 40px;
+      }
+      
+      .emotion-hero h1 {
+        font-size: 2rem;
+      }
+      
+      .segment-title {
+        font-size: 1.5rem;
+      }
+      
+      .segment-subtitle {
+        display: none;
+      }
+      
+      .cases-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <div id="navbar-container"></div>
+
+  <!-- Hero Section -->
+  <section class="emotion-hero">
+    <h1><i class="fas fa-heart"></i> Animal Emotion Map</h1>
+    <p class="hero-subtitle">Explore the emotional lives of animals through their experiences of fear, hunger, pain, and safety</p>
+    <div class="hero-instruction">
+      <i class="fas fa-mouse-pointer"></i> Click on an emotion to see real animal situations
+    </div>
+  </section>
+
+  <!-- Emotion Wheel -->
+  <div class="emotion-map-container">
+    <div class="emotion-wheel" id="emotionWheel">
+      <!-- Center -->
+      <div class="wheel-center">
+        <div class="center-text">
+          <h3>How do animals feel?</h3>
+          <p>Select an emotion to explore</p>
+          <div id="currentEmotion" style="font-size: 1.2rem; font-weight: bold; color: #667eea; margin-top: 10px;">
+            Click an emotion
+          </div>
+        </div>
+      </div>
+
+      <!-- Emotion Segments -->
+      <div class="emotion-segment segment-fear" data-emotion="fear">
+        <div class="segment-content">
+          <div class="segment-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <div class="segment-title">FEAR</div>
+          <div class="segment-subtitle">When animals feel threatened or unsafe</div>
+        </div>
+      </div>
+
+      <div class="emotion-segment segment-hunger" data-emotion="hunger">
+        <div class="segment-content">
+          <div class="segment-icon">
+            <i class="fas fa-apple-alt"></i>
+          </div>
+          <div class="segment-title">HUNGER</div>
+          <div class="segment-subtitle">When basic survival needs aren't met</div>
+        </div>
+      </div>
+
+      <div class="emotion-segment segment-pain" data-emotion="pain">
+        <div class="segment-content">
+          <div class="segment-icon">
+            <i class="fas fa-bandage"></i>
+          </div>
+          <div class="segment-title">PAIN</div>
+          <div class="segment-subtitle">Physical and emotional suffering</div>
+        </div>
+      </div>
+
+      <div class="emotion-segment segment-safety" data-emotion="safety">
+        <div class="segment-content">
+          <div class="segment-icon">
+            <i class="fas fa-home"></i>
+          </div>
+          <div class="segment-title">SAFETY</div>
+          <div class="segment-subtitle">When animals feel secure and protected</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cases Container -->
+  <div class="cases-container">
+    <div class="cases-header">
+      <h2>Real Animal Situations</h2>
+      <div id="selectedEmotionDisplay" class="selected-emotion" style="background: #667eea;">
+        Select an emotion above
+      </div>
+      <p>Click an emotion to see real-life situations animals experience</p>
+    </div>
+
+    <!-- Fear Cases -->
+    <div id="fearCases" class="cases-grid">
+      <!-- Fear Case 1 -->
+      <div class="case-card" data-delay="0">
+        <div class="case-header fear-bg">
+          <div class="animal-icon">
+            <i class="fas fa-dog"></i>
+          </div>
+          <div class="case-title">Thunderstorm Terror</div>
+          <span class="animal-type">Domestic Dogs</span>
+        </div>
+        <div class="case-content">
+          <div class="situation fear-border">
+            <h4><i class="fas fa-cloud-bolt"></i> The Situation</h4>
+            <p>A dog home alone during a severe thunderstorm. Loud cracks of thunder, bright lightning flashes, and pressure changes trigger intense fear responses.</p>
+          </div>
+          
+          <h4><i class="fas fa-eye"></i> Signs of Fear:</h4>
+          <div class="signs-grid">
+            <div class="sign-item">
+              <div class="sign-icon fear-icon"><i class="fas fa-tremble"></i></div>
+              <span>Full-body trembling</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon fear-icon"><i class="fas fa-hide"></i></div>
+              <span>Hiding in small spaces</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon fear-icon"><i class="fas fa-drool"></i></div>
+              <span>Excessive drooling</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon fear-icon"><i class="fas fa-toilet"></i></div>
+              <span>Loss of bladder control</span>
+            </div>
+          </div>
+          
+          <div class="help-tip">
+            <h4><i class="fas fa-lightbulb"></i> How to Help:</h4>
+            <p>Create a "safe den" with blankets, use white noise to mask sounds, and consider anxiety wraps that provide gentle pressure.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fear Case 2 -->
+      <div class="case-card" data-delay="100">
+        <div class="case-header fear-bg">
+          <div class="animal-icon">
+            <i class="fas fa-dove"></i>
+          </div>
+          <div class="case-title">Predator Pressure</div>
+          <span class="animal-type">Songbirds</span>
+        </div>
+        <div class="case-content">
+          <div class="situation fear-border">
+            <h4><i class="fas fa-hawk"></i> The Situation</h4>
+            <p>A small songbird feeding at a backyard feeder when a hawk is spotted nearby. The immediate threat triggers survival responses.</p>
+          </div>
+          
+          <h4><i class="fas fa-eye"></i> Signs of Fear:</h4>
+          <div class="signs-grid">
+            <div class="sign-item">
+              <div class="sign-icon fear-icon"><i class="fas fa-freeze"></i></div>
+              <span>Complete freeze response</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon fear-icon"><i class="fas fa-alarm"></i></div>
+              <span>Alarm calls to warn others</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon fear-icon"><i class="fas fa-rush"></i></div>
+              <span>Rapid escape flight</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon fear-icon"><i class="fas fa-heart-rate"></i></div>
+              <span>Heart rate triples instantly</span>
+            </div>
+          </div>
+          
+          <div class="help-tip">
+            <h4><i class="fas fa-lightbulb"></i> How to Help:</h4>
+            <p>Place bird feeders near bushes for quick cover, avoid startling birds suddenly, and keep pet cats indoors during peak feeding times.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fear Case 3 -->
+      <div class="case-card" data-delay="200">
+        <div class="case-header fear-bg">
+          <div class="animal-icon">
+            <i class="fas fa-deer"></i>
+          </div>
+          <div class="case-title">Highway Panic</div>
+          <span class="animal-type">Wild Deer</span>
+        </div>
+        <div class="case-content">
+          <div class="situation fear-border">
+            <h4><i class="fas fa-car"></i> The Situation</h4>
+            <p>A deer family attempting to cross a busy highway at night. Blinding headlights, roaring engines, and the inability to escape create extreme fear.</p>
+          </div>
+          
+          <h4><i class="fas fa-eye"></i> Signs of Fear:</h4>
+          <div class="signs-grid">
+            <div class="sign-item">
+              <div class="sign-icon fear-icon"><i class="fas fa-dizzy"></i></div>
+              <span>Disoriented running in circles</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon fear-icon"><i class="fas fa-eye-wide"></i></div>
+              <span>Eyes wide with visible whites</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon fear-icon"><i class="fas fa-split"></i></div>
+              <span>Separation from herd/family</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon fear-icon"><i class="fas fa-adrenaline"></i></div>
+              <span>Adrenaline-induced freezing</span>
+            </div>
+          </div>
+          
+          <div class="help-tip">
+            <h4><i class="fas fa-lightbulb"></i> How to Help:</h4>
+            <p>Support wildlife crossing infrastructure, use high-beam headlights responsibly, and slow down in known animal crossing areas.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hunger Cases -->
+    <div id="hungerCases" class="cases-grid">
+      <!-- Hunger Case 1 -->
+      <div class="case-card" data-delay="0">
+        <div class="case-header hunger-bg">
+          <div class="animal-icon">
+            <i class="fas fa-cat"></i>
+          </div>
+          <div class="case-title">Stray Cat Scarcity</div>
+          <span class="animal-type">Urban Stray Cats</span>
+        </div>
+        <div class="case-content">
+          <div class="situation hunger-border">
+            <h4><i class="fas fa-trash"></i> The Situation</h4>
+            <p>A stray cat searching through trash bins in winter. Food sources are scarce, competition is high, and nutritional needs aren't met.</p>
+          </div>
+          
+          <h4><i class="fas fa-eye"></i> Signs of Hunger:</h4>
+          <div class="signs-grid">
+            <div class="sign-item">
+              <div class="sign-icon hunger-icon"><i class="fas fa-bone"></i></div>
+              <span>Constant searching behavior</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon hunger-icon"><i class="fas fa-cry"></i></div>
+              <span>Excessive vocalization (crying)</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon hunger-icon"><i class="fas fa-ribs"></i></div>
+              <span>Visible ribs and spine</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon hunger-icon"><i class="fas fa-weak"></i></div>
+              <span>Lethargy and weakness</span>
+            </div>
+          </div>
+          
+          <div class="help-tip">
+            <h4><i class="fas fa-lightbulb"></i> How to Help:</h4>
+            <p>Support TNR (Trap-Neuter-Return) programs, provide fresh water and cat food in safe locations, and contact local rescue organizations.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hunger Case 2 -->
+      <div class="case-card" data-delay="100">
+        <div class="case-header hunger-bg">
+          <div class="animal-icon">
+            <i class="fas fa-bear"></i>
+          </div>
+          <div class="case-title">Hibernation Interruption</div>
+          <span class="animal-type">Bears</span>
+        </div>
+        <div class="case-content">
+          <div class="situation hunger-border">
+            <h4><i class="fas fa-snowflake"></i> The Situation</h4>
+            <p>A bear waking from hibernation early due to warmer winters. Natural food sources aren't available yet, forcing risky human-interface behavior.</p>
+          </div>
+          
+          <h4><i class="fas fa-eye"></i> Signs of Hunger:</h4>
+          <div class="signs-grid">
+            <div class="sign-item">
+              <div class="sign-icon hunger-icon"><i class="fas fa-binoculars"></i></div>
+              <span>Extended foraging in daylight</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon hunger-icon"><i class="fas fa-raid"></i></div>
+              <span>Raiding human food sources</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon hunger-icon"><i class="fas fa-weight"></i></div>
+              <span>Significant weight loss</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon hunger-icon"><i class="fas fa-range"></i></div>
+              <span>Expanded territory searching</span>
+            </div>
+          </div>
+          
+          <div class="help-tip">
+            <h4><i class="fas fa-lightbulb"></i> How to Help:</h4>
+            <p>Secure trash cans, remove bird feeders in spring, and support climate change mitigation to preserve natural hibernation patterns.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pain Cases -->
+    <div id="painCases" class="cases-grid">
+      <!-- Pain Case 1 -->
+      <div class="case-card" data-delay="0">
+        <div class="case-header pain-bg">
+          <div class="animal-icon">
+            <i class="fas fa-horse"></i>
+          </div>
+          <div class="case-title">Silent Suffering</div>
+          <span class="animal-type">Domestic Horses</span>
+        </div>
+        <div class="case-content">
+          <div class="situation pain-border">
+            <h4><i class="fas fa-hoof"></i> The Situation</h4>
+            <p>An aging horse with chronic arthritis continues working. Horses often hide pain as a survival instinct, making it difficult to detect.</p>
+          </div>
+          
+          <h4><i class="fas fa-eye"></i> Signs of Pain:</h4>
+          <div class="signs-grid">
+            <div class="sign-item">
+              <div class="sign-icon pain-icon"><i class="fas fa-limp"></i></div>
+              <span>Subtle lameness or limping</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon pain-icon"><i class="fas fa-grind"></i></div>
+              <span>Teeth grinding (bruxism)</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon pain-icon"><i class="fas fa-flatten"></i></div>
+              <span>Ears flattened back</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon pain-icon"><i class="fas fa-resist"></i></div>
+              <span>Resistance to movement</span>
+            </div>
+          </div>
+          
+          <div class="help-tip">
+            <h4><i class="fas fa-lightbulb"></i> How to Help:</h4>
+            <p>Regular veterinary check-ups, appropriate pain management, proper hoof care, and recognizing subtle behavioral changes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Safety Cases -->
+    <div id="safetyCases" class="cases-grid">
+      <!-- Safety Case 1 -->
+      <div class="case-card" data-delay="0">
+        <div class="case-header safety-bg">
+          <div class="animal-icon">
+            <i class="fas fa-otter"></i>
+          </div>
+          <div class="case-title">River Otter Sanctuary</div>
+          <span class="animal-type">River Otters</span>
+        </div>
+        <div class="case-content">
+          <div class="situation safety-border">
+            <h4><i class="fas fa-water"></i> The Situation</h4>
+            <p>A family of river otters in a protected wetland area. Clean water, abundant food, and absence of human disturbance create ideal safety conditions.</p>
+          </div>
+          
+          <h4><i class="fas fa-eye"></i> Signs of Safety:</h4>
+          <div class="signs-grid">
+            <div class="sign-item">
+              <div class="sign-icon safety-icon"><i class="fas fa-play"></i></div>
+              <span>Playful social interactions</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon safety-icon"><i class="fas fa-sun"></i></div>
+              <span>Sunbathing and resting openly</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon safety-icon"><i class="fas fa-teach"></i></div>
+              <span>Teaching young survival skills</span>
+            </div>
+            <div class="sign-item">
+              <div class="sign-icon safety-icon"><i class="fas fa-vocal"></i></div>
+              <span>Content vocalizations</span>
+            </div>
+          </div>
+          
+          <div class="help-tip">
+            <h4><i class="fas fa-lightbulb"></i> How to Help:</h4>
+            <p>Support wetland conservation, maintain distance when observing wildlife, and reduce water pollution to preserve safe habitats.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Emotion Statistics -->
+  <section class="emotion-stats">
+    <h2 class="stats-title">Animal Emotion Facts</h2>
+    <div class="stats-grid">
+      <div class="stat-item fear-stat">
+        <i class="fas fa-exclamation-triangle fa-2x"></i>
+        <div class="stat-number">85%</div>
+        <p>of rescued animals show signs of past trauma</p>
+      </div>
+      <div class="stat-item hunger-stat">
+        <i class="fas fa-apple-alt fa-2x"></i>
+        <div class="stat-number">1 in 3</div>
+        <p>stray animals suffers from malnutrition</p>
+      </div>
+      <div class="stat-item pain-stat">
+        <i class="fas fa-bandage fa-2x"></i>
+        <div class="stat-number">70%</div>
+        <p>of chronic pain in animals goes undetected</p>
+      </div>
+      <div class="stat-item safety-stat">
+        <i class="fas fa-home fa-2x"></i>
+        <div class="stat-number">4x</div>
+        <p>longer lifespan in safe environments</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Empathy Exercise -->
+  <section class="empathy-exercise">
+    <h2 class="exercise-title">Walk in Their Paws</h2>
+    <p>Imagine experiencing these situations yourself. How would you feel?</p>
+    
+    <div class="empathy-cards">
+      <div class="empathy-card" data-scenario="thunder">
+        <i class="fas fa-cloud-bolt fa-2x" style="color: var(--fear-color); margin-bottom: 15px;"></i>
+        <h3>Thunderstorm</h3>
+        <p>Imagine loud explosions happening randomly around your home, with bright flashes and shaking walls.</p>
+      </div>
+      
+      <div class="empathy-card" data-scenario="hunger">
+        <i class="fas fa-apple-alt fa-2x" style="color: var(--hunger-color); margin-bottom: 15px;"></i>
+        <h3>Chronic Hunger</h3>
+        <p>Going days without proper meals, feeling weak, and constantly searching for something to eat.</p>
+      </div>
+      
+      <div class="empathy-card" data-scenario="pain">
+        <i class="fas fa-bandage fa-2x" style="color: var(--pain-color); margin-bottom: 15px;"></i>
+        <h3>Hidden Pain</h3>
+        <p>Being in constant discomfort but unable to communicate it to those who could help.</p>
+      </div>
+      
+      <div class="empathy-card" data-scenario="safety">
+        <i class="fas fa-home fa-2x" style="color: var(--safety-color); margin-bottom: 15px;"></i>
+        <h3>True Safety</h3>
+        <p>Being completely secure, with all needs met and no threats to worry about.</p>
+      </div>
+    </div>
+    
+    <p style="font-style: italic; margin-top: 30px;">
+      "The greatness of a nation and its moral progress can be judged by the way its animals are treated." — Mahatma Gandhi
+    </p>
+  </section>
+
+  <!-- Action Section -->
+  <section class="action-section">
+    <h2 class="action-title">Take Action with Understanding</h2>
+    <p>Now that you understand animal emotions better, here's how you can make a difference:</p>
+    
+    <div class="action-buttons">
+      <a href="../pages/volunteer.html" class="action-btn primary">
+        <i class="fas fa-hands-helping"></i> Volunteer at Animal Shelters
+      </a>
+      <a href="../pages/education.html" class="action-btn secondary">
+        <i class="fas fa-book"></i> Learn Animal Body Language
+      </a>
+      <a href="../pages/community-action-hub.html" class="action-btn secondary">
+        <i class="fas fa-bullhorn"></i> Advocate for Animal Welfare
+      </a>
+    </div>
+    
+    <div style="margin-top: 40px; padding: 25px; background: rgba(255,255,255,0.2); border-radius: 15px; max-width: 800px; margin-left: auto; margin-right: auto;">
+      <h4><i class="fas fa-star"></i> Empathy Pledge</h4>
+      <p>I pledge to:</p>
+      <ul style="text-align: left; max-width: 600px; margin: 0 auto; list-style-type: none;">
+        <li>✅ Look for signs of emotion in animals I encounter</li>
+        <li>✅ Consider their perspective before acting</li>
+        <li>✅ Speak up for those who cannot speak for themselves</li>
+        <li>✅ Continue learning about animal emotions and needs</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <!-- Scripts -->
+  <script>
+    // Load navbar and footer
+    fetch('../components/navbar.html')
+      .then(r => r.text())
+      .then(html => {
+        document.getElementById('navbar-container').innerHTML = html;
+      });
+    
+    fetch('../components/footer.html')
+      .then(r => r.text())
+      .then(html => {
+        document.getElementById('footer-container').innerHTML = html;
+      });
+
+    // Emotion selection functionality
+    const emotionSegments = document.querySelectorAll('.emotion-segment');
+    const casesGrids = document.querySelectorAll('.cases-grid');
+    const selectedEmotionDisplay = document.getElementById('selectedEmotionDisplay');
+    const currentEmotionText = document.getElementById('currentEmotion');
+    
+    const emotionData = {
+      fear: {
+        name: "FEAR",
+        color: "#E74C3C",
+        casesId: "fearCases",
+        icon: "fas fa-exclamation-triangle"
+      },
+      hunger: {
+        name: "HUNGER", 
+        color: "#F39C12",
+        casesId: "hungerCases",
+        icon: "fas fa-apple-alt"
+      },
+      pain: {
+        name: "PAIN",
+        color: "#8E44AD",
+        casesId: "painCases",
+        icon: "fas fa-bandage"
+      },
+      safety: {
+        name: "SAFETY",
+        color: "#27AE60",
+        casesId: "safetyCases",
+        icon: "fas fa-home"
+      }
+    };
+
+    // Set initial state
+    let activeEmotion = null;
+
+    // Add click handlers to emotion segments
+    emotionSegments.forEach(segment => {
+      segment.addEventListener('click', function() {
+        const emotion = this.dataset.emotion;
+        selectEmotion(emotion);
+      });
+    });
+
+    function selectEmotion(emotion) {
+      // Reset all segments
+      emotionSegments.forEach(seg => {
+        seg.style.transform = seg.style.transform.replace('scale(1.05)', '');
+      });
+      
+      // Highlight selected segment
+      const selectedSegment = document.querySelector(`[data-emotion="${emotion}"]`);
+      selectedSegment.style.transform = selectedSegment.style.transform + ' scale(1.05)';
+      
+      // Update emotion display
+      const emotionInfo = emotionData[emotion];
+      selectedEmotionDisplay.textContent = emotionInfo.name;
+      selectedEmotionDisplay.style.background = emotionInfo.color;
+      currentEmotionText.textContent = emotionInfo.name;
+      currentEmotionText.style.color = emotionInfo.color;
+      
+      // Hide all case grids
+      casesGrids.forEach(grid => {
+        grid.classList.remove('active');
+        grid.style.display = 'none';
+      });
+      
+      // Show selected emotion's cases
+      const selectedCases = document.getElementById(emotionInfo.casesId);
+      selectedCases.style.display = 'grid';
+      selectedCases.classList.add('active');
+      
+      // Animate case cards
+      const caseCards = selectedCases.querySelectorAll('.case-card');
+      caseCards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 100}ms`;
+        card.classList.add('visible');
+      });
+      
+      // Animate emotion wheel
+      const wheel = document.getElementById('emotionWheel');
+      const rotations = {
+        fear: 'rotate(0deg)',
+        hunger: 'rotate(-90deg)',
+        pain: 'rotate(-180deg)',
+        safety: 'rotate(-270deg)'
+      };
+      wheel.style.transform = rotations[emotion];
+      
+      activeEmotion = emotion;
+      
+      // Play emotion sound effect
+      playEmotionSound(emotion);
+    }
+
+    function playEmotionSound(emotion) {
+      // In a real implementation, you would play actual sound effects
+      console.log(`Playing ${emotion} sound effect`);
+      
+      // For demo purposes, just show a notification
+      const soundMessages = {
+        fear: "🐾 Hearing: Rapid breathing, whimpering sounds",
+        hunger: "🐾 Hearing: Whining, stomach growling sounds", 
+        pain: "🐾 Hearing: Soft whimpers, distressed sounds",
+        safety: "🐾 Hearing: Content purring, relaxed breathing"
+      };
+      
+      showNotification(soundMessages[emotion]);
+    }
+
+    function showNotification(message) {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: white;
+        color: #2C3E50;
+        padding: 15px 25px;
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        z-index: 1000;
+        border-left: 5px solid ${emotionData[activeEmotion]?.color || '#667eea'};
+        animation: slideIn 0.3s ease;
+      `;
+      
+      notification.innerHTML = `
+        <i class="fas fa-volume-up" style="margin-right: 10px; color: ${emotionData[activeEmotion]?.color || '#667eea'}"></i>
+        ${message}
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Remove notification after 3 seconds
+      setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+
+    // Add CSS for animations
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Empathy exercise interaction
+    const empathyCards = document.querySelectorAll('.empathy-card');
+    empathyCards.forEach(card => {
+      card.addEventListener('click', function() {
+        empathyCards.forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        
+        const scenario = this.dataset.scenario;
+        const descriptions = {
+          thunder: "Feel the panic of unpredictable loud noises you can't understand or escape.",
+          hunger: "Experience the desperation of searching for food when you're weak and tired.",
+          pain: "Know what it's like to hurt constantly but be unable to ask for help.",
+          safety: "Imagine the peace of complete security and contentment."
+        };
+        
+        showNotification(`💭 ${descriptions[scenario]}`);
+      });
+    });
+
+    // Auto-rotate emotion wheel for demonstration
+    let rotationAngle = 0;
+    setInterval(() => {
+      if (!activeEmotion) {
+        rotationAngle = (rotationAngle + 0.5) % 360;
+        document.getElementById('emotionWheel').style.transform = `rotate(${rotationAngle}deg)`;
+      }
+    }, 50);
+
+    // Initialize with fear selected
+    setTimeout(() => selectEmotion('fear'), 1000);
+  </script>
+</body>
+</html>

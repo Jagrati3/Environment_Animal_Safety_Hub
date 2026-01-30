@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genetic Consequences of Captive Breeding Programs - Conservation Biology</title>
+    <meta name="description" content="Explore inbreeding depression, domestication selection, and post-release survival challenges in wildlife conservation breeding programs. Interactive genetic modeling tools.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/components/navbar.css">
+    <link rel="stylesheet" href="../css/components/footer.css">
+    <link rel="stylesheet" href="../css/pages/genetic-consequences.css">
+    <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar-container"></nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Genetic Consequences of Captive Breeding Programs</h1>
+                <p class="hero-subtitle">The hidden genetic costs of saving species through captivity</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">70%</span>
+                        <span class="stat-label">Post-Release Mortality</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">50%</span>
+                        <span class="stat-label">Genetic Diversity Lost</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">1000+</span>
+                        <span class="stat-label">Species in Programs</span>
+                    </div>
+                </div>
+                <div class="hero-actions">
+                    <button class="btn-primary" onclick="scrollToSection('genetic-calculator')">
+                        <i class="fas fa-calculator"></i> Genetic Calculator
+                    </button>
+                    <button class="btn-secondary" onclick="learnMore()">
+                        <i class="fas fa-dna"></i> Explore Genetics
+                    </button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="dna-helix">
+                    <div class="dna-strand">
+                        <div class="nucleotide a">A</div>
+                        <div class="nucleotide t">T</div>
+                        <div class="nucleotide c">C</div>
+                        <div class="nucleotide g">G</div>
+                        <div class="nucleotide a">A</div>
+                        <div class="nucleotide t">T</div>
+                    </div>
+                    <div class="dna-strand">
+                        <div class="nucleotide t">T</div>
+                        <div class="nucleotide a">A</div>
+                        <div class="nucleotide g">G</div>
+                        <div class="nucleotide c">C</div>
+                        <div class="nucleotide t">T</div>
+                        <div class="nucleotide a">A</div>
+                    </div>
+                    <div class="genetic-damage">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Inbreeding</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Genetic Diversity Calculator -->
+    <section id="genetic-calculator" class="content-section calculator-section">
+        <div class="container">
+            <h2>Genetic Diversity Calculator</h2>
+            <p class="section-intro">Model how captive breeding affects genetic diversity over generations</p>
+
+            <div class="calculator-container">
+                <div class="calculator-inputs">
+                    <div class="input-group">
+                        <label for="founderCount">Number of Founders</label>
+                        <input type="range" id="founderCount" min="2" max="50" value="10" step="1">
+                        <span class="value-display" id="founderDisplay">10 founders</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="generations">Generations in Captivity</label>
+                        <input type="range" id="generations" min="1" max="20" value="5" step="1">
+                        <span class="value-display" id="generationDisplay">5 generations</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="breedingStrategy">Breeding Strategy</label>
+                        <select id="breedingStrategy">
+                            <option value="random">Random mating</option>
+                            <option value="minimize">Minimize inbreeding</option>
+                            <option value="maximize">Maximize diversity</option>
+                            <option value="line">Line breeding</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="populationSize">Captive Population Size</label>
+                        <input type="range" id="populationSize" min="10" max="500" value="50" step="10">
+                        <span class="value-display" id="populationDisplay">50 individuals</span>
+                    </div>
+                </div>
+
+                <div class="calculator-results">
+                    <div class="result-card">
+                        <h3>Heterozygosity</h3>
+                        <div class="diversity-meter">
+                            <div class="diversity-level" id="heterozygosityLevel"></div>
+                            <span class="diversity-value" id="heterozygosityValue">85%</span>
+                        </div>
+                        <p class="result-description" id="heterozygosityDescription">Genetic diversity maintained</p>
+                    </div>
+
+                    <div class="result-card">
+                        <h3>Inbreeding Coefficient</h3>
+                        <div class="inbreeding-gauge">
+                            <div class="inbreeding-level" id="inbreedingLevel"></div>
+                            <span class="inbreeding-value" id="inbreedingValue">F = 0.05</span>
+                        </div>
+                        <p class="result-description" id="inbreedingDescription">Low inbreeding risk</p>
+                    </div>
+
+                    <div class="result-card">
+                        <h3>Effective Population Size</h3>
+                        <div class="population-chart">
+                            <div class="population-bar" id="effectivePopulationBar"></div>
+                            <span class="population-value" id="effectivePopulationValue">Ne = 40</span>
+                        </div>
+                        <p class="result-description" id="effectivePopulationDescription">Sustainable breeding population</p>
+                    </div>
+                </div>
+
+                <div class="diversity-timeline">
+                    <h3>Genetic Diversity Over Time</h3>
+                    <canvas id="diversityChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Genetic Challenges -->
+    <section class="content-section challenges-section">
+        <div class="container">
+            <h2>Genetic Challenges in Captive Breeding</h2>
+            <p class="section-intro">Understanding the genetic mechanisms that threaten captive populations</p>
+
+            <div class="challenges-grid">
+                <div class="challenge-card">
+                    <div class="challenge-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Founder Effects</h3>
+                    <p>Limited genetic diversity from small founding populations leads to loss of alleles and reduced adaptability.</p>
+                    <button class="learn-more-btn" onclick="showGeneticDetail('founder')">Learn More</button>
+                </div>
+
+                <div class="challenge-card">
+                    <div class="challenge-icon">
+                        <i class="fas fa-random"></i>
+                    </div>
+                    <h3>Genetic Drift</h3>
+                    <p>Random changes in allele frequencies, especially severe in small populations, can lead to fixation of harmful alleles.</p>
+                    <button class="learn-more-btn" onclick="showGeneticDetail('drift')">Learn More</button>
+                </div>
+
+                <div class="challenge-card">
+                    <div class="challenge-icon">
+                        <i class="fas fa-heart-broken"></i>
+                    </div>
+                    <h3>Inbreeding Depression</h3>
+                    <p>Reduced fitness due to increased homozygosity of deleterious recessive alleles affects survival and reproduction.</p>
+                    <button class="learn-more-btn" onclick="showGeneticDetail('inbreeding')">Learn More</button>
+                </div>
+
+                <div class="challenge-card">
+                    <div class="challenge-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3>Domestication Selection</h3>
+                    <p>Unintentional artificial selection in captivity favors traits suited to captive environments over wild survival skills.</p>
+                    <button class="learn-more-btn" onclick="showGeneticDetail('domestication')">Learn More</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Inbreeding Depression Simulator -->
+    <section class="content-section simulator-section">
+        <div class="container">
+            <h2>Inbreeding Depression Simulator</h2>
+            <p class="section-intro">See how inbreeding affects fitness traits over generations</p>
+
+            <div class="simulator-container">
+                <div class="simulator-controls">
+                    <div class="control-group">
+                        <label for="inbreedingLevel">Inbreeding Coefficient (F)</label>
+                        <input type="range" id="inbreedingLevel" min="0" max="1" value="0.25" step="0.01">
+                        <span class="value-display" id="inbreedingDisplay">F = 0.25</span>
+                    </div>
+
+                    <div class="trait-selection">
+                        <h4>Select Fitness Traits to Monitor</h4>
+                        <div class="trait-checkboxes">
+                            <label><input type="checkbox" id="survival" checked> Survival Rate</label>
+                            <label><input type="checkbox" id="fecundity" checked> Reproductive Success</label>
+                            <label><input type="checkbox" id="growth" checked> Growth Rate</label>
+                            <label><input type="checkbox" id="immunity"> Disease Resistance</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="simulator-results">
+                    <div class="fitness-chart">
+                        <h3>Fitness Decline with Inbreeding</h3>
+                        <canvas id="fitnessChart" width="500" height="300"></canvas>
+                    </div>
+
+                    <div class="fitness-impacts">
+                        <div class="impact-item">
+                            <h4>Survival Impact</h4>
+                            <div class="impact-bar">
+                                <div class="impact-fill survival-fill" id="survivalImpact"></div>
+                            </div>
+                            <span class="impact-value" id="survivalValue">75%</span>
+                        </div>
+
+                        <div class="impact-item">
+                            <h4>Reproduction Impact</h4>
+                            <div class="impact-bar">
+                                <div class="impact-fill fecundity-fill" id="fecundityImpact"></div>
+                            </div>
+                            <span class="impact-value" id="fecundityValue">60%</span>
+                        </div>
+
+                        <div class="impact-item">
+                            <h4>Growth Impact</h4>
+                            <div class="impact-bar">
+                                <div class="impact-fill growth-fill" id="growthImpact"></div>
+                            </div>
+                            <span class="impact-value" id="growthValue">80%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies -->
+    <section class="content-section case-studies-section">
+        <div class="container">
+            <h2>Conservation Breeding Case Studies</h2>
+            <p class="section-intro">Real-world examples of genetic challenges and solutions</p>
+
+            <div class="case-studies-grid">
+                <div class="case-study-card">
+                    <div class="case-study-image">
+                        <i class="fas fa-crow"></i>
+                    </div>
+                    <h3>California Condor</h3>
+                    <p>Extreme inbreeding depression led to developmental abnormalities and low fertility. Genetic rescue through cross-fostering saved the species.</p>
+                    <button class="case-study-btn" onclick="showCaseStudy('condor')">Read Study</button>
+                </div>
+
+                <div class="case-study-card">
+                    <div class="case-study-image">
+                        <i class="fas fa-cat"></i>
+                    </div>
+                    <h3>Black-footed Ferret</h3>
+                    <p>Population bottleneck reduced genetic diversity to critical levels. Reintroduction programs face domestication selection challenges.</p>
+                    <button class="case-study-btn" onclick="showCaseStudy('ferret')">Read Study</button>
+                </div>
+
+                <div class="case-study-card">
+                    <div class="case-study-image">
+                        <i class="fas fa-horse"></i>
+                    </div>
+                    <h3>Przewalski's Horse</h3>
+                    <p>Successful reintroduction but captive-bred individuals show reduced wild survival skills and altered social behaviors.</p>
+                    <button class="case-study-btn" onclick="showCaseStudy('horse')">Read Study</button>
+                </div>
+
+                <div class="case-study-card">
+                    <div class="case-study-image">
+                        <i class="fas fa-kiwi-bird"></i>
+                    </div>
+                    <h3>Takahe</h3>
+                    <p>New Zealand flightless bird shows behavioral changes in captivity that affect post-release survival and breeding success.</p>
+                    <button class="case-study-btn" onclick="showCaseStudy('takahe')">Read Study</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Post-Release Survival -->
+    <section class="content-section survival-section">
+        <div class="container">
+            <h2>Post-Release Survival Challenges</h2>
+            <p class="section-intro">Why captive-bred animals struggle in the wild</p>
+
+            <div class="survival-analysis">
+                <div class="survival-stats">
+                    <div class="stat-circle">
+                        <div class="stat-number">30%</div>
+                        <div class="stat-label">1-Year Survival</div>
+                    </div>
+                    <div class="stat-circle">
+                        <div class="stat-number">50%</div>
+                        <div class="stat-label">Reproductive Success</div>
+                    </div>
+                    <div class="stat-circle">
+                        <div class="stat-number">20%</div>
+                        <div class="stat-label">Genetic Contribution</div>
+                    </div>
+                </div>
+
+                <div class="survival-factors">
+                    <h3>Key Survival Factors</h3>
+                    <div class="factor-list">
+                        <div class="factor-item">
+                            <h4>Hunting Skills</h4>
+                            <p>Captive animals lack experience with natural prey and predator avoidance.</p>
+                        </div>
+                        <div class="factor-item">
+                            <h4>Social Behavior</h4>
+                            <p>Altered social structures and mating behaviors reduce reproductive success.</p>
+                        </div>
+                        <div class="factor-item">
+                            <h4>Disease Resistance</h4>
+                            <p>Reduced genetic diversity increases vulnerability to diseases and parasites.</p>
+                        </div>
+                        <div class="factor-item">
+                            <h4>Environmental Adaptation</h4>
+                            <p>Difficulty adapting to variable weather, food availability, and habitat changes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mitigation Strategies -->
+    <section class="content-section mitigation-section">
+        <div class="container">
+            <h2>Genetic Management Strategies</h2>
+            <p class="section-intro">Solutions to minimize genetic problems in captive breeding</p>
+
+            <div class="strategies-grid">
+                <div class="strategy-card">
+                    <h3>Pedigree Management</h3>
+                    <div class="strategy-visual">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <p>Track breeding relationships to minimize inbreeding and maintain genetic diversity.</p>
+                    <button class="strategy-btn" onclick="showStrategyDetail('pedigree')">Details</button>
+                </div>
+
+                <div class="strategy-card">
+                    <h3>Genetic Rescue</h3>
+                    <div class="strategy-visual">
+                        <i class="fas fa-dna"></i>
+                    </div>
+                    <p>Introduce genetic material from wild populations to restore genetic diversity.</p>
+                    <button class="strategy-btn" onclick="showStrategyDetail('rescue')">Details</button>
+                </div>
+
+                <div class="strategy-card">
+                    <h3>Behavioral Training</h3>
+                    <div class="strategy-visual">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <p>Pre-release training programs to teach essential wild survival skills.</p>
+                    <button class="strategy-btn" onclick="showStrategyDetail('training')">Details</button>
+                </div>
+
+                <div class="strategy-card">
+                    <h3>Population Supplementation</h3>
+                    <div class="strategy-visual">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <p>Strategic release of captive-bred individuals to support wild populations.</p>
+                    <button class="strategy-btn" onclick="showStrategyDetail('supplementation')">Details</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Support Conservation Genetics</h2>
+            <p>Help advance the science of captive breeding and wildlife conservation</p>
+
+            <div class="cta-actions">
+                <button class="btn-primary" onclick="supportResearch()">
+                    <i class="fas fa-microscope"></i> Fund Research
+                </button>
+                <button class="btn-secondary" onclick="learnTechniques()">
+                    <i class="fas fa-graduation-cap"></i> Learn Techniques
+                </button>
+                <button class="btn-outline" onclick="joinPrograms()">
+                    <i class="fas fa-hands-helping"></i> Volunteer
+                </button>
+            </div>
+
+            <div class="impact-stats">
+                <div class="impact-stat">
+                    <span class="impact-number">48</span>
+                    <span class="impact-label">Species Saved</span>
+                </div>
+                <div class="impact-stat">
+                    <span class="impact-number">$500M</span>
+                    <span class="impact-label">Annual Investment</span>
+                </div>
+                <div class="impact-stat">
+                    <span class="impact-number">10,000+</span>
+                    <span class="impact-label">Animals Bred</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modals -->
+    <div id="geneticModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="geneticContent"></div>
+        </div>
+    </div>
+
+    <div id="caseStudyModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="caseStudyContent"></div>
+        </div>
+    </div>
+
+    <div id="strategyModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="strategyContent"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="footer-container"></footer>
+
+    <!-- Scripts -->
+    <script src="../js/components/navbar.js"></script>
+    <script src="../js/components/footer.js"></script>
+    <script src="../js/pages/genetic-consequences.js"></script>
+</body>
+</html>

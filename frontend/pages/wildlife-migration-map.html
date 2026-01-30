@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Wildlife Migration Map - EWOC</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/pages/wildlife-migration-map.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <i class="fa-solid fa-leaf"></i>
+                <span>EWOC</span>
+            </a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="../index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="./about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="./get-involved.html" class="nav-link">Get Involved</a></li>
+                <li class="nav-item"><a href="./contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="migration-hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fa-solid fa-satellite"></i>
+                Live Migration Intelligence
+            </div>
+            <h1>Interactive Wildlife Migration Map</h1>
+            <p>Track endangered species journeys in real time with animated routes, seasonal insights, and interactive habitat markers.</p>
+            <div class="hero-stats">
+                <div class="stat-pill">
+                    <span class="stat-label">Active Routes</span>
+                    <span class="stat-value" id="activeRoutes">0</span>
+                </div>
+                <div class="stat-pill">
+                    <span class="stat-label">Avg. Distance</span>
+                    <span class="stat-value" id="avgDistance">0 km</span>
+                </div>
+                <div class="stat-pill">
+                    <span class="stat-label">Season</span>
+                    <span class="stat-value" id="activeSeasonLabel">Spring</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="migration-main">
+        <div class="container">
+            <div class="controls-row">
+                <div class="season-toggle">
+                    <span class="control-title"><i class="fa-solid fa-cloud-sun"></i> Season</span>
+                    <div class="toggle-group" id="seasonToggle">
+                        <button class="toggle-btn active" data-season="Spring">Spring</button>
+                        <button class="toggle-btn" data-season="Summer">Summer</button>
+                        <button class="toggle-btn" data-season="Fall">Fall</button>
+                        <button class="toggle-btn" data-season="Winter">Winter</button>
+                    </div>
+                </div>
+                <div class="category-filter">
+                    <span class="control-title"><i class="fa-solid fa-filter"></i> Category</span>
+                    <select id="categoryFilter">
+                        <option value="All">All Species</option>
+                        <option value="Birds">Birds</option>
+                        <option value="Marine">Marine</option>
+                        <option value="Land">Land</option>
+                    </select>
+                </div>
+                <div class="legend">
+                    <span class="control-title"><i class="fa-solid fa-route"></i> Route Legend</span>
+                    <div class="legend-list" id="legendList"></div>
+                </div>
+            </div>
+
+            <div class="map-layout">
+                <section class="map-panel">
+                    <div class="map-header">
+                        <h2>Global Migration Pathways</h2>
+                        <p>Zoom and pan to explore detailed migration corridors. Tap markers to view species cards.</p>
+                    </div>
+                    <div class="map-wrapper" id="mapWrapper">
+                        <svg id="migrationMap" viewBox="0 0 1000 500" role="img" aria-label="World map with migration routes">
+                            <g id="mapLayer">
+                                <rect class="ocean" x="0" y="0" width="1000" height="500" rx="24"></rect>
+                                <path class="continent" d="M70 120 L160 80 L210 120 L260 110 L300 150 L320 200 L280 230 L230 210 L190 240 L140 230 L90 170 Z"></path>
+                                <path class="continent" d="M150 260 L220 240 L280 260 L320 310 L300 360 L240 390 L180 360 L150 300 Z"></path>
+                                <path class="continent" d="M370 120 L430 100 L500 110 L540 150 L520 200 L470 210 L420 180 L380 150 Z"></path>
+                                <path class="continent" d="M470 220 L540 230 L600 270 L610 330 L560 370 L490 360 L450 300 Z"></path>
+                                <path class="continent" d="M600 120 L720 90 L830 110 L900 170 L880 220 L800 240 L740 220 L690 190 L640 160 Z"></path>
+                                <path class="continent" d="M700 280 L780 290 L840 330 L820 380 L760 400 L700 360 Z"></path>
+                                <path class="continent" d="M820 360 L900 380 L920 420 L880 450 L820 430 Z"></path>
+                                <path class="continent" d="M120 430 L260 440 L420 450 L600 460 L820 470 L940 480 L940 500 L60 500 Z"></path>
+                            </g>
+                            <g id="routesLayer"></g>
+                            <g id="markersLayer"></g>
+                        </svg>
+                        <div class="map-overlay">
+                            <button class="map-btn" id="zoomIn" aria-label="Zoom in">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                            <button class="map-btn" id="zoomOut" aria-label="Zoom out">
+                                <i class="fa-solid fa-minus"></i>
+                            </button>
+                            <button class="map-btn" id="resetView" aria-label="Reset view">
+                                <i class="fa-solid fa-rotate"></i>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <aside class="info-panel">
+                    <div class="info-header">
+                        <h3>Species Migration Card</h3>
+                        <p>Click a marker or route to see details.</p>
+                    </div>
+                    <div class="species-card" id="speciesInfo">
+                        <!-- Dynamic content -->
+                    </div>
+                    <div class="insight-panel">
+                        <h4><i class="fa-solid fa-chart-line"></i> Journey Insights</h4>
+                        <div class="insight-grid">
+                            <div class="insight-item">
+                                <span class="insight-label">Total Routes</span>
+                                <span class="insight-value" id="totalRoutes">0</span>
+                            </div>
+                            <div class="insight-item">
+                                <span class="insight-label">Longest Journey</span>
+                                <span class="insight-value" id="longestJourney">0 km</span>
+                            </div>
+                            <div class="insight-item">
+                                <span class="insight-label">Avg. Duration</span>
+                                <span class="insight-value" id="avgDuration">0 days</span>
+                            </div>
+                            <div class="insight-item">
+                                <span class="insight-label">Filtered Species</span>
+                                <span class="insight-value" id="filteredSpecies">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>EWOC</h3>
+                <p>Endangered Wildlife Organization & Conservation</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="./about.html">About</a></li>
+                    <li><a href="./contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Follow Us</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 EWOC. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../theme-toggle.js"></script>
+    <script src="../js/pages/wildlife-migration-map.js"></script>
+</body>
+</html>

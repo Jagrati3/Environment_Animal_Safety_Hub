@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chain Reaction of Harm - Cause → Effect | Environment & Animal Safety Hub</title>
+  <meta name="description" content="Visualizing environmental domino effects: How cutting trees leads to floods, how plastic pollution moves through ecosystems, and other cause-effect chains harming our planet.">
+  <meta name="keywords" content="environmental chain reaction, cause and effect, deforestation, plastic pollution, ecosystem collapse, environmental domino effect">
+
+  <!-- Favicon -->
+  <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/pwa.css">
+  
+  <!-- Component Styles -->
+  <link rel="stylesheet" href="../css/components/navbar.css">
+  <link rel="stylesheet" href="../css/components/footer.css">
+
+  <!-- Page-specific Styles -->
+  <style>
+    :root {
+      --tree-color: #27AE60;
+      --soil-color: #8B4513;
+      --water-color: #3498DB;
+      --death-color: #7F8C8D;
+      --plastic-color: #95A5A6;
+      --fish-color: #2980B9;
+      --bird-color: #E67E22;
+      --human-color: #E74C3C;
+      --warning-color: #F39C12;
+      --bg-light: #F8F9FA;
+      --timeline-color: #2C3E50;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: var(--bg-light);
+      color: #2C3E50;
+      line-height: 1.6;
+    }
+
+    /* Hero Section */
+    .chain-hero {
+      background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
+      color: white;
+      padding: 100px 20px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chain-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(39, 174, 96, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(52, 152, 219, 0.1) 0%, transparent 50%);
+    }
+
+    .chain-hero h1 {
+      font-family: 'Source Code Pro', monospace;
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-subtitle {
+      font-size: 1.3rem;
+      max-width: 800px;
+      margin: 0 auto 40px;
+      opacity: 0.95;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-tagline {
+      font-family: 'Source Code Pro', monospace;
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-top: 30px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+      z-index: 1;
+      background: rgba(0,0,0,0.2);
+      padding: 15px 30px;
+      border-radius: 50px;
+      display: inline-block;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* Interactive Chains Container */
+    .chains-container {
+      max-width: 1400px;
+      margin: -40px auto 80px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Chain Selection */
+    .chain-selection {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin-bottom: 60px;
+    }
+
+    .chain-option {
+      background: white;
+      padding: 35px;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 3px solid transparent;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chain-option:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+    }
+
+    .chain-option.active {
+      border-color: var(--warning-color);
+      background: #FFF9E6;
+    }
+
+    .chain-option::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+    }
+
+    .deforestation-option::before {
+      background: linear-gradient(to right, var(--tree-color), var(--soil-color), var(--water-color), var(--death-color));
+    }
+
+    .plastic-option::before {
+      background: linear-gradient(to right, var(--plastic-color), var(--fish-color), var(--bird-color), var(--human-color));
+    }
+
+    .chain-icon {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      color: var(--warning-color);
+    }
+
+    .chain-title {
+      font-family: 'Source Code Pro', monospace;
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      color: #2C3E50;
+    }
+
+    /* Chain Visualization */
+    .chain-visualization {
+      position: relative;
+      min-height: 600px;
+      margin: 60px auto;
+      display: none;
+    }
+
+    .chain-visualization.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Timeline Chain */
+    .timeline-chain {
+      position: relative;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .timeline-line {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: var(--timeline-color);
+      transform: translateY(-50%);
+      border-radius: 4px;
+      z-index: 1;
+    }
+
+    .chain-node {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 200px;
+      z-index: 2;
+      transition: all 0.3s ease;
+    }
+
+    .chain-node:hover {
+      transform: translateY(-50%) scale(1.05);
+      z-index: 3;
+    }
+
+    .node-content {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      text-align: center;
+      position: relative;
+      border: 4px solid;
+    }
+
+    .node-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+
+    .node-title {
+      font-family: 'Source Code Pro', monospace;
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .node-description {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    .node-number {
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 30px;
+      background: var(--timeline-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      right: -30px;
+      transform: translateY(-50%);
+      color: var(--timeline-color);
+      font-size: 2rem;
+      z-index: 2;
+    }
+
+    /* Deforestation Chain Colors */
+    .tree-node { border-color: var(--tree-color); left: 5%; }
+    .tree-node .node-icon { color: var(--tree-color); }
+    
+    .soil-node { border-color: var(--soil-color); left: 25%; }
+    .soil-node .node-icon { color: var(--soil-color); }
+    
+    .flood-node { border-color: var(--water-color); left: 45%; }
+    .flood-node .node-icon { color: var(--water-color); }
+    
+    .death-node { border-color: var(--death-color); left: 65%; }
+    .death-node .node-icon { color: var(--death-color); }
+    
+    .human-node { border-color: var(--human-color); left: 85%; }
+    .human-node .node-icon { color: var(--human-color); }
+
+    /* Plastic Chain Colors */
+    .plastic-node { border-color: var(--plastic-color); left: 5%; }
+    .plastic-node .node-icon { color: var(--plastic-color); }
+    
+    .fish-node { border-color: var(--fish-color); left: 25%; }
+    .fish-node .node-icon { color: var(--fish-color); }
+    
+    .bird-node { border-color: var(--bird-color); left: 45%; }
+    .bird-node .node-icon { color: var(--bird-color); }
+    
+    .human-plastic-node { border-color: var(--human-color); left: 65%; }
+    .human-plastic-node .node-icon { color: var(--human-color); }
+    
+    .ecosystem-node { border-color: var(--death-color); left: 85%; }
+    .ecosystem-node .node-icon { color: var(--death-color); }
+
+    /* Impact Visualization */
+    .impact-visualization {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin: 80px auto;
+      max-width: 1200px;
+    }
+
+    .impact-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .impact-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .impact-header {
+      padding: 25px;
+      color: white;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .impact-header.tree-impact { background: linear-gradient(135deg, var(--tree-color), #229954); }
+    .impact-header.soil-impact { background: linear-gradient(135deg, var(--soil-color), #A0522D); }
+    .impact-header.plastic-impact { background: linear-gradient(135deg, var(--plastic-color), #7D7D7D); }
+    .impact-header.water-impact { background: linear-gradient(135deg, var(--water-color), #21618C); }
+
+    .impact-icon {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 2.5rem;
+      opacity: 0.8;
+    }
+
+    .impact-content {
+      padding: 30px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 15px;
+      background: var(--bg-light);
+      border-radius: 10px;
+      border-left: 4px solid var(--warning-color);
+    }
+
+    .stat-number {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--timeline-color);
+      margin: 10px 0;
+    }
+
+    /* Interactive Simulation */
+    .simulation-section {
+      background: linear-gradient(135deg, #2C3E50, #1A252F);
+      color: white;
+      padding: 80px 40px;
+      border-radius: 30px;
+      margin: 80px auto;
+      max-width: 1200px;
+      text-align: center;
+    }
+
+    .simulation-title {
+      font-family: 'Source Code Pro', monospace;
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+      color: #FFF9E6;
+    }
+
+    .simulation-controls {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 40px 0;
+      flex-wrap: wrap;
+    }
+
+    .sim-btn {
+      padding: 15px 30px;
+      background: rgba(255,255,255,0.1);
+      border: 2px solid var(--warning-color);
+      color: white;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Source Code Pro', monospace;
+      font-size: 1rem;
+    }
+
+    .sim-btn:hover {
+      background: var(--warning-color);
+      transform: translateY(-3px);
+    }
+
+    .sim-btn.active {
+      background: var(--warning-color);
+    }
+
+    .simulation-visual {
+      height: 300px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      margin: 40px 0;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid rgba(255,255,255,0.1);
+    }
+
+    .chain-element {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      transition: all 1s ease;
+      opacity: 0;
+    }
+
+    .tree-element { background: var(--tree-color); top: 50%; left: 10%; }
+    .soil-element { background: var(--soil-color); top: 50%; left: 30%; }
+    .flood-element { background: var(--water-color); top: 50%; left: 50%; }
+    .death-element { background: var(--death-color); top: 50%; left: 70%; }
+    .plastic-element { background: var(--plastic-color); top: 30%; left: 10%; }
+    .fish-element { background: var(--fish-color); top: 30%; left: 30%; }
+    .bird-element { background: var(--bird-color); top: 30%; left: 50%; }
+    .human-element { background: var(--human-color); top: 30%; left: 70%; }
+
+    /* Solution Section */
+    .solution-section {
+      max-width: 1200px;
+      margin: 80px auto;
+      padding: 0 20px;
+    }
+
+    .solution-title {
+      text-align: center;
+      font-family: 'Source Code Pro', monospace;
+      font-size: 2.5rem;
+      color: var(--timeline-color);
+      margin-bottom: 50px;
+    }
+
+    .solution-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+    }
+
+    .solution-card {
+      background: white;
+      border-radius: 20px;
+      padding: 35px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+      border-top: 5px solid;
+      transition: transform 0.3s ease;
+    }
+
+    .solution-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .solution-card.tree-solution { border-color: var(--tree-color); }
+    .solution-card.plastic-solution { border-color: var(--plastic-color); }
+    .solution-card.water-solution { border-color: var(--water-color); }
+    .solution-card.soil-solution { border-color: var(--soil-color); }
+
+    .solution-icon {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+
+    .tree-solution .solution-icon { color: var(--tree-color); }
+    .plastic-solution .solution-icon { color: var(--plastic-color); }
+    .water-solution .solution-icon { color: var(--water-color); }
+    .soil-solution .solution-icon { color: var(--soil-color); }
+
+    .action-steps {
+      list-style: none;
+      padding: 0;
+      margin: 25px 0;
+    }
+
+    .action-steps li {
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+    }
+
+    .action-steps li:before {
+      content: '✓';
+      margin-right: 15px;
+      color: var(--tree-color);
+      font-weight: bold;
+    }
+
+    /* Action Section */
+    .action-section {
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(135deg, var(--tree-color), var(--water-color));
+      color: white;
+      border-radius: 30px;
+      margin: 80px auto;
+      max-width: 1200px;
+    }
+
+    .action-title {
+      font-family: 'Source Code Pro', monospace;
+      font-size: 2.8rem;
+      margin-bottom: 30px;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 40px;
+    }
+
+    .action-btn {
+      padding: 15px 30px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Source Code Pro', monospace;
+    }
+
+    .action-btn.primary {
+      background: white;
+      color: var(--tree-color);
+    }
+
+    .action-btn.secondary {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    /* Domino Effect */
+    .domino-section {
+      max-width: 1000px;
+      margin: 80px auto;
+      padding: 40px;
+      background: white;
+      border-radius: 30px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .domino-title {
+      font-family: 'Source Code Pro', monospace;
+      font-size: 2.2rem;
+      color: var(--timeline-color);
+      margin-bottom: 40px;
+    }
+
+    .domino-chain {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 40px 0;
+      flex-wrap: wrap;
+    }
+
+    .domino-piece {
+      width: 80px;
+      height: 160px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+
+    .domino-piece:hover {
+      transform: scale(1.1);
+    }
+
+    .domino-piece.fallen {
+      transform: rotate(90deg);
+      background: linear-gradient(135deg, #E74C3C, #C0392B);
+    }
+
+    .domino-piece:not(:last-child)::after {
+      content: '→';
+      position: absolute;
+      right: -25px;
+      color: var(--timeline-color);
+      font-size: 2rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .chain-node {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        width: 100%;
+        margin-bottom: 30px;
+      }
+      
+      .timeline-line {
+        display: none;
+      }
+      
+      .arrow {
+        display: none;
+      }
+      
+      .timeline-chain {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .chain-hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .simulation-title,
+      .solution-title,
+      .action-title {
+        font-size: 2rem;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+      
+      .action-btn {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .chain-hero {
+        padding: 80px 20px 40px;
+      }
+      
+      .chain-hero h1 {
+        font-size: 2rem;
+      }
+      
+      .chain-option {
+        padding: 25px;
+      }
+      
+      .solution-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .domino-piece {
+        width: 60px;
+        height: 120px;
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <div id="navbar-container"></div>
+
+  <!-- Hero Section -->
+  <section class="chain-hero">
+    <h1><i class="fas fa-link"></i> Chain Reaction of Harm</h1>
+    <p class="hero-subtitle">Visualizing how single actions create devastating domino effects across ecosystems</p>
+    <div class="hero-tagline">
+      <i class="fas fa-exclamation-triangle"></i> Every action has consequences
+    </div>
+  </section>
+
+  <!-- Chain Selection -->
+  <div class="chains-container">
+    <div class="chain-selection">
+      <div class="chain-option deforestation-option active" data-chain="deforestation">
+        <div class="chain-icon">
+          <i class="fas fa-tree"></i>
+        </div>
+        <h3 class="chain-title">Deforestation Chain</h3>
+        <p>Cutting trees → Soil erosion → Floods → Animal deaths</p>
+        <div style="margin-top: 20px; font-size: 0.9rem; color: #666;">
+          <i class="fas fa-arrow-right"></i> Click to explore this chain
+        </div>
+      </div>
+
+      <div class="chain-option plastic-option" data-chain="plastic">
+        <div class="chain-icon">
+          <i class="fas fa-water"></i>
+        </div>
+        <h3 class="chain-title">Plastic Pollution Chain</h3>
+        <p>Plastic waste → Fish ingestion → Bird consumption → Human health</p>
+        <div style="margin-top: 20px; font-size: 0.9rem; color: #666;">
+          <i class="fas fa-arrow-right"></i> Click to explore this chain
+        </div>
+      </div>
+    </div>
+
+    <!-- Deforestation Chain Visualization -->
+    <div id="deforestationChain" class="chain-visualization active">
+      <div class="timeline-chain">
+        <div class="timeline-line"></div>
+        
+        <!-- Step 1: Tree Cutting -->
+        <div class="chain-node tree-node" data-step="1">
+          <div class="node-number">1</div>
+          <div class="node-content">
+            <div class="node-icon">
+              <i class="fas fa-tree"></i>
+            </div>
+            <h4 class="node-title">Tree Cutting</h4>
+            <p class="node-description">Forests cleared for agriculture or development</p>
+            <button class="sim-btn" style="margin-top: 10px; padding: 8px 15px; font-size: 0.9rem;" onclick="showDetails('tree-details')">
+              <i class="fas fa-info-circle"></i> Details
+            </button>
+          </div>
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+
+        <!-- Step 2: Soil Erosion -->
+        <div class="chain-node soil-node" data-step="2">
+          <div class="node-number">2</div>
+          <div class="node-content">
+            <div class="node-icon">
+              <i class="fas fa-mountain"></i>
+            </div>
+            <h4 class="node-title">Soil Erosion</h4>
+            <p class="node-description">Tree roots no longer hold soil in place</p>
+            <button class="sim-btn" style="margin-top: 10px; padding: 8px 15px; font-size: 0.9rem;" onclick="showDetails('soil-details')">
+              <i class="fas fa-info-circle"></i> Details
+            </button>
+          </div>
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+
+        <!-- Step 3: Flooding -->
+        <div class="chain-node flood-node" data-step="3">
+          <div class="node-number">3</div>
+          <div class="node-content">
+            <div class="node-icon">
+              <i class="fas fa-water"></i>
+            </div>
+            <h4 class="node-title">Flooding</h4>
+            <p class="node-description">Water runoff increases without absorption</p>
+            <button class="sim-btn" style="margin-top: 10px; padding: 8px 15px; font-size: 0.9rem;" onclick="showDetails('flood-details')">
+              <i class="fas fa-info-circle"></i> Details
+            </button>
+          </div>
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+
+        <!-- Step 4: Animal Deaths -->
+        <div class="chain-node death-node" data-step="4">
+          <div class="node-number">4</div>
+          <div class="node-content">
+            <div class="node-icon">
+              <i class="fas fa-skull"></i>
+            </div>
+            <h4 class="node-title">Animal Deaths</h4>
+            <p class="node-description">Habitat loss and drowning in floods</p>
+            <button class="sim-btn" style="margin-top: 10px; padding: 8px 15px; font-size: 0.9rem;" onclick="showDetails('death-details')">
+              <i class="fas fa-info-circle"></i> Details
+            </button>
+          </div>
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+
+        <!-- Step 5: Human Impact -->
+        <div class="chain-node human-node" data-step="5">
+          <div class="node-number">5</div>
+          <div class="node-content">
+            <div class="node-icon">
+              <i class="fas fa-user"></i>
+            </div>
+            <h4 class="node-title">Human Impact</h4>
+            <p class="node-description">Food chain collapse affects communities</p>
+            <button class="sim-btn" style="margin-top: 10px; padding: 8px 15px; font-size: 0.9rem;" onclick="showDetails('human-details')">
+              <i class="fas fa-info-circle"></i> Details
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Plastic Pollution Chain Visualization -->
+    <div id="plasticChain" class="chain-visualization">
+      <div class="timeline-chain">
+        <div class="timeline-line"></div>
+        
+        <!-- Step 1: Plastic Waste -->
+        <div class="chain-node plastic-node" data-step="1">
+          <div class="node-number">1</div>
+          <div class="node-content">
+            <div class="node-icon">
+              <i class="fas fa-trash"></i>
+            </div>
+            <h4 class="node-title">Plastic Waste</h4>
+            <p class="node-description">8 million tons enter oceans yearly</p>
+            <button class="sim-btn" style="margin-top: 10px; padding: 8px 15px; font-size: 0.9rem;" onclick="showDetails('plastic-waste-details')">
+              <i class="fas fa-info-circle"></i> Details
+            </button>
+          </div>
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+
+        <!-- Step 2: Fish Ingestion -->
+        <div class="chain-node fish-node" data-step="2">
+          <div class="node-number">2</div>
+          <div class="node-content">
+            <div class="node-icon">
+              <i class="fas fa-fish"></i>
+            </div>
+            <h4 class="node-title">Fish Ingestion</h4>
+            <p class="node-description">Microplastics mistaken for food</p>
+            <button class="sim-btn" style="margin-top: 10px; padding: 8px 15px; font-size: 0.9rem;" onclick="showDetails('fish-details')">
+              <i class="fas fa-info-circle"></i> Details
+            </button>
+          </div>
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+
+        <!-- Step 3: Bird Consumption -->
+        <div class="chain-node bird-node" data-step="3">
+          <div class="node-number">3</div>
+          <div class="node-content">
+            <div class="node-icon">
+              <i class="fas fa-dove"></i>
+            </div>
+            <h4 class="node-title">Bird Consumption</h4>
+            <p class="node-description">Birds eat contaminated fish</p>
+            <button class="sim-btn" style="margin-top: 10px; padding: 8px 15px; font-size: 0.9rem;" onclick="showDetails('bird-details')">
+              <i class="fas fa-info-circle"></i> Details
+            </button>
+          </div>
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+
+        <!-- Step 4: Human Health -->
+        <div class="chain-node human-plastic-node" data-step="4">
+          <div class="node-number">4</div>
+          <div class="node-content">
+            <div class="node-icon">
+              <i class="fas fa-user-md"></i>
+            </div>
+            <h4 class="node-title">Human Health</h4>
+            <p class="node-description">Plastic toxins enter food chain</p>
+            <button class="sim-btn" style="margin-top: 10px; padding: 8px 15px; font-size: 0.9rem;" onclick="showDetails('human-health-details')">
+              <i class="fas fa-info-circle"></i> Details
+            </button>
+          </div>
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+
+        <!-- Step 5: Ecosystem Collapse -->
+        <div class="chain-node ecosystem-node" data-step="5">
+          <div class="node-number">5</div>
+          <div class="node-content">
+            <div class="node-icon">
+              <i class="fas fa-globe"></i>
+            </div>
+            <h4 class="node-title">Ecosystem Collapse</h4>
+            <p class="node-description">Complete system breakdown</p>
+            <button class="sim-btn" style="margin-top: 10px; padding: 8px 15px; font-size: 0.9rem;" onclick="showDetails('ecosystem-details')">
+              <i class="fas fa-info-circle"></i> Details
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Impact Statistics -->
+    <div class="impact-visualization">
+      <div class="impact-card">
+        <div class="impact-header tree-impact">
+          <h3><i class="fas fa-tree"></i> Deforestation Impact</h3>
+          <div class="impact-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+        </div>
+        <div class="impact-content">
+          <p>Every minute, forests equivalent to 27 soccer fields are destroyed worldwide.</p>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-number">80%</div>
+              <p>Terrestrial biodiversity loss</p>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">15%</div>
+              <p>Global greenhouse gas emissions</p>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">50K</div>
+              <p>Species going extinct yearly</p>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">1.6B</div>
+              <p>People depending on forests</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="impact-card">
+        <div class="impact-header plastic-impact">
+          <h3><i class="fas fa-trash"></i> Plastic Pollution Impact</h3>
+          <div class="impact-icon">
+            <i class="fas fa-weight"></i>
+          </div>
+        </div>
+        <div class="impact-content">
+          <p>By 2050, there could be more plastic than fish in the oceans by weight.</p>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-number">100K</div>
+              <p>Marine animals killed yearly</p>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">90%</div>
+              <p>Seabirds with plastic in stomachs</p>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">500 yrs</div>
+              <p>Plastic decomposition time</p>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">5.25T</div>
+              <p>Plastic particles in oceans</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Simulation -->
+    <section class="simulation-section">
+      <h2 class="simulation-title"><i class="fas fa-play-circle"></i> Interactive Chain Reaction</h2>
+      <p>Watch how a single action triggers a cascade of consequences</p>
+      
+      <div class="simulation-controls">
+        <button class="sim-btn active" data-sim="deforestation">
+          <i class="fas fa-tree"></i> Deforestation Chain
+        </button>
+        <button class="sim-btn" data-sim="plastic">
+          <i class="fas fa-water"></i> Plastic Chain
+        </button>
+        <button class="sim-btn" onclick="resetSimulation()">
+          <i class="fas fa-redo"></i> Reset
+        </button>
+      </div>
+      
+      <div class="simulation-visual" id="simulationVisual">
+        <!-- Elements will be added by JavaScript -->
+      </div>
+      
+      <p style="font-style: italic; opacity: 0.9; max-width: 600px; margin: 0 auto;">
+        "We did not inherit the earth from our ancestors; we borrowed it from our children." — Native American Proverb
+      </p>
+    </section>
+
+    <!-- Domino Effect Visualization -->
+    <section class="domino-section">
+      <h2 class="domino-title"><i class="fas fa-dice"></i> Environmental Domino Effect</h2>
+      <p>Click each domino to see the chain reaction unfold</p>
+      
+      <div class="domino-chain" id="dominoChain">
+        <div class="domino-piece" data-step="1" onclick="triggerDomino(1)">
+          <i class="fas fa-tree"></i>
+        </div>
+        <div class="domino-piece" data-step="2" onclick="triggerDomino(2)">
+          <i class="fas fa-mountain"></i>
+        </div>
+        <div class="domino-piece" data-step="3" onclick="triggerDomino(3)">
+          <i class="fas fa-water"></i>
+        </div>
+        <div class="domino-piece" data-step="4" onclick="triggerDomino(4)">
+          <i class="fas fa-skull"></i>
+        </div>
+        <div class="domino-piece" data-step="5" onclick="triggerDomino(5)">
+          <i class="fas fa-user"></i>
+        </div>
+      </div>
+      
+      <div id="dominoMessage" style="margin-top: 30px; padding: 20px; background: #FFF9E6; border-radius: 15px; border-left: 5px solid var(--warning-color);">
+        Click the first domino to start the chain reaction
+      </div>
+    </section>
+
+    <!-- Solutions Section -->
+    <section class="solution-section">
+      <h2 class="solution-title"><i class="fas fa-lightbulb"></i> Breaking the Chain</h2>
+      <p style="text-align: center; max-width: 800px; margin: 0 auto 50px;">Every problem has a solution. Here's how we can interrupt these harmful chains:</p>
+      
+      <div class="solution-grid">
+        <div class="solution-card tree-solution">
+          <div class="solution-icon">
+            <i class="fas fa-seedling"></i>
+          </div>
+          <h3>Reforestation Solutions</h3>
+          <ul class="action-steps">
+            <li>Support sustainable forestry practices</li>
+            <li>Participate in tree planting initiatives</li>
+            <li>Choose recycled paper products</li>
+            <li>Advocate for protected forest areas</li>
+            <li>Support indigenous land management</li>
+          </ul>
+        </div>
+        
+        <div class="solution-card plastic-solution">
+          <div class="solution-icon">
+            <i class="fas fa-recycle"></i>
+          </div>
+          <h3>Plastic Reduction</h3>
+          <ul class="action-steps">
+            <li>Use reusable bags and containers</li>
+            <li>Support plastic-free packaging</li>
+            <li>Participate in beach cleanups</li>
+            <li>Choose natural fiber clothing</li>
+            <li>Advocate for plastic bans</li>
+          </ul>
+        </div>
+        
+        <div class="solution-card water-solution">
+          <div class="solution-icon">
+            <i class="fas fa-tint"></i>
+          </div>
+          <h3>Water Management</h3>
+          <ul class="action-steps">
+            <li>Install rainwater harvesting systems</li>
+            <li>Support wetland conservation</li>
+            <li>Reduce water consumption</li>
+            <li>Plant native vegetation</li>
+            <li>Support sustainable agriculture</li>
+          </ul>
+        </div>
+        
+        <div class="solution-card soil-solution">
+          <div class="solution-icon">
+            <i class="fas fa-leaf"></i>
+          </div>
+          <h3>Soil Conservation</h3>
+          <ul class="action-steps">
+            <li>Practice no-till farming</li>
+            <li>Plant cover crops</li>
+            <li>Create terraces on slopes</li>
+            <li>Use organic composting</li>
+            <li>Support erosion control projects</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Action Section -->
+    <section class="action-section">
+      <h2 class="action-title">Be the Change</h2>
+      <p>You have the power to break harmful chains and create positive ripple effects</p>
+      
+      <div class="action-buttons">
+        <a href="../pages/community-action-hub.html" class="action-btn primary">
+          <i class="fas fa-users"></i> Join a Conservation Group
+        </a>
+        <a href="../pages/education.html" class="action-btn secondary">
+          <i class="fas fa-graduation-cap"></i> Educate Your Community
+        </a>
+        <a href="../pages/donation.html" class="action-btn secondary">
+          <i class="fas fa-hand-holding-heart"></i> Support Conservation
+        </a>
+      </div>
+      
+      <div style="margin-top: 50px; padding: 30px; background: rgba(255,255,255,0.2); border-radius: 20px; max-width: 800px; margin-left: auto; margin-right: auto;">
+        <h4><i class="fas fa-star"></i> Positive Chain Reaction Pledge</h4>
+        <p>I will create positive chains by:</p>
+        <ul style="text-align: left; max-width: 600px; margin: 0 auto; list-style-type: none;">
+          <li>🌱 <strong>Planting trees</strong> to reverse deforestation</li>
+          <li>🔄 <strong>Reducing waste</strong> to prevent pollution</li>
+          <li>💧 <strong>Conserving water</strong> to protect ecosystems</li>
+          <li>📢 <strong>Speaking up</strong> to influence policies</li>
+          <li>🤝 <strong>Inspiring others</strong> to join the movement</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <!-- Scripts -->
+  <script>
+    // Load navbar and footer
+    fetch('../components/navbar.html')
+      .then(r => r.text())
+      .then(html => {
+        document.getElementById('navbar-container').innerHTML = html;
+      });
+    
+    fetch('../components/footer.html')
+      .then(r => r.text())
+      .then(html => {
+        document.getElementById('footer-container').innerHTML = html;
+      });
+
+    // Chain selection functionality
+    const chainOptions = document.querySelectorAll('.chain-option');
+    const chainVisualizations = document.querySelectorAll('.chain-visualization');
+    
+    chainOptions.forEach(option => {
+      option.addEventListener('click', function() {
+        const chain = this.dataset.chain;
+        
+        // Update active option
+        chainOptions.forEach(opt => opt.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Show corresponding visualization
+        chainVisualizations.forEach(viz => {
+          viz.classList.remove('active');
+          viz.style.display = 'none';
+        });
+        
+        const targetViz = document.getElementById(`${chain}Chain`);
+        targetViz.classList.add('active');
+        targetViz.style.display = 'block';
+        
+        // Update simulation
+        updateSimulation(chain);
+      });
+    });
+
+    // Simulation functionality
+    let currentSimulation = 'deforestation';
+    let simulationInterval = null;
+
+    function updateSimulation(chain) {
+      currentSimulation = chain;
+      resetSimulation();
+      
+      const simulationVisual = document.getElementById('simulationVisual');
+      simulationVisual.innerHTML = '';
+      
+      // Create simulation elements based on chain
+      if (chain === 'deforestation') {
+        createSimulationElements(['tree', 'soil', 'flood', 'death']);
+      } else {
+        createSimulationElements(['plastic', 'fish', 'bird', 'human']);
+      }
+      
+      // Update simulation controls
+      document.querySelectorAll('.sim-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.sim === chain) {
+          btn.classList.add('active');
+        }
+      });
+    }
+
+    function createSimulationElements(elements) {
+      const simulationVisual = document.getElementById('simulationVisual');
+      
+      elements.forEach((element, index) => {
+        const el = document.createElement('div');
+        el.className = `chain-element ${element}-element`;
+        el.style.opacity = '0';
+        
+        const iconMap = {
+          tree: 'fas fa-tree',
+          soil: 'fas fa-mountain',
+          flood: 'fas fa-water',
+          death: 'fas fa-skull',
+          plastic: 'fas fa-trash',
+          fish: 'fas fa-fish',
+          bird: 'fas fa-dove',
+          human: 'fas fa-user'
+        };
+        
+        el.innerHTML = `<i class="${iconMap[element]}"></i>`;
+        simulationVisual.appendChild(el);
+        
+        // Animate element appearance
+        setTimeout(() => {
+          el.style.opacity = '1';
+          el.style.transform = `translateY(${Math.sin(index) * 20}px)`;
+        }, index * 300);
+      });
+      
+      // Start chain reaction animation
+      startChainReaction();
+    }
+
+    function startChainReaction() {
+      clearInterval(simulationInterval);
+      
+      const elements = document.querySelectorAll('.chain-element');
+      let currentIndex = 0;
+      
+      simulationInterval = setInterval(() => {
+        if (currentIndex < elements.length) {
+          const element = elements[currentIndex];
+          
+          // Animate current element
+          element.style.animation = 'pulse 0.5s ease';
+          element.style.boxShadow = '0 0 30px rgba(255,255,255,0.5)';
+          
+          // Add connection line
+          if (currentIndex > 0) {
+            const prevElement = elements[currentIndex - 1];
+            drawConnectionLine(prevElement, element);
+          }
+          
+          // Show impact message
+          showImpactMessage(currentIndex, currentSimulation);
+          
+          currentIndex++;
+        } else {
+          clearInterval(simulationInterval);
+          setTimeout(resetSimulation, 2000);
+        }
+      }, 1000);
+    }
+
+    function drawConnectionLine(fromEl, toEl) {
+      const simulationVisual = document.getElementById('simulationVisual');
+      const line = document.createElement('div');
+      line.className = 'connection-line';
+      
+      const fromRect = fromEl.getBoundingClientRect();
+      const toRect = toEl.getBoundingClientRect();
+      const parentRect = simulationVisual.getBoundingClientRect();
+      
+      const x1 = fromRect.left + fromRect.width/2 - parentRect.left;
+      const y1 = fromRect.top + fromRect.height/2 - parentRect.top;
+      const x2 = toRect.left + toRect.width/2 - parentRect.left;
+      const y2 = toRect.top + toRect.height/2 - parentRect.top;
+      
+      const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+      const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+      
+      line.style.cssText = `
+        position: absolute;
+        left: ${x1}px;
+        top: ${y1}px;
+        width: ${length}px;
+        height: 4px;
+        background: linear-gradient(to right, rgba(255,255,255,0.3), rgba(255,255,255,0.8));
+        transform-origin: 0 0;
+        transform: rotate(${angle}deg);
+        z-index: 1;
+        animation: lineDraw 0.5s ease;
+      `;
+      
+      simulationVisual.appendChild(line);
+      
+      // Remove line after animation
+      setTimeout(() => line.remove(), 5000);
+    }
+
+    function showImpactMessage(index, chain) {
+      const messages = {
+        deforestation: [
+          "🌳 Trees cut down → Loss of habitat",
+          "⛰️ Soil erosion begins → Fertility decreases",
+          "💧 Flooding occurs → Ecosystems damaged",
+          "💀 Animal populations decline → Biodiversity loss"
+        ],
+        plastic: [
+          "🗑️ Plastic enters oceans → Marine pollution",
+          "🐟 Fish ingest microplastics → Toxins accumulate",
+          "🕊️ Birds eat contaminated fish → Health declines",
+          "👨‍⚕️ Humans consume seafood → Health risks increase"
+        ]
+      };
+      
+      const messageBox = document.createElement('div');
+      messageBox.style.cssText = `
+        position: absolute;
+        bottom: ${20 + index * 60}px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0,0,0,0.8);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        animation: fadeInUp 0.5s ease;
+        z-index: 10;
+        white-space: nowrap;
+      `;
+      messageBox.textContent = messages[chain][index];
+      
+      const simulationVisual = document.getElementById('simulationVisual');
+      simulationVisual.appendChild(messageBox);
+      
+      setTimeout(() => {
+        messageBox.style.animation = 'fadeOut 0.5s ease';
+        setTimeout(() => messageBox.remove(), 500);
+      }, 2000);
+    }
+
+    function resetSimulation() {
+      clearInterval(simulationInterval);
+      const simulationVisual = document.getElementById('simulationVisual');
+      simulationVisual.innerHTML = '';
+      
+      // Recreate simulation
+      updateSimulation(currentSimulation);
+    }
+
+    // Domino effect functionality
+    let dominoStep = 0;
+    const dominoPieces = document.querySelectorAll('.domino-piece');
+    const dominoMessage = document.getElementById('dominoMessage');
+
+    function triggerDomino(step) {
+      if (step === 1 || step === dominoStep + 1) {
+        dominoStep = step;
+        
+        // Animate current domino
+        const currentDomino = document.querySelector(`.domino-piece[data-step="${step}"]`);
+        currentDomino.classList.add('fallen');
+        
+        // Update message
+        const messages = [
+          "Click the first domino to start the chain reaction",
+          "🌳 Trees are cut down for development",
+          "⛰️ Soil erosion begins without tree roots",
+          "💧 Heavy rains cause devastating floods",
+          "🐾 Animal habitats destroyed, species die",
+          "🏠 Human communities suffer consequences"
+        ];
+        
+        dominoMessage.innerHTML = `
+          <strong>Step ${step}:</strong> ${messages[step]}
+          ${step === 5 ? '<br><br><i class="fas fa-exclamation-triangle"></i> This is the domino effect in action!' : ''}
+        `;
+        
+        // Auto-trigger next domino after delay
+        if (step < 5) {
+          setTimeout(() => triggerDomino(step + 1), 800);
+        }
+      }
+    }
+
+    // Reset domino chain
+    document.querySelectorAll('.sim-btn[data-sim]').forEach(btn => {
+      btn.addEventListener('click', function() {
+        dominoStep = 0;
+        dominoPieces.forEach(piece => piece.classList.remove('fallen'));
+        dominoMessage.textContent = "Click the first domino to start the chain reaction";
+      });
+    });
+
+    // Add CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+      }
+      
+      @keyframes lineDraw {
+        from { width: 0; }
+        to { width: 100%; }
+      }
+      
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+        to { opacity: 1; transform: translateX(-50%) translateY(0); }
+      }
+      
+      @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Initialize with deforestation chain
+    updateSimulation('deforestation');
+
+    // Show details function
+    function showDetails(type) {
+      const detailModals = {
+        'tree-details': {
+          title: 'Tree Cutting Details',
+          content: 'Each year, 15 billion trees are cut down. Forests act as carbon sinks and regulate local climates. Deforestation releases stored carbon and destroys habitats for 80% of terrestrial species.'
+        },
+        'soil-details': {
+          title: 'Soil Erosion Details',
+          content: 'Tree roots anchor soil. Without them, topsoil washes away at 10-40 times the natural rate. Each inch of topsoil takes 500-1000 years to form naturally.'
+        },
+        'flood-details': {
+          title: 'Flooding Details',
+          content: 'Forests absorb rainfall like sponges. Without trees, 75% of rainwater runs off directly, causing flash floods. Floods displace animals and destroy nests/burrows.'
+        },
+        'death-details': {
+          title: 'Animal Deaths Details',
+          content: 'Floods drown ground-dwelling animals. Habitat loss leads to starvation. Displaced animals become vulnerable to predators. Entire species can go extinct.'
+        },
+        'human-details': {
+          title: 'Human Impact Details',
+          content: 'Loss of pollinators affects food crops. Flooding damages human settlements. Loss of medicinal plants affects healthcare. Climate regulation is disrupted.'
+        }
+      };
+
+      const modal = document.createElement('div');
+      modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 20px;
+      `;
+
+      const details = detailModals[type];
+      modal.innerHTML = `
+        <div style="
+          background: white;
+          padding: 40px;
+          border-radius: 20px;
+          max-width: 500px;
+          position: relative;
+          animation: fadeInUp 0.3s ease;
+        ">
+          <h3 style="color: #2C3E50; margin-bottom: 20px;">${details.title}</h3>
+          <p style="line-height: 1.8; color: #555;">${details.content}</p>
+          <button onclick="this.parentElement.parentElement.remove()" style="
+            margin-top: 30px;
+            padding: 10px 25px;
+            background: #2C3E50;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Source Code Pro', monospace;
+          ">
+            Close
+          </button>
+        </div>
+      `;
+
+      document.body.appendChild(modal);
+    }
+
+    // Make showDetails available globally
+    window.showDetails = showDetails;
+  </script>
+</body>
+</html>

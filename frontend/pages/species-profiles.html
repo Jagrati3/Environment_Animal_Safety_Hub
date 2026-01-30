@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Species Profiles | EcoLife</title>
+    <meta name="description" content="Explore detailed profiles of endangered species with conservation status, habitat information, threats, and population trends.">
+    <link rel="icon" type="image/png" href="../assets/images/others/FAVICON.png">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/components/navbar.css">
+    <link rel="stylesheet" href="../css/components/footer.css">
+    <link rel="stylesheet" href="../css/pages/species-profiles.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+
+    <div id="cursor-container"></div>
+
+    <!-- Navbar Container -->
+    <div id="navbar-container"></div>
+
+    <!-- Hero Section -->
+    <section class="species-hero">
+        <div class="hero-particles" id="heroParticles"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fa-solid fa-dna"></i>
+                <span>Species Biodiversity</span>
+            </div>
+            <h1 class="hero-title">
+                Discover <span class="gradient-text">Species Profiles</span>
+            </h1>
+            <p class="hero-subtitle">
+                Explore detailed information about endangered species, their habitats, conservation status, and population trends
+            </p>
+        </div>
+    </section>
+
+    <!-- Search & Filter Section -->
+    <section class="search-filter-section">
+        <div class="container">
+            <div class="search-box">
+                <i class="fa-solid fa-search"></i>
+                <input type="text" id="speciesSearch" placeholder="Search species by name...">
+            </div>
+
+            <div class="filter-group">
+                <div class="filter-item">
+                    <label for="conservationFilter">Conservation Status</label>
+                    <select id="conservationFilter">
+                        <option value="">All Status</option>
+                        <option value="extinct">Extinct (EX)</option>
+                        <option value="extinct-wild">Extinct in Wild (EW)</option>
+                        <option value="critically-endangered">Critically Endangered (CR)</option>
+                        <option value="endangered">Endangered (EN)</option>
+                        <option value="vulnerable">Vulnerable (VU)</option>
+                        <option value="near-threatened">Near Threatened (NT)</option>
+                        <option value="least-concern">Least Concern (LC)</option>
+                    </select>
+                </div>
+
+                <div class="filter-item">
+                    <label for="habitatFilter">Habitat Type</label>
+                    <select id="habitatFilter">
+                        <option value="">All Habitats</option>
+                        <option value="forest">Forest</option>
+                        <option value="desert">Desert</option>
+                        <option value="grassland">Grassland</option>
+                        <option value="wetland">Wetland</option>
+                        <option value="marine">Marine</option>
+                        <option value="mountain">Mountain</option>
+                        <option value="arctic">Arctic</option>
+                    </select>
+                </div>
+
+                <div class="filter-item">
+                    <label for="regionFilter">Geographic Region</label>
+                    <select id="regionFilter">
+                        <option value="">All Regions</option>
+                        <option value="africa">Africa</option>
+                        <option value="asia">Asia</option>
+                        <option value="europe">Europe</option>
+                        <option value="americas">Americas</option>
+                        <option value="oceania">Oceania</option>
+                    </select>
+                </div>
+
+                <button class="reset-filters" id="resetFilters">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    Reset Filters
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Species Grid -->
+    <section class="species-grid-section">
+        <div class="container">
+            <div class="species-grid" id="speciesGrid">
+                <!-- Species cards will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Species Detail Modal -->
+    <div class="species-modal" id="speciesModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="modal-header" id="modalHeader">
+                <!-- Header content will be loaded here -->
+            </div>
+
+            <div class="modal-body">
+                <!-- Tabs -->
+                <div class="modal-tabs">
+                    <button class="modal-tab-button active" data-tab="overview">
+                        <i class="fa-solid fa-info-circle"></i>
+                        <span>Overview</span>
+                    </button>
+                    <button class="modal-tab-button" data-tab="habitat">
+                        <i class="fa-solid fa-tree"></i>
+                        <span>Habitat</span>
+                    </button>
+                    <button class="modal-tab-button" data-tab="threats">
+                        <i class="fa-solid fa-exclamation-triangle"></i>
+                        <span>Threats</span>
+                    </button>
+                    <button class="modal-tab-button" data-tab="conservation">
+                        <i class="fa-solid fa-shield"></i>
+                        <span>Conservation</span>
+                    </button>
+                    <button class="modal-tab-button" data-tab="population">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Population</span>
+                    </button>
+                </div>
+
+                <!-- Tab Contents -->
+                <div class="modal-tab-content active" id="overviewTab">
+                    <!-- Overview content -->
+                </div>
+
+                <div class="modal-tab-content" id="habitatTab">
+                    <!-- Habitat content -->
+                </div>
+
+                <div class="modal-tab-content" id="threatsTab">
+                    <!-- Threats content -->
+                </div>
+
+                <div class="modal-tab-content" id="conservationTab">
+                    <!-- Conservation content -->
+                </div>
+
+                <div class="modal-tab-content" id="populationTab">
+                    <!-- Population content -->
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="action-button" id="shareSpeciesButton">
+                    <i class="fa-solid fa-share-nodes"></i>
+                    Share
+                </button>
+                <button class="action-button secondary" id="saveSpeciesButton">
+                    <i class="fa-solid fa-bookmark"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comparison Tool Section -->
+    <section class="comparison-section">
+        <div class="container">
+            <h2>Compare Species</h2>
+            <p>Select up to 3 species to compare their conservation status and population trends</p>
+            
+            <div class="comparison-tool">
+                <div class="comparison-controls">
+                    <div class="species-selector" id="comparisonSelector">
+                        <!-- Selectors will be created dynamically -->
+                    </div>
+                    <button class="compare-button" id="compareButton" disabled>
+                        <i class="fa-solid fa-shuffle"></i>
+                        Compare Selected
+                    </button>
+                </div>
+
+                <div class="comparison-results" id="comparisonResults" style="display: none;">
+                    <!-- Comparison results -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="statistics-section">
+        <div class="container">
+            <h2>Global Conservation Status</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon extinct">
+                        <i class="fa-solid fa-skull"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label">Extinct</div>
+                        <div class="stat-count" data-count="910">0</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon critically-endangered">
+                        <i class="fa-solid fa-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label">Critically Endangered</div>
+                        <div class="stat-count" data-count="7823">0</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon endangered">
+                        <i class="fa-solid fa-exclamation</i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label">Endangered</div>
+                        <div class="stat-count" data-count="12456">0</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon vulnerable">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label">Vulnerable</div>
+                        <div class="stat-count" data-count="18934">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+
+    <!-- Scripts -->
+    <script src="../js/navbar.js"></script>
+    <script src="../js/footer.js"></script>
+    <script src="../js/theme-toggle.js"></script>
+    <script src="../js/pages/species-profiles.js"></script>
+    <script src="../js/particle-animation.js"></script>
+</body>
+
+</html>

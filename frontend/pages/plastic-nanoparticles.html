@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plastic Nanoparticles and Cellular Toxicity - Environment & Animal Safety Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/pages/plastic-nanoparticles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-atom"></i>
+                <span>Nanoplastic Toxicity</span>
+            </div>
+            <div class="nav-links">
+                <a href="#overview" class="nav-link">Overview</a>
+                <a href="#uptake" class="nav-link">Cellular Uptake</a>
+                <a href="#toxicity" class="nav-link">Toxicity Calculator</a>
+                <a href="#distribution" class="nav-link">Tissue Distribution</a>
+                <a href="#biomarkers" class="nav-link">Biomarkers</a>
+                <a href="#case-studies" class="nav-link">Case Studies</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <i class="fas fa-microscope"></i>
+                    Plastic Nanoparticles and Cellular Toxicity
+                </h1>
+                <p class="hero-subtitle">
+                    Explore how nanoplastics penetrate biological tissues and disrupt cellular processes at the molecular level
+                </p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">1-100</div>
+                        <div class="stat-label">Nanometer Range</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">90%</div>
+                        <div class="stat-label">Cellular Uptake</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Toxicity Pathways</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="cellular-network">
+                    <div class="cell-membrane">
+                        <div class="nanoparticle" style="--delay: 0s; --size: 4px;"></div>
+                        <div class="nanoparticle" style="--delay: 1s; --size: 6px;"></div>
+                        <div class="nanoparticle" style="--delay: 2s; --size: 3px;"></div>
+                        <div class="nanoparticle" style="--delay: 3s; --size: 5px;"></div>
+                        <div class="organelle nucleus"></div>
+                        <div class="organelle mitochondria"></div>
+                        <div class="organelle lysosome"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview" class="content-section">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-dna"></i>
+                The Nanoplastic Threat
+            </h2>
+            <div class="overview-grid">
+                <div class="overview-card">
+                    <div class="card-icon">
+                        <i class="fas fa-cubes"></i>
+                    </div>
+                    <h3>Nanoparticle Sources</h3>
+                    <p>Primary nanoplastics from manufacturing and secondary particles from plastic degradation in the environment.</p>
+                </div>
+                <div class="overview-card">
+                    <div class="card-icon">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <h3>Cellular Penetration</h3>
+                    <p>Nanoplastics cross biological barriers through various mechanisms including endocytosis and diffusion.</p>
+                </div>
+                <div class="overview-card">
+                    <div class="card-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Oxidative Stress</h3>
+                    <p>Induction of reactive oxygen species leading to cellular damage and inflammatory responses.</p>
+                </div>
+                <div class="overview-card">
+                    <div class="card-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Neurotoxicity</h3>
+                    <p>Potential to cross blood-brain barrier causing neurological damage and behavioral changes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cellular Uptake Simulator -->
+    <section id="uptake" class="content-section uptake-section">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-sign-in-alt"></i>
+                Cellular Uptake Simulator
+            </h2>
+            <div class="uptake-simulator">
+                <div class="uptake-controls">
+                    <div class="control-group">
+                        <label for="particleSize">Particle Size (nm):</label>
+                        <input type="range" id="particleSize" min="1" max="100" value="50">
+                        <span id="particleSizeValue">50 nm</span>
+                    </div>
+                    <div class="control-group">
+                        <label for="concentration">Concentration (particles/mL):</label>
+                        <input type="range" id="concentration" min="1000" max="10000000" value="100000">
+                        <span id="concentrationValue">100,000</span>
+                    </div>
+                    <div class="control-group">
+                        <label for="cellType">Cell Type:</label>
+                        <select id="cellType">
+                            <option value="epithelial">Epithelial Cells</option>
+                            <option value="immune">Immune Cells</option>
+                            <option value="neural">Neural Cells</option>
+                            <option value="hepatic">Hepatic Cells</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="exposureTime">Exposure Time:</label>
+                        <select id="exposureTime">
+                            <option value="1h">1 Hour</option>
+                            <option value="24h">24 Hours</option>
+                            <option value="7d">7 Days</option>
+                            <option value="30d">30 Days</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="uptake-results">
+                    <div class="uptake-visualization">
+                        <div class="cell-diagram">
+                            <div class="cell-membrane-animated">
+                                <div class="cytoplasm">
+                                    <div class="organelle nucleus-small"></div>
+                                    <div class="organelle mitochondria-small"></div>
+                                    <div class="nanoparticle-particle" id="particle1"></div>
+                                    <div class="nanoparticle-particle" id="particle2"></div>
+                                    <div class="nanoparticle-particle" id="particle3"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uptake-metrics">
+                        <div class="metric">
+                            <h4>Uptake Rate</h4>
+                            <div class="metric-bar">
+                                <div id="uptakeBar" class="bar-fill"></div>
+                            </div>
+                            <span id="uptakeValue">65%</span>
+                        </div>
+                        <div class="metric">
+                            <h4>Mechanism</h4>
+                            <div class="mechanism-display">
+                                <span id="uptakeMechanism">Endocytosis</span>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <h4>Toxicity Level</h4>
+                            <div class="toxicity-indicator">
+                                <span id="toxicityLevel">Moderate</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cellular Toxicity Calculator -->
+    <section id="toxicity" class="content-section toxicity-section">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-exclamation-triangle"></i>
+                Cellular Toxicity Calculator
+            </h2>
+            <div class="toxicity-calculator">
+                <div class="toxicity-inputs">
+                    <div class="toxicity-controls">
+                        <div class="control-group">
+                            <label for="nanoplasticType">Nanoplastic Type:</label>
+                            <select id="nanoplasticType">
+                                <option value="PS">Polystyrene (PS)</option>
+                                <option value="PE">Polyethylene (PE)</option>
+                                <option value="PVC">PVC</option>
+                                <option value="PET">PET</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="dose">Dose (μg/mL):</label>
+                            <input type="range" id="dose" min="0.1" max="100" value="10" step="0.1">
+                            <span id="doseValue">10 μg/mL</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="cellLine">Cell Line:</label>
+                            <select id="cellLine">
+                                <option value="hepatocyte">Hepatocytes</option>
+                                <option value="neuron">Neurons</option>
+                                <option value="epithelial">Epithelial</option>
+                                <option value="immune">Immune Cells</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="toxicity-checkboxes">
+                        <h4>Toxicity Pathways:</h4>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="oxidative" checked> Oxidative Stress
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="membrane" checked> Membrane Damage
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="mitochondrial"> Mitochondrial Dysfunction
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="genotoxicity"> Genotoxicity
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="inflammation"> Inflammation
+                        </label>
+                    </div>
+                </div>
+                <div class="toxicity-results">
+                    <div class="toxicity-metrics">
+                        <div class="metric-card">
+                            <h4>Cell Viability</h4>
+                            <div class="metric-value" id="viabilityValue">78%</div>
+                            <div class="metric-bar">
+                                <div id="viabilityBar" class="toxicity-bar-fill"></div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <h4>ROS Production</h4>
+                            <div class="metric-value" id="rosValue">2.3x</div>
+                            <div class="metric-bar">
+                                <div id="rosBar" class="toxicity-bar-fill"></div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Membrane Integrity</h4>
+                            <div class="metric-value" id="membraneValue">85%</div>
+                            <div class="metric-bar">
+                                <div id="membraneBar" class="toxicity-bar-fill"></div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Apoptosis Rate</h4>
+                            <div class="metric-value" id="apoptosisValue">12%</div>
+                            <div class="metric-bar">
+                                <div id="apoptosisBar" class="toxicity-bar-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="toxicity-description">
+                        <h4>Predicted Effects:</h4>
+                        <p id="toxicityDescription">Moderate oxidative stress with membrane damage and increased apoptosis. Primary mechanism: ROS-induced cellular damage.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tissue Distribution Analyzer -->
+    <section id="distribution" class="content-section distribution-section">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-route"></i>
+                Tissue Distribution Analyzer
+            </h2>
+            <div class="distribution-analyzer">
+                <div class="organism-diagram">
+                    <div class="organism-body">
+                        <div class="organ liver" data-organ="liver">
+                            <span>Liver</span>
+                            <div class="accumulation-level" id="liverLevel"></div>
+                        </div>
+                        <div class="organ brain" data-organ="brain">
+                            <span>Brain</span>
+                            <div class="accumulation-level" id="brainLevel"></div>
+                        </div>
+                        <div class="organ kidney" data-organ="kidney">
+                            <span>Kidney</span>
+                            <div class="accumulation-level" id="kidneyLevel"></div>
+                        </div>
+                        <div class="organ gill" data-organ="gill">
+                            <span>Gill</span>
+                            <div class="accumulation-level" id="gillLevel"></div>
+                        </div>
+                        <div class="organ gut" data-organ="gut">
+                            <span>Gut</span>
+                            <div class="accumulation-level" id="gutLevel"></div>
+                        </div>
+                        <div class="organ muscle" data-organ="muscle">
+                            <span>Muscle</span>
+                            <div class="accumulation-level" id="muscleLevel"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="distribution-controls">
+                    <div class="control-group">
+                        <label for="species">Species:</label>
+                        <select id="species">
+                            <option value="fish">Fish</option>
+                            <option value="mammal">Mammal</option>
+                            <option value="bird">Bird</option>
+                            <option value="invertebrate">Invertebrate</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="exposureRoute">Exposure Route:</label>
+                        <select id="exposureRoute">
+                            <option value="water">Water</option>
+                            <option value="food">Food</option>
+                            <option value="sediment">Sediment</option>
+                            <option value="air">Air</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="bioaccumulation">Bioaccumulation Factor:</label>
+                        <div class="bioaccumulation-display">
+                            <span id="bafValue">1.0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Biomarkers Dashboard -->
+    <section id="biomarkers" class="content-section biomarkers-section">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-vial"></i>
+                Toxicity Biomarkers Dashboard
+            </h2>
+            <div class="biomarkers-dashboard">
+                <div class="biomarker-controls">
+                    <div class="control-group">
+                        <label for="biomarkerType">Biomarker Category:</label>
+                        <select id="biomarkerType">
+                            <option value="oxidative">Oxidative Stress</option>
+                            <option value="membrane">Membrane Damage</option>
+                            <option value="genetic">Genotoxicity</option>
+                            <option value="inflammation">Inflammation</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="timePoint">Time Point:</label>
+                        <select id="timePoint">
+                            <option value="6h">6 Hours</option>
+                            <option value="24h">24 Hours</option>
+                            <option value="72h">72 Hours</option>
+                            <option value="7d">7 Days</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="biomarkers-display">
+                    <div class="biomarker-chart">
+                        <canvas id="biomarkerChart"></canvas>
+                    </div>
+                    <div class="biomarker-details">
+                        <div class="biomarker-item">
+                            <h4>Antioxidant Enzymes</h4>
+                            <div class="biomarker-value" id="antioxidantValue">↑ 45%</div>
+                            <p>SOD, CAT, GPx activity</p>
+                        </div>
+                        <div class="biomarker-item">
+                            <h4>Lipid Peroxidation</h4>
+                            <div class="biomarker-value" id="lipidValue">↑ 67%</div>
+                            <p>MDA levels</p>
+                        </div>
+                        <div class="biomarker-item">
+                            <h4>DNA Damage</h4>
+                            <div class="biomarker-value" id="dnaValue">↑ 23%</div>
+                            <p>Comet assay</p>
+                        </div>
+                        <div class="biomarker-item">
+                            <h4>Inflammatory Cytokines</h4>
+                            <div class="biomarker-value" id="cytokineValue">↑ 89%</div>
+                            <p>TNF-α, IL-6</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies -->
+    <section id="case-studies" class="content-section case-studies-section">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-book-open"></i>
+                Case Studies
+            </h2>
+            <div class="case-studies-grid">
+                <div class="case-study-card" onclick="showCaseStudy('zebrafish')">
+                    <div class="case-study-image">
+                        <i class="fas fa-fish"></i>
+                    </div>
+                    <h3>Zebrafish Neurotoxicity</h3>
+                    <p>PS nanoplastics cross blood-brain barrier, causing oxidative stress and behavioral changes in zebrafish embryos.</p>
+                    <div class="case-study-tags">
+                        <span class="tag">Neurotoxicity</span>
+                        <span class="tag">Development</span>
+                    </div>
+                </div>
+                <div class="case-study-card" onclick="showCaseStudy('mussel')">
+                    <div class="case-study-image">
+                        <i class="fas fa-water"></i>
+                    </div>
+                    <h3>Mussel Immune Response</h3>
+                    <p>Marine mussels exposed to nanoplastics show suppressed immune function and increased disease susceptibility.</p>
+                    <div class="case-study-tags">
+                        <span class="tag">Immunotoxicity</span>
+                        <span class="tag">Marine</span>
+                    </div>
+                </div>
+                <div class="case-study-card" onclick="showCaseStudy('daphnia')">
+                    <div class="case-study-image">
+                        <i class="fas fa-bug"></i>
+                    </div>
+                    <h3>Daphnia Reproduction</h3>
+                    <p>Nanoplastic exposure disrupts endocrine signaling and reduces reproductive success in freshwater crustaceans.</p>
+                    <div class="case-study-tags">
+                        <span class="tag">Endocrine</span>
+                        <span class="tag">Freshwater</span>
+                    </div>
+                </div>
+                <div class="case-study-card" onclick="showCaseStudy('human')">
+                    <div class="case-study-image">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3>Human Cell Lines</h3>
+                    <p>In vitro studies show nanoplastic-induced DNA damage and chromosomal aberrations in human cells.</p>
+                    <div class="case-study-tags">
+                        <span class="tag">Genotoxicity</span>
+                        <span class="tag">Human Health</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Take Action Against Nanoplastic Pollution</h2>
+                <p>Understanding nanoplastic toxicity is crucial for protecting cellular health and ecosystem integrity.</p>
+                <div class="cta-buttons">
+                    <button class="cta-btn primary" onclick="learnMore()">
+                        <i class="fas fa-graduation-cap"></i>
+                        Learn More
+                    </button>
+                    <button class="cta-btn secondary" onclick="supportResearch()">
+                        <i class="fas fa-flask"></i>
+                        Support Research
+                    </button>
+                    <button class="cta-btn secondary" onclick="reducePlastic()">
+                        <i class="fas fa-recycle"></i>
+                        Reduce Plastic Use
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modals -->
+    <div id="caseStudyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="caseStudyContent"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>About This Tool</h4>
+                    <p>Interactive educational resource for understanding nanoplastic cellular toxicity and biological impacts.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#" onclick="learnMore()">Scientific Literature</a></li>
+                        <li><a href="#" onclick="supportResearch()">Research Funding</a></li>
+                        <li><a href="#" onclick="reducePlastic()">Plastic Reduction</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Questions about nanoplastic toxicity?</p>
+                    <a href="mailto:info@environmenthub.org">info@environmenthub.org</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Environment & Animal Safety Hub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/pages/plastic-nanoparticles.js"></script>
+</body>
+</html>
