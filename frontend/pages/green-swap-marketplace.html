@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Green Swap Marketplace | EcoLife</title>
+  <link rel="icon" type="image/png" href="../assets/images/others/FAVICON.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="../css/global/variables.css" />
+  <link rel="stylesheet" href="../css/global/utilities.css" />
+  <link rel="stylesheet" href="../css/components/navbar.css" />
+  <link rel="stylesheet" href="../css/components/footer.css" />
+  <link rel="stylesheet" href="../css/pages/green-swap-marketplace.css" />
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+  <header class="marketplace-hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="fas fa-recycle"></i>
+        <span>Circular Economy Initiative</span>
+      </div>
+      <h1>Green Swap Marketplace</h1>
+      <p>Share, swap, and borrow eco-friendly items with your community. Reduce waste and promote sustainable living through local exchanges.</p>
+      <div class="hero-actions">
+        <button class="primary-btn" id="listItemBtn">
+          <i class="fas fa-plus-circle"></i> List an Item
+        </button>
+        <button class="secondary-btn" id="browseItemsBtn">
+          <i class="fas fa-search"></i> Browse Listings
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card">
+          <div class="stat-number" id="totalItems">0</div>
+          <div class="stat-label">Active Listings</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="totalSwaps">0</div>
+          <div class="stat-label">Successful Swaps</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="activeUsers">0</div>
+          <div class="stat-label">Active Members</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <!-- Tab Navigation -->
+    <nav class="tab-navigation">
+      <button class="tab-btn active" data-tab="browse">
+        <i class="fas fa-th-large"></i>
+        <span>Browse</span>
+      </button>
+      <button class="tab-btn" data-tab="map">
+        <i class="fas fa-map-marked-alt"></i>
+        <span>Map View</span>
+      </button>
+      <button class="tab-btn" data-tab="wishlist">
+        <i class="fas fa-heart"></i>
+        <span>Wishlist</span>
+        <span class="badge" id="wishlistBadge">0</span>
+      </button>
+      <button class="tab-btn" data-tab="swaps">
+        <i class="fas fa-exchange-alt"></i>
+        <span>My Swaps</span>
+      </button>
+      <button class="tab-btn" data-tab="messages">
+        <i class="fas fa-comments"></i>
+        <span>Messages</span>
+        <span class="badge" id="messagesBadge">0</span>
+      </button>
+      <button class="tab-btn" data-tab="profile">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+      </button>
+    </nav>
+
+    <!-- Browse Tab -->
+    <section class="tab-content active" id="browse-tab">
+      <div class="browse-header">
+        <div class="search-container">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search for seeds, tools, books..." />
+          </div>
+          <button class="filter-toggle-btn" id="filterToggleBtn">
+            <i class="fas fa-filter"></i> Filters
+          </button>
+        </div>
+
+        <div class="filters-panel" id="filtersPanel">
+          <div class="filter-group">
+            <label><i class="fas fa-tag"></i> Category</label>
+            <select id="categoryFilter" class="filter-select">
+              <option value="all">All Categories</option>
+              <option value="Seeds">Seeds & Plants</option>
+              <option value="Tools">Gardening Tools</option>
+              <option value="Composting">Composting Supplies</option>
+              <option value="Upcycled">Upcycled Items</option>
+              <option value="Books">Books & Guides</option>
+              <option value="Containers">Pots & Containers</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label><i class="fas fa-exchange-alt"></i> Type</label>
+            <select id="typeFilter" class="filter-select">
+              <option value="all">All Types</option>
+              <option value="Swap">For Swap</option>
+              <option value="Lend">For Lending</option>
+              <option value="Donate">For Donation</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label><i class="fas fa-star"></i> Condition</label>
+            <select id="conditionFilter" class="filter-select">
+              <option value="all">Any Condition</option>
+              <option value="New">New</option>
+              <option value="Like New">Like New</option>
+              <option value="Good">Good</option>
+              <option value="Fair">Fair</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label><i class="fas fa-map-marker-alt"></i> Location Radius</label>
+            <select id="radiusFilter" class="filter-select">
+              <option value="all">All Locations</option>
+              <option value="5">Within 5 miles</option>
+              <option value="10">Within 10 miles</option>
+              <option value="25">Within 25 miles</option>
+              <option value="50">Within 50 miles</option>
+            </select>
+          </div>
+
+          <button class="clear-filters-btn" id="clearFiltersBtn">
+            <i class="fas fa-times"></i> Clear All Filters
+          </button>
+        </div>
+      </div>
+
+      <div class="listings-grid" id="listingsGrid"></div>
+    </section>
+
+    <!-- Map Tab -->
+    <section class="tab-content" id="map-tab">
+      <div class="map-container">
+        <div class="map-sidebar">
+          <h3><i class="fas fa-map-pin"></i> Nearby Items</h3>
+          <div id="nearbyList" class="nearby-list"></div>
+        </div>
+        <div id="itemsMap" class="items-map"></div>
+      </div>
+    </section>
+
+    <!-- Wishlist Tab -->
+    <section class="tab-content" id="wishlist-tab">
+      <div class="wishlist-header">
+        <h2><i class="fas fa-heart"></i> My Wishlist</h2>
+        <p>Items you've saved for later</p>
+      </div>
+      <div class="wishlist-grid" id="wishlistGrid"></div>
+    </section>
+
+    <!-- Swaps Tab -->
+    <section class="tab-content" id="swaps-tab">
+      <div class="swaps-header">
+        <h2><i class="fas fa-exchange-alt"></i> My Swaps</h2>
+        <div class="swap-tabs">
+          <button class="swap-tab-btn active" data-status="pending">Pending</button>
+          <button class="swap-tab-btn" data-status="completed">Completed</button>
+          <button class="swap-tab-btn" data-status="cancelled">Cancelled</button>
+        </div>
+      </div>
+      <div class="swaps-list" id="swapsList"></div>
+    </section>
+
+    <!-- Messages Tab -->
+    <section class="tab-content" id="messages-tab">
+      <div class="messages-container">
+        <div class="conversations-sidebar">
+          <h3><i class="fas fa-comments"></i> Conversations</h3>
+          <div id="conversationsList" class="conversations-list"></div>
+        </div>
+        <div class="chat-area">
+          <div id="chatContainer" class="chat-container">
+            <div class="no-chat-selected">
+              <i class="fas fa-comments"></i>
+              <p>Select a conversation to start chatting</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Profile Tab -->
+    <section class="tab-content" id="profile-tab">
+      <div class="profile-container">
+        <div class="profile-card">
+          <div class="profile-header">
+            <div class="profile-avatar" id="profileAvatar">A</div>
+            <div class="profile-info">
+              <h2 id="profileName">User Name</h2>
+              <div class="reputation-display">
+                <div class="stars" id="reputationStars"></div>
+                <span class="rating-text" id="ratingText">0.0</span>
+                <span class="reviews-count" id="reviewsCount">(0 reviews)</span>
+              </div>
+              <div class="profile-stats">
+                <div class="profile-stat">
+                  <span class="stat-value" id="userListings">0</span>
+                  <span class="stat-name">Listings</span>
+                </div>
+                <div class="profile-stat">
+                  <span class="stat-value" id="userSwaps">0</span>
+                  <span class="stat-name">Swaps</span>
+                </div>
+                <div class="profile-stat">
+                  <span class="stat-value" id="memberSince">2026</span>
+                  <span class="stat-name">Member Since</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-section">
+            <h3><i class="fas fa-user-edit"></i> Edit Profile</h3>
+            <form id="profileForm" class="profile-form">
+              <div class="form-group">
+                <label>Display Name</label>
+                <input type="text" id="displayName" placeholder="Your name" required />
+              </div>
+              <div class="form-group">
+                <label>Location</label>
+                <input type="text" id="userLocation" placeholder="City, State" required />
+              </div>
+              <div class="form-group">
+                <label>Bio</label>
+                <textarea id="userBio" rows="3" placeholder="Tell us about yourself and your green interests..."></textarea>
+              </div>
+              <button type="submit" class="primary-btn">
+                <i class="fas fa-save"></i> Save Profile
+              </button>
+            </form>
+          </div>
+
+          <div class="profile-section">
+            <h3><i class="fas fa-list"></i> My Listings</h3>
+            <div id="userListingsGrid" class="user-listings-grid"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <!-- List Item Modal -->
+  <div class="modal" id="listItemModal">
+    <div class="modal-content large">
+      <div class="modal-header">
+        <h2><i class="fas fa-plus-circle"></i> List an Item</h2>
+        <button class="modal-close" id="closeListModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="listItemForm" class="listing-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label><i class="fas fa-tag"></i> Item Name *</label>
+              <input type="text" id="itemName" placeholder="e.g., Tomato Seeds, Garden Shovel" required />
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-folder"></i> Category *</label>
+              <select id="itemCategory" required>
+                <option value="">Select Category</option>
+                <option value="Seeds">Seeds & Plants</option>
+                <option value="Tools">Gardening Tools</option>
+                <option value="Composting">Composting Supplies</option>
+                <option value="Upcycled">Upcycled Items</option>
+                <option value="Books">Books & Guides</option>
+                <option value="Containers">Pots & Containers</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label><i class="fas fa-exchange-alt"></i> Listing Type *</label>
+              <select id="itemType" required>
+                <option value="">Select Type</option>
+                <option value="Swap">For Swap</option>
+                <option value="Lend">For Lending</option>
+                <option value="Donate">For Donation</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-star"></i> Condition *</label>
+              <select id="itemCondition" required>
+                <option value="">Select Condition</option>
+                <option value="New">New</option>
+                <option value="Like New">Like New</option>
+                <option value="Good">Good</option>
+                <option value="Fair">Fair</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label><i class="fas fa-align-left"></i> Description *</label>
+            <textarea id="itemDescription" rows="4" placeholder="Describe your item, its condition, and any details..." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label><i class="fas fa-map-marker-alt"></i> Location *</label>
+            <input type="text" id="itemLocation" placeholder="City, Neighborhood" required />
+          </div>
+
+          <div class="form-group">
+            <label><i class="fas fa-camera"></i> Photos (optional)</label>
+            <input type="file" id="itemPhotos" accept="image/*" multiple class="file-input" />
+            <label for="itemPhotos" class="file-label">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <span>Click to upload photos</span>
+              <small>Maximum 5 photos, 5MB each</small>
+            </label>
+            <div id="photoPreview" class="photo-preview"></div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="primary-btn">
+              <i class="fas fa-check"></i> List Item
+            </button>
+            <button type="button" class="secondary-btn" id="cancelListBtn">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Item Details Modal -->
+  <div class="modal" id="itemDetailsModal">
+    <div class="modal-content large">
+      <button class="modal-close" id="closeDetailsModal">
+        <i class="fas fa-times"></i>
+      </button>
+      <div id="itemDetailsBody" class="item-details-body"></div>
+    </div>
+  </div>
+
+  <!-- Message Modal -->
+  <div class="modal" id="messageModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2><i class="fas fa-paper-plane"></i> Send Message</h2>
+        <button class="modal-close" id="closeMessageModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="messageForm" class="message-form">
+          <div class="form-group">
+            <label>To: <strong id="messageRecipient"></strong></label>
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea id="messageText" rows="6" placeholder="Type your message..." required></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="primary-btn">
+              <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+            <button type="button" class="secondary-btn" id="cancelMessageBtn">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report Modal -->
+  <div class="modal" id="reportModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2><i class="fas fa-flag"></i> Report Listing</h2>
+        <button class="modal-close" id="closeReportModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="reportForm" class="report-form">
+          <div class="form-group">
+            <label>Reason for Report</label>
+            <select id="reportReason" required>
+              <option value="">Select a reason</option>
+              <option value="Spam">Spam or Misleading</option>
+              <option value="Inappropriate">Inappropriate Content</option>
+              <option value="Scam">Suspected Scam</option>
+              <option value="Duplicate">Duplicate Listing</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Additional Details</label>
+            <textarea id="reportDetails" rows="4" placeholder="Please provide more information..."></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="danger-btn">
+              <i class="fas fa-flag"></i> Submit Report
+            </button>
+            <button type="button" class="secondary-btn" id="cancelReportBtn">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="../js/components/component-loader.js"></script>
+  <script src="../js/components/navbar-loader.js"></script>
+  <script src="../js/components/footer-loader.js"></script>
+  <script src="../js/pages/green-swap-marketplace.js"></script>
+</body>
+</html>

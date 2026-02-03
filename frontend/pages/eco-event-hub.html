@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Event Hub - Community Events & Workshops</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/eco-event-hub.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <i class="fas fa-leaf"></i>
+        <span>Eco Event Hub</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#" data-tab="discover">Discover</a></li>
+        <li><a href="#" data-tab="calendar">Calendar</a></li>
+        <li><a href="#" data-tab="my-events">My Events</a></li>
+        <li><a href="#" data-tab="community">Community</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-primary" id="createEventBtn"><i class="fas fa-plus"></i> Create Event</button>
+        <div class="user-profile">
+          <img src="https://via.placeholder.com/40" alt="Profile">
+          <span id="currentUserName">Eco Warrior</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero-section">
+    <div class="hero-content">
+      <h1>Join the Eco Community</h1>
+      <p>Discover, organize, and participate in environmental events in your area</p>
+      <div class="hero-search">
+        <input type="text" id="eventSearch" placeholder="Search events, categories, locations...">
+        <button class="btn-search"><i class="fas fa-search"></i></button>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-number" id="totalEvents">24</div>
+        <div class="stat-label">Events</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number" id="totalAttendees">1,250+</div>
+        <div class="stat-label">Members</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number" id="upcomingCount">8</div>
+        <div class="stat-label">This Month</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Discover Tab -->
+    <section id="discover" class="tab-content active">
+      <div class="discover-container">
+        <!-- Filters -->
+        <aside class="filters-sidebar">
+          <div class="filter-group">
+            <h3><i class="fas fa-filter"></i> Filters</h3>
+          </div>
+
+          <div class="filter-section">
+            <label class="filter-title">Category</label>
+            <div class="filter-options">
+              <label class="filter-checkbox">
+                <input type="checkbox" class="category-filter" value="cleanup" checked>
+                <span><i class="fas fa-trash"></i> Cleanup</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" class="category-filter" value="workshop" checked>
+                <span><i class="fas fa-lightbulb"></i> Workshop</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" class="category-filter" value="planting" checked>
+                <span><i class="fas fa-leaf"></i> Planting</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" class="category-filter" value="volunteer" checked>
+                <span><i class="fas fa-hands-helping"></i> Volunteer</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" class="category-filter" value="conference" checked>
+                <span><i class="fas fa-microphone"></i> Conference</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" class="category-filter" value="social" checked>
+                <span><i class="fas fa-users"></i> Social</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="filter-section">
+            <label class="filter-title">Date Range</label>
+            <input type="date" id="filterStartDate" class="filter-input">
+            <input type="date" id="filterEndDate" class="filter-input">
+          </div>
+
+          <div class="filter-section">
+            <label class="filter-title">Distance</label>
+            <input type="range" id="filterDistance" min="1" max="50" value="25" class="filter-input">
+            <span id="distanceValue">25 km</span>
+          </div>
+
+          <button class="btn-secondary" id="resetFilters">Reset Filters</button>
+        </aside>
+
+        <!-- Events Grid -->
+        <div class="events-grid">
+          <div class="grid-header">
+            <h2>Upcoming Events</h2>
+            <div class="grid-controls">
+              <button class="view-toggle active" data-view="grid" title="Grid view">
+                <i class="fas fa-th"></i>
+              </button>
+              <button class="view-toggle" data-view="list" title="List view">
+                <i class="fas fa-list"></i>
+              </button>
+            </div>
+          </div>
+          <div id="eventsContainer" class="events-container"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Calendar Tab -->
+    <section id="calendar" class="tab-content">
+      <div class="calendar-container">
+        <div class="calendar-header">
+          <button class="btn-nav" id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+          <h2 id="currentMonth"></h2>
+          <button class="btn-nav" id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div id="calendarGrid" class="calendar-grid"></div>
+        <div id="calendarEvents" class="calendar-events"></div>
+      </div>
+    </section>
+
+    <!-- My Events Tab -->
+    <section id="my-events" class="tab-content">
+      <div class="my-events-container">
+        <div class="events-tabs">
+          <button class="event-tab active" data-status="registered">
+            <i class="fas fa-calendar-check"></i> Registered (<span id="registeredCount">3</span>)
+          </button>
+          <button class="event-tab" data-status="hosted">
+            <i class="fas fa-star"></i> Hosted (<span id="hostedCount">1</span>)
+          </button>
+          <button class="event-tab" data-status="interested">
+            <i class="fas fa-heart"></i> Interested (<span id="interestedCount">5</span>)
+          </button>
+        </div>
+        <div id="myEventsContainer" class="events-container"></div>
+      </div>
+    </section>
+
+    <!-- Community Tab -->
+    <section id="community" class="tab-content">
+      <div class="community-container">
+        <div class="community-stats">
+          <div class="stat-card">
+            <i class="fas fa-users"></i>
+            <h3 id="communityMembers">1,250</h3>
+            <p>Active Members</p>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-user-check"></i>
+            <h3 id="communityVolunteers">425</h3>
+            <p>Volunteers</p>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-clock"></i>
+            <h3 id="communityHours">3,240+</h3>
+            <p>Volunteer Hours</p>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-globe"></i>
+            <h3 id="communityImpact">$125K</h3>
+            <p>Impact Value</p>
+          </div>
+        </div>
+
+        <div class="community-content">
+          <div class="discussion-board">
+            <h2><i class="fas fa-comments"></i> Community Discussion</h2>
+            <div class="new-discussion">
+              <input type="text" id="newDiscussionTitle" placeholder="Start a discussion...">
+              <button class="btn-primary" id="startDiscussionBtn">Post</button>
+            </div>
+            <div id="discussionThreads" class="discussion-threads"></div>
+          </div>
+
+          <div class="community-leaderboard">
+            <h2><i class="fas fa-trophy"></i> Top Contributors</h2>
+            <div id="contributorsLeaderboard" class="leaderboard"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Event Detail Modal -->
+  <div id="eventModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeEventModal()">&times;</button>
+      
+      <div class="event-modal-header">
+        <img id="modalEventImage" src="" alt="Event" class="event-modal-image">
+        <div class="event-modal-meta">
+          <span id="modalEventCategory" class="badge"></span>
+          <h1 id="modalEventTitle"></h1>
+          <p id="modalEventOrganizer"></p>
+        </div>
+      </div>
+
+      <div class="event-modal-body">
+        <div class="modal-section">
+          <h3><i class="fas fa-calendar"></i> Details</h3>
+          <div class="details-grid">
+            <div class="detail-item">
+              <strong>Date & Time</strong>
+              <p id="modalEventDateTime"></p>
+            </div>
+            <div class="detail-item">
+              <strong>Location</strong>
+              <p id="modalEventLocation"></p>
+            </div>
+            <div class="detail-item">
+              <strong>Attendees</strong>
+              <p id="modalEventAttendees"></p>
+            </div>
+            <div class="detail-item">
+              <strong>Duration</strong>
+              <p id="modalEventDuration"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <h3><i class="fas fa-info-circle"></i> About</h3>
+          <p id="modalEventDescription"></p>
+        </div>
+
+        <div class="modal-section">
+          <h3><i class="fas fa-users"></i> Attendees</h3>
+          <div id="modalEventAttendeesGrid" class="attendees-grid"></div>
+        </div>
+
+        <div class="modal-section">
+          <h3><i class="fas fa-comments"></i> Comments</h3>
+          <div class="comments-section">
+            <div class="new-comment">
+              <input type="text" id="commentText" placeholder="Add a comment...">
+              <button class="btn-secondary" onclick="addComment()">Comment</button>
+            </div>
+            <div id="commentsContainer" class="comments-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="event-modal-footer">
+        <button class="btn-secondary" id="favoriteBtn"><i class="fas fa-heart"></i> Save</button>
+        <button class="btn-primary" id="registerBtn" onclick="registerEvent()">Register</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Event Modal -->
+  <div id="createEventModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeCreateEventModal()">&times;</button>
+      <h2>Create New Event</h2>
+
+      <form id="createEventForm" class="form-group">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Event Title *</label>
+            <input type="text" id="createEventTitle" required>
+          </div>
+          <div class="form-field">
+            <label>Category *</label>
+            <select id="createEventCategory" required>
+              <option value="">Select category</option>
+              <option value="cleanup">Cleanup</option>
+              <option value="workshop">Workshop</option>
+              <option value="planting">Planting</option>
+              <option value="volunteer">Volunteer</option>
+              <option value="conference">Conference</option>
+              <option value="social">Social</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>Date *</label>
+            <input type="date" id="createEventDate" required>
+          </div>
+          <div class="form-field">
+            <label>Time *</label>
+            <input type="time" id="createEventTime" required>
+          </div>
+          <div class="form-field">
+            <label>Duration (hours) *</label>
+            <input type="number" id="createEventDuration" min="0.5" step="0.5" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>Location *</label>
+            <input type="text" id="createEventLocation" required>
+          </div>
+          <div class="form-field">
+            <label>Max Attendees</label>
+            <input type="number" id="createEventMaxAttendees" min="1">
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label>Description *</label>
+          <textarea id="createEventDescription" rows="4" required></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>Image URL</label>
+            <input type="url" id="createEventImage">
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" onclick="closeCreateEventModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Create Event</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="../js/pages/eco-event-hub.js"></script>
+</body>
+</html>

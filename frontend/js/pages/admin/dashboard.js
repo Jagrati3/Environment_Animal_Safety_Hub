@@ -14,6 +14,7 @@ const state = {
     quizzes: [],
     reports: [],
     content: [],
+    feedback: [],
     currentTab: 'plant-care'
 };
 
@@ -168,6 +169,7 @@ const Dashboard = {
             'quiz-manager': 'Quiz Manager',
             'report-viewer': 'Report Viewer',
             'content-editor': 'Content Editor',
+            'feedback-manager': 'Feedback Manager',
             'settings': 'Settings'
         };
         document.getElementById('sectionTitle').textContent = titles[section];
@@ -179,6 +181,9 @@ const Dashboard = {
             ReportViewer.render();
         } else if (section === 'content-editor') {
             ContentEditor.render();
+        }
+        else if (section === 'feedback-manager') {
+            FeedbackManager.render();
         }
     },
 
@@ -194,6 +199,10 @@ const Dashboard = {
         // Load content
         const savedContent = localStorage.getItem('adminContent');
         state.content = savedContent ? JSON.parse(savedContent) : this.getSampleContent();
+
+        // Load feedback (ONLY from real source)
+        const savedFeedback = localStorage.getItem('adminFeedback');
+        state.feedback = savedFeedback ? JSON.parse(savedFeedback) : [];
     },
 
     updateStats() {
@@ -326,10 +335,40 @@ const Dashboard = {
         ];
     },
 
+    getSampleFeedback() {
+        return [
+            {
+                id: 1,
+                name: 'Amit Sharma',
+                email: 'amit@example.com',
+                message: 'Great initiative! The quizzes are very informative.',
+                date: '2026-01-20',
+                status: 'unread'
+            },
+            {
+                id: 2,
+                name: 'Neha Verma',
+                email: 'neha@example.com',
+                message: 'Please add more content on animal rescue and helplines.',
+                date: '2026-01-19',
+                status: 'read'
+            },
+            {
+                id: 3,
+                name: 'Anonymous',
+                email: '-',
+                message: 'The site UI is clean and easy to use. Keep it up!',
+                date: '2026-01-18',
+                status: 'unread'
+            }
+        ];
+    },
+
     saveData() {
         localStorage.setItem('adminQuizzes', JSON.stringify(state.quizzes));
         localStorage.setItem('adminReports', JSON.stringify(state.reports));
         localStorage.setItem('adminContent', JSON.stringify(state.content));
+        localStorage.setItem('adminFeedback', JSON.stringify(state.feedback));
         this.updateStats();
     }
 };
@@ -834,6 +873,69 @@ const ContentEditor = {
 };
 
 // ============================================
+// Feedback Manager
+// ============================================
+
+const FeedbackManager = {
+    render() {
+        const tbody = document.getElementById('feedbackTableBody');
+
+        if (!state.feedback.length) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align:center; padding:2rem; color:var(--text-muted);">
+                        No feedback submitted yet
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = state.feedback.map((fb, index) => `
+            <tr class="${fb.status === 'unread' ? 'unread-row' : ''}">
+                <td>${index + 1}</td>
+                <td>${fb.name}</td>
+                <td>${fb.email}</td>
+                <td>${fb.message.substring(0, 60)}${fb.message.length > 60 ? '...' : ''}</td>
+                <td>${fb.date}</td>
+                <td>
+                    <span class="status-badge ${fb.status}">
+                        ${fb.status}
+                    </span>
+                </td>
+                <td>
+                    <button class="btn-icon" onclick="FeedbackManager.toggleStatus(${fb.id})">
+                        <i class="fas fa-envelope-open"></i>
+                    </button>
+                    <button class="btn-icon delete" onclick="FeedbackManager.deleteFeedback(${fb.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    },
+
+    toggleStatus(id) {
+        const feedback = state.feedback.find(f => f.id === id);
+        if (!feedback) return;
+
+        feedback.status = feedback.status === 'unread' ? 'read' : 'unread';
+        Dashboard.saveData();
+        this.render();
+        showToast('Feedback status updated');
+    },
+
+    deleteFeedback(id) {
+        if (confirm('Delete this feedback?')) {
+            state.feedback = state.feedback.filter(f => f.id !== id);
+            Dashboard.saveData();
+            this.render();
+            showToast('Feedback deleted');
+        }
+    }
+};
+
+// ============================================
 // Settings
 // ============================================
 
@@ -877,10 +979,11 @@ const Settings = {
     },
 
     exportData() {
-        const data = {
+       const data = {
             quizzes: state.quizzes,
             reports: state.reports,
             content: state.content,
+            feedback: state.feedback,
             exportDate: new Date().toISOString()
         };
 
@@ -931,4 +1034,5 @@ document.addEventListener('DOMContentLoaded', () => {
     ReportViewer.init();
     ContentEditor.init();
     Settings.init();
+    FeedbackManager.render();
 });

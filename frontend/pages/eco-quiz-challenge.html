@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eco Quiz Challenge | EcoLife</title>
+  <link rel="icon" type="image/png" href="../assets/images/others/FAVICON.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/global/variables.css" />
+  <link rel="stylesheet" href="../css/global/utilities.css" />
+  <link rel="stylesheet" href="../css/components/navbar.css" />
+  <link rel="stylesheet" href="../css/components/footer.css" />
+  <link rel="stylesheet" href="../css/pages/eco-quiz-challenge.css" />
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+  <header class="eco-quiz-hero">
+    <div class="hero-content">
+      <span class="hero-badge">🎯 Eco Quiz Challenge</span>
+      <h1>Test your eco-knowledge, unlock fun facts, and earn a certificate!</h1>
+      <p>
+        Answer fast, learn faster. Track your score, climb the leaderboard, and collect eco-tips.
+      </p>
+      <button class="primary-btn" id="scrollToQuizBtn">Start the Challenge</button>
+    </div>
+    <div class="hero-orb orb-1"></div>
+    <div class="hero-orb orb-2"></div>
+    <div class="hero-orb orb-3"></div>
+  </header>
+
+  <main class="eco-quiz-wrapper" id="ecoQuizWrapper">
+    <section class="quiz-card" id="startScreen">
+      <div class="card-header">
+        <div>
+          <h2>Welcome, Eco Explorer! 🌿</h2>
+          <p>Enter your name to begin and track your progress.</p>
+        </div>
+        <div class="badge">12 Questions</div>
+      </div>
+
+      <div class="input-group">
+        <label for="playerName">Your Name</label>
+        <input id="playerName" type="text" placeholder="e.g., Ayaan" maxlength="24" />
+        <small>We use this to save your score and certificate.</small>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-item"><i class="fa-solid fa-bolt"></i> Instant feedback</div>
+        <div class="feature-item"><i class="fa-solid fa-ranking-star"></i> Leaderboard</div>
+        <div class="feature-item"><i class="fa-solid fa-unlock"></i> Fun facts & eco-tips</div>
+        <div class="feature-item"><i class="fa-solid fa-certificate"></i> Shareable certificate</div>
+      </div>
+
+      <div class="action-row">
+        <button class="primary-btn" id="startQuizBtn">Start New Quiz</button>
+        <button class="ghost-btn" id="resumeQuizBtn" style="display:none;">Resume Quiz</button>
+        <button class="ghost-btn" id="resetQuizBtn">Reset Progress</button>
+      </div>
+
+      <div class="resume-banner" id="resumeSection" style="display:none;">
+        <div>
+          <strong>Resume Available</strong>
+          <p>You have an unfinished quiz. Continue from where you left off.</p>
+        </div>
+        <button class="secondary-btn" id="resumeBannerBtn">Resume</button>
+      </div>
+
+      <div class="leaderboard-panel">
+        <div class="panel-header">
+          <h3>🏆 Leaderboard</h3>
+          <button class="link-btn" id="clearLeaderboardBtn">Clear</button>
+        </div>
+        <div class="leaderboard-table" id="leaderboardTable"></div>
+      </div>
+    </section>
+
+    <section class="quiz-card" id="quizScreen" style="display:none;">
+      <div class="quiz-topbar">
+        <div class="status-pill"><i class="fa-regular fa-clock"></i> <span id="timeLeft">03:00</span></div>
+        <div class="status-pill"><i class="fa-solid fa-star"></i> Score: <span id="currentScore">0</span></div>
+        <div class="status-pill"><i class="fa-solid fa-circle-check"></i> <span id="questionCounter">1/12</span></div>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <div class="question-card">
+        <h3 id="questionText">Question text</h3>
+        <div class="options-grid" id="optionsGrid"></div>
+        <div class="feedback" id="feedbackBox"></div>
+      </div>
+
+      <div class="unlock-panel">
+        <div class="unlock-header">
+          <h4>🔓 Unlocked Facts & Eco-Tips</h4>
+          <span id="unlockCount">0 unlocked</span>
+        </div>
+        <div class="unlock-list" id="unlockList"></div>
+      </div>
+
+      <div class="action-row">
+        <button class="ghost-btn" id="saveExitBtn">Save & Exit</button>
+        <button class="secondary-btn" id="nextQuestionBtn">Next Question</button>
+      </div>
+    </section>
+
+    <section class="quiz-card" id="resultScreen" style="display:none;">
+      <div class="result-header">
+        <div>
+          <h2>🎉 Quiz Complete!</h2>
+          <p id="resultRemark">Remark</p>
+        </div>
+        <div class="score-badge" id="finalScore">0/12</div>
+      </div>
+
+      <div class="result-metrics">
+        <div>
+          <span>Accuracy</span>
+          <strong id="accuracyValue">0%</strong>
+        </div>
+        <div>
+          <span>Time Used</span>
+          <strong id="timeUsedValue">0s</strong>
+        </div>
+        <div>
+          <span>Fun Facts Unlocked</span>
+          <strong id="factsUnlockedValue">0</strong>
+        </div>
+      </div>
+
+      <div class="leaderboard-panel">
+        <div class="panel-header">
+          <h3>🏅 Your Leaderboard</h3>
+        </div>
+        <div class="leaderboard-table" id="resultLeaderboardTable"></div>
+      </div>
+
+      <div class="certificate-panel" id="certificatePanel" style="display:none;">
+        <div class="panel-header">
+          <h3>🎓 Eco Achievement Certificate</h3>
+        </div>
+        <div class="certificate-card" id="certificateCard">
+          <div class="certificate-badge">EcoLife</div>
+          <h4>Certificate of Eco Excellence</h4>
+          <p>This certifies that</p>
+          <h2 id="certificateName">Eco Explorer</h2>
+          <p>achieved a top score in the Eco Quiz Challenge.</p>
+          <div class="certificate-meta">
+            <span id="certificateScore">Score: 0/12</span>
+            <span id="certificateDate">Date</span>
+          </div>
+        </div>
+        <div class="action-row">
+          <button class="secondary-btn" id="downloadCertificateBtn">Download Certificate</button>
+          <button class="ghost-btn" id="shareCertificateBtn">Share Certificate</button>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button class="primary-btn" id="playAgainBtn">Play Again</button>
+        <a class="ghost-btn" href="quiz-dashboard.html">Back to Dashboard</a>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="../js/components/component-loader.js"></script>
+  <script src="../js/components/navbar-loader.js"></script>
+  <script src="../js/components/footer-loader.js"></script>
+  <script src="../js/pages/eco-quiz-challenge.js"></script>
+</body>
+</html>

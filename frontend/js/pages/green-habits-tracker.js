@@ -1112,7 +1112,7 @@ function scheduleReminder() {
         if (Notification.permission === 'granted' && userData.activeChallenge) {
             new Notification('🌱 Green Habits Reminder', {
                 body: 'Time for your daily eco check-in! Keep up the great work!',
-                icon: '/assets/images/others/envirnoment-logo.png'
+                icon: '/assets/images/others/envirnoment-logo.webp'
             });
         }
         // Schedule next day

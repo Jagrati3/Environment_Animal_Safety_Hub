@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wildlife Sighting Reporter | EcoLife</title>
+  <link rel="icon" type="image/png" href="../assets/images/others/FAVICON.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="../css/global/variables.css" />
+  <link rel="stylesheet" href="../css/global/utilities.css" />
+  <link rel="stylesheet" href="../css/components/navbar.css" />
+  <link rel="stylesheet" href="../css/components/footer.css" />
+  <link rel="stylesheet" href="../css/pages/wildlife-sighting-reporter.css" />
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+  <header class="hero-section">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="fas fa-binoculars"></i>
+        <span>Citizen Science Initiative</span>
+      </div>
+      <h1>Wildlife Sighting Reporter</h1>
+      <p>Document and share your wildlife encounters. Help scientists track species distribution, behavior patterns, and conservation needs.</p>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number" id="totalSightings">0</span>
+          <span class="stat-label">Total Sightings</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="uniqueSpecies">0</span>
+          <span class="stat-label">Unique Species</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="endangeredAlerts">0</span>
+          <span class="stat-label">Endangered Alerts</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <!-- Navigation Tabs -->
+    <div class="tab-navigation">
+      <button class="tab-btn active" data-tab="report">
+        <i class="fas fa-plus-circle"></i>
+        <span>Report Sighting</span>
+      </button>
+      <button class="tab-btn" data-tab="map">
+        <i class="fas fa-map-marked-alt"></i>
+        <span>Interactive Map</span>
+      </button>
+      <button class="tab-btn" data-tab="gallery">
+        <i class="fas fa-images"></i>
+        <span>Sightings Gallery</span>
+      </button>
+      <button class="tab-btn" data-tab="species">
+        <i class="fas fa-book"></i>
+        <span>Species Database</span>
+      </button>
+      <button class="tab-btn" data-tab="feed">
+        <i class="fas fa-stream"></i>
+        <span>Community Feed</span>
+      </button>
+    </div>
+
+    <!-- Report Sighting Tab -->
+    <section class="tab-content active" id="report-tab">
+      <div class="content-grid">
+        <div class="form-card">
+          <div class="card-header">
+            <h2><i class="fas fa-pen"></i> Report a Sighting</h2>
+            <p>Share your wildlife encounter with the community</p>
+          </div>
+          
+          <form id="sightingForm" class="sighting-form">
+            <div class="form-group">
+              <label for="observerName">
+                <i class="fas fa-user"></i> Your Name
+              </label>
+              <input type="text" id="observerName" placeholder="Enter your name" required />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="speciesName">
+                  <i class="fas fa-paw"></i> Species Name
+                </label>
+                <input type="text" id="speciesName" list="speciesList" placeholder="e.g., Red-tailed Hawk" required />
+                <datalist id="speciesList"></datalist>
+              </div>
+
+              <div class="form-group">
+                <label for="speciesCategory">
+                  <i class="fas fa-tag"></i> Category
+                </label>
+                <select id="speciesCategory" required>
+                  <option value="">Select Category</option>
+                  <option value="Mammals">Mammals</option>
+                  <option value="Birds">Birds</option>
+                  <option value="Reptiles">Reptiles</option>
+                  <option value="Amphibians">Amphibians</option>
+                  <option value="Insects">Insects</option>
+                  <option value="Marine Life">Marine Life</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="sightingDate">
+                  <i class="fas fa-calendar"></i> Date & Time
+                </label>
+                <input type="datetime-local" id="sightingDate" required />
+              </div>
+
+              <div class="form-group">
+                <label for="quantity">
+                  <i class="fas fa-hashtag"></i> Quantity
+                </label>
+                <input type="number" id="quantity" min="1" value="1" placeholder="Number seen" />
+              </div>
+            </div>
+
+            <div class="form-group location-group">
+              <label>
+                <i class="fas fa-map-marker-alt"></i> Location
+              </label>
+              <div class="location-input-group">
+                <input type="text" id="locationName" placeholder="Location name or address" required />
+                <button type="button" class="location-btn" id="detectLocationBtn">
+                  <i class="fas fa-crosshairs"></i> Detect Location
+                </button>
+              </div>
+              <div class="coordinates-display" id="coordinatesDisplay"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="behaviorNotes">
+                <i class="fas fa-clipboard"></i> Behavior Notes
+              </label>
+              <textarea id="behaviorNotes" rows="4" placeholder="Describe what you observed (feeding, nesting, migrating, etc.)"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="habitat">
+                <i class="fas fa-tree"></i> Habitat Type
+              </label>
+              <select id="habitat">
+                <option value="">Select Habitat</option>
+                <option value="Forest">Forest</option>
+                <option value="Grassland">Grassland</option>
+                <option value="Wetland">Wetland</option>
+                <option value="Urban">Urban</option>
+                <option value="Marine">Marine/Coastal</option>
+                <option value="Desert">Desert</option>
+                <option value="Mountain">Mountain</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="photoUpload">
+                <i class="fas fa-camera"></i> Upload Photos (optional)
+              </label>
+              <div class="photo-upload-area">
+                <input type="file" id="photoUpload" accept="image/*" multiple />
+                <label for="photoUpload" class="upload-label">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <span>Click to upload or drag and drop</span>
+                  <small>PNG, JPG up to 5MB each</small>
+                </label>
+              </div>
+              <div id="photoPreview" class="photo-preview"></div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="primary-btn">
+                <i class="fas fa-paper-plane"></i> Submit Sighting
+              </button>
+              <button type="reset" class="secondary-btn">
+                <i class="fas fa-redo"></i> Reset Form
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="sidebar-cards">
+          <div class="info-card endangered-alert">
+            <div class="alert-header">
+              <i class="fas fa-exclamation-triangle"></i>
+              <h3>Endangered Species Alert</h3>
+            </div>
+            <p>If you spot an endangered species, your report will be flagged for conservation authorities.</p>
+            <div class="endangered-list" id="endangeredSpeciesList"></div>
+          </div>
+
+          <div class="info-card tips-card">
+            <h3><i class="fas fa-lightbulb"></i> Reporting Tips</h3>
+            <ul>
+              <li>Take clear, well-lit photos from a safe distance</li>
+              <li>Note exact time and location for accuracy</li>
+              <li>Describe behavior patterns observed</li>
+              <li>Never disturb or approach wildlife</li>
+              <li>Report injured animals to wildlife rescue</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Map Tab -->
+    <section class="tab-content" id="map-tab">
+      <div class="map-container-wrapper">
+        <div class="map-controls">
+          <h2><i class="fas fa-filter"></i> Filter Sightings</h2>
+          <div class="filter-group">
+            <select id="mapCategoryFilter" class="filter-select">
+              <option value="all">All Categories</option>
+              <option value="Mammals">Mammals</option>
+              <option value="Birds">Birds</option>
+              <option value="Reptiles">Reptiles</option>
+              <option value="Amphibians">Amphibians</option>
+              <option value="Insects">Insects</option>
+              <option value="Marine Life">Marine Life</option>
+            </select>
+            <select id="mapTimeFilter" class="filter-select">
+              <option value="all">All Time</option>
+              <option value="today">Today</option>
+              <option value="week">This Week</option>
+              <option value="month">This Month</option>
+            </select>
+            <button class="secondary-btn" id="clearMapFilters">
+              <i class="fas fa-times"></i> Clear Filters
+            </button>
+          </div>
+        </div>
+        <div id="sightingMap" class="sighting-map"></div>
+      </div>
+    </section>
+
+    <!-- Sightings Gallery Tab -->
+    <section class="tab-content" id="gallery-tab">
+      <div class="gallery-header">
+        <div>
+          <h2><i class="fas fa-images"></i> Sightings Gallery</h2>
+          <p>Browse all reported wildlife encounters</p>
+        </div>
+        <div class="gallery-filters">
+          <select id="galleryCategoryFilter" class="filter-select">
+            <option value="all">All Categories</option>
+            <option value="Mammals">Mammals</option>
+            <option value="Birds">Birds</option>
+            <option value="Reptiles">Reptiles</option>
+            <option value="Amphibians">Amphibians</option>
+            <option value="Insects">Insects</option>
+            <option value="Marine Life">Marine Life</option>
+          </select>
+          <select id="gallerySortFilter" class="filter-select">
+            <option value="recent">Most Recent</option>
+            <option value="oldest">Oldest First</option>
+            <option value="species">By Species</option>
+          </select>
+        </div>
+      </div>
+      <div class="gallery-grid" id="galleryGrid"></div>
+    </section>
+
+    <!-- Species Database Tab -->
+    <section class="tab-content" id="species-tab">
+      <div class="database-header">
+        <div>
+          <h2><i class="fas fa-book"></i> Species Database</h2>
+          <p>Browse common species in your region</p>
+        </div>
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="speciesSearch" placeholder="Search species..." />
+        </div>
+      </div>
+      <div class="database-filters">
+        <button class="filter-chip active" data-category="all">All Species</button>
+        <button class="filter-chip" data-category="Mammals">Mammals</button>
+        <button class="filter-chip" data-category="Birds">Birds</button>
+        <button class="filter-chip" data-category="Reptiles">Reptiles</button>
+        <button class="filter-chip" data-category="Amphibians">Amphibians</button>
+        <button class="filter-chip" data-category="Insects">Insects</button>
+        <button class="filter-chip" data-category="Marine Life">Marine Life</button>
+      </div>
+      <div class="species-grid" id="speciesGrid"></div>
+    </section>
+
+    <!-- Community Feed Tab -->
+    <section class="tab-content" id="feed-tab">
+      <div class="feed-header">
+        <h2><i class="fas fa-stream"></i> Community Feed</h2>
+        <p>Recent sightings from wildlife observers</p>
+      </div>
+      <div class="feed-container" id="feedContainer"></div>
+    </section>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <!-- Modal for Sighting Details -->
+  <div class="modal" id="sightingModal">
+    <div class="modal-content">
+      <button class="modal-close" id="closeModal">
+        <i class="fas fa-times"></i>
+      </button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="../js/components/component-loader.js"></script>
+  <script src="../js/components/navbar-loader.js"></script>
+  <script src="../js/components/footer-loader.js"></script>
+  <script src="../js/pages/wildlife-sighting-reporter.js"></script>
+</body>
+</html>

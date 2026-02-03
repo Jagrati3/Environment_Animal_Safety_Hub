@@ -1,235 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Species Spotlight - Endangered Animals Database | EWOC</title>
-    <meta name="description" content="Explore our comprehensive database of endangered species from around the world. Learn about conservation status, threats, and how you can help.">
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/endangered-animals.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="assets/FAVICON.png">
+  <title>EcoLife | Protect Our Planet & Animals</title>
+  <link rel="icon" type="image/png" href="/envirnoment-logo.png">
+  <meta name="description"
+    content="Join EcoLife to protect animals, save the environment, and create a greener future for all." />
+
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="../css/global/variables.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/components/navbar.css" />
+  <link rel="stylesheet" href="../css/components/footer.css" />
+  <link rel="stylesheet" href="../css/pages/endangered-animals.css" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 </head>
+
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="../index.html" class="nav-logo">
-                <i class="fas fa-paw"></i> EWOC
-            </a>
-            <button class="nav-toggle" id="navToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <ul class="nav-menu" id="navMenu">
-                <li><a href="../index.html">Home</a></li>
-                <li><a href="./endangered-animals.html" class="active">Endangered Species</a></li>
-                <li><a href="./animals.html">All Animals</a></li>
-                <li><a href="./donate.html">Donate</a></li>
-                <li><a href="./contact.html">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
+  <div class="scroll-progress" id="scrollProgress"></div>
+  <!-- Navbar -->
+  <!-- Navbar (loaded dynamically) -->
+  <div id="navbar-container"></div>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="hero-content">
-            <h1 class="hero-title">Species Spotlight</h1>
-            <p class="hero-subtitle">Discover and protect the world's most endangered animals</p>
-            <div class="hero-stats">
-                <div class="stat-card">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <h3 id="criticallyEndangeredCount">0</h3>
-                    <p>Critically Endangered</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-shield-alt"></i>
-                    <h3 id="endangeredCount">0</h3>
-                    <p>Endangered</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-heart"></i>
-                    <h3 id="vulnerableCount">0</h3>
-                    <p>Vulnerable</p>
-                </div>
-            </div>
-        </div>
+  <main>
+    <section class="hero-section" id="heroSection">
+      <div class="hero-bg" id="heroBg"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1 class="hero-title">
+          <span class="icon-animate">🌍</span>
+          <span class="text-gradient">Endangered Animals</span>
+          Database
+        </h1>
+        <p class="hero-subtitle">Discover the beauty of our planet's rarest species and join the mission to protect them
+          before it's too late.</p>
+      </div>
     </section>
 
-    <!-- Conservation Statistics -->
-    <section class="conservation-stats-section">
-        <div class="container">
-            <h2 class="section-title">Global Conservation Overview</h2>
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="stat-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3>1000x</h3>
-                        <p>Current extinction rate vs natural background rate</p>
-                    </div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-icon">
-                        <i class="fas fa-tree"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3>68%</h3>
-                        <p>Decline in wildlife populations since 1970</p>
-                    </div>
-                </div>
-                <div class="stat-box success">
-                    <div class="stat-icon">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3>48</h3>
-                        <p>Species saved from extinction through conservation</p>
-                    </div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-icon">
-                        <i class="fas fa-globe"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3>1M+</h3>
-                        <p>Species at risk of extinction globally</p>
-                    </div>
-                </div>
-            </div>
+    <div class="search-container">
+      <div class="search-box">
+        <input type="text" id="searchInput" class="search-input"
+          placeholder="Search animals by name or scientific name...">
+        <button class="search-btn" onclick="searchAnimals()">🔍</button>
+      </div>
+
+      <div class="filters">
+        <button class="filter-btn active" onclick="filterByStatus('all', event)">All</button>
+        <button class="filter-btn" onclick="filterByStatus('CR', event)">Critically Endangered</button>
+        <button class="filter-btn" onclick="filterByStatus('EN', event)">Endangered</button>
+        <button class="filter-btn" onclick="filterByStatus('VU', event)">Vulnerable</button>
+      </div>
+    </div>
+
+    <div id="animalsGrid" class="animals-grid"></div>
+    <div id="noResults" class="no-results" style="display: none;">
+      <h3>No animals found</h3>
+      <p>Try adjusting your search or filters</p>
+    </div>
+
+    <section class="help-section">
+      <div class="help-container">
+        <div style="text-align: center; margin-bottom: 3rem;">
+          <h2 style="font-size: 2.5rem; color: #1a1a2e; margin-bottom: 1rem;">How You Can Help</h2>
+          <p style="color: #666; max-width: 600px; margin: 0 auto;">Small actions can make a big difference in
+            protecting endangered species and their habitats.</p>
         </div>
+
+        <div class="help-grid">
+          <div class="help-card">
+            <span class="help-icon">🌿</span>
+            <h3>Restore Habitats</h3>
+            <p>Participate in local tree planting and cleanup drives to restore natural habitats for wildlife.</p>
+          </div>
+
+          <div class="help-card">
+            <span class="help-icon">🚫</span>
+            <h3>Stop Illegal Trade</h3>
+            <p>Never buy products made from endangered animals, such as ivory, tortoise shell, or coral.</p>
+          </div>
+
+          <div class="help-card">
+            <span class="help-icon">📢</span>
+            <h3>Spread Awareness</h3>
+            <p>Educate others about endangered species and advocate for stronger conservation laws.</p>
+          </div>
+
+          <div class="help-card">
+            <span class="help-icon">🤝</span>
+            <h3>Adopt or Donate</h3>
+            <p>Support reputable conservation organizations through donations or animal adoption programs.</p>
+          </div>
+        </div>
+      </div>
     </section>
+  </main>
 
-    <!-- Success Stories -->
-    <section class="success-stories">
-        <div class="container">
-            <h2 class="section-title">Conservation Success Stories</h2>
-            <div class="success-grid">
-                <div class="success-card">
-                    <i class="fas fa-trophy"></i>
-                    <h3>Giant Panda</h3>
-                    <p>Downlisted from "Endangered" to "Vulnerable" in 2016 after population recovery from 1,000 to 1,864</p>
-                </div>
-                <div class="success-card">
-                    <i class="fas fa-trophy"></i>
-                    <h3>Humpback Whale</h3>
-                    <p>Recovered from near extinction (450) to over 25,000 through international protection</p>
-                </div>
-                <div class="success-card">
-                    <i class="fas fa-trophy"></i>
-                    <h3>Southern White Rhino</h3>
-                    <p>Increased from fewer than 100 to over 18,000 through intensive conservation efforts</p>
-                </div>
-            </div>
-        </div>
-    </section>
+  <!-- Modal -->
+  <div id="animalModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
 
-    <!-- Filter and Search -->
-    <section class="filter-section">
-        <div class="container">
-            <div class="filter-controls">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Search species by name...">
-                </div>
-                <div class="filter-group">
-                    <label>Conservation Status:</label>
-                    <select id="statusFilter">
-                        <option value="all">All Status</option>
-                        <option value="CR">Critically Endangered</option>
-                        <option value="EN">Endangered</option>
-                        <option value="VU">Vulnerable</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Habitat:</label>
-                    <select id="habitatFilter">
-                        <option value="all">All Habitats</option>
-                        <option value="forest">Forest</option>
-                        <option value="ocean">Ocean</option>
-                        <option value="arctic">Arctic</option>
-                        <option value="grassland">Grassland</option>
-                        <option value="mountain">Mountain</option>
-                        <option value="wetland">Wetland</option>
-                    </select>
-                </div>
-                <button id="resetFilters" class="btn-reset">
-                    <i class="fas fa-redo"></i> Reset
-                </button>
-            </div>
-        </div>
-    </section>
+  <!-- Footer -->
+  <!-- Footer (loaded dynamically) -->
+  <div id="footer-placeholder"></div>
 
-    <!-- Species Cards Grid -->
-    <section class="species-section">
-        <div class="container">
-            <div class="species-header">
-                <h2 class="section-title">Endangered Species Database</h2>
-                <p class="species-count"><span id="displayCount">0</span> species found</p>
-            </div>
-            <div class="species-grid" id="speciesGrid">
-                <!-- Species cards will be dynamically loaded here -->
-            </div>
-            <div class="no-results" id="noResults" style="display: none;">
-                <i class="fas fa-search"></i>
-                <h3>No species found</h3>
-                <p>Try adjusting your search or filter criteria</p>
-            </div>
-        </div>
-    </section>
+  <!-- Back to Top Button -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to Top">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
 
-    <!-- Call to Action -->
-    <section class="cta-section">
-        <div class="container">
-            <div class="cta-content">
-                <h2>Join the Fight Against Extinction</h2>
-                <p>Your support can make a real difference in protecting these magnificent creatures</p>
-                <div class="cta-buttons">
-                    <a href="./donate.html" class="btn-primary">
-                        <i class="fas fa-heart"></i> Support Conservation
-                    </a>
-                    <a href="./volunteer.html" class="btn-secondary">
-                        <i class="fas fa-hands-helping"></i> Become a Volunteer
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-section">
-                <h3>EWOC</h3>
-                <p>Environmental Wildlife Outreach Coalition</p>
-                <p>Protecting endangered species worldwide</p>
-            </div>
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="./about.html">About Us</a></li>
-                    <li><a href="./contact.html">Contact</a></li>
-                    <li><a href="./volunteer.html">Volunteer</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Connect</h3>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-linkedin"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 EWOC. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script src="../js/endangered-animals.js"></script>
-    <script src="../js/nav.js"></script>
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/components/component-loader.js"></script>
+  <script src="../js/pages/endangered-animals.js"></script>
+  <script>
+    (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "ws110ZzXAkEnbVsIy9g8d"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
+  </script>
 </body>
+
 </html>

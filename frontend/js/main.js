@@ -238,7 +238,7 @@ const ECO_FACTS = [
  * Called when DOM content is loaded
  * Initializes all core application features
  */
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   // Core navigation and UI components
   initNavbar();
   initSmoothScroll();
@@ -309,23 +309,50 @@ function initAdditionalFeatures() {
  * Handles navbar toggling and smooth scrolling
  */
 function initNavbar() {
-  const navbarToggler = document.querySelector('.navbar-toggler');
-  const navbarCollapse = document.querySelector('.navbar-collapse');
+  const setupNavListeners = () => {
+    const navbar = document.getElementById("navbar");
+    const navLinks = document.getElementById("navLinks");
+    const mobileBtn = document.getElementById("navToggle");
 
-  if (navbarToggler && navbarCollapse) {
-    navbarToggler.addEventListener('click', function() {
-      navbarCollapse.classList.toggle('show');
-    });
+    // Mobile Menu Toggle
+    if (mobileBtn && navLinks) {
+      mobileBtn.addEventListener("click", () => {
+        const isExpanded = mobileBtn.getAttribute("aria-expanded") === "true";
+        mobileBtn.setAttribute("aria-expanded", !isExpanded);
 
-    // Close navbar when clicking on a nav link
-    const navLinks = document.querySelectorAll('.nav-link');
-    navLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        if (navbarCollapse.classList.contains('show')) {
-          navbarCollapse.classList.remove('show');
+        navLinks.classList.toggle("active");
+        mobileBtn.classList.toggle("active");
+        document.body.classList.toggle("no-scroll");
+      });
+
+      // Close menu when clicking a link
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          navLinks.classList.remove("active");
+          mobileBtn.classList.remove("active");
+          mobileBtn.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("no-scroll");
+        });
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener("click", (e) => {
+        if (mobileBtn && navLinks && !mobileBtn.contains(e.target) && !navLinks.contains(e.target) && navLinks.classList.contains("active")) {
+          navLinks.classList.remove("active");
+          mobileBtn.classList.remove("active");
+          mobileBtn.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("no-scroll");
         }
       });
-    });
+    }
+  };
+
+  // If navbar is already in DOM, setup immediately
+  if (document.getElementById("navToggle")) {
+    setupNavListeners();
+  } else {
+    // Wait for event from component-loader
+    window.addEventListener("navbarLoaded", setupNavListeners);
   }
 }
 
@@ -340,7 +367,7 @@ function initNavbarActiveState() {
   // Check if elements exist before adding event listener
   if (sections.length === 0 || navLinks.length === 0) return;
 
-  window.addEventListener("scroll", function() {
+  window.addEventListener("scroll", function () {
     let current = "";
     const scrollY = window.pageYOffset;
 
@@ -390,7 +417,7 @@ function initScrollProgress() {
  */
 function initSmoothScroll() {
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-    anchor.addEventListener("click", function(e) {
+    anchor.addEventListener("click", function (e) {
       e.preventDefault();
       const targetId = this.getAttribute("href");
 
@@ -418,7 +445,7 @@ function initBackToTop() {
   const backToTop = document.getElementById("backToTop");
   if (!backToTop) return;
 
-  window.addEventListener("scroll", function() {
+  window.addEventListener("scroll", function () {
     if (window.scrollY > 500) {
       backToTop.classList.add("visible");
     } else {
@@ -426,7 +453,7 @@ function initBackToTop() {
     }
   });
 
-  backToTop.addEventListener("click", function() {
+  backToTop.addEventListener("click", function () {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -514,12 +541,12 @@ function initParticles() {
 
   const particleCount = 30; // Reduced from 50
   const particles = new Set();
-  
+
   for (let i = 0; i < particleCount; i++) {
     const particle = createParticle(particlesContainer);
     particles.add(particle);
   }
-  
+
   // Store particles for cleanup
   particlesContainer._particles = particles;
 }
@@ -579,7 +606,7 @@ function initFormHandlers() {
   // Report Form
   const reportForm = document.getElementById("reportForm");
   if (reportForm) {
-    reportForm.addEventListener("submit", function(e) {
+    reportForm.addEventListener("submit", function (e) {
       e.preventDefault();
       handleReportSubmit(this);
     });
@@ -588,7 +615,7 @@ function initFormHandlers() {
   // Newsletter Form
   const newsletterForm = document.getElementById("newsletterForm");
   if (newsletterForm) {
-    newsletterForm.addEventListener("submit", function(e) {
+    newsletterForm.addEventListener("submit", function (e) {
       e.preventDefault();
       handleNewsletterSubmit(this);
     });
@@ -597,7 +624,7 @@ function initFormHandlers() {
   // File upload preview
   const fileInput = document.querySelector('.file-upload input[type="file"]');
   if (fileInput) {
-    fileInput.addEventListener("change", function() {
+    fileInput.addEventListener("change", function () {
       const fileName = this.files[0]?.name;
       const label = this.parentElement.querySelector(".file-upload-label span");
       if (fileName && label) {
@@ -723,8 +750,8 @@ function handleCarbonSubmit(e) {
   }
 
   let score = CARBON_CALCULATOR_WEIGHTS.transport[transport] +
-             CARBON_CALCULATOR_WEIGHTS.electricity[electricity] +
-             CARBON_CALCULATOR_WEIGHTS.plastic[plastic];
+    CARBON_CALCULATOR_WEIGHTS.electricity[electricity] +
+    CARBON_CALCULATOR_WEIGHTS.plastic[plastic];
 
   const carbonResult = document.getElementById("carbonResult");
   const carbonScoreEl = document.getElementById("carbonScore");
@@ -899,50 +926,93 @@ function initEcoChallenges() {
  * Initialize modal system for service information
  * Sets up modal dialogs for various environmental services
  */
+/**
+ * Initialize modal system for service information
+ * Sets up modal dialogs for various environmental services with accessibility focus trap
+ */
 function initModalSystem() {
   const modal = document.getElementById('infoModal');
   if (!modal) return;
 
   const closeBtn = document.querySelector('.custom-modal-close');
+  // Use event delegation for open buttons since they might be dynamically added
   const modalButtons = document.querySelectorAll('.open-modal-btn');
+  let lastFocusedElement;
 
-  // Open Modal
-  modalButtons.forEach(btn => {
-    btn.addEventListener('click', function(e) {
-      e.preventDefault();
-      const contentId = this.getAttribute('data-id');
-      const content = MODAL_CONTENT[contentId];
+  function trapFocus(e) {
+    if (e.key === 'Tab' || e.keyCode === 9) {
+      const focusableContent = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      const firstFocusableElement = focusableContent[0];
+      const lastFocusableElement = focusableContent[focusableContent.length - 1];
 
-      if (content) {
-        // Populate content
-        document.getElementById('modalHeader').innerHTML = `
-          <i class="fa-solid ${content.icon}"></i>
-          <h2>${content.title}</h2>
-        `;
-        document.getElementById('modalBody').innerHTML = content.body;
-
-        // Show modal
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+      if (e.shiftKey) { // if shift key pressed for shift + tab combination
+        if (document.activeElement === firstFocusableElement) {
+          lastFocusableElement.focus();
+          e.preventDefault();
+        }
+      } else { // if tab key is pressed
+        if (document.activeElement === lastFocusableElement) {
+          firstFocusableElement.focus();
+          e.preventDefault();
+        }
       }
+    }
+  }
+
+  // Open Modal logic
+  function openModal(btn) {
+    lastFocusedElement = document.activeElement; // Save focus
+    const contentId = btn.getAttribute('data-id');
+    const content = MODAL_CONTENT[contentId];
+
+    if (content) {
+      // Populate content
+      document.getElementById('modalHeader').innerHTML = `
+        <i class="fa-solid ${content.icon}"></i>
+        <h2>${content.title}</h2>
+      `;
+      document.getElementById('modalBody').innerHTML = content.body;
+
+      // Show modal
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+
+      // Focus management
+      if (closeBtn) {
+        closeBtn.focus();
+      }
+      document.addEventListener('keydown', trapFocus);
+    }
+  }
+
+  // Initialize buttons
+  modalButtons.forEach(btn => {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      openModal(this);
     });
   });
 
   // Close functions
-  window.closeInfoModal = function() {
+  window.closeInfoModal = function () {
     modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+
+    document.removeEventListener('keydown', trapFocus);
+    if (lastFocusedElement) lastFocusedElement.focus(); // Restore focus
   }
 
   // Close on overlay click
-  modal.addEventListener('click', function(e) {
+  modal.addEventListener('click', function (e) {
     if (e.target === modal) {
       closeInfoModal();
     }
   });
 
   // Close on Escape key
-  document.addEventListener('keydown', function(e) {
+  document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && modal.classList.contains('active')) {
       closeInfoModal();
     }
@@ -1030,7 +1100,7 @@ function initPreloader() {
   const preloader = document.getElementById("preloader");
   if (!preloader) return;
 
-  window.addEventListener("load", function() {
+  window.addEventListener("load", function () {
     setTimeout(() => {
       preloader.style.opacity = "0";
       preloader.style.visibility = "hidden";
@@ -1224,7 +1294,7 @@ function initFutureVisualization() {
    * Show future Earth scenario
    * @param {string} year - Time period to display (present, 2050, 2100)
    */
-  window.showFuture = function(year) {
+  window.showFuture = function (year) {
     if (year === "present") {
       futureDisplay.innerHTML = `
         🌍 <h3>Earth Today</h3>
@@ -1265,7 +1335,7 @@ function initSurvivalScore() {
    * @param {number} water - Water quality percentage
    * @param {number} bio - Biodiversity percentage
    */
-  window.updateSurvivalScore = function(air, water, bio) {
+  window.updateSurvivalScore = function (air, water, bio) {
     const airBar = document.getElementById("airBar");
     const waterBar = document.getElementById("waterBar");
     const bioBar = document.getElementById("bioBar");
@@ -1370,7 +1440,7 @@ function initEarthVisualization() {
    * Update Earth visualization based on score
    * @param {number} score - Environmental impact score (0-100)
    */
-  window.updateEarth = function(score) {
+  window.updateEarth = function (score) {
     const earthText = document.getElementById("earthText");
     const sun = document.querySelector(".sun-rays");
     const rain = document.querySelector(".rain");
@@ -1456,7 +1526,7 @@ function initWildlifeFilter() {
 function initFlipCards() {
   const flipCards = document.querySelectorAll(".flip-card");
   flipCards.forEach(card => {
-    card.addEventListener("click", function() {
+    card.addEventListener("click", function () {
       this.classList.toggle("flipped");
     });
   });
@@ -1729,18 +1799,18 @@ function closeCrisisAlert() {
   if (alertBanner) {
     // Add closing animation
     alertBanner.classList.add('closing');
-    
+
     // Remove crisis alert styling from body
     document.body.classList.remove('crisis-alert-shown');
-    
+
     // Remove the banner after animation completes
     setTimeout(() => {
       alertBanner.remove();
     }, 500);
-    
+
     // Store user preference (optional - can be removed if always want to show alert)
     localStorage.setItem('fireCrisisAlertClosed', 'true');
-    
+
     console.log('🚨 Crisis Alert Closed - User has been informed about Level 3 Fire Crisis');
   }
 }
@@ -1751,20 +1821,20 @@ function closeCrisisAlert() {
  */
 function initCrisisAlert() {
   const alertClosed = localStorage.getItem('fireCrisisAlertClosed');
-  
+
   // For Level 3 Crisis, show alert regardless of previous dismissal
   // Remove the next 3 lines if you want to respect user's dismissal
   if (alertClosed === 'true') {
     // For emergency situations, we want to show the alert again after 24 hours
     const dismissTime = localStorage.getItem('fireCrisisAlertDismissTime');
     const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000);
-    
+
     if (!dismissTime || parseInt(dismissTime) < oneDayAgo) {
       localStorage.removeItem('fireCrisisAlertClosed');
       localStorage.setItem('fireCrisisAlertDismissTime', Date.now().toString());
     }
   }
-  
+
   // Show emergency notification after 5 seconds if user hasn't interacted
   setTimeout(() => {
     const alertBanner = document.getElementById('crisisAlert');
@@ -1794,7 +1864,7 @@ function showEmergencyNotification() {
     max-width: 300px;
     font-weight: 600;
   `;
-  
+
   notification.innerHTML = `
     <div style="display: flex; align-items: center; gap: 10px;">
       <i class="fas fa-fire" style="font-size: 1.2rem; animation: urgentFlash 1s infinite;"></i>
@@ -1805,16 +1875,16 @@ function showEmergencyNotification() {
       <button onclick="this.parentElement.parentElement.remove()" style="background:none; border:none; color:white; font-size:1.2rem; cursor:pointer; padding: 5px;">×</button>
     </div>
   `;
-  
+
   document.body.appendChild(notification);
-  
+
   // Auto-remove after 10 seconds
   setTimeout(() => {
     if (notification.parentNode) {
       notification.remove();
     }
   }, 10000);
-  
+
   console.log('🔥 Emergency notification displayed - Level 3 Crisis requires immediate attention');
 }
 

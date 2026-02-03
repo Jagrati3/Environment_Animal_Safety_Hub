@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Climate Action Planner | EcoLife</title>
+  <link rel="icon" type="image/png" href="../assets/images/others/FAVICON.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.css" />
+  <link rel="stylesheet" href="../css/global/variables.css" />
+  <link rel="stylesheet" href="../css/global/utilities.css" />
+  <link rel="stylesheet" href="../css/components/navbar.css" />
+  <link rel="stylesheet" href="../css/components/footer.css" />
+  <link rel="stylesheet" href="../css/pages/climate-action-planner.css" />
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+  <header class="hero-section">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="fas fa-leaf"></i>
+        <span>Personal Climate Action</span>
+      </div>
+      <h1>Climate Action Planner</h1>
+      <p>Track your carbon footprint, set reduction goals, and take daily action for a sustainable future.</p>
+      <div class="hero-impact-summary" id="heroImpactSummary">
+        <div class="impact-card">
+          <div class="impact-icon">🌍</div>
+          <div class="impact-value" id="totalCO2Saved">0</div>
+          <div class="impact-label">kg CO₂ Saved</div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-icon">🌳</div>
+          <div class="impact-value" id="treesEquivalent">0</div>
+          <div class="impact-label">Trees Planted</div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-icon">💧</div>
+          <div class="impact-value" id="waterSaved">0</div>
+          <div class="impact-label">Liters Saved</div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-icon">🔥</div>
+          <div class="impact-value" id="currentStreak">0</div>
+          <div class="impact-label">Day Streak</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <!-- Tab Navigation -->
+    <nav class="tab-navigation">
+      <button class="tab-btn active" data-tab="dashboard">
+        <i class="fas fa-chart-line"></i>
+        <span>Dashboard</span>
+      </button>
+      <button class="tab-btn" data-tab="calculator">
+        <i class="fas fa-calculator"></i>
+        <span>Carbon Calculator</span>
+      </button>
+      <button class="tab-btn" data-tab="challenges">
+        <i class="fas fa-tasks"></i>
+        <span>Daily Challenges</span>
+        <span class="badge" id="activeChallengesBadge">0</span>
+      </button>
+      <button class="tab-btn" data-tab="activity">
+        <i class="fas fa-list"></i>
+        <span>Activity Log</span>
+      </button>
+      <button class="tab-btn" data-tab="goals">
+        <i class="fas fa-bullseye"></i>
+        <span>Goals</span>
+      </button>
+      <button class="tab-btn" data-tab="leaderboard">
+        <i class="fas fa-trophy"></i>
+        <span>Leaderboard</span>
+      </button>
+      <button class="tab-btn" data-tab="badges">
+        <i class="fas fa-award"></i>
+        <span>Achievements</span>
+      </button>
+    </nav>
+
+    <!-- Dashboard Tab -->
+    <section class="tab-content active" id="dashboard-tab">
+      <div class="dashboard-grid">
+        <div class="dashboard-card impact-overview">
+          <div class="card-header">
+            <h2><i class="fas fa-chart-pie"></i> Your Impact Overview</h2>
+            <button class="export-btn" onclick="exportReport()">
+              <i class="fas fa-download"></i> Export Report
+            </button>
+          </div>
+          <div class="impact-stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon">🚗</div>
+              <div class="stat-info">
+                <h3 id="transportCO2">0 kg</h3>
+                <p>Transport CO₂</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">⚡</div>
+              <div class="stat-info">
+                <h3 id="energyCO2">0 kg</h3>
+                <p>Energy CO₂</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">🍽️</div>
+              <div class="stat-info">
+                <h3 id="foodCO2">0 kg</h3>
+                <p>Food CO₂</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">🛍️</div>
+              <div class="stat-info">
+                <h3 id="shoppingCO2">0 kg</h3>
+                <p>Shopping CO₂</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2><i class="fas fa-chart-line"></i> Monthly Trend</h2>
+          </div>
+          <canvas id="trendChart"></canvas>
+        </div>
+
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2><i class="fas fa-chart-bar"></i> Carbon Breakdown</h2>
+          </div>
+          <canvas id="breakdownChart"></canvas>
+        </div>
+
+        <div class="dashboard-card tips-card">
+          <div class="card-header">
+            <h2><i class="fas fa-lightbulb"></i> Personalized Tips</h2>
+          </div>
+          <div id="personalizedTips" class="tips-list"></div>
+        </div>
+
+        <div class="dashboard-card recent-activities">
+          <div class="card-header">
+            <h2><i class="fas fa-history"></i> Recent Actions</h2>
+          </div>
+          <div id="recentActivities" class="activities-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Carbon Calculator Tab -->
+    <section class="tab-content" id="calculator-tab">
+      <div class="calculator-container">
+        <div class="calculator-card">
+          <div class="card-header">
+            <h2><i class="fas fa-calculator"></i> Carbon Footprint Calculator</h2>
+            <p>Calculate your monthly carbon footprint from daily activities</p>
+          </div>
+
+          <form id="carbonCalculatorForm" class="calculator-form">
+            <!-- Transportation Section -->
+            <div class="calculator-section">
+              <h3><i class="fas fa-car"></i> Transportation</h3>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Car miles per month</label>
+                  <input type="number" id="carMiles" min="0" value="0" step="10" />
+                </div>
+                <div class="form-group">
+                  <label>Public transport trips/month</label>
+                  <input type="number" id="publicTransport" min="0" value="0" />
+                </div>
+                <div class="form-group">
+                  <label>Flight hours per year</label>
+                  <input type="number" id="flightHours" min="0" value="0" />
+                </div>
+                <div class="form-group">
+                  <label>Bike/Walk trips/month</label>
+                  <input type="number" id="bikeTrips" min="0" value="0" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Energy Section -->
+            <div class="calculator-section">
+              <h3><i class="fas fa-bolt"></i> Home Energy</h3>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Electricity (kWh/month)</label>
+                  <input type="number" id="electricity" min="0" value="0" step="10" />
+                </div>
+                <div class="form-group">
+                  <label>Natural Gas (therms/month)</label>
+                  <input type="number" id="naturalGas" min="0" value="0" />
+                </div>
+                <div class="form-group">
+                  <label>Renewable energy %</label>
+                  <input type="number" id="renewableEnergy" min="0" max="100" value="0" />
+                </div>
+                <div class="form-group">
+                  <label>Household size</label>
+                  <input type="number" id="householdSize" min="1" value="1" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Food Section -->
+            <div class="calculator-section">
+              <h3><i class="fas fa-utensils"></i> Diet & Food</h3>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Diet type</label>
+                  <select id="dietType">
+                    <option value="meat-heavy">Meat Heavy</option>
+                    <option value="average">Average</option>
+                    <option value="low-meat">Low Meat</option>
+                    <option value="vegetarian">Vegetarian</option>
+                    <option value="vegan">Vegan</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Local food %</label>
+                  <input type="number" id="localFood" min="0" max="100" value="20" />
+                </div>
+                <div class="form-group">
+                  <label>Food waste %</label>
+                  <input type="number" id="foodWaste" min="0" max="100" value="30" />
+                </div>
+                <div class="form-group">
+                  <label>Organic food %</label>
+                  <input type="number" id="organicFood" min="0" max="100" value="10" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Shopping Section -->
+            <div class="calculator-section">
+              <h3><i class="fas fa-shopping-bag"></i> Shopping & Consumption</h3>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>New clothes per month</label>
+                  <input type="number" id="newClothes" min="0" value="0" />
+                </div>
+                <div class="form-group">
+                  <label>Electronics per year</label>
+                  <input type="number" id="electronics" min="0" value="0" />
+                </div>
+                <div class="form-group">
+                  <label>Recycling habits</label>
+                  <select id="recyclingHabits">
+                    <option value="none">Never Recycle</option>
+                    <option value="sometimes">Sometimes</option>
+                    <option value="often">Often</option>
+                    <option value="always">Always</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Second-hand purchases %</label>
+                  <input type="number" id="secondHand" min="0" max="100" value="0" />
+                </div>
+              </div>
+            </div>
+
+            <div class="calculator-actions">
+              <button type="submit" class="primary-btn">
+                <i class="fas fa-calculator"></i> Calculate Footprint
+              </button>
+              <button type="button" class="secondary-btn" onclick="resetCalculator()">
+                <i class="fas fa-redo"></i> Reset
+              </button>
+            </div>
+          </form>
+
+          <div id="calculatorResults" class="calculator-results"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Daily Challenges Tab -->
+    <section class="tab-content" id="challenges-tab">
+      <div class="challenges-header">
+        <h2><i class="fas fa-tasks"></i> 30-Day Eco Challenges</h2>
+        <p>Take on daily challenges to reduce your environmental impact</p>
+      </div>
+
+      <div class="challenges-grid" id="challengesGrid"></div>
+    </section>
+
+    <!-- Activity Log Tab -->
+    <section class="tab-content" id="activity-tab">
+      <div class="activity-header">
+        <div>
+          <h2><i class="fas fa-list"></i> Activity Log</h2>
+          <p>Track your daily green actions</p>
+        </div>
+        <button class="primary-btn" onclick="openLogActivityModal()">
+          <i class="fas fa-plus"></i> Log Activity
+        </button>
+      </div>
+
+      <div class="activity-filters">
+        <button class="filter-btn active" data-filter="all">All Activities</button>
+        <button class="filter-btn" data-filter="transport">🚲 Transport</button>
+        <button class="filter-btn" data-filter="energy">⚡ Energy</button>
+        <button class="filter-btn" data-filter="waste">♻️ Waste</button>
+        <button class="filter-btn" data-filter="food">🌱 Food</button>
+      </div>
+
+      <div class="activity-timeline" id="activityTimeline"></div>
+    </section>
+
+    <!-- Goals Tab -->
+    <section class="tab-content" id="goals-tab">
+      <div class="goals-header">
+        <div>
+          <h2><i class="fas fa-bullseye"></i> Reduction Goals</h2>
+          <p>Set and track your carbon reduction targets</p>
+        </div>
+        <button class="primary-btn" onclick="openSetGoalModal()">
+          <i class="fas fa-plus"></i> Set New Goal
+        </button>
+      </div>
+
+      <div class="goals-grid" id="goalsGrid"></div>
+    </section>
+
+    <!-- Leaderboard Tab -->
+    <section class="tab-content" id="leaderboard-tab">
+      <div class="leaderboard-header">
+        <h2><i class="fas fa-trophy"></i> Community Leaderboard</h2>
+        <p>See how you compare with other climate action heroes</p>
+      </div>
+
+      <div class="leaderboard-filters">
+        <button class="filter-btn active" data-period="week">This Week</button>
+        <button class="filter-btn" data-period="month">This Month</button>
+        <button class="filter-btn" data-period="year">This Year</button>
+        <button class="filter-btn" data-period="all">All Time</button>
+      </div>
+
+      <div class="leaderboard-container" id="leaderboardContainer"></div>
+    </section>
+
+    <!-- Badges Tab -->
+    <section class="tab-content" id="badges-tab">
+      <div class="badges-header">
+        <h2><i class="fas fa-award"></i> Achievement Badges</h2>
+        <p>Unlock badges by reaching milestones</p>
+      </div>
+
+      <div class="badges-stats">
+        <div class="badge-stat">
+          <span class="stat-value" id="unlockedBadges">0</span>
+          <span class="stat-label">Unlocked</span>
+        </div>
+        <div class="badge-stat">
+          <span class="stat-value" id="totalBadges">15</span>
+          <span class="stat-label">Total Badges</span>
+        </div>
+        <div class="badge-stat">
+          <span class="stat-value" id="badgeProgress">0</span>
+          <span class="stat-label">% Complete</span>
+        </div>
+      </div>
+
+      <div class="badges-grid" id="badgesGrid"></div>
+    </section>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <!-- Log Activity Modal -->
+  <div class="modal" id="logActivityModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2><i class="fas fa-plus-circle"></i> Log Activity</h2>
+        <button class="modal-close" onclick="closeModal('logActivityModal')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="logActivityForm" class="activity-form">
+          <div class="form-group">
+            <label>Activity Type</label>
+            <select id="activityType" required>
+              <option value="">Select an activity</option>
+              <option value="transport">🚲 Used bike/public transport</option>
+              <option value="transport">🚶 Walked instead of driving</option>
+              <option value="energy">💡 Turned off unused lights</option>
+              <option value="energy">🌡️ Adjusted thermostat</option>
+              <option value="waste">♻️ Recycled properly</option>
+              <option value="waste">🗑️ Zero waste day</option>
+              <option value="food">🌱 Ate plant-based meal</option>
+              <option value="food">🥕 Bought local produce</option>
+              <option value="food">🍽️ No food waste</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>CO₂ Impact (kg saved)</label>
+            <input type="number" id="activityImpact" min="0" step="0.1" value="1" required />
+          </div>
+          <div class="form-group">
+            <label>Notes (optional)</label>
+            <textarea id="activityNotes" rows="3" placeholder="Add any details..."></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="primary-btn">
+              <i class="fas fa-check"></i> Log Activity
+            </button>
+            <button type="button" class="secondary-btn" onclick="closeModal('logActivityModal')">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Set Goal Modal -->
+  <div class="modal" id="setGoalModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2><i class="fas fa-bullseye"></i> Set Reduction Goal</h2>
+        <button class="modal-close" onclick="closeModal('setGoalModal')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="setGoalForm" class="goal-form">
+          <div class="form-group">
+            <label>Goal Name</label>
+            <input type="text" id="goalName" placeholder="e.g., Reduce transport emissions" required />
+          </div>
+          <div class="form-group">
+            <label>Target Reduction (kg CO₂)</label>
+            <input type="number" id="goalTarget" min="1" value="50" required />
+          </div>
+          <div class="form-group">
+            <label>Time Period</label>
+            <select id="goalPeriod" required>
+              <option value="month">This Month</option>
+              <option value="quarter">This Quarter</option>
+              <option value="year">This Year</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <select id="goalCategory" required>
+              <option value="transport">Transportation</option>
+              <option value="energy">Energy</option>
+              <option value="food">Food</option>
+              <option value="shopping">Shopping</option>
+              <option value="overall">Overall</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="primary-btn">
+              <i class="fas fa-check"></i> Set Goal
+            </button>
+            <button type="button" class="secondary-btn" onclick="closeModal('setGoalModal')">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="../js/components/component-loader.js"></script>
+  <script src="../js/components/navbar-loader.js"></script>
+  <script src="../js/components/footer-loader.js"></script>
+  <script src="../js/pages/climate-action-planner.js"></script>
+</body>
+</html>

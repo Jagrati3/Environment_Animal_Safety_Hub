@@ -1,0 +1,1375 @@
+:root {
+  --climate-primary: #0ea5e9;
+  --climate-secondary: #06b6d4;
+  --climate-accent: #38bdf8;
+  --climate-success: #10b981;
+  --climate-warning: #f59e0b;
+  --climate-danger: #ef4444;
+  --climate-dark: #1e293b;
+  --climate-light: #f8fafc;
+  --climate-card: #ffffff;
+  --climate-border: #e2e8f0;
+  --climate-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --climate-shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: var(--climate-light);
+  color: var(--climate-dark);
+  line-height: 1.6;
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #38bdf8 100%);
+  color: white;
+  padding: 130px 24px 70px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+}
+
+.hero-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.hero-section h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+}
+
+.hero-section p {
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+  opacity: 0.95;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-impact-summary {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.impact-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 24px 32px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  min-width: 160px;
+  text-align: center;
+}
+
+.impact-icon {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+}
+
+.impact-value {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.impact-label {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* Main Container */
+.main-container {
+  max-width: 1400px;
+  margin: -40px auto 80px;
+  padding: 0 24px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Tab Navigation */
+.tab-navigation {
+  display: flex;
+  gap: 8px;
+  background: var(--climate-card);
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: var(--climate-shadow);
+  margin-bottom: 32px;
+  overflow-x: auto;
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: none;
+  background: transparent;
+  color: var(--climate-dark);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  position: relative;
+}
+
+.tab-btn:hover {
+  background: #f1f5f9;
+  color: var(--climate-primary);
+}
+
+.tab-btn.active {
+  background: var(--climate-primary);
+  color: white;
+}
+
+.tab-btn .badge {
+  background: var(--climate-success);
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.tab-btn.active .badge {
+  background: white;
+  color: var(--climate-primary);
+}
+
+/* Tab Content */
+.tab-content {
+  display: none;
+  animation: fadeIn 0.4s ease;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dashboard */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 24px;
+}
+
+.dashboard-card {
+  background: var(--climate-card);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: var(--climate-shadow);
+}
+
+.dashboard-card.impact-overview {
+  grid-column: span 12;
+}
+
+.dashboard-card.tips-card,
+.dashboard-card.recent-activities {
+  grid-column: span 6;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.card-header h2 {
+  font-size: 1.4rem;
+  color: var(--climate-primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-header p {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin-top: 4px;
+}
+
+.export-btn {
+  padding: 10px 20px;
+  background: var(--climate-success);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.export-btn:hover {
+  background: #059669;
+  transform: translateY(-2px);
+}
+
+.impact-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  padding: 24px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+  font-size: 2.5rem;
+}
+
+.stat-info h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--climate-dark);
+  margin-bottom: 4px;
+}
+
+.stat-info p {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+/* Charts */
+.dashboard-card:has(canvas) {
+  grid-column: span 6;
+}
+
+canvas {
+  max-height: 300px;
+}
+
+/* Tips List */
+.tips-list {
+  display: grid;
+  gap: 16px;
+}
+
+.tip-item {
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border-left: 4px solid var(--climate-primary);
+  display: flex;
+  align-items: start;
+  gap: 12px;
+}
+
+.tip-item i {
+  color: var(--climate-primary);
+  font-size: 1.3rem;
+  margin-top: 2px;
+}
+
+.tip-content h4 {
+  font-size: 1rem;
+  margin-bottom: 4px;
+  color: var(--climate-dark);
+}
+
+.tip-content p {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+/* Activities List */
+.activities-list {
+  display: grid;
+  gap: 12px;
+}
+
+.activity-item {
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activity-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.activity-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--climate-primary);
+  color: white;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.activity-details h4 {
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+}
+
+.activity-details span {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.activity-impact {
+  text-align: right;
+}
+
+.impact-value-badge {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--climate-success);
+}
+
+.impact-label-badge {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+/* Calculator */
+.calculator-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.calculator-card {
+  background: var(--climate-card);
+  border-radius: 16px;
+  padding: 36px;
+  box-shadow: var(--climate-shadow);
+}
+
+.calculator-form {
+  display: grid;
+  gap: 32px;
+}
+
+.calculator-section {
+  padding: 24px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border-left: 4px solid var(--climate-primary);
+}
+
+.calculator-section h3 {
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  color: var(--climate-primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: var(--climate-dark);
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 12px 16px;
+  border: 2px solid var(--climate-border);
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: "Poppins", sans-serif;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--climate-primary);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+}
+
+.calculator-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.primary-btn,
+.secondary-btn {
+  padding: 16px 32px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.primary-btn {
+  background: var(--climate-primary);
+  color: white;
+}
+
+.primary-btn:hover {
+  background: #0284c7;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.3);
+}
+
+.secondary-btn {
+  background: #f1f5f9;
+  color: var(--climate-dark);
+}
+
+.secondary-btn:hover {
+  background: #e2e8f0;
+}
+
+.calculator-results {
+  margin-top: 32px;
+  padding: 32px;
+  background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+  color: white;
+  border-radius: 16px;
+  text-align: center;
+  display: none;
+}
+
+.calculator-results.active {
+  display: block;
+  animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.results-header {
+  margin-bottom: 24px;
+}
+
+.results-header h3 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.total-footprint {
+  font-size: 4rem;
+  font-weight: 800;
+  margin: 24px 0;
+}
+
+.results-breakdown {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.breakdown-item {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 16px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.breakdown-item h4 {
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+
+.breakdown-item .value {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+/* Challenges */
+.challenges-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.challenges-header h2 {
+  font-size: 2rem;
+  color: var(--climate-primary);
+  margin-bottom: 8px;
+}
+
+.challenges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.challenge-card {
+  background: var(--climate-card);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--climate-shadow);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.challenge-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--climate-shadow-lg);
+}
+
+.challenge-card.active {
+  border: 2px solid var(--climate-success);
+}
+
+.challenge-card.completed {
+  border: 2px solid var(--climate-success);
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.challenge-status {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.challenge-status.active {
+  background: var(--climate-warning);
+  color: white;
+}
+
+.challenge-status.completed {
+  background: var(--climate-success);
+  color: white;
+}
+
+.challenge-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--climate-primary), var(--climate-secondary));
+  color: white;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin-bottom: 16px;
+}
+
+.challenge-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+  color: var(--climate-dark);
+}
+
+.challenge-description {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.challenge-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid var(--climate-border);
+}
+
+.challenge-reward {
+  font-weight: 700;
+  color: var(--climate-success);
+}
+
+.challenge-actions button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.challenge-actions .start-btn {
+  background: var(--climate-primary);
+  color: white;
+}
+
+.challenge-actions .complete-btn {
+  background: var(--climate-success);
+  color: white;
+}
+
+/* Activity Log */
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.activity-header h2 {
+  font-size: 2rem;
+  color: var(--climate-primary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.activity-filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 10px 20px;
+  border: 2px solid var(--climate-border);
+  background: white;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+  border-color: var(--climate-primary);
+  color: var(--climate-primary);
+}
+
+.filter-btn.active {
+  background: var(--climate-primary);
+  border-color: var(--climate-primary);
+  color: white;
+}
+
+.activity-timeline {
+  display: grid;
+  gap: 16px;
+}
+
+.timeline-item {
+  background: var(--climate-card);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--climate-shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 4px solid var(--climate-primary);
+}
+
+.timeline-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.timeline-date {
+  text-align: center;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border-radius: 10px;
+  min-width: 80px;
+}
+
+.timeline-date .day {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--climate-primary);
+}
+
+.timeline-date .month {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.timeline-info h4 {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.timeline-info p {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.timeline-impact {
+  text-align: right;
+}
+
+.timeline-impact .value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--climate-success);
+}
+
+.timeline-impact .label {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* Goals */
+.goals-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.goals-header h2 {
+  font-size: 2rem;
+  color: var(--climate-primary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.goals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 24px;
+}
+
+.goal-card {
+  background: var(--climate-card);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: var(--climate-shadow);
+}
+
+.goal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 20px;
+}
+
+.goal-header h3 {
+  font-size: 1.3rem;
+  color: var(--climate-dark);
+}
+
+.goal-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: var(--climate-primary);
+  color: white;
+}
+
+.goal-progress {
+  margin: 20px 0;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.progress-bar-container {
+  height: 12px;
+  background: #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--climate-success), var(--climate-primary));
+  border-radius: 10px;
+  transition: width 0.5s ease;
+}
+
+.goal-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--climate-border);
+}
+
+.goal-stat {
+  text-align: center;
+}
+
+.goal-stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--climate-primary);
+}
+
+.goal-stat-label {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+/* Leaderboard */
+.leaderboard-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.leaderboard-header h2 {
+  font-size: 2rem;
+  color: var(--climate-primary);
+  margin-bottom: 8px;
+}
+
+.leaderboard-filters {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.leaderboard-container {
+  background: var(--climate-card);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: var(--climate-shadow);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.leaderboard-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+}
+
+.leaderboard-item:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-item.me {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border: 2px solid var(--climate-primary);
+}
+
+.leaderboard-rank {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--climate-primary);
+  min-width: 40px;
+  text-align: center;
+}
+
+.leaderboard-rank.top-1 {
+  color: #f59e0b;
+  font-size: 2rem;
+}
+
+.leaderboard-rank.top-2 {
+  color: #94a3b8;
+}
+
+.leaderboard-rank.top-3 {
+  color: #cd7f32;
+}
+
+.leaderboard-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--climate-primary), var(--climate-secondary));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.leaderboard-info {
+  flex: 1;
+}
+
+.leaderboard-info h4 {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.leaderboard-info p {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.leaderboard-score {
+  text-align: right;
+}
+
+.leaderboard-score .value {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--climate-success);
+}
+
+.leaderboard-score .label {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* Badges */
+.badges-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.badges-header h2 {
+  font-size: 2rem;
+  color: var(--climate-primary);
+  margin-bottom: 8px;
+}
+
+.badges-stats {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  margin-bottom: 40px;
+}
+
+.badge-stat {
+  text-align: center;
+}
+
+.badge-stat .stat-value {
+  display: block;
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--climate-primary);
+  margin-bottom: 8px;
+}
+
+.badge-stat .stat-label {
+  color: #64748b;
+}
+
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 24px;
+}
+
+.badge-card {
+  background: var(--climate-card);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: var(--climate-shadow);
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.badge-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--climate-shadow-lg);
+}
+
+.badge-card.locked {
+  opacity: 0.5;
+}
+
+.badge-card.unlocked {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 2px solid var(--climate-success);
+}
+
+.badge-icon-container {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, var(--climate-primary), var(--climate-secondary));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  margin: 0 auto 16px;
+  box-shadow: 0 8px 24px rgba(14, 165, 233, 0.3);
+}
+
+.badge-card.locked .badge-icon-container {
+  background: #e2e8f0;
+  box-shadow: none;
+  filter: grayscale(1);
+}
+
+.badge-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  color: var(--climate-dark);
+}
+
+.badge-card p {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-bottom: 12px;
+}
+
+.badge-progress-text {
+  font-size: 0.85rem;
+  color: var(--climate-primary);
+  font-weight: 600;
+}
+
+.badge-unlocked-date {
+  font-size: 0.8rem;
+  color: var(--climate-success);
+  margin-top: 8px;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  backdrop-filter: blur(4px);
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background: var(--climate-card);
+  border-radius: 24px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-header {
+  padding: 32px 32px 24px;
+  border-bottom: 1px solid var(--climate-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  font-size: 1.8rem;
+  color: var(--climate-primary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.modal-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+  background: var(--climate-danger);
+  color: white;
+  transform: rotate(90deg);
+}
+
+.modal-body {
+  padding: 32px;
+}
+
+.activity-form,
+.goal-form {
+  display: grid;
+  gap: 20px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.form-actions button {
+  flex: 1;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  top: 100px;
+  right: 24px;
+  background: var(--climate-success);
+  color: white;
+  padding: 20px 24px;
+  border-radius: 12px;
+  box-shadow: var(--climate-shadow-lg);
+  z-index: 10000;
+  animation: slideInRight 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 80px 24px;
+  color: #94a3b8;
+}
+
+.empty-state i {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  color: #cbd5e1;
+}
+
+.empty-state h3 {
+  font-size: 1.5rem;
+  color: #64748b;
+  margin-bottom: 12px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .dashboard-card.tips-card,
+  .dashboard-card.recent-activities {
+    grid-column: span 12;
+  }
+
+  .dashboard-card:has(canvas) {
+    grid-column: span 12;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 100px 20px 60px;
+  }
+
+  .hero-impact-summary {
+    gap: 16px;
+  }
+
+  .impact-card {
+    min-width: 140px;
+    padding: 20px 24px;
+  }
+
+  .impact-value {
+    font-size: 1.8rem;
+  }
+
+  .tab-navigation {
+    gap: 6px;
+    padding: 12px;
+  }
+
+  .tab-btn {
+    padding: 10px 14px;
+    font-size: 0.85rem;
+  }
+
+  .tab-btn span {
+    display: none;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .calculator-actions {
+    flex-direction: column;
+  }
+
+  .activity-header,
+  .goals-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .timeline-item {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .timeline-content {
+    flex-direction: column;
+  }
+
+  .badges-stats {
+    gap: 24px;
+  }
+
+  .badge-stat .stat-value {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-impact-summary {
+    flex-direction: column;
+  }
+
+  .impact-card {
+    width: 100%;
+  }
+
+  .modal-content {
+    margin: 0;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .challenges-grid,
+  .goals-grid,
+  .badges-grid {
+    grid-template-columns: 1fr;
+  }
+}

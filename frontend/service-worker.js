@@ -35,7 +35,7 @@ const STATIC_ASSETS = [
   './css/pwa.css',
   './js/main.js',
   './js/pwa.js',
-  './assets/images/others/envirnoment-logo.png',
+  './assets/images/others/envirnoment-logo.webp',
   './assets/icons/icon-192x192.png',
   './assets/icons/icon-512x512.png'
 ];

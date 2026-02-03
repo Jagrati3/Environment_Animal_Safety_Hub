@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Green Commute Planner</title>
+  <link rel="stylesheet" href="../css/green-commute-planner.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="planner-app">
+    <header class="planner-header">
+      <div>
+        <p class="eyebrow">Green Commute Planner</p>
+        <h1>Plan smarter routes, cut emissions, and track savings.</h1>
+        <p class="subtitle">Compare transit, biking, and shared rides with instant CO₂ insights.</p>
+      </div>
+      <div class="header-actions">
+        <button class="ghost-button" id="loadSampleBtn"><i class="fa-solid fa-bolt"></i> Load Sample Commute</button>
+        <button class="primary-button" id="savePlanBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Save Plan</button>
+      </div>
+    </header>
+
+    <section class="hero-grid">
+      <div class="hero-card">
+        <div class="hero-icon"><i class="fa-solid fa-leaf"></i></div>
+        <div>
+          <p>Total Weekly Savings</p>
+          <h2 id="weeklySavings">0 kg CO₂</h2>
+          <span class="pill success">+12% vs last week</span>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-icon"><i class="fa-solid fa-route"></i></div>
+        <div>
+          <p>Recommended Route</p>
+          <h2 id="recommendedRoute">—</h2>
+          <span class="pill info">Lowest emissions</span>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-icon"><i class="fa-solid fa-bicycle"></i></div>
+        <div>
+          <p>Active Commutes</p>
+          <h2 id="activeCommutes">0</h2>
+          <span class="pill warning">2 new challenges</span>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+        <div>
+          <p>Community Rank</p>
+          <h2 id="communityRank">#42</h2>
+          <span class="pill neutral">Top 15%</span>
+        </div>
+      </div>
+    </section>
+
+    <nav class="tab-nav">
+      <button class="tab-link active" data-tab="planner">Planner</button>
+      <button class="tab-link" data-tab="routes">Routes</button>
+      <button class="tab-link" data-tab="integrations">Transit & Bike Share</button>
+      <button class="tab-link" data-tab="savings">Weekly Savings</button>
+    </nav>
+
+    <section class="tab-content active" id="planner">
+      <div class="panel-grid">
+        <div class="panel">
+          <h3>Plan your commute</h3>
+          <p class="panel-subtitle">Enter your commute details to estimate emissions and savings.</p>
+
+          <form id="commuteForm" class="commute-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="origin">Origin</label>
+                <input id="origin" type="text" placeholder="Home, neighborhood" required />
+              </div>
+              <div class="form-group">
+                <label for="destination">Destination</label>
+                <input id="destination" type="text" placeholder="Office, campus" required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="distance">Distance (km)</label>
+                <input id="distance" type="number" min="1" step="0.1" placeholder="12.5" required />
+              </div>
+              <div class="form-group">
+                <label for="trips">Trips per week</label>
+                <input id="trips" type="number" min="1" max="14" value="10" required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="mode">Preferred mode</label>
+                <select id="mode" required>
+                  <option value="transit">Public Transit</option>
+                  <option value="bike">Bike</option>
+                  <option value="walk">Walk</option>
+                  <option value="carpool">Carpool</option>
+                  <option value="ev">Electric Vehicle</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="cost">Budget per trip ($)</label>
+                <input id="cost" type="number" min="0" step="0.5" placeholder="4.00" />
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="primary-button" type="submit"><i class="fa-solid fa-calculator"></i> Calculate</button>
+              <button class="ghost-button" type="button" id="resetBtn">Reset</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel summary-panel">
+          <h3>Trip summary</h3>
+          <div class="summary-grid">
+            <div class="summary-card">
+              <p>Estimated weekly emissions</p>
+              <h4 id="weeklyEmissions">0 kg CO₂</h4>
+            </div>
+            <div class="summary-card">
+              <p>Savings vs solo car</p>
+              <h4 id="savingsVsCar">0 kg CO₂</h4>
+            </div>
+            <div class="summary-card">
+              <p>Estimated monthly savings</p>
+              <h4 id="monthlySavings">0 kg CO₂</h4>
+            </div>
+            <div class="summary-card">
+              <p>Time difference</p>
+              <h4 id="timeDifference">-5 min</h4>
+            </div>
+          </div>
+          <div class="insight-box">
+            <i class="fa-solid fa-circle-info"></i>
+            <p id="insightText">Enter your commute details to see insights.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-content" id="routes">
+      <div class="panel routes-panel">
+        <div class="panel-header">
+          <h3>Route options</h3>
+          <div class="route-filters">
+            <select id="routeFilter">
+              <option value="all">All modes</option>
+              <option value="transit">Transit</option>
+              <option value="bike">Bike</option>
+              <option value="walk">Walk</option>
+              <option value="carpool">Carpool</option>
+              <option value="ev">EV</option>
+            </select>
+            <select id="routeSort">
+              <option value="emissions">Lowest emissions</option>
+              <option value="time">Fastest</option>
+              <option value="cost">Lowest cost</option>
+            </select>
+          </div>
+        </div>
+        <div id="routeCards" class="route-cards"></div>
+      </div>
+
+      <div class="panel comparison-panel">
+        <h3>Emissions comparison</h3>
+        <div class="comparison-table">
+          <div class="comparison-header">
+            <span>Mode</span>
+            <span>Duration</span>
+            <span>Cost</span>
+            <span>CO₂ / trip</span>
+          </div>
+          <div id="comparisonRows"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-content" id="integrations">
+      <div class="panel-grid">
+        <div class="panel">
+          <h3>Transit integration</h3>
+          <p class="panel-subtitle">Live route updates and service alerts.</p>
+          <div class="integration-card">
+            <div>
+              <h4>MetroGo</h4>
+              <p>3 active lines • 2 minutes wait</p>
+            </div>
+            <span class="pill success">Connected</span>
+          </div>
+          <div class="integration-card">
+            <div>
+              <h4>CityBus</h4>
+              <p>Route 22 delayed • 8 min</p>
+            </div>
+            <span class="pill warning">Alert</span>
+          </div>
+          <div class="integration-card">
+            <div>
+              <h4>RailLink</h4>
+              <p>On time • Next train 6 min</p>
+            </div>
+            <span class="pill info">Active</span>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Bike share integration</h3>
+          <p class="panel-subtitle">Station availability and bike types.</p>
+          <div class="bike-grid">
+            <div class="bike-card">
+              <h4>Station 12</h4>
+              <p>6 bikes • 2 e-bikes</p>
+              <span class="pill success">5 min away</span>
+            </div>
+            <div class="bike-card">
+              <h4>Station 24</h4>
+              <p>2 bikes • 1 cargo</p>
+              <span class="pill warning">Low supply</span>
+            </div>
+            <div class="bike-card">
+              <h4>Station 40</h4>
+              <p>9 bikes • 3 e-bikes</p>
+              <span class="pill info">Top pick</span>
+            </div>
+          </div>
+          <button class="ghost-button" id="refreshBikeBtn"><i class="fa-solid fa-rotate"></i> Refresh availability</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-content" id="savings">
+      <div class="panel-grid">
+        <div class="panel">
+          <h3>Weekly CO₂ savings</h3>
+          <canvas id="savingsChart"></canvas>
+        </div>
+        <div class="panel">
+          <h3>Savings breakdown</h3>
+          <div class="breakdown-list" id="savingsBreakdown"></div>
+          <div class="challenge-card">
+            <h4>Challenge: 3-day car-free week</h4>
+            <p>Complete 3 commute days without solo driving to earn a badge.</p>
+            <button class="primary-button" id="joinChallengeBtn">Join Challenge</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <script src="../js/pages/green-commute-planner.js"></script>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Home Energy Coach</title>
+  <link rel="stylesheet" href="../css/smart-home-energy-coach.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="coach-app">
+    <header class="coach-header">
+      <div class="header-content">
+        <div class="header-text">
+          <p class="eyebrow"><i class="fa-solid fa-brain"></i> Smart Home Energy Coach</p>
+          <h1>Your Personalized Energy Advisor</h1>
+          <p class="subtitle">Get AI-powered tips, appliance insights, and achieve your energy reduction goals.</p>
+        </div>
+        <div class="header-stats">
+          <div class="stat-badge success">
+            <i class="fa-solid fa-trophy"></i>
+            <div>
+              <span>This Week</span>
+              <strong id="weekSavings">0 kWh</strong>
+            </div>
+          </div>
+          <div class="stat-badge info">
+            <i class="fa-solid fa-bullseye"></i>
+            <div>
+              <span>Goal Progress</span>
+              <strong id="goalProgress">0%</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="ghost-button" id="refreshBtn"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+        <button class="primary-button" id="setGoalBtn"><i class="fa-solid fa-target"></i> Set New Goal</button>
+      </div>
+    </header>
+
+    <!-- Dashboard Overview -->
+    <section class="dashboard-grid">
+      <div class="dashboard-card energy-score">
+        <div class="score-header">
+          <h3>Your Energy Score</h3>
+          <span class="info-icon" title="Based on your usage patterns and efficiency"><i class="fa-solid fa-circle-info"></i></span>
+        </div>
+        <div class="score-display">
+          <div class="score-circle" id="scoreCircle">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="45" class="score-bg"></circle>
+              <circle cx="50" cy="50" r="45" class="score-progress" id="scoreProgress"></circle>
+            </svg>
+            <div class="score-value">
+              <span id="scoreValue">0</span>
+              <small>/100</small>
+            </div>
+          </div>
+          <div class="score-details">
+            <div class="score-item">
+              <i class="fa-solid fa-check-circle"></i>
+              <span>Efficiency: <strong id="efficiencyScore">0%</strong></span>
+            </div>
+            <div class="score-item">
+              <i class="fa-solid fa-chart-line"></i>
+              <span>Improvement: <strong id="improvementScore">0%</strong></span>
+            </div>
+            <div class="score-item">
+              <i class="fa-solid fa-leaf"></i>
+              <span>Eco-Impact: <strong id="ecoScore">0%</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-card goals-card">
+        <h3><i class="fa-solid fa-bullseye"></i> Active Goals</h3>
+        <div id="activeGoals" class="goals-list"></div>
+        <button class="text-button" id="addGoalBtn"><i class="fa-solid fa-plus"></i> Add New Goal</button>
+      </div>
+
+      <div class="dashboard-card quick-tips">
+        <h3><i class="fa-solid fa-lightbulb"></i> Quick Tips</h3>
+        <div id="quickTips" class="tips-carousel"></div>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <nav class="tab-nav">
+      <button class="tab-link active" data-tab="appliances">
+        <i class="fa-solid fa-plug"></i> Appliances
+      </button>
+      <button class="tab-link" data-tab="tips">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> Personalized Tips
+      </button>
+      <button class="tab-link" data-tab="goals">
+        <i class="fa-solid fa-flag-checkered"></i> Goals & Progress
+      </button>
+      <button class="tab-link" data-tab="insights">
+        <i class="fa-solid fa-chart-simple"></i> Insights
+      </button>
+    </nav>
+
+    <!-- Appliances Tab -->
+    <section class="tab-content active" id="appliances">
+      <div class="panel">
+        <div class="panel-header">
+          <h3>Appliance Energy Breakdown</h3>
+          <div class="panel-actions">
+            <button class="ghost-button" id="sortByUsage"><i class="fa-solid fa-arrow-down-wide-short"></i> Sort by Usage</button>
+            <button class="ghost-button" id="filterBtn"><i class="fa-solid fa-filter"></i> Filter</button>
+          </div>
+        </div>
+        <canvas id="applianceChart" class="main-chart"></canvas>
+      </div>
+
+      <div class="appliance-grid" id="applianceGrid"></div>
+    </section>
+
+    <!-- Personalized Tips Tab -->
+    <section class="tab-content" id="tips">
+      <div class="tips-header">
+        <h3>Personalized Energy-Saving Tips</h3>
+        <div class="tips-filters">
+          <button class="filter-chip active" data-filter="all">All Tips</button>
+          <button class="filter-chip" data-filter="high-impact">High Impact</button>
+          <button class="filter-chip" data-filter="easy">Easy Wins</button>
+          <button class="filter-chip" data-filter="seasonal">Seasonal</button>
+        </div>
+      </div>
+      
+      <div class="tips-grid" id="tipsGrid"></div>
+    </section>
+
+    <!-- Goals & Progress Tab -->
+    <section class="tab-content" id="goals">
+      <div class="goals-layout">
+        <div class="panel">
+          <h3>Your Energy Reduction Goals</h3>
+          <div id="goalsListFull" class="goals-full-list"></div>
+        </div>
+
+        <div class="panel">
+          <h3>Create New Goal</h3>
+          <form id="goalForm" class="goal-form">
+            <div class="form-group">
+              <label for="goalTitle">Goal Name</label>
+              <input id="goalTitle" type="text" placeholder="Reduce AC usage by 20%" required />
+            </div>
+            
+            <div class="form-group">
+              <label for="goalType">Goal Type</label>
+              <select id="goalType" required>
+                <option value="">Select type...</option>
+                <option value="reduction">Total Reduction</option>
+                <option value="appliance">Appliance-Specific</option>
+                <option value="time">Time-Based</option>
+                <option value="cost">Cost Savings</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="goalTarget">Target Value</label>
+                <input id="goalTarget" type="number" min="1" placeholder="20" required />
+              </div>
+              <div class="form-group">
+                <label for="goalUnit">Unit</label>
+                <select id="goalUnit" required>
+                  <option value="percent">%</option>
+                  <option value="kwh">kWh</option>
+                  <option value="dollars">$</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="goalStart">Start Date</label>
+                <input id="goalStart" type="date" required />
+              </div>
+              <div class="form-group">
+                <label for="goalEnd">End Date</label>
+                <input id="goalEnd" type="date" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="goalAppliance">Target Appliance (optional)</label>
+              <select id="goalAppliance">
+                <option value="">All appliances</option>
+                <option value="hvac">HVAC</option>
+                <option value="refrigerator">Refrigerator</option>
+                <option value="washer">Washer/Dryer</option>
+                <option value="water-heater">Water Heater</option>
+                <option value="lighting">Lighting</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <button class="primary-button" type="submit">
+              <i class="fa-solid fa-flag"></i> Create Goal
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Insights Tab -->
+    <section class="tab-content" id="insights">
+      <div class="insights-grid">
+        <div class="panel">
+          <h3>Usage Patterns</h3>
+          <canvas id="usagePatternChart"></canvas>
+          <div class="pattern-summary" id="patternSummary"></div>
+        </div>
+
+        <div class="panel">
+          <h3>Cost Analysis</h3>
+          <canvas id="costChart"></canvas>
+          <div class="cost-breakdown" id="costBreakdown"></div>
+        </div>
+
+        <div class="panel full-width">
+          <h3>Weekly Comparison</h3>
+          <canvas id="comparisonChart"></canvas>
+        </div>
+
+        <div class="panel">
+          <h3>Peak Usage Times</h3>
+          <div class="peak-times" id="peakTimes"></div>
+        </div>
+
+        <div class="panel">
+          <h3>Savings Opportunities</h3>
+          <div class="opportunities-list" id="opportunitiesList"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Goal Modal -->
+    <div class="modal" id="goalModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Set Your Energy Goal</h3>
+          <button class="close-modal" id="closeModal"><i class="fa-solid fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+          <p>Choose a goal template or create a custom goal to start saving energy!</p>
+          <div class="goal-templates">
+            <div class="template-card" data-template="quick">
+              <i class="fa-solid fa-bolt"></i>
+              <h4>Quick Win</h4>
+              <p>Reduce usage by 10% this week</p>
+            </div>
+            <div class="template-card" data-template="monthly">
+              <i class="fa-solid fa-calendar"></i>
+              <h4>Monthly Challenge</h4>
+              <p>Save 100 kWh this month</p>
+            </div>
+            <div class="template-card" data-template="appliance">
+              <i class="fa-solid fa-snowflake"></i>
+              <h4>Appliance Focus</h4>
+              <p>Optimize HVAC efficiency</p>
+            </div>
+            <div class="template-card" data-template="custom">
+              <i class="fa-solid fa-sliders"></i>
+              <h4>Custom Goal</h4>
+              <p>Design your own goal</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <script src="../js/pages/smart-home-energy-coach.js"></script>
+</body>
+</html>

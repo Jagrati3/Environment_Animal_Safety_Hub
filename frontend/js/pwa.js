@@ -125,7 +125,7 @@ class EcoLifePWA {
         installBanner.innerHTML = `
       <div class="pwa-banner-content">
         <div class="pwa-banner-icon">
-          <img src="assets/images/others/envirnoment-logo.png" alt="EcoLife" />
+          <img src="assets/images/others/envirnoment-logo.webp" alt="EcoLife" />
         </div>
         <div class="pwa-banner-text">
           <h4>Install EcoLife</h4>
@@ -161,7 +161,7 @@ class EcoLifePWA {
           <i class="fa-solid fa-times"></i>
         </button>
         <div class="pwa-ios-icon">
-          <img src="assets/images/others/envirnoment-logo.png" alt="EcoLife" />
+          <img src="assets/images/others/envirnoment-logo.webp" alt="EcoLife" />
         </div>
         <h3>Install EcoLife</h3>
         <p>Install this app on your iPhone/iPad for the best experience:</p>

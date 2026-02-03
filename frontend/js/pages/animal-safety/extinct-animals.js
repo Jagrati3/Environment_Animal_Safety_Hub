@@ -29,7 +29,7 @@ const extinctData = [
     {
         name: "Dodo",
         time: "1681",
-        img: "../../assets/images/extinct/dodo.jpg",
+        img: "../../assets/images/extinct/dodo.webp",
         desc: "Flightless bird native to Mauritius.",
         habitat: "Mauritius",
         diet: "Fruits & Seeds",
@@ -38,7 +38,7 @@ const extinctData = [
     {
         name: "Tasmanian Tiger (Thylacine)",
         time: "1936",
-        img: "../../assets/images/extinct/Tasmanian Tiger.jpg",
+        img: "../../assets/images/extinct/Tasmanian Tiger.webp",
         desc: "Carnivorous marsupial with stripes.",
         habitat: "Tasmania, Australia",
         diet: "Meat",
@@ -65,7 +65,7 @@ const extinctData = [
     {
         name: "Great Auk",
         time: "1844",
-        img: "../../assets/images/extinct/Great Auk.jpg",
+        img: "../../assets/images/extinct/Great Auk.webp",
         desc: "Large flightless seabird.",
         habitat: "North Atlantic",
         diet: "Fish",
@@ -74,7 +74,7 @@ const extinctData = [
     {
         name: "Sabre-Toothed Cat (Smilodon)",
         time: "10,000 BCE",
-        img: "../../assets/images/extinct/Sabre-Toothed Cat.jpg",
+        img: "../../assets/images/extinct/Sabre-Toothed Cat.webp",
         desc: "Prehistoric predator with long canines.",
         habitat: "Americas",
         diet: "Large mammals",
@@ -83,7 +83,7 @@ const extinctData = [
     {
         name: "Steller's Sea Cow",
         time: "1768",
-        img: "../../assets/images/extinct/Steller.jpg",
+        img: "../../assets/images/extinct/Steller.webp",
         desc: "Huge marine herbivore.",
         habitat: "North Pacific",
         diet: "Kelp & seaweed",
@@ -101,7 +101,7 @@ const extinctData = [
     {
         name: "Irish Elk",
         time: "7,700 BCE",
-        img: "../../assets/images/extinct/Irish Elk.jpg",
+        img: "../../assets/images/extinct/Irish Elk.webp",
         desc: "Giant deer with massive antlers.",
         habitat: "Europe & Asia",
         diet: "Vegetation",

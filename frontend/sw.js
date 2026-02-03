@@ -20,7 +20,7 @@ const staticAssets = [
   // Core JS only
   '/js/main.js',
   // Critical images only
-  '/assets/images/others/envirnoment-logo.png'
+  '/assets/images/others/envirnoment-logo.webp'
 ];
 
 // Runtime caching patterns
@@ -367,8 +367,8 @@ self.addEventListener('push', event => {
 
     const options = {
       body: data.body || 'You have a new notification',
-      icon: data.icon || '/assets/images/others/envirnoment-logo.png',
-      badge: data.badge || '/assets/images/others/envirnoment-logo.png',
+      icon: data.icon || '/assets/images/others/envirnoment-logo.webp',
+      badge: data.badge || '/assets/images/others/envirnoment-logo.webp',
       image: data.image, // Hero image for rich notifications
       vibrate: data.vibrate || [100, 50, 100],
       data: {

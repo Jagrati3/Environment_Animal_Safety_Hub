@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neighborhood Water Conservation Dashboard</title>
+  <link rel="stylesheet" href="../css/neighborhood-water-conservation.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="water-app">
+    <!-- Header -->
+    <header class="water-header">
+      <div class="header-content">
+        <div class="header-text">
+          <p class="eyebrow"><i class="fa-solid fa-droplet"></i> Neighborhood Water Conservation</p>
+          <h1>Save Water, Save Our Future</h1>
+          <p class="subtitle">Track your usage, detect leaks early, and compete with neighbors to conserve water.</p>
+        </div>
+        <div class="header-stats">
+          <div class="stat-badge success">
+            <i class="fa-solid fa-chart-line"></i>
+            <div>
+              <span>Today's Usage</span>
+              <strong id="todayUsage">0 gal</strong>
+            </div>
+          </div>
+          <div class="stat-badge info">
+            <i class="fa-solid fa-trophy"></i>
+            <div>
+              <span>Your Rank</span>
+              <strong id="userRank">#0</strong>
+            </div>
+          </div>
+          <div class="stat-badge warning">
+            <i class="fa-solid fa-target"></i>
+            <div>
+              <span>Weekly Goal</span>
+              <strong id="weeklyGoal">0%</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="ghost-button" id="refreshBtn">
+          <i class="fa-solid fa-arrows-rotate"></i> Refresh Data
+        </button>
+        <button class="primary-button" id="reportLeakBtn">
+          <i class="fa-solid fa-exclamation-triangle"></i> Report Leak
+        </button>
+      </div>
+    </header>
+
+    <!-- Quick Stats Overview -->
+    <section class="overview-grid">
+      <div class="overview-card">
+        <div class="card-icon blue">
+          <i class="fa-solid fa-faucet-drip"></i>
+        </div>
+        <div class="card-content">
+          <h3 id="totalUsage">0</h3>
+          <p>Total Usage This Month</p>
+          <span class="trend positive"><i class="fa-solid fa-arrow-down"></i> 12% vs last month</span>
+        </div>
+      </div>
+
+      <div class="overview-card">
+        <div class="card-icon green">
+          <i class="fa-solid fa-leaf"></i>
+        </div>
+        <div class="card-content">
+          <h3 id="savedWater">0</h3>
+          <p>Water Saved This Week</p>
+          <span class="trend positive"><i class="fa-solid fa-arrow-up"></i> 245 gallons saved</span>
+        </div>
+      </div>
+
+      <div class="overview-card">
+        <div class="card-icon orange">
+          <i class="fa-solid fa-bell"></i>
+        </div>
+        <div class="card-content">
+          <h3 id="activeAlerts">0</h3>
+          <p>Active Leak Alerts</p>
+          <span class="trend neutral"><i class="fa-solid fa-circle-info"></i> Check below</span>
+        </div>
+      </div>
+
+      <div class="overview-card">
+        <div class="card-icon purple">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <div class="card-content">
+          <h3 id="communityTotal">0</h3>
+          <p>Community Total Savings</p>
+          <span class="trend positive"><i class="fa-solid fa-water"></i> 12,450 gal saved</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Leak Alerts Banner -->
+    <div id="leakAlertBanner" class="alert-banner hidden">
+      <div class="alert-content">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <div>
+          <strong>Leak Detected!</strong>
+          <p>Unusual water usage detected. Check your property for leaks.</p>
+        </div>
+      </div>
+      <button class="close-alert" onclick="dismissAlert()">
+        <i class="fa-solid fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Main Navigation Tabs -->
+    <nav class="tab-nav">
+      <button class="tab-link active" data-tab="usage">
+        <i class="fa-solid fa-chart-area"></i> Usage Trends
+      </button>
+      <button class="tab-link" data-tab="leaks">
+        <i class="fa-solid fa-droplet-slash"></i> Leak Detection
+      </button>
+      <button class="tab-link" data-tab="leaderboard">
+        <i class="fa-solid fa-ranking-star"></i> Leaderboard
+      </button>
+      <button class="tab-link" data-tab="challenges">
+        <i class="fa-solid fa-flag-checkered"></i> Challenges
+      </button>
+      <button class="tab-link" data-tab="tips">
+        <i class="fa-solid fa-lightbulb"></i> Water Tips
+      </button>
+    </nav>
+
+    <!-- Usage Trends Tab -->
+    <section class="tab-content active" id="usage">
+      <div class="usage-layout">
+        <div class="panel main-chart-panel">
+          <div class="panel-header">
+            <h3><i class="fa-solid fa-chart-line"></i> Daily Water Usage</h3>
+            <div class="time-filters">
+              <button class="time-btn active" data-period="7">7 Days</button>
+              <button class="time-btn" data-period="30">30 Days</button>
+              <button class="time-btn" data-period="90">90 Days</button>
+            </div>
+          </div>
+          <canvas id="usageChart"></canvas>
+          <div class="chart-legend">
+            <div class="legend-item">
+              <span class="legend-dot" style="background: #3b82f6;"></span>
+              <span>Your Usage</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot" style="background: #10b981;"></span>
+              <span>Neighborhood Average</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot" style="background: #f59e0b;"></span>
+              <span>Target Goal</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel usage-breakdown">
+          <h3><i class="fa-solid fa-droplet"></i> Usage Breakdown</h3>
+          <canvas id="breakdownChart"></canvas>
+          <div class="breakdown-stats" id="breakdownStats"></div>
+        </div>
+
+        <div class="panel hourly-usage">
+          <h3><i class="fa-solid fa-clock"></i> Hourly Usage Pattern</h3>
+          <canvas id="hourlyChart"></canvas>
+        </div>
+
+        <div class="panel comparison">
+          <h3><i class="fa-solid fa-code-compare"></i> Comparisons</h3>
+          <div class="comparison-list">
+            <div class="comparison-item">
+              <span class="comparison-label">Your Daily Average</span>
+              <span class="comparison-value">287 gal</span>
+            </div>
+            <div class="comparison-item">
+              <span class="comparison-label">Neighborhood Average</span>
+              <span class="comparison-value">342 gal</span>
+            </div>
+            <div class="comparison-item success">
+              <span class="comparison-label">You're saving</span>
+              <span class="comparison-value">16% more</span>
+            </div>
+            <div class="comparison-item">
+              <span class="comparison-label">National Average</span>
+              <span class="comparison-value">400 gal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Leak Detection Tab -->
+    <section class="tab-content" id="leaks">
+      <div class="leaks-layout">
+        <div class="panel leak-status">
+          <h3><i class="fa-solid fa-shield-halved"></i> Leak Detection Status</h3>
+          <div class="status-display">
+            <div class="status-circle" id="leakStatus">
+              <i class="fa-solid fa-check-circle"></i>
+            </div>
+            <h2 id="statusText">All Clear</h2>
+            <p id="statusDesc">No unusual water usage detected</p>
+            <div class="last-check">
+              Last checked: <strong id="lastCheck">Just now</strong>
+            </div>
+          </div>
+          <button class="secondary-button" id="runCheckBtn">
+            <i class="fa-solid fa-magnifying-glass"></i> Run Manual Check
+          </button>
+        </div>
+
+        <div class="panel leak-history">
+          <h3><i class="fa-solid fa-clock-rotate-left"></i> Recent Alerts</h3>
+          <div class="leak-alerts-list" id="leakAlertsList"></div>
+        </div>
+
+        <div class="panel leak-indicators">
+          <h3><i class="fa-solid fa-chart-simple"></i> Leak Indicators</h3>
+          <div class="indicators-grid">
+            <div class="indicator-card">
+              <div class="indicator-icon">
+                <i class="fa-solid fa-moon"></i>
+              </div>
+              <div class="indicator-content">
+                <h4>Overnight Usage</h4>
+                <p class="indicator-value" id="overnightUsage">12 gal</p>
+                <span class="indicator-status safe">Normal</span>
+              </div>
+            </div>
+            <div class="indicator-card">
+              <div class="indicator-icon">
+                <i class="fa-solid fa-droplet"></i>
+              </div>
+              <div class="indicator-content">
+                <h4>Continuous Flow</h4>
+                <p class="indicator-value" id="continuousFlow">0 min</p>
+                <span class="indicator-status safe">No Issues</span>
+              </div>
+            </div>
+            <div class="indicator-card">
+              <div class="indicator-icon">
+                <i class="fa-solid fa-arrow-trend-up"></i>
+              </div>
+              <div class="indicator-content">
+                <h4>Unusual Spike</h4>
+                <p class="indicator-value" id="unusualSpike">None</p>
+                <span class="indicator-status safe">All Clear</span>
+              </div>
+            </div>
+            <div class="indicator-card">
+              <div class="indicator-icon">
+                <i class="fa-solid fa-gauge-high"></i>
+              </div>
+              <div class="indicator-content">
+                <h4>Peak Usage</h4>
+                <p class="indicator-value" id="peakUsage">45 gal/hr</p>
+                <span class="indicator-status safe">Normal</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel leak-tips">
+          <h3><i class="fa-solid fa-wrench"></i> How to Check for Leaks</h3>
+          <div class="tips-list">
+            <div class="tip-item">
+              <span class="tip-number">1</span>
+              <div>
+                <h4>Check Your Water Meter</h4>
+                <p>Turn off all water and check if the meter is still moving.</p>
+              </div>
+            </div>
+            <div class="tip-item">
+              <span class="tip-number">2</span>
+              <div>
+                <h4>Inspect Toilets</h4>
+                <p>Add food coloring to the tank. If it appears in the bowl, you have a leak.</p>
+              </div>
+            </div>
+            <div class="tip-item">
+              <span class="tip-number">3</span>
+              <div>
+                <h4>Check Faucets & Pipes</h4>
+                <p>Look for drips from faucets and moisture under sinks.</p>
+              </div>
+            </div>
+            <div class="tip-item">
+              <span class="tip-number">4</span>
+              <div>
+                <h4>Monitor Your Bill</h4>
+                <p>A sudden increase might indicate a hidden leak.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Leaderboard Tab -->
+    <section class="tab-content" id="leaderboard">
+      <div class="leaderboard-layout">
+        <div class="panel leaderboard-main">
+          <div class="panel-header">
+            <h3><i class="fa-solid fa-trophy"></i> Community Leaderboard</h3>
+            <div class="leaderboard-filters">
+              <select id="leaderboardPeriod" class="filter-select">
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+                <option value="year">This Year</option>
+                <option value="all">All Time</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="podium">
+            <div class="podium-place second">
+              <div class="podium-avatar">
+                <i class="fa-solid fa-user"></i>
+              </div>
+              <div class="podium-medal">🥈</div>
+              <h4>Garcia Family</h4>
+              <p class="podium-savings">1,245 gal saved</p>
+              <span class="podium-rank">#2</span>
+            </div>
+            <div class="podium-place first">
+              <div class="podium-avatar">
+                <i class="fa-solid fa-user"></i>
+              </div>
+              <div class="podium-medal">🥇</div>
+              <h4>Johnson Family</h4>
+              <p class="podium-savings">1,567 gal saved</p>
+              <span class="podium-rank">#1</span>
+            </div>
+            <div class="podium-place third">
+              <div class="podium-avatar">
+                <i class="fa-solid fa-user"></i>
+              </div>
+              <div class="podium-medal">🥉</div>
+              <h4>Chen Family</h4>
+              <p class="podium-savings">1,089 gal saved</p>
+              <span class="podium-rank">#3</span>
+            </div>
+          </div>
+
+          <div class="leaderboard-list" id="leaderboardList"></div>
+        </div>
+
+        <div class="panel achievements">
+          <h3><i class="fa-solid fa-medal"></i> Your Achievements</h3>
+          <div class="achievements-grid" id="achievementsList"></div>
+        </div>
+
+        <div class="panel stats-comparison">
+          <h3><i class="fa-solid fa-chart-bar"></i> Top Performers</h3>
+          <canvas id="topPerformersChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Challenges Tab -->
+    <section class="tab-content" id="challenges">
+      <div class="challenges-layout">
+        <div class="panel active-challenges">
+          <h3><i class="fa-solid fa-flag"></i> Active Challenges</h3>
+          <div class="challenges-grid" id="activeChallenges"></div>
+        </div>
+
+        <div class="panel create-challenge">
+          <h3><i class="fa-solid fa-plus-circle"></i> Create a Challenge</h3>
+          <form id="challengeForm">
+            <div class="form-group">
+              <label for="challengeName">Challenge Name</label>
+              <input type="text" id="challengeName" placeholder="Save 100 gallons this week" required />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="challengeGoal">Goal (gallons)</label>
+                <input type="number" id="challengeGoal" min="1" placeholder="100" required />
+              </div>
+              <div class="form-group">
+                <label for="challengeDuration">Duration (days)</label>
+                <input type="number" id="challengeDuration" min="1" max="90" placeholder="7" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="challengeDescription">Description</label>
+              <textarea id="challengeDescription" rows="3" placeholder="Let's work together to save water!"></textarea>
+            </div>
+            <button type="submit" class="primary-button">
+              <i class="fa-solid fa-rocket"></i> Launch Challenge
+            </button>
+          </form>
+        </div>
+
+        <div class="panel community-challenges">
+          <h3><i class="fa-solid fa-users"></i> Join Community Challenges</h3>
+          <div class="community-challenges-list" id="communityChallenges"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Water Tips Tab -->
+    <section class="tab-content" id="tips">
+      <div class="tips-layout">
+        <div class="tips-hero">
+          <i class="fa-solid fa-lightbulb"></i>
+          <h2>Water Conservation Tips</h2>
+          <p>Small changes can make a big difference. Here are proven ways to save water.</p>
+        </div>
+
+        <div class="tips-grid" id="waterTipsGrid"></div>
+      </div>
+    </section>
+
+    <!-- Report Leak Modal -->
+    <div class="modal" id="reportLeakModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fa-solid fa-exclamation-triangle"></i> Report a Leak</h3>
+          <button class="close-modal" onclick="closeReportModal()">
+            <i class="fa-solid fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="leakReportForm">
+            <div class="form-group">
+              <label for="leakLocation">Location</label>
+              <select id="leakLocation" required>
+                <option value="">Select location...</option>
+                <option value="indoor">Indoor</option>
+                <option value="outdoor">Outdoor</option>
+                <option value="underground">Underground</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="leakType">Type of Leak</label>
+              <select id="leakType" required>
+                <option value="">Select type...</option>
+                <option value="drip">Dripping Faucet</option>
+                <option value="running">Running Toilet</option>
+                <option value="pipe">Pipe Leak</option>
+                <option value="sprinkler">Sprinkler System</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="leakSeverity">Severity</label>
+              <select id="leakSeverity" required>
+                <option value="minor">Minor (a few drops)</option>
+                <option value="moderate">Moderate (steady drip)</option>
+                <option value="major">Major (continuous flow)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="leakDescription">Description</label>
+              <textarea id="leakDescription" rows="4" placeholder="Describe the leak..."></textarea>
+            </div>
+            <button type="submit" class="primary-button">
+              <i class="fa-solid fa-paper-plane"></i> Submit Report
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <script src="../js/pages/neighborhood-water-conservation.js"></script>
+</body>
+</html>

@@ -138,7 +138,7 @@ function showEcoTipNotification() {
     if (Notification.permission === 'granted') {
         const notification = new Notification('EcoLife Tip', {
             body: 'Remember to reduce, reuse, and recycle to protect our planet!',
-            icon: '/assets/images/others/Logo.png'
+            icon: '/assets/images/others/Logo.webp'
         });
 
         // Close notification after 5 seconds

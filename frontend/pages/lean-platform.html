@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEAN - Local Environmental Action Network</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="../css/lean-platform.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <i class="fas fa-globe"></i>
+        <span>LEAN Network</span>
+      </div>
+      <ul class="nav-tabs">
+        <li><a href="#" class="tab-link active" data-tab="map">Map</a></li>
+        <li><a href="#" class="tab-link" data-tab="issues">Issues</a></li>
+        <li><a href="#" class="tab-link" data-tab="myReports">My Reports</a></li>
+        <li><a href="#" class="tab-link" data-tab="leaderboard">Leaderboard</a></li>
+        <li><a href="#" class="tab-link" data-tab="stats">Statistics</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-primary" id="reportIssueBtn"><i class="fas fa-flag"></i> Report Issue</button>
+        <div class="user-info">
+          <img src="https://via.placeholder.com/40" alt="Profile">
+          <span id="userName">Eco Reporter</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Map Tab -->
+    <section id="map" class="tab-content active">
+      <div class="map-container">
+        <div id="leafletMap" class="map"></div>
+        <div class="map-controls">
+          <button class="map-btn" id="zoomInBtn" title="Zoom in"><i class="fas fa-plus"></i></button>
+          <button class="map-btn" id="zoomOutBtn" title="Zoom out"><i class="fas fa-minus"></i></button>
+          <button class="map-btn" id="centerBtn" title="Center map"><i class="fas fa-crosshairs"></i></button>
+        </div>
+        <div class="map-legend">
+          <div class="legend-item">
+            <i class="fas fa-map-pin" style="color: #ef4444;"></i>
+            <span>Critical</span>
+          </div>
+          <div class="legend-item">
+            <i class="fas fa-map-pin" style="color: #f59e0b;"></i>
+            <span>High</span>
+          </div>
+          <div class="legend-item">
+            <i class="fas fa-map-pin" style="color: #06b6d4;"></i>
+            <span>In Progress</span>
+          </div>
+          <div class="legend-item">
+            <i class="fas fa-map-pin" style="color: #10b981;"></i>
+            <span>Resolved</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Issues Tab -->
+    <section id="issues" class="tab-content">
+      <div class="issues-container">
+        <div class="issues-header">
+          <h2>Environmental Issues</h2>
+          <div class="issues-controls">
+            <input type="text" id="searchIssues" placeholder="Search issues...">
+            <div class="filter-group">
+              <select id="filterStatus">
+                <option value="">All Status</option>
+                <option value="reported">Reported</option>
+                <option value="review">Under Review</option>
+                <option value="progress">In Progress</option>
+                <option value="resolved">Resolved</option>
+              </select>
+              <select id="filterCategory">
+                <option value="">All Categories</option>
+                <option value="pollution">Pollution</option>
+                <option value="litter">Litter</option>
+                <option value="dumping">Illegal Dumping</option>
+                <option value="habitat">Habitat Damage</option>
+                <option value="water">Water Issues</option>
+                <option value="other">Other</option>
+              </select>
+              <select id="sortBy">
+                <option value="recent">Recent</option>
+                <option value="urgent">Most Urgent</option>
+                <option value="votes">Most Voted</option>
+                <option value="comments">Most Discussed</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div id="issuesList" class="issues-list"></div>
+      </div>
+    </section>
+
+    <!-- My Reports Tab -->
+    <section id="myReports" class="tab-content">
+      <div class="my-reports-container">
+        <h2>Your Reports</h2>
+        <div class="reports-stats">
+          <div class="stat-card">
+            <span class="stat-number" id="totalReports">5</span>
+            <span class="stat-label">Total Reports</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number" id="resolvedReports">2</span>
+            <span class="stat-label">Resolved</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number" id="totalVotes">187</span>
+            <span class="stat-label">Community Votes</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number" id="userRank">#28</span>
+            <span class="stat-label">Your Rank</span>
+          </div>
+        </div>
+        <div id="myReportsList" class="issues-list"></div>
+      </div>
+    </section>
+
+    <!-- Leaderboard Tab -->
+    <section id="leaderboard" class="tab-content">
+      <div class="leaderboard-container">
+        <h2>Top Environmental Reporters</h2>
+        <div class="leaderboard-tabs">
+          <button class="leaderboard-tab active" data-period="month">This Month</button>
+          <button class="leaderboard-tab" data-period="alltime">All Time</button>
+        </div>
+        <div id="leaderboardList" class="leaderboard-list"></div>
+      </div>
+    </section>
+
+    <!-- Statistics Tab -->
+    <section id="stats" class="tab-content">
+      <div class="stats-container">
+        <h2>Community Impact</h2>
+        
+        <div class="stats-overview">
+          <div class="overview-card">
+            <strong id="totalIssuesCount">24</strong>
+            <span>Total Issues Reported</span>
+          </div>
+          <div class="overview-card">
+            <strong id="resolvedCount">8</strong>
+            <span>Resolved Issues</span>
+          </div>
+          <div class="overview-card">
+            <strong id="activeReporters">156</strong>
+            <span>Active Reporters</span>
+          </div>
+          <div class="overview-card">
+            <strong id="totalCleanups">34</strong>
+            <span>Cleanup Events</span>
+          </div>
+        </div>
+
+        <div class="stats-charts">
+          <div class="chart-card">
+            <h3>Issues by Category</h3>
+            <canvas id="categoryChart"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3>Status Distribution</h3>
+            <canvas id="statusChart"></canvas>
+          </div>
+          <div class="chart-card full-width">
+            <h3>Issues Over Time</h3>
+            <canvas id="timelineChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Report Issue Modal -->
+  <div id="reportModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeReportModal()">&times;</button>
+      <h2>Report Environmental Issue</h2>
+
+      <form id="reportForm" class="form-group">
+        <div class="form-field">
+          <label>Issue Title *</label>
+          <input type="text" id="issueTitle" placeholder="Brief description of the issue" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>Category *</label>
+            <select id="issueCategory" required>
+              <option value="">Select category</option>
+              <option value="pollution">Pollution</option>
+              <option value="litter">Litter</option>
+              <option value="dumping">Illegal Dumping</option>
+              <option value="habitat">Habitat Damage</option>
+              <option value="water">Water Issues</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Urgency *</label>
+            <select id="issueSeverity" required>
+              <option value="">Select severity</option>
+              <option value="critical">Critical</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label>Description *</label>
+          <textarea id="issueDescription" rows="4" placeholder="Detailed description of the issue" required></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>Latitude *</label>
+            <input type="number" id="issueLatitude" step="0.00001" placeholder="Auto-detected" required>
+          </div>
+          <div class="form-field">
+            <label>Longitude *</label>
+            <input type="number" id="issueLongitude" step="0.00001" placeholder="Auto-detected" required>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label>Upload Photo (Optional)</label>
+          <div class="file-upload">
+            <input type="file" id="issuePhoto" accept="image/*">
+            <label class="file-label" for="issuePhoto">
+              <i class="fas fa-camera"></i> Choose Photo
+            </label>
+            <span id="fileName" class="file-name"></span>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label><input type="checkbox" id="notifyAuthorities"> Notify Local Authorities</label>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" onclick="closeReportModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Report Issue</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Issue Detail Modal -->
+  <div id="detailModal" class="modal">
+    <div class="modal-content large">
+      <button class="modal-close" onclick="closeDetailModal()">&times;</button>
+      
+      <div class="issue-detail">
+        <div class="detail-header">
+          <img id="detailPhoto" src="" alt="Issue photo" class="detail-photo">
+          <div class="detail-meta">
+            <span id="detailCategory" class="category-badge"></span>
+            <h2 id="detailTitle"></h2>
+            <div class="detail-info">
+              <span id="detailReporter"></span>
+              <span id="detailDate"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-body">
+          <div class="detail-section">
+            <h3>Description</h3>
+            <p id="detailDescription"></p>
+          </div>
+
+          <div class="detail-section">
+            <h3>Status</h3>
+            <div class="status-tracker">
+              <div class="status-step" id="step-reported">
+                <div class="status-dot"></div>
+                <span>Reported</span>
+              </div>
+              <div class="status-step" id="step-review">
+                <div class="status-dot"></div>
+                <span>Under Review</span>
+              </div>
+              <div class="status-step" id="step-progress">
+                <div class="status-dot"></div>
+                <span>In Progress</span>
+              </div>
+              <div class="status-step" id="step-resolved">
+                <div class="status-dot"></div>
+                <span>Resolved</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h3><i class="fas fa-thumbs-up"></i> Community Support</h3>
+            <div class="support-info">
+              <div class="support-stat">
+                <strong id="detailVotes">156</strong>
+                <span>Upvotes</span>
+              </div>
+              <div class="support-stat">
+                <strong id="detailComments">23</strong>
+                <span>Comments</span>
+              </div>
+              <div class="support-stat">
+                <strong id="detailShares">12</strong>
+                <span>Shares</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h3>Comments</h3>
+            <div class="comments-input">
+              <input type="text" id="commentText" placeholder="Add a comment...">
+              <button class="btn-secondary" onclick="addComment()">Post</button>
+            </div>
+            <div id="commentsList" class="comments-list"></div>
+          </div>
+        </div>
+
+        <div class="detail-footer">
+          <button class="btn-secondary" id="upvoteBtn"><i class="fas fa-thumbs-up"></i> Upvote</button>
+          <button class="btn-secondary" id="shareBtn"><i class="fas fa-share"></i> Share</button>
+          <button class="btn-primary" id="reportActionBtn">Track Updates</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="../js/pages/lean-platform.js"></script>
+</body>
+</html>

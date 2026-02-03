@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Score Tracker - Personal Sustainability Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/eco-score-tracker.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <i class="fas fa-leaf"></i>
+        <span>Eco Score Tracker</span>
+      </div>
+      <ul class="nav-tabs">
+        <li><a href="#" class="tab-link active" data-tab="overview">Overview</a></li>
+        <li><a href="#" class="tab-link" data-tab="categories">Categories</a></li>
+        <li><a href="#" class="tab-link" data-tab="challenges">Challenges</a></li>
+        <li><a href="#" class="tab-link" data-tab="community">Community</a></li>
+        <li><a href="#" class="tab-link" data-tab="badges">Achievements</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-secondary" id="exportBtn"><i class="fas fa-download"></i> Export</button>
+        <div class="user-profile">
+          <img src="https://via.placeholder.com/40" alt="Profile">
+          <span id="userName">Eco Advocate</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Score Section -->
+  <header class="hero-section">
+    <div class="hero-container">
+      <div class="score-circle-container">
+        <div class="score-circle">
+          <div class="score-inner">
+            <span class="score-number" id="ecoScore">78</span>
+            <span class="score-label">Eco Score</span>
+          </div>
+          <svg class="progress-ring" width="250" height="250">
+            <circle class="progress-ring-bg" r="115" cx="125" cy="125" fill="none" stroke-width="8" />
+            <circle class="progress-ring-fill" r="115" cx="125" cy="125" fill="none" stroke-width="8" id="scoreRing" />
+          </svg>
+        </div>
+        <div class="score-info">
+          <h1>You're an Eco Champion!</h1>
+          <p id="scoreDescription">Your sustainability practices put you in the top 25% of our community.</p>
+          <div class="score-meta">
+            <div class="meta-item">
+              <strong id="scoreChange">+5</strong>
+              <span>This Month</span>
+            </div>
+            <div class="meta-item">
+              <strong id="communityRank">#142</strong>
+              <span>Community Rank</span>
+            </div>
+            <div class="meta-item">
+              <strong id="daysStreak">23</strong>
+              <span>Day Streak</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-recommendations">
+        <h2><i class="fas fa-lightbulb"></i> Top Recommendations</h2>
+        <div id="topRecommendations" class="recommendations-list"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Overview Tab -->
+    <section id="overview" class="tab-content active">
+      <div class="overview-container">
+        <div class="overview-grid">
+          <div class="overview-card">
+            <h3><i class="fas fa-chart-pie"></i> Score Breakdown</h3>
+            <canvas id="breakdownChart"></canvas>
+          </div>
+
+          <div class="overview-card">
+            <h3><i class="fas fa-trend-up"></i> Your Progress</h3>
+            <canvas id="progressChart"></canvas>
+          </div>
+
+          <div class="overview-card full-width">
+            <h3><i class="fas fa-list-check"></i> Weekly Summary</h3>
+            <div class="weekly-summary">
+              <div class="summary-item">
+                <span class="summary-label">Eco Habits Logged</span>
+                <span class="summary-value" id="habitCount">24</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">CO₂ Saved</span>
+                <span class="summary-value" id="co2Saved">45 kg</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">Water Saved</span>
+                <span class="summary-value" id="waterSaved">380 L</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">Waste Reduced</span>
+                <span class="summary-value" id="wasteReduced">12 kg</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">Challenges Complete</span>
+                <span class="summary-value" id="challengesComplete">3/5</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">Community Impact</span>
+                <span class="summary-value" id="communityImpact">142 pts</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories Tab -->
+    <section id="categories" class="tab-content">
+      <div class="categories-container">
+        <h2>Score by Category</h2>
+        <p class="subtitle">See your performance in each sustainability area</p>
+
+        <div class="categories-grid" id="categoriesGrid"></div>
+
+        <div class="category-details">
+          <h3 id="selectedCategoryTitle">Lifestyle</h3>
+          <div class="category-info">
+            <div class="category-score-large">
+              <span id="categoryScore">85</span>
+              <span>/ 100</span>
+            </div>
+            <div class="category-stats">
+              <div class="stat-box">
+                <strong id="categoryHabits">8</strong>
+                <span>Active Habits</span>
+              </div>
+              <div class="stat-box">
+                <strong id="categoryStreak">12</strong>
+                <span>Day Streak</span>
+              </div>
+              <div class="stat-box">
+                <strong id="categoryImpact">250</strong>
+                <span>Impact Points</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="category-habits">
+            <h4>Your Habits</h4>
+            <div id="categoryHabitsList" class="habits-list"></div>
+          </div>
+
+          <div class="category-tips">
+            <h4><i class="fas fa-lightbulb"></i> Improvement Tips</h4>
+            <div id="categoryTipsList" class="tips-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Challenges Tab -->
+    <section id="challenges" class="tab-content">
+      <div class="challenges-container">
+        <h2>Weekly Micro-Challenges</h2>
+        <p class="subtitle">Quick 15-minute sustainability actions</p>
+
+        <div class="challenges-header">
+          <div class="challenge-filter">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="active">Active</button>
+            <button class="filter-btn" data-filter="completed">Completed</button>
+          </div>
+          <button class="btn-primary" id="newChallengeBtn"><i class="fas fa-plus"></i> Add Challenge</button>
+        </div>
+
+        <div id="challengesGrid" class="challenges-grid"></div>
+      </div>
+    </section>
+
+    <!-- Community Tab -->
+    <section id="community" class="tab-content">
+      <div class="community-container">
+        <div class="comparison-section">
+          <h2>How You Compare to Community</h2>
+          <div class="comparison-cards">
+            <div class="comparison-card">
+              <div class="comparison-label">Your Score</div>
+              <div class="comparison-value your-score">78</div>
+            </div>
+            <div class="comparison-card">
+              <div class="comparison-label">Community Average</div>
+              <div class="comparison-value community-avg">62</div>
+            </div>
+            <div class="comparison-card">
+              <div class="comparison-label">Your Category Avg</div>
+              <div class="comparison-value category-avg">71</div>
+            </div>
+          </div>
+
+          <div class="comparison-chart">
+            <h3>Score Distribution</h3>
+            <canvas id="communityChart"></canvas>
+          </div>
+        </div>
+
+        <div class="leaderboard-section">
+          <h2>Leaderboard</h2>
+          <div class="leaderboard-tabs">
+            <button class="leaderboard-tab active" data-period="week">This Week</button>
+            <button class="leaderboard-tab" data-period="month">This Month</button>
+            <button class="leaderboard-tab" data-period="alltime">All Time</button>
+          </div>
+          <div id="leaderboardContainer" class="leaderboard"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Achievements Tab -->
+    <section id="badges" class="tab-content">
+      <div class="badges-container">
+        <h2>Achievements & Milestones</h2>
+        <p class="subtitle">Celebrate your sustainability journey</p>
+
+        <div class="badges-stats">
+          <div class="badge-stat">
+            <span class="badge-stat-number" id="unlockedBadges">12</span>
+            <span class="badge-stat-label">Unlocked</span>
+          </div>
+          <div class="badge-stat">
+            <span class="badge-stat-number" id="totalBadges">25</span>
+            <span class="badge-stat-label">Total</span>
+          </div>
+          <div class="badge-stat">
+            <span class="badge-stat-number" id="badgeProgress">48%</span>
+            <span class="badge-stat-label">Progress</span>
+          </div>
+        </div>
+
+        <div id="badgesGrid" class="badges-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Add Challenge Modal -->
+  <div id="addChallengeModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeAddChallengeModal()">&times;</button>
+      <h2>Add Personal Challenge</h2>
+
+      <form id="addChallengeForm" class="form-group">
+        <div class="form-field">
+          <label>Challenge Name *</label>
+          <input type="text" id="challengeName" placeholder="e.g., Use reusable bags for all shopping" required>
+        </div>
+
+        <div class="form-field">
+          <label>Category *</label>
+          <select id="challengeCategory" required>
+            <option value="">Select category</option>
+            <option value="lifestyle">Lifestyle</option>
+            <option value="consumption">Consumption</option>
+            <option value="energy">Energy</option>
+            <option value="waste">Waste</option>
+            <option value="transport">Transport</option>
+            <option value="food">Food</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label>Duration (days) *</label>
+          <input type="number" id="challengeDuration" min="1" max="30" value="7" required>
+        </div>
+
+        <div class="form-field">
+          <label>Estimated Impact *</label>
+          <input type="number" id="challengeImpact" min="1" placeholder="Impact points" required>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" onclick="closeAddChallengeModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Add Challenge</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Habit Modal -->
+  <div id="editHabitModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeEditHabitModal()">&times;</button>
+      <h2>Edit Habit</h2>
+
+      <form id="editHabitForm" class="form-group">
+        <div class="form-field">
+          <label>Habit Name *</label>
+          <input type="text" id="editHabitName" required>
+        </div>
+
+        <div class="form-field">
+          <label>Frequency *</label>
+          <select id="editHabitFrequency" required>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label>Streak (days)</label>
+          <input type="number" id="editHabitStreak" min="0" readonly>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" onclick="closeEditHabitModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="../js/pages/eco-score-tracker.js"></script>
+</body>
+</html>

@@ -50,16 +50,16 @@ const canvasSize = gridSize * pieceSize; // 360x360 canvas
  * @type {string[]}
  */
 const images = [
-  "../../assets/images/puzzle/puzzle1.jpg",   // Forest ecosystem
-  "../../assets/images/puzzle/puzzle2.jpg",   // Ocean wildlife
+  "../../assets/images/puzzle/puzzle1.webp",   // Forest ecosystem
+  "../../assets/images/puzzle/puzzle2.webp",   // Ocean wildlife
   "../../assets/images/puzzle/puzzle3.webp",  // Mountain landscape
-  "../../assets/images/puzzle/puzzle4.jpg",   // Desert conservation
-  "../../assets/images/puzzle/puzzle5.jpg",   // Wetland birds
+  "../../assets/images/puzzle/puzzle4.webp",   // Desert conservation
+  "../../assets/images/puzzle/puzzle5.webp",   // Wetland birds
   "../../assets/images/puzzle/puzzle6.webp",  // Rainforest canopy
   "../../assets/images/puzzle/puzzle7.webp",  // Arctic wildlife
   "../../assets/images/puzzle/puzzle8.webp",  // Coral reef
   "../../assets/images/puzzle/puzzle9.webp",  // Grassland savanna
-  "../../assets/images/puzzle/puzzle10.jpg"   // River ecosystem
+  "../../assets/images/puzzle/puzzle10.webp"   // River ecosystem
 ];
 
 // ===== DOM ELEMENT REFERENCES =====

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Community Energy Monitor</title>
+  <link rel="stylesheet" href="../css/community-energy-monitor.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="energy-app">
+    <header class="energy-header">
+      <div>
+        <p class="eyebrow">Community Energy Monitor</p>
+        <h1>Track neighborhood energy trends and boost renewable adoption.</h1>
+        <p class="subtitle">Monitor peak demand, see solar uptake, and coordinate reduction campaigns.</p>
+      </div>
+      <div class="header-actions">
+        <button class="ghost-button" id="loadSampleBtn"><i class="fa-solid fa-bolt"></i> Load Sample Data</button>
+        <button class="primary-button" id="exportBtn"><i class="fa-solid fa-file-export"></i> Export Report</button>
+      </div>
+    </header>
+
+    <section class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-icon"><i class="fa-solid fa-plug-circle-bolt"></i></div>
+        <div>
+          <p>Current Demand</p>
+          <h2 id="currentDemand">0 MW</h2>
+          <span class="pill warning">Peak window</span>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon"><i class="fa-solid fa-solar-panel"></i></div>
+        <div>
+          <p>Renewable Adoption</p>
+          <h2 id="renewableAdoption">0%</h2>
+          <span class="pill success">+3% month</span>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon"><i class="fa-solid fa-house-circle-check"></i></div>
+        <div>
+          <p>Participating Homes</p>
+          <h2 id="participatingHomes">0</h2>
+          <span class="pill info">Active cohort</span>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon"><i class="fa-solid fa-chart-line"></i></div>
+        <div>
+          <p>Weekly Savings</p>
+          <h2 id="weeklySavings">0 MWh</h2>
+          <span class="pill neutral">Goal: 45 MWh</span>
+        </div>
+      </div>
+    </section>
+
+    <nav class="tab-nav">
+      <button class="tab-link active" data-tab="overview">Overview</button>
+      <button class="tab-link" data-tab="renewables">Renewable Tracker</button>
+      <button class="tab-link" data-tab="alerts">Peak Demand Alerts</button>
+      <button class="tab-link" data-tab="campaigns">Campaigns</button>
+    </nav>
+
+    <section class="tab-content active" id="overview">
+      <div class="panel-grid">
+        <div class="panel">
+          <h3>Neighborhood demand trend</h3>
+          <canvas id="demandChart"></canvas>
+        </div>
+        <div class="panel">
+          <h3>Usage by zone</h3>
+          <canvas id="zoneChart"></canvas>
+        </div>
+      </div>
+      <div class="panel insights-panel">
+        <h3>Insights</h3>
+        <div id="insightsList" class="insights-list"></div>
+      </div>
+    </section>
+
+    <section class="tab-content" id="renewables">
+      <div class="panel-grid">
+        <div class="panel">
+          <h3>Renewable mix</h3>
+          <canvas id="renewableChart"></canvas>
+        </div>
+        <div class="panel">
+          <h3>Adoption progress</h3>
+          <div id="adoptionProgress" class="progress-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-content" id="alerts">
+      <div class="panel-grid">
+        <div class="panel">
+          <h3>Peak demand alerts</h3>
+          <div class="alert-card critical">
+            <div>
+              <h4>Tonight 6-9 PM</h4>
+              <p>Forecast demand: 210 MW. Please reduce usage.</p>
+            </div>
+            <span class="pill warning">High</span>
+          </div>
+          <div class="alert-card">
+            <div>
+              <h4>Tomorrow 5-7 PM</h4>
+              <p>Cooling load expected. Encourage thermostat adjustments.</p>
+            </div>
+            <span class="pill info">Moderate</span>
+          </div>
+          <div class="alert-card">
+            <div>
+              <h4>Weekend event</h4>
+              <p>Community festival could spike demand by 12%.</p>
+            </div>
+            <span class="pill neutral">Monitor</span>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Recommended actions</h3>
+          <div class="action-card">
+            <i class="fa-solid fa-snowflake"></i>
+            <div>
+              <h4>Set AC to 78°F</h4>
+              <p>Potential savings: 4.2 MWh</p>
+            </div>
+          </div>
+          <div class="action-card">
+            <i class="fa-solid fa-lightbulb"></i>
+            <div>
+              <h4>Delay non-essential lighting</h4>
+              <p>Potential savings: 2.1 MWh</p>
+            </div>
+          </div>
+          <div class="action-card">
+            <i class="fa-solid fa-charging-station"></i>
+            <div>
+              <h4>Shift EV charging to 9 PM+</h4>
+              <p>Potential savings: 3.6 MWh</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-content" id="campaigns">
+      <div class="panel-grid">
+        <div class="panel">
+          <h3>Active campaigns</h3>
+          <div id="campaignList" class="campaign-list"></div>
+        </div>
+        <div class="panel">
+          <h3>Create new campaign</h3>
+          <form id="campaignForm" class="campaign-form">
+            <div class="form-group">
+              <label for="campaignTitle">Campaign name</label>
+              <input id="campaignTitle" type="text" placeholder="Reduce Evening Peak" required />
+            </div>
+            <div class="form-group">
+              <label for="campaignGoal">Goal (MWh)</label>
+              <input id="campaignGoal" type="number" min="1" step="1" placeholder="25" required />
+            </div>
+            <div class="form-group">
+              <label for="campaignDate">Start date</label>
+              <input id="campaignDate" type="date" required />
+            </div>
+            <div class="form-group">
+              <label for="campaignNotes">Notes</label>
+              <textarea id="campaignNotes" rows="4" placeholder="Focus on evening usage and HVAC."></textarea>
+            </div>
+            <button class="primary-button" type="submit"><i class="fa-solid fa-flag"></i> Launch Campaign</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <script src="../js/pages/community-energy-monitor.js"></script>
+</body>
+</html>
