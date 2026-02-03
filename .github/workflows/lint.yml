@@ -1,0 +1,39 @@
+name: Lint Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    name: Run Linters
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run HTMLHint
+        run: npm run lint:html
+        continue-on-error: false
+
+      - name: Run Stylelint
+        run: npm run lint:css
+        continue-on-error: false
+
+      - name: Run Prettier Check
+        run: npm run lint:format
+        continue-on-error: false

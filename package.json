@@ -6,7 +6,14 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "init-db": "node backend/init-db.js"
+    "init-db": "node backend/init-db.js",
+    "lint": "npm run lint:html && npm run lint:css && npm run lint:format",
+    "lint:html": "htmlhint \"frontend/**/*.html\"",
+    "lint:css": "stylelint \"frontend/**/*.css\"",
+    "lint:format": "prettier --check \"frontend/**/*.{html,css,js}\"",
+    "format": "prettier --write \"frontend/**/*.{html,css,js}\"",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -23,7 +30,13 @@
     "xss": "^1.0.14"
   },
   "devDependencies": {
-    "nodemon": "^3.1.11"
+    "@playwright/test": "^1.40.0",
+    "htmlhint": "^1.1.4",
+    "http-server": "^14.1.1",
+    "nodemon": "^3.1.11",
+    "prettier": "^3.1.0",
+    "stylelint": "^16.0.2",
+    "stylelint-config-standard": "^35.0.0"
   },
   "keywords": [
     "environment",

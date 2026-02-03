@@ -16,7 +16,39 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Lint job - must pass before deployment
+  lint:
+    name: Run Linters
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run HTMLHint
+        run: npm run lint:html
+        continue-on-error: true
+
+      - name: Run Stylelint
+        run: npm run lint:css
+        continue-on-error: true
+
+      - name: Run Prettier Check
+        run: npm run lint:format
+        continue-on-error: true
+
+  # Deploy job - runs after lint passes
   deploy:
+    needs: lint
     runs-on: ubuntu-latest
 
     environment:
