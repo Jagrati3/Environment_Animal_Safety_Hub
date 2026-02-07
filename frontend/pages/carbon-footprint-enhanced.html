@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Carbon Footprint Calculator | EcoLife</title>
+    <meta name="description" content="Track your daily carbon footprint with AI-powered insights, set reduction goals, and compare with the community.">
+    <link rel="icon" type="image/png" href="../assets/images/others/FAVICON.webp">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/components/navbar.css">
+    <link rel="stylesheet" href="../css/components/footer.css">
+    <link rel="stylesheet" href="../css/pages/carbon-footprint-enhanced.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div id="navbar-container"></div>
+
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Theme">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Quick Actions Floating Button -->
+    <div class="quick-actions-fab" id="quickActionsFab">
+        <button class="fab-main">
+            <i class="fas fa-plus"></i>
+        </button>
+        <div class="fab-options">
+            <button class="fab-option" data-action="quick-entry" title="Quick Entry">
+                <i class="fas fa-bolt"></i>
+            </button>
+            <button class="fab-option" data-action="set-goal" title="Set Goal">
+                <i class="fas fa-bullseye"></i>
+            </button>
+            <button class="fab-option" data-action="view-history" title="View History">
+                <i class="fas fa-history"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-background">
+            <div class="hero-particles"></div>
+        </div>
+        <div class="hero-content container">
+            <div class="hero-badge">
+                <i class="fas fa-leaf"></i>
+                <span>AI-Powered Carbon Tracking</span>
+            </div>
+            <h1 class="hero-title">
+                Master Your <span class="gradient-text">Carbon Footprint</span>
+            </h1>
+            <p class="hero-description">
+                Track daily emissions, get AI insights, achieve reduction goals, and join a community committed to climate action
+            </p>
+            <div class="hero-cta">
+                <button class="btn btn-primary btn-large" id="getDashboard">
+                    <i class="fas fa-chart-line"></i>
+                    View My Dashboard
+                </button>
+                <button class="btn btn-outline btn-large" id="startTracking">
+                    <i class="fas fa-play"></i>
+                    Start Tracking
+                </button>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" data-target="125487">0</div>
+                        <div class="stat-label">Active Trackers</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" data-target="2847">0</div>
+                        <div class="stat-label">Tons CO₂ Saved</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" data-target="68934">0</div>
+                        <div class="stat-label">Trees Planted</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section class="dashboard-section" id="dashboardSection">
+        <div class="container">
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <div class="dashboard-title">
+                    <h2>
+                        <i class="fas fa-tachometer-alt"></i>
+                        Your Carbon Dashboard
+                    </h2>
+                    <p>Last updated: <span id="lastUpdated">Never</span></p>
+                </div>
+                <div class="dashboard-controls">
+                    <select id="timeRangeSelector" class="time-range-selector">
+                        <option value="today">Today</option>
+                        <option value="week" selected>This Week</option>
+                        <option value="month">This Month</option>
+                        <option value="year">This Year</option>
+                        <option value="all">All Time</option>
+                    </select>
+                    <button class="btn btn-sm btn-primary" id="addEntryBtn">
+                        <i class="fas fa-plus"></i>
+                        Add Entry
+                    </button>
+                </div>
+            </div>
+
+            <!-- Today's Summary Card -->
+            <div class="today-summary">
+                <div class="summary-card main-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-calendar-day"></i> Today's Footprint</h3>
+                        <div class="card-badge" id="todayStatus">
+                            <i class="fas fa-check-circle"></i>
+                            <span>On Track</span>
+                        </div>
+                    </div>
+                    <div class="footprint-visual">
+                        <div class="circular-progress" id="todayProgress">
+                            <svg viewBox="0 0 200 200">
+                                <circle class="progress-bg" cx="100" cy="100" r="85"></circle>
+                                <circle class="progress-bar" cx="100" cy="100" r="85" id="todayProgressCircle"></circle>
+                            </svg>
+                            <div class="progress-content">
+                                <div class="progress-value" id="todayEmissions">0</div>
+                                <div class="progress-unit">kg CO₂</div>
+                                <div class="progress-subtitle">Today</div>
+                            </div>
+                        </div>
+                        <div class="footprint-breakdown">
+                            <div class="breakdown-item">
+                                <i class="fas fa-car"></i>
+                                <span class="item-label">Transport</span>
+                                <span class="item-value" id="todayTransport">0 kg</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <i class="fas fa-bolt"></i>
+                                <span class="item-label">Energy</span>
+                                <span class="item-value" id="todayEnergy">0 kg</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <i class="fas fa-utensils"></i>
+                                <span class="item-label">Food</span>
+                                <span class="item-value" id="todayFood">0 kg</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <i class="fas fa-shopping-bag"></i>
+                                <span class="item-label">Shopping</span>
+                                <span class="item-value" id="todayShopping">0 kg</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <i class="fas fa-trash"></i>
+                                <span class="item-label">Waste</span>
+                                <span class="item-value" id="todayWaste">0 kg</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats Grid -->
+                <div class="quick-stats-grid">
+                    <div class="stat-card-sm">
+                        <div class="stat-icon-sm">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-label-sm">Streak</div>
+                            <div class="stat-value-sm" id="streakDays">0 days</div>
+                        </div>
+                    </div>
+                    <div class="stat-card-sm">
+                        <div class="stat-icon-sm">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-label-sm">Badges</div>
+                            <div class="stat-value-sm" id="badgeCount">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card-sm">
+                        <div class="stat-icon-sm">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-label-sm">Weekly Avg</div>
+                            <div class="stat-value-sm" id="weeklyAvg">0 kg</div>
+                        </div>
+                    </div>
+                    <div class="stat-card-sm">
+                        <div class="stat-icon-sm">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-label-sm">Goal Progress</div>
+                            <div class="stat-value-sm" id="goalProgress">0%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Goals Section -->
+            <div class="goals-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-bullseye"></i> Active Goals</h3>
+                    <button class="btn btn-sm btn-outline" id="createGoalBtn">
+                        <i class="fas fa-plus"></i>
+                        New Goal
+                    </button>
+                </div>
+                <div class="goals-container" id="goalsContainer">
+                    <div class="empty-state">
+                        <i class="fas fa-bullseye"></i>
+                        <p>No active goals yet</p>
+                        <button class="btn btn-primary" id="setFirstGoal">Set Your First Goal</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-line"></i> Emission Trends</h3>
+                        <div class="chart-controls">
+                            <button class="chart-btn active" data-period="week">Week</button>
+                            <button class="chart-btn" data-period="month">Month</button>
+                            <button class="chart-btn" data-period="year">Year</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-pie"></i> Category Distribution</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Recommendations -->
+            <div class="ai-recommendations-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-robot"></i> AI-Powered Recommendations</h3>
+                    <button class="btn btn-sm btn-outline" id="refreshRecommendations">
+                        <i class="fas fa-sync"></i>
+                        Refresh
+                    </button>
+                </div>
+                <div class="recommendations-grid" id="recommendationsGrid">
+                    <!-- Dynamically populated -->
+                </div>
+            </div>
+
+            <!-- Community Comparison -->
+            <div class="community-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-users"></i> Community Comparison</h3>
+                    <div class="community-filters">
+                        <select id="regionFilter" class="filter-select">
+                            <option value="global">Global</option>
+                            <option value="country">Your Country</option>
+                            <option value="city">Your City</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="comparison-cards">
+                    <div class="comparison-card">
+                        <h4>Your Position</h4>
+                        <div class="rank-display">
+                            <div class="rank-number" id="userRank">-</div>
+                            <div class="rank-label">of <span id="totalUsers">-</span> users</div>
+                        </div>
+                        <div class="percentile" id="userPercentile">Top --%</div>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>Your Footprint</h4>
+                        <div class="comparison-bar-container">
+                            <div class="comparison-label">
+                                <span>You</span>
+                                <span class="value" id="yourFootprint">0 kg</span>
+                            </div>
+                            <div class="comparison-bar">
+                                <div class="bar-fill your-bar" id="yourBar"></div>
+                            </div>
+                        </div>
+                        <div class="comparison-bar-container">
+                            <div class="comparison-label">
+                                <span>Community Avg</span>
+                                <span class="value" id="communityAvg">0 kg</span>
+                            </div>
+                            <div class="comparison-bar">
+                                <div class="bar-fill community-bar" id="communityBar"></div>
+                            </div>
+                        </div>
+                        <div class="comparison-bar-container">
+                            <div class="comparison-label">
+                                <span>Target</span>
+                                <span class="value">2,000 kg</span>
+                            </div>
+                            <div class="comparison-bar">
+                                <div class="bar-fill target-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>Leaderboard</h4>
+                        <div class="leaderboard-list" id="leaderboardList">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carbon Offset Calculator -->
+            <div class="offset-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-seedling"></i> Carbon Offset Calculator</h3>
+                </div>
+                <div class="offset-grid">
+                    <div class="offset-card">
+                        <div class="offset-icon">
+                            <i class="fas fa-tree"></i>
+                        </div>
+                        <div class="offset-content">
+                            <h4>Trees to Plant</h4>
+                            <div class="offset-value" id="treesToPlant">0</div>
+                            <p>trees needed to offset your annual emissions</p>
+                        </div>
+                    </div>
+                    <div class="offset-card">
+                        <div class="offset-icon">
+                            <i class="fas fa-solar-panel"></i>
+                        </div>
+                        <div class="offset-content">
+                            <h4>Solar Panels</h4>
+                            <div class="offset-value" id="solarPanels">0</div>
+                            <p>solar panels equivalent to your savings</p>
+                        </div>
+                    </div>
+                    <div class="offset-card">
+                        <div class="offset-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="offset-content">
+                            <h4>Offset Cost</h4>
+                            <div class="offset-value" id="offsetCost">$0</div>
+                            <p>estimated cost for carbon credits</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="offset-actions">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-seedling"></i>
+                        Purchase Carbon Credits
+                    </button>
+                    <button class="btn btn-outline">
+                        <i class="fas fa-info-circle"></i>
+                        Learn More
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calculator Modal -->
+    <div class="modal" id="calculatorModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-calculator"></i> Add Carbon Entry</h3>
+                <button class="modal-close" id="closeCalculator">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="carbonEntryForm">
+                    <div class="form-tabs">
+                        <button type="button" class="tab-btn active" data-tab="quick">Quick Entry</button>
+                        <button type="button" class="tab-btn" data-tab="detailed">Detailed Entry</button>
+                    </div>
+
+                    <!-- Quick Entry Tab -->
+                    <div class="tab-content active" id="quickTab">
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar"></i> Date</label>
+                            <input type="date" id="entryDate" class="form-control" required>
+                        </div>
+                        <div class="category-selector">
+                            <div class="category-option" data-category="transport">
+                                <i class="fas fa-car"></i>
+                                <span>Transport</span>
+                                <input type="number" placeholder="kg CO₂" class="category-input" id="quickTransport">
+                            </div>
+                            <div class="category-option" data-category="energy">
+                                <i class="fas fa-bolt"></i>
+                                <span>Energy</span>
+                                <input type="number" placeholder="kg CO₂" class="category-input" id="quickEnergy">
+                            </div>
+                            <div class="category-option" data-category="food">
+                                <i class="fas fa-utensils"></i>
+                                <span>Food</span>
+                                <input type="number" placeholder="kg CO₂" class="category-input" id="quickFood">
+                            </div>
+                            <div class="category-option" data-category="shopping">
+                                <i class="fas fa-shopping-bag"></i>
+                                <span>Shopping</span>
+                                <input type="number" placeholder="kg CO₂" class="category-input" id="quickShopping">
+                            </div>
+                            <div class="category-option" data-category="waste">
+                                <i class="fas fa-trash"></i>
+                                <span>Waste</span>
+                                <input type="number" placeholder="kg CO₂" class="category-input" id="quickWaste">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-comment"></i> Notes (Optional)</label>
+                            <textarea id="entryNotes" class="form-control" rows="3" placeholder="Any additional notes..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Entry Tab -->
+                    <div class="tab-content" id="detailedTab">
+                        <div class="detailed-form">
+                            <!-- Transportation -->
+                            <div class="form-section">
+                                <h4><i class="fas fa-car"></i> Transportation</h4>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Car Distance (km)</label>
+                                        <input type="number" class="form-control" id="carDistance" step="0.1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Public Transit (km)</label>
+                                        <input type="number" class="form-control" id="transitDistance" step="0.1">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Flight Hours</label>
+                                        <input type="number" class="form-control" id="flightHours" step="0.1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Bike/Walk (km)</label>
+                                        <input type="number" class="form-control" id="activeTransport" step="0.1">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Energy -->
+                            <div class="form-section">
+                                <h4><i class="fas fa-bolt"></i> Energy</h4>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Electricity (kWh)</label>
+                                        <input type="number" class="form-control" id="electricity" step="0.1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Gas/Heating (m³)</label>
+                                        <input type="number" class="form-control" id="gasUsage" step="0.1">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Renewable Energy %</label>
+                                    <input type="range" class="range-slider" id="renewablePercent" min="0" max="100" value="0">
+                                    <div class="range-value"><span id="renewableValue">0</span>%</div>
+                                </div>
+                            </div>
+
+                            <!-- Food -->
+                            <div class="form-section">
+                                <h4><i class="fas fa-utensils"></i> Food</h4>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Diet Type</label>
+                                        <select class="form-control" id="dietType">
+                                            <option value="vegan">Vegan</option>
+                                            <option value="vegetarian">Vegetarian</option>
+                                            <option value="pescatarian">Pescatarian</option>
+                                            <option value="balanced">Balanced</option>
+                                            <option value="meat-heavy">Meat Heavy</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Local Food %</label>
+                                        <input type="range" class="range-slider" id="localFood" min="0" max="100" value="50">
+                                        <div class="range-value"><span id="localFoodValue">50</span>%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" id="cancelEntry">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Save Entry
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Goal Modal -->
+    <div class="modal" id="goalModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-bullseye"></i> Create Reduction Goal</h3>
+                <button class="modal-close" id="closeGoalModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="goalForm">
+                    <div class="form-group">
+                        <label><i class="fas fa-tag"></i> Goal Name</label>
+                        <input type="text" class="form-control" id="goalName" placeholder="e.g., Reduce 20% by June" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-percentage"></i> Reduction Target (%)</label>
+                            <input type="number" class="form-control" id="goalTarget" min="1" max="100" value="20" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar"></i> Duration</label>
+                            <select class="form-control" id="goalDuration">
+                                <option value="7">1 Week</option>
+                                <option value="30" selected>1 Month</option>
+                                <option value="90">3 Months</option>
+                                <option value="180">6 Months</option>
+                                <option value="365">1 Year</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-list"></i> Focus Categories</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="transport" checked>
+                                <span><i class="fas fa-car"></i> Transportation</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="energy" checked>
+                                <span><i class="fas fa-bolt"></i> Energy</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="food" checked>
+                                <span><i class="fas fa-utensils"></i> Food</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="shopping">
+                                <span><i class="fas fa-shopping-bag"></i> Shopping</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="waste">
+                                <span><i class="fas fa-trash"></i> Waste</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" id="cancelGoal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check"></i>
+                            Create Goal
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <!-- Scripts -->
+    <script src="../js/pages/carbon-footprint-enhanced.js"></script>
+    <script src="../js/components/navbar-loader.js"></script>
+    <script src="../js/components/footer-loader.js"></script>
+    
+    <!-- Component Loader -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load Navbar
+            fetch('../components/navbar.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('navbar-container').innerHTML = data;
+                    if (typeof initNavbar === 'function') initNavbar();
+                })
+                .catch(error => console.error('Error loading navbar:', error));
+
+            // Load Footer
+            fetch('../components/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-container').innerHTML = data;
+                    if (typeof initFooter === 'function') initFooter();
+                })
+                .catch(error => console.error('Error loading footer:', error));
+
+            // Theme Toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-theme');
+                const isDark = document.body.classList.contains('dark-theme');
+                themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            });
+        });
+    </script>
+</body>
+</html>
