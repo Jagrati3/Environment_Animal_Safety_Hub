@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Join weekly environmental challenges, track completion streaks, earn green points, and see your impact on the planet!">
+    <title>Sustainable Living Challenge Hub | Environment & Animal Safety Hub</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Canvas Confetti for celebrations -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="../css/pages/sustainable-challenge-hub.css">
+</head>
+<body>
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html">
+                    <i class="fas fa-leaf"></i>
+                    <span>EcoHub</span>
+                </a>
+            </div>
+            <div class="nav-menu">
+                <a href="../index.html">Home</a>
+                <a href="#" class="active">Challenges</a>
+                <a href="carbon-footprint-enhanced.html">Carbon Tracker</a>
+                <a href="learn-more.html">Learn More</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-icon" id="themeToggle" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="btn-icon" id="notificationsBtn" aria-label="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background">
+            <div class="hero-gradient"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-trophy"></i>
+                <span>Join 12,458+ Eco Warriors</span>
+            </div>
+            <h1 class="hero-title">
+                Start Your <span class="gradient-text">Sustainability</span> Journey
+            </h1>
+            <p class="hero-subtitle">
+                Join weekly challenges, track your impact, earn rewards, and make a real difference for our planet!
+            </p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="heroTotalChallenges">0</div>
+                        <div class="stat-label">Active Challenges</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="heroCurrentStreak">0</div>
+                        <div class="stat-label">Day Streak</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="heroGreenPoints">0</div>
+                        <div class="stat-label">Green Points</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="heroBadges">0</div>
+                        <div class="stat-label">Badges Earned</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" data-tab="discover">
+                <i class="fas fa-compass"></i>
+                <span>Discover</span>
+            </button>
+            <button class="tab-btn" data-tab="active">
+                <i class="fas fa-running"></i>
+                <span>Active</span>
+                <span class="tab-badge" id="activeCountBadge">0</span>
+            </button>
+            <button class="tab-btn" data-tab="leaderboard">
+                <i class="fas fa-trophy"></i>
+                <span>Leaderboard</span>
+            </button>
+            <button class="tab-btn" data-tab="profile">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </button>
+        </div>
+
+        <!-- Discover Tab -->
+        <div class="tab-content active" id="discoverTab">
+            
+            <!-- Filters Section -->
+            <div class="filters-section">
+                <div class="filters-header">
+                    <h2>
+                        <i class="fas fa-filter"></i>
+                        Browse Challenges
+                    </h2>
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="grid">
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button class="view-btn" data-view="list">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="filters-controls">
+                    <div class="filter-group">
+                        <label for="categoryFilter">
+                            <i class="fas fa-tag"></i>
+                            Category
+                        </label>
+                        <select id="categoryFilter" class="filter-select">
+                            <option value="all">All Categories</option>
+                            <option value="transportation">🚗 Transportation</option>
+                            <option value="energy">⚡ Energy</option>
+                            <option value="food">🥗 Food</option>
+                            <option value="waste">♻️ Waste</option>
+                            <option value="water">💧 Water</option>
+                            <option value="shopping">🛍️ Shopping</option>
+                            <option value="nature">🌳 Nature</option>
+                            <option value="social">👥 Social</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="difficultyFilter">
+                            <i class="fas fa-signal"></i>
+                            Difficulty
+                        </label>
+                        <select id="difficultyFilter" class="filter-select">
+                            <option value="all">All Levels</option>
+                            <option value="beginner">🌱 Beginner</option>
+                            <option value="intermediate">🌿 Intermediate</option>
+                            <option value="expert">🌳 Expert</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="durationFilter">
+                            <i class="fas fa-clock"></i>
+                            Duration
+                        </label>
+                        <select id="durationFilter" class="filter-select">
+                            <option value="all">Any Duration</option>
+                            <option value="3">3 Days</option>
+                            <option value="7">7 Days</option>
+                            <option value="14">14 Days</option>
+                            <option value="30">30 Days</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group search-group">
+                        <label for="searchInput">
+                            <i class="fas fa-search"></i>
+                            Search
+                        </label>
+                        <input type="text" id="searchInput" class="filter-input" placeholder="Search challenges...">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Challenges -->
+            <section class="featured-section">
+                <div class="section-header">
+                    <h2>
+                        <i class="fas fa-star"></i>
+                        Featured This Week
+                    </h2>
+                </div>
+                <div class="featured-grid" id="featuredChallenges">
+                    <!-- Featured challenges will be dynamically inserted -->
+                </div>
+            </section>
+
+            <!-- All Challenges -->
+            <section class="challenges-section">
+                <div class="section-header">
+                    <h2>
+                        <i class="fas fa-list"></i>
+                        All Challenges
+                        <span class="challenge-count" id="challengeCount">0</span>
+                    </h2>
+                    <div class="sort-control">
+                        <label for="sortBy">Sort by:</label>
+                        <select id="sortBy" class="filter-select">
+                            <option value="popular">Most Popular</option>
+                            <option value="newest">Newest First</option>
+                            <option value="points">Highest Points</option>
+                            <option value="difficulty">Difficulty</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="challenges-grid" id="allChallenges">
+                    <!-- All challenges will be dynamically inserted -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Active Tab -->
+        <div class="tab-content" id="activeTab">
+            <div class="empty-state" id="noActiveChallenges">
+                <div class="empty-icon">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <h2>No Active Challenges</h2>
+                <p>Start your sustainability journey by joining a challenge!</p>
+                <button class="btn btn-primary" onclick="switchTab('discover')">
+                    <i class="fas fa-compass"></i>
+                    Browse Challenges
+                </button>
+            </div>
+            
+            <div class="active-challenges-container" id="activeChallengesContainer" style="display: none;">
+                <!-- Daily Check-in Banner -->
+                <div class="checkin-banner">
+                    <div class="checkin-content">
+                        <div class="checkin-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="checkin-text">
+                            <h3>Daily Check-in</h3>
+                            <p>Mark your progress for today to keep your streak going!</p>
+                        </div>
+                    </div>
+                    <div class="checkin-date">
+                        <i class="fas fa-calendar-day"></i>
+                        <span id="todayDate">Today</span>
+                    </div>
+                </div>
+
+                <!-- Active Challenges List -->
+                <div class="active-challenges-list" id="activeChallengesList">
+                    <!-- Active challenges will be dynamically inserted -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Tab -->
+        <div class="tab-content" id="leaderboardTab">
+            <div class="leaderboard-container">
+                
+                <!-- Leaderboard Filters -->
+                <div class="leaderboard-filters">
+                    <button class="leaderboard-filter-btn active" data-filter="global">
+                        <i class="fas fa-globe"></i>
+                        Global
+                    </button>
+                    <button class="leaderboard-filter-btn" data-filter="friends">
+                        <i class="fas fa-user-friends"></i>
+                        Friends
+                    </button>
+                    <button class="leaderboard-filter-btn" data-filter="regional">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Regional
+                    </button>
+                    <button class="leaderboard-filter-btn" data-filter="weekly">
+                        <i class="fas fa-calendar-week"></i>
+                        This Week
+                    </button>
+                </div>
+
+                <!-- Top 3 Podium -->
+                <div class="podium-section">
+                    <div class="podium-container">
+                        <!-- 2nd Place -->
+                        <div class="podium-place second">
+                            <div class="podium-avatar">
+                                <img src="https://i.pravatar.cc/150?img=2" alt="User 2">
+                                <div class="podium-rank">2</div>
+                            </div>
+                            <div class="podium-name">Sarah Chen</div>
+                            <div class="podium-points">
+                                <i class="fas fa-star"></i>
+                                8,750 pts
+                            </div>
+                        </div>
+                        
+                        <!-- 1st Place -->
+                        <div class="podium-place first">
+                            <div class="podium-crown">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <div class="podium-avatar">
+                                <img src="https://i.pravatar.cc/150?img=1" alt="User 1">
+                                <div class="podium-rank">1</div>
+                            </div>
+                            <div class="podium-name">Alex Johnson</div>
+                            <div class="podium-points">
+                                <i class="fas fa-star"></i>
+                                12,340 pts
+                            </div>
+                        </div>
+                        
+                        <!-- 3rd Place -->
+                        <div class="podium-place third">
+                            <div class="podium-avatar">
+                                <img src="https://i.pravatar.cc/150?img=3" alt="User 3">
+                                <div class="podium-rank">3</div>
+                            </div>
+                            <div class="podium-name">Mike Rodriguez</div>
+                            <div class="podium-points">
+                                <i class="fas fa-star"></i>
+                                7,920 pts
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User's Rank Card -->
+                <div class="user-rank-card">
+                    <div class="rank-badge">
+                        <div class="rank-number">#<span id="userRank">--</span></div>
+                    </div>
+                    <div class="rank-info">
+                        <div class="rank-name">Your Ranking</div>
+                        <div class="rank-points">
+                            <i class="fas fa-star"></i>
+                            <span id="userPoints">0</span> points
+                        </div>
+                    </div>
+                    <div class="rank-progress">
+                        <div class="progress-text">
+                            <span id="nextRankPoints">500</span> points to next rank
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="rankProgress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leaderboard List -->
+                <div class="leaderboard-list" id="leaderboardList">
+                    <!-- Leaderboard entries will be dynamically inserted -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Tab -->
+        <div class="tab-content" id="profileTab">
+            <div class="profile-container">
+                
+                <!-- Profile Header -->
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <img src="https://i.pravatar.cc/150?img=50" alt="Profile" id="profileAvatar">
+                        <button class="avatar-edit-btn">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                    <div class="profile-info">
+                        <h2 id="profileName">Eco Warrior</h2>
+                        <div class="profile-level">
+                            <div class="level-badge">
+                                <i class="fas fa-leaf"></i>
+                                Level <span id="userLevel">1</span>
+                            </div>
+                            <div class="level-title" id="userTitle">Sustainability Beginner</div>
+                        </div>
+                        <div class="profile-stats-mini">
+                            <div class="mini-stat">
+                                <i class="fas fa-calendar-check"></i>
+                                Joined Feb 2026
+                            </div>
+                            <div class="mini-stat">
+                                <i class="fas fa-trophy"></i>
+                                <span id="profileChallengesCompleted">0</span> Completed
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Stats Grid -->
+                <div class="profile-stats-grid">
+                    <div class="profile-stat-card">
+                        <div class="stat-card-icon green">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-card-content">
+                            <div class="stat-card-value" id="profilePoints">0</div>
+                            <div class="stat-card-label">Green Points</div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-stat-card">
+                        <div class="stat-card-icon orange">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="stat-card-content">
+                            <div class="stat-card-value" id="profileStreak">0</div>
+                            <div class="stat-card-label">Day Streak</div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-stat-card">
+                        <div class="stat-card-icon blue">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-card-content">
+                            <div class="stat-card-value" id="profileCompleted">0</div>
+                            <div class="stat-card-label">Completed</div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-stat-card">
+                        <div class="stat-card-icon purple">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <div class="stat-card-content">
+                            <div class="stat-card-value" id="profileBadges">0</div>
+                            <div class="stat-card-label">Badges</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Impact Section -->
+                <div class="impact-section">
+                    <h3>
+                        <i class="fas fa-leaf"></i>
+                        Your Environmental Impact
+                    </h3>
+                    <div class="impact-grid">
+                        <div class="impact-card">
+                            <div class="impact-icon">
+                                <i class="fas fa-cloud"></i>
+                            </div>
+                            <div class="impact-value" id="impactCO2">0</div>
+                            <div class="impact-label">kg CO₂ Saved</div>
+                            <div class="impact-equivalent">= <span id="impactTrees">0</span> trees planted</div>
+                        </div>
+                        
+                        <div class="impact-card">
+                            <div class="impact-icon">
+                                <i class="fas fa-recycle"></i>
+                            </div>
+                            <div class="impact-value" id="impactWaste">0</div>
+                            <div class="impact-label">lbs Waste Diverted</div>
+                            <div class="impact-equivalent">= <span id="impactBags">0</span> trash bags</div>
+                        </div>
+                        
+                        <div class="impact-card">
+                            <div class="impact-icon">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <div class="impact-value" id="impactWater">0</div>
+                            <div class="impact-label">Gallons Water Saved</div>
+                            <div class="impact-equivalent">= <span id="impactBottles">0</span> bottles</div>
+                        </div>
+                        
+                        <div class="impact-card">
+                            <div class="impact-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div class="impact-value" id="impactMoney">$0</div>
+                            <div class="impact-label">Money Saved</div>
+                            <div class="impact-equivalent">Keep it up!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Badges Section -->
+                <div class="badges-section">
+                    <h3>
+                        <i class="fas fa-award"></i>
+                        Badge Collection
+                        <span class="badge-count">(<span id="badgeCount">0</span>/30)</span>
+                    </h3>
+                    <div class="badges-grid" id="badgesGrid">
+                        <!-- Badges will be dynamically inserted -->
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="activity-section">
+                    <h3>
+                        <i class="fas fa-history"></i>
+                        Recent Activity
+                    </h3>
+                    <div class="activity-timeline" id="activityTimeline">
+                        <!-- Activity items will be dynamically inserted -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Challenge Detail Modal -->
+    <div class="modal" id="challengeModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-large">
+            <button class="modal-close" onclick="closeModal('challengeModal')">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="challenge-detail" id="challengeDetail">
+                <!-- Challenge details will be dynamically inserted -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Check-in Modal -->
+    <div class="modal" id="checkinModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('checkinModal')">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="checkin-form">
+                <h2>
+                    <i class="fas fa-check-circle"></i>
+                    Daily Check-in
+                </h2>
+                <p class="checkin-subtitle">Mark your progress for today!</p>
+                
+                <div class="form-group">
+                    <label>Challenge:</label>
+                    <div class="selected-challenge" id="checkinChallengeName">
+                        <!-- Challenge name will be inserted -->
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="checkinNote">
+                        <i class="fas fa-pen"></i>
+                        Notes (Optional)
+                    </label>
+                    <textarea id="checkinNote" placeholder="How did it go today? Any challenges or wins?" rows="4"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-camera"></i>
+                        Add Photo (Optional)
+                    </label>
+                    <div class="photo-upload">
+                        <input type="file" id="checkinPhoto" accept="image/*" style="display: none;">
+                        <button class="btn-upload" onclick="document.getElementById('checkinPhoto').click()">
+                            <i class="fas fa-image"></i>
+                            Choose Photo
+                        </button>
+                        <span class="upload-hint">Show proof of your progress!</span>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="closeModal('checkinModal')">Cancel</button>
+                    <button class="btn btn-primary" id="submitCheckinBtn">
+                        <i class="fas fa-check"></i>
+                        Complete Check-in
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div class="toast" id="successToast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Success!</span>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button class="fab" id="quickAddFab" title="Quick Actions">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- FAB Menu -->
+    <div class="fab-menu" id="fabMenu">
+        <button class="fab-menu-item" onclick="switchTab('discover')">
+            <i class="fas fa-compass"></i>
+            <span>Browse Challenges</span>
+        </button>
+        <button class="fab-menu-item" id="quickCheckinBtn">
+            <i class="fas fa-check"></i>
+            <span>Quick Check-in</span>
+        </button>
+        <button class="fab-menu-item" onclick="shareProgress()">
+            <i class="fas fa-share-alt"></i>
+            <span>Share Progress</span>
+        </button>
+    </div>
+
+    <!-- Main JavaScript -->
+    <script src="../js/pages/sustainable-challenge-hub.js"></script>
+</body>
+</html>
