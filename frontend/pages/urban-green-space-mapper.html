@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Green Space Mapper</title>
+    <link rel="stylesheet" href="/frontend/pages/styles/urban-green-space-mapper.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f4f8fb;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 32px 40px 40px 40px;
+        }
+        h1 {
+            color: #2d5c3b;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            color: #4e6e5d;
+            margin-bottom: 24px;
+        }
+        .flex {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+        .map-section, .info-section {
+            flex: 1 1 350px;
+            min-width: 320px;
+        }
+        .map-section {
+            background: #f7faf7;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(45,92,59,0.04);
+        }
+        #map {
+            width: 100%;
+            height: 350px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(45,92,59,0.06);
+        }
+        .legend {
+            background: #fff;
+            border-radius: 6px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            padding: 10px 16px;
+            font-size: 0.95rem;
+            margin-bottom: 18px;
+        }
+        .legend span {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            border-radius: 3px;
+            vertical-align: middle;
+        }
+        .legend .hotspot { background: #e57373; }
+        .legend .conservation { background: #64b5f6; }
+        .legend .green { background: #81c784; }
+        .resources {
+            margin-top: 24px;
+        }
+        .resources h3 {
+            margin-bottom: 10px;
+            color: #2d5c3b;
+        }
+        .resources ul {
+            padding-left: 18px;
+        }
+        .resources li {
+            margin-bottom: 8px;
+        }
+        @media (max-width: 900px) {
+            .flex {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Urban Green Space Mapper</h1>
+        <div class="subtitle">Explore, map, and analyze urban green spaces. Discover biodiversity hotspots and areas needing conservation.</div>
+        <div class="flex">
+            <div class="map-section">
+                <div id="map"></div>
+                <div class="legend">
+                    <span class="green"></span> Green Space &nbsp;
+                    <span class="hotspot"></span> Biodiversity Hotspot &nbsp;
+                    <span class="conservation"></span> Needs Conservation
+                </div>
+            </div>
+            <div class="info-section">
+                <h2>How to Use</h2>
+                <ul>
+                    <li>Pan and zoom the map to explore your city.</li>
+                    <li>Click on green spaces to view details and biodiversity scores.</li>
+                    <li>Hotspots are marked in red, conservation areas in blue.</li>
+                </ul>
+               <div class="resources">
+    <h3>Learn More</h3>
+    <ul>
+        <li>
+            <a href="https://www.nature.org/en-us/what-we-do/our-insights/perspectives/urban-green-spaces/"
+               target="_blank"
+               rel="noopener noreferrer">
+               The Nature Conservancy: Urban Green Spaces
+            </a>
+        </li>
+        <li>
+            <a href="https://www.wri.org/insights/urban-green-space-benefits"
+               target="_blank"
+               rel="noopener noreferrer">
+               WRI: Urban Green Space Benefits
+            </a>
+        </li>
+        <li>
+            <a href="https://www.cbd.int/urban/toolkit/"
+               target="_blank"
+               rel="noopener noreferrer">
+               CBD: Urban Biodiversity Toolkit
+            </a>
+        </li>
+    </ul>
+</div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        // Initialize map
+        var map = L.map('map').setView([40.7128, -74.0060], 12); // Default to New York City
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Example green spaces (replace with real data or API)
+        var greenSpaces = [
+            {
+                name: 'Central Park',
+                coords: [40.785091, -73.968285],
+                type: 'hotspot',
+                description: 'Major biodiversity hotspot with diverse flora and fauna.'
+            },
+            {
+                name: 'Prospect Park',
+                coords: [40.660204, -73.968956],
+                type: 'green',
+                description: 'Large urban park with moderate biodiversity.'
+            },
+            {
+                name: 'Riverside Park',
+                coords: [40.8007, -73.9707],
+                type: 'conservation',
+                description: 'Area identified as needing conservation efforts.'
+            }
+        ];
+
+        greenSpaces.forEach(function(space) {
+            var color;
+            if (space.type === 'hotspot') color = '#e57373';
+            else if (space.type === 'conservation') color = '#64b5f6';
+            else color = '#81c784';
+            var marker = L.circleMarker(space.coords, {
+                radius: 12,
+                color: color,
+                fillColor: color,
+                fillOpacity: 0.7
+            }).addTo(map);
+            marker.bindPopup('<b>' + space.name + '</b><br>' + space.description);
+        });
+    </script>
+</body>
+</html>

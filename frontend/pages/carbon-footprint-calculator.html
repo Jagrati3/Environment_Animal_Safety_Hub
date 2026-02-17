@@ -1,48 +1,616 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html data-theme="light" lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carbon Footprint Calculator | EcoLife</title>
-    <meta name="description"
-        content="Calculate your annual carbon emissions based on your lifestyle choices. Get personalized insights and track your progress towards a greener future.">
-    <link rel="icon" type="image/png" href="../assets/images/others/FAVICON.webp">
-
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/components/navbar.css">
-    <link rel="stylesheet" href="../css/components/footer.css">
-    <link rel="stylesheet" href="../css/pages/carbon-footprint-calculator.css">
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta name="description" content="Carbon Footprint Calculator - Track, analyze, and reduce your daily carbon emissions with AI-powered insights">
+    <meta name="theme-color" content="#06b6d4">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Personal Carbon Footprint Calculator">
+    <meta property="og:description" content="Track your carbon emissions and get AI insights to reduce your environmental impact">
+    
+    <title>Carbon Footprint Calculator - EcoLife</title>
+    <link rel="stylesheet" href="../css/global/theme.css">
+    <link rel="stylesheet" href="../css/carbon-footprint-calculator-new.css">
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
 </head>
 
 <body>
-    <!-- Scroll Progress -->
-    <div class="scroll-progress" id="scrollProgress"></div>
+    <!-- Navigation -->
+    <nav class="carbon-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../../index.html" class="logo">♻️ Carbon Calculator</a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#dashboard" class="nav-link">Dashboard</a></li>
+                <li><a href="#tracker" class="nav-link">Tracker</a></li>
+                <li><a href="#insights" class="nav-link">AI Insights</a></li>
+                <li><a href="#history" class="nav-link">History</a></li>
+                <li><a href="#community" class="nav-link">Community</a></li>
+            </ul>
+            <div class="nav-controls">
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <button class="export-btn" id="exportBtn">📥 Export</button>
+            </div>
+        </div>
+    </nav>
 
-    <div id="navbar-container"></div>
+    <!-- Main Container -->
+    <div class="carbon-container">
+        <!-- Quick Stats Header -->
+        <section class="quick-stats-header">
+            <div class="stat-card primary">
+                <div class="stat-icon">🌍</div>
+                <div class="stat-content">
+                    <p class="stat-label">Today's Footprint</p>
+                    <p class="stat-value" id="todayFootprint">0.0</p>
+                    <p class="stat-unit">kg CO₂e</p>
+                </div>
+            </div>
+            <div class="stat-card secondary">
+                <div class="stat-icon">📊</div>
+                <div class="stat-content">
+                    <p class="stat-label">Monthly Average</p>
+                    <p class="stat-value" id="monthlyAverage">0.0</p>
+                    <p class="stat-unit">kg CO₂e/day</p>
+                </div>
+            </div>
+            <div class="stat-card warning">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-content">
+                    <p class="stat-label">Month Goal</p>
+                    <p class="stat-value" id="goalProgress">0</p>
+                    <p class="stat-unit">% Complete</p>
+                </div>
+            </div>
+            <div class="stat-card success">
+                <div class="stat-icon">🏆</div>
+                <div class="stat-content">
+                    <p class="stat-label">Reduction Score</p>
+                    <p class="stat-value" id="reductionScore">0</p>
+                    <p class="stat-unit">30-day trend</p>
+                </div>
+            </div>
+        </section>
 
-    <!-- Theme Toggle Button -->
-    <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">
-        <i class="fas fa-moon"></i>
-    </button>
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="dashboard-section">
+            <div class="section-header">
+                <h1>Your Carbon Dashboard</h1>
+                <p class="subtitle">Real-time tracking and analysis of your environmental impact</p>
+            </div>
 
-    <!-- Hero Section -->
-    <section class="carbon-hero" id="carbon-hero">
-        <div class="hero-particles" id="heroParticles"></div>
-        <div class="hero-content">
+            <div class="dashboard-grid">
+                <!-- Main Chart -->
+                <div class="chart-container wide">
+                    <h3>Daily Carbon Emissions (30 Days)</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="dailyChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Category Breakdown -->
+                <div class="chart-container">
+                    <h3>Emissions by Category</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Monthly Trends -->
+                <div class="chart-container">
+                    <h3>Monthly Comparison</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Status Cards -->
+                <div class="status-grid">
+                    <div class="status-card">
+                        <div class="status-icon">🚗</div>
+                        <h4>Transportation</h4>
+                        <p class="status-value" id="transportTotal">0 kg</p>
+                        <p class="status-percent" id="transportPercent">0%</p>
+                        <div class="status-bar">
+                            <div class="bar-fill transport-bar" style="width: 45%"></div>
+                        </div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-icon">⚡</div>
+                        <h4>Energy</h4>
+                        <p class="status-value" id="energyTotal">0 kg</p>
+                        <p class="status-percent" id="energyPercent">0%</p>
+                        <div class="status-bar">
+                            <div class="bar-fill energy-bar" style="width: 25%"></div>
+                        </div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-icon">🍽️</div>
+                        <h4>Food</h4>
+                        <p class="status-value" id="foodTotal">0 kg</p>
+                        <p class="status-percent" id="foodPercent">0%</p>
+                        <div class="status-bar">
+                            <div class="bar-fill food-bar" style="width: 20%"></div>
+                        </div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-icon">🛍️</div>
+                        <h4>Shopping</h4>
+                        <p class="status-value" id="shoppingTotal">0 kg</p>
+                        <p class="status-percent" id="shoppingPercent">0%</p>
+                        <div class="status-bar">
+                            <div class="bar-fill shopping-bar" style="width: 8%"></div>
+                        </div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-icon">♻️</div>
+                        <h4>Waste</h4>
+                        <p class="status-value" id="wasteTotal">0 kg</p>
+                        <p class="status-percent" id="wastePercent">0%</p>
+                        <div class="status-bar">
+                            <div class="bar-fill waste-bar" style="width: 2%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tracker Section -->
+        <section id="tracker" class="tracker-section">
+            <div class="section-header">
+                <h1>Carbon Activity Tracker</h1>
+                <p class="subtitle">Log your daily activities to calculate your carbon footprint</p>
+            </div>
+
+            <div class="tracker-wrapper">
+                <!-- Activity Input Tabs -->
+                <div class="tracker-tabs">
+                    <button class="tab-btn active" data-category="transport">🚗 Transportation</button>
+                    <button class="tab-btn" data-category="energy">⚡ Energy</button>
+                    <button class="tab-btn" data-category="food">🍽️ Food</button>
+                    <button class="tab-btn" data-category="shopping">🛍️ Shopping</button>
+                    <button class="tab-btn" data-category="waste">♻️ Waste</button>
+                </div>
+
+                <!-- Transportation Form -->
+                <div class="tracker-form active" id="transport-form">
+                    <h3>Log Transportation Activities</h3>
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Transportation Type</label>
+                                <select id="transportType">
+                                    <option value="car">Car (avg)</option>
+                                    <option value="suv">SUV</option>
+                                    <option value="motorcycle">Motorcycle</option>
+                                    <option value="bus">Bus</option>
+                                    <option value="train">Train</option>
+                                    <option value="bike">Bike</option>
+                                    <option value="walk">Walking</option>
+                                    <option value="flight">Flight (short)</option>
+                                    <option value="flight-long">Flight (long)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Distance (km)</label>
+                                <input type="number" id="transportDistance" placeholder="0" min="0" step="0.1">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="addActivity('transport')">Add Activity</button>
+                    </form>
+                </div>
+
+                <!-- Energy Form -->
+                <div class="tracker-form" id="energy-form">
+                    <h3>Log Energy Usage</h3>
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Energy Source</label>
+                                <select id="energySource">
+                                    <option value="electricity">Electricity</option>
+                                    <option value="natural-gas">Natural Gas</option>
+                                    <option value="heating-oil">Heating Oil</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Amount</label>
+                                <input type="number" id="energyAmount" placeholder="0" min="0" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label>Unit</label>
+                                <select id="energyUnit">
+                                    <option value="kwh">kWh</option>
+                                    <option value="mwh">MWh</option>
+                                    <option value="therm">Therm</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="addActivity('energy')">Add Activity</button>
+                    </form>
+                </div>
+
+                <!-- Food Form -->
+                <div class="tracker-form" id="food-form">
+                    <h3>Log Food Consumption</h3>
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Food Type</label>
+                                <select id="foodType">
+                                    <option value="beef">Beef</option>
+                                    <option value="pork">Pork</option>
+                                    <option value="chicken">Chicken</option>
+                                    <option value="fish">Fish</option>
+                                    <option value="dairy">Dairy</option>
+                                    <option value="vegetables">Vegetables</option>
+                                    <option value="fruits">Fruits</option>
+                                    <option value="grains">Grains</option>
+                                    <option value="processed">Processed Food</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Quantity (servings)</label>
+                                <input type="number" id="foodQuantity" placeholder="1" min="0" step="0.5">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="addActivity('food')">Add Activity</button>
+                    </form>
+                </div>
+
+                <!-- Shopping Form -->
+                <div class="tracker-form" id="shopping-form">
+                    <h3>Log Shopping</h3>
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Item Category</label>
+                                <select id="shoppingCategory">
+                                    <option value="clothing">Clothing</option>
+                                    <option value="electronics">Electronics</option>
+                                    <option value="furniture">Furniture</option>
+                                    <option value="appliances">Appliances</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Amount Spent ($)</label>
+                                <input type="number" id="shoppingAmount" placeholder="0" min="0" step="0.01">
+                            </div>
+                        </div>
+                        <p class="form-hint">Average: ~0.5 kg CO₂e per $100 spent</p>
+                        <button type="button" class="btn btn-primary" onclick="addActivity('shopping')">Add Activity</button>
+                    </form>
+                </div>
+
+                <!-- Waste Form -->
+                <div class="tracker-form" id="waste-form">
+                    <h3>Log Waste Generation</h3>
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Waste Type</label>
+                                <select id="wasteType">
+                                    <option value="general">General Waste</option>
+                                    <option value="recycled">Recycled</option>
+                                    <option value="composted">Composted</option>
+                                    <option value="hazardous">Hazardous</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Weight (kg)</label>
+                                <input type="number" id="wasteWeight" placeholder="0" min="0" step="0.1">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="addActivity('waste')">Add Activity</button>
+                    </form>
+                </div>
+
+                <!-- Recent Activities -->
+                <div class="recent-activities">
+                    <h3>Today's Activities</h3>
+                    <div id="activitiesList" class="activities-list">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Insights Section -->
+        <section id="insights" class="insights-section">
+            <div class="section-header">
+                <h1>🤖 AI-Powered Insights & Recommendations</h1>
+                <p class="subtitle">Personalized recommendations to reduce your carbon footprint</p>
+            </div>
+
+            <div class="insights-grid">
+                <!-- Smart Recommendations -->
+                <div class="insight-card">
+                    <div class="insight-header">
+                        <span class="insight-icon">💡</span>
+                        <h3>Smart Recommendations</h3>
+                    </div>
+                    <div id="aiRecommendations" class="recommendation-list">
+                        <p style="text-align: center; color: #888;">Log activities to get personalized recommendations</p>
+                    </div>
+                </div>
+
+                <!-- Reduction Goals -->
+                <div class="insight-card">
+                    <div class="insight-header">
+                        <span class="insight-icon">🎯</span>
+                        <h3>Reduction Goals</h3>
+                    </div>
+                    <div class="goals-section">
+                        <div class="goal-input">
+                            <input type="number" id="goalTarget" placeholder="Target: 10" min="0" step="1" value="10">
+                            <span class="goal-unit">% Reduction</span>
+                            <button class="btn btn-secondary" onclick="setReductionGoal()">Set Goal</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Carbon Offsets -->
+                <div class="insight-card">
+                    <div class="insight-header">
+                        <span class="insight-icon">🌱</span>
+                        <h3>Carbon Offset Options</h3>
+                    </div>
+                    <div id="offsetOptions" class="offset-list">
+                        <p style="text-align: center; color: #888;">Offset recommendations coming soon</p>
+                    </div>
+                </div>
+
+                <!-- Comparison Insights -->
+                <div class="insight-card">
+                    <div class="insight-header">
+                        <span class="insight-icon">📈</span>
+                        <h3>Your Impact vs Global Average</h3>
+                    </div>
+                    <div class="comparison-chart">
+                        <div class="comparison-item">
+                            <span class="comparison-label">Your Average</span>
+                            <div class="comparison-bar">
+                                <div class="comparison-fill" id="yourAvgBar" style="width: 45%;"></div>
+                            </div>
+                            <span class="comparison-value" id="yourAvgValue">0.0</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comparison-label">Global Average</span>
+                            <div class="comparison-bar">
+                                <div class="comparison-fill global" style="width: 100%;"></div>
+                            </div>
+                            <span class="comparison-value">16.0 kg/day</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Analysis -->
+                <div class="insight-card wide">
+                    <div class="insight-header">
+                        <span class="insight-icon">🤖</span>
+                        <h3>AI Analysis & Insights</h3>
+                    </div>
+                    <div id="aiAnalysis" class="ai-analysis-text">
+                        <p style="text-align: center; color: #888;">AI insights will appear as you log activities</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Historical Data Section -->
+        <section id="history" class="history-section">
+            <div class="section-header">
+                <h1>📈 Historical Tracking</h1>
+                <p class="subtitle">Analyze your carbon footprint trends over time</p>
+            </div>
+
+            <div class="history-controls">
+                <button class="period-btn active" data-period="30">30 Days</button>
+                <button class="period-btn" data-period="90">90 Days</button>
+                <button class="period-btn" data-period="365">1 Year</button>
+            </div>
+
+            <div class="history-grid">
+                <div class="chart-container wide">
+                    <h3>Carbon Emissions Trend</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="history-stat">
+                        <p class="stat-label">Highest Day</p>
+                        <p class="stat-value" id="highestDay">0.0</p>
+                        <p class="stat-detail">kg CO₂e</p>
+                    </div>
+                    <div class="history-stat">
+                        <p class="stat-label">Lowest Day</p>
+                        <p class="stat-value" id="lowestDay">0.0</p>
+                        <p class="stat-detail">kg CO₂e</p>
+                    </div>
+                    <div class="history-stat">
+                        <p class="stat-label">Average</p>
+                        <p class="stat-value" id="avgDay">0.0</p>
+                        <p class="stat-detail">kg CO₂e/day</p>
+                    </div>
+                    <div class="history-stat">
+                        <p class="stat-label">Total</p>
+                        <p class="stat-value" id="totalEmissions">0.0</p>
+                        <p class="stat-detail">kg CO₂e</p>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Category Performance Over Time</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="categoryTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community Comparison Section -->
+        <section id="community" class="community-section">
+            <div class="section-header">
+                <h1>👥 Community Comparisons</h1>
+                <p class="subtitle">See how you compare with other users and set benchmarks</p>
+            </div>
+
+            <div class="community-grid">
+                <!-- Leaderboard -->
+                <div class="community-card">
+                    <h3>🏆 Lowest Carbon Leaders</h3>
+                    <table class="leaderboard">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>User</th>
+                                <th>Avg Daily (kg CO₂e)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboardBody">
+                            <tr>
+                                <td>1</td>
+                                <td>🌱 EcoWarrior</td>
+                                <td>3.2 kg</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>🌿 GreenLiving</td>
+                                <td>4.1 kg</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>♻️ SustainableMe</td>
+                                <td>5.0 kg</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Category Comparison -->
+                <div class="community-card">
+                    <h3>📊 Average Emissions by Category</h3>
+                    <div class="category-stats">
+                        <div class="category-stat">
+                            <span class="cat-name">Transportation</span>
+                            <span class="cat-avg">6.2 kg</span>
+                        </div>
+                        <div class="category-stat">
+                            <span class="cat-name">Energy</span>
+                            <span class="cat-avg">4.5 kg</span>
+                        </div>
+                        <div class="category-stat">
+                            <span class="cat-name">Food</span>
+                            <span class="cat-avg">3.2 kg</span>
+                        </div>
+                        <div class="category-stat">
+                            <span class="cat-name">Shopping</span>
+                            <span class="cat-avg">1.8 kg</span>
+                        </div>
+                        <div class="category-stat">
+                            <span class="cat-name">Waste</span>
+                            <span class="cat-avg">0.3 kg</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Benchmarks -->
+                <div class="community-card wide">
+                    <h3>🎯 Carbon Footprint Benchmarks</h3>
+                    <div class="benchmark-grid">
+                        <div class="benchmark">
+                            <p class="benchmark-label">World Average</p>
+                            <p class="benchmark-value">16 kg CO₂e/day</p>
+                            <p class="benchmark-description">Global average person</p>
+                        </div>
+                        <div class="benchmark">
+                            <p class="benchmark-label">US Average</p>
+                            <p class="benchmark-value">25 kg CO₂e/day</p>
+                            <p class="benchmark-description">United States citizen</p>
+                        </div>
+                        <div class="benchmark">
+                            <p class="benchmark-label">EU Average</p>
+                            <p class="benchmark-value">13 kg CO₂e/day</p>
+                            <p class="benchmark-description">European citizen</p>
+                        </div>
+                        <div class="benchmark">
+                            <p class="benchmark-label">Paris Agreement Target</p>
+                            <p class="benchmark-value">2 kg CO₂e/day</p>
+                            <p class="benchmark-description">By 2050 (limit to 1.5°C)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Badges & Achievements Section -->
+        <section class="achievements-section">
+            <div class="section-header">
+                <h1>🏆 Badges & Achievements</h1>
+                <p class="subtitle">Unlock achievements as you progress toward sustainability goals</p>
+            </div>
+
+            <div id="badgesGrid" class="badges-grid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Export Data Section -->
+        <section class="export-section">
+            <div class="section-header">
+                <h1>📥 Export Your Data</h1>
+                <p class="subtitle">Download your carbon tracking data in various formats</p>
+            </div>
+
+            <div class="export-options">
+                <button class="export-card" onclick="exportData('pdf')">
+                    <span class="export-icon">📄</span>
+                    <span class="export-name">PDF Report</span>
+                    <span class="export-desc">Complete summary</span>
+                </button>
+                <button class="export-card" onclick="exportData('csv')">
+                    <span class="export-icon">📊</span>
+                    <span class="export-name">CSV Data</span>
+                    <span class="export-desc">Detailed entries</span>
+                </button>
+                <button class="export-card" onclick="exportData('json')">
+                    <span class="export-icon">⚙️</span>
+                    <span class="export-name">JSON Export</span>
+                    <span class="export-desc">Full data backup</span>
+                </button>
+                <button class="export-card" onclick="exportData('print')">
+                    <span class="export-icon">🖨️</span>
+                    <span class="export-name">Print Report</span>
+                    <span class="export-desc">Physical copy</span>
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="carbon-footer">
+        <div class="footer-content">
+            <p>&copy; 2026 EcoLife Carbon Calculator. Track your impact, change your future.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+                <a href="#">API Docs</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/carbon-footprint-calculator-new.js"></script>
+</body>
+</html>
             <div class="hero-badge">
                 <i class="fa-solid fa-leaf"></i>
                 <span>Carbon Footprint Tracker</span>

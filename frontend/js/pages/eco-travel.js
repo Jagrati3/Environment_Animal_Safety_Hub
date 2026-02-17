@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Add OpenStreetMap tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer external">OpenStreetMap</a> contributors'
     }).addTo(map);
 
     const searchBtn = document.getElementById('searchBtn');

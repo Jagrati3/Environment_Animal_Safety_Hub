@@ -46,9 +46,6 @@ function initializeSignupForm() {
     // Setup password strength listeners
     setupPasswordListeners();
 
-    // Setup form submission
-    setupFormSubmission();
-
     // Setup modal listeners
     setupModalListeners();
 }
@@ -507,99 +504,75 @@ function updateSummary() {
     }
 }
 
+function populateConfirmationModal() {
+    const confirmName = document.getElementById("confirm-name");
+    const confirmEmail = document.getElementById("confirm-email");
+    const confirmInterests = document.getElementById("confirm-interests");
+
+    const firstName = document.getElementById("firstName")?.value?.trim();
+    const lastName = document.getElementById("lastName")?.value?.trim();
+    const email = document.getElementById("email")?.value?.trim();
+
+    const interests = Array.from(
+        document.querySelectorAll('input[name="interests"]:checked')
+    ).map(i => i.value).join(", ");
+
+    if (confirmName) confirmName.textContent = `${firstName} ${lastName}`;
+    if (confirmEmail) confirmEmail.textContent = email;
+    if (confirmInterests) confirmInterests.textContent = interests || "None";
+}
+
+function openConfirmationModal() {
+    const confirmationModal = document.getElementById("confirmationModal");
+    if (!confirmationModal) return;
+
+    populateConfirmationModal();
+
+    confirmationModal.classList.add("show");
+}
+function handleFinalSubmit() {
+    // Explicitly trigger final-step validation
+    if (!validateStep(4)) return;
+
+    // Open confirmation modal
+    openConfirmationModal();
+}
+
+
 /**
  * Setup form submission handling with real API
  */
-function setupFormSubmission() {
-    const signupForm = document.getElementById("signupForm");
-    if (!signupForm) return;
+document.addEventListener("DOMContentLoaded", () => {
+    const confirmBtn = document.getElementById("confirmSubmitBtn");
+    const cancelBtn = document.getElementById("cancelSubmitBtn");
+    const confirmationModal = document.getElementById("confirmationModal");
+    const successModal = document.getElementById("successModal");
+    const submitBtn = document.getElementById("submitBtn");
 
-    signupForm.addEventListener("submit", async function (e) {
-        e.preventDefault();
+    if (!confirmBtn || !confirmationModal) return;
 
-        if (!validateStep(4)) {
-            return;
-        }
+    confirmBtn.addEventListener("click", () => {
+        confirmationModal.style.display = "none";
 
-        const submitBtn = document.getElementById("submitBtn");
-        const originalText = submitBtn ? submitBtn.innerHTML : '';
-        
-        // Show loading
         if (submitBtn) {
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
             submitBtn.disabled = true;
         }
 
-        // Gather form data
-        const formData = {
-            firstName: document.getElementById('firstName')?.value?.trim(),
-            lastName: document.getElementById('lastName')?.value?.trim(),
-            username: document.getElementById('username')?.value?.trim(),
-            email: document.getElementById('email')?.value?.trim(),
-            password: document.getElementById('password')?.value,
-            interests: Array.from(document.querySelectorAll('input[name="interests"]:checked')).map(cb => cb.value)
-        };
+        // Frontend-only success flow
+        successModal.classList.add("show");
 
-        try {
-            const response = await fetch(`${API_BASE_URL}/auth/register`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            });
-
-            const result = await response.json();
-
-            if (response.ok && result.success) {
-                // Store auth data
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('token', result.data.token);
-                localStorage.setItem('refreshToken', result.data.refreshToken);
-                localStorage.setItem('userName', result.data.user.firstName + ' ' + result.data.user.lastName);
-                localStorage.setItem('userId', result.data.user.id);
-                localStorage.setItem('userEmail', result.data.user.email);
-
-                // Show success modal
-                const successModal = document.getElementById("successModal");
-                if (successModal) {
-                    successModal.classList.add("show");
-                }
-
-                // Redirect after delay
-                setTimeout(() => {
-                    window.location.href = "../index.html";
-                }, 2000);
-            } else {
-                // Show error
-                showSignupError(result.message || 'Registration failed. Please try again.');
-                if (submitBtn) {
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                }
-            }
-        } catch (error) {
-            console.error('Signup error:', error);
-            // Fallback to localStorage for offline/demo mode
-            if (error.name === 'TypeError') {
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('userName', formData.firstName + ' ' + formData.lastName);
-                
-                const successModal = document.getElementById("successModal");
-                if (successModal) {
-                    successModal.classList.add("show");
-                }
-                setTimeout(() => {
-                    window.location.href = "../index.html";
-                }, 2000);
-            } else {
-                showSignupError('Connection error. Please try again.');
-                if (submitBtn) {
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                }
-            }
-        }
+        setTimeout(() => {
+            window.location.href = "../index.html";
+        }, 2000);
     });
-}
+
+    if (cancelBtn) {
+        cancelBtn.addEventListener("click", () => {
+            confirmationModal.style.display = "none";
+        });
+    }
+});
 
 /**
  * Show signup error message
@@ -634,3 +607,35 @@ function setupModalListeners() {
         }
     });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const submitBtn = document.getElementById("submitBtn");
+
+    if (!submitBtn) {
+        console.error("Create Account button not found");
+        return;
+    }
+
+    submitBtn.addEventListener("click", () => {
+        console.log("Create Account clicked");
+
+        // Final validation
+        if (!validateStep(4)) {
+            console.warn("Final step validation failed");
+            return;
+        }
+
+        // Open confirmation modal
+        openConfirmationModal();
+    });
+});
+document.addEventListener("DOMContentLoaded", () => {
+  const closeBtn = document.getElementById("closeModalBtn");
+  const successModal = document.getElementById("successModal");
+
+  if (closeBtn && successModal) {
+    closeBtn.addEventListener("click", () => {
+      successModal.classList.remove("show");
+    });
+  }
+});

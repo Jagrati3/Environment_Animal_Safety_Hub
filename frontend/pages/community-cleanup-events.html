@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Cleanup Events Organizer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/community-cleanup-events.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="header-title">
+          <h1><i class="fa-solid fa-leaf"></i> Community Cleanup Events</h1>
+          <p>Organize & manage neighborhood environmental cleanup</p>
+        </div>
+        <div class="header-stats">
+          <div class="stat-badge">
+            <div class="stat-badge-value" id="upcomingCount">4</div>
+            <div class="stat-badge-label">Upcoming Events</div>
+          </div>
+          <div class="stat-badge">
+            <div class="stat-badge-value" id="volunteerCount">8</div>
+            <div class="stat-badge-label">Active Volunteers</div>
+          </div>
+          <div class="stat-badge">
+            <div class="stat-badge-value" id="wasteCollected">0.5T</div>
+            <div class="stat-badge-label">Waste Diverted</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Overview Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+          <i class="fa-solid fa-tree"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number">24</div>
+          <div class="stat-label">Events Completed</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #3b82f6, #1e40af);">
+          <i class="fa-solid fa-hourglass-end"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number">156</div>
+          <div class="stat-label">Volunteer Hours</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+          <i class="fa-solid fa-trash"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number">3.5T</div>
+          <div class="stat-label">Waste Collected</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">
+          <i class="fa-solid fa-handshake"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number">12</div>
+          <div class="stat-label">Community Partners</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tab-navigation">
+      <button class="tab-link active" data-tab="events">
+        <i class="fa-solid fa-calendar-check"></i> Upcoming Events
+      </button>
+      <button class="tab-link" data-tab="calendar">
+        <i class="fa-solid fa-calendar"></i> Calendar View
+      </button>
+      <button class="tab-link" data-tab="volunteers">
+        <i class="fa-solid fa-people-group"></i> Volunteers
+      </button>
+      <button class="tab-link" data-tab="leaderboard">
+        <i class="fa-solid fa-trophy"></i> Leaderboard
+      </button>
+      <button class="tab-link" data-tab="impact">
+        <i class="fa-solid fa-chart-pie"></i> Impact
+      </button>
+    </div>
+
+    <!-- Tab Content -->
+    
+    <!-- Events Tab -->
+    <div id="events" class="tab-content active">
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Create New Event</h2>
+        </div>
+        <form id="eventForm" class="panel-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="eventTitle">Event Title *</label>
+              <input type="text" id="eventTitle" name="eventTitle" required placeholder="e.g., Central Park Spring Cleanup">
+            </div>
+            <div class="form-group">
+              <label for="eventCapacity">Expected Volunteers *</label>
+              <input type="number" id="eventCapacity" name="eventCapacity" required min="5" value="30">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="eventDate">Date *</label>
+              <input type="date" id="eventDate" name="eventDate" required>
+            </div>
+            <div class="form-group">
+              <label for="eventTime">Time *</label>
+              <input type="time" id="eventTime" name="eventTime" required>
+            </div>
+            <div class="form-group">
+              <label for="eventDuration">Duration (hours) *</label>
+              <input type="number" id="eventDuration" name="eventDuration" required step="0.5" min="1" value="3">
+            </div>
+          </div>
+          <div class="form-group full">
+            <label for="eventLocation">Location *</label>
+            <input type="text" id="eventLocation" name="eventLocation" required placeholder="e.g., Central Park, Downtown">
+          </div>
+          <div class="form-group full">
+            <label for="eventDescription">Description</label>
+            <textarea id="eventDescription" name="eventDescription" rows="3" placeholder="Describe the cleanup event..."></textarea>
+          </div>
+          <div class="form-group full">
+            <label>Supplies Needed</label>
+            <div class="checkbox-group">
+              <label class="checkbox-label">
+                <input type="checkbox" name="eventSupplies" value="gloves"> Gloves
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="eventSupplies" value="bags"> Trash Bags
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="eventSupplies" value="rakes"> Rakes
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="eventSupplies" value="shovels"> Shovels
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="eventSupplies" value="water"> Water/Hydration
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="eventSupplies" value="vests"> Safety Vests
+              </label>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-plus"></i> Create Event
+          </button>
+        </form>
+      </div>
+
+      <!-- Events List -->
+      <div class="panel" style="margin-top: 2rem;">
+        <div class="panel-header">
+          <h2>Upcoming Events</h2>
+          <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="this-week">This Week</button>
+            <button class="filter-btn" data-filter="this-month">This Month</button>
+          </div>
+        </div>
+        <div id="eventsList" class="events-list"></div>
+      </div>
+    </div>
+
+    <!-- Calendar Tab -->
+    <div id="calendar" class="tab-content">
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Events Calendar</h2>
+        </div>
+        <div class="calendar-container">
+          <div class="calendar-header">
+            <button id="prevMonth" class="calendar-nav-btn">
+              <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <h3 id="monthYear" style="flex: 1; text-align: center;">February 2026</h3>
+            <button id="nextMonth" class="calendar-nav-btn">
+              <i class="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
+          <div class="calendar-weekdays">
+            <div class="weekday">Sun</div>
+            <div class="weekday">Mon</div>
+            <div class="weekday">Tue</div>
+            <div class="weekday">Wed</div>
+            <div class="weekday">Thu</div>
+            <div class="weekday">Fri</div>
+            <div class="weekday">Sat</div>
+          </div>
+          <div id="calendarDays" class="calendar-days"></div>
+        </div>
+        <div class="calendar-legend">
+          <div class="legend-item">
+            <span style="width: 12px; height: 12px; background: var(--success-color); border-radius: 50%;"></span>
+            <span>Event Scheduled</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Volunteers Tab -->
+    <div id="volunteers" class="tab-content">
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Become a Volunteer</h2>
+        </div>
+        <form id="volunteerForm" class="panel-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="volName">Full Name *</label>
+              <input type="text" id="volName" name="volName" required placeholder="Your name">
+            </div>
+            <div class="form-group">
+              <label for="volEmail">Email *</label>
+              <input type="email" id="volEmail" name="volEmail" required placeholder="your@email.com">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="volPhone">Phone</label>
+              <input type="tel" id="volPhone" name="volPhone" placeholder="+1 (555) 000-0000">
+            </div>
+            <div class="form-group">
+              <label for="volAvailability">Availability</label>
+              <select id="volAvailability" name="volAvailability">
+                <option>Weekends</option>
+                <option>Weekdays</option>
+                <option>Both</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group full">
+            <label>Skills & Interests</label>
+            <div class="checkbox-group">
+              <label class="checkbox-label">
+                <input type="checkbox" name="volSkills" value="heavy-lifting"> Heavy Lifting
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="volSkills" value="event-planning"> Event Planning
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="volSkills" value="photography"> Photography
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="volSkills" value="training"> Training/Leadership
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="volSkills" value="driving"> Driving/Transport
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="volSkills" value="social-media"> Social Media
+              </label>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-user-plus"></i> Register as Volunteer
+          </button>
+        </form>
+      </div>
+
+      <!-- Volunteers Grid -->
+      <div class="panel" style="margin-top: 2rem;">
+        <div class="panel-header">
+          <h2>Active Volunteers</h2>
+        </div>
+        <div id="volunteersGrid" class="volunteers-grid"></div>
+      </div>
+
+      <!-- Volunteer Statistics -->
+      <div class="panel" style="margin-top: 2rem;">
+        <div class="panel-header">
+          <h2>Volunteer Statistics</h2>
+        </div>
+        <div class="chart-container">
+          <canvas id="volunteerStatsChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leaderboard Tab -->
+    <div id="leaderboard" class="tab-content">
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Leaderboard</h2>
+          <select id="leaderboardFilter" style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 6px; background: var(--bg-primary); color: var(--text-primary);">
+            <option value="hours">Sort by Hours</option>
+            <option value="events">Sort by Events</option>
+          </select>
+        </div>
+
+        <!-- Podium -->
+        <div class="podium-container">
+          <div class="podium-position second">
+            <div class="medal">🥈</div>
+            <div class="name" id="second-name">Sarah Johnson</div>
+            <div class="stat" id="second-stat">45 hours</div>
+            <div class="podium-height"></div>
+          </div>
+          <div class="podium-position first">
+            <div class="medal">🥇</div>
+            <div class="name" id="first-name">Marcus Chen</div>
+            <div class="stat" id="first-stat">68 hours</div>
+            <div class="podium-height"></div>
+          </div>
+          <div class="podium-position third">
+            <div class="medal">🥉</div>
+            <div class="name" id="third-name">Elena Rodriguez</div>
+            <div class="stat" id="third-stat">38 hours</div>
+            <div class="podium-height"></div>
+          </div>
+        </div>
+
+        <!-- Full Leaderboard -->
+        <div class="leaderboard-list-container">
+          <div id="leaderboardList" class="leaderboard-list"></div>
+        </div>
+      </div>
+
+      <!-- Achievements -->
+      <div class="panel" style="margin-top: 2rem;">
+        <div class="panel-header">
+          <h2>Achievements & Badges</h2>
+        </div>
+        <div id="achievementsGrid" class="achievements-grid"></div>
+      </div>
+    </div>
+
+    <!-- Impact Tab -->
+    <div id="impact" class="tab-content">
+      <div class="impact-overview">
+        <div class="impact-card">
+          <div class="impact-icon">🌳</div>
+          <div class="impact-text">
+            <div class="impact-number">45</div>
+            <div class="impact-label">Trees Planted</div>
+          </div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-icon">💧</div>
+          <div class="impact-text">
+            <div class="impact-number">18K L</div>
+            <div class="impact-label">Water Conserved</div>
+          </div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-icon">🌍</div>
+          <div class="impact-text">
+            <div class="impact-number">2.8T</div>
+            <div class="impact-label">CO₂ Prevented</div>
+          </div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-icon">🏞️</div>
+          <div class="impact-text">
+            <div class="impact-number">8</div>
+            <div class="impact-label">Green Spaces</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="charts-grid">
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Waste Breakdown</h3>
+          </div>
+          <div class="chart-container">
+            <canvas id="wasteBreakdownChart"></canvas>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Monthly Progress</h3>
+          </div>
+          <div class="chart-container">
+            <canvas id="monthlyTrendChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Waste Details -->
+      <div class="panel" style="margin-top: 2rem;">
+        <div class="panel-header">
+          <h2>Waste Collected by Type</h2>
+        </div>
+        <div id="wasteTypes" class="waste-list"></div>
+      </div>
+
+      <!-- Top Impact -->
+      <div class="panel" style="margin-top: 2rem;">
+        <div class="panel-header">
+          <h3>Top Impact Contributors</h3>
+        </div>
+        <div class="chart-container">
+          <canvas id="topImpactChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Event Details Modal -->
+  <div id="eventDetailsModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalEventTitle">Event Details</h3>
+        <button class="modal-close" onclick="closeEventModal()">
+          <i class="fa-solid fa-times"></i>
+        </button>
+      </div>
+      <div id="eventDetailsContent"></div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeEventModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <script src="../js/pages/community-cleanup-events.js"></script>
+</body>
+</html>

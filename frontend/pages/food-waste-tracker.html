@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Food Waste Tracker | EcoLife</title>
+  <link rel="stylesheet" href="../css/food-waste-tracker.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="food-app">
+    <!-- Navbar will be injected -->
+    <div id="navbar-container"></div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1><i class="fas fa-leaf"></i> Food Waste Tracker</h1>
+          <p>Track, reduce, and eliminate food waste. Build a sustainable kitchen, one meal at a time!</p>
+        </div>
+        <div class="hero-visual">
+          <div class="food-animation">
+            <div class="compost-container">
+              <div class="compost-pile">
+                <i class="fas fa-leaf leaf-1"></i>
+                <i class="fas fa-apple-alt apple"></i>
+                <i class="fas fa-leaf leaf-2"></i>
+              </div>
+              <div class="waste-value">
+                <span id="totalWasteKg">0</span>
+                <span class="unit">kg</span>
+              </div>
+            </div>
+            <p class="hero-stat">This Month</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Alert Banner -->
+    <div id="alertBanner" class="alert-banner hidden">
+      <i class="fas fa-exclamation-triangle"></i>
+      <span id="alertMessage"></span>
+      <button class="alert-close" onclick="closeAlert()">×</button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+      <!-- Quick Stats Dashboard -->
+      <section class="stats-dashboard">
+        <div class="stat-card today">
+          <div class="stat-icon">
+            <i class="fas fa-calendar-day"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Today's Waste</h3>
+            <p class="stat-value" id="todayWaste">0</p>
+            <span class="stat-unit">kg</span>
+          </div>
+          <div class="stat-badge" id="todayStatus">Tracking</div>
+        </div>
+
+        <div class="stat-card week">
+          <div class="stat-icon">
+            <i class="fas fa-trash"></i>
+          </div>
+          <div class="stat-content">
+            <h3>This Week</h3>
+            <p class="stat-value" id="weekWaste">0</p>
+            <span class="stat-unit">kg</span>
+          </div>
+          <div class="stat-change" id="weekChange">0%</div>
+        </div>
+
+        <div class="stat-card month">
+          <div class="stat-icon">
+            <i class="fas fa-money-bill"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Money Wasted</h3>
+            <p class="stat-value" id="monetaryWaste">$0</p>
+            <span class="stat-unit">This Month</span>
+          </div>
+          <div class="stat-comparison" id="costTrend">Increasing</div>
+        </div>
+
+        <div class="stat-card goal">
+          <div class="stat-icon">
+            <i class="fas fa-leaf"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Compostable</h3>
+            <p class="stat-value" id="compostablePercent">0</p>
+            <span class="stat-unit">%</span>
+          </div>
+          <div class="goal-progress-mini">
+            <div class="progress-bar-mini">
+              <div class="progress-fill-mini" id="compostProgressBar"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Main Content Grid -->
+      <div class="main-grid">
+        <!-- Left Column -->
+        <div class="left-column">
+          <!-- Log Food Waste -->
+          <section class="card waste-form-card">
+            <h2><i class="fas fa-plus-circle"></i> Log Food Waste</h2>
+            <form id="wasteForm" class="waste-form">
+              <div class="form-group">
+                <label for="wasteCategory">Food Category</label>
+                <select id="wasteCategory" required>
+                  <option value="">Select Category</option>
+                  <option value="vegetables">🥬 Vegetables</option>
+                  <option value="fruits">🍎 Fruits</option>
+                  <option value="meat">🥩 Meat/Seafood</option>
+                  <option value="dairy">🧀 Dairy</option>
+                  <option value="grains">🌾 Grains/Bread</option>
+                  <option value="cooked">🍲 Cooked Food</option>
+                  <option value="packaged">📦 Packaged/Processed</option>
+                  <option value="other">📊 Other</option>
+                </select>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="wasteType">Waste Type</label>
+                  <select id="wasteType" required>
+                    <option value="">Select Type</option>
+                    <option value="expired">Expired</option>
+                    <option value="spoiled">Spoiled/Moldy</option>
+                    <option value="leftover">Leftover</option>
+                    <option value="plate-waste">Plate Waste</option>
+                    <option value="preparation">Preparation Scraps</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="wasteWeight">Weight (kg)</label>
+                  <input type="number" id="wasteWeight" min="0.1" step="0.1" placeholder="e.g., 0.5" required />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="itemName">Item Name</label>
+                  <input type="text" id="itemName" placeholder="e.g., Tomatoes, Bread, Chicken" required />
+                </div>
+                <div class="form-group">
+                  <label for="itemCost">Original Cost ($)</label>
+                  <input type="number" id="itemCost" min="0" step="0.01" placeholder="e.g., 5.99" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="wasteDate">Date</label>
+                <input type="datetime-local" id="wasteDate" required />
+              </div>
+
+              <div class="form-group">
+                <label for="wasteReason">Reason for Waste</label>
+                <textarea id="wasteReason" rows="2" placeholder="Why was this wasted? (help improve habits)"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="wastePhoto">Upload Photo (Optional)</label>
+                <div class="photo-upload">
+                  <input type="file" id="wastePhoto" accept="image/*" />
+                  <span class="file-hint">📸 Add a photo to track before/after</span>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Log Waste
+              </button>
+            </form>
+
+            <!-- Quick Log Buttons -->
+            <div class="quick-log-section">
+              <h3>Quick Log</h3>
+              <div class="quick-log-buttons">
+                <button class="quick-btn" onclick="quickLog('vegetables', 'spoiled', 0.3, 'Vegetables')">
+                  <i class="fas fa-leaf"></i>
+                  <span>Spoiled Veggies</span>
+                  <small>~0.3kg</small>
+                </button>
+                <button class="quick-btn" onclick="quickLog('fruits', 'expired', 0.2, 'Fruits')">
+                  <i class="fas fa-apple-alt"></i>
+                  <span>Old Fruit</span>
+                  <small>~0.2kg</small>
+                </button>
+                <button class="quick-btn" onclick="quickLog('cooked', 'leftover', 0.4, 'Leftovers')">
+                  <i class="fas fa-utensils"></i>
+                  <span>Leftovers</span>
+                  <small>~0.4kg</small>
+                </button>
+                <button class="quick-btn" onclick="quickLog('dairy', 'expired', 0.25, 'Dairy')">
+                  <i class="fas fa-cheese"></i>
+                  <span>Expired Dairy</span>
+                  <small>~0.25kg</small>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Expiry Date Reminder -->
+          <section class="card expiry-reminder-card">
+            <h2><i class="fas fa-clock"></i> Expiry Reminders</h2>
+            <p class="card-subtitle">Track items that need attention soon</p>
+            
+            <div class="expiry-inputs">
+              <div class="form-group">
+                <label for="expiryItem">Item Name</label>
+                <input type="text" id="expiryItem" placeholder="e.g., Milk, Yogurt, Bread" />
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="expiryDate">Expiry Date</label>
+                  <input type="date" id="expiryDate" />
+                </div>
+                <div class="form-group">
+                  <label for="expiryLocation">Location</label>
+                  <select id="expiryLocation">
+                    <option value="fridge">Fridge</option>
+                    <option value="freezer">Freezer</option>
+                    <option value="pantry">Pantry</option>
+                    <option value="shelf">Shelf</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="button" class="btn btn-primary" onclick="addExpiryReminder()">
+                <i class="fas fa-plus"></i> Add Reminder
+              </button>
+            </div>
+
+            <div id="expiryList" class="expiry-list"></div>
+          </section>
+
+          <!-- Recipe Suggestions -->
+          <section class="card recipes-card">
+            <h2><i class="fas fa-utensils"></i> Recipe Suggestions</h2>
+            <p class="card-subtitle">Use your leftovers creatively</p>
+            
+            <div class="recipe-filters">
+              <input type="text" id="recipeSearch" placeholder="Search recipes..." />
+              <select id="recipeIngredient">
+                <option value="">All Ingredients</option>
+                <option value="vegetables">Vegetables</option>
+                <option value="fruits">Fruits</option>
+                <option value="bread">Bread/Grains</option>
+                <option value="dairy">Dairy</option>
+              </select>
+            </div>
+
+            <div id="recipeContainer" class="recipe-container"></div>
+            
+            <button class="btn btn-secondary" onclick="loadMoreRecipes()">
+              <i class="fas fa-refresh"></i> Get More Recipes
+            </button>
+          </section>
+
+          <!-- Food Storage Tips -->
+          <section class="card storage-card">
+            <h2><i class="fas fa-refrigerator"></i> Storage Tips</h2>
+            <div id="storageContainer" class="tips-container"></div>
+            <button class="btn btn-secondary" onclick="rotatStorageTips()">
+              <i class="fas fa-refresh"></i> More Tips
+            </button>
+          </section>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+          <!-- Waste Category Breakdown -->
+          <section class="card breakdown-card">
+            <h2><i class="fas fa-chart-pie"></i> Waste by Category</h2>
+            <canvas id="wasteCategoryChart"></canvas>
+            <div class="breakdown-legend" id="categoryLegend"></div>
+          </section>
+
+          <!-- Environmental Impact -->
+          <section class="card impact-card">
+            <h2><i class="fas fa-earth-americas"></i> Environmental Impact</h2>
+            <p class="card-subtitle">This month's waste converted to environmental metrics</p>
+            
+            <div class="impact-metrics">
+              <div class="metric-item">
+                <div class="metric-icon">
+                  <i class="fas fa-cloud"></i>
+                </div>
+                <div class="metric-content">
+                  <span class="metric-label">Carbon Footprint</span>
+                  <span class="metric-value" id="carbonImpact">0</span>
+                  <span class="metric-unit">kg CO₂e</span>
+                </div>
+              </div>
+
+              <div class="metric-item">
+                <div class="metric-icon">
+                  <i class="fas fa-droplet"></i>
+                </div>
+                <div class="metric-content">
+                  <span class="metric-label">Water Used</span>
+                  <span class="metric-value" id="waterImpact">0</span>
+                  <span class="metric-unit">L</span>
+                </div>
+              </div>
+
+              <div class="metric-item">
+                <div class="metric-icon">
+                  <i class="fas fa-mountain"></i>
+                </div>
+                <div class="metric-content">
+                  <span class="metric-label">Land Used</span>
+                  <span class="metric-value" id="landImpact">0</span>
+                  <span class="metric-unit">m²</span>
+                </div>
+              </div>
+
+              <div class="metric-item">
+                <div class="metric-icon">
+                  <i class="fas fa-recycle"></i>
+                </div>
+                <div class="metric-content">
+                  <span class="metric-label">Compostable</span>
+                  <span class="metric-value" id="compostableKg">0</span>
+                  <span class="metric-unit">kg</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="impact-insight">
+              <i class="fas fa-info-circle"></i>
+              <p id="impactMessage">Start logging your food waste to see environmental impact.</p>
+            </div>
+          </section>
+
+          <!-- Waste Pattern Heatmap -->
+          <section class="card pattern-card">
+            <h2><i class="fas fa-fire"></i> Waste Patterns</h2>
+            <p class="card-subtitle">When do you waste the most?</p>
+            
+            <div class="pattern-controls">
+              <button class="pattern-btn active" onclick="changePatternView('week')">This Week</button>
+              <button class="pattern-btn" onclick="changePatternView('month')">This Month</button>
+            </div>
+
+            <div id="patternHeatmap" class="pattern-heatmap"></div>
+          </section>
+
+          <!-- Household Comparison -->
+          <section class="card comparison-card">
+            <h2><i class="fas fa-home"></i> Comparison</h2>
+            <p class="card-subtitle">How you compare with others</p>
+            
+            <div class="comparison-bars">
+              <div class="comp-bar">
+                <span class="bar-label">Your Average/Month</span>
+                <div class="bar-container">
+                  <div class="bar bar-yours" id="yourWasteBar" style="width: 0%">
+                    <span class="bar-value" id="yourWasteValue">0kg</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="comp-bar">
+                <span class="bar-label">Avg Household</span>
+                <div class="bar-container">
+                  <div class="bar bar-average" style="width: 75%">
+                    <span class="bar-value">25kg</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="comp-bar">
+                <span class="bar-label">Below Average</span>
+                <div class="bar-container">
+                  <div class="bar bar-eco" style="width: 30%">
+                    <span class="bar-value">10kg</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-insight" id="comparisonMessage">
+              <i class="fas fa-lightbulb"></i>
+              <p>Start tracking to compare! Every bit helps.</p>
+            </div>
+          </section>
+
+          <!-- Waste Reduction Goal -->
+          <section class="card reduction-goal-card">
+            <h2><i class="fas fa-target"></i> Reduction Goal</h2>
+            
+            <div class="goal-display">
+              <div class="goal-info">
+                <span>Monthly Goal:</span>
+                <strong id="currentGoal">20 kg</strong>
+              </div>
+              <button class="btn-edit" onclick="toggleGoalEdit()">
+                <i class="fas fa-edit"></i>
+              </button>
+            </div>
+
+            <div class="goal-edit-form hidden" id="goalEditForm">
+              <label for="newReductionGoal">Set Monthly Reduction Goal (kg)</label>
+              <input type="number" id="newReductionGoal" min="1" max="100" value="20" />
+              <div class="goal-presets">
+                <button onclick="setReductionGoal(10)">Minimal (10kg)</button>
+                <button onclick="setReductionGoal(20)">Target (20kg)</button>
+                <button onclick="setReductionGoal(30)">Ambitious (30kg)</button>
+              </div>
+              <div class="goal-actions">
+                <button class="btn btn-primary" onclick="saveReductionGoal()">Save Goal</button>
+                <button class="btn btn-secondary" onclick="toggleGoalEdit()">Cancel</button>
+              </div>
+            </div>
+
+            <div class="goal-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" id="goalProgressFill"></div>
+              </div>
+              <p class="progress-text" id="goalProgressText">0kg of monthly goal achieved</p>
+            </div>
+          </section>
+
+          <!-- Smart Shopping List -->
+          <section class="card shopping-list-card">
+            <h2><i class="fas fa-shopping-list"></i> Smart Shopping List</h2>
+            <p class="card-subtitle">Based on your waste patterns</p>
+
+            <div class="smart-list-actions">
+              <input type="text" id="newListItem" placeholder="Add item..." />
+              <button class="btn btn-primary" onclick="addToShoppingList()">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+
+            <div id="shoppingList" class="shopping-list"></div>
+
+            <button class="btn btn-secondary btn-full" onclick="exportShoppingList()">
+              <i class="fas fa-download"></i> Export List
+            </button>
+          </section>
+
+          <!-- Social Challenge -->
+          <section class="card challenge-card">
+            <h2><i class="fas fa-trophy"></i> Neighborhood Challenge</h2>
+            <p class="card-subtitle">Compete to waste less!</p>
+            
+            <div class="challenge-info">
+              <div class="challenge-header">
+                <div class="challenge-icon">♻️</div>
+                <div>
+                  <h3>Zero Waste Challenge</h3>
+                  <span>5 days remaining</span>
+                </div>
+              </div>
+
+              <div class="challenge-leaderboard">
+                <div class="leader rank-1">
+                  <span class="rank">1st</span>
+                  <span class="name">Eco Savers</span>
+                  <span class="score">8kg waste</span>
+                </div>
+                <div class="leader rank-2">
+                  <span class="rank">2nd</span>
+                  <span class="name">Green Kitchen</span>
+                  <span class="score">12kg waste</span>
+                </div>
+                <div class="leader rank-you">
+                  <span class="rank">3rd</span>
+                  <span class="name">You</span>
+                  <span class="score" id="yourWaste">0kg waste</span>
+                </div>
+                <div class="leader">
+                  <span class="rank">4th</span>
+                  <span class="name">Fresh Start</span>
+                  <span class="score">18kg waste</span>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-full" onclick="joinFoodChallenge()">
+              <i class="fas fa-handshake"></i> Join Challenge
+            </button>
+          </section>
+        </div>
+      </div>
+
+      <!-- Activity Log -->
+      <section class="card activity-log-card">
+        <div class="card-header">
+          <h2><i class="fas fa-history"></i> Waste Log</h2>
+          <div class="header-actions">
+            <button class="btn-filter" onclick="toggleWasteFilter()">
+              <i class="fas fa-filter"></i> Filter
+            </button>
+            <button class="btn-export" onclick="exportWasteData()">
+              <i class="fas fa-download"></i> Export
+            </button>
+          </div>
+        </div>
+
+        <div class="filter-panel hidden" id="filterPanel">
+          <select id="categoryFilter">
+            <option value="all">All Categories</option>
+            <option value="vegetables">Vegetables</option>
+            <option value="fruits">Fruits</option>
+            <option value="meat">Meat/Seafood</option>
+            <option value="dairy">Dairy</option>
+            <option value="grains">Grains</option>
+          </select>
+          <select id="typeFilter">
+            <option value="all">All Types</option>
+            <option value="expired">Expired</option>
+            <option value="spoiled">Spoiled</option>
+            <option value="leftover">Leftover</option>
+            <option value="plate-waste">Plate Waste</option>
+          </select>
+          <select id="dateFilter">
+            <option value="today">Today</option>
+            <option value="week">This Week</option>
+            <option value="month">This Month</option>
+            <option value="all">All Time</option>
+          </select>
+          <button class="btn btn-primary" onclick="applyWasteFilter()">Apply</button>
+        </div>
+
+        <div class="waste-log" id="wasteLog">
+          <div class="empty-state">
+            <i class="fas fa-leaf"></i>
+            <p>No food waste logged yet</p>
+            <small>Start tracking to see your waste patterns</small>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <p>🍽️ Reduce food waste, save money, and help the environment!</p>
+        <div class="footer-stats">
+          <div class="footer-stat">
+            <strong id="totalWastePrevented">0 kg</strong>
+            <span>Waste Prevented</span>
+          </div>
+          <div class="footer-stat">
+            <strong id="totalSaved">$0</strong>
+            <span>Money Saved</span>
+          </div>
+          <div class="footer-stat">
+            <strong id="mealsRescued">0</strong>
+            <span>Meals Saved</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../js/food-waste-tracker.js"></script>
+  <script>
+    // Load navbar
+    fetch('../components/navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+        
+        // Initialize navbar functionality
+        const script = document.createElement('script');
+        script.src = '../js/components/navbar.js';
+        document.body.appendChild(script);
+      });
+  </script>
+</body>
+</html>

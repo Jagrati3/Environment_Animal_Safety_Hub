@@ -153,7 +153,10 @@ function createContributorCard(contributor, index) {
         <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">
             ${contributor.contributions} Commits
         </p>
-        <a href="${contributor.html_url}" target="_blank" class="github-btn">
+        <a href="${contributor.html_url}"
+           target="_blank"
+           rel="noopener noreferrer external"
+           class="github-btn">
             <i class="fa-brands fa-github"></i> Profile
         </a>
     `;
@@ -175,7 +178,9 @@ function showContributorsFallback(container) {
             <i class="fa-solid fa-users" style="font-size: 3rem; color: #ccc; margin: 20px 0;"></i>
             <p>Contributors list unavailable currently.</p>
             <a href="https://github.com/Jagrati3/Environment_Animal_Safety_Hub/graphs/contributors"
-               target="_blank" class="github-btn">
+               target="_blank"
+               rel="noopener noreferrer external"
+               class="github-btn">
                 View on GitHub
             </a>
         </div>
@@ -228,7 +233,10 @@ function createProfileCardHTML(user, role) {
         <h3 style="margin: 0; font-size: 1.5rem;">${user.name || user.login}</h3>
         <p style="color: #2e7d32; font-weight: 600; margin: 5px 0 15px;">${role}</p>
         <div style="display: flex; gap: 10px; justify-content: center;">
-            <a href="${user.html_url}" target="_blank" class="github-btn">
+            <a href="${user.html_url}"
+               target="_blank"
+               rel="noopener noreferrer external"
+               class="github-btn">
                 <i class="fa-brands fa-github"></i> GitHub
             </a>
         </div>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Biodiversity Explorer</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #e8f5e9; margin: 0; color: #222; }
+    #app { max-width: 1100px; margin: 40px auto; background: #fff; border-radius: 14px; box-shadow: 0 4px 24px rgba(0,0,0,0.10); padding: 32px 24px 24px 24px; }
+    header { display: flex; flex-direction: row; align-items: center; gap: 16px; margin-bottom: 24px; }
+    header h1 { margin: 0 18px 0 0; font-size: 2.1rem; color: #388e3c; }
+    #species-search { flex: 1; padding: 10px 14px; border: 1px solid #bdbdbd; border-radius: 8px; font-size: 1rem; }
+    #report-btn { padding: 10px 18px; background: #388e3c; color: #fff; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: background 0.2s; }
+    #report-btn:hover { background: #2e7031; }
+    main { display: flex; gap: 32px; }
+    #map-section { flex: 2; }
+    #map { width: 100%; height: 480px; border-radius: 10px; box-shadow: 0 2px 8px rgba(44,62,80,0.07); }
+    #sidebar { flex: 1; background: #f1f8e9; border-radius: 10px; padding: 18px 16px; box-shadow: 0 2px 8px rgba(44,62,80,0.07); min-width: 260px; }
+    #species-list { margin-bottom: 24px; }
+    #species-list .species-card { background: #fff; border-radius: 8px; margin-bottom: 10px; padding: 10px 12px; box-shadow: 0 1px 4px rgba(44,62,80,0.05); }
+    #edu-content { font-size: 1rem; color: #2e7031; }
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); justify-content: center; align-items: center; }
+    .modal-content { background: #fff; border-radius: 10px; padding: 28px 32px; max-width: 400px; margin: auto; box-shadow: 0 4px 24px rgba(0,0,0,0.15); position: relative; }
+    .close { position: absolute; right: 18px; top: 12px; font-size: 1.5rem; color: #888; cursor: pointer; }
+    label { display: block; margin-bottom: 10px; font-size: 1rem; }
+    input, textarea { width: 100%; padding: 8px 10px; border: 1px solid #bdbdbd; border-radius: 6px; font-size: 1rem; margin-top: 4px; }
+    button[type="submit"] { background: #388e3c; color: #fff; border: none; border-radius: 8px; padding: 10px 18px; font-size: 1rem; cursor: pointer; margin-top: 10px; }
+    button[type="submit"]:hover { background: #2e7031; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Local Biodiversity Explorer</h1>
+      <input type="text" id="species-search" placeholder="Search species or location...">
+      <button id="report-btn">Report Sighting</button>
+    </header>
+    <main>
+      <section id="map-section">
+        <div id="map"></div>
+      </section>
+      <section id="sidebar">
+        <h2>Species & Sightings</h2>
+        <div id="species-list"></div>
+        <h2>Learn & Conserve</h2>
+        <div id="edu-content"></div>
+      </section>
+    </main>
+    <div id="report-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Report Wildlife Sighting</h2>
+        <form id="report-form">
+          <label>Species Name:<input type="text" id="report-species" required></label>
+          <label>Location:<input type="text" id="report-location" required></label>
+          <label>Date:<input type="date" id="report-date" required></label>
+          <label>Notes:<textarea id="report-notes"></textarea></label>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+// Demo data for preview
+const demoSpecies = [
+  { name: 'Eastern Bluebird', type: 'Bird', location: 'Central Park', date: '2026-02-07', notes: 'Seen near the pond.' },
+  { name: 'Red Fox', type: 'Mammal', location: 'Riverside Trail', date: '2026-02-06', notes: 'Quickly crossed the path.' },
+  { name: 'Milkweed', type: 'Plant', location: 'Meadow Field', date: '2026-02-05', notes: 'Flowering.' },
+  { name: 'Painted Turtle', type: 'Reptile', location: 'Lake Edge', date: '2026-02-04', notes: 'Basking on a log.' }
+];
+const eduContent = `
+  <strong>Why Biodiversity Matters:</strong><br>
+  Biodiversity supports healthy ecosystems, clean air and water, and resilience to climate change.<br><br>
+  <strong>How You Can Help:</strong>
+  <ul>
+    <li>Plant native species in your yard or community.</li>
+    <li>Report wildlife sightings to help scientists track populations.</li>
+    <li>Reduce pesticide and chemical use.</li>
+    <li>Participate in local conservation events.</li>
+  </ul>
+`;
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Map setup
+  const map = L.map('map').setView([40.7831, -73.9712], 12); // Default: Central Park, NY
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  // Add demo markers
+  demoSpecies.forEach(s => {
+    L.marker([40.78 + Math.random() * 0.04, -73.97 + Math.random() * 0.04])
+      .addTo(map)
+      .bindPopup(`<strong>${s.name}</strong><br>${s.type}<br>${s.location}<br>${s.date}<br>${s.notes}`);
+  });
+
+  // Species list
+  const speciesList = document.getElementById('species-list');
+  function renderSpeciesList(list) {
+    speciesList.innerHTML = '';
+    list.forEach(s => {
+      const div = document.createElement('div');
+      div.className = 'species-card';
+      div.innerHTML = `<strong>${s.name}</strong> <span>(${s.type})</span><br><small>${s.location} • ${s.date}</small><br><span>${s.notes}</span>`;
+      speciesList.appendChild(div);
+    });
+  }
+  renderSpeciesList(demoSpecies);
+
+  // Educational content
+  document.getElementById('edu-content').innerHTML = eduContent;
+
+  // Search/filter
+  document.getElementById('species-search').addEventListener('input', e => {
+    const q = e.target.value.trim().toLowerCase();
+    if (!q) {
+      renderSpeciesList(demoSpecies);
+      return;
+    }
+    const filtered = demoSpecies.filter(s =>
+      s.name.toLowerCase().includes(q) ||
+      s.type.toLowerCase().includes(q) ||
+      s.location.toLowerCase().includes(q)
+    );
+    renderSpeciesList(filtered);
+  });
+
+  // Modal logic
+  const modal = document.getElementById('report-modal');
+  const openBtn = document.getElementById('report-btn');
+  const closeBtn = document.querySelector('.close');
+  openBtn.onclick = () => { modal.style.display = 'flex'; };
+  closeBtn.onclick = () => { modal.style.display = 'none'; };
+  window.onclick = e => { if (e.target === modal) modal.style.display = 'none'; };
+
+  // Report form (demo only)
+  document.getElementById('report-form').onsubmit = e => {
+    e.preventDefault();
+    alert('Thank you for reporting your sighting! (Demo only)');
+    modal.style.display = 'none';
+  };
+});
+  </script>
+</body>
+</html>

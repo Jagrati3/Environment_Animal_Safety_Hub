@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Urban Heat Island Reporter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --main: #212121;
+      --accent: #ff7043;
+      --bg: #fff3e0;
+      --card: #fff;
+      --muted: #757575;
+      --cool: #29b6f6;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding: 0;
+      color: var(--main);
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 850px;
+      margin: 40px auto;
+      background: var(--card);
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(33,33,33,0.10);
+      padding: 36px 28px;
+    }
+    h1 {
+      color: var(--main);
+      margin-bottom: 8px;
+      font-size: 2.1rem;
+      font-weight: 700;
+    }
+    h2 {
+      color: var(--accent);
+      margin-top: 32px;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    label {
+      color: var(--main);
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: block;
+    }
+    input, select, button, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 16px;
+      border: 1px solid var(--muted);
+      border-radius: 6px;
+      font-size: 1rem;
+      color: var(--main);
+      background: #f9f9f9;
+      box-sizing: border-box;
+    }
+    button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #d84315;
+    }
+    .hotspot-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .hotspot-item {
+      background: #ffe0b2;
+      border-left: 6px solid var(--accent);
+      border-radius: 10px;
+      padding: 18px 16px;
+      margin-bottom: 14px;
+      color: var(--main);
+      display: flex;
+      flex-direction: column;
+    }
+    .cooling-section {
+      background: #e1f5fe;
+      border-radius: 10px;
+      padding: 18px 14px;
+      color: var(--cool);
+      margin-top: 18px;
+    }
+    .cooling-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .cooling-item {
+      background: #b3e5fc;
+      border-left: 6px solid var(--cool);
+      border-radius: 8px;
+      padding: 14px 12px;
+      margin-bottom: 10px;
+      color: var(--main);
+    }
+    .resources-section {
+      background: #fbe9e7;
+      border-radius: 10px;
+      padding: 18px 14px;
+      color: var(--accent);
+      margin-top: 18px;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 14px 4px; }
+      h1 { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Urban Heat Island Reporter</h1>
+    <p style="color:var(--muted);">Log and view urban heat hotspots, share cooling strategies, and access resources for mitigating heat island effects.</p>
+    <form id="hotspotForm">
+      <label for="location">Hotspot Location</label>
+      <input type="text" id="location" name="location" required placeholder="e.g., Main St, Downtown">
+      <label for="temp">Temperature (°C)</label>
+      <input type="number" id="temp" name="temp" required placeholder="e.g., 38">
+      <label for="desc">Description</label>
+      <textarea id="desc" name="desc" rows="2" required placeholder="Describe the hotspot..."></textarea>
+      <button type="submit">Log Hotspot</button>
+    </form>
+    <h2>Logged Heat Hotspots</h2>
+    <ul class="hotspot-list" id="hotspotList"></ul>
+    <div class="cooling-section">
+      <h2 style="color:var(--cool);margin-top:0;">Share Cooling Strategies</h2>
+      <form id="coolingForm">
+        <label for="strategy">Strategy</label>
+        <input type="text" id="strategy" name="strategy" required placeholder="e.g., Planting trees, green roofs">
+        <button type="submit">Share Strategy</button>
+      </form>
+      <ul class="cooling-list" id="coolingList"></ul>
+    </div>
+    <div class="resources-section">
+  <h2 style="color:var(--accent);margin-top:0;">Resources for Mitigation</h2>
+  <ul>
+    <li>
+      <a href="https://www.epa.gov/heatislands"
+         target="_blank"
+         rel="noopener noreferrer"
+         style="color:var(--accent);font-weight:700;">
+         EPA: Heat Island Mitigation
+      </a>
+    </li>
+    <li>
+      <a href="https://www.nature.org/en-us/what-we-do/our-insights/perspectives/urban-heat-island-effect/"
+         target="_blank"
+         rel="noopener noreferrer"
+         style="color:var(--accent);font-weight:700;">
+         Nature Conservancy: Urban Heat
+      </a>
+    </li>
+    <li>
+      <a href="https://www.cdc.gov/climateandhealth/effects/urbanheat.htm"
+         target="_blank"
+         rel="noopener noreferrer"
+         style="color:var(--accent);font-weight:700;">
+         CDC: Urban Heat Island Effect
+      </a>
+    </li>
+  </ul>
+</div>
+
+  </div>
+  <script>
+    // Hotspot logging logic
+    const hotspotForm = document.getElementById('hotspotForm');
+    const hotspotList = document.getElementById('hotspotList');
+    let hotspots = [];
+    hotspotForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const location = hotspotForm.location.value.trim();
+      const temp = parseFloat(hotspotForm.temp.value);
+      const desc = hotspotForm.desc.value.trim();
+      if (location && !isNaN(temp) && desc) {
+        hotspots.push({ location, temp, desc });
+        renderHotspots();
+        hotspotForm.reset();
+      }
+    });
+    function renderHotspots() {
+      hotspotList.innerHTML = '';
+      hotspots.slice().reverse().forEach(h => {
+        const li = document.createElement('li');
+        li.className = 'hotspot-item';
+        li.innerHTML = `<strong>${h.location}</strong> <span style='color:var(--accent);font-weight:700;'>${h.temp}°C</span><br><span style='color:var(--muted);'>${h.desc}</span>`;
+        hotspotList.appendChild(li);
+      });
+    }
+    // Cooling strategies logic
+    const coolingForm = document.getElementById('coolingForm');
+    const coolingList = document.getElementById('coolingList');
+    let strategies = [];
+    coolingForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const strategy = coolingForm.strategy.value.trim();
+      if (strategy) {
+        strategies.push(strategy);
+        renderStrategies();
+        coolingForm.reset();
+      }
+    });
+    function renderStrategies() {
+      coolingList.innerHTML = '';
+      strategies.slice().reverse().forEach(s => {
+        const li = document.createElement('li');
+        li.className = 'cooling-item';
+        li.textContent = s;
+        coolingList.appendChild(li);
+      });
+    }
+    // Initial render
+    renderHotspots();
+    renderStrategies();
+  </script>
+</body>
+</html>

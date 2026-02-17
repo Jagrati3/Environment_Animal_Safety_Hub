@@ -20,6 +20,8 @@ class BaseQuiz {
    * @param {string} config.progressKey - localStorage key for progress
    * @param {string} config.iconClass - FontAwesome icon class for options
    * @param {Object} config.elements - DOM element references
+   * @param {Object} config.scoring - Scoring configuration with remarks
+   * @param {string} config.progressType - Type of progress display ('standard' or 'time-spent')
    */
   constructor(config) {
     this.config = config;
@@ -29,6 +31,7 @@ class BaseQuiz {
     this.iconClass = config.iconClass;
     this.elements = config.elements;
     this.scoring = config.scoring;
+    this.progressType = config.progressType || 'standard';
 
     // Initialize ProgressManager
     this.progressManager = new ProgressManager(this.progressKey);
@@ -41,39 +44,7 @@ class BaseQuiz {
     this.answers = [];
   }
 
-  /**
-   * Create a quiz instance from registry by ID
-   * @param {string} quizId - The ID of the quiz to load from registry
-   * @param {Object} elements - DOM element references
-   * @returns {Promise<BaseQuiz|null>} The quiz instance or null if failed
-   */
-  static async createFromId(quizId, elements) {
-    try {
-      // Ensure registry is loaded
-      if (!quizRegistry.isLoaded) {
-        const loaded = await quizRegistry.loadQuizzes();
-        if (!loaded) {
-          console.error('Failed to load quiz registry');
-          return null;
-        }
-      }
 
-      // Get processed quiz config
-      const config = quizRegistry.getProcessedQuiz(quizId);
-      if (!config) {
-        console.error(`Quiz with ID '${quizId}' not found`);
-        return null;
-      }
-
-      // Add elements to config
-      config.elements = elements;
-
-      return new BaseQuiz(config);
-    } catch (error) {
-      console.error('Error creating quiz from ID:', error);
-      return null;
-    }
-  }
 
   /**
    * Initialize the quiz on page load
@@ -254,18 +225,38 @@ class BaseQuiz {
     // Display score
     this.elements.scoreEl.textContent = `${this.score}/${this.questions.length}`;
 
-    // Performance-based remark
+    // Performance-based remark from config
     let remark = "";
-    if (this.score >= 8) {
-      remark = "🌟 Excellent!";
-    } else if (this.score >= 5) {
-      remark = "👍 Good Effort!";
+    if (this.scoring) {
+      if (this.score >= (this.scoring.excellent?.min || 8)) {
+        remark = this.scoring.excellent?.remark || "🌟 Excellent!";
+      } else if (this.score >= (this.scoring.good?.min || 5)) {
+        remark = this.scoring.good?.remark || "👍 Good Effort!";
+      } else {
+        remark = this.scoring.poor?.remark || "🌱 Keep Learning!";
+      }
     } else {
-      remark = "🌱 Keep Learning!";
+      // Fallback to hardcoded remarks if scoring config is missing
+      if (this.score >= 8) {
+        remark = "🌟 Excellent!";
+      } else if (this.score >= 5) {
+        remark = "👍 Good Effort!";
+      } else {
+        remark = "🌱 Keep Learning!";
+      }
     }
 
     if (this.elements.remarkEl) {
       this.elements.remarkEl.textContent = remark;
+    }
+
+    // Report progress to global system
+    if (window.UserProgress) {
+      window.UserProgress.completeQuiz(
+        this.config.id || 'unknown-quiz', // Ensure config has ID
+        this.score,
+        this.questions.length
+      );
     }
   }
 

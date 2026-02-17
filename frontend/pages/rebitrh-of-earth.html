@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Rebirth of Earth</title>
+
+<style>
+:root{
+  --dark1:#3a0ca3;
+  --dark2:#240046;
+  --heal1:#80ed99;
+  --heal2:#38b000;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(135deg,var(--dark1),var(--dark2));
+  font-family:Segoe UI, sans-serif;
+  color:#f1faee;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  transition:background 1s ease;
+}
+
+h1{
+  margin-top:30px;
+  font-size:3rem;
+  text-align:center;
+}
+
+/* EARTH */
+.earth{
+  margin-top:60px;
+  font-size:140px;
+  filter:grayscale(80%);
+  transition:filter 0.8s ease, transform 0.8s ease;
+}
+
+/* MESSAGE */
+.message{
+  margin-top:30px;
+  max-width:650px;
+  background:rgba(255,255,255,0.12);
+  padding:20px 24px;
+  border-radius:18px;
+  animation:fadeUp 0.6s ease;
+  line-height:1.6;
+}
+
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(20px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+/* BUTTON */
+button{
+  margin-top:40px;
+  padding:14px 36px;
+  font-size:1rem;
+  background:#80ed99;
+  color:#081c15;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  transition:0.3s;
+}
+button:hover{
+  transform:scale(1.05);
+}
+
+.footer{
+  margin-top:20px;
+  font-size:0.9rem;
+  opacity:0.8;
+}
+</style>
+</head>
+
+<body>
+
+<h1>⚪ Rebirth of Earth</h1>
+
+<div class="earth" id="earth">🌍</div>
+
+<div id="messages"></div>
+
+<button onclick="heal()">Restore the Planet</button>
+
+<p class="footer">Healing is still possible.</p>
+
+<script>
+const messages = [
+  "Renewable energy reduces environmental damage.",
+  "Protecting forests restores ecosystems.",
+  "Clean water initiatives save lives.",
+  "Sustainable choices heal the planet.",
+  "Earth can recover when we act together."
+];
+
+let step = 0;
+const earth = document.getElementById("earth");
+
+function heal(){
+  if(step < messages.length){
+    const msg = document.createElement("div");
+    msg.className = "message";
+    msg.textContent = messages[step];
+    document.getElementById("messages").appendChild(msg);
+
+    // Gradual healing visuals
+    earth.style.filter = `grayscale(${80 - step * 20}%)`;
+    earth.style.transform = `scale(${1 + step * 0.05})`;
+
+    document.body.style.background =
+      "linear-gradient(135deg,var(--heal1),var(--heal2))";
+
+    step++;
+  } else {
+    alert("🌍 The planet is healing. Now protect it.");
+  }
+}
+</script>
+
+</body>
+</html>

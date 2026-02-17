@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waterway Cleanup Organizer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 32px 24px;
+    }
+    h1 {
+      color: #00796b;
+      margin-bottom: 8px;
+    }
+    h2 {
+      color: #0097a7;
+      margin-top: 32px;
+    }
+    .section {
+      margin-bottom: 32px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+    input, textarea, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 16px;
+      border: 1px solid #b2dfdb;
+      border-radius: 6px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    button {
+      background: #009688;
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #00796b;
+    }
+    .hotspot-list, .event-list {
+      list-style: none;
+      padding: 0;
+    }
+    .hotspot-item, .event-item {
+      background: #e0f2f1;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+    }
+    .event-actions {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+    }
+    .joined {
+      background: #4caf50 !important;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 16px 6px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Waterway Cleanup Organizer</h1>
+    <p>Organize, track, and join community waterway cleanups. Report litter hotspots and help keep our waterways clean!</p>
+
+    <div class="section">
+      <h2>Report a Litter Hotspot</h2>
+      <form id="hotspotForm">
+        <label for="location">Location</label>
+        <input type="text" id="location" name="location" required placeholder="e.g., Riverside Park, Dock 3">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="3" required placeholder="Describe the litter problem..."></textarea>
+        <button type="submit">Report Hotspot</button>
+      </form>
+      <ul class="hotspot-list" id="hotspotList"></ul>
+    </div>
+
+    <div class="section">
+      <h2>Upcoming Cleanup Events</h2>
+      <form id="eventForm">
+        <label for="eventName">Event Name</label>
+        <input type="text" id="eventName" name="eventName" required placeholder="e.g., Spring River Sweep">
+        <label for="eventDate">Date</label>
+        <input type="date" id="eventDate" name="eventDate" required>
+        <label for="eventLocation">Location</label>
+        <input type="text" id="eventLocation" name="eventLocation" required placeholder="e.g., Main Street Bridge">
+        <button type="submit">Add Event</button>
+      </form>
+      <ul class="event-list" id="eventList"></ul>
+    </div>
+  </div>
+  <script>
+    // Hotspot reporting logic
+    const hotspotForm = document.getElementById('hotspotForm');
+    const hotspotList = document.getElementById('hotspotList');
+    let hotspots = [];
+
+    hotspotForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const location = hotspotForm.location.value.trim();
+      const description = hotspotForm.description.value.trim();
+      if (location && description) {
+        hotspots.push({ location, description });
+        renderHotspots();
+        hotspotForm.reset();
+      }
+    });
+
+    function renderHotspots() {
+      hotspotList.innerHTML = '';
+      hotspots.forEach((hotspot, idx) => {
+        const li = document.createElement('li');
+        li.className = 'hotspot-item';
+        li.innerHTML = `<strong>${hotspot.location}</strong><br><span>${hotspot.description}</span>`;
+        hotspotList.appendChild(li);
+      });
+    }
+
+    // Event management logic
+    const eventForm = document.getElementById('eventForm');
+    const eventList = document.getElementById('eventList');
+    let events = [];
+    let joinedEvents = new Set();
+
+    eventForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = eventForm.eventName.value.trim();
+      const date = eventForm.eventDate.value;
+      const location = eventForm.eventLocation.value.trim();
+      if (name && date && location) {
+        events.push({ name, date, location });
+        renderEvents();
+        eventForm.reset();
+      }
+    });
+
+    function renderEvents() {
+      eventList.innerHTML = '';
+      events.forEach((event, idx) => {
+        const li = document.createElement('li');
+        li.className = 'event-item';
+        li.innerHTML = `<strong>${event.name}</strong><br><span>${event.date} @ ${event.location}</span>`;
+        const actions = document.createElement('div');
+        actions.className = 'event-actions';
+        const joinBtn = document.createElement('button');
+        joinBtn.textContent = joinedEvents.has(idx) ? 'Joined' : 'Join Event';
+        joinBtn.className = joinedEvents.has(idx) ? 'joined' : '';
+        joinBtn.onclick = () => {
+          if (!joinedEvents.has(idx)) {
+            joinedEvents.add(idx);
+            renderEvents();
+          }
+        };
+        actions.appendChild(joinBtn);
+        li.appendChild(actions);
+        eventList.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>

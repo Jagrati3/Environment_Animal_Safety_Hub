@@ -1,0 +1,844 @@
+/* Wetland Drainage and Amphibian Immune Collapse Page Styles */
+
+:root {
+    --wetland-primary: #2e7d32;
+    --wetland-secondary: #4caf50;
+    --wetland-accent: #81c784;
+    --wetland-light: #e8f5e8;
+    --wetland-dark: #1b5e20;
+    --water-blue: #1976d2;
+    --water-light: #bbdefb;
+    --stress-red: #d32f2f;
+    --stress-light: #ffcdd2;
+    --immune-gold: #ffa000;
+    --immune-light: #fff3e0;
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    height: 100vh;
+    background: linear-gradient(135deg, var(--wetland-primary) 0%, var(--wetland-secondary) 50%, var(--water-blue) 100%);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="water" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.2)"/></pattern></defs><rect width="100" height="100" fill="url(%23water)"/></svg>');
+    opacity: 0.3;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.hero-text h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-size: 1.3rem;
+    color: var(--wetland-light);
+    margin-bottom: 2rem;
+    font-weight: 300;
+}
+
+.hero-stats {
+    display: flex;
+    gap: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+    color: white;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--wetland-accent);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* Amphibian Animation */
+.amphibian-animation {
+    position: relative;
+    width: 300px;
+    height: 200px;
+}
+
+.frog {
+    position: absolute;
+    width: 60px;
+    height: 40px;
+    animation: float 3s ease-in-out infinite;
+}
+
+.frog:nth-child(1) {
+    left: 50px;
+    top: 50px;
+    animation-delay: 0s;
+}
+
+.frog:nth-child(2) {
+    right: 50px;
+    top: 80px;
+    animation-delay: 1.5s;
+}
+
+.frog-body {
+    width: 100%;
+    height: 100%;
+    background: #4caf50;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    position: relative;
+}
+
+.frog-body::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 15px;
+    background: #4caf50;
+    border-radius: 50%;
+}
+
+.frog-eyes {
+    position: absolute;
+    top: -8px;
+    left: 15px;
+    width: 30px;
+    height: 12px;
+    background: white;
+    border-radius: 50%;
+}
+
+.frog-eyes::before,
+.frog-eyes::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    width: 6px;
+    height: 6px;
+    background: black;
+    border-radius: 50%;
+}
+
+.frog-eyes::before {
+    left: 4px;
+}
+
+.frog-eyes::after {
+    right: 4px;
+}
+
+.health-indicator {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.health-indicator.healthy {
+    background: var(--wetland-accent);
+    box-shadow: 0 0 10px var(--wetland-accent);
+}
+
+.health-indicator.stressed {
+    background: var(--stress-red);
+    box-shadow: 0 0 10px var(--stress-red);
+}
+
+.wetland-indicator {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 30px;
+    background: #8d6e63;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.water-level {
+    height: 100%;
+    background: var(--water-blue);
+    transition: width 1s ease;
+}
+
+.water-level.healthy-water {
+    width: 80%;
+}
+
+.water-level.drained-water {
+    width: 20%;
+    background: #ffb74d;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Immune System Impact Section */
+.impact-section {
+    padding: 5rem 0;
+    background: white;
+}
+
+.impact-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--wetland-dark);
+    margin-bottom: 1rem;
+}
+
+.section-intro {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #666;
+    max-width: 800px;
+    margin: 0 auto 3rem;
+    line-height: 1.6;
+}
+
+/* Immune Simulator */
+.immune-simulator {
+    background: var(--wetland-light);
+    border-radius: 15px;
+    padding: 2rem;
+    margin-top: 2rem;
+}
+
+.simulator-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.simulator-header h3 {
+    font-size: 1.8rem;
+    color: var(--wetland-dark);
+    margin-bottom: 0.5rem;
+}
+
+.simulator-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.control-group label {
+    font-weight: 600;
+    color: var(--wetland-dark);
+}
+
+.control-group input[type="range"] {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: #ddd;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.control-group input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--wetland-primary);
+    cursor: pointer;
+}
+
+.control-group input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--wetland-primary);
+    cursor: pointer;
+    border: none;
+}
+
+.control-value {
+    font-weight: 700;
+    color: var(--wetland-primary);
+    text-align: center;
+}
+
+/* Immune Metrics */
+.immune-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.metric-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.metric-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--wetland-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--wetland-primary);
+}
+
+.metric-content {
+    flex: 1;
+}
+
+.metric-content h4 {
+    margin: 0 0 0.5rem 0;
+    color: var(--wetland-dark);
+    font-size: 1.1rem;
+}
+
+.metric-bar {
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.metric-fill {
+    height: 100%;
+    background: var(--wetland-secondary);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.metric-bar.stress-bar .metric-fill {
+    background: var(--stress-red);
+}
+
+.metric-bar.risk-bar .metric-fill {
+    background: var(--stress-red);
+}
+
+.metric-value {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--wetland-dark);
+}
+
+/* Disease Dynamics Section */
+.disease-section {
+    padding: 5rem 0;
+    background: var(--wetland-light);
+}
+
+.disease-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.disease-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.disease-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+}
+
+.disease-header {
+    background: var(--wetland-primary);
+    color: white;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.disease-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.disease-content {
+    padding: 1.5rem;
+}
+
+.disease-stats {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 0;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 0.25rem;
+}
+
+.stat-value {
+    display: block;
+    font-weight: 700;
+    color: var(--wetland-primary);
+    font-size: 1.1rem;
+}
+
+.learn-more-btn {
+    background: var(--wetland-secondary);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.learn-more-btn:hover {
+    background: var(--wetland-dark);
+}
+
+/* Disease Modal */
+.disease-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.disease-modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 15px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: var(--wetland-dark);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+/* Case Studies Section */
+.case-studies-section {
+    padding: 5rem 0;
+    background: white;
+}
+
+.case-study-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.case-study-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.case-study-card:hover {
+    transform: translateY(-5px);
+}
+
+.case-study-image {
+    height: 200px;
+    background: var(--wetland-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-placeholder {
+    text-align: center;
+    color: var(--wetland-primary);
+}
+
+.image-placeholder i {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.case-study-content {
+    padding: 1.5rem;
+}
+
+.case-study-content h3 {
+    color: var(--wetland-dark);
+    margin-bottom: 0.5rem;
+}
+
+.location {
+    color: var(--wetland-primary);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.case-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.case-stats .stat {
+    text-align: center;
+}
+
+.case-stats .label {
+    display: block;
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 0.25rem;
+}
+
+.case-stats .value {
+    display: block;
+    font-weight: 700;
+    color: var(--wetland-primary);
+}
+
+/* Restoration Solutions Section */
+.restoration-section {
+    padding: 5rem 0;
+    background: var(--wetland-light);
+}
+
+.solution-tabs {
+    margin-top: 3rem;
+}
+
+.tab-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.tab-btn {
+    background: white;
+    border: 2px solid var(--wetland-primary);
+    color: var(--wetland-primary);
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+    background: var(--wetland-primary);
+    color: white;
+}
+
+.tab-content {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+}
+
+.tab-panel {
+    display: none;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+.tab-panel h3 {
+    color: var(--wetland-dark);
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+}
+
+.solution-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.solution-item {
+    text-align: center;
+    padding: 1.5rem;
+    background: var(--wetland-light);
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.solution-item:hover {
+    transform: translateY(-3px);
+}
+
+.solution-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--wetland-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin: 0 auto 1rem;
+}
+
+.solution-item h4 {
+    color: var(--wetland-dark);
+    margin-bottom: 0.5rem;
+}
+
+/* Call to Action Section */
+.cta-section {
+    padding: 4rem 0;
+    background: var(--wetland-dark);
+    color: white;
+    text-align: center;
+}
+
+.cta-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.cta-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+.cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.cta-btn.primary {
+    background: var(--stress-red);
+    color: white;
+}
+
+.cta-btn.primary:hover {
+    background: #b71c1c;
+    transform: translateY(-2px);
+}
+
+.cta-btn.secondary {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.cta-btn.secondary:hover {
+    background: white;
+    color: var(--wetland-dark);
+}
+
+/* Scroll Indicator */
+.scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    text-align: center;
+    animation: bounce 2s infinite;
+}
+
+.scroll-indicator i {
+    display: block;
+    margin-top: 0.5rem;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+    40% { transform: translateX(-50%) translateY(-10px); }
+    60% { transform: translateX(-50%) translateY(-5px); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+    }
+
+    .hero-text h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-stats {
+        justify-content: center;
+    }
+
+    .amphibian-animation {
+        width: 250px;
+        height: 150px;
+    }
+
+    .simulator-controls {
+        grid-template-columns: 1fr;
+    }
+
+    .immune-metrics {
+        grid-template-columns: 1fr;
+    }
+
+    .disease-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .case-study-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .solution-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tab-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-text h1 {
+        font-size: 2rem;
+    }
+
+    .hero-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .metric-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .disease-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .case-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}

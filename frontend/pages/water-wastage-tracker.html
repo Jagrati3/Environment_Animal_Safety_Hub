@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Water Wastage Tracker | EcoLife</title>
+  <link rel="stylesheet" href="../css/water-wastage-tracker.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="../css/components/navbar.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="water-app">
+    <!-- Navbar will be injected -->
+    <div id="navbar-container"></div>
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-tag">
+          <i class="fas fa-users"></i>
+          <span>Join 5,000+ Eco Warriors</span>
+        </div>
+        <div class="hero-text">
+          <h1>Water Wastage <span>Tracker</span></h1>
+          <p>Monitor your household water consumption, identify wastage sources, and make every drop count. Move from
+            learning to doing and make a real-world impact.</p>
+        </div>
+        <div class="hero-actions">
+          <a href="#usageForm" class="btn btn-primary">
+            <i class="fas fa-plus-circle"></i> Log Usage
+          </a>
+          <a href="#statsDashboard" class="btn btn-secondary">
+            <i class="fas fa-chart-bar"></i> View Stats
+          </a>
+        </div>
+        <div class="hero-visual">
+          <div class="water-drop-animation">
+            <div class="water-drop">
+              <svg viewBox="0 0 200 200" class="drop-svg">
+                <path d="M100,20 Q80,60 100,100 Q120,60 100,20 M100,100 Q70,130 100,180 Q130,130 100,100 Z"
+                  class="drop-path" fill="url(#waterGradient)" />
+                <defs>
+                  <linearGradient id="waterGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#10b981;stop-opacity:1" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="water-value">
+                <span id="totalWaterUsed">0</span><span class="unit">L</span>
+              </div>
+            </div>
+            <p class="hero-stat">Total Today</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Alert Banner -->
+    <div id="alertBanner" class="alert-banner hidden">
+      <i class="fas fa-exclamation-triangle"></i>
+      <span id="alertMessage"></span>
+      <button class="alert-close" onclick="closeAlert()">×</button>
+    </div>
+    <!-- Main Container -->
+    <div class="container">
+      <!-- Quick Stats Dashboard -->
+      <section class="stats-dashboard">
+        <div class="stat-card today">
+          <div class="stat-icon">
+            <i class="fas fa-calendar-day"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Today's Usage</h3>
+            <p class="stat-value" id="todayUsage">0</p>
+            <span class="stat-unit">Liters</span>
+          </div>
+          <div class="stat-badge" id="todayStatus">On Track</div>
+        </div>
+        <div class="stat-card week">
+          <div class="stat-icon">
+            <i class="fas fa-calendar-week"></i>
+          </div>
+          <div class="stat-content">
+            <h3>This Week</h3>
+            <p class="stat-value" id="weekUsage">0</p>
+            <span class="stat-unit">Liters</span>
+          </div>
+          <div class="stat-change" id="weekChange">0%</div>
+        </div>
+        <div class="stat-card month">
+          <div class="stat-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Monthly Avg</h3>
+            <p class="stat-value" id="monthAverage">0</p>
+            <span class="stat-unit">L/day</span>
+          </div>
+          <div class="stat-comparison" id="comparisonBadge">Below Avg</div>
+        </div>
+        <div class="stat-card goal">
+          <div class="stat-icon">
+            <i class="fas fa-bullseye"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Daily Goal</h3>
+            <p class="stat-value" id="goalValue">300</p>
+            <span class="stat-unit">Liters</span>
+          </div>
+          <div class="goal-progress-mini">
+            <div class="progress-bar-mini">
+              <div class="progress-fill-mini" id="goalProgressBar"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Main Content Grid -->
+      <div class="main-grid">
+        <!-- Left Column -->
+        <div class="left-column">
+          <!-- Log Water Usage -->
+          <section class="card usage-form-card">
+            <h2><i class="fas fa-plus-circle"></i> Log Water Usage</h2>
+            <form id="usageForm" class="usage-form">
+              <div class="form-group">
+                <label for="activityType">Activity Type</label>
+                <select id="activityType" required>
+                  <option value="">Select Activity</option>
+                  <option value="shower">🚿 Shower</option>
+                  <option value="laundry">👕 Laundry</option>
+                  <option value="garden">🌱 Watering Garden</option>
+                  <option value="toilet">🚽 Toilet Flush</option>
+                  <option value="dishes">🍽️ Washing Dishes</option>
+                  <option value="cooking">🍳 Cooking</option>
+                  <option value="car-wash">🚗 Car Wash</option>
+                  <option value="other">📊 Other</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="duration">Duration (minutes)</label>
+                  <input type="number" id="duration" min="1" max="120" placeholder="e.g., 10" />
+                </div>
+                <div class="form-group">
+                  <label for="waterAmount">Water Used (Liters)</label>
+                  <input type="number" id="waterAmount" min="1" step="0.1" placeholder="Auto-calculated" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="usageTime">Time of Usage</label>
+                <input type="datetime-local" id="usageTime" required />
+              </div>
+              <div class="form-group">
+                <label for="notes">Notes (optional)</label>
+                <textarea id="notes" rows="2" placeholder="Add any additional details..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Log Usage
+              </button>
+            </form>
+            <!-- Quick Add Buttons -->
+            <div class="quick-add-section">
+              <h3>Quick Add</h3>
+              <div class="quick-add-buttons">
+                <button class="quick-btn" onclick="quickAdd('shower', 10)">
+                  <i class="fas fa-shower"></i>
+                  <span>Shower</span>
+                  <small>~80L</small>
+                </button>
+                <button class="quick-btn" onclick="quickAdd('toilet', 0.5)">
+                  <i class="fas fa-toilet"></i>
+                  <span>Toilet</span>
+                  <small>~6L</small>
+                </button>
+                <button class="quick-btn" onclick="quickAdd('dishes', 10)">
+                  <i class="fas fa-utensils"></i>
+                  <span>Dishes</span>
+                  <small>~20L</small>
+                </button>
+                <button class="quick-btn" onclick="quickAdd('laundry', 45)">
+                  <i class="fas fa-tshirt"></i>
+                  <span>Laundry</span>
+                  <small>~50L</small>
+                </button>
+              </div>
+            </div>
+          </section>
+          <!-- Water Footprint Calculator -->
+          <section class="card footprint-calculator">
+            <h2><i class="fas fa-calculator"></i> Virtual Water Footprint</h2>
+            <p class="card-subtitle">Calculate hidden water usage in products you consume</p>
+            <div class="footprint-list">
+              <div class="footprint-item">
+                <div class="footprint-label">
+                  <i class="fas fa-hamburger"></i>
+                  <span>Beef (100g)</span>
+                </div>
+                <div class="footprint-controls">
+                  <input type="number" min="0" max="10" value="0" data-water="1500" class="footprint-input" />
+                  <span class="water-equiv">0L</span>
+                </div>
+              </div>
+              <div class="footprint-item">
+                <div class="footprint-label">
+                  <i class="fas fa-coffee"></i>
+                  <span>Coffee (1 cup)</span>
+                </div>
+                <div class="footprint-controls">
+                  <input type="number" min="0" max="20" value="0" data-water="140" class="footprint-input" />
+                  <span class="water-equiv">0L</span>
+                </div>
+              </div>
+              <div class="footprint-item">
+                <div class="footprint-label">
+                  <i class="fas fa-cheese"></i>
+                  <span>Cheese (100g)</span>
+                </div>
+                <div class="footprint-controls">
+                  <input type="number" min="0" max="10" value="0" data-water="500" class="footprint-input" />
+                  <span class="water-equiv">0L</span>
+                </div>
+              </div>
+              <div class="footprint-item">
+                <div class="footprint-label">
+                  <i class="fas fa-bread-slice"></i>
+                  <span>Bread (1 slice)</span>
+                </div>
+                <div class="footprint-controls">
+                  <input type="number" min="0" max="20" value="0" data-water="40" class="footprint-input" />
+                  <span class="water-equiv">0L</span>
+                </div>
+              </div>
+              <div class="footprint-item">
+                <div class="footprint-label">
+                  <i class="fas fa-egg"></i>
+                  <span>Eggs (1 egg)</span>
+                </div>
+                <div class="footprint-controls">
+                  <input type="number" min="0" max="20" value="0" data-water="200" class="footprint-input" />
+                  <span class="water-equiv">0L</span>
+                </div>
+              </div>
+              <div class="footprint-item">
+                <div class="footprint-label">
+                  <i class="fas fa-apple-alt"></i>
+                  <span>Apple (1 piece)</span>
+                </div>
+                <div class="footprint-controls">
+                  <input type="number" min="0" max="20" value="0" data-water="70" class="footprint-input" />
+                  <span class="water-equiv">0L</span>
+                </div>
+              </div>
+            </div>
+            <div class="footprint-total">
+              <strong>Total Virtual Water:</strong>
+              <span id="virtualWaterTotal">0 L</span>
+            </div>
+          </section>
+          <!-- Conservation Tips -->
+          <section class="card tips-card">
+            <h2><i class="fas fa-lightbulb"></i> Conservation Tips</h2>
+            <div id="tipsContainer" class="tips-container"></div>
+            <button class="btn btn-secondary" onclick="loadMoreTips()">
+              <i class="fas fa-refresh"></i> Get More Tips
+            </button>
+          </section>
+        </div>
+        <!-- Right Column -->
+        <div class="right-column">
+          <!-- Usage Breakdown -->
+          <section class="card breakdown-card">
+            <h2><i class="fas fa-chart-pie"></i> Usage Breakdown</h2>
+            <canvas id="usageBreakdownChart"></canvas>
+            <div class="breakdown-legend" id="breakdownLegend"></div>
+          </section>
+          <!-- Time Heatmap -->
+          <section class="card heatmap-card">
+            <h2><i class="fas fa-fire"></i> Usage Heatmap</h2>
+            <p class="card-subtitle">Water consumption by time and day</p>
+            <div class="heatmap-controls">
+              <button class="heatmap-btn active" onclick="changeHeatmapView('week')">This Week</button>
+              <button class="heatmap-btn" onclick="changeHeatmapView('month')">This Month</button>
+            </div>
+            <div id="heatmapContainer" class="heatmap-container"></div>
+          </section>
+          <!-- Household Comparison -->
+          <section class="card comparison-card">
+            <h2><i class="fas fa-home"></i> Household Comparison</h2>
+            <p class="card-subtitle">How you compare with average households</p>
+            <div class="comparison-chart">
+              <div class="comparison-bar">
+                <div class="bar-label">Your Usage</div>
+                <div class="bar-container">
+                  <div class="bar bar-yours" id="yourUsageBar" style="width: 0%">
+                    <span class="bar-value" id="yourUsageValue">0L</span>
+                  </div>
+                </div>
+              </div>
+              <div class="comparison-bar">
+                <div class="bar-label">City Average</div>
+                <div class="bar-container">
+                  <div class="bar bar-average" style="width: 70%">
+                    <span class="bar-value">350L</span>
+                  </div>
+                </div>
+              </div>
+              <div class="comparison-bar">
+                <div class="bar-label">National Average</div>
+                <div class="bar-container">
+                  <div class="bar bar-national" style="width: 85%">
+                    <span class="bar-value">425L</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="comparison-insight" id="comparisonInsight">
+              <i class="fas fa-info-circle"></i>
+              <p>Start logging your water usage to see how you compare!</p>
+            </div>
+          </section>
+          <!-- Goal Setting -->
+          <section class="card goal-card">
+            <h2><i class="fas fa-target"></i> Conservation Goals</h2>
+            <div class="goal-display">
+              <div class="goal-header">
+                <div class="goal-limit">Daily Limit: <strong id="currentGoalDisplay">300 L</strong></div>
+                <button class="btn-edit" onclick="toggleGoalEdit()">
+                  <i class="fas fa-edit"></i>
+                </button>
+              </div>
+              <div class="goal-edit-form hidden" id="goalEditForm">
+                <div class="goal-input-group">
+                  <input type="number" id="newGoal" min="50" max="1000" step="10" value="300"
+                    placeholder="Enter limit" />
+                </div>
+                <div class="goal-presets">
+                  <button onclick="setGoalPreset(200)">Low (200L)</button>
+                  <button onclick="setGoalPreset(300)">Med (300L)</button>
+                  <button onclick="setGoalPreset(400)">High (400L)</button>
+                </div>
+                <div class="goal-actions">
+                  <button class="btn-save" onclick="saveGoal()">Save</button>
+                  <button class="btn-cancel" onclick="toggleGoalEdit()">Cancel</button>
+                </div>
+              </div>
+              <div class="goal-progress-container">
+                <div class="goal-progress-fill" id="goalProgressFill"></div>
+              </div>
+              <p class="goal-status-text" id="goalProgressText">0% of daily goal used</p>
+            </div>
+          </section>
+          <!-- Social Challenge -->
+          <section class="card challenge-card">
+            <h2><i class="fas fa-trophy"></i> Social Challenges</h2>
+            <p class="card-subtitle">Compete with neighbors on water savings</p>
+            <div class="challenge-active">
+              <div class="challenge-header">
+                <div class="challenge-icon">🏆</div>
+                <div class="challenge-info">
+                  <h3>Neighborhood Water Challenge</h3>
+                  <span class="challenge-duration">6 days remaining</span>
+                </div>
+              </div>
+              <div class="challenge-leaderboard">
+                <div class="leaderboard-item rank-1">
+                  <span class="rank">1st</span>
+                  <span class="name">Green Family</span>
+                  <span class="score">-45L/day</span>
+                </div>
+                <div class="leaderboard-item rank-2">
+                  <span class="rank">2nd</span>
+                  <span class="name">Eco Warriors</span>
+                  <span class="score">-38L/day</span>
+                </div>
+                <div class="leaderboard-item rank-you">
+                  <span class="rank">3rd</span>
+                  <span class="name">You</span>
+                  <span class="score" id="yourSavings">-0L/day</span>
+                </div>
+                <div class="leaderboard-item">
+                  <span class="rank">4th</span>
+                  <span class="name">Blue House</span>
+                  <span class="score">-22L/day</span>
+                </div>
+                <div class="leaderboard-item">
+                  <span class="rank">5th</span>
+                  <span class="name">River St #12</span>
+                  <span class="score">-18L/day</span>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-full" onclick="joinNewChallenge()">
+              <i class="fas fa-plus"></i> Join New Challenge
+            </button>
+          </section>
+        </div>
+      </div>
+      <!-- Recent Activity Log -->
+      <section class="card activity-log-card">
+        <div class="card-header">
+          <h2><i class="fas fa-history"></i> Recent Activity</h2>
+          <div class="header-actions">
+            <button class="btn-filter" onclick="toggleFilter()">
+              <i class="fas fa-filter"></i> Filter
+            </button>
+            <button class="btn-export" onclick="exportData()">
+              <i class="fas fa-download"></i> Export
+            </button>
+          </div>
+        </div>
+        <div class="filter-panel hidden" id="filterPanel">
+          <select id="activityFilter">
+            <option value="all">All Activities</option>
+            <option value="shower">Showers</option>
+            <option value="laundry">Laundry</option>
+            <option value="garden">Garden</option>
+            <option value="toilet">Toilet</option>
+            <option value="dishes">Dishes</option>
+          </select>
+          <select id="dateFilter">
+            <option value="today">Today</option>
+            <option value="week">This Week</option>
+            <option value="month">This Month</option>
+            <option value="all">All Time</option>
+          </select>
+          <button class="btn btn-primary" onclick="applyFilter()">Apply</button>
+        </div>
+        <div class="activity-log" id="activityLog">
+          <div class="empty-state">
+            <i class="fas fa-droplet"></i>
+            <p>No water usage logged yet</p>
+            <small>Start tracking your water consumption to see your activity here</small>
+          </div>
+        </div>
+      </section>
+    </div>
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <p>💧 Every drop counts! Together we can conserve water for future generations.</p>
+        <div class="footer-stats">
+          <div class="footer-stat">
+            <strong id="totalSaved">0 L</strong>
+            <span>Total Saved</span>
+          </div>
+          <div class="footer-stat">
+            <strong id="treesEquivalent">0</strong>
+            <span>Trees Watered</span>
+          </div>
+          <div class="footer-stat">
+            <strong id="daysStreak">0</strong>
+            <span>Day Streak</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <!-- Scripts -->
+  <script src="../js/water-wastage-tracker.js"></script>
+  <script>
+    // Load navbar
+    fetch('../components/navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+        // Initialize navbar functionality
+        const script = document.createElement('script');
+        script.src = '../js/components/navbar.js';
+        document.body.appendChild(script);
+      });
+  </script>
+</body>
+</html>

@@ -20,6 +20,7 @@
       font-family: "Poppins", sans-serif;
       background: linear-gradient(135deg, #ffecd2, #fcb69f);
       color: #333;
+      padding-top: 80px;
     }
 
     .container {
@@ -118,9 +119,11 @@
       font-weight: 600;
     }
   </style>
+  <link rel="stylesheet" href="css/components/navbar.css">
+  <link rel="stylesheet" href="css/components/footer.css">
 </head>
 <body>
-
+  <div id="navbar-container"></div>
   <div class="container">
 
     <!-- HERO -->
@@ -193,6 +196,27 @@
     </div>
 
   </div>
-
+  <div id="footer-container"></div>
+<script>
+    // Load navbar
+    fetch('components/navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+        
+        // Initialize navbar functionality
+        const script = document.createElement('script');
+        script.src = 'js/components/navbar.js';
+        document.body.appendChild(script);
+      });
+  </script>
+  <script>
+  // Load footer
+  fetch('components/footer.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('footer-container').innerHTML = data;
+    });
+</script>
 </body>
 </html>

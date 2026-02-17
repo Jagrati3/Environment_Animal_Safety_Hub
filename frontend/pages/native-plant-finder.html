@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Native Plant Finder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black1: #222;
+      --black2: #444;
+      --black3: #666;
+      --accent: #43a047;
+      --bg: #f5f5f5;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      color: var(--black1);
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(34,34,34,0.10);
+      padding: 36px 28px;
+    }
+    h1 {
+      color: var(--black1);
+      margin-bottom: 8px;
+      font-size: 2.2rem;
+      font-weight: 700;
+    }
+    h2 {
+      color: var(--black2);
+      margin-top: 32px;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+    label {
+      color: var(--black2);
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: block;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 16px;
+      border: 1px solid var(--black3);
+      border-radius: 6px;
+      font-size: 1rem;
+      color: var(--black1);
+      background: #fafafa;
+      box-sizing: border-box;
+    }
+    button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #2e7031;
+    }
+    .plant-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .plant-item {
+      background: #f0f0f0;
+      border-radius: 10px;
+      padding: 18px 16px;
+      margin-bottom: 14px;
+      border-left: 6px solid var(--black2);
+      color: var(--black2);
+    }
+    .plant-item strong {
+      color: var(--black1);
+      font-size: 1.1rem;
+    }
+    .guide {
+      color: var(--black3);
+      margin-top: 6px;
+      font-size: 0.98rem;
+    }
+    .map-section {
+      margin-top: 32px;
+      background: #e0e0e0;
+      border-radius: 12px;
+      padding: 18px 12px;
+      color: var(--black2);
+    }
+    .nursery-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .nursery-item {
+      margin-bottom: 10px;
+      color: var(--black3);
+    }
+    .map-placeholder {
+      width: 100%;
+      height: 220px;
+      background: repeating-linear-gradient(135deg, #bbb 0 10px, #e0e0e0 10px 20px);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--black2);
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 14px 4px; }
+      h1 { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Native Plant Finder</h1>
+    <p style="color:var(--black3);">Discover native plants for your region, get planting guides, and find local nurseries or restoration projects.</p>
+    <form id="regionForm">
+      <label for="region">Enter Your Region or Zip Code</label>
+      <input type="text" id="region" name="region" required placeholder="e.g., 90210 or Pacific Northwest">
+      <button type="submit">Find Native Plants</button>
+    </form>
+    <h2>Recommended Native Plants</h2>
+    <ul class="plant-list" id="plantList"></ul>
+    <div class="map-section">
+      <h2>Local Nurseries & Projects</h2>
+      <div class="map-placeholder" id="mapPlaceholder">Map of local nurseries and restoration projects will appear here.</div>
+      <ul class="nursery-list" id="nurseryList"></ul>
+    </div>
+  </div>
+  <script>
+    // Example plant data by region
+    const plantData = {
+      '90210': [
+        { name: 'California Poppy', guide: 'Full sun, well-drained soil. Sow in fall or early spring.' },
+        { name: 'Toyon', guide: 'Drought-tolerant shrub, attracts birds. Plant in sun or part shade.' },
+        { name: 'Coast Live Oak', guide: 'Large tree, deep soil, water first year.' }
+      ],
+      'pacific northwest': [
+        { name: 'Red Flowering Currant', guide: 'Partial shade, moist soil. Prune after flowering.' },
+        { name: 'Oregon Grape', guide: 'Evergreen, sun or shade, drought-tolerant.' },
+        { name: 'Western Trillium', guide: 'Woodland plant, rich moist soil, shade.' }
+      ]
+    };
+    // Example nursery data by region
+    const nurseryData = {
+      '90210': [
+        { name: 'Beverly Native Nursery', address: '123 Beverly Dr, Beverly Hills, CA' },
+        { name: 'LA Restoration Project', address: '456 River Rd, Los Angeles, CA' }
+      ],
+      'pacific northwest': [
+        { name: 'PNW Native Plants', address: '789 Rainy St, Portland, OR' },
+        { name: 'Salmon Creek Restoration', address: '321 Creek Rd, Seattle, WA' }
+      ]
+    };
+    const regionForm = document.getElementById('regionForm');
+    const plantList = document.getElementById('plantList');
+    const nurseryList = document.getElementById('nurseryList');
+    const mapPlaceholder = document.getElementById('mapPlaceholder');
+    regionForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const regionInput = regionForm.region.value.trim().toLowerCase();
+      renderPlants(regionInput);
+      renderNurseries(regionInput);
+      mapPlaceholder.textContent = `Map for region: ${regionForm.region.value}`;
+    });
+    function renderPlants(region) {
+      plantList.innerHTML = '';
+      const plants = plantData[region] || [
+        { name: 'Milkweed', guide: 'Full sun, attracts pollinators. Plant in spring.' },
+        { name: 'Goldenrod', guide: 'Tolerates poor soil, blooms late summer.' }
+      ];
+      plants.forEach(plant => {
+        const li = document.createElement('li');
+        li.className = 'plant-item';
+        li.innerHTML = `<strong>${plant.name}</strong><div class="guide">${plant.guide}</div>`;
+        plantList.appendChild(li);
+      });
+    }
+    function renderNurseries(region) {
+      nurseryList.innerHTML = '';
+      const nurseries = nurseryData[region] || [
+        { name: 'Native Roots Nursery', address: 'Local address available on request' }
+      ];
+      nurseries.forEach(nursery => {
+        const li = document.createElement('li');
+        li.className = 'nursery-item';
+        li.innerHTML = `<strong>${nursery.name}</strong> - ${nursery.address}`;
+        nurseryList.appendChild(li);
+      });
+    }
+    // Initial render
+    renderPlants('');
+    renderNurseries('');
+  </script>
+</body>
+</html>

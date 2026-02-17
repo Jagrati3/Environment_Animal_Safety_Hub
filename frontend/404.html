@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>404 - EcoLife</title>
+<!-- Three.js CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
 <style>
 *{
@@ -20,14 +22,27 @@ body{
     align-items:center;
     background: linear-gradient(135deg,#a8e063,#56ab2f);
     overflow:hidden;
+    position: relative;
 }
 
-/* floating leaves */
+/* 3D Container */
+#canvas-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* Behind error container but in front of gradient if needed, actually let's put it behind everything meaningful */
+    pointer-events: none; /* Let clicks pass through */
+}
+
+/* floating leaves - simplified to not clash too much */
 .leaf{
     position:absolute;
     font-size:30px;
     animation: float 8s linear infinite;
-    opacity:0.6;
+    opacity:0.4;
+    z-index: 0; /* Behind canvas? or front? Let's put them behind the card but maybe mixed with 3d? We'll put them at z-index 0 */
 }
 .leaf:nth-child(1){left:10%; animation-delay:0s;}
 .leaf:nth-child(2){left:30%; animation-delay:2s;}
@@ -40,15 +55,19 @@ body{
 }
 
 .error-container{
-    background: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.75); /* More transparent for glassmorphism */
     padding:60px 40px;
     border-radius:25px;
     box-shadow:0 20px 40px rgba(0,0,0,0.2);
     text-align:center;
     max-width:500px;
     width:90%;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     animation: pop 1s ease;
+    z-index: 10; /* Top layer */
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.3);
 }
 
 @keyframes pop{
@@ -71,6 +90,12 @@ body{
     color:#2ecc71;
     text-shadow:3px 3px 10px rgba(0,0,0,0.1);
     cursor:pointer;
+    transition: transform 0.6s ease;
+    display: inline-block;
+}
+
+.error-code:hover {
+    transform: scale(1.1) rotate(5deg);
 }
 
 .error-title{
@@ -84,6 +109,7 @@ body{
     font-size:18px;
     line-height:1.6;
     margin-bottom:35px;
+    font-weight: 500;
 }
 
 .btn-container{
@@ -99,7 +125,9 @@ body{
     font-size:16px;
     font-weight:bold;
     text-decoration:none;
-    transition:0.3s;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
 .btn-primary{
@@ -116,12 +144,14 @@ body{
 .btn-secondary{
     border:2px solid #27ae60;
     color:#27ae60;
+    background: transparent;
 }
 
 .btn-secondary:hover{
     background:#27ae60;
     color:white;
     transform:translateY(-4px);
+    box-shadow: 0 5px 15px rgba(39,174,96,0.3);
 }
 
 @media(max-width:600px){
@@ -133,6 +163,8 @@ body{
 
 <body>
 
+<div id="canvas-container"></div>
+
 <div class="leaf">🍃</div>
 <div class="leaf">🍃</div>
 <div class="leaf">🍃</div>
@@ -143,7 +175,7 @@ body{
     <div class="error-code">404</div>
     <h1 class="error-title">Oops! Page Not Found</h1>
     <p class="error-message">
-        Looks like this page went on a nature walk 🌿  
+        Looks like this page went on a nature walk 🌿 <br>
         Don’t worry — let’s guide you back to a greener path.
     </p>
 
@@ -154,12 +186,136 @@ body{
 </div>
 
 <script>
+// Toggle rotation on click
 const code = document.querySelector(".error-code");
-
 code.addEventListener("click",()=>{
     code.style.transform="rotate(360deg)";
-    code.style.transition="0.6s";
-    setTimeout(()=>code.style.transform="rotate(0deg)",600);
+    setTimeout(()=> {
+        code.style.transform="rotate(0deg)";
+    }, 600);
+});
+
+// Three.js 3D Background
+document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('canvas-container');
+    
+    // Scene setup
+    const scene = new THREE.Scene();
+    
+    // Perspective Camera
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 8;
+    
+    // Renderer with transparency to show gradient background
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    container.appendChild(renderer.domElement);
+    
+    // Lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambientLight);
+    
+    const pointLight = new THREE.PointLight(0xffffff, 1);
+    pointLight.position.set(10, 10, 10);
+    scene.add(pointLight);
+
+    // Group to hold all 3D objects
+    const group = new THREE.Group();
+    scene.add(group);
+
+    // Main Planet (Low Poly)
+    const geometry = new THREE.IcosahedronGeometry(3, 1);
+    const material = new THREE.MeshStandardMaterial({
+        color: 0x66bb6a,
+        flatShading: true,
+        metalness: 0.1,
+        roughness: 0.8
+    });
+    const planet = new THREE.Mesh(geometry, material);
+    group.add(planet);
+
+    // Floating Particles (Small geometric shapes)
+    const particleGeo = new THREE.IcosahedronGeometry(0.15, 0);
+    const particleMat = new THREE.MeshStandardMaterial({
+        color: 0xc8e6c9,
+        flatShading: true
+    });
+
+    const particles = [];
+    for(let i=0; i<40; i++) {
+        const mesh = new THREE.Mesh(particleGeo, particleMat);
+        
+        // Random spherical distribution
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        const radius = 4.5 + Math.random() * 3;
+        
+        mesh.position.x = radius * Math.sin(phi) * Math.cos(theta);
+        mesh.position.y = radius * Math.sin(phi) * Math.sin(theta);
+        mesh.position.z = radius * Math.cos(phi);
+        
+        mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
+        
+        // Custom properties for animation
+        mesh.userData = {
+            rotationSpeed: 0.01 + Math.random() * 0.02,
+            orbitSpeed: 0.002 + Math.random() * 0.005,
+            orbitAxis: new THREE.Vector3(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize()
+        };
+        
+        group.add(mesh);
+        particles.push(mesh);
+    }
+
+    // Interactive mouse movement effect
+    let mouseX = 0;
+    let mouseY = 0;
+    let targetX = 0;
+    let targetY = 0;
+    const windowHalfX = window.innerWidth / 2;
+    const windowHalfY = window.innerHeight / 2;
+
+    document.addEventListener('mousemove', (event) => {
+        mouseX = (event.clientX - windowHalfX);
+        mouseY = (event.clientY - windowHalfY);
+    });
+
+    // Animation Loop
+    const animate = () => {
+        requestAnimationFrame(animate);
+
+        // Gentle rotation of the whole group
+        planet.rotation.y += 0.002;
+        planet.rotation.z += 0.001;
+
+        // Animate particles
+        particles.forEach(p => {
+            p.rotation.x += p.userData.rotationSpeed;
+            p.rotation.y += p.userData.rotationSpeed;
+            
+            // Simple orbit simulation (rotating position around an axis)
+            p.position.applyAxisAngle(p.userData.orbitAxis, p.userData.orbitSpeed);
+        });
+
+        // Mouse Parallax easing
+        targetX = mouseX * 0.001;
+        targetY = mouseY * 0.001;
+        
+        group.rotation.y += 0.05 * (targetX - group.rotation.y);
+        group.rotation.x += 0.05 * (targetY - group.rotation.x);
+
+        renderer.render(scene, camera);
+    };
+
+    animate();
+
+    // Handle Window Resize
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
 });
 </script>
 

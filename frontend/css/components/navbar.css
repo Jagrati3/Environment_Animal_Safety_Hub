@@ -78,6 +78,9 @@ body.no-scroll {
   transition: var(--transition-normal);
   padding: 5px 0;
 }
+.navbar {
+  height: 70px;
+}
 
 .navbar.scrolled {
   background: rgba(20, 50, 30, 0.95);
@@ -95,10 +98,10 @@ body.no-scroll {
   /* reduce side padding */
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 6px;
-  height: 80px;
-  transition: height 0.3s ease;
+  width: 100%;
+  max-width: 100%;     /* remove restriction */
+  margin: 0;
+  padding: 0 20px;     /* balanced left/right spacing */
 }
 
 .navbar.scrolled .nav-container {
@@ -110,20 +113,21 @@ body.no-scroll {
 .navbar .logo {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 1.6rem;
+  gap: 8px;          /* smaller gap */
+  font-size: 1.4rem; /* slightly smaller */
   font-weight: 700;
   color: var(--white);
   text-decoration: none;
+}
+
+.navbar .logo {
   flex-shrink: 0;
-  letter-spacing: 0.5px;
+  margin-right: 30px;   /* space between logo and Home */
 }
 
 .navbar .logo-img {
-  width: 42px;
-  height: 42px;
-  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.4));
-  transition: var(--transition-normal);
+  width: 36px;
+  height: 36px;
 }
 
 .navbar .logo:hover .logo-img {
@@ -251,8 +255,6 @@ body.no-scroll {
   list-style: none;
   margin: 0;
   padding: 0;
-  flex: 1;
-  min-width: 0;
 }
 
 .nav-link {
@@ -276,8 +278,10 @@ body.no-scroll {
   transition: transform 0.3s ease;
 }
 
-.nav-group:hover .nav-link i {
-  transform: rotate(180deg);
+@media (min-width: 1201px) {
+  .nav-group:hover .nav-link i {
+    transform: rotate(180deg);
+  }
 }
 
 /* Premium Underline Animation */
@@ -340,11 +344,14 @@ body.no-scroll {
 }
 
 /* Hover State */
-.nav-group:hover .dropdown {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(10px);
+@media (min-width: 1201px) {
+  .nav-group:hover .dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(10px);
+  }
 }
+
 
 /* Dropdown Links */
 .dropdown li {
@@ -373,7 +380,7 @@ body.no-scroll {
 .nav-auth {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   margin-left: auto;
   padding-left: 16px;
   border-left: 1px solid rgba(255, 255, 255, 0.3);
@@ -383,36 +390,48 @@ body.no-scroll {
 }
 
 /* Login Button */
+/* Login Button - 3D White */
 .btn-login {
   padding: 8px 16px;
-  border: 2px solid rgba(255, 255, 255, 0.6);
+  background-color: var(--white);
+  color: var(--eco-dark);
+  border: none; /* Removed border for 3D effect */
   border-radius: var(--radius-xl);
-  color: var(--white);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.85rem;
-  transition: var(--transition-normal);
+  transition: all 0.1s ease;
   white-space: nowrap;
   text-decoration: none;
   margin-left: 6px;
+  position: relative;
+  box-shadow: 0 4px 0 #cccccc, 0 5px 10px rgba(0,0,0,0.1);
+  transform: translateY(0);
 }
 
 .btn-login:hover {
-  background: var(--white);
+  background-color: #f0f0f0;
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #cccccc, 0 3px 5px rgba(0,0,0,0.1);
   color: var(--eco-dark);
-  border-color: var(--white);
-  transform: translateY(-2px);
+  border-color: transparent;
+}
+
+.btn-login:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 #cccccc, 0 0 0 rgba(0,0,0,0.1);
 }
 
 /* Sign Up Button */
+/* Sign Up Button - 3D Green */
 .btn-signup {
   padding: 8px 16px;
   /* slightly tighter */
   background: linear-gradient(135deg, var(--eco-light), var(--eco-primary));
   color: var(--white);
   border-radius: var(--radius-xl);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.85rem;
-  transition: var(--transition-normal);
+  transition: all 0.1s ease;
   white-space: nowrap;
   text-decoration: none;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -421,9 +440,15 @@ body.no-scroll {
 }
 
 .btn-signup:hover {
-  background: linear-gradient(135deg, var(--eco-primary), var(--eco-dark));
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+  background: var(--eco-light);
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #1b5e20, 0 3px 5px rgba(0,0,0,0.2);
+  color: var(--white);
+}
+
+.btn-signup:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 #1b5e20, 0 0 0 rgba(0,0,0,0.2);
 }
 
 

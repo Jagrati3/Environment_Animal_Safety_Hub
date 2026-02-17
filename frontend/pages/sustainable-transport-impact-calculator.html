@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sustainable Transport Impact Calculator</title>
+  <style>
+    :root {
+      --black-1: #181818; /* darkest */
+      --black-2: #232323; /* card bg */
+      --black-3: #353535; /* accent */
+      --accent: #00e676;
+      --accent2: #00bfae;
+      --white: #fff;
+      --gray: #bdbdbd;
+    }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(120deg, var(--black-1) 0%, var(--black-3) 100%);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .container {
+      background: var(--black-2);
+      margin-top: 40px;
+      padding: 32px 28px 24px 28px;
+      border-radius: 18px;
+      box-shadow: 0 6px 32px rgba(0,0,0,0.25);
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      border: 1.5px solid var(--black-3);
+    }
+    h1 {
+      color: var(--accent);
+      margin-bottom: 10px;
+      font-size: 2rem;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px #000a;
+    }
+    .desc {
+      color: var(--gray);
+      margin-bottom: 24px;
+      font-size: 1.05rem;
+    }
+    label {
+      display: block;
+      margin: 16px 0 6px 0;
+      color: var(--white);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    select, input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 7px;
+      border: 1px solid var(--black-3);
+      margin-bottom: 12px;
+      font-size: 1rem;
+      background: var(--black-1);
+      color: var(--white);
+      transition: border 0.2s, box-shadow 0.2s;
+      box-shadow: 0 1px 4px #0003;
+    }
+    select:focus, input[type="number"]:focus {
+      border: 1.5px solid var(--accent2);
+      outline: none;
+      box-shadow: 0 0 0 2px var(--accent2)33;
+    }
+    button {
+      background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%);
+      color: var(--black-1);
+      border: none;
+      border-radius: 7px;
+      padding: 12px 0;
+      width: 100%;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.2s, color 0.2s;
+      box-shadow: 0 2px 8px #0004;
+    }
+    button:hover {
+      background: linear-gradient(90deg, var(--accent2) 0%, var(--accent) 100%);
+      color: var(--white);
+    }
+    .result {
+      margin-top: 24px;
+      background: var(--black-3);
+      border-radius: 10px;
+      padding: 18px 12px;
+      color: var(--accent);
+      font-size: 1.1rem;
+      min-height: 40px;
+      box-shadow: 0 1px 8px #0002;
+    }
+    .result b {
+      color: var(--accent2);
+    }
+    .history {
+      margin-top: 32px;
+      background: var(--black-1);
+      border-radius: 10px;
+      padding: 18px 12px;
+      color: var(--gray);
+      font-size: 1rem;
+      min-height: 40px;
+      text-align: left;
+      box-shadow: 0 1px 8px #0002;
+      border: 1px solid var(--black-3);
+    }
+    .history-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--accent2);
+      letter-spacing: 0.5px;
+    }
+    #historyList li {
+      color: var(--white);
+      margin-bottom: 2px;
+      font-size: 0.98rem;
+    }
+    @media (max-width: 600px) {
+      .container {
+        max-width: 98vw;
+        padding: 18px 4vw 18px 4vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Sustainable Transport Impact Calculator</h1>
+    <div class="desc">Compare the environmental impact of your travel choices and track your sustainable journeys!</div>
+    <form id="impactForm">
+      <label for="mode">Transport Mode</label>
+      <select id="mode" required>
+        <option value="car">Car</option>
+        <option value="bike">Bike</option>
+        <option value="public">Public Transit</option>
+        <option value="walk">Walking</option>
+      </select>
+      <label for="distance">Distance (km)</label>
+      <input type="number" id="distance" min="0.1" step="0.1" required placeholder="Enter distance in kilometers">
+      <button type="submit">Calculate Impact</button>
+    </form>
+    <div class="result" id="result"></div>
+    <div class="history" id="history">
+      <div class="history-title">Your Sustainable Travel History</div>
+      <ul id="historyList" style="padding-left: 18px; margin: 0;"></ul>
+    </div>
+  </div>
+  <script>
+    // Emission factors in grams CO2e per km
+    const emissionFactors = {
+      car: 192,        // average car (g CO2e/km)
+      bike: 16,        // bike (food energy, g CO2e/km)
+      public: 70,      // public transit (bus/train avg)
+      walk: 8          // walking (food energy, g CO2e/km)
+    };
+
+    const modeLabels = {
+      car: 'Car',
+      bike: 'Bike',
+      public: 'Public Transit',
+      walk: 'Walking'
+    };
+
+    const form = document.getElementById('impactForm');
+    const resultDiv = document.getElementById('result');
+    const historyList = document.getElementById('historyList');
+
+    // Load history from localStorage
+    function loadHistory() {
+      const history = JSON.parse(localStorage.getItem('sustainableTravelHistory') || '[]');
+      historyList.innerHTML = '';
+      if (history.length === 0) {
+        historyList.innerHTML = '<li>No journeys tracked yet.</li>';
+        return;
+      }
+      history.slice(-8).reverse().forEach(entry => {
+        const li = document.createElement('li');
+        li.textContent = `${entry.date}: ${entry.distance} km by ${modeLabels[entry.mode]} → ${entry.impact} g CO₂e`;
+        historyList.appendChild(li);
+      });
+    }
+
+    // Save journey to localStorage
+    function saveJourney(journey) {
+      const history = JSON.parse(localStorage.getItem('sustainableTravelHistory') || '[]');
+      history.push(journey);
+      localStorage.setItem('sustainableTravelHistory', JSON.stringify(history));
+    }
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const mode = document.getElementById('mode').value;
+      const distance = parseFloat(document.getElementById('distance').value);
+      if (isNaN(distance) || distance <= 0) {
+        resultDiv.textContent = 'Please enter a valid distance.';
+        return;
+      }
+      const impact = Math.round(emissionFactors[mode] * distance);
+      let message = '';
+      if (mode === 'car') {
+        message = `Your car journey of ${distance} km emits about <b>${impact} grams</b> of CO₂e.`;
+      } else if (mode === 'public') {
+        message = `Your public transit journey of ${distance} km emits about <b>${impact} grams</b> of CO₂e.`;
+      } else if (mode === 'bike') {
+        message = `Biking ${distance} km emits only <b>${impact} grams</b> of CO₂e (mostly from food energy).`;
+      } else if (mode === 'walk') {
+        message = `Walking ${distance} km emits just <b>${impact} grams</b> of CO₂e (food energy).`;
+      }
+      resultDiv.innerHTML = message;
+      // Save to history
+      const journey = {
+        date: new Date().toLocaleDateString(),
+        mode,
+        distance,
+        impact
+      };
+      saveJourney(journey);
+      loadHistory();
+      form.reset();
+    });
+
+    // Initial load
+    loadHistory();
+  </script>
+</body>
+</html>

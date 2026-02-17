@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Endangered Scroll</title>
+
+<style>
+:root{
+  --bg1:#001219;
+  --bg2:#005f73;
+  --accent:#0bbcd6;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  font-family:Segoe UI, sans-serif;
+  color:#e0fbfc;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+h1{
+  margin-top:30px;
+  font-size:3rem;
+  letter-spacing:2px;
+  text-align:center;
+}
+
+.container{
+  width:90%;
+  max-width:650px;
+  margin-top:40px;
+}
+
+/* STORY CARD */
+.card{
+  background:rgba(255,255,255,0.08);
+  padding:20px;
+  margin:18px 0;
+  border-radius:18px;
+  backdrop-filter:blur(6px);
+  animation:fadeUp 0.7s ease;
+  line-height:1.6;
+}
+
+/* ANIMATION */
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(30px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+/* BUTTON */
+button{
+  margin:30px 0;
+  padding:14px 30px;
+  font-size:1rem;
+  background:var(--accent);
+  color:#001219;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  transition:0.3s;
+}
+button:hover{
+  transform:scale(1.05);
+  opacity:0.9;
+}
+
+/* FOOTER MESSAGE */
+.end{
+  opacity:0.8;
+  font-size:0.9rem;
+  margin-bottom:20px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🦏 Endangered Scroll</h1>
+
+<div class="container" id="container"></div>
+
+<button onclick="nextStory()">Scroll to Reveal</button>
+
+<p class="end">Each scroll reveals a species closer to extinction.</p>
+
+<script>
+const stories = [
+  "🐯 Tigers are losing their habitat faster than they can adapt.",
+  "🐘 Elephants are hunted for ivory despite global bans.",
+  "🦏 Rhinos survive today only because of constant protection.",
+  "🐼 Pandas depend on forests that are rapidly disappearing.",
+  "🐢 Sea turtles mistake plastic for food and pay with their lives.",
+  "If we scroll past them, they may disappear forever."
+];
+
+let index = 0;
+
+function nextStory(){
+  if(index < stories.length){
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerText = stories[index];
+    document.getElementById("container").appendChild(card);
+    index++;
+  } else {
+    alert("🌍 The story ends here. Action should not.");
+  }
+}
+</script>
+
+</body>
+</html>

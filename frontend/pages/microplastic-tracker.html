@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microplastic Tracker - Reduce Your Exposure</title>
+    <link rel="stylesheet" href="../css/microplastic-tracker.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="microplastic-container">
+        <!-- Header -->
+        <header class="mp-header">
+            <div class="header-content">
+                <div class="header-title">
+                    <i class="fas fa-droplet"></i>
+                    <h1>Microplastic Tracker</h1>
+                </div>
+                <p class="header-subtitle">Track and reduce microplastic exposure in your daily life</p>
+            </div>
+            <nav class="nav-tabs">
+                <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
+                <button class="nav-tab" data-tab="logger">Log Source</button>
+                <button class="nav-tab" data-tab="scanner">Product Scanner</button>
+                <button class="nav-tab" data-tab="alternatives">Alternatives</button>
+                <button class="nav-tab" data-tab="timeline">Timeline</button>
+                <button class="nav-tab" data-tab="hotspot-map">Hotspot Map</button>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="mp-main">
+            <!-- Dashboard Tab -->
+            <div class="tab-content active" id="dashboard">
+                <div class="dashboard-grid">
+                    <!-- Microplastic Score Card -->
+                    <div class="score-card">
+                        <div class="score-header">
+                            <h2>Weekly Microplastic Score</h2>
+                            <span class="score-badge" id="scoreBadge">High</span>
+                        </div>
+                        <div class="score-circle">
+                            <svg viewBox="0 0 120 120" class="score-svg">
+                                <circle cx="60" cy="60" r="55" class="score-bg"></circle>
+                                <circle cx="60" cy="60" r="55" class="score-fill" id="scoreFill"></circle>
+                            </svg>
+                            <div class="score-text">
+                                <span class="score-number" id="scoreNumber">0</span>
+                                <span class="score-unit">/ 100</span>
+                            </div>
+                        </div>
+                        <div class="score-breakdown">
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Current</span>
+                                <span class="breakdown-value" id="currentScore">0</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Last Week</span>
+                                <span class="breakdown-value" id="lastWeekScore">0</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Trend</span>
+                                <span class="breakdown-value trend" id="trendValue">→</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Exposure by Source -->
+                    <div class="exposure-card">
+                        <h2>Exposure by Source</h2>
+                        <div class="exposure-list">
+                            <div class="exposure-item">
+                                <div class="exposure-header">
+                                    <i class="fas fa-soap"></i>
+                                    <span>Cosmetics & Personal Care</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="cosmetics-bar" style="width: 0%"></div>
+                                </div>
+                                <span class="exposure-value" id="cosmetics-val">0%</span>
+                            </div>
+                            <div class="exposure-item">
+                                <div class="exposure-header">
+                                    <i class="fas fa-shirt"></i>
+                                    <span>Laundry (Synthetic Fabrics)</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="laundry-bar" style="width: 0%"></div>
+                                </div>
+                                <span class="exposure-value" id="laundry-val">0%</span>
+                            </div>
+                            <div class="exposure-item">
+                                <div class="exposure-header">
+                                    <i class="fas fa-droplet"></i>
+                                    <span>Bottled Water</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="water-bar" style="width: 0%"></div>
+                                </div>
+                                <span class="exposure-value" id="water-val">0%</span>
+                            </div>
+                            <div class="exposure-item">
+                                <div class="exposure-header">
+                                    <i class="fas fa-box"></i>
+                                    <span>Packaging & Takeout</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="packaging-bar" style="width: 0%"></div>
+                                </div>
+                                <span class="exposure-value" id="packaging-val">0%</span>
+                            </div>
+                            <div class="exposure-item">
+                                <div class="exposure-header">
+                                    <i class="fas fa-water"></i>
+                                    <span>Synthetic Fibers (Other)</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="fibers-bar" style="width: 0%"></div>
+                                </div>
+                                <span class="exposure-value" id="fibers-val">0%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reduction Tips -->
+                    <div class="tips-card">
+                        <h2>Quick Reduction Tips</h2>
+                        <div class="tips-list">
+                            <div class="tip-item">
+                                <div class="tip-icon">🧴</div>
+                                <div class="tip-content">
+                                    <h3>Use solid alternatives</h3>
+                                    <p>Replace liquid cosmetics with solid bars</p>
+                                </div>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-icon">🌊</div>
+                                <div class="tip-content">
+                                    <h3>Filter your water</h3>
+                                    <p>Use reusable bottles with filtration</p>
+                                </div>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-icon">👕</div>
+                                <div class="tip-content">
+                                    <h3>Natural fabrics first</h3>
+                                    <p>Choose cotton, linen, or wool clothing</p>
+                                </div>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-icon">♻️</div>
+                                <div class="tip-content">
+                                    <h3>Reduce plastic packaging</h3>
+                                    <p>Buy bulk items and items with minimal packaging</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logger Tab -->
+            <div class="tab-content" id="logger">
+                <div class="logger-container">
+                    <div class="logger-card">
+                        <h2>Log Daily Microplastic Source</h2>
+                        <form id="loggerForm" class="logger-form">
+                            <div class="form-group">
+                                <label for="sourceType">Source Category</label>
+                                <select id="sourceType" required>
+                                    <option value="">Select a category</option>
+                                    <option value="cosmetics">Cosmetics & Personal Care</option>
+                                    <option value="laundry">Laundry (Synthetic Fabrics)</option>
+                                    <option value="water">Bottled Water</option>
+                                    <option value="packaging">Packaging & Takeout</option>
+                                    <option value="fibers">Synthetic Fibers (Other)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productName">Product/Item Name</label>
+                                <input type="text" id="productName" placeholder="e.g., Facial cleanser, Plastic bottle" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exposure">Estimated Exposure Level</label>
+                                <div class="exposure-slider">
+                                    <input type="range" id="exposure" min="1" max="10" value="5" class="slider">
+                                    <div class="slider-labels">
+                                        <span>Low</span>
+                                        <span id="exposureValue">5</span>
+                                        <span>High</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="room">Room/Location</label>
+                                <div class="room-selector">
+                                    <button type="button" class="room-btn" data-room="bathroom">
+                                        <i class="fas fa-toilet"></i> Bathroom
+                                    </button>
+                                    <button type="button" class="room-btn" data-room="kitchen">
+                                        <i class="fas fa-utensils"></i> Kitchen
+                                    </button>
+                                    <button type="button" class="room-btn" data-room="bedroom">
+                                        <i class="fas fa-bed"></i> Bedroom
+                                    </button>
+                                    <button type="button" class="room-btn" data-room="laundry">
+                                        <i class="fas fa-shirt"></i> Laundry
+                                    </button>
+                                    <button type="button" class="room-btn" data-room="other">
+                                        <i class="fas fa-home"></i> Other
+                                    </button>
+                                </div>
+                                <input type="hidden" id="selectedRoom" value="">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="frequency">Frequency of Use</label>
+                                <select id="frequency" required>
+                                    <option value="">Select frequency</option>
+                                    <option value="daily">Daily</option>
+                                    <option value="3-times-week">3 times a week</option>
+                                    <option value="weekly">Weekly</option>
+                                    <option value="monthly">Monthly</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="notes">Notes (Optional)</label>
+                                <textarea id="notes" placeholder="Any additional details..."></textarea>
+                            </div>
+
+                            <button type="submit" class="submit-btn">
+                                <i class="fas fa-plus"></i> Log This Source
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="recent-logs">
+                        <h2>Recent Logs</h2>
+                        <div class="logs-list" id="logsList">
+                            <p class="empty-state">No logs yet. Start tracking your microplastic exposure!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scanner Tab -->
+            <div class="tab-content" id="scanner">
+                <div class="scanner-container">
+                    <div class="scanner-card">
+                        <h2>Product Scanner</h2>
+                        <p class="scanner-subtitle">Check products for plastic-based ingredients</p>
+                        
+                        <div class="scanner-input-group">
+                            <input type="text" id="scannerInput" placeholder="Enter product name or ingredient..." class="scanner-input">
+                            <button id="scanBtn" class="scan-btn">
+                                <i class="fas fa-search"></i> Scan
+                            </button>
+                        </div>
+
+                        <div id="scannerResults" class="scanner-results" style="display: none;">
+                            <div class="result-card" id="resultContent"></div>
+                        </div>
+
+                        <div class="plastic-ingredients-guide">
+                            <h3>Common Plastic-Based Ingredients to Avoid</h3>
+                            <div class="ingredients-grid">
+                                <div class="ingredient-chip">
+                                    <span class="ingredient-name">Microbeads</span>
+                                    <span class="ingredient-badge warn">High Risk</span>
+                                </div>
+                                <div class="ingredient-chip">
+                                    <span class="ingredient-name">Polyethylene (PE)</span>
+                                    <span class="ingredient-badge warn">High Risk</span>
+                                </div>
+                                <div class="ingredient-chip">
+                                    <span class="ingredient-name">Polypropylene (PP)</span>
+                                    <span class="ingredient-badge warn">High Risk</span>
+                                </div>
+                                <div class="ingredient-chip">
+                                    <span class="ingredient-name">Nylon</span>
+                                    <span class="ingredient-badge warn">High Risk</span>
+                                </div>
+                                <div class="ingredient-chip">
+                                    <span class="ingredient-name">Polyurethane (PU)</span>
+                                    <span class="ingredient-badge caution">Medium Risk</span>
+                                </div>
+                                <div class="ingredient-chip">
+                                    <span class="ingredient-name">Acrylates</span>
+                                    <span class="ingredient-badge caution">Medium Risk</span>
+                                </div>
+                                <div class="ingredient-chip">
+                                    <span class="ingredient-name">Dimethicone</span>
+                                    <span class="ingredient-badge caution">Medium Risk</span>
+                                </div>
+                                <div class="ingredient-chip">
+                                    <span class="ingredient-name">Siloxane</span>
+                                    <span class="ingredient-badge caution">Medium Risk</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alternatives Tab -->
+            <div class="tab-content" id="alternatives">
+                <div class="alternatives-container">
+                    <div class="alternatives-header">
+                        <h2>Safer Alternatives</h2>
+                        <p>Reduce your microplastic exposure with these eco-friendly swaps</p>
+                    </div>
+
+                    <div class="alternatives-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="cosmetics">Cosmetics</button>
+                        <button class="filter-btn" data-filter="laundry">Laundry</button>
+                        <button class="filter-btn" data-filter="water">Water</button>
+                        <button class="filter-btn" data-filter="packaging">Packaging</button>
+                    </div>
+
+                    <div class="alternatives-grid" id="alternativesGrid">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Tab -->
+            <div class="tab-content" id="timeline">
+                <div class="timeline-container">
+                    <div class="timeline-header">
+                        <h2>Reduction Timeline</h2>
+                        <p>Track your progress in reducing microplastic exposure</p>
+                    </div>
+
+                    <div class="timeline-stats">
+                        <div class="stat-box">
+                            <span class="stat-icon">📊</span>
+                            <div class="stat-info">
+                                <span class="stat-label">Total Reductions Made</span>
+                                <span class="stat-value" id="totalReductions">0</span>
+                            </div>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-icon">📉</span>
+                            <div class="stat-info">
+                                <span class="stat-label">Score Improvement</span>
+                                <span class="stat-value" id="scoreImprovement">0%</span>
+                            </div>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-icon">💾</span>
+                            <div class="stat-info">
+                                <span class="stat-label">Estimated Microplastics Avoided</span>
+                                <span class="stat-value" id="microplasticsAvoided">0 mg</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-section">
+                        <h3>Your Progress</h3>
+                        <div class="vertical-timeline" id="timelineEvents">
+                            <p class="empty-state">Log your first reduction to start your timeline!</p>
+                        </div>
+                    </div>
+
+                    <div class="impact-area">
+                        <h3>Impact Visualization</h3>
+                        <div class="impact-chart">
+                            <canvas id="impactChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hotspot Map Tab -->
+            <div class="tab-content" id="hotspot-map">
+                <div class="hotspot-map-container">
+                    <h2>Microplastic Pollution Hotspot Map</h2>
+                    <div id="hotspotMap" style="width:100%;height:350px;border-radius:8px;margin-bottom:24px;"></div>
+                    <form id="hotspotReportForm" style="background:#f7faf7;padding:16px;border-radius:8px;box-shadow:0 2px 8px rgba(30,77,124,0.04);margin-bottom:24px;">
+                        <h3>Report a Hotspot</h3>
+                        <label for="hotspotLocation">Location Description</label>
+                        <input type="text" id="hotspotLocation" name="hotspotLocation" required>
+                        <label for="hotspotDate">Date Observed</label>
+                        <input type="date" id="hotspotDate" name="hotspotDate" required>
+                        <label for="hotspotNotes">Additional Notes</label>
+                        <textarea id="hotspotNotes" name="hotspotNotes" rows="2"></textarea>
+                        <button type="submit">Submit Hotspot</button>
+                        <p style="font-size:0.95em;color:#888;margin-top:8px;">Click on the map to select the hotspot location.</p>
+                    </form>
+                    <div class="resources">
+    <h3>Prevention & Cleanup Resources</h3>
+    <ul>
+        <li>
+            <a href="https://www.nationalgeographic.com/environment/article/microplastics"
+               target="_blank"
+               rel="noopener noreferrer">
+               National Geographic: Microplastics
+            </a>
+        </li>
+        <li>
+            <a href="https://www.plasticpollutioncoalition.org/"
+               target="_blank"
+               rel="noopener noreferrer">
+               Plastic Pollution Coalition
+            </a>
+        </li>
+        <li>
+            <a href="https://www.earthday.org/campaign/end-plastic-pollution/"
+               target="_blank"
+               rel="noopener noreferrer">
+               Earth Day: End Plastic Pollution
+            </a>
+        </li>
+    </ul>
+</div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for reduction entry -->
+    <div class="modal" id="reductionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Log a Reduction</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="reductionForm" class="modal-form">
+                <div class="form-group">
+                    <label for="reductionType">What did you reduce?</label>
+                    <input type="text" id="reductionType" placeholder="e.g., Switched to solid shampoo" required>
+                </div>
+                <div class="form-group">
+                    <label for="microplasticsSpared">Estimated Microplastics Spared (mg)</label>
+                    <input type="number" id="microplasticsSpared" placeholder="Estimate in mg" min="0" required>
+                </div>
+                <button type="submit" class="submit-btn">Save Reduction</button>
+            </form>
+        </div>
+    </div>
+
+<script src="../js/microplastic-tracker.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+</body>
+</html>

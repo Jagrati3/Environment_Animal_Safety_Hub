@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco-Friendly Shopping Scorecard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></link>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <link rel="stylesheet" href="../css/eco-shopping-scorecard.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Animated Background -->
+    <div class="animated-background">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="brand">
+          <div class="brand-icon">🛒</div>
+          <div class="brand-text">
+            <h1>Eco Score</h1>
+            <p>Track Your Impact</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="btn-notification" id="notification-btn">
+            <i class="fas fa-bell"></i>
+            <span class="badge" id="notification-badge" style="display: none;">3</span>
+          </button>
+          <button class="btn-settings" id="settings-btn">
+            <i class="fas fa-cog"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs">
+        <button class="nav-tab active" data-tab="dashboard">
+          <i class="fas fa-chart-line"></i>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-tab" data-tab="log-purchase">
+          <i class="fas fa-plus-circle"></i>
+          <span>Log Purchase</span>
+        </button>
+        <button class="nav-tab" data-tab="analytics">
+          <i class="fas fa-chart-bar"></i>
+          <span>Analytics</span>
+        </button>
+        <button class="nav-tab" data-tab="badges">
+          <i class="fas fa-medal"></i>
+          <span>Badges</span>
+        </button>
+        <button class="nav-tab" data-tab="leaderboard">
+          <i class="fas fa-crown"></i>
+          <span>Leaderboard</span>
+        </button>
+      </nav>
+
+      <!-- Dashboard Tab -->
+      <section class="tab-content active" id="dashboard">
+        <!-- Score Card -->
+        <div class="score-card">
+          <div class="score-display">
+            <div class="score-circle">
+              <svg class="score-ring" viewBox="0 0 100 100">
+                <circle class="score-ring-bg" cx="50" cy="50" r="45"/>
+                <circle class="score-ring-fill" cx="50" cy="50" r="45" id="score-ring"/>
+              </svg>
+              <div class="score-content">
+                <div class="score-number" id="overall-score">78</div>
+                <div class="score-label">Score</div>
+              </div>
+            </div>
+            <div class="score-info">
+              <div class="info-item">
+                <div class="info-label">Monthly Target</div>
+                <div class="info-progress">
+                  <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 78%"></div>
+                  </div>
+                  <div class="info-text"><span id="target-score">78</span>/100</div>
+                </div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">Shopping Today</div>
+                <div class="info-value">
+                  <span id="today-spent">$0.00</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">Streak Days</div>
+                <div class="info-value">
+                  <span id="streak-days">0</span>
+                  <span class="streak-icon">🔥</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+          <div class="stat-card eco-score-stat">
+            <div class="stat-header">
+              <i class="fas fa-leaf"></i>
+              <span class="stat-title">Eco Score</span>
+            </div>
+            <div class="stat-value" id="eco-score-value">78%</div>
+            <div class="stat-trend up"><i class="fas fa-arrow-up"></i> +5% vs last month</div>
+          </div>
+
+          <div class="stat-card savings-stat">
+            <div class="stat-header">
+              <i class="fas fa-dollar-sign"></i>
+              <span class="stat-title">Savings This Month</span>
+            </div>
+            <div class="stat-value" id="savings-value">$0.00</div>
+            <div class="stat-trend"><i class="fas fa-info-circle"></i> From eco purchases</div>
+          </div>
+
+          <div class="stat-card impact-stat">
+            <div class="stat-header">
+              <i class="fas fa-tree"></i>
+              <span class="stat-title">CO₂ Offset</span>
+            </div>
+            <div class="stat-value" id="co2-offset">0 kg</div>
+            <div class="stat-trend"><i class="fas fa-info-circle"></i> This year</div>
+          </div>
+
+          <div class="stat-card waste-stat">
+            <div class="stat-header">
+              <i class="fas fa-trash-alt"></i>
+              <span class="stat-title">Waste Avoided</span>
+            </div>
+            <div class="stat-value" id="waste-avoided">0 lbs</div>
+            <div class="stat-trend"><i class="fas fa-info-circle"></i> Landfill diversion</div>
+          </div>
+        </div>
+
+        <!-- Category Scores -->
+        <div class="category-scores">
+          <h3>Category Eco Scores</h3>
+          <div class="category-grid">
+            <div class="category-card focus" id="food-card">
+              <div class="category-header">
+                <i class="fas fa-apple-alt"></i>
+                <h4>Food</h4>
+              </div>
+              <div class="category-score">
+                <div class="score-value" id="food-score">75</div>
+                <div class="score-out">/ 100</div>
+              </div>
+              <div class="category-progress">
+                <div class="progress-ring">
+                  <svg viewBox="0 0 36 36">
+                    <circle cx="18" cy="18" r="15.915" class="progress-ring-bg"/>
+                    <circle cx="18" cy="18" r="15.915" class="progress-ring-fill" id="food-ring"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="category-count" id="food-count">12 purchases</div>
+            </div>
+
+            <div class="category-card" id="apparel-card">
+              <div class="category-header">
+                <i class="fas fa-tshirt"></i>
+                <h4>Apparel</h4>
+              </div>
+              <div class="category-score">
+                <div class="score-value" id="apparel-score">65</div>
+                <div class="score-out">/ 100</div>
+              </div>
+              <div class="category-progress">
+                <div class="progress-ring">
+                  <svg viewBox="0 0 36 36">
+                    <circle cx="18" cy="18" r="15.915" class="progress-ring-bg"/>
+                    <circle cx="18" cy="18" r="15.915" class="progress-ring-fill" id="apparel-ring"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="category-count" id="apparel-count">8 purchases</div>
+            </div>
+
+            <div class="category-card" id="electronics-card">
+              <div class="category-header">
+                <i class="fas fa-laptop"></i>
+                <h4>Electronics</h4>
+              </div>
+              <div class="category-score">
+                <div class="score-value" id="electronics-score">82</div>
+                <div class="score-out">/ 100</div>
+              </div>
+              <div class="category-progress">
+                <div class="progress-ring">
+                  <svg viewBox="0 0 36 36">
+                    <circle cx="18" cy="18" r="15.915" class="progress-ring-bg"/>
+                    <circle cx="18" cy="18" r="15.915" class="progress-ring-fill" id="electronics-ring"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="category-count" id="electronics-count">3 purchases</div>
+            </div>
+
+            <div class="category-card" id="home-card">
+              <div class="category-header">
+                <i class="fas fa-home"></i>
+                <h4>Home & Garden</h4>
+              </div>
+              <div class="category-score">
+                <div class="score-value" id="home-score">80</div>
+                <div class="score-out">/ 100</div>
+              </div>
+              <div class="category-progress">
+                <div class="progress-ring">
+                  <svg viewBox="0 0 36 36">
+                    <circle cx="18" cy="18" r="15.915" class="progress-ring-bg"/>
+                    <circle cx="18" cy="18" r="15.915" class="progress-ring-fill" id="home-ring"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="category-count" id="home-count">5 purchases</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tips & Recommendations -->
+        <div class="tips-section">
+          <h3>Personalized Tips</h3>
+          <div class="tips-container" id="tips-container">
+            <div class="tip-card">
+              <div class="tip-icon"><i class="fas fa-lightbulb"></i></div>
+              <div class="tip-content">
+                <h4>Boost Your Apparel Score</h4>
+                <p>Consider shopping from sustainable brands that use organic materials and ethical manufacturing.</p>
+                <a href="#" class="tip-action">Learn More <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Log Purchase Tab -->
+      <section class="tab-content" id="log-purchase">
+        <div class="form-card">
+          <h2>Log a Purchase</h2>
+          <form id="purchase-form">
+            <div class="form-group">
+              <label>Category *</label>
+              <div class="category-select">
+                <button type="button" class="category-btn" data-category="food">
+                  <i class="fas fa-apple-alt"></i>
+                  <span>Food</span>
+                </button>
+                <button type="button" class="category-btn" data-category="apparel">
+                  <i class="fas fa-tshirt"></i>
+                  <span>Apparel</span>
+                </button>
+                <button type="button" class="category-btn" data-category="electronics">
+                  <i class="fas fa-laptop"></i>
+                  <span>Electronics</span>
+                </button>
+                <button type="button" class="category-btn" data-category="home">
+                  <i class="fas fa-home"></i>
+                  <span>Home</span>
+                </button>
+              </div>
+              <input type="hidden" id="selected-category" required>
+            </div>
+
+            <div class="form-group">
+              <label for="product-name">Product Name *</label>
+              <input type="text" id="product-name" placeholder="e.g., Organic Coffee Beans" required>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="amount-spent">Amount Spent ($) *</label>
+                <input type="number" id="amount-spent" placeholder="0.00" min="0" step="0.01" required>
+              </div>
+
+              <div class="form-group">
+                <label for="product-brand">Brand / Store</label>
+                <input type="text" id="product-brand" placeholder="e.g., Whole Foods">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Eco-Friendliness *</label>
+              <div class="eco-rating">
+                <input type="hidden" id="eco-score" required>
+                <div class="rating-stars">
+                  <button type="button" class="rating-btn" data-rating="1">
+                    <i class="fas fa-leaf"></i>
+                  </button>
+                  <button type="button" class="rating-btn" data-rating="2">
+                    <i class="fas fa-leaf"></i>
+                    <i class="fas fa-leaf"></i>
+                  </button>
+                  <button type="button" class="rating-btn" data-rating="3">
+                    <i class="fas fa-leaf"></i>
+                    <i class="fas fa-leaf"></i>
+                    <i class="fas fa-leaf"></i>
+                  </button>
+                  <button type="button" class="rating-btn" data-rating="4">
+                    <i class="fas fa-leaf"></i>
+                    <i class="fas fa-leaf"></i>
+                    <i class="fas fa-leaf"></i>
+                    <i class="fas fa-leaf"></i>
+                  </button>
+                  <button type="button" class="rating-btn" data-rating="5">
+                    <i class="fas fa-leaf"></i>
+                    <i class="fas fa-leaf"></i>
+                    <i class="fas fa-leaf"></i>
+                    <i class="fas fa-leaf"></i>
+                    <i class="fas fa-leaf"></i>
+                  </button>
+                </div>
+                <div class="rating-label" id="rating-label">Click to rate eco-friendliness</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="notes">Notes (Optional)</label>
+              <textarea id="notes" placeholder="e.g., Purchased plastic-free packaging version..." rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>
+                <input type="checkbox" id="recyclable-packaging">
+                <span>Recyclable/Compostable Packaging</span>
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-check"></i> Log Purchase
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Analytics Tab -->
+      <section class="tab-content" id="analytics">
+        <div class="analytics-header">
+          <h2>Monthly Analytics</h2>
+          <div class="period-selector">
+            <button class="period-btn active" data-period="month">This Month</button>
+            <button class="period-btn" data-period="6months">6 Months</button>
+            <button class="period-btn" data-period="year">This Year</button>
+          </div>
+        </div>
+
+        <div class="charts-grid">
+          <div class="chart-card">
+            <h3>Score Trend</h3>
+            <div class="chart-container">
+              <canvas id="score-trend-chart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <h3>Category Distribution</h3>
+            <div class="chart-container">
+              <canvas id="category-chart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <h3>Spending vs Impact</h3>
+            <div class="chart-container">
+              <canvas id="spending-impact-chart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <h3>Eco-Friendly Purchases</h3>
+            <div class="chart-container">
+              <canvas id="eco-purchases-chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Purchases -->
+        <div class="recent-purchases">
+          <h3>Recent Purchases</h3>
+          <div class="purchases-list" id="purchases-list">
+            <div class="no-data">
+              <i class="fas fa-shopping-bag"></i>
+              <p>No purchases logged yet</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Badges Tab -->
+      <section class="tab-content" id="badges">
+        <div class="badges-header">
+          <h2>Achievements & Badges</h2>
+          <div class="badge-stats">
+            <div class="badge-stat">
+              <div class="stat-value" id="earned-badges">0</div>
+              <div class="stat-label">Badges Earned</div>
+            </div>
+            <div class="badge-stat">
+              <div class="stat-value" id="total-points">0</div>
+              <div class="stat-label">Total Points</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="badges-container" id="badges-container">
+          <!-- Dynamic badges will be inserted here -->
+        </div>
+
+        <!-- Goals Section -->
+        <div class="goals-section">
+          <h3>Your Goals</h3>
+          <div class="goals-list" id="goals-list">
+            <!-- Dynamic goals will be inserted here -->
+          </div>
+          <button class="btn btn-secondary" id="add-goal-btn">
+            <i class="fas fa-plus"></i> Set New Goal
+          </button>
+        </div>
+      </section>
+
+      <!-- Leaderboard Tab -->
+      <section class="tab-content" id="leaderboard">
+        <div class="leaderboard-header">
+          <h2>Neighborhood Leaderboard</h2>
+          <div class="leaderboard-filters">
+            <button class="filter-btn active" data-filter="score">Top Eco Scores</button>
+            <button class="filter-btn" data-filter="savings">Most Savings</button>
+            <button class="filter-btn" data-filter="streak">Longest Streak</button>
+          </div>
+        </div>
+
+        <div class="leaderboard-table">
+          <div class="leaderboard-header-row">
+            <div class="rank-col">#</div>
+            <div class="name-col">Member</div>
+            <div class="score-col">Score</div>
+            <div class="badge-col">Badges</div>
+            <div class="value-col">Value</div>
+          </div>
+          <div id="leaderboard-body"></div>
+        </div>
+
+        <!-- Your Rank -->
+        <div class="your-rank">
+          <h3>Your Ranking</h3>
+          <div class="rank-card">
+            <div class="rank-badge">
+              <span id="your-rank">--</span>
+            </div>
+            <div class="rank-info">
+              <div class="rank-name" id="rank-name">You</div>
+              <div class="rank-score">
+                <span id="rank-score">0</span> Eco Score
+              </div>
+              <div class="rank-message" id="rank-message">Keep shopping eco-friendly to climb the ranks!</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Bottom Navigation (Mobile) -->
+    <nav class="bottom-nav">
+      <button class="bottom-nav-btn active" data-tab="dashboard">
+        <i class="fas fa-chart-line"></i>
+      </button>
+      <button class="bottom-nav-btn" data-tab="log-purchase">
+        <i class="fas fa-plus-circle"></i>
+      </button>
+      <button class="bottom-nav-btn" data-tab="analytics">
+        <i class="fas fa-chart-bar"></i>
+      </button>
+      <button class="bottom-nav-btn" data-tab="badges">
+        <i class="fas fa-medal"></i>
+      </button>
+      <button class="bottom-nav-btn" data-tab="leaderboard">
+        <i class="fas fa-crown"></i>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Goal Modal -->
+  <div class="modal" id="goal-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Set a New Goal</h2>
+        <button class="close-btn" id="goal-close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <form id="goal-form">
+        <div class="form-group">
+          <label for="goal-name">Goal Name *</label>
+          <input type="text" id="goal-name" placeholder="e.g., Reach 90 Eco Score" required>
+        </div>
+
+        <div class="form-group">
+          <label for="goal-type">Goal Type</label>
+          <select id="goal-type" required>
+            <option value="score">Eco Score Target</option>
+            <option value="spending">Spending Limit</option>
+            <option value="streak">Streak Days</option>
+            <option value="purchases">Eco Purchases</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="goal-target">Target Value</label>
+          <input type="number" id="goal-target" placeholder="e.g., 90" required>
+        </div>
+
+        <div class="form-group">
+          <label for="goal-deadline">Deadline</label>
+          <input type="date" id="goal-deadline">
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" id="goal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Goal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal" id="settings-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Settings</h2>
+        <button class="close-btn" id="settings-close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="settings-content">
+        <div class="setting-item">
+          <label>
+            <input type="checkbox" id="notifications-toggle" checked>
+            <span>Enable Notifications</span>
+          </label>
+        </div>
+        <div class="setting-item">
+          <label>
+            <input type="checkbox" id="tips-toggle" checked>
+            <span>Show Personalized Tips</span>
+          </label>
+        </div>
+        <div class="setting-item">
+          <label>
+            <input type="checkbox" id="leaderboard-toggle" checked>
+            <span>Show on Leaderboard</span>
+          </label>
+        </div>
+        <div class="setting-divider"></div>
+        <div class="setting-item">
+          <label for="neighborhood">Your Neighborhood</label>
+          <input type="text" id="neighborhood" placeholder="e.g., San Francisco, CA">
+        </div>
+        <div class="setting-actions">
+          <button type="button" class="btn btn-secondary" id="settings-cancel">Close</button>
+          <button type="button" class="btn btn-primary" id="settings-save">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div class="toast" id="toast">
+    <div class="toast-content">
+      <i class="toast-icon"></i>
+      <span class="toast-message"></span>
+    </div>
+  </div>
+
+  <script src="../js/eco-shopping-scorecard.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ripple Effect</title>
+<style>
+body{
+ margin:0;height:100vh;
+ background:linear-gradient(#03045e,#0077b6);
+ color:white;font-family:sans-serif;
+ display:flex;flex-direction:column;align-items:center;
+ overflow:hidden;
+}
+h1{margin-top:30px;font-size:3rem}
+.ripple{
+ position:absolute;border-radius:50%;
+ background:rgba(255,255,255,.4);
+ animation:rip 1s ease-out;
+}
+@keyframes rip{
+ from{width:0;height:0;opacity:1}
+ to{width:300px;height:300px;opacity:0}
+}
+.msg{margin-top:60px}
+</style>
+</head>
+<body onclick="drop(event)">
+
+<h1>🌊 Ripple Effect</h1>
+<div class="msg" id="msg"></div>
+
+<script>
+const texts=[
+"Every action creates a ripple.",
+"Pollution travels far beyond sight.",
+"Oceans connect all life.",
+"Protect water, protect life."
+];
+let i=0;
+function drop(e){
+ if(i>=texts.length) return;
+ const r=document.createElement("div");
+ r.className="ripple";
+ r.style.left=e.clientX+"px";
+ r.style.top=e.clientY+"px";
+ document.body.appendChild(r);
+ msg.innerText=texts[i++];
+ setTimeout(()=>r.remove(),1000);
+}
+</script>
+</body>
+</html>

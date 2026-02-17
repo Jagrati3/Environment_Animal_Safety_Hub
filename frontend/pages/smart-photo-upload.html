@@ -24,12 +24,15 @@
 </head>
 
 <body>
-    <!-- Theme Toggle -->
+    <!-- Navbar -->
+  <div id="navbar-container">
+  </div>
+    <!-- Theme Toggle
     <div class="theme-toggle">
         <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">
             <i class="fas fa-moon"></i>
         </button>
-    </div>
+    </div> -->
 
     <div id="cursor-container"></div>
 
@@ -327,6 +330,28 @@
     <script src="../js/theme-toggle.js"></script>
     <script src="../js/pages/smart-photo-upload.js"></script>
     <script src="../js/particle-animation.js"></script>
+    <script>
+    // Load navbar
+    fetch('../components/navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+        
+        // Initialize navbar functionality
+        const script = document.createElement('script');
+        script.src = '../js/components/navbar.js';
+        document.body.appendChild(script);
+      });
+  </script>
+  <script>
+  // Load footer
+  fetch('../components/footer.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('footer-container').innerHTML = data;
+    });
+</script>
+
 </body>
 
 </html>

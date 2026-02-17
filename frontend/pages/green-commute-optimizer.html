@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Commute Optimizer - Save Carbon, Time & Money</title>
+    <link rel="stylesheet" href="../css/green-commute-optimizer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="commute-container">
+        <!-- Header -->
+        <header class="gc-header">
+            <div class="header-content">
+                <div class="header-title">
+                    <i class="fas fa-leaf"></i>
+                    <h1>Green Commute Optimizer</h1>
+                </div>
+                <p class="header-subtitle">Compare, optimize, and track your sustainable commute options</p>
+            </div>
+            <nav class="nav-tabs">
+                <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
+                <button class="nav-tab" data-tab="planner">Trip Planner</button>
+                <button class="nav-tab" data-tab="logger">Trip Logger</button>
+                <button class="nav-tab" data-tab="analytics">Analytics</button>
+                <button class="nav-tab" data-tab="leaderboard">Leaderboard</button>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="gc-main">
+            <!-- Dashboard Tab -->
+            <div class="tab-content active" id="dashboard">
+                <div class="dashboard-grid">
+                    <!-- Weekly Stats -->
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <div class="stat-details">
+                                <span class="stat-label">CO₂ Saved This Week</span>
+                                <span class="stat-value" id="weekCO2Saved">0 kg</span>
+                                <span class="stat-trend" id="co2Trend">↓ 15% vs last week</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div class="stat-details">
+                                <span class="stat-label">Money Saved This Week</span>
+                                <span class="stat-value" id="moneySaved">$0</span>
+                                <span class="stat-trend" id="moneyTrend">↓ 20% vs last week</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-road"></i>
+                            </div>
+                            <div class="stat-details">
+                                <span class="stat-label">Trips Logged</span>
+                                <span class="stat-value" id="tripsLogged">0</span>
+                                <span class="stat-trend" id="tripsTrend">3 today</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="stat-details">
+                                <span class="stat-label">Eco Score</span>
+                                <span class="stat-value" id="ecoScore">0</span>
+                                <span class="stat-trend" id="scoreRank">Excellent</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Best Route Recommendation -->
+                    <div class="recommendation-card">
+                        <div class="recommendation-header">
+                            <h2>Today's Best Route</h2>
+                            <span class="weather-badge" id="weatherBadge">
+                                <i class="fas fa-cloud-sun"></i> 68°F
+                            </span>
+                        </div>
+                        
+                        <div class="routes-comparison" id="todayRoutes">
+                            <!-- Populated by JavaScript -->
+                        </div>
+
+                        <div class="recommendation-details" id="recommendedDetails">
+                            <!-- Route details populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Weekly Progress -->
+                    <div class="progress-card">
+                        <h2>Weekly Sustainability Goals</h2>
+                        <div class="goal-item">
+                            <div class="goal-header">
+                                <span class="goal-name">Public Transit Trips</span>
+                                <span class="goal-count" id="transitCount">2/7</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="transitBar" style="width: 28%"></div>
+                            </div>
+                        </div>
+
+                        <div class="goal-item">
+                            <div class="goal-header">
+                                <span class="goal-name">Bike/Walk Trips</span>
+                                <span class="goal-count" id="bikeCount">1/7</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="bikeBar" style="width: 14%"></div>
+                            </div>
+                        </div>
+
+                        <div class="goal-item">
+                            <div class="goal-header">
+                                <span class="goal-name">Carpooling Trips</span>
+                                <span class="goal-count" id="carpoolCount">1/3</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="carpoolBar" style="width: 33%"></div>
+                            </div>
+                        </div>
+
+                        <div class="goal-item">
+                            <div class="goal-header">
+                                <span class="goal-name">Avoid Solo Drive</span>
+                                <span class="goal-count" id="soloCount">1/2</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="soloBar" style="width: 50%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Carbon Impact Chart -->
+                    <div class="chart-card">
+                        <h2>Your Commute Impact</h2>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <span class="legend-color car"></span> Car Alone
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color transit"></span> Public Transit
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color bike"></span> Bike/Walk
+                            </div>
+                        </div>
+                        <div class="simple-chart">
+                            <div class="chart-bar">
+                                <div class="bar-segment car" style="width: 70%">
+                                    <span class="bar-label">14 kg CO₂</span>
+                                </div>
+                                <div class="bar-segment transit" style="width: 20%">
+                                    <span class="bar-label">4 kg CO₂</span>
+                                </div>
+                                <div class="bar-segment bike" style="width: 10%">
+                                    <span class="bar-label">0 kg CO₂</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Planner Tab -->
+            <div class="tab-content" id="planner">
+                <div class="planner-container">
+                    <div class="planner-setup">
+                        <h2>Set Your Commute Details</h2>
+                        <form id="plannerForm" class="planner-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="startLocation">Starting Location</label>
+                                    <input type="text" id="startLocation" placeholder="e.g., Home, 123 Main St" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="endLocation">Destination</label>
+                                    <input type="text" id="endLocation" placeholder="e.g., Work, 456 Oak Ave" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="commuteDays">Days Per Week</label>
+                                    <select id="commuteDays" required>
+                                        <option value="">Select frequency</option>
+                                        <option value="1">1 day/week</option>
+                                        <option value="2">2 days/week</option>
+                                        <option value="3">3 days/week</option>
+                                        <option value="4">4 days/week</option>
+                                        <option value="5">5 days/week</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="commuteDist">Distance (miles)</label>
+                                    <input type="number" id="commuteDist" placeholder="e.g., 15" step="0.1" required>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="submit-btn">
+                                <i class="fas fa-check"></i> Save Routine
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="route-comparison">
+                        <h2>Compare Your Commute Options</h2>
+                        <div class="comparison-table">
+                            <div class="table-header">
+                                <div class="table-cell">Mode</div>
+                                <div class="table-cell">Time</div>
+                                <div class="table-cell">Cost</div>
+                                <div class="table-cell">CO₂/Trip</div>
+                                <div class="table-cell">Reliability</div>
+                                <div class="table-cell">Exposure</div>
+                                <div class="table-cell">Score</div>
+                            </div>
+
+                            <div class="comparison-modes" id="comparisonModes">
+                                <!-- Populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <div class="mode-details" id="modeDetails">
+                            <!-- Detailed info for selected mode -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logger Tab -->
+            <div class="tab-content" id="logger">
+                <div class="logger-container">
+                    <div class="log-form-card">
+                        <h2>Log Your Commute</h2>
+                        <form id="tripLoggerForm" class="trip-form">
+                            <div class="form-group">
+                                <label for="tripDate">Date</label>
+                                <input type="date" id="tripDate" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tripMode">Transportation Mode</label>
+                                <select id="tripMode" required>
+                                    <option value="">Select mode</option>
+                                    <option value="car-alone">🚗 Driving Alone</option>
+                                    <option value="carpool">🚗 Carpooling (2-3 people)</option>
+                                    <option value="carpool-4">🚗 Carpooling (4+ people)</option>
+                                    <option value="bus">🚌 Bus/Public Transit</option>
+                                    <option value="train">🚆 Train/Light Rail</option>
+                                    <option value="bike">🚴 Bike</option>
+                                    <option value="scooter">🛴 Electric Scooter</option>
+                                    <option value="walk">🚶 Walk</option>
+                                    <option value="hybrid">🔄 Multi-mode (hybrid)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="tripTime">Time Taken (minutes)</label>
+                                    <input type="number" id="tripTime" placeholder="e.g., 30" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tripDistance">Distance (miles)</label>
+                                    <input type="number" id="tripDistance" placeholder="e.g., 15" step="0.1" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tripCost">Cost ($)</label>
+                                <input type="number" id="tripCost" placeholder="e.g., 5.50" step="0.01">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tripNotes">Notes (Optional)</label>
+                                <textarea id="tripNotes" placeholder="Weather, delays, experience..."></textarea>
+                            </div>
+
+                            <button type="submit" class="submit-btn">
+                                <i class="fas fa-plus"></i> Log Trip
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="recent-trips">
+                        <h2>Recent Trips</h2>
+                        <div class="trips-list" id="tripsList">
+                            <p class="empty-state">No trips logged yet. Start tracking your commutes!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div class="tab-content" id="analytics">
+                <div class="analytics-container">
+                    <div class="analytics-header">
+                        <h2>Your Commute Analytics</h2>
+                        <div class="time-filters">
+                            <button class="time-filter active" data-period="week">This Week</button>
+                            <button class="time-filter" data-period="month">This Month</button>
+                            <button class="time-filter" data-period="year">This Year</button>
+                        </div>
+                    </div>
+
+                    <div class="analytics-grid">
+                        <!-- CO2 Comparison -->
+                        <div class="analytics-card">
+                            <h3>Weekly CO₂ Comparison</h3>
+                            <div id="co2Chart" class="analytics-chart">
+                                <!-- Populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Mode Distribution -->
+                        <div class="analytics-card">
+                            <h3>Transportation Mode Distribution</h3>
+                            <div class="mode-breakdown" id="modeBreakdown">
+                                <!-- Populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Cost vs Carbon -->
+                        <div class="analytics-card">
+                            <h3>Cost vs Carbon Impact</h3>
+                            <div class="metrics-table">
+                                <div class="metric-row">
+                                    <span class="metric-label">Average Trip Cost</span>
+                                    <span class="metric-value" id="avgCost">$5.20</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="metric-label">Average CO₂/Trip</span>
+                                    <span class="metric-value" id="avgCO2">2.1 kg</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="metric-label">Total Distance</span>
+                                    <span class="metric-value" id="totalDist">105 mi</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="metric-label">Total Cost</span>
+                                    <span class="metric-value" id="totalCost">$52.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Environmental Impact -->
+                        <div class="analytics-card">
+                            <h3>Environmental Impact</h3>
+                            <div class="impact-list">
+                                <div class="impact-item">
+                                    <span class="impact-icon">🌍</span>
+                                    <div class="impact-text">
+                                        <span class="impact-label">Trees Equivalent</span>
+                                        <span class="impact-value" id="treesEquiv">3 trees</span>
+                                    </div>
+                                </div>
+                                <div class="impact-item">
+                                    <span class="impact-icon">⚡</span>
+                                    <div class="impact-text">
+                                        <span class="impact-label">Energy Saved</span>
+                                        <span class="impact-value" id="energySaved">15 kWh</span>
+                                    </div>
+                                </div>
+                                <div class="impact-item">
+                                    <span class="impact-icon">💧</span>
+                                    <div class="impact-text">
+                                        <span class="impact-label">Water Conserved</span>
+                                        <span class="impact-value" id="waterSaved">20 gal</span>
+                                    </div>
+                                </div>
+                                <div class="impact-item">
+                                    <span class="impact-icon">☁️</span>
+                                    <div class="impact-text">
+                                        <span class="impact-label">Emissions Avoided</span>
+                                        <span class="impact-value" id="emissionsAvoided">15 kg CO₂</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Health Benefits -->
+                        <div class="analytics-card">
+                            <h3>Health Benefits</h3>
+                            <div class="health-metrics">
+                                <div class="health-item">
+                                    <span class="health-icon">❤️</span>
+                                    <span class="health-label">Active Transportation</span>
+                                    <span class="health-value" id="activeTime">2 hours</span>
+                                </div>
+                                <div class="health-item">
+                                    <span class="health-icon">🏃</span>
+                                    <span class="health-label">Calories Burned</span>
+                                    <span class="health-value" id="caloriesBurned">450 cal</span>
+                                </div>
+                                <div class="health-item">
+                                    <span class="health-icon">😌</span>
+                                    <span class="health-label">Air Quality Score</span>
+                                    <span class="health-value" id="airQuality">Good</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Trends -->
+                        <div class="analytics-card">
+                            <h3>Trends & Insights</h3>
+                            <div class="insights-list">
+                                <div class="insight-item success">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>You've reduced CO₂ emissions by 40% this month!</span>
+                                </div>
+                                <div class="insight-item">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <span>Try biking on Mondays - weather forecast looks perfect</span>
+                                </div>
+                                <div class="insight-item info">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>New bus route available - 5 min faster to your work!</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leaderboard Tab -->
+            <div class="tab-content" id="leaderboard">
+                <div class="leaderboard-container">
+                    <div class="leaderboard-header">
+                        <h2>Neighborhood Champions</h2>
+                        <p>Most sustainable commuters in your area</p>
+                        <div class="leaderboard-filters">
+                            <select id="leaderboardPeriod">
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                                <option value="year">This Year</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="leaderboard-content">
+                        <div class="your-rank">
+                            <h3>Your Rank</h3>
+                            <div class="rank-card">
+                                <div class="rank-number" id="yourRank">--</div>
+                                <div class="rank-info">
+                                    <span class="rank-name" id="yourName">You</span>
+                                    <span class="rank-score" id="yourLeaderboardScore">0 points</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="top-commuters">
+                            <h3>Top Commuters</h3>
+                            <div class="leaderboard-list" id="leaderboardList">
+                                <!-- Populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="leaderboard-badges">
+                        <h3>Achievement Badges</h3>
+                        <div class="badges-grid" id="badgesGrid">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Setup Modal -->
+    <div class="modal" id="setupModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Welcome to Green Commute Optimizer</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Let's set up your commute profile to get personalized recommendations.</p>
+                <form id="setupForm" class="setup-form">
+                    <div class="form-group">
+                        <label for="setupStart">Starting Point</label>
+                        <input type="text" id="setupStart" placeholder="Your home or starting location" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="setupEnd">Destination</label>
+                        <input type="text" id="setupEnd" placeholder="Your work or main destination" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="setupDist">Distance (miles)</label>
+                        <input type="number" id="setupDist" placeholder="Commute distance" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="setupDays">Commute Days Per Week</label>
+                        <input type="number" id="setupDays" min="1" max="7" value="5" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Get Started</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weather Alert -->
+    <div class="weather-alert" id="weatherAlert" style="display: none;">
+        <div class="alert-content">
+            <i class="fas fa-cloud-rain"></i>
+            <span id="weatherMessage">Rain expected today - consider alternatives</span>
+            <button class="alert-close" onclick="this.parentElement.parentElement.style.display='none'">×</button>
+        </div>
+    </div>
+
+<script src="../js/green-commute-optimizer.js"></script>
+</body>
+</html>

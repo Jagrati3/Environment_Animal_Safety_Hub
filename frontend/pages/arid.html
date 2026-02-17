@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arid & Semi-Arid Ecosystems | EcoLife</title>
+    <meta name="description" content="Explore deserts, xeric shrublands, and other arid ecosystems - their unique biodiversity, adaptations, and conservation challenges.">
+    <link rel="icon" type="image/png" href="../assets/images/others/FAVICON.png">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/components/navbar.css">
+    <link rel="stylesheet" href="../css/components/footer.css">
+    <link rel="stylesheet" href="ecosystems.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Roboto+Slab:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Leaflet Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+
+<body>
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <div id="navbar-container"></div>
+
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Hero Section -->
+    <section class="ecosystem-hero" id="aridHero">
+        <div class="hero-particles" id="heroParticles"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fa-solid fa-sun"></i>
+                <span>Arid Ecosystems</span>
+            </div>
+            <h1 class="hero-title">
+                Deserts & <span class="gradient-text">Xeric Shrublands</span>
+            </h1>
+            <p class="hero-subtitle">
+                Discover the surprising biodiversity and remarkable adaptations in Earth's driest ecosystems, where life thrives against all odds
+            </p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <i class="fa-solid fa-globe-americas"></i>
+                    <div class="stat-content">
+                        <span class="stat-number" data-count="33">0</span>
+                        <span class="stat-label">% of Earth's Land</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fa-solid fa-droplet-slash"></i>
+                    <div class="stat-content">
+                        <span class="stat-number" data-count="250">0</span>
+                        <span class="stat-label">mm Annual Rainfall</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fa-solid fa-seedling"></i>
+                    <div class="stat-content">
+                        <span class="stat-number" data-count="10">0</span>
+                        <span class="stat-label">K+ Species</span>
+                    </div>
+                </div>
+            </div>
+            <button class="cta-button" id="exploreArid">
+                <i class="fa-solid fa-cactus"></i>
+                <span>Explore Adaptations</span>
+                <div class="button-glow"></div>
+            </button>
+        </div>
+        <div class="hero-visual">
+            <div class="desert-landscape">
+                <div class="landscape-layer sun">
+                    <div class="sun-disc">
+                        <i class="fa-solid fa-sun"></i>
+                    </div>
+                </div>
+                <div class="landscape-layer mountains">
+                    <div class="mountain"></div>
+                    <div class="mountain"></div>
+                    <div class="mountain"></div>
+                </div>
+                <div class="landscape-layer desert">
+                    <div class="cactus">
+                        <div class="cactus-body">
+                            <div class="cactus-arm"></div>
+                        </div>
+                    </div>
+                    <div class="cactus">
+                        <div class="cactus-body">
+                            <div class="cactus-arm left"></div>
+                            <div class="cactus-arm right"></div>
+                        </div>
+                    </div>
+                    <div class="rock"></div>
+                    <div class="rock"></div>
+                </div>
+                <div class="landscape-layer animals">
+                    <div class="animal lizard">
+                        <i class="fa-solid fa-lizard"></i>
+                    </div>
+                    <div class="animal camel">
+                        <i class="fa-solid fa-camel"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ecosystem Overview -->
+    <section class="overview-section" id="overviewSection">
+        <div class="section-container">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-info-circle"></i> Arid Ecosystem Overview</h2>
+                <p>Understanding the unique characteristics and global distribution of desert biomes</p>
+            </div>
+
+            <div class="overview-content">
+                <div class="definition-card" data-aos="fade-right">
+                    <div class="definition-header">
+                        <div class="definition-icon">
+                            <i class="fa-solid fa-temperature-high"></i>
+                        </div>
+                        <h3>What Makes an Ecosystem Arid?</h3>
+                        <div class="definition-principle">Low Precipitation</div>
+                    </div>
+                    <div class="definition-content">
+                        <blockquote>
+                            "Arid ecosystems are defined by receiving less than 250mm of annual precipitation, creating environments where evaporation exceeds rainfall and specialized adaptations are essential for survival."
+                            <cite>- UNESCO Arid Zones Program</cite>
+                        </blockquote>
+                        <div class="classification-grid">
+                            <div class="classification-card">
+                                <div class="classification-icon">
+                                    <i class="fa-solid fa-sun"></i>
+                                </div>
+                                <h4>Hyper-Arid</h4>
+                                <p>Extremely dry deserts receiving &lt;100mm annual rainfall</p>
+                                <div class="classification-examples">
+                                    <span class="example">Sahara</span>
+                                    <span class="example">Atacama</span>
+                                    <span class="example">Arabian</span>
+                                </div>
+                            </div>
+                            <div class="classification-card">
+                                <div class="classification-icon">
+                                    <i class="fa-solid fa-cloud-sun"></i>
+                                </div>
+                                <h4>Arid</h4>
+                                <p>True deserts with 100-250mm annual rainfall</p>
+                                <div class="classification-examples">
+                                    <span class="example">Sonoran</span>
+                                    <span class="example">Mojave</span>
+                                    <span class="example">Great Sandy</span>
+                                </div>
+                            </div>
+                            <div class="classification-card">
+                                <div class="classification-icon">
+                                    <i class="fa-solid fa-cloud"></i>
+                                </div>
+                                <h4>Semi-Arid</h4>
+                                <p>Drylands with 250-500mm annual rainfall</p>
+                                <div class="classification-examples">
+                                    <span class="example">Sahel</span>
+                                    <span class="example">Chihuahuan</span>
+                                    <span class="example">Great Basin</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="distribution-map" data-aos="fade-left">
+                    <div class="map-card">
+                        <h3><i class="fa-solid fa-map"></i> Global Distribution</h3>
+                        <div class="map-visual" id="aridDistributionMap">
+                            <div class="map-placeholder">
+                                <div class="placeholder-content">
+                                    <i class="fa-solid fa-earth-americas"></i>
+                                    <h4>Arid Regions Map</h4>
+                                    <p>Loading global arid ecosystem distribution...</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="distribution-stats">
+                            <div class="distribution-stat">
+                                <span class="value">33%</span>
+                                <span class="label">of Earth's land surface</span>
+                            </div>
+                            <div class="distribution-stat">
+                                <span class="value">1 billion</span>
+                                <span class="label">people depend on arid lands</span>
+                            </div>
+                            <div class="distribution-stat">
+                                <span class="value">2x faster</span>
+                                <span class="label">warming than global average</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-characteristics">
+                <h3><i class="fa-solid fa-list-check"></i> Key Characteristics</h3>
+                <div class="characteristics-grid">
+                    <div class="characteristic-card" data-aos="zoom-in">
+                        <div class="characteristic-icon">
+                            <i class="fa-solid fa-droplet-slash"></i>
+                        </div>
+                        <h4>Water Scarcity</h4>
+                        <p>Annual precipitation below 250mm, often with high evaporation rates</p>
+                        <div class="characteristic-metric">
+                            <span class="metric">250mm max</span>
+                            <span class="detail">annual rainfall</span>
+                        </div>
+                    </div>
+                    <div class="characteristic-card" data-aos="zoom-in" data-aos-delay="100">
+                        <div class="characteristic-icon">
+                            <i class="fa-solid fa-temperature-high"></i>
+                        </div>
+                        <h4>Temperature Extremes</h4>
+                        <p>Daily temperature fluctuations can exceed 40°C in some deserts</p>
+                        <div class="characteristic-metric">
+                            <span class="metric">40°C+ swing</span>
+                            <span class="detail">daily variation</span>
+                        </div>
+                    </div>
+                    <div class="characteristic-card" data-aos="zoom-in" data-aos-delay="200">
+                        <div class="characteristic-icon">
+                            <i class="fa-solid fa-wind"></i>
+                        </div>
+                        <h4>Soil Conditions</h4>
+                        <p>Minimal organic matter, high mineral content, and wind erosion</p>
+                        <div class="characteristic-metric">
+                            <span class="metric">&lt;1% organic</span>
+                            <span class="detail">soil composition</span>
+                        </div>
+                    </div>
+                    <div class="characteristic-card" data-aos="zoom-in" data-aos-delay="300">
+                        <div class="characteristic-icon">
+                            <i class="fa-solid fa-leaf"></i>
+                        </div>
+                        <h4>Sparse Vegetation</h4>
+                        <p>Low plant density with specialized adaptations for water conservation</p>
+                        <div class="characteristic-metric">
+                            <span class="metric">15% cover</span>
+                            <span class="detail">typical vegetation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Desert Types Section -->
+    <section class="desert-types-section" id="desertTypes">
+        <div class="section-container">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-mountain-sun"></i> Types of Deserts</h2>
+                <p>Exploring the diversity of desert formations across the planet</p>
+            </div>
+
+            <div class="desert-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="subtropical">
+                        <i class="fa-solid fa-sun"></i>
+                        Subtropical
+                    </button>
+                    <button class="tab-btn" data-tab="rain-shadow">
+                        <i class="fa-solid fa-mountain"></i>
+                        Rain Shadow
+                    </button>
+                    <button class="tab-btn" data-tab="coastal">
+                        <i class="fa-solid fa-water"></i>
+                        Coastal
+                    </button>
+                    <button class="tab-btn" data-tab="polar">
+                        <i class="fa-solid fa-snowflake"></i>
+                        Polar
+                    </button>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="subtropical">
+                        <div class="desert-type">
+                            <div class="type-visual">
+                                <div class="climate-diagram">
+                                    <div class="diagram-title">Subtropical Desert Climate</div>
+                                    <div class="temperature-chart">
+                                        <div class="chart-bar" style="height: 100%; background: #ff6b6b;">
+                                            <span class="bar-label">40°C</span>
+                                        </div>
+                                        <div class="chart-bar" style="height: 90%; background: #ff8e53;">
+                                            <span class="bar-label">35°C</span>
+                                        </div>
+                                        <div class="chart-bar" style="height: 80%; background: #ffb347;">
+                                            <span class="bar-label">30°C</span>
+                                        </div>
+                                        <div class="chart-bar" style="height: 70%; background: #ffd166;">
+                                            <span class="bar-label">25°C</span>
+                                        </div>
+                                        <div class="chart-bar" style="height: 60%; background: #06d6a0;">
+                                            <span class="bar-label">20°C</span>
+                                        </div>
+                                        <div class="chart-bar" style="height: 50%; background: #118ab2;">
+                                            <span class="bar-label">15°C</span>
+                                        </div>
+                                    </div>
+                                    <div class="precipitation-chart">
+                                        <div class="chart-bar" style="height: 10%; background: #4cc9f0;">
+                                            <span class="bar-label">10mm</span>
+                                        </div>
+                                        <div class="chart-bar" style="height: 5%; background: #4cc9f0;">
+                                            <span class="bar-label">5mm</span>
+                                        </div>
+                                        <div class="chart-bar" style="height: 2%; background: #4cc9f0;">
+                                            <span class="bar-label">2mm</span>
+                                        </div>
+                                        <div class="chart-bar" style="height: 15%; background: #4cc9f0;">
+                                            <span class="bar-label">15mm</span>
+                                        </div>
+                                        <div class="chart-bar" style="height: 3%; background: #4cc9f0;">
+                                            <span class="bar-label">3mm</span>
+                                        </div>
+                                        <div class="chart-bar" style="height: 1%; background: #4cc9f0;">
+                                            <span class="bar-label">1mm</span>
+                                        </div>
+                                    </div>
+                                    <div class="chart-labels">
+                                        <span>Jan</span>
+                                        <span>Feb</span>
+                                        <span>Mar</span>
+                                        <span>Apr</span>
+                                        <span>May</span>
+                                        <span>Jun</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="type-content">
+                                <h3>Subtropical Deserts</h3>
+                                <p>Located near the Tropic of Cancer and Capricorn, these are the hottest and driest deserts on Earth, formed by persistent high-pressure systems that prevent cloud formation.</p>
+                                
+                                <div class="type-features">
+                                    <div class="feature">
+                                        <div class="feature-icon">
+                                            <i class="fa-solid fa-location-dot"></i>
+                                        </div>
+                                        <div class="feature-details">
+                                            <h5>Location</h5>
+                                            <p>20-30° latitude, both hemispheres</p>
+                                        </div>
+                                    </div>
+                                    <div class="feature">
+                                        <div class="feature-icon">
+                                            <i class="fa-solid fa-temperature-full"></i>
+                                        </div>
+                                        <div class="feature-details">
+                                            <h5>Temperature</h5>
+                                            <p>Average: 25-40°C, Extreme: up to 58°C</p>
+                                        </div>
+                                    </div>
+                                    <div class="feature">
+                                        <div class="feature-icon">
+                                            <i class="fa-solid fa-cloud-rain"></i>
+                                        </div>
+                                        <div class="feature-details">
+                                            <h5>Precipitation</h5>
+                                            <p>&lt;250mm/year, often less than 25mm</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="type-examples">
+                                    <h4><i class="fa-solid fa-landmark"></i> Famous Examples</h4>
+                                    <div class="examples-grid">
+                                        <div class="example-card">
+                                            <div class="example-image sahara"></div>
+                                            <div class="example-content">
+                                                <h5>Sahara Desert</h5>
+                                                <p>World's largest hot desert, covering 9.2 million km² across North Africa</p>
+                                                <div class="example-stats">
+                                                    <span class="stat">58°C record</span>
+                                                    <span class="stat">25mm/year</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="example-card">
+                                            <div class="example-image arabian"></div>
+                                            <div class="example-content">
+                                                <h5>Arabian Desert</h5>
+                                                <p>Rub' al Khali (Empty Quarter) contains the largest continuous sand desert</p>
+                                                <div class="example-stats">
+                                                    <span class="stat">2.3M km²</span>
+                                                    <span class="stat">50mm/year</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="example-card">
+                                            <div class="example-image australian"></div>
+                                            <div class="example-content">
+                                                <h5>Australian Deserts</h5>
+                                                <p>Great Sandy, Gibson, and Great Victoria deserts cover most of Australia</p>
+                                                <div class="example-stats">
+                                                    <span class="stat">70% continent</span>
+                                                    <span class="stat">150mm/year</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Additional tab panes would follow similar structure -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Adaptations Section -->
+    <section class="adaptations-section" id="adaptationsSection">
+        <div class="section-container">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-shield-alt"></i> Desert Adaptations</h2>
+                <p>Remarkable strategies that enable life to thrive in extreme dryness</p>
+            </div>
+
+            <div class="adaptations-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="plants">
+                        <i class="fa-solid fa-seedling"></i>
+                        Plant Adaptations
+                    </button>
+                    <button class="tab-btn" data-tab="animals">
+                        <i class="fa-solid fa-paw"></i>
+                        Animal Adaptations
+                    </button>
+                    <button class="tab-btn" data-tab="microbial">
+                        <i class="fa-solid fa-bacteria"></i>
+                        Microbial Life
+                    </button>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="plants">
+                        <div class="adaptation-content">
+                            <div class="adaptation-visual">
+                                <div class="plant-adaptations">
+                                    <div class="adaptation-type">
+                                        <div class="type-icon">
+                                            <i class="fa-solid fa-leaf"></i>
+                                        </div>
+                                        <h4>Xerophytes</h4>
+                                        <p>Plants with specialized water conservation features</p>
+                                        <div class="adaptation-examples">
+                                            <div class="example-item">
+                                                <div class="example-icon">
+                                                    <i class="fa-solid fa-cactus"></i>
+                                                </div>
+                                                <div class="example-details">
+                                                    <h5>Cacti</h5>
+                                                    <p>Succulent stems, spines instead of leaves, CAM photosynthesis</p>
+                                                </div>
+                                            </div>
+                                            <div class="example-item">
+                                                <div class="example-icon">
+                                                    <i class="fa-solid fa-tree"></i>
+                                                </div>
+                                                <div class="example-details">
+                                                    <h5>Mesquite</h5>
+                                                    <p>Deep taproots reaching groundwater, small leaves</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="adaptation-details">
+                                <h3>Plant Survival Strategies</h3>
+                                <p>Desert plants have evolved incredible adaptations to survive with minimal water and extreme temperatures.</p>
+                                
+                                <div class="strategy-grid">
+                                    <div class="strategy-card">
+                                        <div class="strategy-icon">
+                                            <i class="fa-solid fa-droplet"></i>
+                                        </div>
+                                        <h4>Water Storage</h4>
+                                        <p>Succulent tissues store water for dry periods</p>
+                                        <div class="strategy-metric">
+                                            <span class="metric">90% water</span>
+                                            <span class="detail">in stem tissue</span>
+                                        </div>
+                                    </div>
+                                    <div class="strategy-card">
+                                        <div class="strategy-icon">
+                                            <i class="fa-solid fa-sun"></i>
+                                        </div>
+                                        <h4>Reduced Leaves</h4>
+                                        <p>Small or absent leaves minimize water loss</p>
+                                        <div class="strategy-metric">
+                                            <span class="metric">95% less</span>
+                                            <span class="detail">surface area</span>
+                                        </div>
+                                    </div>
+                                    <div class="strategy-card">
+                                        <div class="strategy-icon">
+                                            <i class="fa-solid fa-root"></i>
+                                        </div>
+                                        <h4>Deep Roots</h4>
+                                        <p>Extensive root systems access deep groundwater</p>
+                                        <div class="strategy-metric">
+                                            <span class="metric">30m deep</span>
+                                            <span class="detail">taproot systems</span>
+                                        </div>
+                                    </div>
+                                    <div class="strategy-card">
+                                        <div class="strategy-icon">
+                                            <i class="fa-solid fa-clock"></i>
+                                        </div>
+                                        <h4>CAM Photosynthesis</h4>
+                                        <p>Open stomata at night to reduce water loss</p>
+                                        <div class="strategy-metric">
+                                            <span class="metric">80% less</span>
+                                            <span class="detail">water usage</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Additional adaptation tabs would follow -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Biodiversity Section -->
+    <section class="biodiversity-section" id="biodiversitySection">
+        <div class="section-container">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-dna"></i> Desert Biodiversity</h2>
+                <p>Discovering the surprisingly rich life in arid ecosystems</p>
+            </div>
+
+            <div class="biodiversity-content">
+                <div class="biodiversity-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-seedling"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value">10,000+</span>
+                            <span class="stat-label">Plant Species</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-paw"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value">2,500+</span>
+                            <span class="stat-label">Vertebrate Species</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-bug"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value">100,000+</span>
+                            <span class="stat-label">Invertebrate Species</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="species-showcase">
+                    <h3><i class="fa-solid fa-star"></i> Iconic Desert Species</h3>
+                    <div class="species-carousel">
+                        <button class="carousel-btn prev">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <div class="carousel-track">
+                            <div class="species-card active">
+                                <div class="species-image saguaro"></div>
+                                <div class="species-content">
+                                    <h4>Saguaro Cactus</h4>
+                                    <p>Carnegiea gigantea - The iconic cactus of Sonoran Desert</p>
+                                    <div class="species-details">
+                                        <div class="detail">
+                                            <span class="label">Lifespan</span>
+                                            <span class="value">150-200 years</span>
+                                        </div>
+                                        <div class="detail">
+                                            <span class="label">Height</span>
+                                            <span class="value">Up to 12m</span>
+                                        </div>
+                                        <div class="detail">
+                                            <span class="label">Water Storage</span>
+                                            <span class="value">750 liters</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Additional species cards would follow -->
+                        </div>
+                        <button class="carousel-btn next">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer placeholder -->
+    <div id="footer-container"></div>
+
+    <!-- Scripts -->
+    <script src="../js/main.js"></script>
+    <script src="../js/pages/arid-ecosystems.js"></script>
+    <script src="../js/components/navbar-loader.js"></script>
+    <script src="../js/components/footer-loader.js"></script>
+    
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize AOS
+            AOS.init({
+                duration: 800,
+                once: true,
+                offset: 100
+            });
+
+            // Theme Toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
+            
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                body.classList.add('dark-theme');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('dark-theme');
+                const isDark = body.classList.contains('dark-theme');
+                themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            });
+
+            // Number counters
+            const counters = document.querySelectorAll('.stat-number');
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-count'));
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                let current = 0;
+                
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.textContent = Math.floor(current);
+                        setTimeout(updateCounter, 16);
+                    } else {
+                        counter.textContent = target;
+                    }
+                };
+                
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            updateCounter();
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                });
+                
+                observer.observe(counter);
+            });
+
+            // Tab functionality
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabPanes.forEach(p => p.classList.remove('active'));
+                    
+                    btn.classList.add('active');
+                    const tabId = btn.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+
+            // Carousel functionality
+            const carouselTrack = document.querySelector('.carousel-track');
+            const carouselCards = document.querySelectorAll('.species-card');
+            const prevBtn = document.querySelector('.carousel-btn.prev');
+            const nextBtn = document.querySelector('.carousel-btn.next');
+            
+            let currentSlide = 0;
+            const totalSlides = carouselCards.length;
+            
+            function updateCarousel() {
+                if (carouselTrack && carouselCards.length > 0) {
+                    const slideWidth = carouselCards[0].offsetWidth + 30;
+                    carouselTrack.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+                    
+                    carouselCards.forEach((card, index) => {
+                        card.classList.toggle('active', index === currentSlide);
+                    });
+                }
+            }
+            
+            if (prevBtn && nextBtn) {
+                prevBtn.addEventListener('click', () => {
+                    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                    updateCarousel();
+                });
+                
+                nextBtn.addEventListener('click', () => {
+                    currentSlide = (currentSlide + 1) % totalSlides;
+                    updateCarousel();
+                });
+            }
+            
+            // Initialize Leaflet map
+            if (document.getElementById('aridDistributionMap')) {
+                setTimeout(() => {
+                    const map = L.map('aridDistributionMap').setView([20, 0], 2);
+                    
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap contributors'
+                    }).addTo(map);
+                    
+                    // Add arid region polygons (simplified representation)
+                    const aridRegions = [
+                        {
+                            name: "Sahara Desert",
+                            coords: [[20, -15], [25, -5], [30, 10], [15, 25], [5, 15]],
+                            type: "hyper-arid"
+                        },
+                        {
+                            name: "Arabian Desert",
+                            coords: [[20, 45], [25, 55], [15, 60], [10, 50]],
+                            type: "hyper-arid"
+                        },
+                        {
+                            name: "Australian Deserts",
+                            coords: [[-20, 125], [-25, 135], [-30, 140], [-35, 130]],
+                            type: "arid"
+                        },
+                        {
+                            name: "Sonoran Desert",
+                            coords: [[32, -115], [35, -112], [28, -110]],
+                            type: "arid"
+                        },
+                        {
+                            name: "Atacama Desert",
+                            coords: [[-20, -70], [-25, -68], [-30, -65]],
+                            type: "hyper-arid"
+                        }
+                    ];
+                    
+                    aridRegions.forEach(region => {
+                        const color = region.type === 'hyper-arid' ? '#d9534f' : 
+                                    region.type === 'arid' ? '#f0ad4e' : '#5bc0de';
+                        
+                        L.polygon(region.coords, {
+                            color: color,
+                            fillColor: color,
+                            fillOpacity: 0.3,
+                            weight: 2
+                        }).addTo(map)
+                          .bindPopup(`<b>${region.name}</b><br>Type: ${region.type}`);
+                    });
+                }, 500);
+            }
+            
+            // Explore button
+            const exploreBtn = document.getElementById('exploreArid');
+            if (exploreBtn) {
+                exploreBtn.addEventListener('click', function() {
+                    document.getElementById('adaptationsSection').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            }
+            
+            // Scroll progress
+            window.addEventListener('scroll', () => {
+                const scrollProgress = document.getElementById('scrollProgress');
+                const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (window.scrollY / windowHeight) * 100;
+                scrollProgress.style.width = scrolled + '%';
+            });
+        });
+
+        // Simple component loader
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load Navbar
+            fetch('../components/navbar.html')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to load navbar');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('navbar-container').innerHTML = data;
+                    if (typeof initNavbar === 'function') {
+                        initNavbar();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading navbar:', error);
+                    document.getElementById('navbar-container').innerHTML = 
+                        '<div style="padding: 20px; background: #f8d7da; color: #721c24;">Navbar failed to load</div>';
+                });
+
+            // Load Footer
+            fetch('../components/footer.html')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to load footer');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('footer-container').innerHTML = data;
+                    if (typeof initFooter === 'function') {
+                        initFooter();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading footer:', error);
+                    document.getElementById('footer-container').innerHTML = 
+                        '<div style="padding: 20px; background: #f8d7da; color: #721c24; text-align: center;">Footer failed to load</div>';
+                });
+        });
+    </script>
+</body>
+
+</html>

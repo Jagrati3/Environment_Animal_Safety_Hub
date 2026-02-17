@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Forest vs Human</title>
+
+<style>
+:root{
+  --good1:#2d6a4f;
+  --good2:#40916c;
+  --bad1:#6a040f;
+  --bad2:#9d0208;
+  --neutral1:#1b263b;
+  --neutral2:#415a77;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(135deg,var(--neutral1),var(--neutral2));
+  font-family:Segoe UI, sans-serif;
+  color:#e9ecef;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  transition:background 0.6s ease;
+}
+
+h1{
+  margin-top:30px;
+  font-size:3rem;
+  text-align:center;
+}
+
+.choice-box{
+  margin-top:60px;
+  display:flex;
+  gap:30px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+.choice{
+  width:240px;
+  height:140px;
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.2rem;
+  cursor:pointer;
+  transition:0.4s;
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(6px);
+}
+.choice:hover{
+  transform:scale(1.08);
+}
+
+/* MESSAGE */
+.message{
+  margin-top:40px;
+  max-width:650px;
+  background:rgba(0,0,0,0.25);
+  padding:22px;
+  border-radius:18px;
+  animation:popIn 0.6s ease;
+  line-height:1.6;
+}
+
+@keyframes popIn{
+  from{opacity:0; transform:scale(0.9)}
+  to{opacity:1; transform:scale(1)}
+}
+
+.footer{
+  margin-top:20px;
+  font-size:0.9rem;
+  opacity:0.8;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🌲 Forest vs Human</h1>
+
+<div class="choice-box">
+  <div class="choice" onclick="choose('cut')">🪓 Cut Trees</div>
+  <div class="choice" onclick="choose('plant')">🌱 Plant Trees</div>
+</div>
+
+<div id="result"></div>
+
+<p class="footer">Every choice leaves a mark.</p>
+
+<script>
+let used = false;
+
+function choose(type){
+  if(used) return;
+  used = true;
+
+  const body = document.body;
+  const box = document.createElement("div");
+  box.className = "message";
+
+  if(type === "cut"){
+    body.style.background =
+      "linear-gradient(135deg,var(--bad1),var(--bad2))";
+    box.textContent =
+      "Deforestation destroys habitats, increases carbon levels, and accelerates climate change.";
+  } else {
+    body.style.background =
+      "linear-gradient(135deg,var(--good1),var(--good2))";
+    box.textContent =
+      "Planting trees restores ecosystems, supports wildlife, and protects future generations.";
+  }
+
+  document.getElementById("result").appendChild(box);
+}
+</script>
+
+</body>
+</html>

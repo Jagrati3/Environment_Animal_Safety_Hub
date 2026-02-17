@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Recycling Guide & Tracker ♻️ | EcoLife</title>
+  <link rel="stylesheet" href="../css/smart-recycling-guide-tracker.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+<body>
+  <div class="recycling-app">
+    <!-- Navbar will be injected -->
+    <div id="navbar-container"></div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1><i class="fas fa-recycle"></i> Smart Recycling Guide & Tracker</h1>
+          <p>Learn what you can recycle, track your recycling habits, and become an eco-champion with challenges and achievements!</p>
+        </div>
+        <div class="hero-visual">
+          <div class="recycling-animation">
+            <div class="recycling-wheel">
+              <span class="wheel-item" style="--index: 0;">♻️</span>
+              <span class="wheel-item" style="--index: 1;">🌍</span>
+              <span class="wheel-item" style="--index: 2;">🌱</span>
+              <span class="wheel-item" style="--index: 3;">💚</span>
+            </div>
+            <div class="recycling-counter">
+              <span id="itemsRecycled">0</span>
+              <span class="unit">Items</span>
+            </div>
+            <p class="hero-stat">This Month</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Alert Banner -->
+    <div id="alertBanner" class="alert-banner hidden">
+      <i class="fas fa-check-circle"></i>
+      <span id="alertMessage"></span>
+      <button class="alert-close" onclick="closeAlert()">×</button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+      <!-- Gamification Dashboard -->
+      <section class="gamification-dashboard">
+        <div class="profile-card">
+          <div class="level-badge">
+            <div class="level-circle" id="levelCircle">
+              <span class="level-number" id="userLevel">1</span>
+              <span class="level-label">LEVEL</span>
+            </div>
+            <span class="user-title" id="userTitle">Recycling Rookie</span>
+          </div>
+          <div class="xp-progress">
+            <div class="xp-label">
+              <span>Experience Points</span>
+              <span id="xpText">0 / 100 XP</span>
+            </div>
+            <div class="xp-bar">
+              <div class="xp-fill" id="xpFill"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card recycled">
+            <div class="stat-icon">
+              <i class="fas fa-trash-alt"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Items Recycled</h3>
+              <p class="stat-value" id="totalRecycled">0</p>
+              <span class="stat-unit">This Month</span>
+            </div>
+          </div>
+
+          <div class="stat-card streak">
+            <div class="stat-icon">
+              <i class="fas fa-fire"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Current Streak</h3>
+              <p class="stat-value" id="currentStreak">0</p>
+              <span class="stat-unit">Days</span>
+            </div>
+          </div>
+
+          <div class="stat-card impact">
+            <div class="stat-icon">
+              <i class="fas fa-leaf"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Environmental Impact</h3>
+              <p class="stat-value" id="co2Saved">0</p>
+              <span class="stat-unit">kg CO₂ Saved</span>
+            </div>
+          </div>
+
+          <div class="stat-card achievements">
+            <div class="stat-icon">
+              <i class="fas fa-trophy"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Achievements</h3>
+              <p class="stat-value" id="achievementCount">0</p>
+              <span class="stat-unit">Unlocked</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Search & Guide Section -->
+      <section class="search-guide-section">
+        <div class="section-header">
+          <h2><i class="fas fa-search"></i> What Can I Recycle?</h2>
+          <p>Search for items to learn about recyclability and proper disposal methods</p>
+        </div>
+
+        <div class="search-container">
+          <div class="search-input-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input 
+              type="text" 
+              id="searchInput" 
+              class="search-input" 
+              placeholder="Search for an item (e.g., plastic bottle, aluminum can, cardboard)..."
+              autocomplete="off"
+            />
+            <button class="search-clear" id="clearBtn" onclick="clearSearch()" style="display: none;">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div id="searchResults" class="search-results hidden"></div>
+        </div>
+
+        <div class="quick-categories">
+          <h3>Quick Categories</h3>
+          <div class="category-buttons">
+            <button class="category-btn" onclick="searchCategory('plastic')">
+              <i class="fas fa-cube"></i> <span>Plastic</span>
+            </button>
+            <button class="category-btn" onclick="searchCategory('metal')">
+              <i class="fas fa-ring"></i> <span>Metal</span>
+            </button>
+            <button class="category-btn" onclick="searchCategory('paper')">
+              <i class="fas fa-file"></i> <span>Paper</span>
+            </button>
+            <button class="category-btn" onclick="searchCategory('glass')">
+              <i class="fas fa-wine-glass"></i> <span>Glass</span>
+            </button>
+            <button class="category-btn" onclick="searchCategory('electronics')">
+              <i class="fas fa-microchip"></i> <span>Electronics</span>
+            </button>
+            <button class="category-btn" onclick="searchCategory('textiles')">
+              <i class="fas fa-shirt"></i> <span>Textiles</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Item Card Detail -->
+      <section id="itemDetailSection" class="item-detail-section hidden">
+        <div class="item-detail-card">
+          <button class="close-detail" onclick="closeItemDetail()"><i class="fas fa-times"></i></button>
+          
+          <div class="item-detail-header">
+            <div class="item-icon" id="itemIcon"></div>
+            <div class="item-info">
+              <h2 id="itemName"></h2>
+              <div class="recyclability-badge" id="recyclabilityBadge"></div>
+            </div>
+          </div>
+
+          <div class="item-details-grid">
+            <div class="detail-box">
+              <h3><i class="fas fa-lightbulb"></i> Tips</h3>
+              <p id="itemTips"></p>
+            </div>
+
+            <div class="detail-box">
+              <h3><i class="fas fa-check-double"></i> Preparation</h3>
+              <p id="itemPreparation"></p>
+            </div>
+
+            <div class="detail-box">
+              <h3><i class="fas fa-globe"></i> Impact</h3>
+              <p id="itemImpact"></p>
+            </div>
+
+            <div class="detail-box">
+              <h3><i class="fas fa-location-dot"></i> Where</h3>
+              <p id="itemWhere"></p>
+            </div>
+          </div>
+
+          <button class="log-activity-btn" id="logActivityBtn" onclick="logRecyclingActivity()">
+            <i class="fas fa-plus"></i> Log This Activity
+          </button>
+        </div>
+      </section>
+
+      <!-- Active Challenges Section -->
+      <section class="challenges-section">
+        <div class="section-header">
+          <h2><i class="fas fa-tasks"></i> Active Challenges</h2>
+          <p>Complete challenges to earn bonus experience points and unlock achievements</p>
+        </div>
+
+        <div class="challenges-grid" id="challengesGrid">
+          <!-- Challenges will be populated here -->
+        </div>
+      </section>
+
+      <!-- Achievements Section -->
+      <section class="achievements-section">
+        <div class="section-header">
+          <h2><i class="fas fa-star"></i> Achievements</h2>
+          <p>Unlock these achievements as you become an eco-champion</p>
+        </div>
+
+        <div class="achievements-grid" id="achievementsGrid">
+          <!-- Achievements will be populated here -->
+        </div>
+      </section>
+
+      <!-- Activity Log Section -->
+      <section class="activity-log-section">
+        <div class="section-header">
+          <h2><i class="fas fa-list"></i> Your Recycling Activity</h2>
+          <p>Track your daily recycling habits and progress</p>
+        </div>
+
+        <div class="activity-filters">
+          <button class="filter-btn active" onclick="filterActivities('all')">All</button>
+          <button class="filter-btn" onclick="filterActivities('today')">Today</button>
+          <button class="filter-btn" onclick="filterActivities('week')">This Week</button>
+          <button class="filter-btn" onclick="filterActivities('month')">This Month</button>
+        </div>
+
+        <div class="activity-log" id="activityLog">
+          <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <p>No recycling activities yet. Start logging to track your impact!</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recycling Tips Section -->
+      <section class="tips-section">
+        <div class="section-header">
+          <h2><i class="fas fa-book"></i> Recycling Tips & Guide</h2>
+          <p>Learn best practices for effective recycling</p>
+        </div>
+
+        <div class="tips-grid" id="tipsGrid">
+          <!-- Tips will be populated here -->
+        </div>
+      </section>
+
+      <!-- Leaderboard Section -->
+      <section class="leaderboard-section">
+        <div class="section-header">
+          <h2><i class="fas fa-ranking-star"></i> Your Stats</h2>
+          <p>Your environmental impact overview</p>
+        </div>
+
+        <div class="stats-overview">
+          <div class="stat-item">
+            <div class="stat-number" id="totalItems">0</div>
+            <div class="stat-label">Total Items Recycled</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" id="totalDays">0</div>
+            <div class="stat-label">Active Recycling Days</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" id="mostRecycled">-</div>
+            <div class="stat-label">Most Recycled Item</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" id="totalXP">0</div>
+            <div class="stat-label">Total XP Earned</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="../js/smart-recycling-guide-tracker.js"></script>
+</body>
+</html>

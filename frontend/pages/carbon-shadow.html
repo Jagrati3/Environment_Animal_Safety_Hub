@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Carbon Shadow</title>
+
+<style>
+:root{
+  --bg1:#0b090a;
+  --bg2:#161a1d;
+  --accent:#f1faee;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  font-family:Segoe UI, sans-serif;
+  color:#f1faee;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  overflow:hidden;
+}
+
+h1{
+  margin-top:30px;
+  font-size:3rem;
+  text-align:center;
+}
+
+/* SHADOW ZONE */
+.stage{
+  position:relative;
+  width:100%;
+  height:50vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.planet{
+  font-size:120px;
+  z-index:2;
+}
+
+/* SHADOW */
+.shadow{
+  position:absolute;
+  width:120px;
+  height:120px;
+  background:rgba(0,0,0,0.7);
+  border-radius:50%;
+  filter:blur(25px);
+  transform:scale(0);
+  transition:transform 0.6s ease;
+  z-index:1;
+}
+
+/* MESSAGE */
+.message{
+  margin-top:30px;
+  max-width:650px;
+  background:rgba(255,255,255,0.08);
+  padding:20px 24px;
+  border-radius:18px;
+  animation:fadeUp 0.6s ease;
+  line-height:1.6;
+}
+
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(20px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+/* BUTTON */
+button{
+  margin-top:30px;
+  padding:14px 36px;
+  font-size:1rem;
+  background:var(--accent);
+  color:#0b090a;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  transition:0.3s;
+}
+button:hover{
+  transform:scale(1.05);
+}
+
+.footer{
+  margin-top:20px;
+  font-size:0.9rem;
+  opacity:0.8;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🌑 Carbon Shadow</h1>
+
+<div class="stage">
+  <div class="shadow" id="shadow"></div>
+  <div class="planet">🌍</div>
+</div>
+
+<div id="messages"></div>
+
+<button onclick="impact()">Increase Impact</button>
+
+<p class="footer">Your shadow follows every action.</p>
+
+<script>
+const texts = [
+  "Burning fossil fuels increases carbon emissions.",
+  "Transportation leaves a heavy carbon footprint.",
+  "Industrial pollution darkens our future.",
+  "Excess consumption accelerates climate damage.",
+  "Reducing emissions shrinks the shadow."
+];
+
+let level = 0;
+const shadow = document.getElementById("shadow");
+
+function impact(){
+  if(level < texts.length){
+    level++;
+    shadow.style.transform = `scale(${level * 0.6})`;
+
+    const msg = document.createElement("div");
+    msg.className = "message";
+    msg.textContent = texts[level - 1];
+    document.getElementById("messages").appendChild(msg);
+  } else {
+    alert("🌍 The shadow is too large. Change begins with awareness.");
+  }
+}
+</script>
+
+</body>
+</html>

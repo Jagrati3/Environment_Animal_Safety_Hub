@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ocean Depths</title>
+
+<style>
+:root{
+  --light:#90e0ef;
+  --dark:#03045e;
+}
+
+body{
+  margin:0;
+  font-family:Segoe UI, sans-serif;
+  background:linear-gradient(180deg,#caf0f8,#48cae4);
+  color:#001219;
+}
+
+/* HEADER */
+.header{
+  position:fixed;
+  top:0;
+  width:100%;
+  text-align:center;
+  padding:20px;
+  font-size:2rem;
+  background:rgba(0,0,0,0.2);
+  color:white;
+  z-index:10;
+}
+
+/* SCROLL AREA */
+.depth{
+  height:400vh;
+  padding-top:120px;
+}
+
+/* MESSAGE */
+.message{
+  position:sticky;
+  top:50%;
+  margin:auto;
+  max-width:600px;
+  background:rgba(0,0,0,0.35);
+  color:white;
+  padding:22px;
+  border-radius:18px;
+  opacity:0;
+  transform:translateY(30px);
+  transition:0.6s;
+}
+
+/* ACTIVE */
+.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.footer{
+  text-align:center;
+  margin:100px 0;
+  color:white;
+  opacity:0.8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">🌊 Ocean Depths</div>
+
+<div class="depth">
+  <div class="message" id="msg"></div>
+</div>
+
+<div class="footer">The deepest damage is often unseen.</div>
+
+<script>
+const messages = [
+  "Sunlight fades as depth increases.",
+  "Plastic waste sinks into deep waters.",
+  "Overfishing disrupts marine balance.",
+  "Noise pollution affects sea life.",
+  "Even the deepest oceans are no longer untouched."
+];
+
+const msgBox = document.getElementById("msg");
+let index = -1;
+
+window.addEventListener("scroll", () => {
+  const scrollPercent =
+    window.scrollY / (document.body.scrollHeight - window.innerHeight);
+
+  // darken background
+  const darkness = Math.min(scrollPercent * 100, 100);
+  document.body.style.background =
+    `linear-gradient(180deg, #48cae4, rgb(0,0,${Math.floor(80 - darkness)}))`;
+
+  const step = Math.floor(scrollPercent * messages.length);
+
+  if(step !== index && step < messages.length){
+    index = step;
+    msgBox.textContent = messages[index];
+    msgBox.classList.remove("show");
+    void msgBox.offsetWidth; // reset animation
+    msgBox.classList.add("show");
+  }
+});
+</script>
+
+</body>
+</html>

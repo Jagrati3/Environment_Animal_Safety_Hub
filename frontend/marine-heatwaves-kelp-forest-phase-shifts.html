@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marine Heatwaves and Kelp Forest Phase Shifts - Kelp to Urchin Ecosystem Transitions</title>
+<link rel="stylesheet" href="css/marine-heatwaves-kelp-forest-phase-shifts.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="accessibility-controls">
+        <button class="accessibility-btn" onclick="toggleHighContrast()">High Contrast</button>
+        <button class="accessibility-btn" onclick="toggleFontSize()">Font Size</button>
+        <button class="accessibility-btn" onclick="toggleReducedMotion()">Reduced Motion</button>
+    </div>
+
+    <header class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Marine Heatwaves & Kelp Forest Phase Shifts</h1>
+                <p class="hero-subtitle">Analyzing Transition from Kelp-Dominated to Urchin-Dominated Ecosystems</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">40+</span>
+                        <span class="stat-label">Regions Affected</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">60%</span>
+                        <span class="stat-label">Kelp Biomass Lost</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">$1.2B</span>
+                        <span class="stat-label">Annual Economic Impact</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="phase-shift-simulator">
+                    <h3>Kelp Forest Phase Shift Simulator</h3>
+                    <div class="simulator-controls">
+                        <div class="control-group">
+                            <label for="temperature">Temperature Anomaly (°C):</label>
+                            <input type="range" id="temperature" min="0" max="5" value="2.5" step="0.1">
+                            <span class="control-value" id="temperature-value">2.5°C</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="duration">Heatwave Duration (days):</label>
+                            <input type="range" id="duration" min="5" max="60" value="20">
+                            <span class="control-value" id="duration-value">20 days</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="urchin-density">Urchin Density (per m²):</label>
+                            <input type="range" id="urchin-density" min="0" max="50" value="5">
+                            <span class="control-value" id="urchin-density-value">5</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="predator-pressure">Predator Pressure:</label>
+                            <select id="predator-pressure">
+                                <option value="high">High</option>
+                                <option value="moderate">Moderate</option>
+                                <option value="low">Low</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="simulator-results">
+                        <div class="result-metric">
+                            <span class="metric-label">Phase Shift Risk:</span>
+                            <span class="metric-value" id="phase-shift-risk">High</span>
+                            <div class="risk-indicator">
+                                <div class="risk-bar" id="risk-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Kelp Survival Rate:</span>
+                            <span class="metric-value" id="kelp-survival">35%</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill kelp-fill" id="kelp-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Urchin Population Growth:</span>
+                            <span class="metric-value" id="urchin-growth">+850%</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill urchin-fill" id="urchin-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Recovery Time:</span>
+                            <span class="metric-value" id="recovery-time">8 years</span>
+                            <div class="recovery-indicators">
+                                <span class="indicator" id="natural-recovery">🌿 Natural</span>
+                                <span class="indicator" id="assisted-recovery">🔧 Assisted</span>
+                                <span class="indicator" id="active-restoration">🏗️ Active</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-icon">🌊</span>
+                <span class="brand-text">KelpWatch Hub</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#science" class="nav-link active" data-tab="science">Science</a></li>
+                <li><a href="#impacts" class="nav-link" data-tab="impacts">Impacts</a></li>
+                <li><a href="#mechanisms" class="nav-link" data-tab="mechanisms">Mechanisms</a></li>
+                <li><a href="#solutions" class="nav-link" data-tab="solutions">Solutions</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section id="science" class="content-section active">
+            <div class="section-container">
+                <h2>The Science of Marine Heatwaves</h2>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>Heatwave Characteristics</h3>
+                        <div class="heatwave-metrics">
+                            <div class="metric-category">
+                                <h4>🌡️ Temperature Dynamics</h4>
+                                <div class="metric-grid">
+                                    <div class="metric">Duration: <span id="hw-duration">5-30 days</span></div>
+                                    <div class="metric">Intensity: <span id="hw-intensity">2-5°C above normal</span></div>
+                                    <div class="metric">Frequency: <span id="hw-frequency">3-4 events/decade</span></div>
+                                    <div class="metric">Spatial scale: <span id="hw-spatial">100-1000s km²</span></div>
+                                </div>
+                            </div>
+                            <div class="metric-category">
+                                <h4>🌊 Oceanographic Drivers</h4>
+                                <div class="metric-grid">
+                                    <div class="metric">Atmospheric blocking: <span id="blocking-events">+45%</span></div>
+                                    <div class="metric">Reduced upwelling: <span id="upwelling-reduction">60%</span></div>
+                                    <div class="metric">Stratification: <span id="stratification-increase">+25%</span></div>
+                                    <div class="metric">Current anomalies: <span id="current-shifts">±2-3 knots</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h3>Kelp Forest Vulnerability</h3>
+                        <div class="vulnerability-chart">
+                            <canvas id="vulnerabilityChart"></canvas>
+                        </div>
+                        <div class="vulnerability-legend">
+                            <div class="legend-item">
+                                <span class="legend-color giant-kelp"></span>
+                                <span>Giant Kelp</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color bull-kelp"></span>
+                                <span>Bull Kelp</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color ecklonia"></span>
+                                <span>Ecklonia</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color laminaria"></span>
+                                <span>Laminaria</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h3>Urchin Population Response</h3>
+                        <div class="urchin-response">
+                            <div class="response-metric">
+                                <div class="circle-value">10x</div>
+                                <div class="circle-label">Population Increase</div>
+                            </div>
+                            <div class="response-arrow">→</div>
+                            <div class="response-metric">
+                                <div class="circle-value">100%</div>
+                                <div class="circle-label">Bare Substrate</div>
+                            </div>
+                            <div class="response-stats">
+                                <div class="stat">Grazing rate: 10-15 kg/m²/year</div>
+                                <div class="stat">Reproductive output: 100M eggs/female</div>
+                                <div class="stat">Lifespan: 100+ years</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="impacts" class="content-section">
+            <div class="section-container">
+                <h2>Regional Impacts and Case Studies</h2>
+                <div class="case-studies">
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>California Coast</h3>
+                            <span class="case-location">"The Blob" 2014-2016</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">547 days</div>
+                                <div class="stat">+3.5°C</div>
+                                <div class="stat">$544M loss</div>
+                            </div>
+                            <p>95% kelp loss, 10,000-fold urchin increase, persistent barrens in southern regions.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Tasmania</h3>
+                            <span class="case-location">East Coast 2015-2016</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">252 days</div>
+                                <div class="stat">+2.8°C</div>
+                                <div class="stat">43% barrens</div>
+                            </div>
+                            <p>90% Ecklonia loss, active restoration programs, 50% fisheries decline.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Mediterranean Sea</h3>
+                            <span class="case-location">Spain/France 2003-2015</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">Multiple events</div>
+                                <div class="stat">+2.5°C avg</div>
+                                <div class="stat">60-80% loss</div>
+                            </div>
+                            <p>Cystoseira forests devastated, Arbacia lixula population explosions.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Hokkaido, Japan</h3>
+                            <span class="case-location">2016 Heatwave</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">98 days</div>
+                                <div class="stat">+3.2°C</div>
+                                <div class="stat">70% loss</div>
+                            </div>
+                            <p>Laminaria forests destroyed, urchin harvesting programs for recovery.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="global-impact">
+                    <h3>Global Heatwave Frequency Trends</h3>
+                    <canvas id="heatwaveTrendsChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="mechanisms" class="content-section">
+            <div class="section-container">
+                <h2>Mechanisms of Phase Shifts</h2>
+                <div class="mechanism-explorer">
+                    <div class="mechanism-tabs">
+                        <button class="mechanism-tab active" data-mechanism="physiological">Physiological</button>
+                        <button class="mechanism-tab" data-mechanism="trophic">Trophic</button>
+                        <button class="mechanism-tab" data-mechanism="oceanographic">Oceanographic</button>
+                    </div>
+
+                    <div class="mechanism-content">
+                        <div class="mechanism-panel active" id="physiological-panel">
+                            <h3>Physiological Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Kelp Thermal Stress</h4>
+                                    <p>Marine heatwaves exceed thermal tolerance limits, causing photosynthetic inhibition, metabolic stress, and tissue degradation in kelp species.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Urchin Thermal Tolerance</h4>
+                                    <p>Sea urchins demonstrate greater thermal tolerance, surviving heatwaves that devastate kelp populations and enabling population explosions.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Reproductive Impacts</h4>
+                                    <p>Heat stress impairs kelp reproduction while urchins increase reproductive output, creating demographic imbalances.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mechanism-panel" id="trophic-panel">
+                            <h3>Trophic Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Predator Displacement</h4>
+                                    <p>Fish predators move to deeper waters during heatwaves, releasing urchin populations from predation pressure.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Grazing Release</h4>
+                                    <p>Uncontrolled urchin grazing prevents kelp recruitment and creates bare substrate that favors further urchin dominance.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Alternative Stable States</h4>
+                                    <p>Urchin barrens represent alternative stable states resistant to natural recovery without intervention.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mechanism-panel" id="oceanographic-panel">
+                            <h3>Oceanographic Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Atmospheric Blocking</h4>
+                                    <p>Persistent high-pressure systems prevent cloud formation and enhance solar heating of surface waters.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Stratification Changes</h4>
+                                    <p>Increased water column stratification reduces nutrient mixing and vertical heat exchange.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Current Anomalies</h4>
+                                    <p>Altered ocean currents transport heat anomalies and affect larval dispersal patterns.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solutions" class="content-section">
+            <div class="section-container">
+                <h2>Management and Restoration Strategies</h2>
+                <div class="solutions-framework">
+                    <div class="solution-category">
+                        <h3>Prevention and Monitoring</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Early Warning Systems</h4>
+                                <p>Deploy satellite monitoring and predictive models for 7-14 day heatwave forecasts.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Climate Adaptation</h4>
+                                <p>Develop heat-tolerant kelp strains and assisted migration programs.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Protected Areas</h4>
+                                <p>Establish marine protected areas as climate refugia for kelp populations.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="solution-category">
+                        <h3>Active Restoration</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Urchin Population Control</h4>
+                                <p>Implement targeted harvesting programs and biological control methods.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Kelp Reef Enhancement</h4>
+                                <p>Deploy artificial reefs and cultured kelp for rapid ecosystem recovery.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Predator Enhancement</h4>
+                                <p>Create artificial habitats to increase predator populations and control urchins.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="solution-category">
+                        <h3>Technological Solutions</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Remote Sensing</h4>
+                                <p>Use satellite imagery and autonomous vehicles for continuous monitoring.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Predictive Modeling</h4>
+                                <p>Develop AI models for phase shift prediction and restoration optimization.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Genetic Engineering</h4>
+                                <p>Research heat-resistant kelp varieties for future climate scenarios.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="policy-framework">
+                        <h3>Policy and Research Framework</h3>
+                        <div class="policy-actions">
+                            <div class="policy-item">
+                                <h4>Regulatory Approaches</h4>
+                                <ul>
+                                    <li>Implement heatwave monitoring and early warning systems</li>
+                                    <li>Establish urchin harvesting quotas and management zones</li>
+                                    <li>Create marine spatial planning for kelp forest protection</li>
+                                    <li>Develop international cooperation for transboundary heatwaves</li>
+                                </ul>
+                            </div>
+                            <div class="policy-item">
+                                <h4>Research Priorities</h4>
+                                <ul>
+                                    <li>Thermal tolerance limits of kelp and urchin species</li>
+                                    <li>Trophic cascade dynamics during heatwaves</li>
+                                    <li>Genetic adaptation potential of foundation species</li>
+                                    <li>Cost-effective restoration and monitoring technologies</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>Issue #2326</h4>
+                <p>Marine Heatwaves and Kelp Forest Phase Shifts</p>
+                <p>Analyzing transition from kelp-dominated to urchin-dominated ecosystems</p>
+            </div>
+            <div class="footer-section">
+                <h4>Key Findings</h4>
+                <ul>
+                    <li>40+ coastal regions affected by heatwaves</li>
+                    <li>60% loss of kelp forest biomass</li>
+                    <li>$1.2 billion annual economic impact</li>
+                    <li>25 urchin species expanding ranges</li>
+                    <li>2-5°C temperature anomalies driving shifts</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Management Actions</h4>
+                <ul>
+                    <li>Deploy early warning systems</li>
+                    <li>Implement urchin control programs</li>
+                    <li>Develop heat-tolerant kelp strains</li>
+                    <li>Create marine protected areas</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <a href="#science">Heatwave Science</a>
+                    <a href="#impacts">Case Studies</a>
+                    <a href="#mechanisms">Phase Shift Mechanisms</a>
+                    <a href="#solutions">Restoration Strategies</a>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Environment Animal Safety Hub - Issue #2326: Marine Heatwaves Research</p>
+        </div>
+    </footer>
+
+    <script src="marine-heatwaves-kelp-forest-phase-shifts.js"></script>
+</body>
+</html>

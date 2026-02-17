@@ -1,6 +1,7 @@
 <!-- report-dumping.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,14 +9,14 @@
   <title>EcoLife | Report Abandoned or Injured Animals</title>
   <meta name="description"
     content="Report abandoned, injured, or distressed animals that need help. Help save lives by providing immediate assistance to vulnerable animals in need." />
-<link rel="icon" type="image/png" href="/envirnoment-logo.png">
+  <link rel="icon" type="image/png" href="/envirnoment-logo.png">
   <!-- CSS Files -->
   <link rel="stylesheet" href="../../css/global/variables.css" />
   <link rel="stylesheet" href="../../css/style.css" />
   <link rel="stylesheet" href="../../css/components/navbar.css" />
   <link rel="stylesheet" href="../../css/components/footer.css" />
   <link rel="stylesheet" href="../../css/pages/report/report.css" />
-<link rel="stylesheet" href="../../css/global/utilities.css" />
+  <link rel="stylesheet" href="../../css/global/utilities.css" />
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,368 +29,374 @@
   <!-- AOS Animation Library -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 </head>
-    <button id="scrollBottomBtn" title="Scroll to Bottom">
+<button id="scrollBottomBtn" title="Scroll to Bottom">
   ⬇️
 </button>
 
 <body>
-    <style>
-  .circle-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 999999;
-  }
-
-  .cursor-circle {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    pointer-events: none;
-    background-color: #ff8c00; /* Dark orange */
-    box-shadow: 0 0 15px rgba(255, 140, 0, 0.7);
-    transform: translate(-50%, -50%);
-    will-change: transform;
-    mix-blend-mode: screen;
-  }
-
-  .cursor-circle:first-child {
-    width: 14px;
-    height: 14px;
-    background-color: #ffcc00; /* Brighter yellow */
-    mix-blend-mode: normal;
-    box-shadow: 0 0 20px #ff8c00, 0 0 40px rgba(255, 140, 0, 0.5);
-    z-index: 2;
-  }
-
-  .cursor-glow {
-    display: block;
-    width: 40px;
-    height: 40px;
-    background: radial-gradient(circle, rgba(255, 140, 0, 0.5) 0%, transparent 70%);
-    filter: blur(8px);
-    z-index: -1;
-  }
-
-  .cursor-clicking {
-    transform: translate(-50%, -50%) scale(3);
-    background-color: #ffcc00;
-    box-shadow: 0 0 30px #ffcc00, 0 0 60px #ff8c00;
-    opacity: 1 !important;
-  }
-
-  .cursor-hovering {
-    transform: translate(-50%, -50%) scale(1.8);
-    background-color: #ff9900; /* Medium orange */
-    box-shadow: 0 0 25px #ff9900, 0 0 35px rgba(255, 153, 0, 0.6);
-  }
-
-  .cursor-hovering:first-child {
-    transform: translate(-50%, -50%) scale(0.5);
-    opacity: 0;
-  }
-</style>
-
-<div class="circle-container" id="cursor-container"></div>
-
-<!-- ADD THIS LINE: loadComponents.js script -->
-<script src="../../js/components/loadComponents.js"></script>
-
-<script>
-  (function() {
-    'use strict';
-    
-    // Disable default cursor on the whole page
-    document.body.style.cursor = 'none';
-    
-    const container = document.getElementById('cursor-container');
-    const coords = { x: 0, y: 0 };
-    const circles = [];
-    const NUM_CIRCLES = 18;
-    
-    // Create cursor circles
-    for (let i = 0; i < NUM_CIRCLES; i++) {
-      const circle = document.createElement('div');
-      circle.className = 'cursor-circle';
-      if (i === 0) circle.classList.add('cursor-glow');
-      
-      // Darker trail effect for later circles
-      const opacity = 1 - (i / NUM_CIRCLES);
-      const brightness = 0.7 + (opacity * 0.3); // Darker base
-      circle.style.opacity = (opacity * 0.9).toString();
-      circle.style.filter = `brightness(${brightness})`;
-      
-      container.appendChild(circle);
-      
-      circles.push({
-        element: circle,
-        x: 0,
-        y: 0
-      });
+  <style>
+    .circle-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999999;
     }
-    
-    // Mouse event handlers
-    const handleMouseMove = (e) => {
-      coords.x = e.clientX;
-      coords.y = e.clientY;
-    };
-    
-    const handleMouseDown = () => {
-      circles.forEach(c => c.element.classList.add('cursor-clicking'));
-    };
-    
-    const handleMouseUp = () => {
-      circles.forEach(c => c.element.classList.remove('cursor-clicking'));
-    };
-    
-    const handleMouseOver = (e) => {
-      const target = e.target;
-      const isInteractive = target.tagName === 'A' || 
-                           target.tagName === 'BUTTON' || 
-                           target.closest('button') || 
-                           target.closest('a') ||
-                           target.hasAttribute('onclick') ||
-                           target.style.cursor === 'pointer';
-      
-      if (isInteractive) {
-        circles.forEach(c => {
-          c.element.classList.add('cursor-hovering');
-          // Darker color for hover
-          c.element.style.backgroundColor = '#ff9900';
-        });
-      } else {
-        circles.forEach(c => {
-          c.element.classList.remove('cursor-hovering');
-          // Restore original dark orange
-          c.element.style.backgroundColor = '#ff8c00';
+
+    .cursor-circle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      pointer-events: none;
+      background-color: #ff8c00;
+      /* Dark orange */
+      box-shadow: 0 0 15px rgba(255, 140, 0, 0.7);
+      transform: translate(-50%, -50%);
+      will-change: transform;
+      mix-blend-mode: screen;
+    }
+
+    .cursor-circle:first-child {
+      width: 14px;
+      height: 14px;
+      background-color: #ffcc00;
+      /* Brighter yellow */
+      mix-blend-mode: normal;
+      box-shadow: 0 0 20px #ff8c00, 0 0 40px rgba(255, 140, 0, 0.5);
+      z-index: 2;
+    }
+
+    .cursor-glow {
+      display: block;
+      width: 40px;
+      height: 40px;
+      background: radial-gradient(circle, rgba(255, 140, 0, 0.5) 0%, transparent 70%);
+      filter: blur(8px);
+      z-index: -1;
+    }
+
+    .cursor-clicking {
+      transform: translate(-50%, -50%) scale(3);
+      background-color: #ffcc00;
+      box-shadow: 0 0 30px #ffcc00, 0 0 60px #ff8c00;
+      opacity: 1 !important;
+    }
+
+    .cursor-hovering {
+      transform: translate(-50%, -50%) scale(1.8);
+      background-color: #ff9900;
+      /* Medium orange */
+      box-shadow: 0 0 25px #ff9900, 0 0 35px rgba(255, 153, 0, 0.6);
+    }
+
+    .cursor-hovering:first-child {
+      transform: translate(-50%, -50%) scale(0.5);
+      opacity: 0;
+    }
+  </style>
+
+  <div class="circle-container" id="cursor-container"></div>
+
+  <!-- ADD THIS LINE: loadComponents.js script -->
+  <script src="../../js/components/loadComponents.js"></script>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // Disable default cursor on the whole page
+      document.body.style.cursor = 'none';
+
+      const container = document.getElementById('cursor-container');
+      const coords = { x: 0, y: 0 };
+      const circles = [];
+      const NUM_CIRCLES = 18;
+
+      // Create cursor circles
+      for (let i = 0; i < NUM_CIRCLES; i++) {
+        const circle = document.createElement('div');
+        circle.className = 'cursor-circle';
+        if (i === 0) circle.classList.add('cursor-glow');
+
+        // Darker trail effect for later circles
+        const opacity = 1 - (i / NUM_CIRCLES);
+        const brightness = 0.7 + (opacity * 0.3); // Darker base
+        circle.style.opacity = (opacity * 0.9).toString();
+        circle.style.filter = `brightness(${brightness})`;
+
+        container.appendChild(circle);
+
+        circles.push({
+          element: circle,
+          x: 0,
+          y: 0
         });
       }
-    };
-    
-    // Animation loop
-    let animationId;
-    const animate = () => {
-      let x = coords.x;
-      let y = coords.y;
-      
-      circles.forEach((circleData, index) => {
-        const element = circleData.element;
-        
-        element.style.left = `${x}px`;
-        element.style.top = `${y}px`;
-        
-        const scale = (NUM_CIRCLES - index) / NUM_CIRCLES;
-        element.style.transform = `translate(-50%, -50%) scale(${scale})`;
-        
-        // Make trail circles darker as they trail behind
-        if (index > 0) {
-          const darken = 0.9 - (index / NUM_CIRCLES * 0.5);
-          element.style.filter = `brightness(${darken})`;
+
+      // Mouse event handlers
+      const handleMouseMove = (e) => {
+        coords.x = e.clientX;
+        coords.y = e.clientY;
+      };
+
+      const handleMouseDown = () => {
+        circles.forEach(c => c.element.classList.add('cursor-clicking'));
+      };
+
+      const handleMouseUp = () => {
+        circles.forEach(c => c.element.classList.remove('cursor-clicking'));
+      };
+
+      const handleMouseOver = (e) => {
+        const target = e.target;
+        const isInteractive = target.tagName === 'A' ||
+          target.tagName === 'BUTTON' ||
+          target.closest('button') ||
+          target.closest('a') ||
+          target.hasAttribute('onclick') ||
+          target.style.cursor === 'pointer';
+
+        if (isInteractive) {
+          circles.forEach(c => {
+            c.element.classList.add('cursor-hovering');
+            // Darker color for hover
+            c.element.style.backgroundColor = '#ff9900';
+          });
+        } else {
+          circles.forEach(c => {
+            c.element.classList.remove('cursor-hovering');
+            // Restore original dark orange
+            c.element.style.backgroundColor = '#ff8c00';
+          });
         }
-        
-        circleData.x = x;
-        circleData.y = y;
-        
-        const nextCircle = circles[index + 1] || circles[0];
-        x += (nextCircle.x - x) * 0.5;
-        y += (nextCircle.y - y) * 0.5;
-      });
-      
-      animationId = requestAnimationFrame(animate);
-    };
-    
-    // Initialize
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mousedown', handleMouseDown);
-    window.addEventListener('mouseup', handleMouseUp);
-    window.addEventListener('mouseover', handleMouseOver);
-    
-    // Start animation
-    animate();
-    
-    // Cleanup function (optional)
-    window.cursorCleanup = function() {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mousedown', handleMouseDown);
-      window.removeEventListener('mouseup', handleMouseUp);
-      window.removeEventListener('mouseover', handleMouseOver);
-      cancelAnimationFrame(animationId);
-      document.body.style.cursor = '';
-      container.remove();
-    };
-  })();
-</script>
-    <div id="navbar-container"></div>
+      };
 
-    <section class="report-page">
-        <!--  HEADER  -->
-        <div class="container hero">
-            <div class="hero-image" data-aos="fade-right"></div>
+      // Animation loop
+      let animationId;
+      const animate = () => {
+        let x = coords.x;
+        let y = coords.y;
 
-            <div class="hero-content" data-aos="fade-left">
-            <h1>🐾 Report Abandoned or Injured Animals</h1>
-            <p>
-                Be the voice for animals in distress.  
-                Your quick action can save lives and reunite families 💚
-            </p>
-            </div>
+        circles.forEach((circleData, index) => {
+          const element = circleData.element;
+
+          element.style.left = `${x}px`;
+          element.style.top = `${y}px`;
+
+          const scale = (NUM_CIRCLES - index) / NUM_CIRCLES;
+          element.style.transform = `translate(-50%, -50%) scale(${scale})`;
+
+          // Make trail circles darker as they trail behind
+          if (index > 0) {
+            const darken = 0.9 - (index / NUM_CIRCLES * 0.5);
+            element.style.filter = `brightness(${darken})`;
+          }
+
+          circleData.x = x;
+          circleData.y = y;
+
+          const nextCircle = circles[index + 1] || circles[0];
+          x += (nextCircle.x - x) * 0.5;
+          y += (nextCircle.y - y) * 0.5;
+        });
+
+        animationId = requestAnimationFrame(animate);
+      };
+
+      // Initialize
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mousedown', handleMouseDown);
+      window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener('mouseover', handleMouseOver);
+
+      // Start animation
+      animate();
+
+      // Cleanup function (optional)
+      window.cursorCleanup = function () {
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mousedown', handleMouseDown);
+        window.removeEventListener('mouseup', handleMouseUp);
+        window.removeEventListener('mouseover', handleMouseOver);
+        cancelAnimationFrame(animationId);
+        document.body.style.cursor = '';
+        container.remove();
+      };
+    })();
+  </script>
+  <div id="navbar-container"></div>
+
+  <section class="report-page">
+    <!--  HEADER  -->
+    <div class="container hero">
+      <div class="hero-image" data-aos="fade-right"></div>
+
+      <div class="hero-content" data-aos="fade-left">
+        <h1>🐾 Report Abandoned or Injured Animals</h1>
+        <p>
+          Be the voice for animals in distress.
+          Your quick action can save lives and reunite families 💚
+        </p>
+      </div>
+    </div>
+
+    <!--  STEPS  -->
+    <div class="container steps-section">
+      <h2 data-aos="fade-up">🔄 How It Works</h2>
+
+      <div class="steps">
+
+        <div class="step-card" data-aos="zoom-in">
+          <div class="step-circle">🐕</div>
+          <p>Found an animal in distress</p>
         </div>
 
-        <!--  STEPS  -->
-        <div class="container steps-section">
-            <h2 data-aos="fade-up">🔄 How It Works</h2>
-
-            <div class="steps">
-
-            <div class="step-card" data-aos="zoom-in">
-                <div class="step-circle">🐕</div>
-                <p>Found an animal in distress</p>
-            </div>
-
-            <div class="step-card" data-aos="zoom-in">
-                <div class="step-circle">📝</div>
-                <p>Fill the report form</p>
-            </div>
-
-            <div class="step-card" data-aos="zoom-in">
-                <div class="step-circle">📍</div>
-                <p>Add details & location</p>
-            </div>
-
-            <div class="step-card" data-aos="zoom-in">
-                <div class="step-circle">📸</div>
-                <p>Upload pet photos</p>
-            </div>
-
-            <div class="step-card" data-aos="zoom-in">
-                <div class="step-circle">❤️</div>
-                <p>Submit & help arrives</p>
-            </div>
-
-            </div>
+        <div class="step-card" data-aos="zoom-in">
+          <div class="step-circle">📝</div>
+          <p>Fill the report form</p>
         </div>
 
-        <!--  FORM  -->
-        <div class="form-bg">
-            <div class="container">
-            <div class="form-card" data-aos="fade-up">
-                <h2>🧾 Report Abandoned or Injured Animal</h2>
-
-                <form id="reportForm">
-
-                <div class="field">
-                    <label>🐾 Pet Type</label>
-                    <select name="petType" required>
-                    <option value="">Select</option>
-                    <option selected>Dog</option>
-                    <option>Cat</option>
-                    <option>Other</option>
-                    </select>
-                </div>
-                
-                <div class="field">
-                    <label>🪪 Name (if known)</label>
-                    <input name="petName" type="text" placeholder="Mark or Unknown">
-                </div>
-                
-                <div class="field">
-                    <label>⚧️ Gender</label>
-                    <select name="gender">
-                    <option value="">Select</option>
-                    <option>Male</option>
-                    <option>Female</option>
-                    <option>Unknown</option>
-                    </select>
-                </div>
-
-                <div class="field">
-                    <label>🎨 Color / Markings</label>
-                    <input name="color" type="text" placeholder="Brown with white spots">
-                </div>
-
-                <div class="field">
-                    <label>📍 Location Found</label>
-                    <input name="location" type="text" placeholder="Street / Area / City" required>
-                </div>
-
-                <div class="field">
-                    <label>🏠 Situation Type</label>
-                    <select name="situation" required>
-                    <option value="">Select Situation</option>
-                    <option value="abandoned">Appears Abandoned</option>
-                    <option value="injured">Injured/Distressed</option>
-                    <option value="stray">Stray (no apparent danger)</option>
-                    <option value="other">Other</option>
-                    </select>
-                </div>
-
-                <div class="field">
-                    <label>⚕️ Condition Details</label>
-                    <select name="condition">
-                    <option value="">Select Condition</option>
-                    <option>Healthy but alone</option>
-                    <option>Injured - bleeding</option>
-                    <option>Injured - limping</option>
-                    <option>Sick - vomiting/diarrhea</option>
-                    <option>Malnourished</option>
-                    <option>Signs of abuse</option>
-                    <option>Other distress</option>
-                    </select>
-                </div>
-
-                <div class="field">
-                    <label>🚨 Urgency Level</label>
-                    <select name="urgency" required>
-                    <option value="">Select Urgency</option>
-                    <option value="normal">Normal - General report</option>
-                    <option value="urgent">Urgent - Needs attention soon</option>
-                    <option value="emergency">Emergency - Immediate danger</option>
-                    </select>
-                </div>
-
-                <div class="field">
-                    <label>📝 Additional Details</label>
-                    <textarea name="details" placeholder="Describe signs of abandonment, injuries, behavior, or urgency"></textarea>
-                </div>
-
-                <div class="field">
-                    <label>📸 Upload Photos</label>
-                    <input name="photos" type="file" multiple accept="image/*">
-                </div>
-
-                <button type="submit">🚀 Submit Report</button>
-
-                </form>
-            </div>
-            </div>
+        <div class="step-card" data-aos="zoom-in">
+          <div class="step-circle">📍</div>
+          <p>Add details & location</p>
         </div>
-    </section>
 
-    <!-- Footer placeholder -->
+        <div class="step-card" data-aos="zoom-in">
+          <div class="step-circle">📸</div>
+          <p>Upload pet photos</p>
+        </div>
+
+        <div class="step-card" data-aos="zoom-in">
+          <div class="step-circle">❤️</div>
+          <p>Submit & help arrives</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!--  FORM  -->
+    <div class="form-bg">
+      <div class="container">
+        <div class="form-card" data-aos="fade-up">
+          <h2>🧾 Report Abandoned or Injured Animal</h2>
+
+          <form id="reportForm">
+
+            <div class="field">
+              <label>🐾 Pet Type</label>
+              <select name="petType" required>
+                <option value="">Select</option>
+                <option selected>Dog</option>
+                <option>Cat</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>🪪 Name (if known)</label>
+              <input name="petName" type="text" placeholder="Mark or Unknown">
+            </div>
+
+            <div class="field">
+              <label>⚧️ Gender</label>
+              <select name="gender">
+                <option value="">Select</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Unknown</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>🎨 Color / Markings</label>
+              <input name="color" type="text" placeholder="Brown with white spots">
+            </div>
+
+            <div class="field">
+              <label>📍 Location Found</label>
+              <input name="location" type="text" placeholder="Street / Area / City" required>
+            </div>
+
+            <div class="field">
+              <label>🏠 Situation Type</label>
+              <select name="situation" required>
+                <option value="">Select Situation</option>
+                <option value="abandoned">Appears Abandoned</option>
+                <option value="injured">Injured/Distressed</option>
+                <option value="stray">Stray (no apparent danger)</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>⚕️ Condition Details</label>
+              <select name="condition">
+                <option value="">Select Condition</option>
+                <option>Healthy but alone</option>
+                <option>Injured - bleeding</option>
+                <option>Injured - limping</option>
+                <option>Sick - vomiting/diarrhea</option>
+                <option>Malnourished</option>
+                <option>Signs of abuse</option>
+                <option>Other distress</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>🚨 Urgency Level</label>
+              <select name="urgency" required>
+                <option value="">Select Urgency</option>
+                <option value="normal">Normal - General report</option>
+                <option value="urgent">Urgent - Needs attention soon</option>
+                <option value="emergency">Emergency - Immediate danger</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>📝 Additional Details</label>
+              <textarea name="details"
+                placeholder="Describe signs of abandonment, injuries, behavior, or urgency"></textarea>
+            </div>
+
+            <div class="field">
+              <label>📸 Upload Photos</label>
+              <input name="photos" type="file" multiple accept="image/*">
+            </div>
+
+            <button type="submit">🚀 Submit Report</button>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer placeholder -->
   <div id="footer-placeholder"></div>
-<!-- Back to Top Button -->
-    <button class="back-to-top" id="backToTop" aria-label="Back to Top">
-      <i class="fa-solid fa-arrow-up"></i>
-    </button>
+  <!-- Back to Top Button -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to Top">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
 
-    <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="../../js/main.js"></script>
-    <script src="../../js/global/theme-toggle.js"></script>
-    <script src="../../js/pages/report/report.js"></script>
-    
-    <!-- ADD THIS LINE: component-loader.js script -->
-    <script src="../../js/components/component-loader.js"></script>
-    
-<script>
-(function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="ws110ZzXAkEnbVsIy9g8d";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
-</script>
-<script src="/frontend/js/components/footer-loader.js"></script>
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="../../js/main.js"></script>
+  <script src="../../js/global/theme-toggle.js"></script>
+  <script type="module" src="../../js/utils/global-error-handler.js"></script>
+  <script type="module" src="../../js/pages/report/report.js"></script>
+
+  <!-- ADD THIS LINE: component-loader.js script -->
+  <script src="../../js/components/component-loader.js"></script>
+
+  <script>
+    (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "ws110ZzXAkEnbVsIy9g8d"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
+  </script>
+  <script src="/frontend/js/components/footer-loader.js"></script>
 
   <script src="../../js/components/navbar-loader.js"></script>
 </body>
+
 </html>

@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geospatial Tech | EcoLife</title>
+    <meta name="description" content="Mapping and monitoring wildlife conservation using satellite imagery, drones, and GIS technology.">
+    <link rel="icon" type="image/png" href="../assets/images/others/FAVICON.png">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/components/navbar.css">
+    <link rel="stylesheet" href="../css/components/footer.css">
+    <link rel="stylesheet" href="../css/geospatial.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Roboto+Slab:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+
+<body>
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <div id="navbar-container"></div>
+
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Interactive Map Background -->
+    <div class="map-background" id="mapBackground"></div>
+
+    <!-- Hero Section -->
+    <section class="geospatial-hero" id="geospatialHero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fa-solid fa-satellite"></i>
+                <span>From Space to Species</span>
+            </div>
+            <h1 class="hero-title">
+                <span class="gradient-text">Geospatial</span> Conservation
+            </h1>
+            <p class="hero-subtitle">
+                Mapping ecosystems, tracking wildlife, and protecting habitats using satellite technology and GIS
+            </p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <i class="fa-solid fa-globe-americas"></i>
+                    <div class="stat-content">
+                        <span class="stat-number" data-count="98">0</span>
+                        <span class="stat-label">% Earth Coverage</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fa-solid fa-satellite-dish"></i>
+                    <div class="stat-content">
+                        <span class="stat-number" data-count="250">0</span>
+                        <span class="stat-label">+ Satellites</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fa-solid fa-map-marked-alt"></i>
+                    <div class="stat-content">
+                        <span class="stat-number" data-count="3000">0</span>
+                        <span class="stat-label">Projects Active</span>
+                    </div>
+                </div>
+            </div>
+            <button class="cta-button" id="exploreMap">
+                <i class="fa-solid fa-map"></i>
+                <span>Explore Conservation Map</span>
+            </button>
+        </div>
+        <div class="satellite-orbit">
+            <div class="satellite"></div>
+        </div>
+    </section>
+
+    <!-- What is Geospatial Conservation -->
+    <section class="definition-section" id="definitionSection">
+        <div class="section-container">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-satellite"></i> Eyes in the Sky</h2>
+                <p>How satellite technology revolutionizes wildlife conservation</p>
+            </div>
+
+            <div class="definition-content">
+                <div class="definition-card" data-aos="fade-up">
+                    <div class="definition-icon">
+                        <i class="fa-solid fa-map"></i>
+                    </div>
+                    <h3>Geospatial Intelligence</h3>
+                    <p class="definition-text">
+                        Geospatial conservation combines satellite imagery, GPS tracking, GIS mapping, and remote sensing to monitor ecosystems, track wildlife movements, detect environmental changes, and combat illegal activities in real-time.
+                    </p>
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <i class="fa-solid fa-satellite"></i>
+                            <span>Satellite Imagery</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fa-solid fa-drone"></i>
+                            <span>Drone Surveys</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fa-solid fa-map-pin"></i>
+                            <span>GPS Tracking</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fa-solid fa-layer-group"></i>
+                            <span>GIS Mapping</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="applications-grid">
+                    <div class="application-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="app-icon">
+                            <i class="fa-solid fa-tree"></i>
+                        </div>
+                        <h4>Deforestation Alerts</h4>
+                        <p>Real-time monitoring of forest cover changes and illegal logging</p>
+                    </div>
+                    <div class="application-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="app-icon">
+                            <i class="fa-solid fa-paw"></i>
+                        </div>
+                        <h4>Animal Tracking</h4>
+                        <p>GPS collars and tags monitoring migration patterns</p>
+                    </div>
+                    <div class="application-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="app-icon">
+                            <i class="fa-solid fa-fire"></i>
+                        </div>
+                        <h4>Wildfire Detection</h4>
+                        <p>Early warning systems using thermal imaging</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Stack -->
+    <section class="tech-section" id="techSection">
+        <div class="section-container">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-rocket"></i> Technology Arsenal</h2>
+                <p>Tools shaping modern conservation mapping</p>
+            </div>
+
+            <div class="tech-grid">
+                <div class="tech-card" data-aos="flip-left">
+                    <div class="tech-image">
+                        <i class="fa-solid fa-satellite"></i>
+                    </div>
+                    <div class="tech-content">
+                        <h3>Satellite Constellations</h3>
+                        <p>High-resolution imagery updated daily from multiple satellite networks</p>
+                        <div class="tech-specs">
+                            <span>10-30cm resolution</span>
+                            <span>Daily updates</span>
+                            <span>Multispectral</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-card" data-aos="flip-left" data-aos-delay="100">
+                    <div class="tech-image">
+                        <i class="fa-solid fa-drone"></i>
+                    </div>
+                    <div class="tech-content">
+                        <h3>Conservation Drones</h3>
+                        <p>Autonomous UAVs for detailed aerial surveys and monitoring</p>
+                        <div class="tech-specs">
+                            <span>Thermal cameras</span>
+                            <span>AI recognition</span>
+                            <span>Long endurance</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-card" data-aos="flip-left" data-aos-delay="200">
+                    <div class="tech-image">
+                        <i class="fa-solid fa-map-marked-alt"></i>
+                    </div>
+                    <div class="tech-content">
+                        <h3>GIS Platforms</h3>
+                        <p>Advanced mapping software integrating multiple data layers</p>
+                        <div class="tech-specs">
+                            <span>3D modeling</span>
+                            <span>Predictive analysis</span>
+                            <span>Real-time updates</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="resolution-demo">
+                <h3><i class="fa-solid fa-search"></i> Resolution Comparison</h3>
+                <div class="resolution-grid">
+                    <div class="resolution-level">
+                        <div class="resolution-image low-res"></div>
+                        <div class="resolution-info">
+                            <h4>Landsat (30m)</h4>
+                            <p>Regional monitoring, deforestation tracking</p>
+                        </div>
+                    </div>
+                    <div class="resolution-level">
+                        <div class="resolution-image medium-res"></div>
+                        <div class="resolution-info">
+                            <h4>Sentinel (10m)</h4>
+                            <p>Habitat mapping, fire detection</p>
+                        </div>
+                    </div>
+                    <div class="resolution-level">
+                        <div class="resolution-image high-res"></div>
+                        <div class="resolution-info">
+                            <h4>Commercial (0.3m)</h4>
+                            <p>Individual tree counting, animal spotting</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conservation Applications -->
+    <section class="applications-section" id="applicationsSection">
+        <div class="section-container">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-bullseye"></i> Impact Areas</h2>
+                <p>Transforming conservation efforts worldwide</p>
+            </div>
+
+            <div class="applications-showcase">
+                <div class="app-showcase" data-aos="fade-right">
+                    <div class="showcase-image deforestation"></div>
+                    <div class="showcase-content">
+                        <h3>Forest Guardians</h3>
+                        <p>Real-time deforestation monitoring with automated change detection algorithms</p>
+                        <div class="showcase-stats">
+                            <div class="stat">
+                                <span class="value">48 hours</span>
+                                <span class="label">Alert response time</span>
+                            </div>
+                            <div class="stat">
+                                <span class="value">30% reduction</span>
+                                <span class="label">Illegal logging</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="app-showcase" data-aos="fade-left">
+                    <div class="showcase-content">
+                        <h3>Wildlife Corridors</h3>
+                        <p>Mapping and protecting migration routes using GPS collar data and habitat analysis</p>
+                        <div class="showcase-stats">
+                            <div class="stat">
+                                <span class="value">15,000+</span>
+                                <span class="label">Animals tracked</span>
+                            </div>
+                            <div class="stat">
+                                <span class="value">5,000 km</span>
+                                <span class="label">Corridors mapped</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showcase-image migration"></div>
+                </div>
+
+                <div class="app-showcase" data-aos="fade-right">
+                    <div class="showcase-image marine"></div>
+                    <div class="showcase-content">
+                        <h3>Ocean Watch</h3>
+                        <p>Monitoring illegal fishing, coral reef health, and marine protected areas</p>
+                        <div class="showcase-stats">
+                            <div class="stat">
+                                <span class="value">95% accuracy</span>
+                                <span class="label">Vessel detection</span>
+                            </div>
+                            <div class="stat">
+                                <span class="value">70 countries</span>
+                                <span class="label">Marine monitoring</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Stories -->
+    <section class="stories-section" id="storiesSection">
+        <div class="section-container">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-trophy"></i> Mapping Success</h2>
+                <p>Real-world impact of geospatial conservation</p>
+            </div>
+
+            <div class="stories-grid">
+                <div class="story-card" data-aos="zoom-in">
+                    <div class="story-header">
+                        <div class="story-icon">
+                            <i class="fa-solid fa-tree"></i>
+                        </div>
+                        <h3>Amazon Protection</h3>
+                    </div>
+                    <div class="story-content">
+                        <p>Satellite monitoring reduced deforestation by 70% in protected areas through real-time alerts to authorities.</p>
+                        <div class="story-impact">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <span>2.5M hectares saved</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story-card" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="story-header">
+                        <div class="story-icon">
+                            <i class="fa-solid fa-elephant"></i>
+                        </div>
+                        <h3>Elephant Tracking</h3>
+                    </div>
+                    <div class="story-content">
+                        <p>GPS collars on 500+ elephants helped create safe corridors, reducing human-wildlife conflicts by 60%.</p>
+                        <div class="story-impact">
+                            <i class="fa-solid fa-route"></i>
+                            <span>1,200 km corridors</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story-card" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="story-header">
+                        <div class="story-icon">
+                            <i class="fa-solid fa-water"></i>
+                        </div>
+                        <h3>Coral Reef Rescue</h3>
+                    </div>
+                    <div class="story-content">
+                        <p>Satellite monitoring identified bleaching events 2 weeks earlier, enabling rapid conservation response.</p>
+                        <div class="story-impact">
+                            <i class="fa-solid fa-heart"></i>
+                            <span>400 reefs protected</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Map -->
+    <section class="map-section" id="mapSection">
+        <div class="section-container">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-globe-americas"></i> Global Conservation Map</h2>
+                <p>Explore real-time conservation projects worldwide</p>
+            </div>
+
+            <div class="map-container" data-aos="fade-up">
+                <div id="conservationMap"></div>
+                <div class="map-legend">
+                    <div class="legend-item">
+                        <div class="legend-color protected"></div>
+                        <span>Protected Areas</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color active"></div>
+                        <span>Active Projects</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color endangered"></div>
+                        <span>Endangered Species</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color deforestation"></div>
+                        <span>Deforestation Alerts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Citizen Science -->
+    <section class="citizen-section" id="citizenSection">
+        <div class="section-container">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-user-astronaut"></i> Map with Us</h2>
+                <p>How you can contribute to geospatial conservation</p>
+            </div>
+
+            <div class="citizen-content">
+                <div class="citizen-card" data-aos="fade-up">
+                    <h3><i class="fa-solid fa-map-marked-alt"></i> Crowdsourced Mapping</h3>
+                    <p>Help identify features, tag wildlife, and map changes using satellite imagery</p>
+                    <div class="platform-list">
+                        <div class="platform-item">
+                            <i class="fa-solid fa-earth-americas"></i>
+                            <span>Google Earth Engine</span>
+                        </div>
+                        <div class="platform-item">
+                            <i class="fa-solid fa-map"></i>
+                            <span>OpenStreetMap</span>
+                        </div>
+                        <div class="platform-item">
+                            <i class="fa-solid fa-satellite"></i>
+                            <span>NASA Earthdata</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="citizen-projects">
+                    <h3><i class="fa-solid fa-handshake"></i> Collaborative Projects</h3>
+                    <div class="projects-grid">
+                        <div class="project" data-aos="flip-up">
+                            <div class="project-icon">
+                                <i class="fa-solid fa-tree"></i>
+                            </div>
+                            <h4>Forest Watchers</h4>
+                            <p>Community monitoring of deforestation using satellite alerts</p>
+                        </div>
+                        <div class="project" data-aos="flip-up" data-aos-delay="100">
+                            <div class="project-icon">
+                                <i class="fa-solid fa-water"></i>
+                            </div>
+                            <h4>Coral Watch</h4>
+                            <p>Volunteer analysis of reef health from space imagery</p>
+                        </div>
+                        <div class="project" data-aos="flip-up" data-aos-delay="200">
+                            <div class="project-icon">
+                                <i class="fa-solid fa-kiwi-bird"></i>
+                            </div>
+                            <h4>Bird Migration Map</h4>
+                            <p>Tracking bird movements across continents</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Future Vision -->
+    <section class="future-section" id="futureSection">
+        <div class="section-container">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-crystal-ball"></i> The Mapping Future</h2>
+                <p>Next-generation geospatial technologies</p>
+            </div>
+
+            <div class="future-grid">
+                <div class="future-card" data-aos="fade-up">
+                    <div class="future-icon">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <h3>AI-Powered Analysis</h3>
+                    <p>Machine learning algorithms that predict environmental changes before they happen</p>
+                </div>
+
+                <div class="future-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="future-icon">
+                        <i class="fa-solid fa-cube"></i>
+                    </div>
+                    <h3>3D Ecosystem Mapping</h3>
+                    <p>Complete volumetric modeling of forests, oceans, and habitats</p>
+                </div>
+
+                <div class="future-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="future-icon">
+                        <i class="fa-solid fa-sync-alt"></i>
+                    </div>
+                    <h3>Real-Time Planet</h3>
+                    <p>Continuous global monitoring with minute-by-minute updates</p>
+                </div>
+            </div>
+
+            <div class="map-action">
+                <h3><i class="fa-solid fa-map-pin"></i> Start Mapping Today</h3>
+                <p>Join thousands of conservationists using geospatial technology to protect our planet</p>
+                <div class="action-buttons">
+                    <button class="action-btn primary" id="joinProject">
+                        <i class="fa-solid fa-user-plus"></i>
+                        Join a Project
+                    </button>
+                    <button class="action-btn secondary" id="learnMapping">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        Learn Mapping
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer placeholder -->
+    <div id="footer-container"></div>
+
+    <!-- Scripts -->
+    <script src="../js/main.js"></script>
+    <script src="../js/pages/geospatial.js"></script>
+    <script src="../js/components/navbar-loader.js"></script>
+    <script src="../js/components/footer-loader.js"></script>
+    
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize AOS
+            AOS.init({
+                duration: 800,
+                once: true,
+                offset: 100
+            });
+
+            // Theme Toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
+            
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                body.classList.add('dark-theme');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('dark-theme');
+                const isDark = body.classList.contains('dark-theme');
+                themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            });
+
+            // Number counters
+            const counters = document.querySelectorAll('.stat-number');
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-count'));
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                let current = 0;
+                
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.textContent = Math.floor(current);
+                        setTimeout(updateCounter, 16);
+                    } else {
+                        counter.textContent = target;
+                    }
+                };
+                
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            updateCounter();
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                });
+                
+                observer.observe(counter);
+            });
+
+            // Initialize Leaflet Map
+            const map = L.map('conservationMap').setView([20, 0], 2);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Add conservation project markers
+            const conservationProjects = [
+                {
+                    coords: [-3.4653, -62.2159],
+                    title: 'Amazon Protection',
+                    description: 'Satellite monitoring of deforestation',
+                    type: 'protected'
+                },
+                {
+                    coords: [1.9403, 33.9874],
+                    title: 'African Elephant Tracking',
+                    description: 'GPS monitoring of migration routes',
+                    type: 'active'
+                },
+                {
+                    coords: [-18.2871, 147.6992],
+                    title: 'Great Barrier Reef',
+                    description: 'Coral health monitoring',
+                    type: 'endangered'
+                },
+                {
+                    coords: [52.3555, -1.1743],
+                    title: 'UK Rewilding',
+                    description: 'Habitat restoration mapping',
+                    type: 'active'
+                }
+            ];
+
+            conservationProjects.forEach(project => {
+                const iconColor = project.type === 'protected' ? 'green' : 
+                                project.type === 'active' ? 'blue' : 
+                                project.type === 'endangered' ? 'red' : 'orange';
+                
+                const icon = L.divIcon({
+                    html: `<i class="fa-solid fa-map-pin" style="color: ${iconColor}; font-size: 24px;"></i>`,
+                    className: 'custom-icon',
+                    iconSize: [30, 30]
+                });
+
+                L.marker(project.coords, {icon})
+                    .addTo(map)
+                    .bindPopup(`
+                        <h3>${project.title}</h3>
+                        <p>${project.description}</p>
+                    `);
+            });
+
+            // Map exploration button
+            const exploreMapBtn = document.getElementById('exploreMap');
+            if (exploreMapBtn) {
+                exploreMapBtn.addEventListener('click', () => {
+                    document.getElementById('mapSection').scrollIntoView({ 
+                        behavior: 'smooth' 
+                    });
+                    map.flyTo([20, 0], 2.5);
+                });
+            }
+
+            // Project join button
+            const joinProjectBtn = document.getElementById('joinProject');
+            if (joinProjectBtn) {
+                joinProjectBtn.addEventListener('click', () => {
+                    alert('Redirecting to conservation projects portal...');
+                    // In real implementation: window.location.href = '/projects';
+                });
+            }
+
+            // Learn mapping button
+            const learnMappingBtn = document.getElementById('learnMapping');
+            if (learnMappingBtn) {
+                learnMappingBtn.addEventListener('click', () => {
+                    alert('Opening geospatial learning resources...');
+                    // In real implementation: window.location.href = '/learn';
+                });
+            }
+
+            // Animate satellite orbit
+            const satellite = document.querySelector('.satellite');
+            if (satellite) {
+                let angle = 0;
+                setInterval(() => {
+                    angle = (angle + 1) % 360;
+                    const radius = 150;
+                    const x = Math.cos(angle * Math.PI / 180) * radius;
+                    const y = Math.sin(angle * Math.PI / 180) * radius;
+                    satellite.style.transform = `translate(${x}px, ${y}px)`;
+                }, 50);
+            }
+
+            // Scroll progress
+            window.addEventListener('scroll', () => {
+                const scrollProgress = document.getElementById('scrollProgress');
+                const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (window.scrollY / windowHeight) * 100;
+                scrollProgress.style.width = scrolled + '%';
+            });
+
+            // Create animated map background
+            const mapBackground = document.getElementById('mapBackground');
+            if (mapBackground) {
+                const canvas = document.createElement('canvas');
+                mapBackground.appendChild(canvas);
+                const ctx = canvas.getContext('2d');
+                
+                function resizeCanvas() {
+                    canvas.width = mapBackground.clientWidth;
+                    canvas.height = mapBackground.clientHeight;
+                }
+                
+                resizeCanvas();
+                window.addEventListener('resize', resizeCanvas);
+                
+                function drawMapLines() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    // Draw grid
+                    ctx.strokeStyle = 'rgba(14, 165, 233, 0.1)';
+                    ctx.lineWidth = 1;
+                    
+                    for (let x = 0; x < canvas.width; x += 50) {
+                        ctx.beginPath();
+                        ctx.moveTo(x, 0);
+                        ctx.lineTo(x, canvas.height);
+                        ctx.stroke();
+                    }
+                    
+                    for (let y = 0; y < canvas.height; y += 50) {
+                        ctx.beginPath();
+                        ctx.moveTo(0, y);
+                        ctx.lineTo(canvas.width, y);
+                        ctx.stroke();
+                    }
+                    
+                    // Draw animated data points
+                    ctx.fillStyle = 'rgba(14, 165, 233, 0.3)';
+                    for (let i = 0; i < 20; i++) {
+                        const x = Math.random() * canvas.width;
+                        const y = Math.random() * canvas.height;
+                        const size = 2 + Math.random() * 4;
+                        ctx.beginPath();
+                        ctx.arc(x, y, size, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    
+                    requestAnimationFrame(drawMapLines);
+                }
+                
+                drawMapLines();
+            }
+        });
+
+        // Component loader
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load Navbar
+            fetch('../components/navbar.html')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to load navbar');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('navbar-container').innerHTML = data;
+                    if (typeof initNavbar === 'function') {
+                        initNavbar();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading navbar:', error);
+                    document.getElementById('navbar-container').innerHTML = 
+                        '<div style="padding: 20px; background: #f8d7da; color: #721c24;">Navbar failed to load</div>';
+                });
+
+            // Load Footer
+            fetch('../components/footer.html')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to load footer');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('footer-container').innerHTML = data;
+                    if (typeof initFooter === 'function') {
+                        initFooter();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading footer:', error);
+                    document.getElementById('footer-container').innerHTML = 
+                        '<div style="padding: 20px; background: #f8d7da; color: #721c24; text-align: center;">Footer failed to load</div>';
+                });
+        });
+    </script>
+</body>
+</html>

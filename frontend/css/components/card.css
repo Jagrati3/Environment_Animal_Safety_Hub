@@ -27,17 +27,30 @@
 
 /* ===== FEATURE CARD ===== */
 .feature-card {
-  background: var(--card-bg);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition-normal);
-  position: relative;
+  transition: 
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .feature-card:hover {
-  transform: translateY(-10px);
-  box-shadow: var(--shadow-xl);
+  transform: translateY(-12px) scale(1.015);
+  box-shadow:
+    0 15px 30px rgba(0, 0, 0, 0.18),
+    0 40px 80px rgba(0, 0, 0, 0.22);
+}
+
+.feature-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+  transition: box-shadow 0.4s ease;
+  pointer-events: none;
+}
+
+.feature-card:hover::after {
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.35);
 }
 
 /* Card Image */
@@ -48,14 +61,11 @@
 }
 
 .card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: var(--transition-slow);
+  transition: transform 0.6s ease;
 }
 
 .feature-card:hover .card-image img {
-  transform: scale(1.1);
+  transform: scale(1.08) translateY(-4px);
 }
 
 .card-overlay {
@@ -131,6 +141,16 @@
   gap: 12px;
   color: var(--primary-dark);
 }
+.card-btn,
+.card-footer button {
+  transition: 
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.feature-card:hover .card-btn {
+  transform: translateX(4px);
+}
 
 .card-stats {
   display: flex;
@@ -142,6 +162,12 @@
 
 .card-stats i {
   color: #e91e63;
+}
+
+@media (hover: hover) {
+  .feature-card:hover {
+    transform: translateY(-12px) scale(1.015);
+  }
 }
 
 /* ===== SIMPLE CARDS (Original Style Enhanced) ===== */

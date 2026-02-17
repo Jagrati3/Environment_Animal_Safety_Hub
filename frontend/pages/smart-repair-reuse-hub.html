@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Repair & Reuse Hub | EcoLife</title>
+  <link rel="stylesheet" href="../css/smart-repair-reuse-hub.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+<body>
+  <div class="repair-app">
+    <!-- Navbar will be injected -->
+    <div id="navbar-container"></div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1><i class="fas fa-screwdriver-wrench"></i> Smart Repair & Reuse Hub</h1>
+          <p>Search common household items, follow step-by-step repair guides, and extend product life with reuse ideas.</p>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-gauge">
+            <div class="gauge-ring">
+              <div class="gauge-value" id="guidesCompleted">0</div>
+              <div class="gauge-label">Guides completed</div>
+            </div>
+            <div class="gauge-caption">This month</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Alert Banner -->
+    <div id="alertBanner" class="alert-banner hidden">
+      <i class="fas fa-check-circle"></i>
+      <span id="alertMessage"></span>
+      <button class="alert-close" onclick="closeAlert()">x</button>
+    </div>
+
+    <div class="container">
+      <!-- Quick Stats -->
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-toolbox"></i></div>
+          <div class="stat-content">
+            <h3>Repair Guides</h3>
+            <p class="stat-value" id="guideCount">0</p>
+            <span class="stat-unit">Available</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-circle-check"></i></div>
+          <div class="stat-content">
+            <h3>Completed</h3>
+            <p class="stat-value" id="completedCount">0</p>
+            <span class="stat-unit">Logged</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-recycle"></i></div>
+          <div class="stat-content">
+            <h3>Reuse Ideas</h3>
+            <p class="stat-value" id="reuseIdeas">0</p>
+            <span class="stat-unit">Total</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-leaf"></i></div>
+          <div class="stat-content">
+            <h3>CO2 Avoided</h3>
+            <p class="stat-value" id="co2Avoided">0.0</p>
+            <span class="stat-unit">kg</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Search Section -->
+      <section class="panel">
+        <div class="section-header">
+          <h2><i class="fas fa-magnifying-glass"></i> Find a Repair Guide</h2>
+          <p>Search an item to see repair steps, tools, and reuse ideas.</p>
+        </div>
+        <div class="search-wrapper">
+          <i class="fas fa-search"></i>
+          <input id="searchInput" type="text" placeholder="Search items like lamp, chair, headphones..." autocomplete="off" />
+          <button class="search-clear" id="clearBtn" onclick="clearSearch()"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="searchResults" class="search-results hidden"></div>
+        <div class="quick-tags">
+          <button onclick="selectCategory('electronics')">Electronics</button>
+          <button onclick="selectCategory('furniture')">Furniture</button>
+          <button onclick="selectCategory('clothing')">Clothing</button>
+          <button onclick="selectCategory('kitchen')">Kitchen</button>
+          <button onclick="selectCategory('outdoor')">Outdoor</button>
+        </div>
+      </section>
+
+      <!-- Guide Detail -->
+      <section id="guideDetail" class="guide-detail hidden">
+        <div class="guide-card">
+          <button class="close-detail" onclick="closeGuide()"><i class="fas fa-times"></i></button>
+          <div class="guide-header">
+            <div class="guide-icon" id="guideIcon"></div>
+            <div>
+              <h2 id="guideTitle"></h2>
+              <div class="guide-tags" id="guideTags"></div>
+            </div>
+          </div>
+          <div class="guide-grid">
+            <div class="guide-section">
+              <h3><i class="fas fa-list-ol"></i> Steps</h3>
+              <ol id="guideSteps"></ol>
+            </div>
+            <div class="guide-section">
+              <h3><i class="fas fa-screwdriver"></i> Tools</h3>
+              <ul id="guideTools"></ul>
+            </div>
+            <div class="guide-section">
+              <h3><i class="fas fa-seedling"></i> Reuse Ideas</h3>
+              <ul id="guideReuse"></ul>
+            </div>
+            <div class="guide-section">
+              <h3><i class="fas fa-circle-info"></i> Tips</h3>
+              <p id="guideTips"></p>
+            </div>
+          </div>
+          <button class="primary-btn" onclick="logCompletion()"><i class="fas fa-check"></i> Log Repair Completion</button>
+        </div>
+      </section>
+
+      <!-- Completed Log -->
+      <section class="panel">
+        <div class="section-header">
+          <h2><i class="fas fa-clipboard-list"></i> Repair Log</h2>
+          <p>Track completed repairs and reuse ideas.</p>
+        </div>
+        <div id="repairLog" class="repair-log"></div>
+      </section>
+
+      <!-- Tips Section -->
+      <section class="panel">
+        <div class="section-header">
+          <h2><i class="fas fa-lightbulb"></i> Repair Tips</h2>
+          <p>Smart habits to make repairs easier.</p>
+        </div>
+        <div class="tips-grid" id="tipsGrid"></div>
+      </section>
+    </div>
+  </div>
+
+  <script src="../js/smart-repair-reuse-hub.js"></script>
+</body>
+</html>

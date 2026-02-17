@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ice-Albedo Feedback and Coastal Marine Productivity - Ecological Impacts of Declining Sea Ice Reflectivity</title>
+<link rel="stylesheet" href="css/ice-albedo-feedback-coastal-marine-productivity.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="accessibility-controls">
+        <button class="accessibility-btn" onclick="toggleHighContrast()">High Contrast</button>
+        <button class="accessibility-btn" onclick="toggleFontSize()">Font Size</button>
+        <button class="accessibility-btn" onclick="toggleReducedMotion()">Reduced Motion</button>
+    </div>
+
+    <header class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Ice-Albedo Feedback & Coastal Marine Productivity</h1>
+                <p class="hero-subtitle">Studying Ecological Impacts of Declining Sea Ice Reflectivity</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">4.6M</span>
+                        <span class="stat-label">km² Sea Ice Extent</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">13%</span>
+                        <span class="stat-label">Loss/Decade</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">20-50%</span>
+                        <span class="stat-label">Productivity Increase</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="albedo-simulator">
+                    <h3>Albedo Feedback Simulator</h3>
+                    <div class="simulator-controls">
+                        <div class="control-group">
+                            <label for="ice-extent">Sea Ice Extent (%):</label>
+                            <input type="range" id="ice-extent" min="0" max="100" value="70">
+                            <span class="control-value" id="ice-extent-value">70%</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="temperature-change">Temperature Change (°C):</label>
+                            <input type="range" id="temperature-change" min="0" max="5" step="0.1" value="2.0">
+                            <span class="control-value" id="temperature-value">+2.0°C</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="season-select">Season:</label>
+                            <select id="season-select">
+                                <option value="spring">Spring (Max Feedback)</option>
+                                <option value="summer">Summer</option>
+                                <option value="fall">Fall</option>
+                                <option value="winter">Winter</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="region-select">Region:</label>
+                            <select id="region-select">
+                                <option value="beaufort">Beaufort Sea</option>
+                                <option value="chukchi">Chukchi Sea</option>
+                                <option value="bering">Bering Sea</option>
+                                <option value="greenland">Greenland</option>
+                                <option value="antarctic">Antarctic Peninsula</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="simulator-results">
+                        <div class="result-metric">
+                            <span class="metric-label">Albedo Value:</span>
+                            <span class="metric-value" id="albedo-value">0.65</span>
+                            <div class="albedo-indicator">
+                                <div class="albedo-bar" id="albedo-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Feedback Strength:</span>
+                            <span class="metric-value" id="feedback-strength">Strong</span>
+                            <div class="feedback-indicators">
+                                <span class="indicator" id="warming-amplifier">🌡️ Warming Amplifier</span>
+                                <span class="indicator" id="ice-melt">🧊 Ice Melt</span>
+                                <span class="indicator" id="productivity-boost">🌿 Productivity Boost</span>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Marine Productivity:</span>
+                            <span class="metric-value" id="marine-productivity">+35%</span>
+                            <div class="productivity-bar">
+                                <div class="productivity-fill" id="productivity-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Ecosystem Impact:</span>
+                            <span class="metric-value" id="ecosystem-impact">High Change</span>
+                            <div class="impact-indicators">
+                                <div class="impact-meter">
+                                    <span class="impact-label ice-dependent">Ice Species</span>
+                                    <div class="impact-bar">
+                                        <div class="impact-fill ice-fill" id="ice-fill"></div>
+                                    </div>
+                                </div>
+                                <div class="impact-meter">
+                                    <span class="impact-label open-water">Open Water Species</span>
+                                    <div class="impact-bar">
+                                        <div class="impact-fill water-fill" id="water-fill"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-icon">🧊</span>
+                <span class="brand-text">Albedo Hub</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#science" class="nav-link active" data-tab="science">Science</a></li>
+                <li><a href="#impacts" class="nav-link" data-tab="impacts">Impacts</a></li>
+                <li><a href="#mechanisms" class="nav-link" data-tab="mechanisms">Mechanisms</a></li>
+                <li><a href="#solutions" class="nav-link" data-tab="solutions">Solutions</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section id="science" class="content-section active">
+            <div class="section-container">
+                <h2>The Science of Ice-Albedo Feedback</h2>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>Albedo Dynamics</h3>
+                        <div class="albedo-dynamics">
+                            <div class="albedo-category">
+                                <h4>❄️ Sea Ice Types</h4>
+                                <div class="albedo-metrics">
+                                    <div class="metric">Multi-year ice: <span id="multi-year">0.75-0.85</span></div>
+                                    <div class="metric">First-year ice: <span id="first-year">0.45-0.65</span></div>
+                                    <div class="metric">Open water: <span id="open-water">0.10-0.20</span></div>
+                                    <div class="metric">Snow-covered: <span id="snow-covered">0.80-0.90</span></div>
+                                </div>
+                            </div>
+                            <div class="albedo-category">
+                                <h4>🔄 Feedback Strength</h4>
+                                <div class="albedo-metrics">
+                                    <div class="metric">Arctic amplification: <span id="arctic-amp">2.0-3.0x</span></div>
+                                    <div class="metric">Spring feedback: <span id="spring-feedback">1.5-2.5 W/m²</span></div>
+                                    <div class="metric">Summer feedback: <span id="summer-feedback">0.5-1.0 W/m²</span></div>
+                                    <div class="metric">Global contribution: <span id="global-contrib">20-30%</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h3>Marine Productivity Response</h3>
+                        <div class="productivity-chart">
+                            <canvas id="productivityChart"></canvas>
+                        </div>
+                        <div class="productivity-legend">
+                            <div class="legend-item">
+                                <span class="legend-color phytoplankton"></span>
+                                <span>Phytoplankton</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color zooplankton"></span>
+                                <span>Zooplankton</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color fish"></span>
+                                <span>Fish Stocks</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h3>Feedback Amplification</h3>
+                        <div class="feedback-amplification">
+                            <div class="amplification-metric">
+                                <div class="circle-value">2-3x</div>
+                                <div class="circle-label">Warming Amplification</div>
+                            </div>
+                            <div class="amplification-arrow">→</div>
+                            <div class="amplification-metric">
+                                <div class="circle-value">50%</div>
+                                <div class="circle-label">Productivity Increase</div>
+                            </div>
+                            <div class="amplification-stats">
+                                <div class="stat">Carbon sequestration: +0.5-1.0 Pg C/year</div>
+                                <div class="stat">Biodiversity shifts: 30-50% species affected</div>
+                                <div class="stat">Economic impacts: $10B+ annually</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="impacts" class="content-section">
+            <div class="section-container">
+                <h2>Regional Impacts and Case Studies</h2>
+                <div class="case-studies">
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Beaufort Sea</h3>
+                            <span class="case-location">Arctic Coastal Canada/Alaska</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">13%</div>
+                                <div class="stat">20-30%</div>
+                                <div class="stat">$2.5B</div>
+                            </div>
+                            <p>Enhanced phytoplankton blooms, bowhead whale habitat changes, increased shipping activity.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Chukchi Sea</h3>
+                            <span class="case-location">Arctic Russia/Alaska</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">15%</div>
+                                <div class="stat">25-35%</div>
+                                <div class="stat">$1.8B</div>
+                            </div>
+                            <p>Walrus haulout changes, Pacific species invasion, oil spill risk increase.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Bering Sea</h3>
+                            <span class="case-location">Alaska Peninsula</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">15-20%</div>
+                                <div class="stat">25-35%</div>
+                                <div class="stat">$1.2B</div>
+                            </div>
+                            <p>Pollock stock fluctuations, crab population shifts, storm surge impacts.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Greenland Waters</h3>
+                            <span class="case-location">West Greenland</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">8-12%</div>
+                                <div class="stat">15-25%</div>
+                                <div class="stat">€1.8B</div>
+                            </div>
+                            <p>Atlantic water inflow, cod population recovery, fjord ecosystem changes.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Antarctic Peninsula</h3>
+                            <span class="case-location">Western Antarctic</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">6-10%</div>
+                                <div class="stat">10-20%</div>
+                                <div class="stat">$900M</div>
+                            </div>
+                            <p>Krill population fluctuations, penguin breeding changes, tourism impacts.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="global-impact">
+                    <h3>Global Sea Ice Loss and Productivity Changes</h3>
+                    <canvas id="globalIceChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="mechanisms" class="content-section">
+            <div class="section-container">
+                <h2>Mechanisms of Albedo Feedback</h2>
+                <div class="mechanism-explorer">
+                    <div class="mechanism-tabs">
+                        <button class="mechanism-tab active" data-mechanism="physical">Physical</button>
+                        <button class="mechanism-tab" data-mechanism="biological">Biological</button>
+                        <button class="mechanism-tab" data-mechanism="seasonal">Seasonal</button>
+                    </div>
+
+                    <div class="mechanism-content">
+                        <div class="mechanism-panel active" id="physical-panel">
+                            <h3>Physical Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Solar Radiation Absorption</h4>
+                                    <p>Reduced ice cover allows more solar energy to be absorbed by dark ocean waters instead of being reflected back to space.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Heat Storage and Release</h4>
+                                    <p>Absorbed solar energy warms surface waters, delaying ice formation and extending the melt season.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Atmospheric Coupling</h4>
+                                    <p>Warmed ocean surfaces enhance heat transfer to the atmosphere, creating self-reinforcing warming patterns.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mechanism-panel" id="biological-panel">
+                            <h3>Biological Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Primary Production Enhancement</h4>
+                                    <p>Increased light availability and nutrient mixing stimulate phytoplankton growth and carbon fixation.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Trophic Cascade Effects</h4>
+                                    <p>Changes in primary production propagate through food webs, affecting all trophic levels.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Species Redistribution</h4>
+                                    <p>Warmer waters allow poleward expansion of subarctic species while displacing Arctic endemics.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mechanism-panel" id="seasonal-panel">
+                            <h3>Seasonal Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Spring Melt Dynamics</h4>
+                                    <p>Maximum feedback occurs during spring when solar input is high and ice is most vulnerable to melt.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Summer Open Water</h4>
+                                    <p>Extended periods of open water allow continued heat absorption throughout the summer season.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Fall Freeze Delay</h4>
+                                    <p>Delayed ice formation in fall allows continued ocean-atmosphere heat exchange.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solutions" class="content-section">
+            <div class="section-container">
+                <h2>Management and Adaptation Strategies</h2>
+                <div class="solutions-framework">
+                    <div class="solution-category">
+                        <h3>Monitoring & Research</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Satellite Networks</h4>
+                                <p>Comprehensive satellite monitoring of ice extent, albedo, and productivity changes.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Ocean Observing</h4>
+                                <p>Integrated oceanographic monitoring networks for ecosystem response tracking.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Biodiversity Surveys</h4>
+                                <p>Long-term monitoring of species distribution and population changes.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="solution-category">
+                        <h3>Adaptive Management</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Fisheries Adaptation</h4>
+                                <p>Dynamic fisheries management responding to changing species distributions.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Protected Areas</h4>
+                                <p>Expansion and redesign of marine protected areas for shifting ecosystems.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Community Planning</h4>
+                                <p>Indigenous and coastal community adaptation planning and capacity building.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="solution-category">
+                        <h3>Technological Solutions</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Climate Modeling</h4>
+                                <p>Advanced coupled ice-ocean-atmosphere models for prediction and planning.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Early Warning Systems</h4>
+                                <p>Real-time monitoring and prediction systems for ecosystem changes.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Sustainable Development</h4>
+                                <p>Climate-resilient infrastructure and economic development strategies.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="policy-framework">
+                        <h3>Policy and Governance Framework</h3>
+                        <div class="policy-actions">
+                            <div class="policy-item">
+                                <h4>International Cooperation</h4>
+                                <ul>
+                                    <li>Arctic Council coordination</li>
+                                    <li>Antarctic Treaty implementation</li>
+                                    <li>Climate agreement integration</li>
+                                    <li>Indigenous rights protection</li>
+                                </ul>
+                            </div>
+                            <div class="policy-item">
+                                <h4>National Strategies</h4>
+                                <ul>
+                                    <li>Coastal zone adaptation plans</li>
+                                    <li>Fisheries management reforms</li>
+                                    <li>Infrastructure resilience standards</li>
+                                    <li>Community support programs</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>Issue #2332</h4>
+                <p>Ice-Albedo Feedback and Coastal Marine Productivity</p>
+                <p>Studying ecological impacts of declining sea ice reflectivity</p>
+            </div>
+            <div class="footer-section">
+                <h4>Key Findings</h4>
+                <ul>
+                    <li>13% Arctic sea ice loss per decade</li>
+                    <li>20-50% increase in coastal marine productivity</li>
+                    <li>$10B+ annual global economic impacts</li>
+                    <li>2-3x warming amplification in polar regions</li>
+                    <li>30-50% species redistribution expected</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Management Actions</h4>
+                <ul>
+                    <li>Implement comprehensive monitoring networks</li>
+                    <li>Develop adaptive fisheries management</li>
+                    <li>Expand marine protected areas</li>
+                    <li>Support community adaptation strategies</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <a href="#science">Albedo Science</a>
+                    <a href="#impacts">Case Studies</a>
+                    <a href="#mechanisms">Feedback Mechanisms</a>
+                    <a href="#solutions">Adaptation Strategies</a>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Environment Animal Safety Hub - Issue #2332: Ice-Albedo Feedback Research</p>
+        </div>
+    </footer>
+
+    <script src="ice-albedo-feedback-coastal-marine-productivity.js"></script>
+</body>
+</html>

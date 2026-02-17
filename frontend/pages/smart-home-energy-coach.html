@@ -6,9 +6,12 @@
   <title>Smart Home Energy Coach</title>
   <link rel="stylesheet" href="../css/smart-home-energy-coach.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="../css/components/navbar.css">
+  <link rel="stylesheet" href="../css/components/footer.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+  <div id="navbar-container"></div>
   <div class="coach-app">
     <header class="coach-header">
       <div class="header-content">
@@ -278,7 +281,28 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast"></div>
   </div>
-
+  <div id="footer-container"></div>
+  <script>
+    // Load navbar
+    fetch('../components/navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+        
+        // Initialize navbar functionality
+        const script = document.createElement('script');
+        script.src = '../js/components/navbar.js';
+        document.body.appendChild(script);
+      });
+  </script>
+  <script>
+  // Load footer
+  fetch('../components/footer.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('footer-container').innerHTML = data;
+    });
+</script>
   <script src="../js/pages/smart-home-energy-coach.js"></script>
 </body>
 </html>

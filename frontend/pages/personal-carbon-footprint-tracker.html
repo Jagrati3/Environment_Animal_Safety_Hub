@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personal Carbon Footprint Tracker</title>
+  <link rel="stylesheet" href="../css/personal-carbon-footprint-tracker.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/date-fns@3.0.0/index.min.js"></script>
+</head>
+<body>
+  <div class="carbon-app">
+    <!-- Navbar will be injected -->
+    <div id="navbar-container"></div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1><i class="fas fa-leaf"></i> Personal Carbon Footprint Tracker</h1>
+          <p>Track your daily emissions, get personalized reduction tips, and monitor your environmental impact</p>
+        </div>
+        <div class="hero-visual">
+          <div class="carbon-meter">
+            <svg viewBox="0 0 200 200" class="meter-gauge">
+              <circle cx="100" cy="100" r="90" class="meter-bg" />
+              <circle cx="100" cy="100" r="90" class="meter-progress" id="meterProgress" />
+            </svg>
+            <div class="meter-value">
+              <span id="totalEmissions">0</span>
+              <span>kg CO₂</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Container -->
+    <div class="container">
+      <!-- Quick Stats Dashboard -->
+      <section class="stats-dashboard">
+        <div class="stat-card today">
+          <div class="stat-icon">
+            <i class="fas fa-calendar-day"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Today's Emissions</h3>
+            <p class="stat-value" id="todayEmissions">0</p>
+            <span class="stat-unit">kg CO₂</span>
+          </div>
+          <div class="stat-change up" id="todayChange">+0%</div>
+        </div>
+
+        <div class="stat-card week">
+          <div class="stat-icon">
+            <i class="fas fa-calendar-week"></i>
+          </div>
+          <div class="stat-content">
+            <h3>This Week</h3>
+            <p class="stat-value" id="weekEmissions">0</p>
+            <span class="stat-unit">kg CO₂</span>
+          </div>
+          <div class="stat-change neutral" id="weekChange">0%</div>
+        </div>
+
+        <div class="stat-card month">
+          <div class="stat-icon">
+            <i class="fas fa-calendar"></i>
+          </div>
+          <div class="stat-content">
+            <h3>This Month</h3>
+            <p class="stat-value" id="monthEmissions">0</p>
+            <span class="stat-unit">kg CO₂</span>
+          </div>
+          <div class="stat-change neutral" id="monthChange">0%</div>
+        </div>
+
+        <div class="stat-card goal">
+          <div class="stat-icon">
+            <i class="fas fa-bullseye"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Monthly Goal</h3>
+            <p class="stat-value" id="goalProgress">0</p>
+            <span class="stat-unit">% Completed</span>
+          </div>
+          <div class="stat-change neutral" id="goalStatus">On Track</div>
+        </div>
+      </section>
+
+      <!-- Main Content Grid -->
+      <div class="main-grid">
+        <!-- Left Column -->
+        <div class="left-column">
+          <!-- Add Activity Form -->
+          <section class="card activity-form-card">
+            <h2><i class="fas fa-plus-circle"></i> Log Activity</h2>
+            <form id="activityForm" class="activity-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="activityDate">Date</label>
+                  <input
+                    type="date"
+                    id="activityDate"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="activityType">Activity Type</label>
+                  <select id="activityType" required>
+                    <option value="">Select an activity</option>
+                    <optgroup label="Transportation">
+                      <option value="car">Driving (Car)</option>
+                      <option value="car-electric">Driving (Electric)</option>
+                      <option value="public-transport">Public Transport</option>
+                      <option value="flight">Flight</option>
+                      <option value="bike">Cycling/Walking</option>
+                    </optgroup>
+                    <optgroup label="Energy">
+                      <option value="electricity">Electricity Usage</option>
+                      <option value="gas">Natural Gas</option>
+                      <option value="water">Water Usage</option>
+                    </optgroup>
+                    <optgroup label="Consumption">
+                      <option value="meat">Meat Consumption</option>
+                      <option value="dairy">Dairy Consumption</option>
+                      <option value="vegetables">Plant-based Meal</option>
+                      <option value="shopping">Shopping/Clothes</option>
+                    </optgroup>
+                    <optgroup label="Waste">
+                      <option value="waste">Waste Generation</option>
+                      <option value="recycling">Recycling</option>
+                    </optgroup>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="activityValue">Value</label>
+                  <input
+                    type="number"
+                    id="activityValue"
+                    placeholder="Enter amount"
+                    step="0.1"
+                    min="0"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="activityUnit">Unit</label>
+                  <select id="activityUnit" required>
+                    <option value="km">Kilometers</option>
+                    <option value="miles">Miles</option>
+                    <option value="kwh">kWh</option>
+                    <option value="liters">Liters</option>
+                    <option value="kg">Kilograms</option>
+                    <option value="gallons">Gallons</option>
+                    <option value="items">Items</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="activityNotes">Notes (Optional)</label>
+                <textarea
+                  id="activityNotes"
+                  placeholder="Add any notes about this activity..."
+                  rows="3"
+                ></textarea>
+              </div>
+
+              <div class="estimated-emissions">
+                <p>Estimated Emissions: <strong id="estimatedEmissions">0</strong> kg CO₂</p>
+              </div>
+
+              <button type="submit" class="btn-primary btn-large">
+                <i class="fas fa-check"></i> Log Activity
+              </button>
+            </form>
+          </section>
+
+          <!-- Activity Log -->
+          <section class="card activity-log-card">
+            <div class="card-header">
+              <h2><i class="fas fa-history"></i> Recent Activities</h2>
+              <button class="btn-icon" id="filterActivityBtn" title="Filter">
+                <i class="fas fa-sliders-h"></i>
+              </button>
+            </div>
+            <div class="activity-log" id="activityLog">
+              <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <p>No activities logged yet. Start tracking your carbon footprint!</p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+          <!-- Emissions by Category Chart -->
+          <section class="card chart-card">
+            <h2><i class="fas fa-chart-pie"></i> Emissions by Category</h2>
+            <div class="chart-container">
+              <canvas id="categoryChart"></canvas>
+            </div>
+            <div class="chart-legend" id="categoryLegend"></div>
+          </section>
+
+          <!-- Weekly Trend Chart -->
+          <section class="card chart-card">
+            <h2><i class="fas fa-chart-line"></i> Weekly Trend</h2>
+            <div class="chart-container">
+              <canvas id="trendChart"></canvas>
+            </div>
+          </section>
+
+          <!-- Goals & Targets -->
+          <section class="card goals-card">
+            <div class="card-header">
+              <h2><i class="fas fa-trophy"></i> Goals & Targets</h2>
+              <button class="btn-icon" id="editGoalBtn" title="Edit">
+                <i class="fas fa-edit"></i>
+              </button>
+            </div>
+
+            <div class="goal-items">
+              <div class="goal-item">
+                <div class="goal-info">
+                  <h4>Daily Target</h4>
+                  <p class="goal-description">kg CO₂ per day</p>
+                </div>
+                <div class="goal-value" id="dailyTarget">5</div>
+              </div>
+
+              <div class="goal-item">
+                <div class="goal-info">
+                  <h4>Weekly Target</h4>
+                  <p class="goal-description">kg CO₂ per week</p>
+                </div>
+                <div class="goal-value" id="weeklyTarget">35</div>
+              </div>
+
+              <div class="goal-item">
+                <div class="goal-info">
+                  <h4>Monthly Target</h4>
+                  <p class="goal-description">kg CO₂ per month</p>
+                </div>
+                <div class="goal-value" id="monthlyTarget">150</div>
+              </div>
+            </div>
+
+            <div class="goal-progress">
+              <div class="progress-label">
+                <span>Monthly Progress</span>
+                <span id="monthlyProgressPercent">0%</span>
+              </div>
+              <div class="progress-bar-container">
+                <div class="progress-bar" id="monthlyProgressBar" style="width: 0%"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Quick Tips -->
+          <section class="card tips-card">
+            <h2><i class="fas fa-lightbulb"></i> Reduction Tips</h2>
+            <div class="tips-container" id="tipsContainer"></div>
+          </section>
+
+          <!-- Achievements -->
+          <section class="card achievements-card">
+            <h2><i class="fas fa-star"></i> Achievements</h2>
+            <div class="achievements-grid" id="achievementsGrid"></div>
+          </section>
+        </div>
+      </div>
+
+      <!-- Detailed Breakdown -->
+      <section class="card comparison-section">
+        <h2><i class="fas fa-exchange-alt"></i> Comparison & Impact</h2>
+        <div class="comparison-grid">
+          <div class="comparison-item">
+            <div class="comparison-icon">
+              <i class="fas fa-tree"></i>
+            </div>
+            <div class="comparison-content">
+              <h4 id="treesNeeded">0</h4>
+              <p>Trees needed to offset</p>
+            </div>
+          </div>
+          <div class="comparison-item">
+            <div class="comparison-icon">
+              <i class="fas fa-road"></i>
+            </div>
+            <div class="comparison-content">
+              <h4 id="carEmissions">0</h4>
+              <p>km in a gasoline car</p>
+            </div>
+          </div>
+          <div class="comparison-item">
+            <div class="comparison-icon">
+              <i class="fas fa-globe"></i>
+            </div>
+            <div class="comparison-content">
+              <h4 id="globalComparison">0%</h4>
+              <p>of global average</p>
+            </div>
+          </div>
+          <div class="comparison-item">
+            <div class="comparison-icon">
+              <i class="fas fa-person"></i>
+            </div>
+            <div class="comparison-content">
+              <h4 id="personComparison">0%</h4>
+              <p>vs national average</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Edit Goal Modal -->
+    <div id="goalModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Edit Carbon Goals</h2>
+          <button class="btn-icon" id="closeGoalModal">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <form id="goalForm" class="goal-form">
+          <div class="form-group">
+            <label for="dailyGoalInput">Daily Goal (kg CO₂)</label>
+            <input
+              type="number"
+              id="dailyGoalInput"
+              step="0.1"
+              min="0"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="weeklyGoalInput">Weekly Goal (kg CO₂)</label>
+            <input
+              type="number"
+              id="weeklyGoalInput"
+              step="0.1"
+              min="0"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="monthlyGoalInput">Monthly Goal (kg CO₂)</label>
+            <input
+              type="number"
+              id="monthlyGoalInput"
+              step="0.1"
+              min="0"
+              required
+            />
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" id="cancelGoalBtn">Cancel</button>
+            <button type="submit" class="btn-primary">Save Goals</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Filter Modal -->
+    <div id="filterModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Filter Activities</h2>
+          <button class="btn-icon" id="closeFilterModal">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <form id="filterForm" class="filter-form">
+          <div class="form-group">
+            <label for="filterType">Activity Type</label>
+            <select id="filterType">
+              <option value="">All Types</option>
+              <option value="transportation">Transportation</option>
+              <option value="energy">Energy</option>
+              <option value="consumption">Consumption</option>
+              <option value="waste">Waste</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="filterDateFrom">From Date</label>
+            <input type="date" id="filterDateFrom" />
+          </div>
+          <div class="form-group">
+            <label for="filterDateTo">To Date</label>
+            <input type="date" id="filterDateTo" />
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" id="cancelFilterBtn">Cancel</button>
+            <button type="submit" class="btn-primary">Apply Filter</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer will be injected -->
+  <div id="footer-container"></div>
+
+  <script src="../js/personal-carbon-footprint-tracker.js"></script>
+</body>
+</html>

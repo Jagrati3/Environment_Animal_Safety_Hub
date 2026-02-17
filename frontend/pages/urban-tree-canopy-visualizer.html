@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Urban Tree Canopy Visualizer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/frontend/pages/urban-tree-canopy-visualizer.css" />
+  <style>
+    body {
+      font-family: 'Montserrat', Arial, sans-serif;
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+      margin: 0;
+      padding: 0;
+      color: #263238;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(56, 142, 60, 0.13);
+      padding: 40px 32px 32px 32px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #388e3c;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+    .subtitle {
+      font-size: 1.2rem;
+      color: #388e3c;
+      margin-bottom: 32px;
+    }
+    .map-section {
+      background: #e8f5e9;
+      border-radius: 14px;
+      padding: 32px 24px;
+      margin-bottom: 36px;
+      box-shadow: 0 2px 8px rgba(56, 142, 60, 0.07);
+    }
+    #treeMap {
+      width: 100%;
+      height: 420px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(56, 142, 60, 0.10);
+      margin-bottom: 18px;
+    }
+    .legend {
+      display: flex;
+      gap: 18px;
+      margin-top: 10px;
+      font-size: 1rem;
+      color: #388e3c;
+      align-items: center;
+    }
+    .legend span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .dot-tree { background: #43a047; }
+    .dot-suggest { background: #fbc02d; }
+    .benefits-section {
+      margin-bottom: 36px;
+    }
+    .benefits-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #388e3c;
+      margin-bottom: 10px;
+    }
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+    }
+    .benefit-card {
+      background: #e0f2f1;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(38, 166, 154, 0.08);
+      padding: 18px 14px;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .benefit-card:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 8px 24px rgba(38, 166, 154, 0.18);
+    }
+    .benefit-icon {
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+      color: #43a047;
+    }
+    .benefit-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+    }
+    .benefit-desc {
+      font-size: 0.98rem;
+      color: #444;
+    }
+    .suggest-section {
+      background: #fffde7;
+      border-radius: 14px;
+      padding: 28px 20px;
+      box-shadow: 0 2px 8px rgba(251, 192, 45, 0.07);
+    }
+    .suggest-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fbc02d;
+      margin-bottom: 10px;
+    }
+    .suggest-list {
+      list-style: disc inside;
+      color: #fbc02d;
+      font-size: 1rem;
+      margin: 0;
+      padding-left: 18px;
+    }
+    @media (max-width: 700px) {
+      .container { padding: 18px 4vw; }
+      h1 { font-size: 2rem; }
+      .map-section, .benefits-section, .suggest-section { padding: 18px 6px; }
+      .benefits-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Urban Tree Canopy Visualizer</h1>
+    <div class="subtitle">Visualize tree coverage, estimate environmental benefits, and find areas for new planting in your city.</div>
+    <div class="map-section">
+      <div id="treeMap"></div>
+      <div class="legend">
+        <span><span class="legend-dot dot-tree"></span>Existing Tree</span>
+        <span><span class="legend-dot dot-suggest"></span>Suggested Planting</span>
+      </div>
+    </div>
+    <div class="benefits-section">
+      <div class="benefits-title">Estimated Benefits</div>
+      <div class="benefits-grid" id="benefitsGrid">
+        <!-- Benefits cards will be injected here -->
+      </div>
+    </div>
+    <div class="suggest-section">
+      <div class="suggest-title">Suggested Planting Areas</div>
+      <ul class="suggest-list" id="suggestList">
+        <!-- Suggestions will be injected here -->
+      </ul>
+    </div>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/frontend/pages/urban-tree-canopy-visualizer.js"></script>
+</body>
+</html>

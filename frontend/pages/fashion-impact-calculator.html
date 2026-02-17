@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fast Fashion Impact Calculator - Understand Your Wardrobe</title>
+    <link rel="stylesheet" href="../css/fashion-impact-calculator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="fashion-container">
+        <!-- Header -->
+        <header class="fi-header">
+            <div class="header-content">
+                <div class="header-title">
+                    <i class="fas fa-shirt"></i>
+                    <h1>Fashion Impact Calculator</h1>
+                </div>
+                <p class="header-subtitle">Understand the environmental cost of your wardrobe</p>
+            </div>
+            <nav class="nav-tabs">
+                <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
+                <button class="nav-tab" data-tab="audit">Wardrobe Audit</button>
+                <button class="nav-tab" data-tab="calculator">Impact Calculator</button>
+                <button class="nav-tab" data-tab="brands">Sustainable Brands</button>
+                <button class="nav-tab" data-tab="repair">Repair Guide</button>
+                <button class="nav-tab" data-tab="lifecycle">Lifecycle</button>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="fi-main">
+            <!-- Dashboard Tab -->
+            <div class="tab-content active" id="dashboard">
+                <div class="dashboard-grid">
+                    <!-- Total Impact Summary -->
+                    <div class="impact-summary">
+                        <h2>Your Total Wardrobe Impact</h2>
+                        <div class="summary-cards">
+                            <div class="summary-card water">
+                                <div class="card-icon">💧</div>
+                                <div class="card-details">
+                                    <span class="card-label">Water Consumed</span>
+                                    <span class="card-value" id="totalWater">0</span>
+                                    <span class="card-unit">Gallons</span>
+                                </div>
+                            </div>
+
+                            <div class="summary-card carbon">
+                                <div class="card-icon">🌍</div>
+                                <div class="card-details">
+                                    <span class="card-label">CO₂ Emissions</span>
+                                    <span class="card-value" id="totalCO2">0</span>
+                                    <span class="card-unit">kg</span>
+                                </div>
+                            </div>
+
+                            <div class="summary-card chemical">
+                                <div class="card-icon">⚗️</div>
+                                <div class="card-details">
+                                    <span class="card-label">Chemical Waste</span>
+                                    <span class="card-value" id="totalChemical">0</span>
+                                    <span class="card-unit">Gallons</span>
+                                </div>
+                            </div>
+
+                            <div class="summary-card microplastic">
+                                <div class="card-icon">🧬</div>
+                                <div class="card-details">
+                                    <span class="card-label">Microplastics</span>
+                                    <span class="card-value" id="totalMicroplastic">0</span>
+                                    <span class="card-unit">mg</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wardrobe Overview -->
+                    <div class="wardrobe-overview">
+                        <h2>Wardrobe Overview</h2>
+                        <div class="overview-stats">
+                            <div class="stat">
+                                <span class="stat-number" id="totalGarments">0</span>
+                                <span class="stat-label">Total Garments</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number" id="avgImpact">0</span>
+                                <span class="stat-label">Avg. Impact/Item</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number" id="sustainableCount">0</span>
+                                <span class="stat-label">Sustainable Items</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number" id="needsRepair">0</span>
+                                <span class="stat-label">Need Repair</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Impact by Material -->
+                    <div class="impact-chart">
+                        <h2>Environmental Impact by Material</h2>
+                        <div class="material-breakdown" id="materialBreakdown">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="quick-actions">
+                        <h2>Quick Actions</h2>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="openAddGarmentModal()">
+                                <i class="fas fa-plus"></i> Add Garment
+                            </button>
+                            <button class="action-btn" onclick="scrollToTab('audit')">
+                                <i class="fas fa-clipboard-list"></i> Audit Wardrobe
+                            </button>
+                            <button class="action-btn" onclick="scrollToTab('brands')">
+                                <i class="fas fa-leaf"></i> Find Brands
+                            </button>
+                            <button class="action-btn" onclick="downloadReport()">
+                                <i class="fas fa-download"></i> Download Report
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Sustainability Tips -->
+                    <div class="tips-section">
+                        <h2>Reduce Your Fashion Impact</h2>
+                        <div class="tips-grid">
+                            <div class="tip-card">
+                                <span class="tip-icon">🔄</span>
+                                <h3>Buy Less, Choose Better</h3>
+                                <p>Invest in quality pieces that last longer</p>
+                            </div>
+                            <div class="tip-card">
+                                <span class="tip-icon">🧵</span>
+                                <h3>Choose Natural Materials</h3>
+                                <p>Organic cotton, linen, and wool are sustainable</p>
+                            </div>
+                            <div class="tip-card">
+                                <span class="tip-icon">♻️</span>
+                                <h3>Shop Second-Hand</h3>
+                                <p>Vintage and thrift reduce production impact</p>
+                            </div>
+                            <div class="tip-card">
+                                <span class="tip-icon">🛠️</span>
+                                <h3>Repair & Upcycle</h3>
+                                <p>Fix broken items instead of replacing them</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wardrobe Audit Tab -->
+            <div class="tab-content" id="audit">
+                <div class="audit-container">
+                    <div class="audit-header">
+                        <h2>Complete Wardrobe Audit</h2>
+                        <p>Review and manage all items in your wardrobe</p>
+                        <button class="add-item-btn" onclick="openAddGarmentModal()">
+                            <i class="fas fa-plus"></i> Add New Item
+                        </button>
+                    </div>
+
+                    <!-- Filter/Sort Options -->
+                    <div class="audit-filters">
+                        <div class="filter-group">
+                            <label>Filter by:</label>
+                            <select id="filterType">
+                                <option value="">All Types</option>
+                                <option value="shirt">Shirts</option>
+                                <option value="pants">Pants</option>
+                                <option value="dress">Dresses</option>
+                                <option value="jacket">Jackets</option>
+                                <option value="shoes">Shoes</option>
+                                <option value="accessory">Accessories</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Sort by:</label>
+                            <select id="sortBy">
+                                <option value="recent">Recently Added</option>
+                                <option value="impact">Highest Impact</option>
+                                <option value="age">Oldest First</option>
+                                <option value="material">Material</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Wardrobe List -->
+                    <div class="wardrobe-list" id="wardrobeList">
+                        <p class="empty-state">No items yet. Add your first garment to get started!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Impact Calculator Tab -->
+            <div class="tab-content" id="calculator">
+                <div class="calculator-container">
+                    <div class="calculator-form-card">
+                        <h2>Calculate Garment Impact</h2>
+                        <form id="garmentForm" class="garment-form">
+                            <div class="form-section">
+                                <h3>Basic Information</h3>
+                                
+                                <div class="form-group">
+                                    <label for="garmentName">Garment Name</label>
+                                    <input type="text" id="garmentName" placeholder="e.g., Blue Cotton T-shirt" required>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="garmentType">Type</label>
+                                        <select id="garmentType" required>
+                                            <option value="">Select type</option>
+                                            <option value="shirt">Shirt</option>
+                                            <option value="pants">Pants</option>
+                                            <option value="dress">Dress</option>
+                                            <option value="jacket">Jacket</option>
+                                            <option value="shoes">Shoes</option>
+                                            <option value="accessory">Accessory</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="weight">Weight (oz)</label>
+                                        <input type="number" id="weight" placeholder="e.g., 5.5" step="0.1" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h3>Material & Production</h3>
+                                
+                                <div class="form-group">
+                                    <label for="material">Primary Material</label>
+                                    <select id="material" required>
+                                        <option value="">Select material</option>
+                                        <option value="cotton">Conventional Cotton</option>
+                                        <option value="organic-cotton">Organic Cotton</option>
+                                        <option value="polyester">Polyester</option>
+                                        <option value="nylon">Nylon</option>
+                                        <option value="wool">Wool</option>
+                                        <option value="silk">Silk</option>
+                                        <option value="linen">Linen</option>
+                                        <option value="hemp">Hemp</option>
+                                        <option value="recycled">Recycled Fabric</option>
+                                        <option value="blend">Blend/Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="brand">Brand</label>
+                                        <input type="text" id="brand" placeholder="Brand name" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="country">Made In</label>
+                                        <select id="country" required>
+                                            <option value="">Select country</option>
+                                            <option value="china">China</option>
+                                            <option value="india">India</option>
+                                            <option value="vietnam">Vietnam</option>
+                                            <option value="bangladesh">Bangladesh</option>
+                                            <option value="usa">USA</option>
+                                            <option value="eu">EU</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h3>Condition & Use</h3>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="purchaseDate">Purchase Date</label>
+                                        <input type="date" id="purchaseDate" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="condition">Current Condition</label>
+                                        <select id="condition" required>
+                                            <option value="">Select condition</option>
+                                            <option value="excellent">Excellent (Like New)</option>
+                                            <option value="good">Good (Regular Wear)</option>
+                                            <option value="fair">Fair (Some Wear)</option>
+                                            <option value="poor">Poor (Needs Repair)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="wearFrequency">Wear Frequency (times/month)</label>
+                                        <input type="number" id="wearFrequency" placeholder="e.g., 8" min="0" max="30">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="washFrequency">Wash Frequency (times/month)</label>
+                                        <input type="number" id="washFrequency" placeholder="e.g., 2" min="0" max="20">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h3>Additional Details</h3>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="price">Purchase Price ($)</label>
+                                        <input type="number" id="price" placeholder="e.g., 45" step="0.01" min="0">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="certifications">Certifications</label>
+                                        <select id="certifications" multiple>
+                                            <option value="fair-trade">Fair Trade</option>
+                                            <option value="gots">GOTS (Organic)</option>
+                                            <option value="bluesign">Bluesign</option>
+                                            <option value="oeko-tex">Oeko-Tex</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="notes">Notes</label>
+                                    <textarea id="notes" placeholder="Any additional details..."></textarea>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="submit-btn">
+                                <i class="fas fa-calculator"></i> Calculate Impact
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Calculation Results -->
+                    <div class="calculation-results" id="calculationResults" style="display: none;">
+                        <h2>Impact Analysis</h2>
+                        <div class="results-grid">
+                            <div class="result-card">
+                                <div class="result-icon">💧</div>
+                                <span class="result-label">Water Consumed</span>
+                                <span class="result-value" id="resultWater">0</span>
+                                <span class="result-unit">gallons</span>
+                            </div>
+
+                            <div class="result-card">
+                                <div class="result-icon">🌍</div>
+                                <span class="result-label">CO₂ Emissions</span>
+                                <span class="result-value" id="resultCO2">0</span>
+                                <span class="result-unit">kg</span>
+                            </div>
+
+                            <div class="result-card">
+                                <div class="result-icon">⚗️</div>
+                                <span class="result-label">Chemical Waste</span>
+                                <span class="result-value" id="resultChemical">0</span>
+                                <span class="result-unit">gallons</span>
+                            </div>
+
+                            <div class="result-card">
+                                <div class="result-icon">🧬</div>
+                                <span class="result-label">Microplastics</span>
+                                <span class="result-value" id="resultMicroplastic">0</span>
+                                <span class="result-unit">mg</span>
+                            </div>
+
+                            <div class="result-card">
+                                <div class="result-icon">❤️</div>
+                                <span class="result-label">Labor Impact</span>
+                                <span class="result-value" id="resultLabor">Fair</span>
+                                <span class="result-unit">Rating</span>
+                            </div>
+
+                            <div class="result-card">
+                                <div class="result-icon">⭐</div>
+                                <span class="result-label">Sustainability</span>
+                                <span class="result-value" id="resultScore">0</span>
+                                <span class="result-unit">/10</span>
+                            </div>
+                        </div>
+
+                        <div class="result-details">
+                            <h3>Detailed Breakdown</h3>
+                            <div id="detailedBreakdown"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sustainable Brands Tab -->
+            <div class="tab-content" id="brands">
+                <div class="brands-container">
+                    <div class="brands-header">
+                        <h2>Sustainable Fashion Brands</h2>
+                        <p>Discover environmentally conscious clothing brands</p>
+                    </div>
+
+                    <div class="brands-filters">
+                        <input type="text" id="brandSearch" placeholder="Search brands..." class="brand-search">
+                        <select id="priceFilter">
+                            <option value="">All Price Ranges</option>
+                            <option value="budget">Budget ($)</option>
+                            <option value="mid">Mid-Range ($$)</option>
+                            <option value="luxury">Premium ($$$)</option>
+                        </select>
+                        <select id="stylFilter">
+                            <option value="">All Styles</option>
+                            <option value="casual">Casual</option>
+                            <option value="formal">Formal</option>
+                            <option value="activewear">Activewear</option>
+                            <option value="accessories">Accessories</option>
+                        </select>
+                    </div>
+
+                    <div class="brands-grid" id="brandsGrid">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Repair Guide Tab -->
+            <div class="tab-content" id="repair">
+                <div class="repair-container">
+                    <div class="repair-header">
+                        <h2>Repair vs. Replace Guide</h2>
+                        <p>Learn how to extend the life of your clothes</p>
+                    </div>
+
+                    <div class="repair-issues" id="repairIssues">
+                        <!-- Populated by JavaScript -->
+                    </div>
+
+                    <div class="upcycling-section">
+                        <h2>Upcycling Ideas</h2>
+                        <div class="upcycling-grid" id="upcyclingGrid">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lifecycle Tab -->
+            <div class="tab-content" id="lifecycle">
+                <div class="lifecycle-container">
+                    <div class="lifecycle-header">
+                        <h2>Clothing Lifecycle Tracker</h2>
+                        <p>Monitor the environmental journey of your garments</p>
+                    </div>
+
+                    <div class="lifecycle-timeline" id="lifecycleTimeline">
+                        <!-- Populated by JavaScript -->
+                    </div>
+
+                    <div class="clothing-value-analysis">
+                        <h2>Clothing Value Analysis</h2>
+                        <div class="analysis-grid">
+                            <div class="analysis-card">
+                                <h3>Cost Per Wear</h3>
+                                <div id="costPerWear">Loading...</div>
+                            </div>
+                            <div class="analysis-card">
+                                <h3>Environmental ROI</h3>
+                                <div id="envROI">Loading...</div>
+                            </div>
+                            <div class="analysis-card">
+                                <h3>Recommended Lifespan</h3>
+                                <div id="lifespan">Loading...</div>
+                            </div>
+                            <div class="analysis-card">
+                                <h3>Resale Value</h3>
+                                <div id="resaleValue">Loading...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="end-of-life-options">
+                        <h2>End of Life Options</h2>
+                        <div class="options-grid">
+                            <div class="option-card">
+                                <i class="fas fa-store"></i>
+                                <h3>Sell Second-Hand</h3>
+                                <p>Platforms: Depop, Vinted, Poshmark</p>
+                            </div>
+                            <div class="option-card">
+                                <i class="fas fa-gift"></i>
+                                <h3>Donate</h3>
+                                <p>Local charities or clothing banks</p>
+                            </div>
+                            <div class="option-card">
+                                <i class="fas fa-scissors"></i>
+                                <h3>Upcycle/Repurpose</h3>
+                                <p>Turn old clothes into new items</p>
+                            </div>
+                            <div class="option-card">
+                                <i class="fas fa-recycle"></i>
+                                <h3>Recycle</h3>
+                                <p>Textile recycling programs</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Garment Modal -->
+    <div class="modal" id="addGarmentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Garment to Wardrobe</h3>
+                <button class="modal-close" onclick="closeAddGarmentModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <p>Fill out the calculator form to add items to your wardrobe.</p>
+                <button class="submit-btn" onclick="scrollToTab('calculator')">Go to Calculator</button>
+            </div>
+        </div>
+    </div>
+
+<script src="../js/fashion-impact-calculator.js"></script>
+</body>
+</html>

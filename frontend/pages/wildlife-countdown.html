@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Wildlife Countdown</title>
+
+<style>
+:root{
+  --bg1:#03071e;
+  --bg2:#370617;
+  --accent:#faa307;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  font-family:Segoe UI, sans-serif;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+h1{
+  margin-top:30px;
+  font-size:3rem;
+  text-align:center;
+}
+
+.timer{
+  margin-top:50px;
+  font-size:5rem;
+  font-weight:bold;
+  color:var(--accent);
+}
+
+.message{
+  margin-top:30px;
+  max-width:650px;
+  background:rgba(255,255,255,0.08);
+  padding:20px 24px;
+  border-radius:18px;
+  animation:fadeIn 0.6s ease;
+  line-height:1.6;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(20px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+.footer{
+  margin-top:30px;
+  font-size:0.9rem;
+  opacity:0.8;
+}
+</style>
+</head>
+
+<body>
+
+<h1>⏳ Wildlife Countdown</h1>
+
+<div class="timer" id="timer">10</div>
+
+<div id="messages"></div>
+
+<p class="footer">Every second matters.</p>
+
+<script>
+let time = 10;
+
+const texts = [
+  "Species are disappearing faster than ever before.",
+  "Habitat destruction accelerates extinction.",
+  "Illegal wildlife trade fuels loss.",
+  "Climate change disrupts survival.",
+  "Conservation delays the inevitable.",
+  "Without action, silence remains."
+];
+
+const timerEl = document.getElementById("timer");
+const container = document.getElementById("messages");
+
+const interval = setInterval(()=>{
+  time--;
+  timerEl.textContent = time;
+
+  if(texts[10 - time - 1]){
+    const msg = document.createElement("div");
+    msg.className = "message";
+    msg.textContent = texts[10 - time - 1];
+    container.appendChild(msg);
+  }
+
+  if(time <= 0){
+    clearInterval(interval);
+    timerEl.textContent = "0";
+  }
+},1000);
+</script>
+
+</body>
+</html>

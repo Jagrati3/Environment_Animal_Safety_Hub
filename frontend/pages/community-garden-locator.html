@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Garden Locator & Management</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/community-garden-locator.css">
+</head>
+<body>
+  <div class="page">
+    <header class="top-bar">
+      <div class="brand">
+        <div class="brand-mark"><i class="fa-solid fa-seedling"></i></div>
+        <div>
+          <h1>GardenGrid</h1>
+          <p>Find, join, and grow together</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="btn ghost" id="open-messages"><i class="fa-regular fa-comments"></i> Messages</button>
+        <button class="btn primary" id="open-plot">Request a Plot</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="pill">Community Garden Locator</div>
+        <h2>Grow local food, meet neighbors, and track your harvest impact.</h2>
+        <p>
+          Discover nearby gardens, see plot availability, join events, and manage your plant calendar.
+          Get real-time soil notes, watering reminders, and community updates.
+        </p>
+        <div class="hero-actions">
+          <button class="btn primary" id="locate-me"><i class="fa-solid fa-location-crosshairs"></i> Use My Location</button>
+          <button class="btn secondary" id="view-calendar"><i class="fa-regular fa-calendar"></i> View Plant Calendar</button>
+        </div>
+        <div class="hero-metrics">
+          <div>
+            <h3>38</h3>
+            <span>Active gardens</span>
+          </div>
+          <div>
+            <h3>214</h3>
+            <span>Available plots</span>
+          </div>
+          <div>
+            <h3>6.4k</h3>
+            <span>Pounds harvested</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-map">
+        <div class="map-card">
+          <div class="map-header">
+            <h4>Live Garden Map</h4>
+            <div class="map-actions">
+              <button class="chip active" data-layer="gardens">Gardens</button>
+              <button class="chip" data-layer="events">Events</button>
+              <button class="chip" data-layer="markets">Markets</button>
+            </div>
+          </div>
+          <div class="map-canvas">
+            <div class="map-pin pin-1"></div>
+            <div class="map-pin pin-2"></div>
+            <div class="map-pin pin-3"></div>
+            <div class="map-grid"></div>
+          </div>
+          <div class="map-footer">
+            <span><i class="fa-solid fa-circle"></i> Available plots</span>
+            <span><i class="fa-regular fa-circle"></i> Waitlist</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="filters">
+      <div class="filter-group">
+        <div class="input-icon">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="search-input" placeholder="Search gardens, neighborhoods, or crops">
+        </div>
+        <select id="availability-filter">
+          <option value="">All Availability</option>
+          <option value="open">Open plots</option>
+          <option value="waitlist">Waitlist</option>
+        </select>
+        <select id="amenities-filter">
+          <option value="">All Amenities</option>
+          <option value="water">Water access</option>
+          <option value="tools">Shared tools</option>
+          <option value="compost">Compost on-site</option>
+          <option value="greenhouse">Greenhouse</option>
+        </select>
+        <select id="distance-filter">
+          <option value="">Distance</option>
+          <option value="1">Within 1 mile</option>
+          <option value="3">Within 3 miles</option>
+          <option value="5">Within 5 miles</option>
+        </select>
+      </div>
+      <div class="filter-actions">
+        <button class="btn secondary" id="reset-filters">Reset</button>
+        <button class="btn primary" id="add-garden"><i class="fa-solid fa-plus"></i> Add Garden</button>
+      </div>
+    </section>
+
+    <section class="content-grid">
+      <div class="garden-list" id="garden-list">
+        <article class="garden-card" data-availability="open" data-amenities="water tools compost" data-distance="1">
+          <div class="garden-header">
+            <div>
+              <h3>Sunrise Patch Collective</h3>
+              <p>Mission District · 0.8 mi</p>
+            </div>
+            <span class="status open">Open plots</span>
+          </div>
+          <div class="garden-body">
+            <div class="garden-tags">
+              <span><i class="fa-solid fa-droplet"></i> Water access</span>
+              <span><i class="fa-solid fa-toolbox"></i> Shared tools</span>
+              <span><i class="fa-solid fa-seedling"></i> Compost</span>
+            </div>
+            <div class="garden-stats">
+              <div>
+                <h4>12</h4>
+                <span>Plots open</span>
+              </div>
+              <div>
+                <h4>36</h4>
+                <span>Gardeners</span>
+              </div>
+              <div>
+                <h4>86%</h4>
+                <span>Soil health</span>
+              </div>
+            </div>
+            <div class="garden-footer">
+              <button class="btn ghost">View Details</button>
+              <button class="btn primary">Request Plot</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="garden-card" data-availability="waitlist" data-amenities="water greenhouse" data-distance="3">
+          <div class="garden-header">
+            <div>
+              <h3>Harborview Greenhouse</h3>
+              <p>Embarcadero · 2.9 mi</p>
+            </div>
+            <span class="status waitlist">Waitlist</span>
+          </div>
+          <div class="garden-body">
+            <div class="garden-tags">
+              <span><i class="fa-solid fa-droplet"></i> Water access</span>
+              <span><i class="fa-solid fa-igloo"></i> Greenhouse</span>
+            </div>
+            <div class="garden-stats">
+              <div>
+                <h4>0</h4>
+                <span>Plots open</span>
+              </div>
+              <div>
+                <h4>42</h4>
+                <span>Gardeners</span>
+              </div>
+              <div>
+                <h4>92%</h4>
+                <span>Soil health</span>
+              </div>
+            </div>
+            <div class="garden-footer">
+              <button class="btn ghost">Join Waitlist</button>
+              <button class="btn primary">View Calendar</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="garden-card" data-availability="open" data-amenities="tools compost" data-distance="5">
+          <div class="garden-header">
+            <div>
+              <h3>Oaklane Urban Farm</h3>
+              <p>Noe Valley · 4.6 mi</p>
+            </div>
+            <span class="status open">Open plots</span>
+          </div>
+          <div class="garden-body">
+            <div class="garden-tags">
+              <span><i class="fa-solid fa-toolbox"></i> Shared tools</span>
+              <span><i class="fa-solid fa-recycle"></i> Compost</span>
+            </div>
+            <div class="garden-stats">
+              <div>
+                <h4>5</h4>
+                <span>Plots open</span>
+              </div>
+              <div>
+                <h4>28</h4>
+                <span>Gardeners</span>
+              </div>
+              <div>
+                <h4>79%</h4>
+                <span>Soil health</span>
+              </div>
+            </div>
+            <div class="garden-footer">
+              <button class="btn ghost">View Details</button>
+              <button class="btn primary">Request Plot</button>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <aside class="side-panel">
+        <div class="panel-card">
+          <h3>Planting Calendar</h3>
+          <p>April is ideal for leafy greens, beans, and herb starts.</p>
+          <div class="calendar-list">
+            <div>
+              <strong>Leafy Greens</strong>
+              <span>Plant now</span>
+            </div>
+            <div>
+              <strong>Tomatoes</strong>
+              <span>Start indoors</span>
+            </div>
+            <div>
+              <strong>Root Veggies</strong>
+              <span>Soil prep</span>
+            </div>
+          </div>
+          <button class="btn secondary">Download Calendar</button>
+        </div>
+
+        <div class="panel-card">
+          <h3>Neighborhood Impact</h3>
+          <div class="impact-metric">
+            <div>
+              <h4>1,240</h4>
+              <span>Pounds harvested</span>
+            </div>
+            <div>
+              <h4>72%</h4>
+              <span>Food shared</span>
+            </div>
+          </div>
+          <div class="impact-list">
+            <div>
+              <span>Compost diverted</span>
+              <strong>420 lbs</strong>
+            </div>
+            <div>
+              <span>Volunteer hours</span>
+              <strong>580 hrs</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <h3>Upcoming Events</h3>
+          <div class="event">
+            <div class="event-date">APR 12</div>
+            <div>
+              <strong>Seed Swap Saturday</strong>
+              <span>Sunrise Patch Collective</span>
+            </div>
+          </div>
+          <div class="event">
+            <div class="event-date">APR 18</div>
+            <div>
+              <strong>Compost Workshop</strong>
+              <span>Harborview Greenhouse</span>
+            </div>
+          </div>
+          <button class="btn ghost">View All Events</button>
+        </div>
+      </aside>
+    </section>
+
+    <section class="community">
+      <div class="community-card">
+        <h3>Garden Management Toolkit</h3>
+        <p>Track soil health, watering rotations, and harvest yields in one place.</p>
+        <div class="toolkit-grid">
+          <div>
+            <i class="fa-solid fa-clipboard-list"></i>
+            <h4>Plot Scheduler</h4>
+            <span>Assign beds & rotations</span>
+          </div>
+          <div>
+            <i class="fa-solid fa-droplet"></i>
+            <h4>Watering Roster</h4>
+            <span>Automated reminders</span>
+          </div>
+          <div>
+            <i class="fa-solid fa-apple-whole"></i>
+            <h4>Harvest Log</h4>
+            <span>Track yields weekly</span>
+          </div>
+          <div>
+            <i class="fa-solid fa-people-group"></i>
+            <h4>Volunteer Shifts</h4>
+            <span>Coordinate community help</span>
+          </div>
+        </div>
+      </div>
+      <div class="community-card dark">
+        <h3>Community Highlights</h3>
+        <p>See what neighbors are growing and share surplus produce.</p>
+        <div class="highlight">
+          <div>
+            <strong>Today</strong>
+            <span>12 pounds of lettuce donated</span>
+          </div>
+          <button class="btn ghost">Offer Surplus</button>
+        </div>
+        <div class="highlight">
+          <div>
+            <strong>This Week</strong>
+            <span>46 volunteer sign-ups</span>
+          </div>
+          <button class="btn ghost">Join a Shift</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div>
+        <h4>GardenGrid</h4>
+        <p>Building resilient neighborhoods through shared growing spaces.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#">Gardens</a>
+        <a href="#">Events</a>
+        <a href="#">Volunteer</a>
+        <a href="#">Contact</a>
+      </div>
+    </footer>
+  </div>
+
+  <div class="modal" id="plot-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Request a Garden Plot</h3>
+        <button class="icon-btn" data-close="plot-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="plot-form">
+        <div class="form-row">
+          <div>
+            <label for="full-name">Full Name</label>
+            <input id="full-name" type="text" required placeholder="Your name">
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" type="email" required placeholder="you@email.com">
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="preferred-garden">Preferred Garden</label>
+            <select id="preferred-garden" required>
+              <option value="">Select garden</option>
+              <option value="sunrise">Sunrise Patch Collective</option>
+              <option value="harborview">Harborview Greenhouse</option>
+              <option value="oaklane">Oaklane Urban Farm</option>
+            </select>
+          </div>
+          <div>
+            <label for="plot-size">Plot Size</label>
+            <select id="plot-size" required>
+              <option value="">Select size</option>
+              <option value="small">Small (4x6)</option>
+              <option value="medium">Medium (6x8)</option>
+              <option value="large">Large (8x10)</option>
+            </select>
+          </div>
+        </div>
+        <label for="notes">Tell us about what you want to grow</label>
+        <textarea id="notes" rows="4" placeholder="Herbs, greens, pollinator-friendly flowers..."></textarea>
+        <div class="form-actions">
+          <button type="button" class="btn ghost" data-close="plot-modal">Cancel</button>
+          <button type="submit" class="btn primary">Submit Request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Plot request sent! We will follow up soon.</div>
+
+  <script src="../js/community-garden-locator.js"></script>
+</body>
+</html>

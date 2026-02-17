@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plastic Footprint Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/frontend/pages/plastic-footprint-calculator.css" />
+  <style>
+    body {
+      font-family: 'Montserrat', Arial, sans-serif;
+      background: linear-gradient(135deg, #e3f2fd 0%, #fffde7 100%);
+      margin: 0;
+      padding: 0;
+      color: #263238;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(33, 150, 243, 0.13);
+      padding: 40px 32px 32px 32px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #0288d1;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+    .subtitle {
+      font-size: 1.2rem;
+      color: #0288d1;
+      margin-bottom: 32px;
+    }
+    .calculator-section {
+      background: #e1f5fe;
+      border-radius: 14px;
+      padding: 32px 24px;
+      margin-bottom: 36px;
+      box-shadow: 0 2px 8px rgba(2, 136, 209, 0.07);
+    }
+    .calc-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px 32px;
+      align-items: flex-end;
+      margin-bottom: 18px;
+    }
+    .calc-form label {
+      font-weight: 600;
+      margin-right: 8px;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .calc-form input {
+      padding: 7px 10px;
+      border-radius: 6px;
+      border: 1px solid #bdbdbd;
+      font-size: 1rem;
+      min-width: 80px;
+      width: 100%;
+    }
+    .calc-btn {
+      background: #0288d1;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 9px 22px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-left: 10px;
+    }
+    .calc-btn:hover {
+      background: #01579b;
+    }
+    .calc-result {
+      font-size: 1.15rem;
+      color: #01579b;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    .progress-section {
+      background: #fffde7;
+      border-radius: 14px;
+      padding: 28px 20px;
+      margin-bottom: 36px;
+      box-shadow: 0 2px 8px rgba(255, 193, 7, 0.07);
+    }
+    .progress-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fbc02d;
+      margin-bottom: 10px;
+    }
+    .progress-bar-bg {
+      background: #ffe082;
+      border-radius: 8px;
+      height: 22px;
+      width: 100%;
+      margin-bottom: 8px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      background: linear-gradient(90deg, #0288d1 0%, #fbc02d 100%);
+      height: 100%;
+      border-radius: 8px 0 0 8px;
+      transition: width 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .progress-label {
+      font-size: 0.98rem;
+      color: #263238;
+      margin-bottom: 6px;
+    }
+    .tips-section {
+      background: #f1f8e9;
+      border-radius: 14px;
+      padding: 28px 20px;
+      box-shadow: 0 2px 8px rgba(56, 142, 60, 0.07);
+    }
+    .tips-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #388e3c;
+      margin-bottom: 10px;
+    }
+    .tips-list {
+      list-style: disc inside;
+      color: #388e3c;
+      font-size: 1rem;
+      margin: 0;
+      padding-left: 18px;
+    }
+    @media (max-width: 700px) {
+      .container { padding: 18px 4vw; }
+      h1 { font-size: 2rem; }
+      .calculator-section, .progress-section, .tips-section { padding: 18px 6px; }
+      .calc-form { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Plastic Footprint Calculator</h1>
+    <div class="subtitle">Estimate your plastic usage, track your reduction progress, and get actionable tips to minimize plastic waste.</div>
+    <div class="calculator-section">
+      <form class="calc-form" id="plasticCalcForm">
+        <div>
+          <label for="bottles">Plastic Bottles (per week):</label>
+          <input type="number" id="bottles" name="bottles" min="0" value="3" required />
+        </div>
+        <div>
+          <label for="bags">Plastic Bags (per week):</label>
+          <input type="number" id="bags" name="bags" min="0" value="5" required />
+        </div>
+        <div>
+          <label for="packaging">Plastic Packaging (per week):</label>
+          <input type="number" id="packaging" name="packaging" min="0" value="7" required />
+        </div>
+        <div>
+          <label for="cups">Disposable Cups (per week):</label>
+          <input type="number" id="cups" name="cups" min="0" value="2" required />
+        </div>
+        <div>
+          <label for="utensils">Plastic Utensils (per week):</label>
+          <input type="number" id="utensils" name="utensils" min="0" value="2" required />
+        </div>
+        <button type="submit" class="calc-btn">Calculate</button>
+      </form>
+      <div class="calc-result" id="calcResult"></div>
+    </div>
+    <div class="progress-section">
+      <div class="progress-title">Your Reduction Progress</div>
+      <div class="progress-label" id="progressLabel">Set a reduction goal to start tracking!</div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+      </div>
+      <form id="goalForm" style="margin-top: 10px;">
+        <label for="goal" style="font-weight:600;">Weekly Plastic Usage Goal:</label>
+        <input type="number" id="goal" name="goal" min="0" value="10" style="margin-right:8px;" />
+        <button type="submit" class="calc-btn" style="background:#fbc02d;color:#263238;">Set Goal</button>
+      </form>
+    </div>
+    <div class="tips-section">
+      <div class="tips-title">Tips to Reduce Plastic Waste</div>
+      <ul class="tips-list" id="tipsList">
+        <!-- Tips will be injected here -->
+      </ul>
+    </div>
+  </div>
+  <script src="/frontend/pages/plastic-footprint-calculator.js"></script>
+</body>
+</html>

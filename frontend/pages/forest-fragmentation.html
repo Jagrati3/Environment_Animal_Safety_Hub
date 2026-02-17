@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forest Fragmentation and Edge-Driven Invasions - EcoLife</title>
+    <link rel="stylesheet" href="../css/pages/forest-fragmentation.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <i class="fas fa-leaf"></i>
+                EcoLife
+            </a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="../learn-more.html">Learn More</a>
+                <a href="../wildlife-conservation.html">Conservation</a>
+                <a href="../pollinator-protection.html">Pollinators</a>
+                <a href="sitemap.html">Site Map</a>
+            </div>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Forest Fragmentation & Edge-Driven Invasions</h1>
+                <p class="hero-subtitle">Understanding how habitat fragmentation creates opportunities for invasive species dominance</p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">50%</span>
+                        <span class="stat-label">Global Forest Loss</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">80%</span>
+                        <span class="stat-label">Edge Habitat Increase</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">15,000+</span>
+                        <span class="stat-label">Invasive Species</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="fragmentation-diagram">
+                    <div class="forest-patch">
+                        <div class="edge-zone"></div>
+                        <div class="interior-zone"></div>
+                    </div>
+                    <div class="invasive-indicator">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Invasive Species Hotspot</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fragmentation Simulator -->
+        <section class="simulator-section">
+            <div class="container">
+                <h2><i class="fas fa-tree"></i> Fragmentation Simulator</h2>
+                <p>Explore how forest patch size affects edge-to-area ratios and invasive species success</p>
+
+                <div class="simulator-container">
+                    <div class="controls">
+                        <div class="control-group">
+                            <label for="patchSize">Forest Patch Size (hectares):</label>
+                            <input type="range" id="patchSize" min="1" max="1000" value="100" step="10">
+                            <span id="patchSizeValue">100 ha</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="edgeDepth">Edge Effect Depth (meters):</label>
+                            <input type="range" id="edgeDepth" min="10" max="200" value="50" step="5">
+                            <span id="edgeDepthValue">50m</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="invasivePressure">Invasive Species Pressure:</label>
+                            <input type="range" id="invasivePressure" min="0" max="100" value="30" step="5">
+                            <span id="invasivePressureValue">30%</span>
+                        </div>
+                    </div>
+
+                    <div class="visualization">
+                        <canvas id="fragmentationCanvas" width="600" height="400"></canvas>
+                        <div class="metrics">
+                            <div class="metric">
+                                <span class="metric-label">Edge-to-Area Ratio:</span>
+                                <span class="metric-value" id="edgeRatio">0.00</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Core Habitat (%):</span>
+                                <span class="metric-value" id="coreHabitat">0.00%</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Invasion Risk:</span>
+                                <span class="metric-value" id="invasionRisk">Low</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Edge Effects Explorer -->
+        <section class="edge-effects-section">
+            <div class="container">
+                <h2><i class="fas fa-sun"></i> Edge Effect Dynamics</h2>
+                <p>Discover how forest edges create microclimates that favor invasive species</p>
+
+                <div class="edge-effects-grid">
+                    <div class="effect-card">
+                        <div class="effect-icon">
+                            <i class="fas fa-thermometer-half"></i>
+                        </div>
+                        <h3>Temperature</h3>
+                        <p>Edge zones experience greater temperature fluctuations, creating stress for interior-adapted species while favoring adaptable invasives.</p>
+                        <div class="effect-visual">
+                            <canvas id="temperatureChart" width="300" height="150"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="effect-card">
+                        <div class="effect-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <h3>Humidity</h3>
+                        <p>Reduced humidity at edges increases drought stress for native plants, giving competitive advantage to drought-tolerant invasives.</p>
+                        <div class="effect-visual">
+                            <canvas id="humidityChart" width="300" height="150"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="effect-card">
+                        <div class="effect-icon">
+                            <i class="fas fa-wind"></i>
+                        </div>
+                        <h3>Wind Exposure</h3>
+                        <p>Increased wind speeds at edges enhance seed dispersal of wind-adapted invasive species and reduce pollination success.</p>
+                        <div class="effect-visual">
+                            <canvas id="windChart" width="300" height="150"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="effect-card">
+                        <div class="effect-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3>Light Penetration</h3>
+                        <p>Greater light availability at edges promotes fast-growing invasive species that outcompete shade-adapted natives.</p>
+                        <div class="effect-visual">
+                            <canvas id="lightChart" width="300" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Invasion Dynamics -->
+        <section class="invasion-section">
+            <div class="container">
+                <h2><i class="fas fa-biohazard"></i> Invasion Dynamics Model</h2>
+                <p>Simulate how invasive species compete with natives in fragmented landscapes</p>
+
+                <div class="invasion-simulator">
+                    <div class="species-setup">
+                        <div class="species native-species">
+                            <h4>Native Species</h4>
+                            <div class="species-traits">
+                                <label>Edge Tolerance: <span id="nativeEdgeTolerance">Low</span></label>
+                                <input type="range" id="nativeTolerance" min="0" max="100" value="20">
+                            </div>
+                            <div class="species-traits">
+                                <label>Competitive Ability: <span id="nativeCompetitive">Medium</span></label>
+                                <input type="range" id="nativeCompetition" min="0" max="100" value="60">
+                            </div>
+                        </div>
+
+                        <div class="species invasive-species">
+                            <h4>Invasive Species</h4>
+                            <div class="species-traits">
+                                <label>Edge Tolerance: <span id="invasiveEdgeTolerance">High</span></label>
+                                <input type="range" id="invasiveTolerance" min="0" max="100" value="90">
+                            </div>
+                            <div class="species-traits">
+                                <label>Competitive Ability: <span id="invasiveCompetitive">High</span></label>
+                                <input type="range" id="invasiveCompetition" min="0" max="100" value="85">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="competition-results">
+                        <canvas id="competitionChart" width="500" height="300"></canvas>
+                        <div class="outcome">
+                            <h4>Competition Outcome</h4>
+                            <div class="outcome-metrics">
+                                <div class="metric">
+                                    <span class="metric-label">Native Population:</span>
+                                    <span class="metric-value" id="nativePopulation">60%</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Invasive Population:</span>
+                                    <span class="metric-value" id="invasivePopulation">40%</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Edge Effect Impact:</span>
+                                    <span class="metric-value" id="edgeImpact">High</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Case Studies -->
+        <section class="case-studies-section">
+            <div class="container">
+                <h2><i class="fas fa-book-open"></i> Real-World Case Studies</h2>
+                <p>Learn from documented examples of fragmentation-driven invasions</p>
+
+                <div class="case-studies-grid">
+                    <div class="case-study-card">
+                        <div class="case-study-image">
+                            <i class="fas fa-tree"></i>
+                        </div>
+                        <h3>Amazon Rainforest Fragmentation</h3>
+                        <p>The BR-163 highway has created thousands of forest fragments, where edge effects have allowed invasive grasses and vines to dominate native biodiversity.</p>
+                        <button class="case-study-btn" data-case="amazon">Explore Case Study</button>
+                    </div>
+
+                    <div class="case-study-card">
+                        <div class="case-study-image">
+                            <i class="fas fa-city"></i>
+                        </div>
+                        <h3>Urban Forest Edges</h3>
+                        <p>Suburban development creates forest fragments where invasive species like Japanese honeysuckle and garlic mustard thrive in edge habitats.</p>
+                        <button class="case-study-btn" data-case="urban">Explore Case Study</button>
+                    </div>
+
+                    <div class="case-study-card">
+                        <div class="case-study-image">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <h3>Australian Eucalypt Forests</h3>
+                        <p>Fragmentation has facilitated the invasion of exotic weeds and shrubs that alter fire regimes and compete with native vegetation.</p>
+                        <button class="case-study-btn" data-case="australia">Explore Case Study</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mitigation Strategies -->
+        <section class="mitigation-section">
+            <div class="container">
+                <h2><i class="fas fa-tools"></i> Mitigation Strategies</h2>
+                <p>Practical approaches to reduce fragmentation effects and manage invasive species</p>
+
+                <div class="mitigation-grid">
+                    <div class="mitigation-card">
+                        <div class="mitigation-icon">
+                            <i class="fas fa-route"></i>
+                        </div>
+                        <h3>Wildlife Corridors</h3>
+                        <p>Create connected habitats that allow native species to move between fragments while reducing edge effects.</p>
+                        <ul>
+                            <li>Design corridor width based on target species</li>
+                            <li>Plant native vegetation to buffer edges</li>
+                            <li>Monitor corridor effectiveness</li>
+                        </ul>
+                    </div>
+
+                    <div class="mitigation-card">
+                        <div class="mitigation-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Buffer Zones</h3>
+                        <p>Establish protective vegetation strips around forest edges to reduce microclimate alterations.</p>
+                        <ul>
+                            <li>Plant multi-species native buffers</li>
+                            <li>Control invasive species in buffers</li>
+                            <li>Monitor edge effect reduction</li>
+                        </ul>
+                    </div>
+
+                    <div class="mitigation-card">
+                        <div class="mitigation-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>Early Detection</h3>
+                        <p>Monitor forest edges for new invasive species introductions and respond quickly.</p>
+                        <ul>
+                            <li>Regular edge surveys</li>
+                            <li>Community reporting programs</li>
+                            <li>Rapid response teams</li>
+                        </ul>
+                    </div>
+
+                    <div class="mitigation-card">
+                        <div class="mitigation-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Integrated Management</h3>
+                        <p>Combine multiple approaches for comprehensive invasive species control and habitat restoration.</p>
+                        <ul>
+                            <li>Mechanical and chemical control</li>
+                            <li>Biological control agents</li>
+                            <li>Restoration planting programs</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Quiz -->
+        <section class="quiz-section">
+            <div class="container">
+                <h2><i class="fas fa-brain"></i> Fragmentation Challenge Quiz</h2>
+                <p>Test your knowledge of forest fragmentation and edge-driven invasions</p>
+
+                <div class="quiz-container">
+                    <div class="quiz-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <span class="progress-text">Question <span id="currentQuestion">1</span> of <span id="totalQuestions">10</span></span>
+                    </div>
+
+                    <div class="quiz-question" id="quizQuestion">
+                        <h3 id="questionText">Loading question...</h3>
+                        <div class="quiz-options" id="quizOptions"></div>
+                    </div>
+
+                    <div class="quiz-controls">
+                        <button class="quiz-btn" id="prevBtn" disabled>Previous</button>
+                        <button class="quiz-btn primary" id="nextBtn">Next</button>
+                        <button class="quiz-btn secondary" id="submitBtn" style="display: none;">Submit Quiz</button>
+                    </div>
+
+                    <div class="quiz-results" id="quizResults" style="display: none;">
+                        <h3>Quiz Complete!</h3>
+                        <div class="score-display">
+                            <div class="score-circle">
+                                <span id="finalScore">0</span>
+                                <span class="score-total">/10</span>
+                            </div>
+                            <p id="scoreMessage">Keep learning about forest fragmentation!</p>
+                        </div>
+                        <button class="quiz-btn primary" id="retakeBtn">Retake Quiz</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Educational Resources -->
+        <section class="resources-section">
+            <div class="container">
+                <h2><i class="fas fa-book"></i> Educational Resources</h2>
+                <p>Further reading and tools for understanding forest fragmentation</p>
+
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <h3>Fragmentation Research Papers</h3>
+                        <p>Key scientific papers on edge effects and invasive species dynamics</p>
+                        <a href="#" class="resource-link">Download Papers</a>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h3>Landscape Analysis Tools</h3>
+                        <p>Software tools for analyzing habitat fragmentation and connectivity</p>
+                        <a href="#" class="resource-link">Explore Tools</a>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Management Guidelines</h3>
+                        <p>Practical guides for managing fragmented landscapes and invasive species</p>
+                        <a href="#" class="resource-link">View Guidelines</a>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h3>Educational Videos</h3>
+                        <p>Documentaries and tutorials on forest fragmentation and conservation</p>
+                        <a href="#" class="resource-link">Watch Videos</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <div class="modal" id="caseStudyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Case Study</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Case study content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>EcoLife Platform</h4>
+                    <p>Advancing environmental education through interactive learning experiences.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../learn-more.html">Learn More</a></li>
+                        <li><a href="sitemap.html">Site Map</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 EcoLife. All rights reserved. | Built with ❤️ for environmental conservation</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/theme-toggle.js"></script>
+    <script src="../js/pages/forest-fragmentation.js"></script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs').promises;
 const helmet = require('helmet');
 require('dotenv').config();
 const connectDB = require('./backend/config/database');
@@ -49,6 +50,57 @@ app.use('/api/species', require('./backend/routes/species'));
 app.use('/api/carbon-offsets', require('./backend/routes/carbon-offsets'));
 app.use('/api/eco-challenges', require('./backend/routes/eco-challenges'));
 
+
+// Middleware: serve HTML files with automatic navbar/footer injection when missing
+app.use(async (req, res, next) => {
+    try {
+        // Only handle GET requests for .html files or root
+        if (req.method !== 'GET') return next();
+
+        let urlPath = req.path;
+
+        // Map root to index.html
+        if (urlPath === '/' || urlPath === '') urlPath = '/index.html';
+
+        // Only process requests for .html files
+        if (!urlPath.toLowerCase().endsWith('.html')) return next();
+
+        const filePath = path.join(__dirname, 'frontend', decodeURIComponent(urlPath));
+
+        // Check file existence
+        let stat;
+        try {
+            stat = await fs.stat(filePath);
+        } catch (err) {
+            return next();
+        }
+
+        if (!stat.isFile()) return next();
+
+        let content = await fs.readFile(filePath, 'utf8');
+
+        // Ensure navbar placeholder exists
+        if (!/id=["']navbar-container["']/.test(content)) {
+            content = content.replace(/<body([^>]*)>/i, '<body$1>\n  <div id="navbar-container"></div>');
+        }
+
+        // Ensure footer placeholder exists
+        if (!/id=["']footer-placeholder["']/.test(content)) {
+            content = content.replace(/<\/body>/i, '  <div id="footer-placeholder"></div>\n</body>');
+        }
+
+        // Ensure component-loader script is included (uses relative path from frontend root)
+        if (!/component-loader\.js/.test(content)) {
+            // Insert before closing </body>
+            const scriptTag = '\n  <script src="/js/components/component-loader.js"></script>\n';
+            content = content.replace(/<\/body>/i, scriptTag + '</body>');
+        }
+
+        res.type('html').send(content);
+    } catch (err) {
+        next(err);
+    }
+});
 
 // Serve static files from frontend directory
 app.use(express.static(path.join(__dirname, 'frontend')));
