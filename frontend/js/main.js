@@ -313,35 +313,114 @@ function initNavbar() {
     const navbar = document.getElementById("navbar");
     const navLinks = document.getElementById("navLinks");
     const mobileBtn = document.getElementById("navToggle");
+    const overlay = document.getElementById("navOverlay");
+
+    // Keep track of scroll position for no-scroll body fix
+    let savedScrollY = 0;
+
+    /**
+     * Helper: open the mobile menu drawer
+     */
+    function openMobileMenu() {
+      savedScrollY = window.scrollY;
+      navLinks.classList.add("active");
+      mobileBtn.classList.add("active");
+      mobileBtn.setAttribute("aria-expanded", "true");
+      if (overlay) overlay.classList.add("active");
+      document.body.classList.add("no-scroll");
+      document.body.style.top = `-${savedScrollY}px`;
+    }
+
+    /**
+     * Helper: close the mobile menu drawer
+     */
+    function closeMobileMenu() {
+      navLinks.classList.remove("active");
+      mobileBtn.classList.remove("active");
+      mobileBtn.setAttribute("aria-expanded", "false");
+      if (overlay) overlay.classList.remove("active");
+      document.body.classList.remove("no-scroll");
+      document.body.style.top = "";
+      window.scrollTo(0, savedScrollY);
+
+      // Close all open dropdowns
+      navLinks.querySelectorAll(".nav-group.dropdown-open").forEach((g) => {
+        g.classList.remove("dropdown-open");
+      });
+    }
 
     // Mobile Menu Toggle
     if (mobileBtn && navLinks) {
-      mobileBtn.addEventListener("click", () => {
-        const isExpanded = mobileBtn.getAttribute("aria-expanded") === "true";
-        mobileBtn.setAttribute("aria-expanded", !isExpanded);
-
-        navLinks.classList.toggle("active");
-        mobileBtn.classList.toggle("active");
-        document.body.classList.toggle("no-scroll");
+      mobileBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (navLinks.classList.contains("active")) {
+          closeMobileMenu();
+        } else {
+          openMobileMenu();
+        }
       });
 
-      // Close menu when clicking a link
+      // Close menu when clicking the overlay backdrop
+      if (overlay) {
+        overlay.addEventListener("click", () => {
+          closeMobileMenu();
+        });
+      }
+
+      // Close menu when clicking a non-parent link inside the drawer
       navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          navLinks.classList.remove("active");
-          mobileBtn.classList.remove("active");
-          mobileBtn.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("no-scroll");
+        link.addEventListener("click", (e) => {
+          // If this is a parent link that has a dropdown, let the dropdown
+          // toggle handler below deal with it instead of closing the menu.
+          const parentGroup = link.closest(".nav-group");
+          if (parentGroup && parentGroup.querySelector(".dropdown") && link === parentGroup.querySelector(".nav-link")) {
+            return; // handled by dropdown toggle below
+          }
+          closeMobileMenu();
+        });
+      });
+
+      // Mobile dropdown toggle on tap (instead of hover-only)
+      navLinks.querySelectorAll(".nav-group").forEach((group) => {
+        const parentLink = group.querySelector(".nav-link");
+        const dropdown = group.querySelector(".dropdown");
+        if (!parentLink || !dropdown) return;
+
+        parentLink.addEventListener("click", (e) => {
+          // Only intercept on mobile-sized screens where the drawer is active
+          const isMobileDrawer = window.getComputedStyle(mobileBtn).display !== "none";
+          if (!isMobileDrawer) return;
+
+          e.preventDefault();
+          e.stopPropagation();
+
+          // Close other open dropdowns (accordion behaviour)
+          navLinks.querySelectorAll(".nav-group.dropdown-open").forEach((g) => {
+            if (g !== group) g.classList.remove("dropdown-open");
+          });
+
+          group.classList.toggle("dropdown-open");
         });
       });
 
       // Close menu when clicking outside
       document.addEventListener("click", (e) => {
-        if (mobileBtn && navLinks && !mobileBtn.contains(e.target) && !navLinks.contains(e.target) && navLinks.classList.contains("active")) {
-          navLinks.classList.remove("active");
-          mobileBtn.classList.remove("active");
-          mobileBtn.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("no-scroll");
+        if (
+          mobileBtn &&
+          navLinks &&
+          !mobileBtn.contains(e.target) &&
+          !navLinks.contains(e.target) &&
+          navLinks.classList.contains("active")
+        ) {
+          closeMobileMenu();
+        }
+      });
+
+      // Close menu on Escape key press
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && navLinks.classList.contains("active")) {
+          closeMobileMenu();
+          mobileBtn.focus(); // return focus to toggle for accessibility
         }
       });
     }
