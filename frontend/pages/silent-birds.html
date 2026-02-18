@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Silent Birds</title>
+
+<style>
+:root{
+  --bg1:#0a2540;
+  --bg2:#144272;
+  --accent:#9fd3ff;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  font-family:Segoe UI, sans-serif;
+  color:#eef7ff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+h1{
+  margin-top:30px;
+  font-size:3rem;
+  letter-spacing:2px;
+  text-align:center;
+}
+
+.container{
+  width:90%;
+  max-width:650px;
+  margin-top:40px;
+}
+
+/* MESSAGE BOX */
+.message{
+  background:rgba(255,255,255,0.12);
+  padding:22px;
+  margin:20px 0;
+  border-radius:18px;
+  backdrop-filter:blur(8px);
+  font-size:1.1rem;
+  line-height:1.7;
+  box-shadow:0 0 0 rgba(159,211,255,0.0);
+}
+
+/* GLOW AFTER TYPING */
+.glow{
+  animation:glowPulse 1.5s ease;
+}
+
+@keyframes glowPulse{
+  0%{box-shadow:0 0 0 rgba(159,211,255,0)}
+  50%{box-shadow:0 0 18px rgba(159,211,255,0.6)}
+  100%{box-shadow:0 0 0 rgba(159,211,255,0)}
+}
+
+/* BUTTON */
+button{
+  margin:30px 0;
+  padding:14px 32px;
+  font-size:1rem;
+  background:var(--accent);
+  color:#0a2540;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  transition:0.3s;
+}
+button:hover{
+  transform:scale(1.05);
+  opacity:0.9;
+}
+
+.footer{
+  font-size:0.9rem;
+  opacity:0.8;
+  margin-bottom:20px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🐦 Silent Birds</h1>
+
+<div class="container" id="container"></div>
+
+<button onclick="reveal()">Tap to hear a voice</button>
+
+<p class="footer">Some voices never return.</p>
+
+<script>
+const messages = [
+  "🦤 The Dodo will never sing again.",
+  "🦜 Many birds vanish before we even learn their names.",
+  "🏙️ Cities grow louder while forests fall silent.",
+  "🌍 Climate change disrupts ancient migration paths.",
+  "🔇 Silence is the loudest warning nature gives us."
+];
+
+let index = 0;
+let typing = false;
+
+function reveal(){
+  if(index >= messages.length || typing) return;
+
+  typing = true;
+  const box = document.createElement("div");
+  box.className = "message";
+  document.getElementById("container").appendChild(box);
+
+  let text = messages[index];
+  let i = 0;
+
+  const typer = setInterval(()=>{
+    box.textContent += text.charAt(i);
+    i++;
+    if(i >= text.length){
+      clearInterval(typer);
+      box.classList.add("glow");
+      typing = false;
+      index++;
+    }
+  }, 40);
+}
+</script>
+
+</body>
+</html>

@@ -240,7 +240,6 @@ const ECO_FACTS = [
  */
 document.addEventListener("DOMContentLoaded", function () {
   // Core navigation and UI components
-  initNavbar();
   initSmoothScroll();
   initBackToTop();
   initScrollProgress();
@@ -285,7 +284,7 @@ function initAdditionalFeatures() {
   initSurvivalScore();
 
   // Theme and accessibility
-  initThemeToggle();
+  // initThemeToggle(); // Handled by theme-toggle.js
   initScrollBottomButton();
 
   // Earth visualization
@@ -391,6 +390,7 @@ function initNavbar() {
     window.addEventListener("navbarLoaded", setupNavListeners);
   }
 }
+
 
 /**
  * Initialize navbar active state based on scroll position
@@ -1403,38 +1403,23 @@ function initSurvivalScore() {
 // THEME & ACCESSIBILITY FEATURES
 // ===========================================
 
-/**
- * Initialize theme toggle functionality
- * Handles light/dark theme switching with localStorage persistence
- */
-function initThemeToggle() {
-  if (typeof window.initThemeToggle === 'function') {
-    window.initThemeToggle();
-    return;
+
+
+// ===============================
+// REMOVE DUPLICATE FLOATING THEME TOGGLE
+// ===============================
+document.addEventListener("DOMContentLoaded", () => {
+  const navbarToggle = document.getElementById("themeToggle");
+
+  // Common selectors used for floating toggles
+  const floatingToggles = document.querySelectorAll(
+    ".theme-toggle, .floating-theme-toggle, .theme-fab"
+  );
+
+  if (navbarToggle && floatingToggles.length > 0) {
+    floatingToggles.forEach(toggle => toggle.remove());
   }
-
-  // Minimal fallback if global theme-toggle.js is not loaded
-  const toggle = document.getElementById("themeToggle");
-  if (!toggle) return;
-
-  const icon = toggle.querySelector("i");
-  if (localStorage.getItem("theme") === "dark") {
-    document.body.classList.add("dark-theme");
-    if (icon) icon.classList.replace("fa-moon", "fa-sun");
-  }
-
-  toggle.addEventListener("click", () => {
-    document.body.classList.toggle("dark-theme");
-    const isDark = document.body.classList.contains("dark-theme");
-
-    if (icon) {
-      icon.classList.toggle("fa-moon", !isDark);
-      icon.classList.toggle("fa-sun", isDark);
-    }
-
-    localStorage.setItem("theme", isDark ? "dark" : "light");
-  });
-}
+});
 
 /**
  * Initialize scroll to bottom button
@@ -1941,7 +1926,7 @@ function initFlipCards() {
 // ===========================================
 // END OF MAIN.JS
 // ===========================================function closeNoiseCrisisAlert() {
-  function closeNoiseCrisisAlert() {
+function closeNoiseCrisisAlert() {
   const banner = document.getElementById("noise-crisis-alert-banner");
 
   if (banner) {

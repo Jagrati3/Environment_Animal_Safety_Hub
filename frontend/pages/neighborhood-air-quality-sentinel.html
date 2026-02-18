@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neighborhood Air Quality Sentinel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/neighborhood-air-quality-sentinel.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon"><i class="fa-solid fa-wind"></i></div>
+        <div>
+          <h1>AirWatch Sentinel</h1>
+          <p>Hyper-local air intelligence</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="btn ghost" id="open-log"><i class="fa-regular fa-pen-to-square"></i> Log Observation</button>
+        <button class="btn primary" id="open-alerts"><i class="fa-solid fa-bell"></i> Alerts</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="pill">Neighborhood AQI Dashboard</div>
+        <h2>Track your block, share air observations, and plan safer commutes.</h2>
+        <p>
+          See daily AQI trends, spot hotspots, and connect symptoms to pollution spikes.
+          Build cleaner routes and keep your household updated with hyper-local alerts.
+        </p>
+        <div class="hero-actions">
+          <button class="btn primary" id="open-route"><i class="fa-solid fa-route"></i> Plan Safe Route</button>
+          <button class="btn secondary" id="open-tips"><i class="fa-solid fa-house"></i> Indoor Tips</button>
+        </div>
+        <div class="hero-metrics">
+          <div>
+            <h3>58</h3>
+            <span>Current AQI</span>
+          </div>
+          <div>
+            <h3>+14%</h3>
+            <span>Weekly spike</span>
+          </div>
+          <div>
+            <h3>112</h3>
+            <span>Community logs</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <div class="aqi-card">
+          <div class="aqi-header">
+            <h4>Live AQI</h4>
+            <span class="status good">Good</span>
+          </div>
+          <div class="aqi-value">
+            <strong>58</strong>
+            <span>San Francisco · 10:30 AM</span>
+          </div>
+          <div class="aqi-scale">
+            <span class="range good">0-50</span>
+            <span class="range moderate">51-100</span>
+            <span class="range caution">101-150</span>
+            <span class="range danger">150+</span>
+          </div>
+          <div class="sparkline">
+            <div class="spark-bar" style="height: 40%"></div>
+            <div class="spark-bar" style="height: 55%"></div>
+            <div class="spark-bar" style="height: 35%"></div>
+            <div class="spark-bar" style="height: 60%"></div>
+            <div class="spark-bar" style="height: 70%"></div>
+            <div class="spark-bar" style="height: 45%"></div>
+            <div class="spark-bar" style="height: 52%"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="controls">
+      <div class="control-group">
+        <div class="input-icon">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="search-input" placeholder="Search neighborhoods or streets">
+        </div>
+        <select id="time-filter">
+          <option value="">Time of day</option>
+          <option value="morning">Morning</option>
+          <option value="midday">Midday</option>
+          <option value="evening">Evening</option>
+          <option value="night">Night</option>
+        </select>
+        <select id="risk-filter">
+          <option value="">Risk level</option>
+          <option value="good">Good</option>
+          <option value="moderate">Moderate</option>
+          <option value="unhealthy">Unhealthy</option>
+        </select>
+        <select id="symptom-filter">
+          <option value="">Symptom trends</option>
+          <option value="none">None</option>
+          <option value="mild">Mild</option>
+          <option value="high">High</option>
+        </select>
+      </div>
+      <div class="control-actions">
+        <button class="btn secondary" id="reset-filters">Reset</button>
+        <button class="btn primary" id="share-alert"><i class="fa-solid fa-bullhorn"></i> Share Alert</button>
+      </div>
+    </section>
+
+    <section class="content-grid">
+      <div class="map-panel">
+        <div class="panel-header">
+          <h3>Community Air Map</h3>
+          <div class="chip-group">
+            <button class="chip active">Hotspots</button>
+            <button class="chip">Clean pockets</button>
+            <button class="chip">Symptoms</button>
+          </div>
+        </div>
+        <div class="map-canvas">
+          <div class="map-layer"></div>
+          <div class="map-pin hotspot" style="top: 25%; left: 35%"></div>
+          <div class="map-pin hotspot" style="top: 55%; left: 70%"></div>
+          <div class="map-pin clean" style="top: 60%; left: 20%"></div>
+          <div class="map-pin clean" style="top: 35%; left: 60%"></div>
+          <div class="map-pin symptom" style="top: 70%; left: 45%"></div>
+        </div>
+        <div class="map-footer">
+          <span><i class="fa-solid fa-circle"></i> Hotspot</span>
+          <span><i class="fa-regular fa-circle"></i> Clean pocket</span>
+          <span><i class="fa-solid fa-triangle-exclamation"></i> Symptom report</span>
+        </div>
+      </div>
+
+      <aside class="side-panel">
+        <div class="side-card">
+          <h3>Safe Route Planner</h3>
+          <p>Choose low-exposure paths for walking or biking.</p>
+          <div class="route-list">
+            <div>
+              <strong>Route A · 18 min</strong>
+              <span>Low exposure · 42 AQI</span>
+            </div>
+            <div>
+              <strong>Route B · 15 min</strong>
+              <span>Moderate exposure · 68 AQI</span>
+            </div>
+            <div>
+              <strong>Route C · 22 min</strong>
+              <span>Low exposure · 50 AQI</span>
+            </div>
+          </div>
+          <button class="btn secondary">Send to Phone</button>
+        </div>
+
+        <div class="side-card">
+          <h3>Indoor Air Tips</h3>
+          <ul>
+            <li>Run HEPA filters during afternoon spikes.</li>
+            <li>Seal windows before peak commute hours.</li>
+            <li>Use exhaust fans while cooking.</li>
+          </ul>
+          <button class="btn ghost">Download Checklist</button>
+        </div>
+
+        <div class="side-card dark">
+          <h3>Alert Digest</h3>
+          <div class="alert">
+            <strong>9-11 AM</strong>
+            <span>Moderate spike near Mission St.</span>
+          </div>
+          <div class="alert">
+            <strong>2 PM</strong>
+            <span>Construction dust elevated.</span>
+          </div>
+          <button class="btn ghost">Manage Alerts</button>
+        </div>
+      </aside>
+    </section>
+
+    <section class="insights">
+      <div class="insight-card">
+        <h3>Daily AQI Trend</h3>
+        <div class="trend">
+          <div class="trend-bar" style="height: 40%"><span>6 AM</span></div>
+          <div class="trend-bar" style="height: 60%"><span>9 AM</span></div>
+          <div class="trend-bar" style="height: 75%"><span>12 PM</span></div>
+          <div class="trend-bar" style="height: 55%"><span>3 PM</span></div>
+          <div class="trend-bar" style="height: 45%"><span>6 PM</span></div>
+          <div class="trend-bar" style="height: 35%"><span>9 PM</span></div>
+        </div>
+      </div>
+
+      <div class="insight-card">
+        <h3>Symptom Correlation</h3>
+        <div class="symptom-grid">
+          <div>
+            <strong>Respiratory</strong>
+            <span>+18% on spike days</span>
+          </div>
+          <div>
+            <strong>Headache</strong>
+            <span>+12% midday</span>
+          </div>
+          <div>
+            <strong>Fatigue</strong>
+            <span>+9% evenings</span>
+          </div>
+          <div>
+            <strong>Irritation</strong>
+            <span>+6% nights</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="insight-card">
+        <h3>Community Observations</h3>
+        <div class="obs-list">
+          <div>
+            <strong>09:12 AM</strong>
+            <span>Diesel fumes reported near 18th St.</span>
+          </div>
+          <div>
+            <strong>11:45 AM</strong>
+            <span>Smoky haze around playground.</span>
+          </div>
+          <div>
+            <strong>04:20 PM</strong>
+            <span>Fresh breeze cleared the marina.</span>
+          </div>
+        </div>
+        <button class="btn primary">Add Observation</button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div>
+        <h4>AirWatch Sentinel</h4>
+        <p>Built for cleaner neighborhoods and safer routes.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#">Dashboard</a>
+        <a href="#">Routes</a>
+        <a href="#">Alerts</a>
+        <a href="#">Support</a>
+      </div>
+    </footer>
+  </div>
+
+  <div class="modal" id="log-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Log Air Observation</h3>
+        <button class="icon-btn" data-close="log-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="log-form">
+        <div class="form-row">
+          <div>
+            <label for="location">Location</label>
+            <input id="location" type="text" required placeholder="Street or neighborhood">
+          </div>
+          <div>
+            <label for="aqi">Estimated AQI</label>
+            <input id="aqi" type="number" required placeholder="e.g., 82">
+          </div>
+        </div>
+        <label for="symptoms">Symptoms observed</label>
+        <select id="symptoms" required>
+          <option value="">Select</option>
+          <option>None</option>
+          <option>Mild irritation</option>
+          <option>Headache</option>
+          <option>Respiratory distress</option>
+        </select>
+        <label for="notes">Notes</label>
+        <textarea id="notes" rows="4" placeholder="Dust, smoke, heavy traffic..." required></textarea>
+        <div class="form-actions">
+          <button type="button" class="btn ghost" data-close="log-modal">Cancel</button>
+          <button type="submit" class="btn primary">Submit Log</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Observation logged. Thanks for helping your neighborhood.</div>
+
+  <script src="../js/neighborhood-air-quality-sentinel.js"></script>
+</body>
+</html>

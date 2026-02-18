@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Water Usage Tracker</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js/dist/Chart.min.css">
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #e3f2fd; margin: 0; color: #222; }
+    #app { max-width: 700px; margin: 40px auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 32px 24px 24px 24px; }
+    header { display: flex; flex-direction: column; align-items: center; margin-bottom: 32px; }
+    header h1 { margin: 0 0 16px 0; font-size: 2.2rem; color: #1976d2; }
+    #log-form { display: flex; gap: 12px; margin-bottom: 24px; }
+    #log-form input, #log-form button { font-size: 1rem; padding: 8px 12px; border-radius: 8px; border: 1px solid #bdbdbd; }
+    #log-form button { background: #1976d2; color: #fff; border: none; cursor: pointer; transition: background 0.2s; }
+    #log-form button:hover { background: #1565c0; }
+    #goal-section { margin-bottom: 24px; }
+    #goal-section input { font-size: 1rem; padding: 8px 12px; border-radius: 8px; border: 1px solid #bdbdbd; }
+    #goal-section button { background: #388e3c; color: #fff; border: none; border-radius: 8px; padding: 8px 12px; font-size: 1rem; cursor: pointer; margin-left: 8px; }
+    #goal-section button:hover { background: #2e7031; }
+    .card { background: #f5faff; border-radius: 10px; padding: 20px 24px; margin-bottom: 28px; box-shadow: 0 2px 8px rgba(44,62,80,0.07); }
+    #tips-list { padding-left: 18px; margin: 0; }
+    #tips-list li { margin-bottom: 8px; font-size: 1rem; }
+    #edu-content { font-size: 1rem; color: #1976d2; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Water Usage Tracker</h1>
+      <form id="log-form">
+        <input type="date" id="log-date" required>
+        <input type="number" id="log-amount" min="0" step="0.1" placeholder="Liters used" required>
+        <button type="submit">Log Usage</button>
+      </form>
+    </header>
+    <section id="goal-section" class="card">
+      <label>Daily Conservation Goal (liters): <input type="number" id="goal-input" min="0" step="0.1"></label>
+      <button id="set-goal">Set Goal</button>
+      <div id="goal-status"></div>
+    </section>
+    <section id="chart-section" class="card">
+      <h2>Usage Chart</h2>
+      <canvas id="usage-chart" width="600" height="250"></canvas>
+    </section>
+    <section id="tips-section" class="card">
+      <h2>Water Saving Tips</h2>
+      <ul id="tips-list"></ul>
+    </section>
+    <section id="edu-section" class="card">
+      <h2>Educational Resources</h2>
+      <div id="edu-content"></div>
+    </section>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+const demoTips = [
+  'Turn off the tap while brushing your teeth.',
+  'Fix leaks promptly to avoid water waste.',
+  'Take shorter showers.',
+  'Use a bucket to wash your car instead of a hose.',
+  'Collect rainwater for plants.'
+];
+const eduContent = `
+  <strong>Learn More:</strong><br>
+  <a href='https://www.epa.gov/watersense/how-we-use-water' target='_blank'>How We Use Water (EPA)</a><br>
+  <a href='https://www.watercalculator.org/' target='_blank'>Water Calculator</a><br>
+  <a href='https://www.worldwildlife.org/threats/water-scarcity' target='_blank'>Water Scarcity (WWF)</a>
+`;
+let usageData = [];
+let goal = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+  const logForm = document.getElementById('log-form');
+  const logDate = document.getElementById('log-date');
+  const logAmount = document.getElementById('log-amount');
+  const usageChart = document.getElementById('usage-chart');
+  const goalInput = document.getElementById('goal-input');
+  const setGoalBtn = document.getElementById('set-goal');
+  const goalStatus = document.getElementById('goal-status');
+  const tipsList = document.getElementById('tips-list');
+  const eduDiv = document.getElementById('edu-content');
+
+  // Render tips
+  demoTips.forEach(tip => {
+    const li = document.createElement('li');
+    li.textContent = tip;
+    tipsList.appendChild(li);
+  });
+
+  // Render educational content
+  eduDiv.innerHTML = eduContent;
+
+  // Chart setup
+  let chartInstance = null;
+  function renderChart() {
+    const labels = usageData.map(u => u.date);
+    const data = usageData.map(u => u.amount);
+    if (chartInstance) chartInstance.destroy();
+    chartInstance = new Chart(usageChart.getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Liters Used',
+          data,
+          backgroundColor: '#1976d2',
+        }]
+      },
+      options: {
+        responsive: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  }
+
+  // Log form handler
+  logForm.onsubmit = e => {
+    e.preventDefault();
+    const date = logDate.value;
+    const amount = parseFloat(logAmount.value);
+    if (!date || isNaN(amount)) return;
+    const idx = usageData.findIndex(u => u.date === date);
+    if (idx >= 0) usageData[idx].amount = amount;
+    else usageData.push({ date, amount });
+    usageData.sort((a, b) => a.date.localeCompare(b.date));
+    renderChart();
+    logForm.reset();
+    updateGoalStatus();
+  };
+
+  // Goal handler
+  setGoalBtn.onclick = () => {
+    const val = parseFloat(goalInput.value);
+    if (isNaN(val) || val < 0) return;
+    goal = val;
+    updateGoalStatus();
+  };
+
+  function updateGoalStatus() {
+    if (!goal || usageData.length === 0) {
+      goalStatus.textContent = '';
+      return;
+    }
+    const today = new Date().toISOString().slice(0,10);
+    const todayUsage = usageData.find(u => u.date === today);
+    if (!todayUsage) {
+      goalStatus.textContent = `No usage logged for today.`;
+      return;
+    }
+    if (todayUsage.amount <= goal) {
+      goalStatus.textContent = `Great job! Today's usage (${todayUsage.amount}L) is within your goal (${goal}L).`;
+      goalStatus.style.color = '#388e3c';
+    } else {
+      goalStatus.textContent = `Today's usage (${todayUsage.amount}L) exceeds your goal (${goal}L). Try to save more!`;
+      goalStatus.style.color = '#d32f2f';
+    }
+  }
+
+  renderChart();
+});
+  </script>
+</body>
+</html>

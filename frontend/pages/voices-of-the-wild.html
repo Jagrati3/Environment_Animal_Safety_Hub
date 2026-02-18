@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Voices of the Wild</title>
+
+<style>
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(135deg,#0f2a1d,#163f2e);
+  font-family:Segoe UI, sans-serif;
+  color:#eaffea;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+/* CENTER BIG TITLE */
+h1{
+  margin-top:30px;
+  font-size:3rem;
+  letter-spacing:2px;
+  text-align:center;
+}
+
+/* CHAT AREA */
+.chat{
+  width:90%;
+  max-width:600px;
+  margin-top:40px;
+}
+
+/* MESSAGE BUBBLE */
+.bubble{
+  background:#1f6f4a;
+  padding:14px 18px;
+  margin:12px 0;
+  border-radius:16px;
+  animation:slideUp 0.6s ease;
+}
+
+/* ANIMATION */
+@keyframes slideUp{
+  from{opacity:0; transform:translateY(20px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+/* BUTTON */
+button{
+  margin-top:30px;
+  padding:12px 22px;
+  font-size:1rem;
+  background:#4caf50;
+  color:white;
+  border:none;
+  border-radius:25px;
+  cursor:pointer;
+  transition:0.3s;
+}
+button:hover{
+  background:#66bb6a;
+  transform:scale(1.05);
+}
+</style>
+</head>
+
+<body>
+
+<h1>🌍 Voices of the Wild</h1>
+
+<div class="chat" id="chat"></div>
+
+<button onclick="reply()">Why are you disappearing?</button>
+
+<script>
+const messages = [
+  "Because forests are shrinking every single day.",
+  "Humans cut trees faster than nature can heal.",
+  "Our homes vanish when cities expand.",
+  "Climate change is stealing our food and water.",
+  "We are losing safe places to live.",
+  "If forests fall, we fall with them."
+];
+
+let index = 0;
+
+function reply(){
+  if(index < messages.length){
+    const chat = document.getElementById("chat");
+    const msg = document.createElement("div");
+    msg.className = "bubble";
+    msg.innerText = messages[index];
+    chat.appendChild(msg);
+    index++;
+  } else {
+    alert("🐾 That's all the voices for now. Please help us.");
+  }
+}
+</script>
+
+</body>
+</html>

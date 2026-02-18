@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hope for the Future</title>
+
+<style>
+:root{
+  --dark1:#0b090a;
+  --dark2:#161a1d;
+  --light1:#a7c957;
+  --light2:#6a994e;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(135deg,var(--dark1),var(--dark2));
+  font-family:Segoe UI, sans-serif;
+  color:#f1faee;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  transition:background 1s ease;
+}
+
+h1{
+  margin-top:30px;
+  font-size:3rem;
+  text-align:center;
+}
+
+.message{
+  margin-top:50px;
+  max-width:650px;
+  background:rgba(255,255,255,0.1);
+  padding:22px;
+  border-radius:18px;
+  animation:fadeIn 0.6s ease;
+  line-height:1.6;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(20px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+button{
+  margin-top:30px;
+  padding:14px 34px;
+  font-size:1rem;
+  background:#6a994e;
+  color:#0b090a;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  transition:0.3s;
+}
+button:hover{
+  transform:scale(1.05);
+}
+
+.footer{
+  margin-top:20px;
+  font-size:0.9rem;
+  opacity:0.8;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🌈 Hope for the Future</h1>
+
+<div id="messages"></div>
+
+<button onclick="restore()">Restore</button>
+
+<p class="footer">Hope grows with action.</p>
+
+<script>
+const messages = [
+  "Renewable energy reduces emissions.",
+  "Reforestation revives ecosystems.",
+  "Sustainable cities protect life.",
+  "Awareness leads to responsibility.",
+  "The future can still be green."
+];
+
+let step = 0;
+
+function restore(){
+  if(step < messages.length){
+    const msg = document.createElement("div");
+    msg.className = "message";
+    msg.textContent = messages[step];
+    document.getElementById("messages").appendChild(msg);
+
+    document.body.style.background =
+      "linear-gradient(135deg,var(--light1),var(--light2))";
+
+    step++;
+  } else {
+    alert("🌍 The future begins with you.");
+  }
+}
+</script>
+
+</body>
+</html>

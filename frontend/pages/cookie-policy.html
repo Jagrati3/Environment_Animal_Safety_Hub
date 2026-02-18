@@ -8,9 +8,8 @@
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../css/global/utilities.css" />
-    <link rel="stylesheet" href="../css/components/navbar.css" />
-    <link rel="stylesheet" href="../css/components/footer.css" />   
+    <link rel="stylesheet" href="../css/global/utilities.css" />
+    <link rel="stylesheet" href="../css/components/navbar.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
@@ -65,52 +64,6 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
-        }
-
-        /* ===== NAVBAR STYLES ===== */
-        .navbar {
-            background: var(--light);
-            padding: 1rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 1000;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            text-decoration: none;
-        }
-
-        .logo i {
-            font-size: 1.8rem;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--dark);
-            text-decoration: none;
-            font-weight: 500;
-            transition: var(--transition);
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary);
-            background: var(--primary-light);
         }
 
         /* ===== THEME TOGGLE ===== */
@@ -340,37 +293,24 @@
             box-shadow: var(--shadow-hover);
         }
 
-        /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2.2rem;
             }
-            
+
             .hero p {
                 font-size: 1rem;
             }
-            
+
             .card-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
-            
+
             .card {
                 padding: 25px;
             }
-            
-            .navbar {
-                flex-direction: column;
-                gap: 15px;
-                padding: 15px 5%;
-            }
-            
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 10px;
-            }
-            
+
             .theme-toggle {
                 top: 80px;
                 right: 15px;
@@ -535,198 +475,8 @@
 
     <!-- FOOTER PLACEHOLDER (Your original footer will load here) -->
     <div id="footer-placeholder"></div>
-
-    
-    <!-- Chatbase Chatbot Script (Your original script) -->
-    <script>
-        (function(){
-            if(!window.chatbase||window.chatbase("getState")!=="initialized"){
-                window.chatbase=(...arguments)=>{
-                    if(!window.chatbase.q){
-                        window.chatbase.q=[]
-                    }
-                    window.chatbase.q.push(arguments)
-                };
-                window.chatbase=new Proxy(window.chatbase,{
-                    get(target,prop){
-                        if(prop==="q"){
-                            return target.q
-                        }
-                        return(...args)=>target(prop,...args)
-                    }
-                })
-            }
-            const onLoad=function(){
-                const script=document.createElement("script");
-                script.src="https://www.chatbase.co/embed.min.js";
-                script.id="ws110ZzXAkEnbVsIy9g8d";
-                script.domain="www.chatbase.co";
-                document.body.appendChild(script);
-            };
-            if(document.readyState==="complete"){
-                onLoad()
-            }else{
-                window.addEventListener("load",onLoad)
-            }
-        })();
-    </script>
-
-    <script>
-        // ===== THEME MANAGEMENT =====
-        const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = themeToggle.querySelector('i');
-        
-        // Check saved theme or system preference
-        const savedTheme = localStorage.getItem('ecolife-theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        
-        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            themeIcon.className = 'fas fa-sun';
-        }
-        
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            if (currentTheme === 'dark') {
-                document.documentElement.removeAttribute('data-theme');
-                themeIcon.className = 'fas fa-moon';
-                localStorage.setItem('ecolife-theme', 'light');
-            } else {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                themeIcon.className = 'fas fa-sun';
-                localStorage.setItem('ecolife-theme', 'dark');
-            }
-        });
-
-        // ===== COOKIE CONTROLS =====
-        const essentialToggle = document.getElementById('essentialToggle');
-        const analyticsToggle = document.getElementById('analyticsToggle');
-        const preferenceToggle = document.getElementById('preferenceToggle');
-        const saveBtn = document.getElementById('savePreferences');
-
-        // Load saved preferences
-        const savedPrefs = JSON.parse(localStorage.getItem('cookiePrefs') || '{}');
-        
-        if (savedPrefs.analytics !== undefined) {
-            analyticsToggle.classList.toggle('active', savedPrefs.analytics);
-        }
-        
-        if (savedPrefs.preference !== undefined) {
-            preferenceToggle.classList.toggle('active', savedPrefs.preference);
-        }
-
-        // Toggle switches
-        essentialToggle.addEventListener('click', () => {
-            // Essential cookies cannot be disabled
-            alert('Essential cookies are required for the website to function properly.');
-        });
-
-        analyticsToggle.addEventListener('click', () => {
-            analyticsToggle.classList.toggle('active');
-        });
-
-        preferenceToggle.addEventListener('click', () => {
-            preferenceToggle.classList.toggle('active');
-        });
-
-        // Save preferences
-        saveBtn.addEventListener('click', () => {
-            const prefs = {
-                analytics: analyticsToggle.classList.contains('active'),
-                preference: preferenceToggle.classList.contains('active')
-            };
-            
-            localStorage.setItem('cookiePrefs', JSON.stringify(prefs));
-            
-            // Show confirmation
-            alert('Cookie preferences saved successfully!');
-            
-            // Visual feedback
-            saveBtn.innerHTML = '<i class="fas fa-check"></i> Preferences Saved!';
-            saveBtn.style.background = '#27ae60';
-            
-            setTimeout(() => {
-                saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Cookie Preferences';
-                saveBtn.style.background = '';
-            }, 2000);
-        });
-
-        // ===== BACK TO HOME =====
-        function goHome() {
-            window.location.href = "/";
-        }
-
-        // ===== PRINT FUNCTIONALITY =====
-        const printBtn = document.createElement('button');
-        printBtn.innerHTML = '<i class="fas fa-print"></i>';
-        printBtn.title = 'Print Policy';
-        printBtn.style.cssText = `
-            position: fixed;
-            bottom: 30px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 99;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-        `;
-        
-        printBtn.addEventListener('mouseenter', () => {
-            printBtn.style.transform = 'scale(1.1)';
-        });
-        
-        printBtn.addEventListener('mouseleave', () => {
-            printBtn.style.transform = 'scale(1)';
-        });
-        
-        printBtn.addEventListener('click', () => {
-            window.print();
-        });
-        
-        document.body.appendChild(printBtn);
-
-        // ===== LOAD EXTERNAL FOOTER (Your original code) =====
-        // This will load your footer exactly as it was
-        console.log('Loading original footer...');
-        
-        // Simulate your original footer loading
-        // setTimeout(() => {
-        //     const footerPlaceholder = document.getElementById('footer-placeholder');
-        //     if (footerPlaceholder) {
-        //         // Create a simple footer similar to your original structure
-        //         const originalFooter = document.createElement('footer');
-        //         originalFooter.innerHTML = `
-        //             <div style="background: #2c3e50; color: white; padding: 20px; text-align: center;">
-        //                 <p>&copy; 2026 EcoLife. All rights reserved.</p>
-        //                 <div style="margin-top: 10px;">
-        //                     <a href="/privacy" style="color: #2ecc71; margin: 0 10px;">Privacy Policy</a>
-        //                     <a href="/terms" style="color: #2ecc71; margin: 0 10px;">Terms</a>
-        //                     <a href="/cookies" style="color: #2ecc71; margin: 0 10px;">Cookies</a>
-        //                 </div>
-        //             </div>
-        //         `;
-        //         footerPlaceholder.appendChild(originalFooter);
-        //         console.log('Original footer loaded');
-        //     }
-        // }, 100);
-
-        // ===== INITIALIZATION =====
-        console.log('EcoLife Cookie Policy page loaded');
-        console.log('Theme:', document.documentElement.getAttribute('data-theme') || 'light');
-    </script>
     
     <!-- Your original footer loader script (commented out since we're simulating it) -->
-    
-    <script src="/frontend/js/components/footer-loader.js"></script>
-    <script src="../js/components/navbar-loader.js"></script>
-    <script src="../js/components/component-loader.js"></script>
+<script src="../js/components/component-loader.js"></script>
 </body>
 </html>

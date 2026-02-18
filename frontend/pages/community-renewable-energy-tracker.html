@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Renewable Energy Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --main: #263238;
+      --accent: #ffb300;
+      --bg: #f9fbe7;
+      --card: #fffde7;
+      --muted: #78909c;
+      --success: #43a047;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding: 0;
+      color: var(--main);
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 850px;
+      margin: 40px auto;
+      background: var(--card);
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(38,50,56,0.10);
+      padding: 36px 28px;
+    }
+    h1 {
+      color: var(--main);
+      margin-bottom: 8px;
+      font-size: 2.1rem;
+      font-weight: 700;
+    }
+    h2 {
+      color: var(--accent);
+      margin-top: 32px;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    label {
+      color: var(--main);
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: block;
+    }
+    input, select, button, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 16px;
+      border: 1px solid var(--muted);
+      border-radius: 6px;
+      font-size: 1rem;
+      color: var(--main);
+      background: #f9f9f9;
+      box-sizing: border-box;
+    }
+    button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #ffa000;
+    }
+    .project-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .project-item {
+      background: #fffde7;
+      border-left: 6px solid var(--accent);
+      border-radius: 10px;
+      padding: 18px 16px;
+      margin-bottom: 14px;
+      color: var(--main);
+      display: flex;
+      flex-direction: column;
+    }
+    .progress-bar {
+      height: 18px;
+      background: #e0e0e0;
+      border-radius: 8px;
+      margin: 8px 0 0 0;
+      overflow: hidden;
+      width: 100%;
+    }
+    .progress {
+      height: 100%;
+      background: var(--success);
+      border-radius: 8px 0 0 8px;
+      transition: width 0.4s;
+      color: #fff;
+      font-size: 0.95em;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+      font-weight: 700;
+    }
+    .involve-section {
+      background: #e0f2f1;
+      border-radius: 10px;
+      padding: 18px 14px;
+      color: var(--success);
+      margin-top: 18px;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 14px 4px; }
+      h1 { font-size: 1.3rem; }
+    }
+  </style>
+  <link rel="stylesheet" href="../css/components/navbar.css">
+  <link rel="stylesheet" href="../css/components/footer.css">
+</head>
+<body>
+  <div id="navbar-container"></div>
+  <div class="container">
+    <h1>Community Renewable Energy Tracker</h1>
+    <p style="color:var(--muted);">Track local renewable energy projects, submit new ones, view progress, and learn how to get involved.</p>
+    <form id="projectForm">
+      <label for="name">Project Name</label>
+      <input type="text" id="name" name="name" required placeholder="e.g., Solar School Initiative">
+      <label for="type">Type</label>
+      <select id="type" name="type" required>
+        <option value="">Select type</option>
+        <option value="Solar">Solar</option>
+        <option value="Wind">Wind</option>
+        <option value="Hydro">Hydro</option>
+        <option value="Geothermal">Geothermal</option>
+        <option value="Other">Other</option>
+      </select>
+      <label for="location">Location</label>
+      <input type="text" id="location" name="location" required placeholder="e.g., Main St, 90210">
+      <label for="progress">Progress (%)</label>
+      <input type="number" id="progress" name="progress" min="0" max="100" required placeholder="e.g., 45">
+      <label for="desc">Description</label>
+      <textarea id="desc" name="desc" rows="2" required placeholder="Brief project description..."></textarea>
+      <button type="submit">Add Project</button>
+    </form>
+    <h2>Active Projects</h2>
+    <ul class="project-list" id="projectList"></ul>
+    <div class="involve-section">
+      <h2 style="color:var(--success);margin-top:0;">How to Get Involved</h2>
+      <ul>
+        <li>Volunteer for local renewable energy projects.</li>
+        <li>Attend community meetings and workshops.</li>
+        <li>Support policies that promote clean energy.</li>
+        <li>Share project updates and successes with your network.</li>
+        <li>Start your own renewable energy initiative!</li>
+      </ul>
+    </div>
+  </div>
+  <div id="footer-container"></div>
+  <script>
+    // Project tracking logic
+    const projectForm = document.getElementById('projectForm');
+    const projectList = document.getElementById('projectList');
+    let projects = [];
+    projectForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = projectForm.name.value.trim();
+      const type = projectForm.type.value;
+      const location = projectForm.location.value.trim();
+      const progress = Math.max(0, Math.min(100, parseInt(projectForm.progress.value, 10)));
+      const desc = projectForm.desc.value.trim();
+      if (name && type && location && !isNaN(progress) && desc) {
+        projects.push({ name, type, location, progress, desc });
+        renderProjects();
+        projectForm.reset();
+      }
+    });
+    function renderProjects() {
+      projectList.innerHTML = '';
+      projects.slice().reverse().forEach(project => {
+        const li = document.createElement('li');
+        li.className = 'project-item';
+        li.innerHTML = `<strong>${project.name}</strong> <span style='color:var(--accent);font-weight:700;'>[${project.type}]</span><br><span style='color:var(--muted);'>${project.location}</span><div style='margin:6px 0 0 0;'>${project.desc}</div>`;
+        const bar = document.createElement('div');
+        bar.className = 'progress-bar';
+        const prog = document.createElement('div');
+        prog.className = 'progress';
+        prog.style.width = project.progress + '%';
+        prog.textContent = project.progress + '%';
+        bar.appendChild(prog);
+        li.appendChild(bar);
+        projectList.appendChild(li);
+      });
+    }
+    // Initial render
+    renderProjects();
+  </script>
+  <script>
+    // Load navbar
+    fetch('../components/navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+        
+        // Initialize navbar functionality
+        const script = document.createElement('script');
+        script.src = '../js/components/navbar.js';
+        document.body.appendChild(script);
+      });
+
+
+
+      
+  </script>
+  <script>
+  // Load footer
+  fetch('../components/footer.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('footer-container').innerHTML = data;
+    });
+</script>
+</body>
+</html>

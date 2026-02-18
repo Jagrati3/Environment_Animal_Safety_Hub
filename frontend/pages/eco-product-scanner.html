@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco-Product Scanner | EWOC</title>
+    <meta name="description" content="Scan products to check environmental impact, certifications, and find sustainable alternatives.">
+    <link rel="stylesheet" href="../css/eco-product-scanner.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-barcode"></i>
+                <span>Eco Scanner</span>
+            </div>
+            <nav class="nav">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="#scanner" class="nav-link active">Scanner</a>
+                <a href="#history" class="nav-link" id="historyLink">History</a>
+                <a href="#about" class="nav-link">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Scan for Sustainability</h1>
+            <p class="hero-subtitle">Check product environmental impact & find better alternatives</p>
+            
+            <!-- Impact Stats -->
+            <div class="impact-stats">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="totalScans">0</div>
+                        <div class="stat-label">Products Scanned</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="ecoChoices">0</div>
+                        <div class="stat-label">Eco Choices Made</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-earth-americas"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="co2Saved">0</div>
+                        <div class="stat-label">kg CO₂ Saved</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <!-- Scanner Section -->
+        <section class="scanner-section" id="scannerSection">
+            <div class="scanner-card">
+                <div class="scanner-header">
+                    <h2>Scan Product</h2>
+                    <div class="scan-methods">
+                        <button class="method-btn active" data-method="barcode">
+                            <i class="fas fa-barcode"></i>
+                            Barcode
+                        </button>
+                        <button class="method-btn" data-method="qr">
+                            <i class="fas fa-qrcode"></i>
+                            QR Code
+                        </button>
+                        <button class="method-btn" data-method="manual">
+                            <i class="fas fa-keyboard"></i>
+                            Manual
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Scanner Interface -->
+                <div class="scanner-interface">
+                    <div class="scanner-viewport" id="scannerViewport">
+                        <div class="scan-frame">
+                            <div class="scan-corners">
+                                <div class="corner top-left"></div>
+                                <div class="corner top-right"></div>
+                                <div class="corner bottom-left"></div>
+                                <div class="corner bottom-right"></div>
+                            </div>
+                            <div class="scan-line"></div>
+                        </div>
+                        <div class="scan-instructions">
+                            <i class="fas fa-barcode scan-icon"></i>
+                            <p>Position barcode within frame</p>
+                            <p class="scan-hint">Or enter code manually below</p>
+                        </div>
+                    </div>
+
+                    <div class="manual-input-section">
+                        <div class="input-group">
+                            <input type="text" 
+                                   id="manualBarcodeInput" 
+                                   class="barcode-input" 
+                                   placeholder="Enter barcode or product name..."
+                                   maxlength="13">
+                            <button class="btn-scan" id="scanButton">
+                                <i class="fas fa-magnifying-glass"></i>
+                                Scan
+                            </button>
+                        </div>
+                        <div class="quick-scan-options">
+                            <p class="quick-label">Try these sample products:</p>
+                            <div class="sample-products">
+                                <button class="sample-btn" data-code="1234567890">Plastic Bottle</button>
+                                <button class="sample-btn" data-code="2345678901">Reusable Bag</button>
+                                <button class="sample-btn" data-code="3456789012">Organic Snack</button>
+                                <button class="sample-btn" data-code="4567890123">LED Bulb</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section" id="resultsSection" style="display: none;">
+            <button class="btn-back" id="backButton">
+                <i class="fas fa-arrow-left"></i>
+                Scan Another Product
+            </button>
+
+            <!-- Product Info Card -->
+            <div class="product-card">
+                <div class="product-header">
+                    <div class="product-image-container">
+                        <img id="productImage" src="" alt="Product" class="product-image">
+                        <div class="product-badge" id="productBadge"></div>
+                    </div>
+                    <div class="product-info">
+                        <h2 class="product-name" id="productName"></h2>
+                        <p class="product-brand" id="productBrand"></p>
+                        <p class="product-category" id="productCategory"></p>
+                    </div>
+                </div>
+
+                <!-- Sustainability Score -->
+                <div class="sustainability-score">
+                    <h3>Sustainability Rating</h3>
+                    <div class="score-display">
+                        <div class="score-circle" id="scoreCircle">
+                            <svg class="score-svg" viewBox="0 0 200 200">
+                                <circle class="score-bg" cx="100" cy="100" r="85"></circle>
+                                <circle class="score-progress" id="scoreProgress" cx="100" cy="100" r="85"></circle>
+                            </svg>
+                            <div class="score-content">
+                                <div class="score-value" id="scoreValue">0</div>
+                                <div class="score-label" id="scoreLabel">Rating</div>
+                            </div>
+                        </div>
+                        <div class="score-breakdown" id="scoreBreakdown">
+                            <!-- Score factors will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Environmental Impact -->
+                <div class="impact-section">
+                    <h3><i class="fas fa-leaf"></i> Environmental Impact</h3>
+                    <div class="impact-grid" id="impactGrid">
+                        <!-- Impact metrics will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Certifications -->
+                <div class="certifications-section" id="certificationsSection">
+                    <h3><i class="fas fa-certificate"></i> Certifications & Labels</h3>
+                    <div class="certifications-grid" id="certificationsGrid">
+                        <!-- Certifications will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Ingredients/Materials -->
+                <div class="materials-section" id="materialsSection">
+                    <h3><i class="fas fa-flask"></i> Materials & Ingredients</h3>
+                    <div class="materials-list" id="materialsList">
+                        <!-- Materials will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Pros and Cons -->
+                <div class="pros-cons-section">
+                    <div class="pros-column">
+                        <h4><i class="fas fa-check-circle"></i> Positives</h4>
+                        <ul id="prosList"></ul>
+                    </div>
+                    <div class="cons-column">
+                        <h4><i class="fas fa-exclamation-circle"></i> Concerns</h4>
+                        <ul id="consList"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alternatives Section -->
+            <div class="alternatives-section" id="alternativesSection">
+                <h3><i class="fas fa-arrows-rotate"></i> Better Alternatives</h3>
+                <p class="alternatives-subtitle">Consider these more sustainable options</p>
+                <div class="alternatives-grid" id="alternativesGrid">
+                    <!-- Alternatives will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn-action btn-primary" id="compareBtn">
+                    <i class="fas fa-code-compare"></i>
+                    Compare Products
+                </button>
+                <button class="btn-action btn-secondary" id="shareBtn">
+                    <i class="fas fa-share-nodes"></i>
+                    Share Results
+                </button>
+                <button class="btn-action btn-secondary" id="saveBtn">
+                    <i class="fas fa-bookmark"></i>
+                    Save to History
+                </button>
+            </div>
+        </section>
+
+        <!-- Scan History Section -->
+        <section class="history-section" id="historySection" style="display: none;">
+            <div class="history-header">
+                <h2><i class="fas fa-clock-rotate-left"></i> Scan History</h2>
+                <button class="btn-clear-history" id="clearHistoryBtn">
+                    <i class="fas fa-trash"></i>
+                    Clear History
+                </button>
+            </div>
+            <div class="history-grid" id="historyGrid">
+                <!-- History items will be inserted here -->
+            </div>
+            <div class="empty-history" id="emptyHistory" style="display: none;">
+                <i class="fas fa-inbox"></i>
+                <h3>No scan history yet</h3>
+                <p>Start scanning products to build your history</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Scanning product...</p>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Success!</span>
+    </div>
+
+    <!-- Info Modal -->
+    <div class="modal" id="infoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Product Information</h2>
+                <button class="modal-close" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Modal content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/eco-product-scanner.js"></script>
+</body>
+</html>

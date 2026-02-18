@@ -26,7 +26,7 @@ const upload = multer({
         const filetypes = /jpeg|jpg|png|webp/;
         const mimetype = filetypes.test(file.mimetype);
         const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-        
+
         if (mimetype && extname) {
             return cb(null, true);
         } else {
@@ -104,7 +104,7 @@ router.post('/analyze', upload.single('photo'), async (req, res) => {
                     status: 'Endangered (EN)',
                     population: 'Approximately 2,500 individuals',
                     threats: 'Habitat loss, poaching, human-wildlife conflict',
-                    protectionLevel: 'Schedule I (India)', 
+                    protectionLevel: 'Schedule I (India)',
                     conservationEfforts: 'Multiple tiger reserves and anti-poaching operations'
                 }
             ],
@@ -138,6 +138,7 @@ router.post('/analyze', upload.single('photo'), async (req, res) => {
             error: error.message
         });
     }
+});
 
 /**
  * @route   GET /api/photos/gallery

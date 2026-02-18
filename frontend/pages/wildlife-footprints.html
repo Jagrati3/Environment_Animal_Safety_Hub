@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Wildlife Footprints</title>
+
+<style>
+:root{
+  --bg1:#1b4332;
+  --bg2:#081c15;
+  --accent:#95d5b2;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  font-family:Segoe UI, sans-serif;
+  color:#e9f5ef;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  overflow:hidden;
+}
+
+h1{
+  margin-top:30px;
+  font-size:3rem;
+  text-align:center;
+}
+
+/* PATH AREA */
+.path{
+  position:relative;
+  width:100%;
+  height:60vh;
+  margin-top:40px;
+}
+
+/* FOOTPRINT */
+.footprint{
+  position:absolute;
+  font-size:2rem;
+  opacity:0;
+  transform:scale(0.6);
+  animation:stepIn 0.6s ease forwards;
+}
+
+@keyframes stepIn{
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+/* MESSAGE */
+.message{
+  margin-top:20px;
+  max-width:650px;
+  background:rgba(0,0,0,0.3);
+  padding:20px 24px;
+  border-radius:18px;
+  animation:fadeUp 0.6s ease;
+  line-height:1.6;
+}
+
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(20px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+/* BUTTON */
+button{
+  margin-top:30px;
+  padding:14px 36px;
+  font-size:1rem;
+  background:var(--accent);
+  color:#081c15;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  transition:0.3s;
+}
+button:hover{
+  transform:scale(1.05);
+}
+
+.footer{
+  margin-top:20px;
+  font-size:0.9rem;
+  opacity:0.8;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🐾 Wildlife Footprints</h1>
+
+<div class="path" id="path"></div>
+
+<div id="messages"></div>
+
+<button onclick="step()">Take a Step</button>
+
+<p class="footer">Every footprint tells a story.</p>
+
+<script>
+const footprints = ["🐾","🐾","🐾","🐾","🐾"];
+
+const texts = [
+  "Wild animals follow ancient paths.",
+  "Roads and cities block migration routes.",
+  "Habitat loss forces animals closer to danger.",
+  "Broken paths lead to extinction.",
+  "Protecting land preserves wildlife journeys."
+];
+
+let index = 0;
+const path = document.getElementById("path");
+
+function step(){
+  if(index < footprints.length){
+    const fp = document.createElement("div");
+    fp.className = "footprint";
+    fp.textContent = footprints[index];
+
+    // Random position
+    fp.style.left = Math.random() * 80 + 10 + "%";
+    fp.style.top = Math.random() * 80 + "%";
+
+    path.appendChild(fp);
+
+    const msg = document.createElement("div");
+    msg.className = "message";
+    msg.textContent = texts[index];
+    document.getElementById("messages").appendChild(msg);
+
+    index++;
+  } else {
+    alert("🌍 The trail ends here. Let’s protect what remains.");
+  }
+}
+</script>
+
+</body>
+</html>

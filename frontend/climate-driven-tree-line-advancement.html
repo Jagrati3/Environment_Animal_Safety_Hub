@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climate-Driven Tree Line Advancement - Biodiversity Shifts in Tundra Ecosystems</title>
+<link rel="stylesheet" href="css/climate-driven-tree-line-advancement.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="accessibility-controls">
+        <button class="accessibility-btn" onclick="toggleHighContrast()">High Contrast</button>
+        <button class="accessibility-btn" onclick="toggleFontSize()">Font Size</button>
+        <button class="accessibility-btn" onclick="toggleReducedMotion()">Reduced Motion</button>
+    </div>
+
+    <header class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Climate-Driven Tree Line Advancement</h1>
+                <p class="hero-subtitle">Assessing Biodiversity Shifts as Forests Expand into Tundra Ecosystems</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">11M</span>
+                        <span class="stat-label">km² Tundra at Risk</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">50-100m</span>
+                        <span class="stat-label">Advance/Decade</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">15-30%</span>
+                        <span class="stat-label">Species Affected</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="tree-line-simulator">
+                    <h3>Tree Line Advancement Simulator</h3>
+                    <div class="simulator-controls">
+                        <div class="control-group">
+                            <label for="temperature-increase">Temperature Increase (°C):</label>
+                            <input type="range" id="temperature-increase" min="0" max="5" step="0.1" value="2.0">
+                            <span class="control-value" id="temperature-value">2.0°C</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="co2-level">CO₂ Concentration (ppm):</label>
+                            <input type="range" id="co2-level" min="280" max="600" value="420">
+                            <span class="control-value" id="co2-value">420</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="precipitation-change">Precipitation Change (%):</label>
+                            <input type="range" id="precipitation-change" min="-50" max="50" value="20">
+                            <span class="control-value" id="precipitation-value">+20%</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="region-select">Region:</label>
+                            <select id="region-select">
+                                <option value="arctic">Arctic Tundra</option>
+                                <option value="rockies">Rocky Mountains</option>
+                                <option value="tibet">Tibetan Plateau</option>
+                                <option value="patagonia">Patagonia</option>
+                                <option value="alaska">Alaska</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="simulator-results">
+                        <div class="result-metric">
+                            <span class="metric-label">Advancement Rate:</span>
+                            <span class="metric-value" id="advancement-rate">65 m/decade</span>
+                            <div class="advancement-indicator">
+                                <div class="advancement-bar" id="advancement-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Biodiversity Impact:</span>
+                            <span class="metric-value" id="biodiversity-impact">High</span>
+                            <div class="impact-indicators">
+                                <span class="indicator" id="species-loss">🦌 Species Loss</span>
+                                <span class="indicator" id="habitat-change">🏔️ Habitat Change</span>
+                                <span class="indicator" id="carbon-impact">🌲 Carbon Dynamics</span>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Carbon Sequestration:</span>
+                            <span class="metric-value" id="carbon-sequestration">+2.3 Pg C</span>
+                            <div class="carbon-bar">
+                                <div class="carbon-fill" id="carbon-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Ecosystem State:</span>
+                            <span class="metric-value" id="ecosystem-state">Transitioning</span>
+                            <div class="state-indicators">
+                                <div class="state-meter">
+                                    <span class="state-label tundra">Tundra</span>
+                                    <div class="state-bar">
+                                        <div class="state-fill tundra-fill" id="tundra-fill"></div>
+                                    </div>
+                                </div>
+                                <div class="state-meter">
+                                    <span class="state-label forest">Forest</span>
+                                    <div class="state-bar">
+                                        <div class="state-fill forest-fill" id="forest-fill"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-icon">🌲</span>
+                <span class="brand-text">TreeLine Hub</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#science" class="nav-link active" data-tab="science">Science</a></li>
+                <li><a href="#impacts" class="nav-link" data-tab="impacts">Impacts</a></li>
+                <li><a href="#mechanisms" class="nav-link" data-tab="mechanisms">Mechanisms</a></li>
+                <li><a href="#solutions" class="nav-link" data-tab="solutions">Solutions</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section id="science" class="content-section active">
+            <div class="section-container">
+                <h2>The Science of Climate-Driven Tree Line Advancement</h2>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>Climate Drivers</h3>
+                        <div class="climate-drivers">
+                            <div class="driver-category">
+                                <h4>🌡️ Temperature</h4>
+                                <div class="driver-metrics">
+                                    <div class="metric">Arctic increase: <span id="arctic-temp">+2.1°C</span></div>
+                                    <div class="metric">Alpine increase: <span id="alpine-temp">+1.8°C</span></div>
+                                    <div class="metric">Growing season: <span id="growing-season">+15 days</span></div>
+                                    <div class="metric">Frost frequency: <span id="frost-freq">-40%</span></div>
+                                </div>
+                            </div>
+                            <div class="driver-category">
+                                <h4>💨 CO₂ Effects</h4>
+                                <div class="driver-metrics">
+                                    <div class="metric">Photosynthesis: <span id="photosynthesis">+25%</span></div>
+                                    <div class="metric">Water use: <span id="water-use">+15%</span></div>
+                                    <div class="metric">Nutrient uptake: <span id="nutrient-uptake">+20%</span></div>
+                                    <div class="metric">Herbivory: <span id="herbivory">-10%</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h3>Advancement Patterns</h3>
+                        <div class="advancement-chart">
+                            <canvas id="advancementChart"></canvas>
+                        </div>
+                        <div class="advancement-legend">
+                            <div class="legend-item">
+                                <span class="legend-color coniferous"></span>
+                                <span>Coniferous Species</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color deciduous"></span>
+                                <span>Deciduous Species</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color shrubs"></span>
+                                <span>Shrub Species</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h3>Biodiversity Shifts</h3>
+                        <div class="biodiversity-shifts">
+                            <div class="shift-metric">
+                                <div class="circle-value">25%</div>
+                                <div class="circle-label">Tundra Species Loss</div>
+                            </div>
+                            <div class="shift-arrow">→</div>
+                            <div class="shift-metric">
+                                <div class="circle-value">40%</div>
+                                <div class="circle-label">Forest Species Gain</div>
+                            </div>
+                            <div class="shift-stats">
+                                <div class="stat">Endemic species: 50+ threatened</div>
+                                <div class="stat">Migratory birds: Habitat changes</div>
+                                <div class="stat">Mammals: Range shifts northward</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="impacts" class="content-section">
+            <div class="section-container">
+                <h2>Regional Impacts and Case Studies</h2>
+                <div class="case-studies">
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Arctic Tundra</h3>
+                            <span class="case-location">Scandinavia & Russia</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">50-100m</div>
+                                <div class="stat">30% loss</div>
+                                <div class="stat">€500M</div>
+                            </div>
+                            <p>Reindeer lichen pastures disappearing, Sami communities affected, increased wildfire risk.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Rocky Mountains</h3>
+                            <span class="case-location">USA & Canada</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">20-50m</div>
+                                <div class="stat">25% loss</div>
+                                <div class="stat">$200M</div>
+                            </div>
+                            <p>Alpine meadows disappearing, bighorn sheep habitats changing, water resources impacted.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Tibetan Plateau</h3>
+                            <span class="case-location">China</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">30-60m</div>
+                                <div class="stat">20% loss</div>
+                                <div class="stat">¥2B</div>
+                            </div>
+                            <p>Tibetan antelope habitats threatened, headwater hydrology changing, pastoral impacts.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Patagonia</h3>
+                            <span class="case-location">Argentina & Chile</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">10-30m</div>
+                                <div class="stat">15% loss</div>
+                                <div class="stat">$100M</div>
+                            </div>
+                            <p>Penguin colonies affected, marine-terrestrial linkages changing, tourism impacts.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Alaska</h3>
+                            <span class="case-location">USA</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">40-80m</div>
+                                <div class="stat">35% loss</div>
+                                <div class="stat">$300M</div>
+                            </div>
+                            <p>Caribou calving grounds lost, salmon habitats changing, indigenous communities impacted.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="global-impact">
+                    <h3>Global Tree Line Advancement Projections</h3>
+                    <canvas id="globalTreeLineChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="mechanisms" class="content-section">
+            <div class="section-container">
+                <h2>Mechanisms of Tree Line Advancement</h2>
+                <div class="mechanism-explorer">
+                    <div class="mechanism-tabs">
+                        <button class="mechanism-tab active" data-mechanism="physiological">Physiological</button>
+                        <button class="mechanism-tab" data-mechanism="dispersal">Dispersal</button>
+                        <button class="mechanism-tab" data-mechanism="disturbance">Disturbance</button>
+                    </div>
+
+                    <div class="mechanism-content">
+                        <div class="mechanism-panel active" id="physiological-panel">
+                            <h3>Physiological Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Photosynthetic Capacity</h4>
+                                    <p>Enhanced CO₂ fixation and carbohydrate production under warmer conditions and elevated CO₂.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Phenological Changes</h4>
+                                    <p>Earlier bud burst, extended growing seasons, and delayed senescence allowing more carbon assimilation.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Root Development</h4>
+                                    <p>Deeper root penetration into thawing permafrost and improved nutrient acquisition.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mechanism-panel" id="dispersal-panel">
+                            <h3>Dispersal Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Seed Production</h4>
+                                    <p>Increased seed production and viability under favorable climatic conditions.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Wind Dispersal</h4>
+                                    <p>Enhanced wind patterns and longer dispersal seasons improving seed transport distances.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Animal Vectors</h4>
+                                    <p>Changes in animal behavior and migration patterns facilitating seed dispersal.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mechanism-panel" id="disturbance-panel">
+                            <h3>Disturbance Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Permafrost Thaw</h4>
+                                    <p>Creation of new microsites for seedling establishment through soil thawing.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Wildfire Changes</h4>
+                                    <p>Altered fire regimes creating opportunities for tree establishment in some regions.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Human Activities</h4>
+                                    <p>Anthropogenic disturbances creating dispersal corridors and establishment sites.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solutions" class="content-section">
+            <div class="section-container">
+                <h2>Management and Conservation Strategies</h2>
+                <div class="solutions-framework">
+                    <div class="solution-category">
+                        <h3>Active Management</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Tree Removal</h4>
+                                <p>Mechanical removal of advancing trees in critical biodiversity areas to maintain tundra habitats.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Prescribed Burning</h4>
+                                <p>Controlled burns to prevent forest establishment and maintain tundra vegetation communities.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Grazing Management</h4>
+                                <p>Strategic use of herbivores to suppress tree seedling establishment and maintain open habitats.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="solution-category">
+                        <h3>Protected Areas</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Expansion Programs</h4>
+                                <p>Designation of new protected areas and expansion of existing reserves to encompass shifting habitats.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Biodiversity Corridors</h4>
+                                <p>Creation of connected habitat networks to allow species movement through advancing forests.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Refugia Design</h4>
+                                <p>Identification and protection of climate refugia where tundra species can persist long-term.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="solution-category">
+                        <h3>Monitoring & Research</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Remote Sensing</h4>
+                                <p>Satellite and drone monitoring of tree line changes and biodiversity responses.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Long-term Networks</h4>
+                                <p>Establishment of comprehensive monitoring networks for climate and ecological variables.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Indigenous Knowledge</h4>
+                                <p>Integration of traditional ecological knowledge with scientific monitoring approaches.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="policy-framework">
+                        <h3>Policy and Governance Framework</h3>
+                        <div class="policy-actions">
+                            <div class="policy-item">
+                                <h4>Climate Policy Integration</h4>
+                                <ul>
+                                    <li>National climate adaptation strategies</li>
+                                    <li>International biodiversity agreements</li>
+                                    <li>Carbon market incentives</li>
+                                    <li>Indigenous rights frameworks</li>
+                                </ul>
+                            </div>
+                            <div class="policy-item">
+                                <h4>Management Guidelines</h4>
+                                <ul>
+                                    <li>Regional adaptation planning</li>
+                                    <li>Stakeholder engagement processes</li>
+                                    <li>Economic impact assessments</li>
+                                    <li>Monitoring and evaluation frameworks</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>Issue #2329</h4>
+                <p>Climate-Driven Tree Line Advancement</p>
+                <p>Assessing biodiversity shifts as forests expand into tundra ecosystems</p>
+            </div>
+            <div class="footer-section">
+                <h4>Key Findings</h4>
+                <ul>
+                    <li>11 million km² of tundra ecosystems at risk</li>
+                    <li>50-100 m advancement per decade in Arctic regions</li>
+                    <li>15-30% of tundra species potentially affected</li>
+                    <li>$1B+ in annual economic impacts globally</li>
+                    <li>10-20 Pg C potential sequestration benefits</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Management Actions</h4>
+                <ul>
+                    <li>Implement active tree line management</li>
+                    <li>Expand protected area networks</li>
+                    <li>Establish comprehensive monitoring</li>
+                    <li>Integrate indigenous knowledge</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <a href="#science">Climate Science</a>
+                    <a href="#impacts">Case Studies</a>
+                    <a href="#mechanisms">Advancement Mechanisms</a>
+                    <a href="#solutions">Conservation Strategies</a>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Environment Animal Safety Hub - Issue #2329: Tree Line Advancement Research</p>
+        </div>
+    </footer>
+
+    <script src="climate-driven-tree-line-advancement.js"></script>
+</body>
+</html>

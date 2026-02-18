@@ -1,67 +1,188 @@
-/* Progress UI Component Styles */
-#resumeSection {
-  margin-top: 20px;
-  padding: 15px;
-  background: linear-gradient(135deg, #f0f8ff 0%, #e8f4fd 100%);
-  border-radius: 8px;
-  border: 2px solid #4CAF50;
-  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
-  transition: all 0.3s ease;
+:root {
+    --eco-green: #2ecc71;
+    --eco-dark: #27ae60;
+    --eco-text: #2c3e50;
+    --eco-bg: #ffffff;
 }
 
-#resumeSection:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+#eco-progress-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-#resumeSection h3 {
-  color: #2E7D32;
-  margin-bottom: 10px;
-  font-size: 1.2em;
-  font-weight: 600;
+/* Toggle Button */
+.progress-toggle {
+    width: 60px;
+    height: 60px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: absolute;
+    bottom: 0;
+    right: 0;
 }
 
-#resumeSection p {
-  margin-bottom: 15px;
-  color: #555;
-  line-height: 1.5;
+.progress-toggle:hover {
+    transform: scale(1.1);
 }
 
-#resumeSection button {
-  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 1em;
-  transition: all 0.3s ease;
+.progress-icon {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
 }
 
-#resumeSection button:hover {
-  background: linear-gradient(135deg, #45a049 0%, #4CAF50 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+.level-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--eco-green);
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 12px;
+    border: 2px solid white;
 }
 
-#resumeSection button:active {
-  transform: translateY(0);
+/* Expanded Card */
+.progress-card {
+    background: var(--eco-bg);
+    width: 280px;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    pointer-events: none;
+    transition: all 0.3s ease;
+    border: 1px solid #eee;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  #resumeSection {
-    margin: 15px 10px;
-    padding: 12px;
-  }
+#eco-progress-widget.active .progress-card {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: all;
+}
 
-  #resumeSection h3 {
-    font-size: 1.1em;
-  }
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
 
-  #resumeSection button {
-    width: 100%;
-    padding: 12px;
-  }
+.user-level {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--eco-text);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #999;
+}
+
+.xp-container {
+    margin-bottom: 15px;
+}
+
+.xp-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.progress-bar-bg {
+    background: #eee;
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--eco-green), var(--eco-dark));
+    border-radius: 5px;
+    transition: width 0.5s ease;
+}
+
+.latest-badge {
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.latest-badge p {
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.badge-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.badge-icon {
+    font-size: 1.5rem;
+}
+
+.badge-name {
+    font-weight: 600;
+    color: var(--eco-text);
+}
+
+/* Toast */
+.progress-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #333;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-weight: 500;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transform: translateY(-100px);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.progress-toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.progress-toast.success {
+    background: var(--eco-green);
 }

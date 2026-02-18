@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Tree Canopy Explorer</title>
+    <link rel="stylesheet" href="/frontend/pages/styles/urban-tree-canopy-explorer.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f4f8fb;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 32px 40px 40px 40px;
+        }
+        h1 {
+            color: #2e6e4e;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            color: #4e8e6e;
+            margin-bottom: 24px;
+        }
+        .flex {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+        .map-section, .info-section {
+            flex: 1 1 350px;
+            min-width: 320px;
+        }
+        .map-section {
+            background: #f7faf7;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(46,110,78,0.04);
+        }
+        #map {
+            width: 100%;
+            height: 350px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(46,110,78,0.06);
+        }
+        .legend {
+            background: #fff;
+            border-radius: 6px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            padding: 10px 16px;
+            font-size: 0.95rem;
+            margin-bottom: 18px;
+        }
+        .legend span {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            border-radius: 3px;
+            vertical-align: middle;
+        }
+        .legend .tree { background: #81c784; }
+        .legend .planting { background: #ffd54f; }
+        .legend .removal { background: #e57373; }
+        .resources {
+            margin-top: 24px;
+        }
+        .resources h3 {
+            margin-bottom: 10px;
+            color: #2e6e4e;
+        }
+        .resources ul {
+            padding-left: 18px;
+        }
+        .resources li {
+            margin-bottom: 8px;
+        }
+        @media (max-width: 900px) {
+            .flex {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Urban Tree Canopy Explorer</h1>
+        <div class="subtitle">Map urban tree cover, report plantings or removals, and learn about the benefits of urban forestry.</div>
+        <div class="flex">
+            <div class="map-section">
+                <div id="map"></div>
+                <form id="treeForm" style="background:#f7faf7;padding:16px;border-radius:8px;box-shadow:0 2px 8px rgba(46,110,78,0.04);margin-bottom:24px;">
+                    <h3>Report Tree Planting or Removal</h3>
+                    <label for="treeType">Type</label>
+                    <select id="treeType" required>
+                        <option value="planting">Planting</option>
+                        <option value="removal">Removal</option>
+                    </select>
+                    <label for="species">Species</label>
+                    <input type="text" id="species" required>
+                    <label for="notes">Notes</label>
+                    <textarea id="notes" rows="2"></textarea>
+                    <button type="submit">Submit Report</button>
+                    <p style="font-size:0.95em;color:#888;margin-top:8px;">Click on the map to select the location.</p>
+                </form>
+                <div class="legend">
+                    <span class="tree"></span> Existing Tree &nbsp;
+                    <span class="planting"></span> Planting &nbsp;
+                    <span class="removal"></span> Removal
+                </div>
+            </div>
+            <div class="info-section">
+                <h2>Why Urban Trees?</h2>
+                <ul>
+                    <li>Improve air quality and reduce urban heat.</li>
+                    <li>Provide habitat for wildlife and pollinators.</li>
+                    <li>Enhance property values and community well-being.</li>
+                    <li>Reduce stormwater runoff and erosion.</li>
+                </ul>
+                <div class="resources">
+                    <h3>Learn More</h3>
+                    <ul>
+                        <li><a href="https://www.arborday.org/trees/benefits.cfm" target="_blank">Arbor Day Foundation: Tree Benefits</a></li>
+                        <li><a href="https://www.fs.usda.gov/managing-land/urban-forests/ucf" target="_blank">US Forest Service: Urban Forestry</a></li>
+                        <li><a href="https://www.treepeople.org/" target="_blank">TreePeople</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Initialize map
+        var map = L.map('map').setView([40.7128, -74.0060], 12); // Default to New York City
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Example existing trees (replace with real data or API)
+        var trees = [
+            {
+                species: 'London Plane',
+                coords: [40.7306, -73.9866],
+                description: 'Mature street tree.'
+            },
+            {
+                species: 'Red Maple',
+                coords: [40.7150, -74.0150],
+                description: 'Park tree.'
+            }
+        ];
+        trees.forEach(function(tree) {
+            var marker = L.circleMarker(tree.coords, {
+                radius: 10,
+                color: '#81c784',
+                fillColor: '#81c784',
+                fillOpacity: 0.8
+            }).addTo(map);
+            marker.bindPopup('<b>' + tree.species + '</b><br>' + tree.description);
+        });
+
+        // User reports
+        var reportMarkers = [];
+        var selectedLatLng = null;
+        map.on('click', function(e) {
+            selectedLatLng = e.latlng;
+            reportMarkers.forEach(function(m) { map.removeLayer(m); });
+            var marker = L.marker(e.latlng).addTo(map);
+            reportMarkers = [marker];
+        });
+        document.getElementById('treeForm').addEventListener('submit', function(ev) {
+            ev.preventDefault();
+            if(!selectedLatLng) { alert('Please click on the map to select a location.'); return; }
+            var type = document.getElementById('treeType').value;
+            var species = document.getElementById('species').value;
+            var notes = document.getElementById('notes').value;
+            var color = type === 'planting' ? '#ffd54f' : '#e57373';
+            var marker = L.circleMarker(selectedLatLng, {
+                radius: 10,
+                color: color,
+                fillColor: color,
+                fillOpacity: 0.8
+            }).addTo(map);
+            marker.bindPopup('<b>' + (type === 'planting' ? 'Planting' : 'Removal') + '</b><br>Species: ' + species + (notes ? ('<br>Notes: ' + notes) : ''));
+            reportMarkers.push(marker);
+            alert('Thank you for your report!');
+            document.getElementById('treeForm').reset();
+            selectedLatLng = null;
+        });
+    </script>
+</body>
+</html>

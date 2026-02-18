@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Air Quality Monitor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --main: #263238;
+      --accent: #00bcd4;
+      --bg: #f4f8fb;
+      --card: #fff;
+      --danger: #e53935;
+      --success: #43a047;
+      --muted: #78909c;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding: 0;
+      color: var(--main);
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: var(--card);
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(38,50,56,0.10);
+      padding: 36px 28px;
+    }
+    h1 {
+      color: var(--main);
+      margin-bottom: 8px;
+      font-size: 2.1rem;
+      font-weight: 700;
+    }
+    h2 {
+      color: var(--accent);
+      margin-top: 32px;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    label {
+      color: var(--main);
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: block;
+    }
+    input, select, button, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 16px;
+      border: 1px solid var(--muted);
+      border-radius: 6px;
+      font-size: 1rem;
+      color: var(--main);
+      background: #f9f9f9;
+      box-sizing: border-box;
+    }
+    button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #008ba3;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 18px;
+    }
+    .data-table th, .data-table td {
+      border: 1px solid #e0e0e0;
+      padding: 8px 10px;
+      text-align: left;
+    }
+    .data-table th {
+      background: #eceff1;
+      color: var(--main);
+    }
+    .data-table td {
+      color: var(--main);
+    }
+    .pollution-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .pollution-item {
+      background: #fbe9e7;
+      border-left: 6px solid var(--danger);
+      border-radius: 8px;
+      padding: 14px 12px;
+      margin-bottom: 10px;
+      color: var(--danger);
+    }
+    .tips-section {
+      background: #e0f2f1;
+      border-radius: 10px;
+      padding: 18px 14px;
+      color: var(--success);
+      margin-top: 18px;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 14px 4px; }
+      h1 { font-size: 1.3rem; }
+    }
+    .chart {
+      width: 100%;
+      height: 220px;
+      margin-bottom: 18px;
+      background: repeating-linear-gradient(135deg, #b0bec5 0 10px, #eceff1 10px 20px);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Community Air Quality Monitor</h1>
+    <p style="color:var(--muted);">Log and visualize local air quality, report pollution sources, and get tips to improve air quality.</p>
+    <form id="aqForm">
+      <label for="date">Date</label>
+      <input type="date" id="date" name="date" required>
+      <label for="location">Location</label>
+      <input type="text" id="location" name="location" required placeholder="e.g., Main St, 90210">
+      <label for="aqi">Air Quality Index (AQI)</label>
+      <input type="number" id="aqi" name="aqi" min="0" max="500" required placeholder="e.g., 42">
+      <button type="submit">Log Data</button>
+    </form>
+    <div class="chart" id="aqChart">Air quality chart will appear here.</div>
+    <table class="data-table" id="aqTable">
+      <thead>
+        <tr><th>Date</th><th>Location</th><th>AQI</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <h2>Report Pollution Source</h2>
+    <form id="pollutionForm">
+      <label for="source">Source Description</label>
+      <input type="text" id="source" name="source" required placeholder="e.g., Factory smoke, idling trucks">
+      <label for="sourceLocation">Location</label>
+      <input type="text" id="sourceLocation" name="sourceLocation" required placeholder="e.g., 5th Ave, Riverside">
+      <button type="submit">Report Source</button>
+    </form>
+    <ul class="pollution-list" id="pollutionList"></ul>
+    <div class="tips-section">
+      <h2 style="color:var(--success);margin-top:0;">Tips for Cleaner Air</h2>
+      <ul>
+        <li>Use public transport, bike, or walk when possible.</li>
+        <li>Limit burning of trash or yard waste.</li>
+        <li>Plant trees and maintain green spaces.</li>
+        <li>Report illegal dumping or pollution sources.</li>
+        <li>Keep vehicles well-maintained to reduce emissions.</li>
+      </ul>
+    </div>
+  </div>
+  <script>
+    // Air quality data logic
+    const aqForm = document.getElementById('aqForm');
+    const aqTable = document.getElementById('aqTable').querySelector('tbody');
+    const aqChart = document.getElementById('aqChart');
+    let aqData = [];
+    aqForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const date = aqForm.date.value;
+      const location = aqForm.location.value.trim();
+      const aqi = parseInt(aqForm.aqi.value, 10);
+      if (date && location && !isNaN(aqi)) {
+        aqData.push({ date, location, aqi });
+        renderAQTable();
+        renderAQChart();
+        aqForm.reset();
+      }
+    });
+    function renderAQTable() {
+      aqTable.innerHTML = '';
+      aqData.slice().reverse().forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${row.date}</td><td>${row.location}</td><td>${row.aqi}</td>`;
+        aqTable.appendChild(tr);
+      });
+    }
+    function renderAQChart() {
+      if (aqData.length === 0) {
+        aqChart.textContent = 'Air quality chart will appear here.';
+        return;
+      }
+      // Simple bar chart using HTML/CSS
+      const maxAQI = Math.max(...aqData.map(d => d.aqi), 100);
+      aqChart.innerHTML = '<div style="display:flex;align-items:flex-end;height:180px;width:100%;gap:6px;">' +
+        aqData.slice(-10).map(d => {
+          const h = Math.max(10, d.aqi / maxAQI * 160);
+          let color = '#43a047';
+          if (d.aqi > 150) color = '#e53935';
+          else if (d.aqi > 100) color = '#fbc02d';
+          else if (d.aqi > 50) color = '#00bcd4';
+          return `<div title="${d.location} (${d.date}): AQI ${d.aqi}" style="flex:1;min-width:18px;height:${h}px;background:${color};border-radius:4px 4px 0 0;display:flex;align-items:flex-end;justify-content:center;font-size:0.9em;color:#fff;">${d.aqi}</div>`;
+        }).join('') + '</div>';
+    }
+    // Pollution source reporting
+    const pollutionForm = document.getElementById('pollutionForm');
+    const pollutionList = document.getElementById('pollutionList');
+    let pollutionSources = [];
+    pollutionForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const source = pollutionForm.source.value.trim();
+      const sourceLocation = pollutionForm.sourceLocation.value.trim();
+      if (source && sourceLocation) {
+        pollutionSources.push({ source, sourceLocation });
+        renderPollutionList();
+        pollutionForm.reset();
+      }
+    });
+    function renderPollutionList() {
+      pollutionList.innerHTML = '';
+      pollutionSources.slice().reverse().forEach(item => {
+        const li = document.createElement('li');
+        li.className = 'pollution-item';
+        li.innerHTML = `<strong>${item.source}</strong><br><span>${item.sourceLocation}</span>`;
+        pollutionList.appendChild(li);
+      });
+    }
+    // Initial render
+    renderAQTable();
+    renderAQChart();
+    renderPollutionList();
+  </script>
+</body>
+</html>

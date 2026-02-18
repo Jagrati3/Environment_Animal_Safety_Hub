@@ -1,0 +1,401 @@
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circular Closet Planner | EWOC</title>
+    <meta name="description" content="Plan re-wears, swaps, and repairs. Track your cost-per-wear and reduce new fashion purchases.">
+    <link rel="stylesheet" href="../css/circular-closet-planner.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-tshirt"></i>
+                <span>Circular Closet</span>
+            </div>
+            <nav class="nav">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="#wardrobe" class="nav-link active">My Wardrobe</a>
+                <a href="#outfits" class="nav-link">Outfits</a>
+                <a href="#swaps" class="nav-link">Swap Events</a>
+                <a href="#achievements" class="nav-link">Achievements</a>
+            </nav>
+            <button class="btn-add-item" id="addItemBtn">
+                <i class="fas fa-plus"></i>
+                Add Item
+            </button>
+        </div>
+    </header>
+
+    <!-- Dashboard Section -->
+    <section class="dashboard">
+        <div class="dashboard-container">
+            <div class="welcome-banner">
+                <div class="welcome-content">
+                    <h1 class="dashboard-title">Your Sustainable Wardrobe 👗</h1>
+                    <p class="dashboard-subtitle">Make every piece count. Wear more, buy less.</p>
+                </div>
+                <div class="streak-badge">
+                    <i class="fas fa-fire"></i>
+                    <div>
+                        <div class="streak-count" id="streakCount">0</div>
+                        <div class="streak-label">Day Streak</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">
+                        <i class="fas fa-shirt"></i>
+                    </div>
+                    <div class="stat-details">
+                        <div class="stat-value" id="totalItems">0</div>
+                        <div class="stat-label">Wardrobe Items</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #8b5cf6, #6366f1);">
+                        <i class="fas fa-repeat"></i>
+                    </div>
+                    <div class="stat-details">
+                        <div class="stat-value" id="totalWears">0</div>
+                        <div class="stat-label">Total Wears</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #10b981, #14b8a6);">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-details">
+                        <div class="stat-value" id="avgCostPerWear">$0</div>
+                        <div class="stat-label">Avg Cost Per Wear</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b, #f97316);">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="stat-details">
+                        <div class="stat-value" id="needsRepair">0</div>
+                        <div class="stat-label">Needs Repair</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button class="action-btn" id="logOutfitBtn">
+                    <i class="fas fa-camera"></i>
+                    <span>Log Today's Outfit</span>
+                </button>
+                <button class="action-btn" id="scheduleSwapBtn">
+                    <i class="fas fa-calendar-plus"></i>
+                    <span>Schedule Swap Event</span>
+                </button>
+                <button class="action-btn" id="markRepairBtn">
+                    <i class="fas fa-wrench"></i>
+                    <span>Mark for Repair</span>
+                </button>
+                <button class="action-btn" id="viewChallengesBtn">
+                    <i class="fas fa-trophy"></i>
+                    <span>View Challenges</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">All Items</button>
+                <button class="filter-tab" data-filter="tops">Tops</button>
+                <button class="filter-tab" data-filter="bottoms">Bottoms</button>
+                <button class="filter-tab" data-filter="dresses">Dresses</button>
+                <button class="filter-tab" data-filter="outerwear">Outerwear</button>
+                <button class="filter-tab" data-filter="shoes">Shoes</button>
+                <button class="filter-tab" data-filter="accessories">Accessories</button>
+            </div>
+
+            <div class="filter-options">
+                <select id="sortBy" class="filter-select">
+                    <option value="recent">Recently Added</option>
+                    <option value="most-worn">Most Worn</option>
+                    <option value="least-worn">Least Worn</option>
+                    <option value="cost-per-wear">Cost Per Wear</option>
+                </select>
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="grid" id="gridView">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button class="view-btn" data-view="list" id="listView">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wardrobe Grid -->
+        <div class="wardrobe-grid" id="wardrobeGrid">
+            <!-- Items will be dynamically inserted here -->
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <i class="fas fa-tshirt"></i>
+            <h3>Your wardrobe is empty</h3>
+            <p>Start building your sustainable closet by adding your first item</p>
+            <button class="btn-primary" onclick="document.getElementById('addItemBtn').click()">
+                <i class="fas fa-plus"></i> Add Your First Item
+            </button>
+        </div>
+    </main>
+
+    <!-- Add Item Modal -->
+    <div class="modal" id="addItemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Wardrobe Item</h2>
+                <button class="modal-close" id="closeAddItemModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addItemForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Item Name *</label>
+                            <input type="text" id="itemName" class="form-input" placeholder="e.g., Blue Denim Jacket" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Category *</label>
+                            <select id="itemCategory" class="form-input" required>
+                                <option value="">Select category...</option>
+                                <option value="tops">Tops</option>
+                                <option value="bottoms">Bottoms</option>
+                                <option value="dresses">Dresses</option>
+                                <option value="outerwear">Outerwear</option>
+                                <option value="shoes">Shoes</option>
+                                <option value="accessories">Accessories</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Brand</label>
+                            <input type="text" id="itemBrand" class="form-input" placeholder="Optional">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Purchase Price ($)</label>
+                            <input type="number" id="itemPrice" class="form-input" placeholder="0.00" min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>Purchase Date</label>
+                            <input type="date" id="itemPurchaseDate" class="form-input">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Color Tags</label>
+                        <div class="color-palette" id="colorPalette">
+                            <button type="button" class="color-btn" data-color="black" style="background: #000000;"></button>
+                            <button type="button" class="color-btn" data-color="white" style="background: #ffffff; border: 2px solid #e5e7eb;"></button>
+                            <button type="button" class="color-btn" data-color="gray" style="background: #6b7280;"></button>
+                            <button type="button" class="color-btn" data-color="red" style="background: #ef4444;"></button>
+                            <button type="button" class="color-btn" data-color="pink" style="background: #ec4899;"></button>
+                            <button type="button" class="color-btn" data-color="purple" style="background: #8b5cf6;"></button>
+                            <button type="button" class="color-btn" data-color="blue" style="background: #3b82f6;"></button>
+                            <button type="button" class="color-btn" data-color="green" style="background: #10b981;"></button>
+                            <button type="button" class="color-btn" data-color="yellow" style="background: #f59e0b;"></button>
+                            <button type="button" class="color-btn" data-color="orange" style="background: #f97316;"></button>
+                            <button type="button" class="color-btn" data-color="brown" style="background: #92400e;"></button>
+                            <button type="button" class="color-btn" data-color="navy" style="background: #1e3a8a;"></button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <textarea id="itemNotes" class="form-input" rows="3" placeholder="Add any notes about this item..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" id="cancelAddItem">Cancel</button>
+                <button type="button" class="btn-primary" id="submitAddItem">
+                    <i class="fas fa-plus"></i> Add Item
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Log Outfit Modal -->
+    <div class="modal" id="logOutfitModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>Log Today's Outfit</h2>
+                <button class="modal-close" id="closeLogOutfitModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="outfit-builder">
+                    <div class="selected-items" id="selectedItems">
+                        <p class="helper-text">Select items from your wardrobe to create an outfit</p>
+                    </div>
+                    <div class="wardrobe-selector">
+                        <input type="text" id="outfitSearch" class="form-input" placeholder="Search your wardrobe...">
+                        <div class="selectable-items" id="selectableItems">
+                            <!-- Items will be dynamically inserted -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Occasion</label>
+                        <select id="outfitOccasion" class="form-input">
+                            <option value="casual">Casual</option>
+                            <option value="work">Work</option>
+                            <option value="formal">Formal</option>
+                            <option value="workout">Workout</option>
+                            <option value="evening">Evening Out</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <textarea id="outfitNotes" class="form-input" rows="2" placeholder="How did you feel? Any compliments?"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelLogOutfit">Cancel</button>
+                <button class="btn-primary" id="submitLogOutfit">
+                    <i class="fas fa-check"></i> Log Outfit
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item Details Modal -->
+    <div class="modal" id="itemDetailsModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="itemDetailsName"></h2>
+                <button class="modal-close" id="closeItemDetailsModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="itemDetailsContent">
+                <!-- Details will be dynamically inserted -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Schedule Swap Event Modal -->
+    <div class="modal" id="scheduleSwapModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Schedule Swap Event</h2>
+                <button class="modal-close" id="closeScheduleSwapModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="scheduleSwapForm">
+                    <div class="form-group">
+                        <label>Event Name *</label>
+                        <input type="text" id="swapEventName" class="form-input" placeholder="e.g., Spring Clothing Swap" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Date *</label>
+                            <input type="date" id="swapEventDate" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Time *</label>
+                            <input type="time" id="swapEventTime" class="form-input" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" id="swapEventLocation" class="form-input" placeholder="Where will this happen?">
+                    </div>
+                    <div class="form-group">
+                        <label>Items to Bring</label>
+                        <textarea id="swapEventItems" class="form-input" rows="3" placeholder="List items you plan to bring to swap..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelScheduleSwap">Cancel</button>
+                <button class="btn-primary" id="submitScheduleSwap">
+                    <i class="fas fa-calendar-check"></i> Schedule Event
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Challenges Modal -->
+    <div class="modal" id="challengesModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>Challenges & Achievements</h2>
+                <button class="modal-close" id="closeChallengesModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="challenges-container" id="challengesContainer">
+                    <!-- Challenges will be dynamically inserted -->
+                </div>
+                <div class="achievements-container">
+                    <h3 style="margin-bottom: 1rem;">🏆 Your Achievements</h3>
+                    <div class="achievements-grid" id="achievementsGrid">
+                        <!-- Achievements will be dynamically inserted -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Swap Events List Modal -->
+    <div class="modal" id="swapEventsModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>Upcoming Swap Events</h2>
+                <button class="modal-close" id="closeSwapEventsModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="events-list" id="eventsList">
+                    <!-- Events will be dynamically inserted -->
+                </div>
+                <button class="btn-primary" style="width: 100%; margin-top: 1rem;" onclick="document.getElementById('scheduleSwapBtn').click(); document.getElementById('closeSwapEventsModal').click();">
+                    <i class="fas fa-plus"></i> Schedule New Event
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Success!</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/circular-closet-planner.js"></script>
+</body>
+</html>

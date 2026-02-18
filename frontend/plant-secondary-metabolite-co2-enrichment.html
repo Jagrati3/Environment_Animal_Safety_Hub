@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Secondary Metabolite Changes Under CO₂ Enrichment - Chemical Defense Alterations</title>
+<link rel="stylesheet" href="css/plant-secondary-metabolite-co2-enrichment.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="accessibility-controls">
+        <button class="accessibility-btn" onclick="toggleHighContrast()">High Contrast</button>
+        <button class="accessibility-btn" onclick="toggleFontSize()">Font Size</button>
+        <button class="accessibility-btn" onclick="toggleReducedMotion()">Reduced Motion</button>
+    </div>
+
+    <header class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Plant Secondary Metabolite Changes Under CO₂ Enrichment</h1>
+                <p class="hero-subtitle">Investigating Altered Chemical Defenses Affecting Herbivore Feeding Patterns</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">420</span>
+                        <span class="stat-label">ppm Current CO₂ Level</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">550</span>
+                        <span class="stat-label">ppm Projected by 2050</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">80%</span>
+                        <span class="stat-label">Major Crops Affected</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="co2-simulator">
+                    <h3>CO₂ Enrichment Impact Simulator</h3>
+                    <div class="simulator-controls">
+                        <div class="control-group">
+                            <label for="co2-level">CO₂ Concentration (ppm):</label>
+                            <input type="range" id="co2-level" min="300" max="800" value="420">
+                            <span class="control-value" id="co2-level-value">420</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="nitrogen-level">Nitrogen Availability:</label>
+                            <input type="range" id="nitrogen-level" min="1" max="10" value="5">
+                            <span class="control-value" id="nitrogen-level-value">5</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="plant-type">Plant Defense Strategy:</label>
+                            <select id="plant-type">
+                                <option value="phenolics">Phenolic Compounds</option>
+                                <option value="terpenoids">Terpenoid Defenses</option>
+                                <option value="alkaloids">Alkaloid Production</option>
+                                <option value="glucosinolates">Glucosinolates</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="simulator-results">
+                        <div class="result-metric">
+                            <span class="metric-label">Photosynthetic Rate:</span>
+                            <span class="metric-value" id="photosynthesis-rate">+35%</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill photosynthesis-fill" id="photosynthesis-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Chemical Defense Level:</span>
+                            <span class="metric-value" id="defense-level">-18%</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill defense-fill" id="defense-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Herbivore Feeding Rate:</span>
+                            <span class="metric-value" id="herbivore-rate">+42%</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill herbivore-fill" id="herbivore-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Plant Fitness:</span>
+                            <span class="metric-value" id="plant-fitness">+28%</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill fitness-fill" id="fitness-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-icon">🌿</span>
+                <span class="brand-text">Plant Chemistry Hub</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#science" class="nav-link active" data-tab="science">Science</a></li>
+                <li><a href="#impacts" class="nav-link" data-tab="impacts">Impacts</a></li>
+                <li><a href="#mechanisms" class="nav-link" data-tab="mechanisms">Mechanisms</a></li>
+                <li><a href="#solutions" class="nav-link" data-tab="solutions">Solutions</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section id="science" class="content-section active">
+            <div class="section-container">
+                <h2>The Science of CO₂-Induced Chemical Changes</h2>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>Photosynthetic Enhancement</h3>
+                        <div class="photosynthesis-diagram">
+                            <div class="carbon-cycle">
+                                <h4>Carbon-Nitrogen Imbalance</h4>
+                                <div class="cycle-stages">
+                                    <div class="stage">
+                                        <span class="stage-icon">☀️</span>
+                                        <span class="stage-label">CO₂ Uptake</span>
+                                        <span class="stage-value" id="co2-uptake">+40%</span>
+                                    </div>
+                                    <div class="stage">
+                                        <span class="stage-icon">🌱</span>
+                                        <span class="stage-label">Growth Rate</span>
+                                        <span class="stage-value" id="growth-rate">+35%</span>
+                                    </div>
+                                    <div class="stage">
+                                        <span class="stage-icon">🧪</span>
+                                        <span class="stage-label">Defense Dilution</span>
+                                        <span class="stage-value" id="defense-dilution">-20%</span>
+                                    </div>
+                                    <div class="stage">
+                                        <span class="stage-icon">🐛</span>
+                                        <span class="stage-label">Herbivore Pressure</span>
+                                        <span class="stage-value" id="herbivore-pressure">+45%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h3>Secondary Metabolite Pathways</h3>
+                        <div class="pathway-chart">
+                            <canvas id="metaboliteChart"></canvas>
+                        </div>
+                        <div class="pathway-legend">
+                            <div class="legend-item">
+                                <span class="legend-color phenolics"></span>
+                                <span>Phenolics</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color terpenoids"></span>
+                                <span>Terpenoids</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color alkaloids"></span>
+                                <span>Alkaloids</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color glucosinolates"></span>
+                                <span>Glucosinolates</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h3>Herbivore Response Patterns</h3>
+                        <div class="response-metrics">
+                            <div class="metric-circle">
+                                <div class="circle-value">+40%</div>
+                                <div class="circle-label">Feeding Rate Increase</div>
+                            </div>
+                            <div class="metric-circle">
+                                <div class="circle-value">+25%</div>
+                                <div class="circle-label">Development Acceleration</div>
+                            </div>
+                            <div class="metric-circle">
+                                <div class="circle-value">-15%</div>
+                                <div class="circle-label">Defense Effectiveness</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="impacts" class="content-section">
+            <div class="section-container">
+                <h2>Species-Specific Impacts</h2>
+                <div class="case-studies">
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Tobacco Hornworm on Tomato</h3>
+                            <span class="case-location">USA</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">25% nicotine reduction</div>
+                                <div class="stat">40% consumption increase</div>
+                                <div class="stat">30% faster development</div>
+                            </div>
+                            <p>Reduced foliar nicotine content under elevated CO₂ leads to increased herbivore performance and potential pest outbreaks in agricultural systems.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Aphids on Wheat</h3>
+                            <span class="case-location">Arizona, USA</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">15% phenolic increase</div>
+                                <div class="stat">20% amino acid decrease</div>
+                                <div class="stat">50% population growth</div>
+                            </div>
+                            <p>Complex changes in wheat chemistry result in enhanced aphid performance despite increased phenolic defenses.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Forest Lepidoptera on Oak</h3>
+                            <span class="case-location">Switzerland</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">30% tannin reduction</div>
+                                <div class="stat">25% larval performance</div>
+                                <div class="stat">Modified terpenoids</div>
+                            </div>
+                            <p>Oak tree chemistry changes create trophic cascade effects through altered herbivore-parasitoid interactions.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Grasshoppers on Grasses</h3>
+                            <span class="case-location">Wyoming, USA</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">C4 photosynthesis</div>
+                                <div class="stat">10% feeding reduction</div>
+                                <div class="stat">Stable metabolites</div>
+                            </div>
+                            <p>C4 photosynthetic pathway provides relative stability in secondary metabolite production under CO₂ enrichment.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="impact-visualization">
+                    <h3>Global CO₂ Enrichment Effects</h3>
+                    <canvas id="impactChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="mechanisms" class="content-section">
+            <div class="section-container">
+                <h2>Mechanisms of Chemical Change</h2>
+                <div class="mechanism-explorer">
+                    <div class="mechanism-tabs">
+                        <button class="mechanism-tab active" data-mechanism="photosynthetic">Photosynthetic</button>
+                        <button class="mechanism-tab" data-mechanism="biosynthetic">Biosynthetic</button>
+                        <button class="mechanism-tab" data-mechanism="ecological">Ecological</button>
+                    </div>
+
+                    <div class="mechanism-content">
+                        <div class="mechanism-panel active" id="photosynthetic-panel">
+                            <h3>Photosynthetic Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Carbon Assimilation Enhancement</h4>
+                                    <p>Elevated CO₂ increases Rubisco carboxylation efficiency, leading to enhanced photosynthetic rates and carbohydrate accumulation. This creates a carbon surplus that dilutes nitrogen-containing defensive compounds.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Stomatal Regulation</h4>
+                                    <p>Reduced stomatal conductance improves water use efficiency but may limit nutrient uptake, creating imbalances in carbon and nitrogen allocation that affect secondary metabolite production.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Resource Allocation Shifts</h4>
+                                    <p>Plants prioritize growth over defense under CO₂ enrichment, diverting resources from secondary metabolite production to structural carbohydrates and increased biomass.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mechanism-panel" id="biosynthetic-panel">
+                            <h3>Biosynthetic Pathways</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Phenylpropanoid Pathway</h4>
+                                    <p>Changes in phenylalanine ammonia-lyase (PAL) activity affect flavonoid, tannin, and lignin production. CO₂ enrichment can either stimulate or suppress these pathways depending on nitrogen availability.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Terpenoid Biosynthesis</h4>
+                                    <p>MEP and DOXP pathways for isoprenoid production are affected by carbon flux changes. Essential oils and resin composition shift, altering herbivore deterrence and attraction cues.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Alkaloid Production</h4>
+                                    <p>Nitrogen-limited alkaloid synthesis pathways show variable responses. Some compounds decrease due to resource limitation, while others may increase through regulatory changes.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mechanism-panel" id="ecological-panel">
+                            <h3>Ecological Consequences</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Herbivore Feeding Patterns</h4>
+                                    <p>Altered plant chemistry changes host plant selection, feeding rates, and digestive efficiency. Herbivores may experience improved nutrition despite reduced defenses.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Trophic Interactions</h4>
+                                    <p>Changes cascade through food webs, affecting predator-prey dynamics, parasitoid-host relationships, and competitive interactions among herbivore species.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Community Structure</h4>
+                                    <p>Plant community composition shifts based on species-specific responses to CO₂ enrichment, affecting biodiversity and ecosystem function.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solutions" class="content-section">
+            <div class="section-container">
+                <h2>Management and Solutions</h2>
+                <div class="solutions-framework">
+                    <div class="solution-category">
+                        <h3>Agricultural Adaptation</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Breeding Programs</h4>
+                                <p>Develop CO₂-responsive crop varieties with stable secondary metabolite production and enhanced natural defenses.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Fertilization Strategies</h4>
+                                <p>Optimize nitrogen application to maintain chemical defense levels under elevated CO₂ conditions.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Integrated Pest Management</h4>
+                                <p>Adapt IPM strategies to account for changing pest pressures and altered plant-herbivore interactions.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="solution-category">
+                        <h3>Research and Monitoring</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>FACE Experiments</h4>
+                                <p>Continue long-term Free Air CO₂ Enrichment studies to understand ecosystem-level responses.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Metabolomics Research</h4>
+                                <p>Develop comprehensive analytical methods for secondary metabolite profiling under changing CO₂ conditions.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Predictive Modeling</h4>
+                                <p>Create models to forecast CO₂ effects on plant chemistry and herbivore interactions.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="solution-category">
+                        <h3>Climate Change Mitigation</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Carbon Management</h4>
+                                <p>Implement emission reduction strategies to stabilize atmospheric CO₂ concentrations.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Land Use Planning</h4>
+                                <p>Design conservation strategies that account for CO₂-induced changes in plant-herbivore relationships.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Adaptive Management</h4>
+                                <p>Develop flexible management approaches that can respond to changing ecological conditions.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="research-priorities">
+                        <h3>Research Priorities</h3>
+                        <div class="priority-list">
+                            <div class="priority-item">
+                                <h4>Mechanistic Understanding</h4>
+                                <ul>
+                                    <li>Biosynthetic pathway regulation under elevated CO₂</li>
+                                    <li>Gene expression changes in secondary metabolism</li>
+                                    <li>Carbon-nitrogen interactions in defense production</li>
+                                    <li>Species-specific response mechanisms</li>
+                                </ul>
+                            </div>
+                            <div class="priority-item">
+                                <h4>Ecosystem Impacts</h4>
+                                <ul>
+                                    <li>Trophic cascade effects on biodiversity</li>
+                                    <li>Community composition changes</li>
+                                    <li>Nutrient cycling alterations</li>
+                                    <li>Climate change interaction effects</li>
+                                </ul>
+                            </div>
+                            <div class="priority-item">
+                                <h4>Agricultural Applications</h4>
+                                <ul>
+                                    <li>Crop breeding for CO₂ resilience</li>
+                                    <li>Pest management adaptation</li>
+                                    <li>Food quality and nutrition impacts</li>
+                                    <li>Economic consequence assessment</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>Issue #2324</h4>
+                <p>Plant Secondary Metabolite Changes Under CO₂ Enrichment</p>
+                <p>Investigating altered chemical defenses affecting herbivore feeding patterns</p>
+            </div>
+            <div class="footer-section">
+                <h4>Key Findings</h4>
+                <ul>
+                    <li>420 ppm current CO₂ level, 550 ppm projected</li>
+                    <li>80% of major crops show altered chemistry</li>
+                    <li>30-50% changes in secondary metabolites</li>
+                    <li>Complex herbivore response patterns</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Conservation Actions</h4>
+                <ul>
+                    <li>Develop CO₂-adaptive crop varieties</li>
+                    <li>Optimize fertilization strategies</li>
+                    <li>Continue FACE research programs</li>
+                    <li>Implement adaptive pest management</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <a href="#science">Photosynthetic Mechanisms</a>
+                    <a href="#impacts">Species Case Studies</a>
+                    <a href="#mechanisms">Biosynthetic Pathways</a>
+                    <a href="#solutions">Management Strategies</a>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Environment Animal Safety Hub - Issue #2324: Plant Chemistry Research</p>
+        </div>
+    </footer>
+</div>
+
+    <script src="plant-secondary-metabolite-co2-enrichment.js"></script>
+</body>
+</html>

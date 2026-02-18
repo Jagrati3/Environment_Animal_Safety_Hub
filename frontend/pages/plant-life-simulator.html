@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Plant Life Simulator</title>
+
+<style>
+:root{
+  --bg1:#1b4332;
+  --bg2:#2d6a4f;
+  --accent:#95d5b2;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  font-family:Segoe UI, sans-serif;
+  color:#e9f5ef;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+h1{
+  margin-top:30px;
+  font-size:3rem;
+  letter-spacing:2px;
+  text-align:center;
+}
+
+.scene{
+  margin-top:50px;
+  height:220px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+}
+
+/* PLANT */
+#plant{
+  font-size:3rem;
+  transition:transform 0.6s ease;
+}
+
+/* MESSAGE */
+.message{
+  margin-top:30px;
+  background:rgba(0,0,0,0.25);
+  padding:18px 22px;
+  border-radius:18px;
+  max-width:650px;
+  animation:fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(20px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+/* BUTTON */
+button{
+  margin-top:30px;
+  padding:14px 34px;
+  font-size:1rem;
+  background:var(--accent);
+  color:#1b4332;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  transition:0.3s;
+}
+button:hover{
+  transform:scale(1.05);
+  opacity:0.9;
+}
+
+.footer{
+  margin-top:20px;
+  font-size:0.9rem;
+  opacity:0.8;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🌱 Plant Life Simulator</h1>
+
+<div class="scene">
+  <div id="plant">🌱</div>
+</div>
+
+<div id="messages"></div>
+
+<button onclick="grow()">Water the Plant</button>
+
+<p class="footer">Growth takes patience. So does healing the planet.</p>
+
+<script>
+const stages = ["🌱","🌿","🌾","🌳"];
+const texts = [
+  "Plants begin life fragile and dependent.",
+  "Without care, growth stops early.",
+  "Plants clean the air we breathe.",
+  "Protecting plants protects all life."
+];
+
+let stage = 0;
+
+function grow(){
+  if(stage < stages.length){
+    const plant = document.getElementById("plant");
+    plant.textContent = stages[stage];
+    plant.style.transform = "scale(" + (1 + stage*0.2) + ")";
+
+    const msg = document.createElement("div");
+    msg.className = "message";
+    msg.textContent = texts[stage];
+    document.getElementById("messages").appendChild(msg);
+
+    stage++;
+  } else {
+    alert("🌍 This plant is fully grown. Now protect others.");
+  }
+}
+</script>
+
+</body>
+</html>

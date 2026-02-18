@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Energy Usage Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/frontend/pages/smart-energy-tracker.css" />
+  <style>
+    body {
+      font-family: 'Montserrat', Arial, sans-serif;
+      background: linear-gradient(135deg, #e3f2fd 0%, #e0f7fa 100%);
+      margin: 0;
+      padding: 0;
+      color: #263238;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(2, 136, 209, 0.13);
+      padding: 40px 32px 32px 32px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #0288d1;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+    .subtitle {
+      font-size: 1.2rem;
+      color: #0288d1;
+      margin-bottom: 32px;
+    }
+    .tracker-section {
+      background: #e1f5fe;
+      border-radius: 14px;
+      padding: 32px 24px;
+      margin-bottom: 36px;
+      box-shadow: 0 2px 8px rgba(2, 136, 209, 0.07);
+    }
+    .tracker-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px 32px;
+      align-items: flex-end;
+      margin-bottom: 18px;
+    }
+    .tracker-form label {
+      font-weight: 600;
+      margin-right: 8px;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .tracker-form input {
+      padding: 7px 10px;
+      border-radius: 6px;
+      border: 1px solid #bdbdbd;
+      font-size: 1rem;
+      min-width: 80px;
+      width: 100%;
+    }
+    .tracker-btn {
+      background: #0288d1;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 9px 22px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-left: 10px;
+    }
+    .tracker-btn:hover {
+      background: #01579b;
+    }
+    .tracker-result {
+      font-size: 1.15rem;
+      color: #01579b;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    .goal-section {
+      background: #e0f7fa;
+      border-radius: 14px;
+      padding: 28px 20px;
+      margin-bottom: 36px;
+      box-shadow: 0 2px 8px rgba(2, 136, 209, 0.07);
+    }
+    .goal-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #00acc1;
+      margin-bottom: 10px;
+    }
+    .goal-bar-bg {
+      background: #b2ebf2;
+      border-radius: 8px;
+      height: 22px;
+      width: 100%;
+      margin-bottom: 8px;
+      overflow: hidden;
+    }
+    .goal-bar {
+      background: linear-gradient(90deg, #0288d1 0%, #00acc1 100%);
+      height: 100%;
+      border-radius: 8px 0 0 8px;
+      transition: width 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .goal-label {
+      font-size: 0.98rem;
+      color: #263238;
+      margin-bottom: 6px;
+    }
+    .recommend-section {
+      background: #f1f8e9;
+      border-radius: 14px;
+      padding: 28px 20px;
+      box-shadow: 0 2px 8px rgba(56, 142, 60, 0.07);
+    }
+    .recommend-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #388e3c;
+      margin-bottom: 10px;
+    }
+    .recommend-list {
+      list-style: disc inside;
+      color: #388e3c;
+      font-size: 1rem;
+      margin: 0;
+      padding-left: 18px;
+    }
+    @media (max-width: 700px) {
+      .container { padding: 18px 4vw; }
+      h1 { font-size: 2rem; }
+      .tracker-section, .goal-section, .recommend-section { padding: 18px 6px; }
+      .tracker-form { flex-direction: column; gap: 12px; }
+    }
+  </style>
+  <link rel="stylesheet" href="../css/components/navbar.css">
+  <link rel="stylesheet" href="../css/components/footer.css">
+</head>
+<body>
+  <div id="navbar-container"></div>
+  <div class="container">
+    <h1>Smart Energy Usage Tracker</h1>
+    <div class="subtitle">Monitor your household energy consumption, set reduction targets, and get personalized energy-saving recommendations.</div>
+    <div class="tracker-section">
+      <form class="tracker-form" id="energyTrackerForm">
+        <div>
+          <label for="lighting">Lighting (kWh/month):</label>
+          <input type="number" id="lighting" name="lighting" min="0" value="40" required />
+        </div>
+        <div>
+          <label for="appliances">Appliances (kWh/month):</label>
+          <input type="number" id="appliances" name="appliances" min="0" value="120" required />
+        </div>
+        <div>
+          <label for="heating">Heating/Cooling (kWh/month):</label>
+          <input type="number" id="heating" name="heating" min="0" value="90" required />
+        </div>
+        <div>
+          <label for="other">Other Uses (kWh/month):</label>
+          <input type="number" id="other" name="other" min="0" value="30" required />
+        </div>
+        <button type="submit" class="tracker-btn">Track</button>
+      </form>
+      <div class="tracker-result" id="trackerResult"></div>
+    </div>
+    <div class="goal-section">
+      <div class="goal-title">Your Energy Reduction Goal</div>
+      <div class="goal-label" id="goalLabel">Set a monthly energy usage goal to start tracking!</div>
+      <div class="goal-bar-bg">
+        <div class="goal-bar" id="goalBar" style="width: 0%"></div>
+      </div>
+      <form id="goalForm" style="margin-top: 10px;">
+        <label for="goal" style="font-weight:600;">Monthly Energy Usage Goal (kWh):</label>
+        <input type="number" id="goal" name="goal" min="0" value="250" style="margin-right:8px;" />
+        <button type="submit" class="tracker-btn" style="background:#00acc1;color:#263238;">Set Goal</button>
+      </form>
+    </div>
+    <div class="recommend-section">
+      <div class="recommend-title">Personalized Recommendations</div>
+      <ul class="recommend-list" id="recommendList">
+        <!-- Recommendations will be injected here -->
+      </ul>
+    </div>
+  </div>
+  <div id="footer-container"></div>
+  <script>
+    // Load navbar
+    fetch('../components/navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+        
+        // Initialize navbar functionality
+        const script = document.createElement('script');
+        script.src = '../js/components/navbar.js';
+        document.body.appendChild(script);
+      });
+  </script>
+  <script>
+  // Load footer
+  fetch('../components/footer.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('footer-container').innerHTML = data;
+    });
+</script>
+  <script src="/frontend/pages/smart-energy-tracker.js"></script>
+</body>
+</html>

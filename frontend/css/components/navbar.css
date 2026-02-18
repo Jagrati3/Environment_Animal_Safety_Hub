@@ -27,6 +27,8 @@
   /* --- SIZES --- */
   --radius-md: 8px;
   --radius-xl: 50px;
+  --eco-gradient: linear-gradient(135deg, #22c55e, #16a34a);
+  --eco-gradient-hover: linear-gradient(135deg, #16a34a, #15803d);
 }
 
 * {
@@ -64,40 +66,28 @@ body.no-scroll {
 }
 
 .nav-container {
-  width: 95%;                /* slightly tighter container */
-  max-width: 1400px;         /* prevents edge clipping at 100% zoom */
-  padding: 0 16px;           /* reduce side padding */
+  width: 100%;
+  padding: 0 30px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 6px;
-  height: 80px;
-  transition: height 0.3s ease;
-}
-
-.navbar.scrolled .nav-container {
   height: 70px;
-  /* Shrink slightly on scroll */
 }
 
 /* ===== LOGO ===== */
 .navbar .logo {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 1.6rem;
+  gap: 8px;
+  font-size: 1.35rem;
   font-weight: 700;
   color: var(--white);
   text-decoration: none;
   flex-shrink: 0;
-  letter-spacing: 0.5px;
 }
 
 .navbar .logo-img {
-  width: 42px;
-  height: 42px;
-  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.4));
-  transition: var(--transition-normal);
+  width: 36px;
+  height: 36px;
 }
 
 .navbar .logo:hover .logo-img {
@@ -120,9 +110,9 @@ body.no-scroll {
   font-weight: 500;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: var(--transition-normal);
-  margin-bottom: 20px;
   flex-shrink: 0;
-  width: fit-content;            /* ⬅️ content jitni width */
+  width: fit-content;
+  /* ⬅️ content jitni width */
   max-width: fit-content;
 }
 
@@ -160,8 +150,6 @@ body.no-scroll {
 .search-container {
   flex: 1;
   max-width: 400px;
-  /* margin: 0 20px; */
-  margin-bottom: 20px;
 }
 
 .search-form {
@@ -219,19 +207,18 @@ body.no-scroll {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 16px;                /* tighter but still readable */
+  gap: 14px;
   list-style: none;
-  margin: 0;
+  margin: 0 0 0 25px;  /* space after logo */
   padding: 0;
   flex: 1;
-  min-width: 0;
 }
 
 .nav-link {
   color: rgba(255, 255, 255, 0.85);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 500;
-  padding: 8px 12px;
+  padding: 6px 10px;
   border-radius: var(--radius-md);
   transition: var(--transition-normal);
   position: relative;
@@ -240,6 +227,8 @@ body.no-scroll {
   display: flex;
   align-items: center;
   gap: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Icon rotation in links */
@@ -248,8 +237,10 @@ body.no-scroll {
   transition: transform 0.3s ease;
 }
 
-.nav-group:hover .nav-link i {
-  transform: rotate(180deg);
+@media (min-width: 1201px) {
+  .nav-group:hover .nav-link i {
+    transform: rotate(180deg);
+  }
 }
 
 /* Premium Underline Animation */
@@ -282,6 +273,7 @@ body.no-scroll {
 .font-size-increase {
   margin-left: 15px;
 }
+
 /* ===== DROPDOWNS ===== */
 .nav-group {
   position: relative;
@@ -311,11 +303,14 @@ body.no-scroll {
 }
 
 /* Hover State */
-.nav-group:hover .dropdown {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(10px);
+@media (min-width: 1201px) {
+  .nav-group:hover .dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(10px);
+  }
 }
+
 
 /* Dropdown Links */
 .dropdown li {
@@ -344,61 +339,77 @@ body.no-scroll {
 .nav-auth {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   margin-left: auto;
-  padding-left: 16px;
-  border-left: 1px solid rgba(255, 255, 255, 0.3);
-  flex-shrink: 1;           /* allow slight shrink instead of clipping */
-  min-width: fit-content;
 }
 
 /* Login Button */
+/* Login Button - 3D White */
 .btn-login {
   padding: 8px 16px;
-  border: 2px solid rgba(255, 255, 255, 0.6);
+  background-color: var(--white);
+  color: var(--eco-dark);
+  border: none; /* Removed border for 3D effect */
   border-radius: var(--radius-xl);
-  color: var(--white);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.85rem;
-  transition: var(--transition-normal);
+  transition: all 0.1s ease;
   white-space: nowrap;
   text-decoration: none;
   margin-left: 6px;
+  position: relative;
+  box-shadow: 0 4px 0 #cccccc, 0 5px 10px rgba(0,0,0,0.1);
+  transform: translateY(0);
 }
 
 .btn-login:hover {
-  background: var(--white);
+  background-color: #f0f0f0;
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #cccccc, 0 3px 5px rgba(0,0,0,0.1);
   color: var(--eco-dark);
-  border-color: var(--white);
-  transform: translateY(-2px);
+  border-color: transparent;
+}
+
+.btn-login:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 #cccccc, 0 0 0 rgba(0,0,0,0.1);
 }
 
 /* Sign Up Button */
+/* Sign Up Button - 3D Green */
 .btn-signup {
-  padding: 8px 16px;        /* slightly tighter */
-  background: linear-gradient(135deg, var(--eco-light), var(--eco-primary));
+  padding: 8px 16px;
+  background: var(--eco-primary);
   color: var(--white);
   border-radius: var(--radius-xl);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.85rem;
-  transition: var(--transition-normal);
+  transition: all 0.1s ease;
   white-space: nowrap;
   text-decoration: none;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  margin-left: 10px;        /* ensures it never clips */
+  margin-left: 10px;
+  position: relative;
+  box-shadow: 0 4px 0 #1b5e20, 0 5px 10px rgba(0,0,0,0.2);
+  transform: translateY(0);
 }
 
 .btn-signup:hover {
-  background: linear-gradient(135deg, var(--eco-primary), var(--eco-dark));
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+  background: var(--eco-light);
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #1b5e20, 0 3px 5px rgba(0,0,0,0.2);
+  color: var(--white);
+}
+
+.btn-signup:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 #1b5e20, 0 0 0 rgba(0,0,0,0.2);
 }
 
 
 /* ===== THEME TOGGLE ===== */
 .theme-toggle-btn {
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.15);
   display: flex;
@@ -408,6 +419,11 @@ body.no-scroll {
   color: var(--white);
   transition: var(--transition-normal);
   border: 1px solid transparent;
+  margin-left: 12px; /* spacing from Eco Games */
+}
+
+.theme-toggle-btn i {
+  font-size: 0.9rem;
 }
 
 .theme-toggle-btn:hover {
@@ -610,7 +626,7 @@ body.no-scroll {
     display: flex;
   }
 
-  .nav-links {
+    .nav-links {
     position: fixed;
     top: 0;
     right: -100%;
@@ -717,11 +733,11 @@ body.no-scroll {
   }
 
   .nav-left {
-  display: flex;
-  align-items: center;
-  gap: 35px;
-  flex: 1;            
-}
+    display: flex;
+    align-items: center;
+    gap: 35px;
+    flex: 1;
+  }
 
   .auth-guest-only {
     width: 100%;
@@ -1019,6 +1035,7 @@ body.no-scroll {
     transform: translateY(0);
   }
 }
+
 /* Kids Quiz Button Highlight */
 .btn-quiz-highlight {
   background: var(--eco-primary) !important;
@@ -1039,21 +1056,79 @@ body.no-scroll {
   box-shadow: 0 6px 15px rgba(46, 125, 50, 0.4);
 }
 
-/* Quiz Highlight Button */
-.btn-quiz-highlight {
-  background: #c6f6d5;
-  color: #1b4d3e !important;
-  font-weight: 700;
-  border: 2px solid #38a169;
-  padding: 8px 16px;
-  border-radius: 20px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+/* ========================================= */
+/* ECO GAMES STYLES */
+/* ========================================= */
+
+.nav-eco-games {
+    font-weight: 600;
+}
+
+.nav-eco-games:hover {
+    color: #22c55e;
+}
+/* ============================= */
+/* Eco Games Navbar Button */
+/* ============================= */
+
+.eco-games-btn {
+    flex-shrink: 0;
+    background: var(--eco-gradient);
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-right: 15px;
+    display: inline-block;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+}
+
+.eco-games-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(34, 197, 94, 0.4);
+}
+/* ============================= */
+/* Eco Games Corner Button */
+/* ============================= */
+
+.eco-games-corner-btn {
+  flex-shrink: 0;
+  background: var(--eco-gradient);
+  color: #ffffff;
+  padding: 8px 20px;
+  border-radius: 30px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.35);
   transition: all 0.3s ease;
 }
 
-.btn-quiz-highlight:hover {
-  background: #38a169 !important;
-  color: white !important;
+.eco-games-corner-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 18px rgba(34, 197, 94, 0.45);
+}
+
+/* Push Eco Games fully right */
+
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.language-selector {
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.language-selector:hover {
+  background: rgba(255,255,255,0.25);
 }

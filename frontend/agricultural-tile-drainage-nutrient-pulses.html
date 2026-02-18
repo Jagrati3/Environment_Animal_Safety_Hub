@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agricultural Tile Drainage and Nutrient Pulses - Episodic Nutrient Loading into Rivers</title>
+<link rel="stylesheet" href="css/agricultural-tile-drainage-nutrient-pulses.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="accessibility-controls">
+        <button class="accessibility-btn" onclick="toggleHighContrast()">High Contrast</button>
+        <button class="accessibility-btn" onclick="toggleFontSize()">Font Size</button>
+        <button class="accessibility-btn" onclick="toggleReducedMotion()">Reduced Motion</button>
+    </div>
+
+    <header class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Agricultural Tile Drainage & Nutrient Pulses</h1>
+                <p class="hero-subtitle">Examining Episodic Nutrient Loading into Rivers from Subsurface Drainage Systems</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">500K+</span>
+                        <span class="stat-label">km of Tile Drainage</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">40-70%</span>
+                        <span class="stat-label">Nutrient Load from Tiles</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">$2.3B</span>
+                        <span class="stat-label">Annual Economic Cost</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="nutrient-pulse-simulator">
+                    <h3>Nutrient Pulse Simulator</h3>
+                    <div class="simulator-controls">
+                        <div class="control-group">
+                            <label for="precipitation">Precipitation (mm):</label>
+                            <input type="range" id="precipitation" min="0" max="100" value="25">
+                            <span class="control-value" id="precipitation-value">25 mm</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="fertilizer">Fertilizer Rate (kg/ha):</label>
+                            <input type="range" id="fertilizer" min="0" max="300" value="150">
+                            <span class="control-value" id="fertilizer-value">150</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="drainage-flow">Drainage Flow (L/s):</label>
+                            <input type="range" id="drainage-flow" min="0" max="50" value="10">
+                            <span class="control-value" id="drainage-flow-value">10</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="soil-type">Soil Type:</label>
+                            <select id="soil-type">
+                                <option value="clay">Clay</option>
+                                <option value="loam">Loam</option>
+                                <option value="sandy">Sandy</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="simulator-results">
+                        <div class="result-metric">
+                            <span class="metric-label">Nutrient Pulse Intensity:</span>
+                            <span class="metric-value" id="pulse-intensity">High</span>
+                            <div class="risk-indicator">
+                                <div class="risk-bar" id="pulse-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Nitrate Concentration:</span>
+                            <span class="metric-value" id="nitrate-level">18 mg/L</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill nitrate-fill" id="nitrate-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Phosphorus Load:</span>
+                            <span class="metric-value" id="phosphorus-load">2.3 kg/ha</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill phosphorus-fill" id="phosphorus-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">River Impact:</span>
+                            <span class="metric-value" id="river-impact">Moderate</span>
+                            <div class="impact-indicators">
+                                <span class="indicator" id="eutrophication-risk">🌿 Eutrophication</span>
+                                <span class="indicator" id="drinking-risk">🚰 Drinking Water</span>
+                                <span class="indicator" id="aquatic-risk">🐟 Aquatic Life</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-icon">🌾</span>
+                <span class="brand-text">TileDrain Hub</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#science" class="nav-link active" data-tab="science">Science</a></li>
+                <li><a href="#impacts" class="nav-link" data-tab="impacts">Impacts</a></li>
+                <li><a href="#mechanisms" class="nav-link" data-tab="mechanisms">Mechanisms</a></li>
+                <li><a href="#solutions" class="nav-link" data-tab="solutions">Solutions</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section id="science" class="content-section active">
+            <div class="section-container">
+                <h2>The Science of Tile Drainage Nutrient Loading</h2>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>Tile Drainage Systems</h3>
+                        <div class="drainage-characteristics">
+                            <div class="system-category">
+                                <h4>🌀 Flow Dynamics</h4>
+                                <div class="flow-metrics">
+                                    <div class="metric">Base flow: <span id="base-flow">0.1-0.5 L/s</span></div>
+                                    <div class="metric">Peak flow: <span id="peak-flow">5-50 L/s</span></div>
+                                    <div class="metric">Response time: <span id="response-time">1-24 hours</span></div>
+                                    <div class="metric">Drainage extent: <span id="drainage-extent">500,000+ km</span></div>
+                                </div>
+                            </div>
+                            <div class="system-category">
+                                <h4>🧪 Nutrient Sources</h4>
+                                <div class="flow-metrics">
+                                    <div class="metric">Fertilizer N: <span id="fert-n">60-80%</span></div>
+                                    <div class="metric">Manure P: <span id="manure-p">20-40%</span></div>
+                                    <div class="metric">Soil organic: <span id="soil-organic">10-20%</span></div>
+                                    <div class="metric">Legacy P: <span id="legacy-p">5-15%</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h3>Nutrient Transport Patterns</h3>
+                        <div class="transport-chart">
+                            <canvas id="transportChart"></canvas>
+                        </div>
+                        <div class="transport-legend">
+                            <div class="legend-item">
+                                <span class="legend-color nitrate"></span>
+                                <span>Nitrate-N</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color ammonium"></span>
+                                <span>Ammonium-N</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color phosphate"></span>
+                                <span>Phosphate-P</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color particulate"></span>
+                                <span>Particulate-P</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h3>Episodic Loading Events</h3>
+                        <div class="loading-events">
+                            <div class="event-metric">
+                                <div class="circle-value">5x</div>
+                                <div class="circle-label">Concentration Increase</div>
+                            </div>
+                            <div class="event-arrow">→</div>
+                            <div class="event-metric">
+                                <div class="circle-value">50x</div>
+                                <div class="circle-label">Load Multiplier</div>
+                            </div>
+                            <div class="event-stats">
+                                <div class="stat">Spring snowmelt: 40% of annual load</div>
+                                <div class="stat">Post-fertilizer: 25% of annual load</div>
+                                <div class="stat">Storm events: 20% of annual load</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="impacts" class="content-section">
+            <div class="section-container">
+                <h2>Regional Impacts and Case Studies</h2>
+                <div class="case-studies">
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Midwest USA</h3>
+                            <span class="case-location">Corn Belt - Iowa, Illinois</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">15M ha</div>
+                                <div class="stat">50 mg/L NO₃</div>
+                                <div class="stat">$2.1B cost</div>
+                            </div>
+                            <p>50-70% of river nitrogen from tile drainage, Gulf hypoxia, drinking water contamination.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Europe</h3>
+                            <span class="case-location">Netherlands, Denmark</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">8M ha</div>
+                                <div class="stat">30 mg/L NO₃</div>
+                                <div class="stat">EU WFD</div>
+                            </div>
+                            <p>40-60% of nutrient loads, Baltic Sea eutrophication, regulatory compliance challenges.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Canada Prairies</h3>
+                            <span class="case-location">Manitoba, Saskatchewan</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">2.5M ha</div>
+                                <div class="stat">40 mg/L NO₃</div>
+                                <div class="stat">Lake Winnipeg</div>
+                            </div>
+                            <p>35-55% of nutrient loads, snowmelt pulses, transboundary water quality issues.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>China</h3>
+                            <span class="case-location">Northeast Provinces</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">12M ha</div>
+                                <div class="stat">35 mg/L NO₃</div>
+                                <div class="stat">Songhua River</div>
+                            </div>
+                            <p>45-65% of nutrient loads, food security impacts, water resource conflicts.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="global-impact">
+                    <h3>Global Tile Drainage Nutrient Contributions</h3>
+                    <canvas id="globalNutrientChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="mechanisms" class="content-section">
+            <div class="section-container">
+                <h2>Mechanisms of Nutrient Loading</h2>
+                <div class="mechanism-explorer">
+                    <div class="mechanism-tabs">
+                        <button class="mechanism-tab active" data-mechanism="hydrological">Hydrological</button>
+                        <button class="mechanism-tab" data-mechanism="biogeochemical">Biogeochemical</button>
+                        <button class="mechanism-tab" data-mechanism="temporal">Temporal</button>
+                    </div>
+
+                    <div class="mechanism-content">
+                        <div class="mechanism-panel active" id="hydrological-panel">
+                            <h3>Hydrological Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Preferential Flow</h4>
+                                    <p>Water moves rapidly through macropores and cracks, bypassing soil matrix interaction and carrying nutrients directly to drains.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Drainage Interception</h4>
+                                    <p>Tile drains intercept nutrient-rich water before it can be taken up by plants or adsorbed by soil particles.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Flow Concentration</h4>
+                                    <p>Convergent drainage patterns concentrate nutrients from large areas into discrete discharge points.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mechanism-panel" id="biogeochemical-panel">
+                            <h3>Biogeochemical Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Nutrient Mobilization</h4>
+                                    <p>Rainfall and drainage water mobilize soluble nutrients and desorb phosphorus from soil particles.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Microbial Transformations</h4>
+                                    <p>Soil microbes transform organic matter and fertilizers into mobile forms of nitrogen and phosphorus.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Chemical Equilibrium</h4>
+                                    <p>Changes in soil water content and chemistry affect nutrient adsorption/desorption dynamics.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mechanism-panel" id="temporal-panel">
+                            <h3>Temporal Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Event-Based Pulses</h4>
+                                    <p>Precipitation events create rapid drainage responses with high nutrient concentrations.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Seasonal Patterns</h4>
+                                    <p>Snowmelt and post-fertilization periods generate major nutrient loading events.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Management Timing</h4>
+                                    <p>Fertilizer application and tillage timing influence nutrient availability and transport.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solutions" class="content-section">
+            <div class="section-container">
+                <h2>Management and Mitigation Strategies</h2>
+                <div class="solutions-framework">
+                    <div class="solution-category">
+                        <h3>Drainage System Management</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Controlled Drainage</h4>
+                                <p>Implement adjustable outlets to control water table depth and reduce nutrient transport during critical periods.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Treatment Wetlands</h4>
+                                <p>Create vegetated wetlands to intercept and treat drainage water before it reaches rivers.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Denitrification Beds</h4>
+                                <p>Use woodchip bioreactors to remove nitrate from drainage water through microbial processes.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="solution-category">
+                        <h3>Nutrient Management</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Precision Fertilizer</h4>
+                                <p>Apply fertilizers at optimal rates and timing based on soil testing and crop needs.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Cover Crops</h4>
+                                <p>Plant vegetation during non-growing seasons to capture and utilize residual nutrients.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Buffer Strips</h4>
+                                <p>Establish vegetated areas along drainage ditches to filter nutrients from runoff.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="solution-category">
+                        <h3>Technological Solutions</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Real-time Monitoring</h4>
+                                <p>Deploy sensors for continuous water quality monitoring and early warning systems.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Predictive Modeling</h4>
+                                <p>Use hydrological models to forecast nutrient loading and optimize management practices.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Decision Support</h4>
+                                <p>Develop tools to help farmers make informed nutrient management decisions.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="policy-framework">
+                        <h3>Policy and Regulatory Framework</h3>
+                        <div class="policy-actions">
+                            <div class="policy-item">
+                                <h4>Regulatory Approaches</h4>
+                                <ul>
+                                    <li>Implement watershed-based nutrient reduction strategies</li>
+                                    <li>Establish site-specific water quality standards</li>
+                                    <li>Require nutrient management plans for tile-drained fields</li>
+                                    <li>Create monitoring and reporting requirements</li>
+                                </ul>
+                            </div>
+                            <div class="policy-item">
+                                <h4>Incentive Programs</h4>
+                                <ul>
+                                    <li>Provide cost-share funding for BMP implementation</li>
+                                    <li>Offer tax incentives for nutrient reduction practices</li>
+                                    <li>Develop certification programs for sustainable agriculture</li>
+                                    <li>Create market-based approaches for nutrient trading</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>Issue #2327</h4>
+                <p>Agricultural Tile Drainage and Nutrient Pulses</p>
+                <p>Examining episodic nutrient loading into rivers from subsurface drainage systems</p>
+            </div>
+            <div class="footer-section">
+                <h4>Key Findings</h4>
+                <ul>
+                    <li>500,000+ km of tile drainage systems worldwide</li>
+                    <li>40-70% of river nutrient loads from tile drainage</li>
+                    <li>$2.3 billion annual economic impact</li>
+                    <li>2-5x higher concentrations during drainage events</li>
+                    <li>60% increase in tile drainage since 1990</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Management Actions</h4>
+                <ul>
+                    <li>Implement controlled drainage systems</li>
+                    <li>Adopt precision nutrient management</li>
+                    <li>Deploy real-time monitoring networks</li>
+                    <li>Establish regulatory frameworks</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <a href="#science">Drainage Science</a>
+                    <a href="#impacts">Case Studies</a>
+                    <a href="#mechanisms">Loading Mechanisms</a>
+                    <a href="#solutions">Mitigation Strategies</a>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Environment Animal Safety Hub - Issue #2327: Tile Drainage Research</p>
+        </div>
+    </footer>
+
+    <script src="agricultural-tile-drainage-nutrient-pulses.js"></script>
+</body>
+</html>

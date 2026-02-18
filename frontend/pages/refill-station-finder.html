@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neighborhood Refill Station Finder | EWOC</title>
+    <meta name="description" content="Find local refill stations for soaps, detergents, and pantry staples. Track your refill streak and plastic avoided.">
+    <link rel="stylesheet" href="../css/refill-station-finder.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-recycle"></i>
+                <span>EWOC Refill Finder</span>
+            </div>
+            <nav class="nav">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="#" class="nav-link active">Refill Stations</a>
+                <button class="btn-favorites" id="showFavoritesBtn">
+                    <i class="fas fa-heart"></i>
+                    <span class="favorites-count">0</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section with Stats -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Find Local Refill Stations</h1>
+            <p class="hero-subtitle">Reduce plastic waste by refilling instead of buying new</p>
+            
+            <!-- Impact Stats -->
+            <div class="impact-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="streakCount">0</div>
+                        <div class="stat-label">Day Streak</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-bottle-water"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="plasticAvoided">0</div>
+                        <div class="stat-label">Bottles Avoided</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="co2Saved">0</div>
+                        <div class="stat-label">kg CO₂ Saved</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <!-- Search and Filters Section -->
+        <section class="search-section">
+            <div class="search-container">
+                <div class="search-bar">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search by station name, address, or item..." class="search-input">
+                    <button class="btn-clear" id="clearSearch" style="display: none;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <button class="btn-filters" id="toggleFilters">
+                    <i class="fas fa-sliders-h"></i>
+                    <span>Filters</span>
+                </button>
+            </div>
+
+            <!-- Filter Panel -->
+            <div class="filter-panel" id="filterPanel">
+                <div class="filter-group">
+                    <label class="filter-label">Item Type</label>
+                    <div class="filter-chips">
+                        <button class="chip active" data-category="all">All Items</button>
+                        <button class="chip" data-category="cleaning">Cleaning Products</button>
+                        <button class="chip" data-category="personal-care">Personal Care</button>
+                        <button class="chip" data-category="pantry">Pantry Staples</button>
+                        <button class="chip" data-category="beverages">Beverages</button>
+                        <button class="chip" data-category="bulk">Bulk Foods</button>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Distance (within <span id="distanceValue">10</span> miles)</label>
+                    <input type="range" id="distanceRange" min="1" max="50" value="10" class="distance-slider">
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Open Now</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="openNowFilter">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="filter-actions">
+                    <button class="btn-secondary" id="resetFilters">Reset All</button>
+                    <button class="btn-primary" id="applyFilters">Apply Filters</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Layout Toggle -->
+        <div class="view-controls">
+            <div class="results-count" id="resultsCount">Found 0 stations</div>
+            <div class="view-toggle">
+                <button class="view-btn active" data-view="grid" id="gridViewBtn">
+                    <i class="fas fa-th"></i>
+                </button>
+                <button class="view-btn" data-view="list" id="listViewBtn">
+                    <i class="fas fa-list"></i>
+                </button>
+                <button class="view-btn" data-view="map" id="mapViewBtn">
+                    <i class="fas fa-map"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-wrapper">
+            <!-- Map View -->
+            <div class="map-container" id="mapContainer" style="display: none;">
+                <div id="map"></div>
+            </div>
+
+            <!-- Stations Grid/List -->
+            <div class="stations-container" id="stationsContainer">
+                <!-- Stations will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <i class="fas fa-search-location"></i>
+            <h3>No stations found</h3>
+            <p>Try adjusting your filters or search criteria</p>
+        </div>
+    </main>
+
+    <!-- Log Refill Modal -->
+    <div class="modal" id="logRefillModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Log Your Refill</h2>
+                <button class="modal-close" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Station</label>
+                    <input type="text" id="refillStation" class="form-input" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Item Type</label>
+                    <select id="refillItemType" class="form-input">
+                        <option value="cleaning">Cleaning Product</option>
+                        <option value="personal-care">Personal Care</option>
+                        <option value="pantry">Pantry Staple</option>
+                        <option value="beverages">Beverage</option>
+                        <option value="bulk">Bulk Food</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Containers Refilled</label>
+                    <input type="number" id="refillContainers" class="form-input" min="1" value="1">
+                </div>
+                <div class="form-group">
+                    <label>Notes (optional)</label>
+                    <textarea id="refillNotes" class="form-input" rows="3" placeholder="Add any notes about your refill..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelRefill">Cancel</button>
+                <button class="btn-primary" id="submitRefill">
+                    <i class="fas fa-check"></i> Log Refill
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Station Details Modal -->
+    <div class="modal" id="stationDetailsModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="modalStationName"></h2>
+                <button class="modal-close" id="closeDetailsModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="stationDetailsContent">
+                <!-- Details will be dynamically inserted -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Success!</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="../js/refill-station-finder.js"></script>
+</body>
+</html>

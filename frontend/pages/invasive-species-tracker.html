@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invasive Species Tracker</title>
+    <link rel="stylesheet" href="/frontend/pages/styles/invasive-species-tracker.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f4f8fb;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 32px 40px 40px 40px;
+        }
+        h1 {
+            color: #2d5c3b;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            color: #4e6e5d;
+            margin-bottom: 24px;
+        }
+        .flex {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+        .form-section, .info-section {
+            flex: 1 1 350px;
+            min-width: 320px;
+        }
+        .form-section {
+            background: #f7faf7;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(45,92,59,0.04);
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #2d5c3b;
+            font-weight: 500;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px 10px;
+            margin-bottom: 16px;
+            border: 1px solid #c7d7c9;
+            border-radius: 4px;
+            font-size: 1rem;
+            background: #fff;
+        }
+        button {
+            background: #2d5c3b;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #3e7c54;
+        }
+        #map {
+            width: 100%;
+            height: 350px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(45,92,59,0.06);
+        }
+        .resources {
+            margin-top: 24px;
+        }
+        .resources h3 {
+            margin-bottom: 10px;
+            color: #2d5c3b;
+        }
+        .resources ul {
+            padding-left: 18px;
+        }
+        .resources li {
+            margin-bottom: 8px;
+        }
+        @media (max-width: 900px) {
+            .flex {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Invasive Species Tracker</h1>
+        <div class="subtitle">Report sightings, view distribution, and learn about invasive species in your area.</div>
+        <div class="flex">
+            <div class="form-section">
+                <h2>Report a Sighting</h2>
+                <form id="reportForm">
+                    <label for="species">Species Name</label>
+                    <input type="text" id="species" name="species" required>
+
+                    <label for="location">Location Description</label>
+                    <input type="text" id="location" name="location" required>
+
+                    <label for="date">Date of Sighting</label>
+                    <input type="date" id="date" name="date" required>
+
+                    <label for="notes">Additional Notes</label>
+                    <textarea id="notes" name="notes" rows="3"></textarea>
+
+                    <button type="submit">Submit Report</button>
+                </form>
+            </div>
+            <div class="info-section">
+                <h2>Distribution Map</h2>
+                <div id="map"></div>
+                <div class="resources">
+    <h3>Educational Resources</h3>
+    <ul>
+        <li>
+            <a href="https://www.invasivespeciesinfo.gov/"
+               target="_blank"
+               rel="noopener noreferrer">
+               National Invasive Species Information Center
+            </a>
+        </li>
+        <li>
+            <a href="https://www.iucngisd.org/gisd/"
+               target="_blank"
+               rel="noopener noreferrer">
+               Global Invasive Species Database
+            </a>
+        </li>
+        <li>
+            <a href="https://www.nationalgeographic.com/environment/article/invasive-species"
+               target="_blank"
+               rel="noopener noreferrer">
+               National Geographic: Invasive Species
+            </a>
+        </li>
+    </ul>
+</div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        // Initialize map
+        var map = L.map('map').setView([20, 0], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Example: Add a marker for demonstration
+        var demoMarker = L.marker([37.7749, -122.4194]).addTo(map);
+        demoMarker.bindPopup('<b>Example Sighting</b><br>Species: Zebra Mussel<br>Location: San Francisco Bay');
+
+        // Handle form submission
+        document.getElementById('reportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var species = document.getElementById('species').value;
+            var location = document.getElementById('location').value;
+            var date = document.getElementById('date').value;
+            var notes = document.getElementById('notes').value;
+            alert('Thank you for reporting!\n\nSpecies: ' + species + '\nLocation: ' + location + '\nDate: ' + date + (notes ? ('\nNotes: ' + notes) : ''));
+            // Optionally, send data to backend here
+            document.getElementById('reportForm').reset();
+        });
+    </script>
+</body>
+</html>

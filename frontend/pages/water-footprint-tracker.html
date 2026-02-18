@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Footprint Tracker | EcoLife</title>
+    <meta name="description" content="Track your daily water usage, discover hidden water consumption, and learn conservation strategies">
+    <link rel="stylesheet" href="../css/water-footprint-tracker.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="water-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../../index.html" class="logo">💧 Water Tracker</a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#dashboard" class="nav-link">Dashboard</a></li>
+                <li><a href="#tracker" class="nav-link">Usage Tracker</a></li>
+                <li><a href="#insights" class="nav-link">Insights</a></li>
+                <li><a href="#virtual-water" class="nav-link">Virtual Water</a></li>
+                <li><a href="#tips" class="nav-link">Conservation Tips</a></li>
+            </ul>
+            <div class="nav-controls">
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <button class="export-btn" id="exportBtn">📥 Export</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="water-container">
+        <!-- Quick Stats Header -->
+        <section class="quick-stats-header">
+            <div class="stat-card primary">
+                <div class="stat-icon">💧</div>
+                <div class="stat-content">
+                    <p class="stat-label">Today's Usage</p>
+                    <p class="stat-value" id="todayUsage">0</p>
+                    <p class="stat-unit">Liters</p>
+                </div>
+            </div>
+            <div class="stat-card secondary">
+                <div class="stat-icon">📊</div>
+                <div class="stat-content">
+                    <p class="stat-label">Weekly Average</p>
+                    <p class="stat-value" id="weeklyAverage">0</p>
+                    <p class="stat-unit">L/day</p>
+                </div>
+            </div>
+            <div class="stat-card warning">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-content">
+                    <p class="stat-label">Conservation Goal</p>
+                    <p class="stat-value" id="goalProgress">0</p>
+                    <p class="stat-unit">% Progress</p>
+                </div>
+            </div>
+            <div class="stat-card success">
+                <div class="stat-icon">💚</div>
+                <div class="stat-content">
+                    <p class="stat-label">Water Saved</p>
+                    <p class="stat-value" id="waterSaved">0</p>
+                    <p class="stat-unit">L this month</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="dashboard-section">
+            <div class="section-header">
+                <h1>Water Usage Dashboard</h1>
+                <p class="subtitle">Track your daily water consumption and discover hidden usage patterns</p>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Main Usage Chart -->
+                <div class="chart-container wide">
+                    <h3>Daily Water Consumption (30 Days)</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="dailyWaterChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Category Breakdown -->
+                <div class="chart-container">
+                    <h3>Usage by Category</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="categoryBreakdownChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Water Types -->
+                <div class="chart-container">
+                    <h3>Direct vs Virtual Water</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="waterTypesChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Category Cards -->
+                <div class="category-grid">
+                    <div class="category-card household">
+                        <div class="category-icon">🏠</div>
+                        <h4>Household</h4>
+                        <p class="category-value" id="householdTotal">0 L</p>
+                        <p class="category-detail">Shower, toilet, dishes</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="householdBar"></div>
+                        </div>
+                    </div>
+                    <div class="category-card food">
+                        <div class="category-icon">🍽️</div>
+                        <h4>Food Production</h4>
+                        <p class="category-value" id="foodTotal">0 L</p>
+                        <p class="category-detail">Virtual water in diet</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill food-fill" id="foodBar"></div>
+                        </div>
+                    </div>
+                    <div class="category-card products">
+                        <div class="category-icon">🛍️</div>
+                        <h4>Products</h4>
+                        <p class="category-value" id="productsTotal">0 L</p>
+                        <p class="category-detail">Goods & services</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill products-fill" id="productsBar"></div>
+                        </div>
+                    </div>
+                    <div class="category-card garden">
+                        <div class="category-icon">🌱</div>
+                        <h4>Garden/Outdoor</h4>
+                        <p class="category-value" id="gardenTotal">0 L</p>
+                        <p class="category-detail">Lawn & plants</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill garden-fill" id="gardenBar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Usage Tracker Section -->
+        <section id="tracker" class="tracker-section">
+            <div class="section-header">
+                <h1>Water Usage Tracker</h1>
+                <p class="subtitle">Log your daily water activities to calculate your total footprint</p>
+            </div>
+
+            <div class="tracker-wrapper">
+                <!-- Activity Tabs -->
+                <div class="tracker-tabs">
+                    <button class="tab-btn active" data-category="household">🏠 Household</button>
+                    <button class="tab-btn" data-category="food">🍽️ Food</button>
+                    <button class="tab-btn" data-category="products">🛍️ Products</button>
+                    <button class="tab-btn" data-category="garden">🌱 Garden</button>
+                </div>
+
+                <!-- Household Form -->
+                <div class="tracker-form active" id="household-form">
+                    <h3>Log Household Water Usage</h3>
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Activity Type</label>
+                                <select id="householdType">
+                                    <option value="shower">Shower</option>
+                                    <option value="bath">Bath</option>
+                                    <option value="toilet">Toilet Flush</option>
+                                    <option value="handwash">Hand Washing</option>
+                                    <option value="dishes">Dishes (hand)</option>
+                                    <option value="dishwasher">Dishwasher</option>
+                                    <option value="laundry">Laundry</option>
+                                    <option value="cooking">Cooking</option>
+                                    <option value="drinking">Drinking Water</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Duration/Count</label>
+                                <input type="number" id="householdDuration" placeholder="0" min="0" step="1">
+                            </div>
+                            <div class="form-group">
+                                <label>Unit</label>
+                                <select id="householdUnit">
+                                    <option value="minutes">Minutes</option>
+                                    <option value="count">Times</option>
+                                    <option value="loads">Loads</option>
+                                </select>
+                            </div>
+                        </div>
+                        <p class="form-hint">💡 Average shower uses ~10 L/min</p>
+                        <button type="button" class="btn btn-primary" onclick="addWaterActivity('household')">Add Activity</button>
+                    </form>
+                </div>
+
+                <!-- Food Form -->
+                <div class="tracker-form" id="food-form">
+                    <h3>Log Food Consumption (Virtual Water)</h3>
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Food Type</label>
+                                <select id="foodType">
+                                    <option value="beef">Beef</option>
+                                    <option value="pork">Pork</option>
+                                    <option value="chicken">Chicken</option>
+                                    <option value="fish">Fish</option>
+                                    <option value="eggs">Eggs</option>
+                                    <option value="dairy">Dairy (milk)</option>
+                                    <option value="cheese">Cheese</option>
+                                    <option value="rice">Rice</option>
+                                    <option value="wheat">Wheat/Bread</option>
+                                    <option value="vegetables">Vegetables</option>
+                                    <option value="fruits">Fruits</option>
+                                    <option value="coffee">Coffee</option>
+                                    <option value="tea">Tea</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Quantity</label>
+                                <input type="number" id="foodQuantity" placeholder="1" min="0" step="0.5">
+                            </div>
+                            <div class="form-group">
+                                <label>Unit</label>
+                                <select id="foodUnit">
+                                    <option value="serving">Serving</option>
+                                    <option value="kg">Kilogram</option>
+                                    <option value="cup">Cup</option>
+                                </select>
+                            </div>
+                        </div>
+                        <p class="form-hint">💡 1 kg beef requires ~15,400 L water!</p>
+                        <button type="button" class="btn btn-primary" onclick="addWaterActivity('food')">Add Activity</button>
+                    </form>
+                </div>
+
+                <!-- Products Form -->
+                <div class="tracker-form" id="products-form">
+                    <h3>Log Product Purchases</h3>
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Product Category</label>
+                                <select id="productType">
+                                    <option value="clothing-cotton">Cotton Clothing</option>
+                                    <option value="clothing-synthetic">Synthetic Clothing</option>
+                                    <option value="paper">Paper Products</option>
+                                    <option value="electronics">Electronics</option>
+                                    <option value="plastic">Plastic Items</option>
+                                    <option value="glass">Glass Products</option>
+                                    <option value="metal">Metal Items</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Quantity</label>
+                                <input type="number" id="productQuantity" placeholder="1" min="0" step="1">
+                            </div>
+                        </div>
+                        <p class="form-hint">💡 1 cotton t-shirt needs ~2,700 L water</p>
+                        <button type="button" class="btn btn-primary" onclick="addWaterActivity('products')">Add Activity</button>
+                    </form>
+                </div>
+
+                <!-- Garden Form -->
+                <div class="tracker-form" id="garden-form">
+                    <h3>Log Garden & Outdoor Usage</h3>
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Activity</label>
+                                <select id="gardenType">
+                                    <option value="lawn">Lawn Watering</option>
+                                    <option value="garden">Garden/Plants</option>
+                                    <option value="car-wash">Car Wash</option>
+                                    <option value="pool">Pool Fill/Top-up</option>
+                                    <option value="hose">Hose Usage</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Duration (minutes)</label>
+                                <input type="number" id="gardenDuration" placeholder="0" min="0" step="1">
+                            </div>
+                        </div>
+                        <p class="form-hint">💡 Garden hose uses ~20 L/min</p>
+                        <button type="button" class="btn btn-primary" onclick="addWaterActivity('garden')">Add Activity</button>
+                    </form>
+                </div>
+
+                <!-- Recent Activities -->
+                <div class="recent-activities">
+                    <h3>Today's Activities</h3>
+                    <div id="activitiesList" class="activities-list">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Insights Section -->
+        <section id="insights" class="insights-section">
+            <div class="section-header">
+                <h1>💡 Conservation Insights</h1>
+                <p class="subtitle">AI-powered recommendations to reduce your water footprint</p>
+            </div>
+
+            <div class="insights-grid">
+                <!-- Smart Recommendations -->
+                <div class="insight-card">
+                    <div class="insight-header">
+                        <span class="insight-icon">💡</span>
+                        <h3>Conservation Tips</h3>
+                    </div>
+                    <div id="conservationTips" class="tips-list">
+                        <p style="text-align: center; color: #888;">Log activities to get personalized tips</p>
+                    </div>
+                </div>
+
+                <!-- Global Comparison -->
+                <div class="insight-card">
+                    <div class="insight-header">
+                        <span class="insight-icon">🌍</span>
+                        <h3>Global Comparison</h3>
+                    </div>
+                    <div class="comparison-bars">
+                        <div class="comparison-item">
+                            <span class="comp-label">Your Usage</span>
+                            <div class="comp-bar">
+                                <div class="comp-fill" id="yourUsageBar"></div>
+                            </div>
+                            <span class="comp-value" id="yourUsageValue">0 L/day</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comp-label">USA Average</span>
+                            <div class="comp-bar">
+                                <div class="comp-fill global"></div>
+                            </div>
+                            <span class="comp-value">575 L/day</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comp-label">Global Average</span>
+                            <div class="comp-bar">
+                                <div class="comp-fill global" style="width: 60%;"></div>
+                            </div>
+                            <span class="comp-value">340 L/day</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Savings Calculator -->
+                <div class="insight-card wide">
+                    <div class="insight-header">
+                        <span class="insight-icon">💰</span>
+                        <h3>Potential Annual Savings</h3>
+                    </div>
+                    <div class="savings-grid">
+                        <div class="savings-item">
+                            <p class="savings-amount" id="waterSavings">0 L</p>
+                            <p class="savings-label">Water Saved</p>
+                        </div>
+                        <div class="savings-item">
+                            <p class="savings-amount" id="moneySavings">$0</p>
+                            <p class="savings-label">Cost Savings</p>
+                        </div>
+                        <div class="savings-item">
+                            <p class="savings-amount" id="carbonSavings">0 kg</p>
+                            <p class="savings-label">CO₂ Saved</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Analysis -->
+                <div class="insight-card wide">
+                    <div class="insight-header">
+                        <span class="insight-icon">🤖</span>
+                        <h3>AI Water Footprint Analysis</h3>
+                    </div>
+                    <div id="aiWaterAnalysis" class="ai-text">
+                        <p style="text-align: center; color: #888;">AI insights will appear as you track usage</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Virtual Water Section -->
+        <section id="virtual-water" class="virtual-water-section">
+            <div class="section-header">
+                <h1>💧 Virtual Water Guide</h1>
+                <p class="subtitle">Discover the hidden water in everyday products and food</p>
+            </div>
+
+            <div class="virtual-water-grid">
+                <div class="vw-card">
+                    <div class="vw-icon">🥩</div>
+                    <h4>1 kg Beef</h4>
+                    <p class="vw-amount">15,400 L</p>
+                    <p class="vw-detail">Feed, grazing, processing</p>
+                </div>
+                <div class="vw-card">
+                    <div class="vw-icon">👕</div>
+                    <h4>Cotton T-shirt</h4>
+                    <p class="vw-amount">2,700 L</p>
+                    <p class="vw-detail">Growing, processing, dyeing</p>
+                </div>
+                <div class="vw-card">
+                    <div class="vw-icon">☕</div>
+                    <h4>1 Cup Coffee</h4>
+                    <p class="vw-amount">140 L</p>
+                    <p class="vw-detail">Bean cultivation & processing</p>
+                </div>
+                <div class="vw-card">
+                    <div class="vw-icon">👖</div>
+                    <h4>Jeans</h4>
+                    <p class="vw-amount">7,600 L</p>
+                    <p class="vw-detail">Cotton, production, finishing</p>
+                </div>
+                <div class="vw-card">
+                    <div class="vw-icon">🍷</div>
+                    <h4>1 Glass Wine</h4>
+                    <p class="vw-amount">120 L</p>
+                    <p class="vw-detail">Grape growing & fermentation</p>
+                </div>
+                <div class="vw-card">
+                    <div class="vw-icon">🍫</div>
+                    <h4>100g Chocolate</h4>
+                    <p class="vw-amount">1,700 L</p>
+                    <p class="vw-detail">Cocoa farming & processing</p>
+                </div>
+                <div class="vw-card">
+                    <div class="vw-icon">🧀</div>
+                    <h4>1 kg Cheese</h4>
+                    <p class="vw-amount">5,000 L</p>
+                    <p class="vw-detail">Milk production & processing</p>
+                </div>
+                <div class="vw-card">
+                    <div class="vw-icon">📱</div>
+                    <h4>Smartphone</h4>
+                    <p class="vw-amount">12,760 L</p>
+                    <p class="vw-detail">Mining, production, assembly</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Conservation Tips Section -->
+        <section id="tips" class="tips-section">
+            <div class="section-header">
+                <h1>🌊 Top Conservation Strategies</h1>
+                <p class="subtitle">Practical tips to reduce your water footprint</p>
+            </div>
+
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-number">1</div>
+                    <h4>Shorter Showers</h4>
+                    <p>Reduce shower time by 2 minutes to save ~20 L per shower</p>
+                    <span class="tip-impact">💧 Saves ~7,300 L/year</span>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-number">2</div>
+                    <h4>Fix Leaks</h4>
+                    <p>A dripping tap wastes up to 15 L per day. Fix it immediately!</p>
+                    <span class="tip-impact">💧 Saves ~5,500 L/year</span>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-number">3</div>
+                    <h4>Full Loads Only</h4>
+                    <p>Run dishwasher and washing machine only when full</p>
+                    <span class="tip-impact">💧 Saves ~30 L per load</span>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-number">4</div>
+                    <h4>Plant-Based Diet</h4>
+                    <p>Reduce meat consumption, especially beef, for huge water savings</p>
+                    <span class="tip-impact">💧 Saves ~15,000 L/kg beef</span>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-number">5</div>
+                    <h4>Install Aerators</h4>
+                    <p>Low-flow faucet aerators reduce water flow by 30-50%</p>
+                    <span class="tip-impact">💧 Saves ~11,000 L/year</span>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-number">6</div>
+                    <h4>Dual-Flush Toilets</h4>
+                    <p>Use half-flush option when possible</p>
+                    <span class="tip-impact">💧 Saves ~6-9 L per flush</span>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-number">7</div>
+                    <h4>Smart Lawn Care</h4>
+                    <p>Water lawn early morning, use drip irrigation, collect rainwater</p>
+                    <span class="tip-impact">💧 Saves ~40% outdoor usage</span>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-number">8</div>
+                    <h4>Buy Secondhand</h4>
+                    <p>Buying used clothing saves all the water from production</p>
+                    <span class="tip-impact">💧 Saves ~2,700 L per shirt</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievements Section -->
+        <section class="achievements-section">
+            <div class="section-header">
+                <h1>🏆 Water Hero Badges</h1>
+                <p class="subtitle">Unlock achievements as you conserve water</p>
+            </div>
+
+            <div id="waterBadgesGrid" class="badges-grid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="water-footer">
+        <div class="footer-content">
+            <p>&copy; 2026 EcoLife Water Tracker. Every drop counts. 💧</p>
+            <div class="footer-links">
+                <a href="#">Water Facts</a>
+                <a href="#">Global Water Crisis</a>
+                <a href="#">Conservation Resources</a>
+                <a href="#">About</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/water-footprint-tracker.js"></script>
+</body>
+</html>

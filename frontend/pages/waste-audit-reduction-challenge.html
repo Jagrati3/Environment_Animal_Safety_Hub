@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waste Audit & Reduction Challenge</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/waste-audit-reduction-challenge.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="header-title">
+          <h1><i class="fa-solid fa-trash-alt"></i> Waste Audit & Reduction Challenge</h1>
+          <p>Track your waste, reduce your impact, join the challenge</p>
+        </div>
+        <div class="header-stats">
+          <div class="stat-badge">
+            <div class="stat-badge-value" id="weeklyWaste">0</div>
+            <div class="stat-badge-label">kg This Week</div>
+          </div>
+          <div class="stat-badge">
+            <div class="stat-badge-value" id="reductionPercent">0%</div>
+            <div class="stat-badge-label">Goal Progress</div>
+          </div>
+          <div class="stat-badge">
+            <div class="stat-badge-value" id="costSavings">$0</div>
+            <div class="stat-badge-label">Savings</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Overview Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+          <i class="fa-solid fa-trash"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number">24.5</div>
+          <div class="stat-label">kg Total Waste</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number">18%</div>
+          <div class="stat-label">Reduction vs Last Month</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+          <i class="fa-solid fa-leaf"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number">4.2T</div>
+          <div class="stat-label">Landfill Diverted</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #3b82f6, #1e40af);">
+          <i class="fa-solid fa-medal"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number">8</div>
+          <div class="stat-label">Badges Unlocked</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tab-navigation">
+      <button class="tab-link active" data-tab="dashboard">
+        <i class="fa-solid fa-gauge"></i> Dashboard
+      </button>
+      <button class="tab-link" data-tab="log">
+        <i class="fa-solid fa-plus-circle"></i> Log Waste
+      </button>
+      <button class="tab-link" data-tab="goals">
+        <i class="fa-solid fa-bullseye"></i> Goals & Targets
+      </button>
+      <button class="tab-link" data-tab="leaderboard">
+        <i class="fa-solid fa-trophy"></i> Leaderboard
+      </button>
+      <button class="tab-link" data-tab="challenges">
+        <i class="fa-solid fa-fire"></i> Challenges
+      </button>
+      <button class="tab-link" data-tab="tips">
+        <i class="fa-solid fa-lightbulb"></i> AI Tips
+      </button>
+    </div>
+
+    <!-- Dashboard Tab -->
+    <div id="dashboard" class="tab-content active">
+      <!-- Waste Composition -->
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Waste Composition</h2>
+          <span class="time-period">This Month</span>
+        </div>
+        <div class="dashboard-grid">
+          <div class="chart-container">
+            <canvas id="wasteCompositionChart"></canvas>
+          </div>
+          <div class="waste-breakdown">
+            <div id="wasteBreakdownItems" class="breakdown-items"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weekly Trend -->
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Weekly Waste Trend</h2>
+        </div>
+        <div class="chart-container">
+          <canvas id="weeklyTrendChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Monthly Comparison -->
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Monthly Comparison & Cost Savings</h2>
+        </div>
+        <div class="dashboard-grid">
+          <div class="chart-container">
+            <canvas id="monthlyCostChart"></canvas>
+          </div>
+          <div class="savings-info">
+            <div class="savings-card">
+              <div class="savings-icon">💰</div>
+              <div class="savings-content">
+                <div class="savings-label">Total Savings</div>
+                <div class="savings-value" id="totalSavings">$0</div>
+              </div>
+            </div>
+            <div class="savings-card">
+              <div class="savings-icon">♻️</div>
+              <div class="savings-content">
+                <div class="savings-label">Landfill Diverted</div>
+                <div class="savings-value" id="landfillDiverted">0 kg</div>
+              </div>
+            </div>
+            <div class="savings-card">
+              <div class="savings-icon">🌍</div>
+              <div class="savings-content">
+                <div class="savings-label">CO₂ Prevented</div>
+                <div class="savings-value" id="co2Prevented">0 kg</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Logs -->
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Recent Waste Logs</h2>
+        </div>
+        <div id="recentLogsList" class="logs-list"></div>
+      </div>
+    </div>
+
+    <!-- Log Waste Tab -->
+    <div id="log" class="tab-content">
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Log Daily Waste</h2>
+        </div>
+        <form id="wasteLogForm" class="panel-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="wasteDate">Date *</label>
+              <input type="date" id="wasteDate" required>
+            </div>
+            <div class="form-group">
+              <label for="wasteCategory">Category *</label>
+              <select id="wasteCategory" required>
+                <option value="">Select category</option>
+                <option value="plastic">Plastic</option>
+                <option value="paper">Paper & Cardboard</option>
+                <option value="food">Food & Organic</option>
+                <option value="electronics">Electronics</option>
+                <option value="textiles">Textiles & Clothing</option>
+                <option value="metal">Metal</option>
+                <option value="glass">Glass</option>
+                <option value="hazardous">Hazardous</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="wasteAmount">Weight (kg) *</label>
+              <input type="number" id="wasteAmount" required min="0" step="0.1" placeholder="0.5">
+            </div>
+            <div class="form-group">
+              <label for="wasteDisposal">Disposal Method *</label>
+              <select id="wasteDisposal" required>
+                <option value="">Select method</option>
+                <option value="landfill">Landfill</option>
+                <option value="recycling">Recycling</option>
+                <option value="composting">Composting</option>
+                <option value="donation">Donation</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group full">
+            <label for="wasteNotes">Notes</label>
+            <textarea id="wasteNotes" rows="3" placeholder="Any additional details..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-plus"></i> Log Waste
+          </button>
+        </form>
+      </div>
+
+      <!-- Quick Log -->
+      <div class="panel" style="margin-top: 2rem;">
+        <div class="panel-header">
+          <h2>Quick Log</h2>
+        </div>
+        <div class="quick-log-grid">
+          <button class="quick-log-btn" data-category="plastic" data-amount="0.1">
+            <i class="fa-solid fa-bottle-water"></i>
+            <span>Plastic</span>
+          </button>
+          <button class="quick-log-btn" data-category="paper" data-amount="0.05">
+            <i class="fa-solid fa-newspaper"></i>
+            <span>Paper</span>
+          </button>
+          <button class="quick-log-btn" data-category="food" data-amount="0.2">
+            <i class="fa-solid fa-apple-whole"></i>
+            <span>Food Waste</span>
+          </button>
+          <button class="quick-log-btn" data-category="glass" data-amount="0.3">
+            <i class="fa-solid fa-wine-glass"></i>
+            <span>Glass</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Goals Tab -->
+    <div id="goals" class="tab-content">
+      <!-- Set New Goal -->
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Set Waste Reduction Goals</h2>
+        </div>
+        <form id="goalsForm" class="panel-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="goalType">Goal Type *</label>
+              <select id="goalType" onchange="updateGoalDisplay()" required>
+                <option value="percentage">Percentage Reduction</option>
+                <option value="weight">Weight Target</option>
+                <option value="zeroWaste">Zero-Waste Week</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="goalTarget">Target Value *</label>
+              <input type="number" id="goalTarget" required min="1" placeholder="e.g., 25">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="goalCategory">Category Focus (Optional)</label>
+              <select id="goalCategory">
+                <option value="">All Categories</option>
+                <option value="plastic">Plastic Only</option>
+                <option value="paper">Paper & Cardboard</option>
+                <option value="food">Food & Organic</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="goalDeadline">Deadline *</label>
+              <input type="date" id="goalDeadline" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-bullseye"></i> Create Goal
+          </button>
+        </form>
+      </div>
+
+      <!-- Active Goals -->
+      <div class="panel" style="margin-top: 2rem;">
+        <div class="panel-header">
+          <h2>Active Goals</h2>
+        </div>
+        <div id="activeGoalsList" class="goals-list"></div>
+      </div>
+    </div>
+
+    <!-- Leaderboard Tab -->
+    <div id="leaderboard" class="tab-content">
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Community Leaderboard</h2>
+          <select id="leaderboardFilter" style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 6px; background: var(--bg-primary); color: var(--text-primary);">
+            <option value="reduction">Most Reduced</option>
+            <option value="savings">Highest Savings</option>
+            <option value="consistency">Most Consistent</option>
+          </select>
+        </div>
+
+        <!-- Podium -->
+        <div class="podium-container">
+          <div class="podium-position second">
+            <div class="medal">🥈</div>
+            <div class="name" id="lb-second-name">Sarah Williams</div>
+            <div class="stat" id="lb-second-stat">35% reduction</div>
+            <div class="podium-height"></div>
+          </div>
+          <div class="podium-position first">
+            <div class="medal">🥇</div>
+            <div class="name" id="lb-first-name">Alex Johnson</div>
+            <div class="stat" id="lb-first-stat">42% reduction</div>
+            <div class="podium-height"></div>
+          </div>
+          <div class="podium-position third">
+            <div class="medal">🥉</div>
+            <div class="name" id="lb-third-name">Maria Chen</div>
+            <div class="stat" id="lb-third-stat">28% reduction</div>
+            <div class="podium-height"></div>
+          </div>
+        </div>
+
+        <!-- Full Leaderboard -->
+        <div class="leaderboard-list-container">
+          <div id="leaderboardList" class="leaderboard-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Challenges Tab -->
+    <div id="challenges" class="tab-content">
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Community Waste Reduction Challenges</h2>
+        </div>
+        <div id="challengesList" class="challenges-grid"></div>
+      </div>
+
+      <!-- Badge Showcase -->
+      <div class="panel" style="margin-top: 2rem;">
+        <div class="panel-header">
+          <h2>Unlocked Badges & Achievements</h2>
+        </div>
+        <div id="badgesGrid" class="badges-grid"></div>
+      </div>
+    </div>
+
+    <!-- Tips Tab -->
+    <div id="tips" class="tab-content">
+      <div class="panel">
+        <div class="panel-header">
+          <h2>AI-Powered Waste Reduction Tips</h2>
+          <button class="btn btn-primary" onclick="generateNewTips()">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Tips
+          </button>
+        </div>
+        <div id="tipsList" class="tips-list"></div>
+      </div>
+
+      <!-- Personalized Insights -->
+      <div class="panel" style="margin-top: 2rem;">
+        <div class="panel-header">
+          <h2>Your Waste Patterns</h2>
+        </div>
+        <div class="insights-grid">
+          <div class="insight-card">
+            <div class="insight-icon">📊</div>
+            <div class="insight-content">
+              <div class="insight-title">Top Waste Category</div>
+              <div class="insight-value" id="topCategory">Loading...</div>
+            </div>
+          </div>
+          <div class="insight-card">
+            <div class="insight-icon">📈</div>
+            <div class="insight-content">
+              <div class="insight-title">Best Day for Logging</div>
+              <div class="insight-value" id="bestDay">Monday</div>
+            </div>
+          </div>
+          <div class="insight-card">
+            <div class="insight-icon">🎯</div>
+            <div class="insight-content">
+              <div class="insight-title">Recommended Focus</div>
+              <div class="insight-value" id="recommendedFocus">Reduce Plastic Use</div>
+            </div>
+          </div>
+          <div class="insight-card">
+            <div class="insight-icon">⏰</div>
+            <div class="insight-content">
+              <div class="insight-title">Your Peak Waste Time</div>
+              <div class="insight-value" id="peakWasteTime">Weekends</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="wasteModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">Details</h3>
+        <button class="modal-close" onclick="closeModal()">
+          <i class="fa-solid fa-times"></i>
+        </button>
+      </div>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <script src="../js/pages/waste-audit-reduction-challenge.js"></script>
+</body>
+</html>

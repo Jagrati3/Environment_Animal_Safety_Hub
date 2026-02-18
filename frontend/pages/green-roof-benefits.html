@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Green Roof Benefits Visualizer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/frontend/pages/green-roof-benefits.css" />
+  <style>
+    body {
+      font-family: 'Montserrat', Arial, sans-serif;
+      background: linear-gradient(135deg, #e0f7fa 0%, #a5d6a7 100%);
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(60, 120, 60, 0.18);
+      padding: 40px 32px 32px 32px;
+    }
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: #388e3c;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+    .subtitle {
+      font-size: 1.3rem;
+      color: #388e3c;
+      margin-bottom: 32px;
+    }
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 28px;
+      margin-bottom: 40px;
+    }
+    .benefit-card {
+      background: #e8f5e9;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(56, 142, 60, 0.08);
+      padding: 24px 18px;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .benefit-card:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 8px 24px rgba(56, 142, 60, 0.18);
+    }
+    .benefit-icon {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: #43a047;
+    }
+    .benefit-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+    }
+    .benefit-desc {
+      font-size: 0.98rem;
+      color: #444;
+    }
+    .simulator-section {
+      margin: 48px 0 32px 0;
+      background: #f1f8e9;
+      border-radius: 14px;
+      padding: 32px 24px;
+      box-shadow: 0 2px 8px rgba(56, 142, 60, 0.07);
+    }
+    .simulator-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #2e7d32;
+      margin-bottom: 18px;
+    }
+    .simulator-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .simulator-form label {
+      font-weight: 600;
+      margin-right: 8px;
+    }
+    .simulator-form input, .simulator-form select {
+      padding: 7px 10px;
+      border-radius: 6px;
+      border: 1px solid #bdbdbd;
+      font-size: 1rem;
+      min-width: 80px;
+    }
+    .simulator-btn {
+      background: #43a047;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 9px 22px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-left: 10px;
+    }
+    .simulator-btn:hover {
+      background: #2e7d32;
+    }
+    .simulator-result {
+      font-size: 1.15rem;
+      color: #1b5e20;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    .case-studies-section {
+      margin-top: 48px;
+    }
+    .case-studies-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #388e3c;
+      margin-bottom: 18px;
+    }
+    .case-studies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+    .case-card {
+      background: #e0f2f1;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(38, 166, 154, 0.08);
+      padding: 22px 18px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .case-card:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 8px 24px rgba(38, 166, 154, 0.18);
+    }
+    .case-city {
+      font-weight: 700;
+      color: #00897b;
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+    }
+    .case-summary {
+      font-size: 0.98rem;
+      color: #444;
+    }
+    @media (max-width: 700px) {
+      .container { padding: 18px 4vw; }
+      h1 { font-size: 2rem; }
+      .simulator-section, .case-studies-section { padding: 18px 6px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Green Roof Benefits Visualizer</h1>
+    <div class="subtitle">Explore the environmental, economic, and social benefits of green roofs. Simulate your own energy savings and discover real-world case studies.</div>
+    <div class="benefits-grid" id="benefitsGrid">
+      <!-- Benefits cards will be injected here -->
+    </div>
+    <div class="simulator-section">
+      <div class="simulator-title">Energy Savings Simulator</div>
+      <form class="simulator-form" id="simulatorForm">
+        <label for="roofSize">Roof Size (m²):</label>
+        <input type="number" id="roofSize" name="roofSize" min="10" max="10000" value="100" required />
+        <label for="city">City:</label>
+        <select id="city" name="city">
+          <option value="nyc">New York</option>
+          <option value="la">Los Angeles</option>
+          <option value="toronto">Toronto</option>
+          <option value="berlin">Berlin</option>
+          <option value="singapore">Singapore</option>
+        </select>
+        <button type="submit" class="simulator-btn">Simulate</button>
+      </form>
+      <div class="simulator-result" id="simulatorResult"></div>
+    </div>
+    <div class="case-studies-section">
+      <div class="case-studies-title">Case Studies from Cities</div>
+      <div class="case-studies-grid" id="caseStudiesGrid">
+        <!-- Case studies will be injected here -->
+      </div>
+    </div>
+  </div>
+  <script src="/frontend/pages/green-roof-benefits.js"></script>
+</body>
+</html>

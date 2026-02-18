@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html data-theme="light" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sustainable Living Challenge Hub - Join 30+ weekly environmental challenges and track your environmental impact">
+    <meta name="theme-color" content="#10b981">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Sustainable Living Challenge Hub">
+    <meta property="og:description" content="Join environmental challenges, earn green points, and track your impact">
+    
+    <title>Sustainable Living Challenge Hub - EcoLife</title>
+    <link rel="stylesheet" href="../css/global/theme.css">
+    <link rel="stylesheet" href="../css/sustainable-living-challenge-hub.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="challenge-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../../index.html" class="logo">🌍 EcoLife</a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#dashboard" class="nav-link">Dashboard</a></li>
+                <li><a href="#challenges" class="nav-link">Challenges</a></li>
+                <li><a href="#leaderboard" class="nav-link">Leaderboard</a></li>
+                <li><a href="#profile" class="nav-link">Profile</a></li>
+            </ul>
+            <button class="theme-toggle" id="themeToggle">🌙</button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="challenge-hub-container">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="dashboard-section">
+            <div class="section-header">
+                <h1>Your Sustainability Dashboard</h1>
+                <p class="subtitle">Track your progress and environmental impact</p>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- User Stats Card -->
+                <div class="stats-card">
+                    <div class="stat-item">
+                        <div class="stat-value" id="userPoints">0</div>
+                        <div class="stat-label">Green Points</div>
+                        <div class="stat-detail">Total earned</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="userStreak">0</div>
+                        <div class="stat-label">Day Streak</div>
+                        <div class="stat-detail">Current active</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="userBadges">0</div>
+                        <div class="stat-label">Badges</div>
+                        <div class="stat-detail">Achievements unlocked</div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="quick-stats">
+                    <div class="quick-stat-item">
+                        <span class="icon">📊</span>
+                        <div>
+                            <p class="label">Challenges Completed</p>
+                            <p class="value" id="completedCount">0</p>
+                        </div>
+                    </div>
+                    <div class="quick-stat-item">
+                        <span class="icon">🎯</span>
+                        <div>
+                            <p class="label">Active Challenges</p>
+                            <p class="value" id="activeCount">0</p>
+                        </div>
+                    </div>
+                    <div class="quick-stat-item">
+                        <span class="icon">🌱</span>
+                        <div>
+                            <p class="label">CO2 Saved (kg)</p>
+                            <p class="value" id="co2Saved">0</p>
+                        </div>
+                    </div>
+                    <div class="quick-stat-item">
+                        <span class="icon">💧</span>
+                        <div>
+                            <p class="label">Water Saved (L)</p>
+                            <p class="value" id="waterSaved">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Impact Tracker -->
+                <div class="impact-tracker">
+                    <h3>Environmental Impact Summary</h3>
+                    <div class="impact-item">
+                        <span class="impact-icon">♻️</span>
+                        <div class="impact-details">
+                            <p class="impact-title">Plastic Reduced</p>
+                            <p class="impact-value" id="plasticReduced">0 kg</p>
+                        </div>
+                        <div class="impact-progress">
+                            <div class="progress-bar" id="plasticProgress"></div>
+                        </div>
+                    </div>
+                    <div class="impact-item">
+                        <span class="impact-icon">🌳</span>
+                        <div class="impact-details">
+                            <p class="impact-title">Trees Saved</p>
+                            <p class="impact-value" id="treesSaved">0</p>
+                        </div>
+                        <div class="impact-progress">
+                            <div class="progress-bar" id="treesProgress"></div>
+                        </div>
+                    </div>
+                    <div class="impact-item">
+                        <span class="impact-icon">⚡</span>
+                        <div class="impact-details">
+                            <p class="impact-title">Energy Saved</p>
+                            <p class="impact-value" id="enerjySaved">0 kWh</p>
+                        </div>
+                        <div class="impact-progress">
+                            <div class="progress-bar" id="energyProgress"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daily Check-in -->
+                <div class="daily-checkin">
+                    <h3>Daily Check-in</h3>
+                    <p id="checkinStatus" class="checkin-status">Ready for today's challenge!</p>
+                    <button id="checkinBtn" class="btn btn-primary">Check In & Earn 10 Points</button>
+                    <p class="checkin-note">Check in daily to maintain your streak</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Challenges Section -->
+        <section id="challenges" class="challenges-section">
+            <div class="section-header">
+                <h1>Challenge Library</h1>
+                <p class="subtitle">30+ weekly environmental challenges</p>
+            </div>
+
+            <!-- Challenge Filters -->
+            <div class="challenge-filters">
+                <div class="filter-group">
+                    <label for="difficultyFilter">Difficulty:</label>
+                    <select id="difficultyFilter">
+                        <option value="">All Levels</option>
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="categoryFilter">Category:</label>
+                    <select id="categoryFilter">
+                        <option value="">All Categories</option>
+                        <option value="zero-waste">Zero Waste</option>
+                        <option value="energy">Energy</option>
+                        <option value="water">Water</option>
+                        <option value="food">Food</option>
+                        <option value="transport">Transport</option>
+                        <option value="fashion">Fashion</option>
+                        <option value="community">Community</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="statusFilter">Status:</label>
+                    <select id="statusFilter">
+                        <option value="">All Challenges</option>
+                        <option value="active">Active</option>
+                        <option value="completed">Completed</option>
+                        <option value="available">Available</option>
+                    </select>
+                </div>
+                <input type="text" id="searchChallenges" class="search-input" placeholder="Search challenges...">
+            </div>
+
+            <!-- Challenges Grid -->
+            <div id="challengesGrid" class="challenges-grid">
+                <!-- Challenges will be populated here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Community Leaderboard Section -->
+        <section id="leaderboard" class="leaderboard-section">
+            <div class="section-header">
+                <h1>Community Leaderboard</h1>
+                <p class="subtitle">See who's leading the sustainability movement</p>
+            </div>
+
+            <!-- Leaderboard Tabs -->
+            <div class="leaderboard-tabs">
+                <button class="tab-btn active" data-tab="global">🌍 Global</button>
+                <button class="tab-btn" data-tab="weekly">📅 This Week</button>
+                <button class="tab-btn" data-tab="monthly">📊 This Month</button>
+                <button class="tab-btn" data-tab="friends">👥 Friends</button>
+            </div>
+
+            <!-- Leaderboard Table -->
+            <div id="leaderboardContent" class="leaderboard-content">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>User</th>
+                            <th>Points</th>
+                            <th>Streaks</th>
+                            <th>Impact</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- User Profile Section -->
+        <section id="profile" class="profile-section">
+            <div class="section-header">
+                <h1>My Profile</h1>
+                <p class="subtitle">Your achievements and progress</p>
+            </div>
+
+            <div class="profile-container">
+                <!-- Profile Card -->
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="avatar" id="userAvatar">👤</div>
+                        <div class="profile-info">
+                            <h2 id="userName">Guest User</h2>
+                            <p id="userLevel" class="user-level">Level 1 - Eco Enthusiast</p>
+                            <p id="userJoined" class="user-joined">Joined today</p>
+                        </div>
+                    </div>
+                    <div class="profile-actions">
+                        <button class="btn btn-secondary" id="editProfileBtn">Edit Profile</button>
+                        <button class="btn btn-secondary" id="shareProfileBtn">Share Profile</button>
+                    </div>
+                </div>
+
+                <!-- Badges Section -->
+                <div class="badges-container">
+                    <h3>🏆 Unlocked Badges</h3>
+                    <div id="badgesGrid" class="badges-grid">
+                        <!-- Badges populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Challenge History -->
+                <div class="challenge-history">
+                    <h3>📋 Challenge History</h3>
+                    <div id="historyList" class="history-list">
+                        <!-- History populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Team Section -->
+                <div class="team-section">
+                    <h3>👥 My Teams</h3>
+                    <button class="btn btn-primary" id="createTeamBtn">Create New Team</button>
+                    <div id="teamsList" class="teams-list">
+                        <!-- Teams populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Friends Section -->
+                <div class="friends-section">
+                    <h3>👫 My Friends</h3>
+                    <input type="text" id="friendSearch" class="search-input" placeholder="Search friends...">
+                    <div id="friendsList" class="friends-list">
+                        <!-- Friends populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modals -->
+        <!-- Challenge Detail Modal -->
+        <div id="challengeModal" class="modal">
+            <div class="modal-content challenge-detail-modal">
+                <button class="modal-close">&times;</button>
+                <h2 id="modalChallengeTitle"></h2>
+                <div class="modal-body">
+                    <div class="challenge-detail-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Difficulty</span>
+                            <span id="modalDifficulty" class="difficulty-badge"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Category</span>
+                            <span id="modalCategory" class="category-badge"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Points</span>
+                            <span id="modalPoints" class="points-badge"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Duration</span>
+                            <span id="modalDuration"></span>
+                        </div>
+                    </div>
+                    <div class="detail-description">
+                        <h3>Description</h3>
+                        <p id="modalDescription"></p>
+                    </div>
+                    <div class="detail-impact">
+                        <h3>Environmental Impact</h3>
+                        <p id="modalImpact"></p>
+                    </div>
+                    <div class="detail-steps">
+                        <h3>How to Complete</h3>
+                        <ol id="modalSteps"></ol>
+                    </div>
+                    <div class="detail-tips">
+                        <h3>💡 Tips for Success</h3>
+                        <ul id="modalTips"></ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="modalActionBtn" class="btn btn-primary">Start Challenge</button>
+                    <button class="btn btn-secondary" id="modalShareBtn">Share Challenge</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Challenge Progress Modal -->
+        <div id="progressModal" class="modal">
+            <div class="modal-content challenge-progress-modal">
+                <button class="modal-close">&times;</button>
+                <h2 id="progressChallengeTitle"></h2>
+                <div class="modal-body">
+                    <div class="progress-tracking">
+                        <h3>Track Your Progress</h3>
+                        <textarea id="progressNotes" placeholder="Add notes about your challenge progress..."></textarea>
+                        <div class="photo-upload">
+                            <input type="file" id="progressPhoto" accept="image/*">
+                            <label for="progressPhoto" class="btn btn-secondary">📸 Upload Photo</label>
+                        </div>
+                    </div>
+                    <div class="completion-status">
+                        <h3>Completion Status</h3>
+                        <div class="progress-indicator">
+                            <input type="range" id="progressSlider" min="0" max="100" value="0">
+                            <p id="progressPercent">0%</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="saveProgressBtn" class="btn btn-secondary">Save Progress</button>
+                    <button id="completeBtn" class="btn btn-primary">Complete Challenge</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Creation Modal -->
+        <div id="teamModal" class="modal">
+            <div class="modal-content team-creation-modal">
+                <button class="modal-close">&times;</button>
+                <h2>Create a New Team</h2>
+                <div class="modal-body">
+                    <form id="teamForm">
+                        <div class="form-group">
+                            <label for="teamName">Team Name</label>
+                            <input type="text" id="teamName" required placeholder="e.g., Eco Warriors">
+                        </div>
+                        <div class="form-group">
+                            <label for="teamDesc">Team Description</label>
+                            <textarea id="teamDesc" required placeholder="What's your team about?"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="teamGoal">Team Goal</label>
+                            <select id="teamGoal">
+                                <option value="zero-waste">Zero Waste</option>
+                                <option value="carbon-neutral">Carbon Neutral</option>
+                                <option value="vegan-challenge">Vegan Challenge</option>
+                                <option value="plastic-free">Plastic Free</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="teamPrivate">
+                                Make team private
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="createTeamFormBtn" class="btn btn-primary">Create Team</button>
+                    <button class="btn btn-secondary" id="cancelTeamBtn">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Profile Modal -->
+        <div id="profileModal" class="modal">
+            <div class="modal-content profile-edit-modal">
+                <button class="modal-close">&times;</button>
+                <h2>Edit Profile</h2>
+                <div class="modal-body">
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label for="editName">Display Name</label>
+                            <input type="text" id="editName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editBio">Bio</label>
+                            <textarea id="editBio" placeholder="Tell us about your sustainability journey..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="editAvatar">Avatar Emoji</label>
+                            <input type="text" id="editAvatar" maxlength="2">
+                        </div>
+                        <div class="form-group">
+                            <label for="editLocation">Location</label>
+                            <input type="text" id="editLocation" placeholder="City, Country">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="saveProfileBtn" class="btn btn-primary">Save Changes</button>
+                    <button class="btn btn-secondary" id="cancelProfileBtn">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Friend Challenge Modal -->
+        <div id="friendChallengeModal" class="modal">
+            <div class="modal-content friend-challenge-modal">
+                <button class="modal-close">&times;</button>
+                <h2>Challenge a Friend</h2>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="friendSelect">Select Friend</label>
+                        <select id="friendSelect">
+                            <option value="">Choose a friend...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="challengeSelect">Select Challenge</label>
+                        <select id="challengeSelect">
+                            <option value="">Choose a challenge...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="challengeMessage">Challenge Message</label>
+                        <textarea id="challengeMessage" placeholder="Add a motivational message..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="sendChallengeBtn" class="btn btn-primary">Send Challenge</button>
+                    <button class="btn btn-secondary" id="cancelChallengeBtn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="challenge-footer">
+        <div class="footer-content">
+            <p>&copy; 2026 EcoLife Challenge Hub. Making sustainability fun and rewarding!</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/sustainable-living-challenge-hub.js"></script>
+</body>
+</html>

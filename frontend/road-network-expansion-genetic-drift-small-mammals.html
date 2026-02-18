@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Road Network Expansion and Genetic Drift in Small Mammals - Gene Flow Loss in Fragmented Landscapes</title>
+<link rel="stylesheet" href="css/road-network-expansion-genetic-drift-small-mammals.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="accessibility-controls">
+        <button class="accessibility-btn" onclick="toggleHighContrast()">High Contrast</button>
+        <button class="accessibility-btn" onclick="toggleFontSize()">Font Size</button>
+        <button class="accessibility-btn" onclick="toggleReducedMotion()">Reduced Motion</button>
+    </div>
+
+    <header class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Road Network Expansion & Genetic Drift in Small Mammals</h1>
+                <p class="hero-subtitle">Studying Loss of Gene Flow Across Increasingly Fragmented Landscapes</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">2.5M km</span>
+                        <span class="stat-label">New Roads Since 2000</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">30-70%</span>
+                        <span class="stat-label">Gene Flow Reduction</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">$2.3B</span>
+                        <span class="stat-label">Annual Mitigation Cost</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="fragmentation-simulator">
+                    <h3>Landscape Fragmentation Simulator</h3>
+                    <div class="simulator-controls">
+                        <div class="control-group">
+                            <label for="road-density">Road Density (km/km²):</label>
+                            <input type="range" id="road-density" min="0.5" max="3.0" value="1.5" step="0.1">
+                            <span class="control-value" id="road-density-value">1.5</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="patch-size">Habitat Patch Size (ha):</label>
+                            <input type="range" id="patch-size" min="1" max="100" value="25">
+                            <span class="control-value" id="patch-size-value">25</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="isolation-distance">Isolation Distance (km):</label>
+                            <input type="range" id="isolation-distance" min="0.1" max="5.0" value="1.5" step="0.1">
+                            <span class="control-value" id="isolation-distance-value">1.5</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="population-size">Population Size:</label>
+                            <select id="population-size">
+                                <option value="large">Large (1000+)</option>
+                                <option value="medium">Medium (100-1000)</option>
+                                <option value="small">Small (<100)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="simulator-results">
+                        <div class="result-metric">
+                            <span class="metric-label">Genetic Diversity Loss:</span>
+                            <span class="metric-value" id="genetic-diversity">35%</span>
+                            <div class="risk-indicator">
+                                <div class="risk-bar" id="diversity-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Gene Flow Reduction:</span>
+                            <span class="metric-value" id="gene-flow">55%</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill flow-fill" id="flow-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Inbreeding Risk:</span>
+                            <span class="metric-value" id="inbreeding-risk">High</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill inbreeding-fill" id="inbreeding-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Population Viability:</span>
+                            <span class="metric-value" id="viability-status">Moderate</span>
+                            <div class="viability-indicators">
+                                <span class="indicator" id="short-term">📈 Short-term</span>
+                                <span class="indicator" id="long-term">📉 Long-term</span>
+                                <span class="indicator" id="extinction-risk">💀 Extinction</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-icon">🛣️</span>
+                <span class="brand-text">RoadEcology Hub</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#science" class="nav-link active" data-tab="science">Science</a></li>
+                <li><a href="#impacts" class="nav-link" data-tab="impacts">Impacts</a></li>
+                <li><a href="#mechanisms" class="nav-link" data-tab="mechanisms">Mechanisms</a></li>
+                <li><a href="#solutions" class="nav-link" data-tab="solutions">Solutions</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section id="science" class="content-section active">
+            <div class="section-container">
+                <h2>The Science of Habitat Fragmentation</h2>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>Road Barrier Effects</h3>
+                        <div class="barrier-effects">
+                            <div class="effect-category">
+                                <h4>🚗 Physical Barriers</h4>
+                                <div class="effect-metrics">
+                                    <div class="metric">Collision mortality: <span id="collision-rate">15-30 deaths/km/year</span></div>
+                                    <div class="metric">Barrier permeability: <span id="barrier-permeability">20-80% reduction</span></div>
+                                    <div class="metric">Crossing success: <span id="crossing-success">5-25% for small mammals</span></div>
+                                    <div class="metric">Behavioral avoidance: <span id="avoidance-distance">50-200m buffer zones</span></div>
+                                </div>
+                            </div>
+                            <div class="effect-category">
+                                <h4>🌍 Landscape Fragmentation</h4>
+                                <div class="effect-metrics">
+                                    <div class="metric">Patch isolation: <span id="patch-isolation">2-5x increase</span></div>
+                                    <div class="metric">Habitat area loss: <span id="area-loss">30-60% effective reduction</span></div>
+                                    <div class="metric">Edge effects: <span id="edge-effects">10-30% of habitat affected</span></div>
+                                    <div class="metric">Connectivity loss: <span id="connectivity-loss">40-80% reduction</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h3>Genetic Drift Dynamics</h3>
+                        <div class="drift-chart">
+                            <canvas id="driftChart"></canvas>
+                        </div>
+                        <div class="drift-legend">
+                            <div class="legend-item">
+                                <span class="legend-color heterozygosity"></span>
+                                <span>Heterozygosity Loss</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color differentiation"></span>
+                                <span>Population Differentiation</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color inbreeding"></span>
+                                <span>Inbreeding Coefficient</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color viability"></span>
+                                <span>Population Viability</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h3>Small Mammal Vulnerability</h3>
+                        <div class="vulnerability-factors">
+                            <div class="vulnerability-metric">
+                                <div class="circle-value">High</div>
+                                <div class="circle-label">Collision Risk</div>
+                            </div>
+                            <div class="vulnerability-arrow">→</div>
+                            <div class="vulnerability-metric">
+                                <div class="circle-value">Low</div>
+                                <div class="circle-label">Crossing Ability</div>
+                            </div>
+                            <div class="vulnerability-stats">
+                                <div class="stat">Body size: <5% road crossing success</div>
+                                <div class="stat">Home range: 0.1-10 ha typical</div>
+                                <div class="stat">Generation time: 3-12 months</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="impacts" class="content-section">
+            <div class="section-container">
+                <h2>Regional Impacts and Case Studies</h2>
+                <div class="case-studies">
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>European Hedgehog</h3>
+                            <span class="case-location">United Kingdom</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">250,000 km roads</div>
+                                <div class="stat">30-50% decline</div>
+                                <div class="stat">25% heterozygosity loss</div>
+                            </div>
+                            <p>30-50% population decline, 25% genetic diversity loss, increased inbreeding depression.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Deer Mouse</h3>
+                            <span class="case-location">California, USA</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">I-80 corridor</div>
+                                <div class="stat">5km gaps</div>
+                                <div class="stat">Founder effects</div>
+                            </div>
+                            <p>Genetic differentiation across 5km road gaps, founder effects in isolated populations.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Bush Rat</h3>
+                            <span class="case-location">Victoria, Australia</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">180,000 km roads</div>
+                                <div class="stat">40% area loss</div>
+                                <div class="stat">60% migration reduction</div>
+                            </div>
+                            <p>40% effective habitat reduction, 60% migration rate decline, increased extinction risk.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Common Vole</h3>
+                            <span class="case-location">Germany</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">High traffic</div>
+                                <div class="stat">Bottlenecks</div>
+                                <div class="stat">Source-sink breakdown</div>
+                            </div>
+                            <p>Repeated population bottlenecks, breakdown of metapopulation dynamics.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="global-impact">
+                    <h3>Global Road Density Trends</h3>
+                    <canvas id="roadDensityChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="mechanisms" class="content-section">
+            <div class="section-container">
+                <h2>Mechanisms of Genetic Isolation</h2>
+                <div class="mechanism-explorer">
+                    <div class="mechanism-tabs">
+                        <button class="mechanism-tab active" data-mechanism="physical">Physical</button>
+                        <button class="mechanism-tab" data-mechanism="behavioral">Behavioral</button>
+                        <button class="mechanism-tab" data-mechanism="genetic">Genetic</button>
+                    </div>
+
+                    <div class="mechanism-content">
+                        <div class="mechanism-panel active" id="physical-panel">
+                            <h3>Physical Barrier Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Road Mortality</h4>
+                                    <p>Direct mortality from vehicle collisions reduces population sizes and creates demographic bottlenecks that accelerate genetic drift.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Habitat Division</h4>
+                                    <p>Roads divide continuous habitats into isolated patches, preventing movement and gene exchange between populations.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Edge Effects</h4>
+                                    <p>Road-adjacent habitats experience altered microclimates, increased predation, and reduced habitat quality.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mechanism-panel" id="behavioral-panel">
+                            <h3>Behavioral Barrier Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Avoidance Behavior</h4>
+                                    <p>Animals avoid road corridors due to traffic noise, vehicle movement, and perceived danger, creating behavioral barriers.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Sensory Disruption</h4>
+                                    <p>Light and noise pollution interfere with communication, navigation, and mate-finding behaviors.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Movement Patterns</h4>
+                                    <p>Altered movement corridors and reduced exploratory behavior limit gene flow opportunities.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mechanism-panel" id="genetic-panel">
+                            <h3>Genetic Drift Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Bottleneck Effects</h4>
+                                    <p>Sudden population reductions from road mortality create genetic bottlenecks with loss of rare alleles.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Founder Effects</h4>
+                                    <p>New populations established by few individuals carry only a subset of the original genetic variation.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Inbreeding Depression</h4>
+                                    <p>Reduced population sizes increase the probability of mating between close relatives, reducing fitness.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solutions" class="content-section">
+            <div class="section-container">
+                <h2>Management and Mitigation Strategies</h2>
+                <div class="solutions-framework">
+                    <div class="solution-category">
+                        <h3>Road Planning and Design</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Environmental Impact Assessment</h4>
+                                <p>Comprehensive fragmentation analysis in road planning, including genetic connectivity mapping.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Connectivity Planning</h4>
+                                <p>Identification and protection of wildlife corridors and genetic connectivity zones.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Alternative Alignments</h4>
+                                <p>Road routing to avoid critical habitat patches and movement corridors.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="solution-category">
+                        <h3>Mitigation Structures</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Wildlife Crossings</h4>
+                                <p>Bridges, tunnels, and culverts designed for small mammal movement and gene flow.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Directional Fencing</h4>
+                                <p>Fencing systems that guide animals to safe crossing locations.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Habitat Linkages</h4>
+                                <p>Vegetated corridors connecting fragmented habitat patches.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="solution-category">
+                        <h3>Active Management</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Genetic Rescue</h4>
+                                <p>Translocation of individuals to restore genetic diversity in inbred populations.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Population Supplementation</h4>
+                                <p>Enhancement of small populations through captive breeding and release.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Habitat Restoration</h4>
+                                <p>Creation of new habitat patches to increase population sizes and connectivity.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="policy-framework">
+                        <h3>Policy and Research Framework</h3>
+                        <div class="policy-actions">
+                            <div class="policy-item">
+                                <h4>Regulatory Approaches</h4>
+                                <ul>
+                                    <li>Mandatory road ecology assessments in transportation planning</li>
+                                    <li>Connectivity requirements in environmental permitting</li>
+                                    <li>Mitigation funding through developer impact fees</li>
+                                    <li>Long-term monitoring requirements for mitigation effectiveness</li>
+                                </ul>
+                            </div>
+                            <div class="policy-item">
+                                <h4>Research Priorities</h4>
+                                <ul>
+                                    <li>Species-specific barrier effects and crossing behaviors</li>
+                                    <li>Genetic monitoring of fragmentation impacts</li>
+                                    <li>Cost-benefit analysis of mitigation strategies</li>
+                                    <li>Climate change interactions with road fragmentation</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>Issue #2328</h4>
+                <p>Road Network Expansion and Genetic Drift in Small Mammals</p>
+                <p>Studying loss of gene flow across increasingly fragmented landscapes</p>
+            </div>
+            <div class="footer-section">
+                <h4>Key Findings</h4>
+                <ul>
+                    <li>2.5 million km of new roads since 2000</li>
+                    <li>30-70% reduction in gene flow</li>
+                    <li>15-40% loss of genetic diversity</li>
+                    <li>$2.3 billion annual mitigation costs</li>
+                    <li>25+ small mammal species affected</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Management Actions</h4>
+                <ul>
+                    <li>Implement wildlife crossing structures</li>
+                    <li>Develop connectivity planning frameworks</li>
+                    <li>Conduct genetic rescue programs</li>
+                    <li>Establish monitoring and research programs</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <a href="#science">Fragmentation Science</a>
+                    <a href="#impacts">Case Studies</a>
+                    <a href="#mechanisms">Genetic Mechanisms</a>
+                    <a href="#solutions">Mitigation Strategies</a>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Environment Animal Safety Hub - Issue #2328: Road Ecology Research</p>
+        </div>
+    </footer>
+
+    <script src="road-network-expansion-genetic-drift-small-mammals.js"></script>
+</body>
+</html>

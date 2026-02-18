@@ -1,0 +1,429 @@
+/* Water Conservation Challenge Styles */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto 500px; /* Add sufficient bottom margin to ensure all buttons are visible */
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    min-height: calc(100vh - 200px); /* Ensure minimum height */
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.title {
+    font-size: 2.5rem;
+    color: #007bff;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,123,255,0.3);
+    padding-top: 60px;
+    word-wrap: break-word;
+    line-height: 1.2;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.stat {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    padding: 15px 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    min-width: 80px;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.game-area {
+    position: relative;
+    background: linear-gradient(135deg, #e8f5e8, #f1f8e9);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    min-height: 400px;
+}
+
+.droplets-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.droplet {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #4fc3f7, #29b6f6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    cursor: grab;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.droplet:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+.droplet:active {
+    cursor: grabbing;
+    transform: scale(0.95);
+}
+
+.droplet span {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.containers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.container {
+    height: 150px;
+    background: linear-gradient(135deg, #fff, #f5f5f5);
+    border: 3px solid #ddd;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.container:hover {
+    border-color: #007bff;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+.container-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, #4fc3f7, #29b6f6, #0277bd);
+    transition: height 0.5s ease;
+    border-radius: 0 0 7px 7px;
+}
+
+.container-label {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #333;
+    background: rgba(255,255,255,0.8);
+    padding: 2px 5px;
+    border-radius: 3px;
+}
+
+.container.full {
+    border-color: #28a745;
+    box-shadow: 0 0 15px rgba(40,167,69,0.3);
+}
+
+.obstacles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.leak {
+    position: absolute;
+    font-size: 2rem;
+    animation: drip 2s infinite;
+    opacity: 0.7;
+}
+
+@keyframes drip {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 10;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    border: 4px solid #007bff;
+    margin-top: 20px;
+}
+
+.controls button {
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: 2px solid transparent;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    min-width: 120px;
+    display: inline-block;
+    text-align: center;
+    margin: 5px;
+}
+
+#startGameBtn {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+}
+
+#startGameBtn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #218838, #1aa085);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+#pauseGameBtn {
+    background: linear-gradient(135deg, #ffc107, #fd7e14);
+    color: white;
+}
+
+#pauseGameBtn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #e0a800, #dc3545);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+#resetGameBtn {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+}
+
+#resetGameBtn:hover {
+    background: linear-gradient(135deg, #bd2130, #a02622);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+.controls button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.tips-section, .badges-section {
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    border: 2px solid #ffc107;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.tips-section h3, .badges-section h3 {
+    color: #856404;
+    margin-bottom: 10px;
+}
+
+.badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.badge {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    max-width: 400px;
+    width: 90%;
+}
+
+.modal-title {
+    font-size: 1.8rem;
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+.modal-text {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.modal-score {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 20px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-modal {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-next-level, .btn-play-again {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+}
+
+.btn-home {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+}
+
+.btn-modal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .title {
+        font-size: 2rem;
+    }
+
+    .stats {
+        gap: 15px;
+    }
+
+    .stat {
+        padding: 10px 15px;
+        min-width: 60px;
+    }
+
+    .droplet {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+
+    .containers-grid {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 15px;
+    }
+
+    .container {
+        height: 120px;
+    }
+
+    .controls {
+        gap: 10px;
+    }
+
+    .controls button {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+
+    .stats {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .droplets-container {
+        gap: 8px;
+    }
+
+    .droplet {
+        width: 45px;
+        height: 45px;
+        font-size: 1rem;
+    }
+
+    .modal-content {
+        padding: 20px;
+    }
+
+    .modal-title {
+        font-size: 1.5rem;
+    }
+}

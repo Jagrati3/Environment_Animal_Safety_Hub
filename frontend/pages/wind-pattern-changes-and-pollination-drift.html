@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wind Pattern Changes and Pollination Drift - EWOC</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/pages/wind-pattern-changes-and-pollination-drift.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <div id="navbar-placeholder"></div>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-wind"></i> Wind Pattern Changes and Pollination Drift</h1>
+            <p>Investigating altered pollen dispersal under shifting atmospheric circulation</p>
+        </div>
+    </header>
+
+    <!-- Impact Overview -->
+    <section class="impact-overview">
+        <div class="container">
+            <div class="overview-grid">
+                <div class="overview-card">
+                    <i class="fas fa-cloud"></i>
+                    <h3>Atmospheric Shifts</h3>
+                    <p>Climate change alters global wind patterns and circulation systems</p>
+                </div>
+                <div class="overview-card">
+                    <i class="fas fa-seedling"></i>
+                    <h3>Pollen Transport</h3>
+                    <p>Wind-driven dispersal affects plant reproduction worldwide</p>
+                </div>
+                <div class="overview-card">
+                    <i class="fas fa-leaf"></i>
+                    <h3>Ecosystem Impact</h3>
+                    <p>Changes cascade through food webs and biodiversity</p>
+                </div>
+                <div class="overview-card">
+                    <i class="fas fa-tractor"></i>
+                    <h3>Agricultural Effects</h3>
+                    <p>Crop pollination and yields affected by wind pattern changes</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs-container">
+        <div class="container">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="overview">
+                    <i class="fas fa-info-circle"></i> Overview
+                </button>
+                <button class="tab-btn" data-tab="patterns">
+                    <i class="fas fa-wind"></i> Wind Patterns
+                </button>
+                <button class="tab-btn" data-tab="dispersal">
+                    <i class="fas fa-seedling"></i> Pollen Dispersal
+                </button>
+                <button class="tab-btn" data-tab="impacts">
+                    <i class="fas fa-exclamation-triangle"></i> Ecological Impacts
+                </button>
+                <button class="tab-btn" data-tab="mitigation">
+                    <i class="fas fa-shield-alt"></i> Mitigation
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab Content -->
+    <main class="main-content">
+        <div class="container">
+
+            <!-- Overview Tab -->
+            <div id="overview-tab" class="tab-content active">
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3><i class="fas fa-globe-americas"></i> Global Circulation Changes</h3>
+                        <ul>
+                            <li><strong>Jet Stream Shifts:</strong> Increased waviness and meridionality</li>
+                            <li><strong>Monsoon Modifications:</strong> Altered timing and intensity</li>
+                            <li><strong>Trade Wind Changes:</strong> Speed and directional variations</li>
+                        </ul>
+                    </div>
+                    <div class="content-card">
+                        <h3><i class="fas fa-dna"></i> Pollen Biology</h3>
+                        <ul>
+                            <li><strong>Anemophilous Species:</strong> Wind-pollinated plants</li>
+                            <li><strong>Aerodynamic Properties:</strong> Size, shape, and density factors</li>
+                            <li><strong>Dispersal Mechanisms:</strong> Turbulent transport and advection</li>
+                        </ul>
+                    </div>
+                    <div class="content-card">
+                        <h3><i class="fas fa-chart-line"></i> Impact Trends</h3>
+                        <div class="chart-container">
+                            <canvas id="impactTrendsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wind Patterns Tab -->
+            <div id="patterns-tab" class="tab-content">
+                <div class="wind-visualization">
+                    <h3><i class="fas fa-wind"></i> Atmospheric Circulation Simulation</h3>
+                    <div class="simulation-controls">
+                        <div class="control-group">
+                            <label for="climateScenario">Climate Scenario:</label>
+                            <select id="climateScenario">
+                                <option value="current">Current Climate</option>
+                                <option value="moderate">Moderate Warming (+2°C)</option>
+                                <option value="extreme">Extreme Warming (+4°C)</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="seasonSelect">Season:</label>
+                            <select id="seasonSelect">
+                                <option value="winter">Winter</option>
+                                <option value="spring">Spring</option>
+                                <option value="summer">Summer</option>
+                                <option value="fall">Fall</option>
+                            </select>
+                        </div>
+                        <button id="simulatePatternsBtn" class="simulate-btn">
+                            <i class="fas fa-play"></i> Update Simulation
+                        </button>
+                    </div>
+                    <div class="wind-patterns-grid">
+                        <div class="pattern-panel">
+                            <h4>Jet Stream Patterns</h4>
+                            <div class="chart-container">
+                                <canvas id="jetStreamChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="pattern-panel">
+                            <h4>Trade Wind Systems</h4>
+                            <div class="chart-container">
+                                <canvas id="tradeWindsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pattern-info">
+                        <div class="info-panel">
+                            <h4>Current Climate</h4>
+                            <p>Stable atmospheric circulation with predictable wind patterns</p>
+                        </div>
+                        <div class="info-panel">
+                            <h4>Future Climate</h4>
+                            <p>Increased variability and extreme weather events</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pollen Dispersal Tab -->
+            <div id="dispersal-tab" class="tab-content">
+                <div class="dispersal-simulation">
+                    <h3><i class="fas fa-seedling"></i> Pollen Dispersal Modeling</h3>
+                    <div class="dispersal-controls">
+                        <div class="control-group">
+                            <label for="windSpeed">Wind Speed (km/h):</label>
+                            <input type="range" id="windSpeed" min="5" max="50" value="20">
+                            <span id="windSpeedValue">20</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="windDirection">Wind Direction:</label>
+                            <select id="windDirection">
+                                <option value="north">North</option>
+                                <option value="south">South</option>
+                                <option value="east">East</option>
+                                <option value="west">West</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="pollenType">Pollen Type:</label>
+                            <select id="pollenType">
+                                <option value="light">Light (Trees)</option>
+                                <option value="medium">Medium (Grasses)</option>
+                                <option value="heavy">Heavy (Crops)</option>
+                            </select>
+                        </div>
+                        <button id="simulateDispersalBtn" class="simulate-btn">
+                            <i class="fas fa-play"></i> Run Dispersal
+                        </button>
+                    </div>
+                    <div class="dispersal-canvas-container">
+                        <canvas id="dispersalCanvas" width="800" height="400"></canvas>
+                    </div>
+                    <div class="dispersal-stats">
+                        <div class="stat-item">
+                            <h4>Max Distance</h4>
+                            <p id="maxDistance">0 km</p>
+                        </div>
+                        <div class="stat-item">
+                            <h4>Effective Range</h4>
+                            <p id="effectiveRange">0 km</p>
+                        </div>
+                        <div class="stat-item">
+                            <h4>Deposition Rate</h4>
+                            <p id="depositionRate">0%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ecological Impacts Tab -->
+            <div id="impacts-tab" class="tab-content">
+                <div class="impacts-grid">
+                    <div class="impact-card">
+                        <h3><i class="fas fa-tree"></i> Plant Reproduction</h3>
+                        <ul>
+                            <li><strong>Pollen Limitation:</strong> Reduced fertilization success</li>
+                            <li><strong>Seed Production:</strong> Variable reproductive output</li>
+                            <li><strong>Genetic Diversity:</strong> Altered gene flow patterns</li>
+                        </ul>
+                    </div>
+                    <div class="impact-card">
+                        <h3><i class="fas fa-users"></i> Human Health</h3>
+                        <ul>
+                            <li><strong>Allergy Seasons:</strong> Extended and intensified</li>
+                            <li><strong>Respiratory Issues:</strong> Increased pollen exposure</li>
+                            <li><strong>Geographic Shifts:</strong> New allergy zones</li>
+                        </ul>
+                    </div>
+                    <div class="impact-card">
+                        <h3><i class="fas fa-chart-bar"></i> Impact Assessment</h3>
+                        <div class="chart-container">
+                            <canvas id="ecologicalImpactsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="species-impacts">
+                    <h3><i class="fas fa-dna"></i> Species-Specific Effects</h3>
+                    <div class="species-comparison">
+                        <div class="species-item">
+                            <h4>Wind-Pollinated Species</h4>
+                            <p><strong>Advantages:</strong> Long-distance dispersal</p>
+                            <p><strong>Risks:</strong> Unpredictable transport</p>
+                            <p><strong>Adaptation:</strong> High pollen production</p>
+                        </div>
+                        <div class="species-item">
+                            <h4>Insect-Pollinated Species</h4>
+                            <p><strong>Advantages:</strong> Targeted pollination</p>
+                            <p><strong>Risks:</strong> Pollinator declines</p>
+                            <p><strong>Adaptation:</strong> Attractive floral displays</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mitigation Tab -->
+            <div id="mitigation-tab" class="tab-content">
+                <div class="mitigation-grid">
+                    <div class="mitigation-card">
+                        <h3><i class="fas fa-tractor"></i> Agricultural Strategies</h3>
+                        <ul>
+                            <li><strong>Crop Breeding:</strong> Wind-tolerant varieties</li>
+                            <li><strong>Management Timing:</strong> Optimal pollination windows</li>
+                            <li><strong>Protected Cultivation:</strong> Greenhouse systems</li>
+                        </ul>
+                    </div>
+                    <div class="mitigation-card">
+                        <h3><i class="fas fa-tree"></i> Conservation Approaches</h3>
+                        <ul>
+                            <li><strong>Habitat Connectivity:</strong> Wind corridor preservation</li>
+                            <li><strong>Species Translocation:</strong> Assisted migration</li>
+                            <li><strong>Genetic Reserves:</strong> Biodiversity preservation</li>
+                        </ul>
+                    </div>
+                    <div class="mitigation-card">
+                        <h3><i class="fas fa-microscope"></i> Research & Monitoring</h3>
+                        <ul>
+                            <li><strong>Pollen Networks:</strong> Real-time monitoring</li>
+                            <li><strong>Climate Modeling:</strong> Wind pattern predictions</li>
+                            <li><strong>Impact Assessments:</strong> Vulnerability mapping</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="future-projections">
+                    <h3><i class="fas fa-crystal-ball"></i> Future Scenarios</h3>
+                    <div class="scenario-grid">
+                        <div class="scenario-item">
+                            <h4>Mild Climate Change</h4>
+                            <p>Gradual adaptation possible with management interventions</p>
+                        </div>
+                        <div class="scenario-item">
+                            <h4>Rapid Climate Change</h4>
+                            <p>Significant ecosystem disruptions requiring intensive mitigation</p>
+                        </div>
+                        <div class="scenario-item">
+                            <h4>Extreme Climate Change</h4>
+                            <p>Major biodiversity losses with limited recovery potential</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <script src="../js/pages/wind-pattern-changes-and-pollination-drift.js"></script>
+</body>
+</html>

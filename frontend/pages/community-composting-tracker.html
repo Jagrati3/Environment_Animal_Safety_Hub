@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Community Composting Tracker</title>
+  <link rel="stylesheet" href="../css/community-composting-tracker.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="composting-app">
+    <!-- Navbar will be injected -->
+    <div id="navbar-container"></div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1><i class="fas fa-leaf"></i> Community Composting Tracker</h1>
+          <p>Track your composting efforts, learn tips, and compete with your neighbors to reduce waste</p>
+        </div>
+        <div class="hero-visual">
+          <div class="compost-pile">
+            <div class="pile" id="compostLevel"></div>
+            <div class="level-text">
+              <span id="totalCompost">0</span>
+              <span>kg</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Container -->
+    <div class="container">
+      <!-- Community Leaderboard -->
+      <section class="leaderboard-section">
+        <div class="section-header">
+          <h2><i class="fas fa-trophy"></i> Community Leaderboard</h2>
+          <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">All Time</button>
+            <button class="filter-btn" data-filter="month">This Month</button>
+            <button class="filter-btn" data-filter="week">This Week</button>
+          </div>
+        </div>
+        <div class="leaderboard-grid" id="leaderboard">
+          <!-- Leaderboard will be populated -->
+        </div>
+      </section>
+
+      <!-- Stats & Contribution -->
+      <div class="main-grid">
+        <!-- Left Column -->
+        <div class="left-column">
+          <!-- My Stats -->
+          <section class="card stats-card">
+            <h2><i class="fas fa-chart-bar"></i> My Stats</h2>
+            <div class="stats-container">
+              <div class="stat-item">
+                <div class="stat-label">Total Composted</div>
+                <div class="stat-value" id="myTotal">0 kg</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-label">This Month</div>
+                <div class="stat-value" id="myMonth">0 kg</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-label">My Rank</div>
+                <div class="stat-value" id="myRank">#0</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-label">My Streak</div>
+                <div class="stat-value" id="myStreak">0 days</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Add Compost Entry -->
+          <section class="card add-entry-card">
+            <h2><i class="fas fa-plus-circle"></i> Add Compost Entry</h2>
+            <form id="compostForm" class="compost-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="compostDate">Date</label>
+                  <input type="date" id="compostDate" required />
+                </div>
+                <div class="form-group">
+                  <label for="compostType">Type</label>
+                  <select id="compostType" required>
+                    <option value="">Select type</option>
+                    <optgroup label="Food Waste">
+                      <option value="fruits">Fruits & Vegetables</option>
+                      <option value="grains">Grains & Bread</option>
+                      <option value="coffee">Coffee Grounds</option>
+                      <option value="eggshells">Eggshells</option>
+                      <option value="other-food">Other Food</option>
+                    </optgroup>
+                    <optgroup label="Yard Waste">
+                      <option value="leaves">Leaves</option>
+                      <option value="grass">Grass Clippings</option>
+                      <option value="branches">Small Branches</option>
+                      <option value="flowers">Flowers & Plants</option>
+                    </optgroup>
+                    <optgroup label="Paper & Cardboard">
+                      <option value="newspaper">Newspaper</option>
+                      <option value="cardboard">Cardboard</option>
+                      <option value="paper-bags">Paper Bags</option>
+                      <option value="shredded">Shredded Paper</option>
+                    </optgroup>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="compostWeight">Weight (kg)</label>
+                  <input
+                    type="number"
+                    id="compostWeight"
+                    placeholder="0.0"
+                    step="0.1"
+                    min="0"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="compostMethod">Method</label>
+                  <select id="compostMethod" required>
+                    <option value="home">Home Compost</option>
+                    <option value="community">Community Bin</option>
+                    <option value="municipal">Municipal Program</option>
+                    <option value="worm">Worm Farming</option>
+                    <option value="bokashi">Bokashi</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="compostNotes">Notes (Optional)</label>
+                <textarea id="compostNotes" placeholder="Add notes about your composting..." rows="3"></textarea>
+              </div>
+
+              <div class="estimated-impact">
+                <p><i class="fas fa-leaf"></i> Waste Diverted: <strong id="estimatedWaste">0</strong> kg</p>
+              </div>
+
+              <button type="submit" class="btn-primary btn-large">
+                <i class="fas fa-check"></i> Log Compost
+              </button>
+            </form>
+          </section>
+
+          <!-- Recent Activity -->
+          <section class="card activity-card">
+            <div class="card-header">
+              <h2><i class="fas fa-history"></i> Recent Activity</h2>
+              <button class="btn-icon" id="viewAllBtn">
+                <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+            <div class="activity-list" id="activityList">
+              <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <p>No composting entries yet. Start composting!</p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+          <!-- Composting Tips -->
+          <section class="card tips-card">
+            <h2><i class="fas fa-lightbulb"></i> Composting Tips</h2>
+            <div class="tips-list" id="tipsList"></div>
+          </section>
+
+          <!-- Impact Chart -->
+          <section class="card chart-card">
+            <h2><i class="fas fa-pie-chart"></i> Waste by Type</h2>
+            <div class="chart-container">
+              <canvas id="wasteChart"></canvas>
+            </div>
+          </section>
+
+          <!-- Community Stats -->
+          <section class="card community-card">
+            <h2><i class="fas fa-users"></i> Community Impact</h2>
+            <div class="community-stats">
+              <div class="community-stat">
+                <div class="stat-icon">
+                  <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-content">
+                  <div class="label">Active Members</div>
+                  <div class="value" id="communityMembers">0</div>
+                </div>
+              </div>
+              <div class="community-stat">
+                <div class="stat-icon">
+                  <i class="fas fa-leaf"></i>
+                </div>
+                <div class="stat-content">
+                  <div class="label">Total Composted</div>
+                  <div class="value" id="communityTotal">0 kg</div>
+                </div>
+              </div>
+              <div class="community-stat">
+                <div class="stat-icon">
+                  <i class="fas fa-tree"></i>
+                </div>
+                <div class="stat-content">
+                  <div class="label">CO₂ Avoided</div>
+                  <div class="value" id="communityEmissions">0 kg</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Achievements -->
+          <section class="card achievements-card">
+            <h2><i class="fas fa-award"></i> Achievements</h2>
+            <div class="achievements-grid" id="achievementsGrid"></div>
+          </section>
+
+          <!-- Weekly Chart -->
+          <section class="card trend-card">
+            <h2><i class="fas fa-chart-line"></i> Weekly Trend</h2>
+            <div class="chart-container">
+              <canvas id="trendChart"></canvas>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- Competition Brackets -->
+      <section class="card brackets-section">
+        <h2><i class="fas fa-fire"></i> Friendly Competitions</h2>
+        <div class="brackets-grid" id="bracketsGrid"></div>
+      </section>
+    </div>
+
+    <!-- Footer will be injected -->
+    <div id="footer-container"></div>
+  </div>
+
+  <script src="../js/community-composting-tracker.js"></script>
+</body>
+</html>

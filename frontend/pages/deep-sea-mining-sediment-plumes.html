@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep-Sea Mining Sediment Plumes - EWOC</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/pages/deep-sea-mining-sediment-plumes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <div id="navbar-placeholder"></div>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-water"></i> Deep-Sea Mining Sediment Plumes</h1>
+            <p>Analyzing smothering impacts on slow-growing benthic communities</p>
+        </div>
+    </header>
+
+    <!-- Impact Overview -->
+    <section class="impact-overview">
+        <div class="container">
+            <div class="overview-grid">
+                <div class="overview-card">
+                    <i class="fas fa-ship"></i>
+                    <h3>Mining Operations</h3>
+                    <p>Deep-sea mining for valuable minerals creates massive sediment plumes</p>
+                </div>
+                <div class="overview-card">
+                    <i class="fas fa-cloud"></i>
+                    <h3>Sediment Dispersion</h3>
+                    <p>Particles spread over vast areas, affecting benthic habitats</p>
+                </div>
+                <div class="overview-card">
+                    <i class="fas fa-fish"></i>
+                    <h3>Benthic Communities</h3>
+                    <p>Slow-growing organisms face smothering and habitat loss</p>
+                </div>
+                <div class="overview-card">
+                    <i class="fas fa-clock"></i>
+                    <h3>Long-term Recovery</h3>
+                    <p>Decades to centuries needed for ecosystem restoration</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs-container">
+        <div class="container">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="overview">
+                    <i class="fas fa-info-circle"></i> Overview
+                </button>
+                <button class="tab-btn" data-tab="plumes">
+                    <i class="fas fa-cloud"></i> Sediment Plumes
+                </button>
+                <button class="tab-btn" data-tab="impacts">
+                    <i class="fas fa-exclamation-triangle"></i> Benthic Impacts
+                </button>
+                <button class="tab-btn" data-tab="species">
+                    <i class="fas fa-fish"></i> Species Vulnerability
+                </button>
+                <button class="tab-btn" data-tab="mitigation">
+                    <i class="fas fa-shield-alt"></i> Mitigation
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab Content -->
+    <main class="main-content">
+        <div class="container">
+
+            <!-- Overview Tab -->
+            <div id="overview-tab" class="tab-content active">
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3><i class="fas fa-industry"></i> Mining Methods</h3>
+                        <ul>
+                            <li><strong>Nodule Collection:</strong> Harvesting polymetallic nodules from abyssal plains</li>
+                            <li><strong>SMS Mining:</strong> Extracting minerals from hydrothermal vents</li>
+                            <li><strong>Crust Mining:</strong> Removing cobalt-rich ferromanganese crusts from seamounts</li>
+                        </ul>
+                    </div>
+                    <div class="content-card">
+                        <h3><i class="fas fa-wave-square"></i> Plume Formation</h3>
+                        <ul>
+                            <li><strong>Resuspension:</strong> Mining activities disturb seafloor sediments</li>
+                            <li><strong>Discharge:</strong> Return water and tailings create near-field plumes</li>
+                            <li><strong>Dispersion:</strong> Currents transport sediments over vast distances</li>
+                        </ul>
+                    </div>
+                    <div class="content-card">
+                        <h3><i class="fas fa-chart-line"></i> Impact Scale</h3>
+                        <div class="chart-container">
+                            <canvas id="impactScaleChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sediment Plumes Tab -->
+            <div id="plumes-tab" class="tab-content">
+                <div class="plume-visualization">
+                    <h3><i class="fas fa-cloud"></i> Plume Dispersion Simulation</h3>
+                    <div class="simulation-controls">
+                        <div class="control-group">
+                            <label for="miningIntensity">Mining Intensity:</label>
+                            <input type="range" id="miningIntensity" min="1" max="10" value="5">
+                            <span id="intensityValue">5</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="currentSpeed">Current Speed:</label>
+                            <input type="range" id="currentSpeed" min="1" max="10" value="3">
+                            <span id="currentValue">3</span>
+                        </div>
+                        <button id="simulateBtn" class="simulate-btn">
+                            <i class="fas fa-play"></i> Run Simulation
+                        </button>
+                    </div>
+                    <div class="plume-canvas-container">
+                        <canvas id="plumeCanvas" width="800" height="400"></canvas>
+                    </div>
+                    <div class="plume-info">
+                        <div class="info-panel">
+                            <h4>Near-Field Plume</h4>
+                            <p>High concentration, limited spatial extent (1-5 km)</p>
+                        </div>
+                        <div class="info-panel">
+                            <h4>Far-Field Plume</h4>
+                            <p>Lower concentration, extensive coverage (up to 100+ km)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Benthic Impacts Tab -->
+            <div id="impacts-tab" class="tab-content">
+                <div class="impacts-grid">
+                    <div class="impact-card">
+                        <h3><i class="fas fa-skull-crossbones"></i> Smothering Mechanism</h3>
+                        <ul>
+                            <li><strong>Sediment Deposition:</strong> Particles settle on benthic organisms</li>
+                            <li><strong>Burial Effects:</strong> Complete coverage prevents feeding and respiration</li>
+                            <li><strong>Suffocation:</strong> Clogging of respiratory structures</li>
+                        </ul>
+                    </div>
+                    <div class="impact-card">
+                        <h3><i class="fas fa-clock"></i> Recovery Timeline</h3>
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <h4>Acute Phase (0-1 year)</h4>
+                                    <p>Immediate smothering and mortality</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <h4>Recovery Phase (1-10 years)</h4>
+                                    <p>Slow recolonization begins</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <h4>Long-term (10-100+ years)</h4>
+                                    <p>Full ecosystem restoration</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="impact-card">
+                        <h3><i class="fas fa-chart-bar"></i> Impact Assessment</h3>
+                        <div class="chart-container">
+                            <canvas id="impactAssessmentChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Species Vulnerability Tab -->
+            <div id="species-tab" class="tab-content">
+                <div class="species-grid">
+                    <div class="species-card">
+                        <div class="species-header">
+                            <i class="fas fa-tree"></i>
+                            <h3>Cold-Water Corals</h3>
+                        </div>
+                        <p><strong>Vulnerability:</strong> High</p>
+                        <p><strong>Lifespan:</strong> Hundreds to thousands of years</p>
+                        <p><strong>Growth Rate:</strong> Millimeters per year</p>
+                        <p><strong>Impact:</strong> Sediment accumulation on polyps and branches</p>
+                    </div>
+                    <div class="species-card">
+                        <div class="species-header">
+                            <i class="fas fa-spider"></i>
+                            <h3>Sponges</h3>
+                        </div>
+                        <p><strong>Vulnerability:</strong> High</p>
+                        <p><strong>Lifespan:</strong> Decades to centuries</p>
+                        <p><strong>Growth Rate:</strong> Millimeters per year</p>
+                        <p><strong>Impact:</strong> Clogging of ostia and oscula</p>
+                    </div>
+                    <div class="species-card">
+                        <div class="species-header">
+                            <i class="fas fa-star"></i>
+                            <h3>Echinoderms</h3>
+                        </div>
+                        <p><strong>Vulnerability:</strong> Medium-High</p>
+                        <p><strong>Lifespan:</strong> Years to decades</p>
+                        <p><strong>Growth Rate:</strong> Centimeters per year</p>
+                        <p><strong>Impact:</strong> Burial prevents deposit feeding</p>
+                    </div>
+                    <div class="species-card">
+                        <div class="species-header">
+                            <i class="fas fa-fish"></i>
+                            <h3>Molluscs</h3>
+                        </div>
+                        <p><strong>Vulnerability:</strong> Medium</p>
+                        <p><strong>Lifespan:</strong> Years to decades</p>
+                        <p><strong>Growth Rate:</strong> Millimeters to centimeters per year</p>
+                        <p><strong>Impact:</strong> Siphon clogging prevents water intake</p>
+                    </div>
+                </div>
+                <div class="vulnerability-chart">
+                    <h3><i class="fas fa-chart-pie"></i> Vulnerability Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="vulnerabilityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mitigation Tab -->
+            <div id="mitigation-tab" class="tab-content">
+                <div class="mitigation-grid">
+                    <div class="mitigation-card">
+                        <h3><i class="fas fa-cogs"></i> Mining Practices</h3>
+                        <ul>
+                            <li><strong>Sediment Management:</strong> Minimizing plume generation</li>
+                            <li><strong>Timing Restrictions:</strong> Avoiding sensitive periods</li>
+                            <li><strong>Technology:</strong> Closed-loop systems</li>
+                        </ul>
+                    </div>
+                    <div class="mitigation-card">
+                        <h3><i class="fas fa-gavel"></i> Regulatory Frameworks</h3>
+                        <ul>
+                            <li><strong>Environmental Assessments:</strong> Comprehensive baseline studies</li>
+                            <li><strong>Monitoring:</strong> Long-term plume tracking</li>
+                            <li><strong>Adaptive Management:</strong> Adjusting based on monitoring</li>
+                        </ul>
+                    </div>
+                    <div class="mitigation-card">
+                        <h3><i class="fas fa-map-marked-alt"></i> Conservation Measures</h3>
+                        <ul>
+                            <li><strong>Protected Areas:</strong> No-mining zones</li>
+                            <li><strong>Baseline Surveys:</strong> Pre-mining biodiversity assessments</li>
+                            <li><strong>Restoration:</strong> Active habitat rehabilitation</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="research-needs">
+                    <h3><i class="fas fa-microscope"></i> Research Priorities</h3>
+                    <div class="research-grid">
+                        <div class="research-item">
+                            <h4>Monitoring Technologies</h4>
+                            <p>Real-time plume tracking and benthic surveys</p>
+                        </div>
+                        <div class="research-item">
+                            <h4>Impact Modeling</h4>
+                            <p>Sediment transport and ecological response models</p>
+                        </div>
+                        <div class="research-item">
+                            <h4>Policy Development</h4>
+                            <p>International governance and sustainability criteria</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <script src="../js/pages/deep-sea-mining-sediment-plumes.js"></script>
+</body>
+</html>

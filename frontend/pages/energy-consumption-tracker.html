@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Energy Consumption Tracker ⚡ | EcoLife</title>
+  <link rel="stylesheet" href="../css/energy-consumption-tracker.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="energy-app">
+    <!-- Navbar will be injected -->
+    <div id="navbar-container"></div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1><i class="fas fa-bolt"></i> Energy Consumption Tracker</h1>
+          <p>Monitor your household energy usage, identify wastage areas, and reduce your carbon footprint!</p>
+        </div>
+        <div class="hero-visual">
+          <div class="energy-animation">
+            <div class="energy-pulse">
+              <i class="fas fa-plug"></i>
+              <div class="pulse-ring"></div>
+              <div class="pulse-ring delay-1"></div>
+              <div class="pulse-ring delay-2"></div>
+            </div>
+            <div class="energy-value">
+              <span id="totalEnergyKwh">0</span>
+              <span class="unit">kWh</span>
+            </div>
+            <p class="hero-stat">This Month</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Alert Banner -->
+    <div id="alertBanner" class="alert-banner hidden">
+      <i class="fas fa-exclamation-triangle"></i>
+      <span id="alertMessage"></span>
+      <button class="alert-close" onclick="closeAlert()">×</button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+      <!-- Quick Stats Dashboard -->
+      <section class="stats-dashboard">
+        <div class="stat-card today">
+          <div class="stat-icon">
+            <i class="fas fa-calendar-day"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Today's Usage</h3>
+            <p class="stat-value" id="todayUsage">0</p>
+            <span class="stat-unit">kWh</span>
+          </div>
+          <div class="stat-badge" id="todayStatus">Normal</div>
+        </div>
+
+        <div class="stat-card week">
+          <div class="stat-icon">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <div class="stat-content">
+            <h3>This Week</h3>
+            <p class="stat-value" id="weekUsage">0</p>
+            <span class="stat-unit">kWh</span>
+          </div>
+          <div class="stat-change" id="weekChange">0%</div>
+        </div>
+
+        <div class="stat-card cost">
+          <div class="stat-icon">
+            <i class="fas fa-dollar-sign"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Energy Cost</h3>
+            <p class="stat-value" id="energyCost">$0</p>
+            <span class="stat-unit">This Month</span>
+          </div>
+          <div class="stat-comparison" id="costTrend">Stable</div>
+        </div>
+
+        <div class="stat-card savings">
+          <div class="stat-icon">
+            <i class="fas fa-leaf"></i>
+          </div>
+          <div class="stat-content">
+            <h3>CO₂ Emissions</h3>
+            <p class="stat-value" id="co2Emissions">0</p>
+            <span class="stat-unit">kg</span>
+          </div>
+          <div class="goal-progress-mini">
+            <div class="progress-bar-mini">
+              <div class="progress-fill-mini" id="emissionProgressBar"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Log Appliance Usage Form -->
+      <section class="log-section">
+        <div class="section-header">
+          <h2><i class="fas fa-plus-circle"></i> Log Appliance Usage</h2>
+          <p>Track your appliances to understand your energy consumption patterns</p>
+        </div>
+
+        <div class="log-form-container">
+          <form id="applianceForm" class="appliance-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="applianceType">
+                  <i class="fas fa-tv"></i> Appliance Type
+                </label>
+                <select id="applianceType" required>
+                  <option value="">Select Appliance</option>
+                  <option value="ac">Air Conditioner (AC)</option>
+                  <option value="refrigerator">Refrigerator</option>
+                  <option value="tv">Television</option>
+                  <option value="lights">Lights (LED/CFL)</option>
+                  <option value="washing-machine">Washing Machine</option>
+                  <option value="water-heater">Water Heater</option>
+                  <option value="microwave">Microwave</option>
+                  <option value="fan">Ceiling Fan</option>
+                  <option value="computer">Computer/Laptop</option>
+                  <option value="dishwasher">Dishwasher</option>
+                  <option value="dryer">Clothes Dryer</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="powerRating">
+                  <i class="fas fa-plug"></i> Power Rating (Watts)
+                </label>
+                <input 
+                  type="number" 
+                  id="powerRating" 
+                  placeholder="e.g., 1500" 
+                  min="1"
+                  required 
+                />
+                <small class="hint">Check appliance label or manual</small>
+              </div>
+
+              <div class="form-group">
+                <label for="hoursUsed">
+                  <i class="fas fa-clock"></i> Hours Used Per Day
+                </label>
+                <input 
+                  type="number" 
+                  id="hoursUsed" 
+                  placeholder="e.g., 8" 
+                  min="0.1"
+                  max="24"
+                  step="0.5"
+                  required 
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="usageDate">
+                  <i class="fas fa-calendar"></i> Date
+                </label>
+                <input 
+                  type="date" 
+                  id="usageDate" 
+                  required 
+                />
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-primary">
+                <i class="fas fa-plus"></i> Add Appliance Usage
+              </button>
+              <button type="button" class="btn-secondary" onclick="resetForm()">
+                <i class="fas fa-redo"></i> Reset
+              </button>
+            </div>
+          </form>
+
+          <!-- Calculation Info -->
+          <div class="calculation-info">
+            <h4><i class="fas fa-calculator"></i> Energy Calculation</h4>
+            <p>Energy (kWh) = (Power Rating in Watts × Hours Used) ÷ 1000</p>
+            <p class="calculation-example">
+              Example: 1500W AC × 8 hours = 12 kWh per day
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Charts Section -->
+      <section class="charts-section">
+        <div class="chart-container">
+          <div class="chart-header">
+            <h3><i class="fas fa-chart-bar"></i> Daily Energy Consumption</h3>
+            <div class="chart-controls">
+              <button class="chart-btn active" onclick="updateChartPeriod('week')">7 Days</button>
+              <button class="chart-btn" onclick="updateChartPeriod('month')">30 Days</button>
+            </div>
+          </div>
+          <canvas id="dailyChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+          <div class="chart-header">
+            <h3><i class="fas fa-chart-pie"></i> Energy by Appliance</h3>
+          </div>
+          <canvas id="applianceChart"></canvas>
+        </div>
+      </section>
+
+      <!-- Appliance List -->
+      <section class="appliance-list-section">
+        <div class="section-header">
+          <h2><i class="fas fa-list"></i> Your Appliances</h2>
+          <div class="list-controls">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input 
+                type="text" 
+                id="searchAppliance" 
+                placeholder="Search appliances..."
+                onkeyup="filterAppliances()"
+              />
+            </div>
+            <select id="filterAppliance" onchange="filterAppliances()">
+              <option value="all">All Appliances</option>
+              <option value="ac">AC</option>
+              <option value="refrigerator">Refrigerator</option>
+              <option value="tv">TV</option>
+              <option value="lights">Lights</option>
+              <option value="washing-machine">Washing Machine</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="applianceList" class="appliance-list">
+          <div class="empty-state">
+            <i class="fas fa-plug"></i>
+            <p>No appliances logged yet</p>
+            <span>Start tracking your energy consumption above!</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Wastage Detection Section -->
+      <section class="wastage-section">
+        <div class="section-header">
+          <h2><i class="fas fa-exclamation-triangle"></i> Energy Wastage Detection</h2>
+          <p>Identify areas where you can save energy and reduce costs</p>
+        </div>
+
+        <div class="wastage-grid" id="wastageGrid">
+          <!-- Wastage cards will be dynamically added here -->
+        </div>
+      </section>
+
+      <!-- Energy Saving Tips -->
+      <section class="tips-section">
+        <div class="section-header">
+          <h2><i class="fas fa-lightbulb"></i> Energy Saving Tips</h2>
+          <p>Smart ways to reduce your energy consumption</p>
+        </div>
+
+        <div class="tips-grid">
+          <div class="tip-card">
+            <div class="tip-icon ac-icon">
+              <i class="fas fa-snowflake"></i>
+            </div>
+            <h4>Air Conditioner</h4>
+            <ul>
+              <li>Set temperature to 24-26°C</li>
+              <li>Clean filters monthly</li>
+              <li>Use timer to avoid overnight running</li>
+              <li>Keep doors and windows closed</li>
+            </ul>
+            <div class="saving-estimate">
+              <span class="saving-label">Potential Saving:</span>
+              <span class="saving-value">30-40%</span>
+            </div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-icon fridge-icon">
+              <i class="fas fa-mug-hot"></i>
+            </div>
+            <h4>Refrigerator</h4>
+            <ul>
+              <li>Keep temperature at 3-5°C</li>
+              <li>Don't overload or leave empty</li>
+              <li>Check door seals regularly</li>
+              <li>Defrost regularly if not frost-free</li>
+            </ul>
+            <div class="saving-estimate">
+              <span class="saving-label">Potential Saving:</span>
+              <span class="saving-value">15-25%</span>
+            </div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-icon lights-icon">
+              <i class="fas fa-lightbulb"></i>
+            </div>
+            <h4>Lighting</h4>
+            <ul>
+              <li>Switch to LED bulbs</li>
+              <li>Use natural daylight when possible</li>
+              <li>Install motion sensors</li>
+              <li>Turn off lights when leaving room</li>
+            </ul>
+            <div class="saving-estimate">
+              <span class="saving-label">Potential Saving:</span>
+              <span class="saving-value">50-75%</span>
+            </div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-icon washer-icon">
+              <i class="fas fa-soap"></i>
+            </div>
+            <h4>Washing Machine</h4>
+            <ul>
+              <li>Use cold water when possible</li>
+              <li>Run full loads only</li>
+              <li>Use eco mode settings</li>
+              <li>Air dry instead of using dryer</li>
+            </ul>
+            <div class="saving-estimate">
+              <span class="saving-label">Potential Saving:</span>
+              <span class="saving-value">25-40%</span>
+            </div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-icon tv-icon">
+              <i class="fas fa-tv"></i>
+            </div>
+            <h4>Electronics</h4>
+            <ul>
+              <li>Unplug when not in use</li>
+              <li>Use power strips with switches</li>
+              <li>Enable sleep/eco modes</li>
+              <li>Reduce screen brightness</li>
+            </ul>
+            <div class="saving-estimate">
+              <span class="saving-label">Potential Saving:</span>
+              <span class="saving-value">10-20%</span>
+            </div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-icon heater-icon">
+              <i class="fas fa-fire"></i>
+            </div>
+            <h4>Water Heater</h4>
+            <ul>
+              <li>Set temperature to 50-60°C</li>
+              <li>Use timer for heating</li>
+              <li>Insulate pipes and tank</li>
+              <li>Take shorter showers</li>
+            </ul>
+            <div class="saving-estimate">
+              <span class="saving-label">Potential Saving:</span>
+              <span class="saving-value">20-30%</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Monthly Summary -->
+      <section class="summary-section">
+        <div class="section-header">
+          <h2><i class="fas fa-chart-line"></i> Monthly Summary</h2>
+          <button class="btn-export" onclick="exportData()">
+            <i class="fas fa-download"></i> Export Report
+          </button>
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="summary-icon energy">
+              <i class="fas fa-bolt"></i>
+            </div>
+            <div class="summary-content">
+              <h4>Total Energy Used</h4>
+              <p class="summary-value" id="summaryTotalEnergy">0 kWh</p>
+              <span class="summary-trend" id="summaryEnergyTrend">
+                <i class="fas fa-arrow-down"></i> 5% from last month
+              </span>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-icon cost">
+              <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="summary-content">
+              <h4>Total Cost</h4>
+              <p class="summary-value" id="summaryTotalCost">$0.00</p>
+              <span class="summary-trend" id="summaryCostTrend">
+                <i class="fas fa-arrow-down"></i> $12 saved
+              </span>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-icon emission">
+              <i class="fas fa-smog"></i>
+            </div>
+            <div class="summary-content">
+              <h4>CO₂ Footprint</h4>
+              <p class="summary-value" id="summaryCO2">0 kg</p>
+              <span class="summary-trend" id="summaryCO2Trend">
+                <i class="fas fa-leaf"></i> Equivalent to 0 trees
+              </span>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-icon efficiency">
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="summary-content">
+              <h4>Efficiency Score</h4>
+              <p class="summary-value" id="summaryEfficiency">0/100</p>
+              <div class="efficiency-bar">
+                <div class="efficiency-fill" id="efficiencyFill"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <p>
+          <i class="fas fa-leaf"></i> 
+          Made with care for the environment | EcoLife 2026
+        </p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Load Navbar Component -->
+  <script src="../components/navbar/navbar.js"></script>
+  <!-- Main JavaScript -->
+  <script src="../js/energy-consumption-tracker.js"></script>
+</body>
+</html>

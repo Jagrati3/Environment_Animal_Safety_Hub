@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Green Home Energy Dashboard</title>
+  <link rel="icon" href="assets/images/others/FAVICON.webp" type="image/png">
+  <link href="css/green-home-energy-dashboard.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="energy-bg-animated"></div>
+  <section class="energy-dashboard" id="energy-dashboard">
+    <header class="dashboard-header">
+      <img src="assets/images/3d/energy_bulb.webp" alt="Green Home" class="dashboard-icon">
+      <div>
+        <h2><i class="fa-solid fa-bolt"></i> Green Home Energy Dashboard</h2>
+        <p class="dashboard-subtitle">Track, analyze, and improve your home's energy efficiency. Set goals, see trends, and get personalized tips!</p>
+      </div>
+    </header>
+    <div class="goal-section">
+      <div>
+        <strong>Monthly Goal:</strong> <span id="goal-value">320</span> kWh
+        <div class="goal-progress">
+          <div class="goal-progress-bar" id="goal-progress-bar" style="width: 0%"></div>
+        </div>
+        <span id="goal-status"></span>
+      </div>
+    </div>
+    <div class="charts">
+      <div class="chart-box">
+        <h3>Daily Usage (kWh)</h3>
+        <canvas id="dailyChart" height="120"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Weekly Usage (kWh)</h3>
+        <canvas id="weeklyChart" height="120"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Monthly Usage (kWh)</h3>
+        <canvas id="monthlyChart" height="120"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Appliance Breakdown</h3>
+        <ul class="appliance-list" id="appliance-list"></ul>
+      </div>
+    </div>
+    <div class="tips-section">
+      <h3><i class="fa-solid fa-lightbulb"></i> Energy Saving Tips</h3>
+      <ul id="energy-tips"></ul>
+    </div>
+    <footer class="dashboard-footer">
+      <span>🌱 <b>EcoScore:</b> <span id="eco-score">A</span> &mdash; Your home is greener than 80% of similar households!</span>
+    </footer>
+  </section>
+  <style>
+    body {
+      background: linear-gradient(120deg, #e0ffe7 0%, #f6fff6 100%);
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+    }
+    .energy-bg-animated {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      background: url('assets/images/3d/planting_tree.webp') no-repeat 95% 90%/180px,
+                  url('assets/images/3d/energy_bulb.webp') no-repeat 5% 10%/120px;
+      opacity: 0.13;
+      animation: bgfloat 12s ease-in-out infinite alternate;
+    }
+    @keyframes bgfloat {
+      0% { background-position: 95% 90%, 5% 10%; }
+      100% { background-position: 92% 87%, 8% 13%; }
+    }
+    .dashboard-header {
+      display: flex; align-items: center; gap: 24px; margin-bottom: 18px;
+    }
+    .dashboard-icon {
+      width: 70px; height: 70px; border-radius: 50%; box-shadow: 0 2px 12px #43e97b33;
+      background: #fff; object-fit: contain;
+      animation: iconpop 1.2s cubic-bezier(.4,2,.6,1) infinite alternate;
+    }
+    @keyframes iconpop {
+      0% { transform: scale(1) rotate(-8deg); }
+      100% { transform: scale(1.08) rotate(8deg); }
+    }
+    .dashboard-subtitle {
+      color: #228B22; font-size: 1.1rem; margin: 0 0 2px 0;
+    }
+    .dashboard-footer {
+      margin-top: 32px; text-align: center; color: #228B22; font-size: 1.1rem;
+      background: #e8f5e9; border-radius: 10px; padding: 12px 0;
+      box-shadow: 0 2px 8px #43e97b11;
+    }
+  </style>
+  <script src="js/green-home-energy-dashboard.js"></script>
+</body>
+</html>

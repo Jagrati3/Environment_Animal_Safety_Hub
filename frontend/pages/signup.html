@@ -18,6 +18,34 @@
   <link rel="stylesheet" href="../css/global/utilities.css" />
   <link rel="stylesheet" href="../css/components/footer.css" />
   <link rel="stylesheet" href="../css/components/navbar.css" />
+  <style>
+  /* Target the actual section since there is no <main> tag */
+  .auth-section {
+    padding-top: 100px; /* Adjust this value based on your navbar height */
+  }
+
+  /* Alternatively, ensure the body has space if the navbar is fixed */
+  body {
+    padding-top: 80px; 
+  }
+  .success-modal {
+    display: flex;
+    padding-left: 0.5em;
+    justify-content: center;
+    align-items: center;
+    
+  }
+  .modal-content {
+    justify-content: center;
+    align-items: center;
+    border: 2px solid black;
+    border-radius: 15px;
+    background: #fff;
+    width: 30%;
+    
+  }
+</style>
+
 </head>
 
 <body>
@@ -78,7 +106,7 @@
           </div>
         </div>
 
-        <form class="auth-form" id="signupForm">
+        <form class="auth-form" id="signupForm" novalidate>
           <!-- Step 1: Personal Information -->
           <div class="form-step active" data-step="1">
             <div class="step-header">
@@ -239,9 +267,17 @@
             <button type="button" class="nav-btn next-btn" id="nextBtn" onclick="changeStep(1)">
               Next <i class="fa-solid fa-arrow-right"></i>
             </button>
-            <button type="submit" class="nav-btn submit-btn" id="submitBtn" style="display: none;">
-              Create Account
-            </button>
+           <button
+  type="button"
+  class="nav-btn submit-btn"
+  id="submitBtn"
+  style="display: none;"
+>
+  Create Account
+</button>
+
+
+
           </div>
         </form>
 
@@ -318,9 +354,8 @@
     </div>
   </div>
 
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
   <!-- External Signup Form Logic -->
-  <script src="../js/pages/signup.js"></script>
+ <script src="../js/pages/signup.js" defer></script>
   <script>
     (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "ws110ZzXAkEnbVsIy9g8d"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
   </script>

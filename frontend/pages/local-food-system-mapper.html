@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Food System Mapper - Connect with Sustainable Local Food</title>
+    <link rel="stylesheet" href="../css/local-food-system-mapper.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="lfsm-container">
+        <!-- Header -->
+        <header class="lfsm-header">
+            <div class="header-content">
+                <div class="header-title">
+                    <i class="fas fa-leaf"></i>
+                    <h1>Local Food System Mapper</h1>
+                </div>
+                <p class="header-subtitle">Connect with your neighborhood's sustainable food ecosystem</p>
+            </div>
+            <nav class="nav-tabs">
+                <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
+                <button class="nav-tab" data-tab="farmers-markets">Farmers Markets</button>
+                <button class="nav-tab" data-tab="csa-farms">CSA & Farms</button>
+                <button class="nav-tab" data-tab="food-network">Food Network</button>
+                <button class="nav-tab" data-tab="seasonal">Seasonal Guide</button>
+                <button class="nav-tab" data-tab="community">Community</button>
+                <button class="nav-tab" data-tab="map">Map</button>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="lfsm-main">
+            <!-- Dashboard Tab -->
+            <div class="tab-content active" id="dashboardTab">
+                <div class="dashboard-grid">
+                    <div class="ecosystem-overview">
+                        <h2>Your Local Food Ecosystem</h2>
+                        <div class="overview-stats">
+                            <div class="stat-box">
+                                <div class="stat-icon">🌾</div>
+                                <div class="stat-number" id="marketCount">0</div>
+                                <div class="stat-label">Markets Found</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-icon">🥬</div>
+                                <div class="stat-number" id="csaCount">0</div>
+                                <div class="stat-label">CSA Programs</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-icon">🏡</div>
+                                <div class="stat-number" id="gardenCount">0</div>
+                                <div class="stat-label">Gardens Nearby</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-icon">♻️</div>
+                                <div class="stat-number" id="wasteCount">0</div>
+                                <div class="stat-label">Active Food Swaps</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quick-filters">
+                        <h2>Explore Local Food Sources</h2>
+                        <div class="filter-buttons">
+                            <button class="filter-btn" onclick="switchTab('farmers-markets')">
+                                <i class="fas fa-store"></i> Farmers Markets
+                            </button>
+                            <button class="filter-btn" onclick="switchTab('csa-farms')">
+                                <i class="fas fa-seedling"></i> CSA Programs
+                            </button>
+                            <button class="filter-btn" onclick="switchTab('food-network')">
+                                <i class="fas fa-hands-helping"></i> Share & Swap
+                            </button>
+                            <button class="filter-btn" onclick="switchTab('seasonal')">
+                                <i class="fas fa-sun"></i> What's in Season
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="impact-summary">
+                        <h2>Your Food Impact</h2>
+                        <div class="impact-cards">
+                            <div class="impact-card">
+                                <div class="impact-icon">🌍</div>
+                                <div class="impact-label">Carbon Saved</div>
+                                <div class="impact-value" id="carbonSaved">0</div>
+                                <div class="impact-unit">kg CO₂/month</div>
+                            </div>
+                            <div class="impact-card">
+                                <div class="impact-icon">💧</div>
+                                <div class="impact-label">Water Conserved</div>
+                                <div class="impact-value" id="waterSaved">0</div>
+                                <div class="impact-unit">gallons/month</div>
+                            </div>
+                            <div class="impact-card">
+                                <div class="impact-icon">📦</div>
+                                <div class="impact-label">Waste Prevented</div>
+                                <div class="impact-value" id="wastePrevented">0</div>
+                                <div class="impact-unit">kg/month</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tips-section">
+                        <h2>Tips for Local Eating</h2>
+                        <div class="tips-grid">
+                            <div class="tip-card">
+                                <div class="tip-icon">🧺</div>
+                                <h3>Bring Reusables</h3>
+                                <p>Bags and containers reduce packaging waste at markets</p>
+                            </div>
+                            <div class="tip-card">
+                                <div class="tip-icon">🔄</div>
+                                <h3>Buy Seasonal</h3>
+                                <p>Seasonal produce travels less distance to reach you</p>
+                            </div>
+                            <div class="tip-card">
+                                <div class="tip-icon">🤝</div>
+                                <h3>Join a CSA</h3>
+                                <p>Support local farmers and get fresh weekly produce</p>
+                            </div>
+                            <div class="tip-card">
+                                <div class="tip-icon">🌱</div>
+                                <h3>Grow Something</h3>
+                                <p>Even herbs on a windowsill reduce food miles</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Farmers Markets Tab -->
+            <div class="tab-content" id="farmers-marketsTab">
+                <div class="markets-container">
+                    <div class="markets-header">
+                        <h2>Farmers Markets Near You</h2>
+                        <p>Fresh local produce with real-time availability</p>
+                    </div>
+
+                    <div class="markets-filters">
+                        <input type="text" id="marketSearch" class="search-input" placeholder="Search by market name...">
+                        <select id="dayFilter" class="filter-select">
+                            <option value="">All Days</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                        </select>
+                        <select id="distanceFilter" class="filter-select">
+                            <option value="">All Distances</option>
+                            <option value="1">Within 1 mile</option>
+                            <option value="3">Within 3 miles</option>
+                            <option value="5">Within 5 miles</option>
+                            <option value="10">Within 10 miles</option>
+                        </select>
+                    </div>
+
+                    <div class="markets-list" id="marketsList"></div>
+                </div>
+            </div>
+
+            <!-- CSA & Farms Tab -->
+            <div class="tab-content" id="csa-farmsTab">
+                <div class="csa-container">
+                    <div class="tabs-secondary">
+                        <button class="secondary-tab active" data-secondary="csa">CSA Programs</button>
+                        <button class="secondary-tab" data-secondary="farms">Farm Directory</button>
+                    </div>
+
+                    <!-- CSA Section -->
+                    <div class="secondary-content active" id="csaContent">
+                        <div class="csa-header">
+                            <h2>Community Supported Agriculture</h2>
+                            <p>Subscribe to get fresh weekly produce boxes from local farms</p>
+                            <button class="action-btn" onclick="toggleCSAForm()">
+                                <i class="fas fa-plus"></i> Find CSA Share
+                            </button>
+                        </div>
+
+                        <div class="csa-filters">
+                            <input type="text" id="csaSearch" class="search-input" placeholder="Search CSA programs...">
+                            <select id="csaDeliveryFilter" class="filter-select">
+                                <option value="">All Delivery Types</option>
+                                <option value="pickup">Pickup at Farm</option>
+                                <option value="delivery">Home Delivery</option>
+                                <option value="both">Both Options</option>
+                            </select>
+                            <select id="csaPriceFilter" class="filter-select">
+                                <option value="">All Price Ranges</option>
+                                <option value="budget">Under $25/week</option>
+                                <option value="standard">$25-40/week</option>
+                                <option value="premium">Over $40/week</option>
+                            </select>
+                        </div>
+
+                        <div class="csa-grid" id="csaList"></div>
+                    </div>
+
+                    <!-- Farms Section -->
+                    <div class="secondary-content" id="farmsContent">
+                        <div class="farms-header">
+                            <h2>Local Farm Directory</h2>
+                            <p>Discover farms offering u-pick, tours, and direct sales</p>
+                            <button class="action-btn" onclick="toggleFarmForm()">
+                                <i class="fas fa-plus"></i> Add Farm Listing
+                            </button>
+                        </div>
+
+                        <div class="farms-filters">
+                            <input type="text" id="farmSearch" class="search-input" placeholder="Search farms...">
+                            <select id="farmTypeFilter" class="filter-select">
+                                <option value="">All Farm Types</option>
+                                <option value="vegetable">Vegetables</option>
+                                <option value="fruit">Fruit</option>
+                                <option value="meat">Meat/Dairy</option>
+                                <option value="mixed">Mixed</option>
+                                <option value="organic">Organic Certified</option>
+                            </select>
+                            <select id="farmActivityFilter" class="filter-select">
+                                <option value="">All Activities</option>
+                                <option value="upick">U-Pick Available</option>
+                                <option value="tours">Farm Tours</option>
+                                <option value="sales">Direct Sales</option>
+                                <option value="events">Farm Events</option>
+                            </select>
+                        </div>
+
+                        <div class="farms-grid" id="farmsList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Food Network Tab -->
+            <div class="tab-content" id="food-networkTab">
+                <div class="network-container">
+                    <div class="tabs-secondary">
+                        <button class="secondary-tab active" data-secondary="garden">Garden Showcase</button>
+                        <button class="secondary-tab" data-secondary="redistribute">Food Redistribution</button>
+                    </div>
+
+                    <!-- Garden Showcase -->
+                    <div class="secondary-content active" id="gardenContent">
+                        <div class="garden-header">
+                            <h2>Home Garden Showcase</h2>
+                            <p>Share your excess produce with neighbors</p>
+                            <button class="action-btn" onclick="toggleGardenForm()">
+                                <i class="fas fa-plus"></i> List Your Produce
+                            </button>
+                        </div>
+
+                        <div class="garden-filters">
+                            <input type="text" id="gardenSearch" class="search-input" placeholder="Search produce...">
+                            <select id="produceTypeFilter" class="filter-select">
+                                <option value="">All Produce</option>
+                                <option value="vegetables">Vegetables</option>
+                                <option value="fruits">Fruits</option>
+                                <option value="herbs">Herbs</option>
+                                <option value="homemade">Homemade Items</option>
+                            </select>
+                        </div>
+
+                        <div class="listings-grid" id="gardenList"></div>
+                    </div>
+
+                    <!-- Food Redistribution -->
+                    <div class="secondary-content" id="redistributeContent">
+                        <div class="waste-header">
+                            <h2>Food Waste Redistribution Network</h2>
+                            <p>Prevent food waste by connecting with those who need it</p>
+                            <button class="action-btn" onclick="toggleWasteForm()">
+                                <i class="fas fa-plus"></i> Report Surplus Food
+                            </button>
+                        </div>
+
+                        <div class="waste-filters">
+                            <input type="text" id="wasteSearch" class="search-input" placeholder="Search items...">
+                            <select id="wasteTypeFilter" class="filter-select">
+                                <option value="">All Types</option>
+                                <option value="restaurant">Restaurant Surplus</option>
+                                <option value="grocery">Grocery Store Donations</option>
+                                <option value="farm">Farm Overflow</option>
+                                <option value="prepared">Prepared Meals</option>
+                                <option value="bakery">Bakery Items</option>
+                            </select>
+                            <select id="urgencyFilter" class="filter-select">
+                                <option value="">All Urgency Levels</option>
+                                <option value="today">Needed Today</option>
+                                <option value="tomorrow">Needed Tomorrow</option>
+                                <option value="week">This Week</option>
+                            </select>
+                        </div>
+
+                        <div class="waste-listings" id="wasteList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seasonal Guide Tab -->
+            <div class="tab-content" id="seasonalTab">
+                <div class="seasonal-container">
+                    <div class="seasonal-header">
+                        <h2>Seasonal Produce & Carbon Calculator</h2>
+                        <p>Learn what's in season and its environmental impact</p>
+                    </div>
+
+                    <div class="seasonal-tabs-secondary">
+                        <button class="secondary-tab active" data-secondary="guide">What's in Season</button>
+                        <button class="secondary-tab" data-secondary="carbon">Carbon Calculator</button>
+                    </div>
+
+                    <!-- Seasonal Guide -->
+                    <div class="secondary-content active" id="guideContent">
+                        <div class="season-selector">
+                            <label>Select Current Season:</label>
+                            <div class="season-buttons">
+                                <button class="season-btn active" data-season="spring">Spring</button>
+                                <button class="season-btn" data-season="summer">Summer</button>
+                                <button class="season-btn" data-season="fall">Fall</button>
+                                <button class="season-btn" data-season="winter">Winter</button>
+                            </div>
+                        </div>
+
+                        <div class="seasonal-produce-grid" id="seasonalProduce"></div>
+                    </div>
+
+                    <!-- Carbon Calculator -->
+                    <div class="secondary-content" id="carbonContent">
+                        <div class="carbon-calculator-form">
+                            <h3>Food Source Carbon Footprint</h3>
+                            <div class="calculator-inputs">
+                                <div class="form-group">
+                                    <label for="foodItem">Select Food Item:</label>
+                                    <select id="foodItem" class="form-input">
+                                        <option value="">-- Choose Item --</option>
+                                        <option value="tomato">Tomato (Local)</option>
+                                        <option value="tomato-import">Tomato (Imported)</option>
+                                        <option value="lettuce">Lettuce (Local)</option>
+                                        <option value="lettuce-import">Lettuce (Imported)</option>
+                                        <option value="apple">Apple (Local)</option>
+                                        <option value="apple-import">Apple (Imported)</option>
+                                        <option value="chicken">Chicken (Local Farm)</option>
+                                        <option value="chicken-industrial">Chicken (Industrial)</option>
+                                        <option value="beef">Beef</option>
+                                        <option value="dairy">Dairy</option>
+                                        <option value="bread">Bread (Local)</option>
+                                        <option value="pasta">Pasta</option>
+                                        <option value="coffee-import">Coffee (Imported)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="quantity">Quantity (kg):</label>
+                                    <input type="number" id="quantity" class="form-input" value="1" min="0.1" step="0.1">
+                                </div>
+
+                                <button class="calculate-btn" onclick="calculateCarbonFootprint()">
+                                    <i class="fas fa-calculator"></i> Calculate Impact
+                                </button>
+                            </div>
+
+                            <div class="carbon-results" id="carbonResults"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Community Tab -->
+            <div class="tab-content" id="communityTab">
+                <div class="community-container">
+                    <div class="tabs-secondary">
+                        <button class="secondary-tab active" data-secondary="restaurants">Restaurant Ratings</button>
+                        <button class="secondary-tab" data-secondary="forum">Food Swap Forum</button>
+                    </div>
+
+                    <!-- Restaurant Ratings -->
+                    <div class="secondary-content active" id="restaurantsContent">
+                        <div class="restaurants-header">
+                            <h2>Sustainable Restaurant Ratings</h2>
+                            <p>Find restaurants supporting local food systems</p>
+                        </div>
+
+                        <div class="restaurant-filters">
+                            <input type="text" id="restaurantSearch" class="search-input" placeholder="Search restaurants...">
+                            <select id="cuisineFilter" class="filter-select">
+                                <option value="">All Cuisines</option>
+                                <option value="farm-to-table">Farm to Table</option>
+                                <option value="vegetarian">Vegetarian</option>
+                                <option value="vegan">Vegan</option>
+                                <option value="asian">Asian</option>
+                                <option value="european">European</option>
+                                <option value="american">American</option>
+                            </select>
+                            <select id="ratingFilter" class="filter-select">
+                                <option value="">All Ratings</option>
+                                <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                                <option value="4">⭐⭐⭐⭐ Very Good</option>
+                                <option value="3">⭐⭐⭐ Good</option>
+                            </select>
+                        </div>
+
+                        <div class="restaurants-grid" id="restaurantsList"></div>
+                    </div>
+
+                    <!-- Food Swap Forum -->
+                    <div class="secondary-content" id="forumContent">
+                        <div class="forum-header">
+                            <h2>Local Food Swap Forum</h2>
+                            <p>Connect with neighbors to exchange homegrown and homemade items</p>
+                            <button class="action-btn" onclick="toggleForumPostForm()">
+                                <i class="fas fa-plus"></i> Create Post
+                            </button>
+                        </div>
+
+                        <div class="forum-filters">
+                            <input type="text" id="forumSearch" class="search-input" placeholder="Search posts...">
+                            <select id="categoryFilter" class="filter-select">
+                                <option value="">All Categories</option>
+                                <option value="offer">Items Offered</option>
+                                <option value="wanted">Items Wanted</option>
+                                <option value="recipe">Recipe Sharing</option>
+                                <option value="advice">Growing Advice</option>
+                            </select>
+                        </div>
+
+                        <div class="forum-posts" id="forumPosts"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map Tab -->
+            <div class="tab-content" id="mapTab">
+                <div class="map-tab-container">
+                    <h2>Local Food System Map</h2>
+                    <div id="foodMap" style="width:100%;height:350px;border-radius:8px;margin-bottom:24px;"></div>
+                    <form id="producerMarketForm" style="background:#f7faf7;padding:16px;border-radius:8px;box-shadow:0 2px 8px rgba(78,110,93,0.04);margin-bottom:24px;">
+                        <h3>Add Producer or Market</h3>
+                        <label for="pmType">Type</label>
+                        <select id="pmType" required>
+                            <option value="producer">Producer</option>
+                            <option value="market">Market</option>
+                        </select>
+                        <label for="pmName">Name</label>
+                        <input type="text" id="pmName" required>
+                        <label for="pmDesc">Description</label>
+                        <textarea id="pmDesc" rows="2"></textarea>
+                        <button type="submit">Add to Map</button>
+                        <p style="font-size:0.95em;color:#888;margin-top:8px;">Click on the map to select the location.</p>
+                    </form>
+                    <div class="resources">
+                        <h3>Why Local Food?</h3>
+                        <ul>
+                            <li><a href="https://www.localharvest.org/" target="_blank">LocalHarvest: Find Local Food</a></li>
+                            <li><a href="https://www.sustainabletable.org/" target="_blank">Sustainable Table</a></li>
+                            <li><a href="https://www.farmersmarket.com/" target="_blank">Farmers Market Directory</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Forms -->
+    <div id="marketModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Market Listing</h3>
+                <button class="modal-close" onclick="closeModal('marketModal')">&times;</button>
+            </div>
+            <form id="marketForm" onsubmit="addMarket(event)">
+                <div class="form-group">
+                    <label for="marketName">Market Name:</label>
+                    <input type="text" id="marketName" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="marketDay">Operating Day:</label>
+                    <select id="marketDay" class="form-input" required>
+                        <option>Saturday</option>
+                        <option>Sunday</option>
+                        <option>Monday</option>
+                        <option>Tuesday</option>
+                        <option>Wednesday</option>
+                        <option>Thursday</option>
+                        <option>Friday</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="marketHours">Hours:</label>
+                    <input type="text" id="marketHours" class="form-input" placeholder="e.g., 8am-1pm" required>
+                </div>
+                <button type="submit" class="submit-btn">Add Market</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="gardenModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>List Your Produce</h3>
+                <button class="modal-close" onclick="closeModal('gardenModal')">&times;</button>
+            </div>
+            <form id="gardenForm" onsubmit="addGarden(event)">
+                <div class="form-group">
+                    <label for="gardenProduce">What are you offering?</label>
+                    <input type="text" id="gardenProduce" class="form-input" placeholder="e.g., Tomatoes, Basil" required>
+                </div>
+                <div class="form-group">
+                    <label for="gardenQuantity">Quantity Available:</label>
+                    <input type="text" id="gardenQuantity" class="form-input" placeholder="e.g., 5 lbs" required>
+                </div>
+                <div class="form-group">
+                    <label for="gardenPickup">Pickup Instructions:</label>
+                    <textarea id="gardenPickup" class="form-input" placeholder="How can neighbors pick up your produce?" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">List Produce</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="forumModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create Forum Post</h3>
+                <button class="modal-close" onclick="closeModal('forumModal')">&times;</button>
+            </div>
+            <form id="forumForm" onsubmit="addForumPost(event)">
+                <div class="form-group">
+                    <label for="forumTitle">Post Title:</label>
+                    <input type="text" id="forumTitle" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="forumCategory">Category:</label>
+                    <select id="forumCategory" class="form-input" required>
+                        <option value="offer">Items Offered</option>
+                        <option value="wanted">Items Wanted</option>
+                        <option value="recipe">Recipe Sharing</option>
+                        <option value="advice">Growing Advice</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="forumContent">Content:</label>
+                    <textarea id="forumContent" class="form-input" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Post to Forum</button>
+            </form>
+        </div>
+    </div>
+
+<script src="../js/local-food-system-mapper.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+</body>
+</html>

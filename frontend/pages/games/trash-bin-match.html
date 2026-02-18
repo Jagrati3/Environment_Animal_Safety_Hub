@@ -61,50 +61,7 @@
         </div>
     </main>
 
-    <script>
-        const items = document.querySelectorAll('.item');
-        const bins = document.querySelectorAll('.bin');
-        const scoreEl = document.getElementById('score');
-
-        let score = 0;
-        let draggedItemType = "";
-
-        items.forEach(item => {
-            item.addEventListener('dragstart', () => {
-                draggedItemType = item.getAttribute('data-type');
-                item.classList.add('dragging');
-            })
-            item.addEventListener("dragend", () => {
-                item.classList.remove("dragging");
-            });
-        });
-        bins.forEach(bin => {
-            // IMPORTANT: allow drop
-            bin.addEventListener("dragover", (e) => {
-                e.preventDefault();
-            });
-            bin.addEventListener("drop", () => {
-                const binType = bin.getAttribute('data-bin');
-                if (binType === draggedItemType) {
-                    score++;
-                    scoreEl.textContent = score;
-                    // remove item after correct match
-
-                    showMessage("✅ Correct!");
-                } else {
-                    showMessage("❌ Wrong bin!", false);
-                }
-            })
-        });
-        const message = document.getElementById("message");
-
-        function showMessage(text, success = true) {
-            message.textContent = text;
-            message.style.color = success ? "green" : "red";
-        }
-
-
-    </script>
+    <script src="../../js/pages/games/trash-bin-game.js"></script>
     <div id="footer-placeholder"></div>
     <script src="/frontend/js/components/footer-loader.js"></script>
     <script src="../../js/components/component-loader.js"></script>

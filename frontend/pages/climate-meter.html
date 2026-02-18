@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Climate Meter</title>
+
+<style>
+:root{
+  --cool:#2a9d8f;
+  --warn:#f4a261;
+  --danger:#e63946;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(180deg,#0b132b,#1c2541);
+  font-family:Segoe UI, sans-serif;
+  color:#edf2f4;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  transition:background 0.6s ease;
+}
+
+h1{
+  margin-top:30px;
+  font-size:3rem;
+  text-align:center;
+}
+
+/* METER */
+.meter-box{
+  margin-top:50px;
+  width:120px;
+  height:300px;
+  border-radius:30px;
+  background:rgba(255,255,255,0.15);
+  display:flex;
+  align-items:flex-end;
+  overflow:hidden;
+}
+
+.meter-fill{
+  width:100%;
+  height:0%;
+  background:var(--cool);
+  transition:height 0.6s ease, background 0.6s ease;
+}
+
+/* MESSAGE */
+.message{
+  margin-top:30px;
+  max-width:650px;
+  background:rgba(0,0,0,0.35);
+  padding:20px 24px;
+  border-radius:18px;
+  animation:fadeIn 0.6s ease;
+  line-height:1.6;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(20px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+/* BUTTON */
+button{
+  margin-top:40px;
+  padding:14px 36px;
+  font-size:1rem;
+  background:#f4a261;
+  color:#1c2541;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  transition:0.3s;
+}
+button:hover{
+  transform:scale(1.05);
+}
+
+.footer{
+  margin-top:20px;
+  font-size:0.9rem;
+  opacity:0.8;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🌡️ Climate Meter</h1>
+
+<div class="meter-box">
+  <div class="meter-fill" id="meter"></div>
+</div>
+
+<div id="messages"></div>
+
+<button onclick="increase()">Increase Temperature</button>
+
+<p class="footer">The planet is heating up.</p>
+
+<script>
+const messages = [
+  "Global temperatures are rising steadily.",
+  "Heatwaves are becoming more frequent.",
+  "Melting ice raises sea levels.",
+  "Extreme weather threatens food systems.",
+  "Urgent action can still slow the damage."
+];
+
+let level = 0;
+const meter = document.getElementById("meter");
+
+function increase(){
+  if(level < messages.length){
+    level++;
+
+    const percent = level * 20;
+    meter.style.height = percent + "%";
+
+    if(level >= 4){
+      meter.style.background = "var(--danger)";
+      document.body.style.background =
+        "linear-gradient(180deg,#370617,#9d0208)";
+    } else if(level >= 2){
+      meter.style.background = "var(--warn)";
+    }
+
+    const msg = document.createElement("div");
+    msg.className = "message";
+    msg.textContent = messages[level - 1];
+    document.getElementById("messages").appendChild(msg);
+  } else {
+    alert("🌍 The meter is critical. Act now.");
+  }
+}
+</script>
+
+</body>
+</html>

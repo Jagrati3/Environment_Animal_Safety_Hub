@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tidal Energy Installations and Benthic Habitat Alteration - Seabed Organisms Near Tidal Turbines</title>
+<link rel="stylesheet" href="css/tidal-energy-installations-benthic-habitat-alteration.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="accessibility-controls">
+        <button class="accessibility-btn" onclick="toggleHighContrast()">High Contrast</button>
+        <button class="accessibility-btn" onclick="toggleFontSize()">Font Size</button>
+        <button class="accessibility-btn" onclick="toggleReducedMotion()">Reduced Motion</button>
+    </div>
+
+    <header class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Tidal Energy & Benthic Habitat Alteration</h1>
+                <p class="hero-subtitle">Investigating Impacts on Seabed Organisms Near Tidal Turbines</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">15-40%</span>
+                        <span class="stat-label">Species Richness Decline</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">2-5x</span>
+                        <span class="stat-label">Sediment Deposition</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">50-200m²</span>
+                        <span class="stat-label">Habitat Footprint</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="benthic-impact-simulator">
+                    <h3>Benthic Impact Simulator</h3>
+                    <div class="simulator-controls">
+                        <div class="control-group">
+                            <label for="tidal-current">Tidal Current (m/s):</label>
+                            <input type="range" id="tidal-current" min="1" max="4" value="2.5" step="0.1">
+                            <span class="control-value" id="tidal-current-value">2.5 m/s</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="turbine-size">Turbine Size (m diameter):</label>
+                            <input type="range" id="turbine-size" min="10" max="30" value="20">
+                            <span class="control-value" id="turbine-size-value">20</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="foundation-type">Foundation Type:</label>
+                            <select id="foundation-type">
+                                <option value="monopile">Monopile</option>
+                                <option value="tripod">Tripod</option>
+                                <option value="gravity">Gravity Base</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="sediment-type">Sediment Type:</label>
+                            <select id="sediment-type">
+                                <option value="sand">Sand</option>
+                                <option value="mud">Mud</option>
+                                <option value="gravel">Gravel</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="simulator-results">
+                        <div class="result-metric">
+                            <span class="metric-label">Habitat Alteration:</span>
+                            <span class="metric-value" id="habitat-alteration">Moderate</span>
+                            <div class="risk-indicator">
+                                <div class="risk-bar" id="alteration-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Sediment Deposition:</span>
+                            <span class="metric-value" id="sediment-deposition">2.3x increase</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill sediment-fill" id="sediment-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Species Impact:</span>
+                            <span class="metric-value" id="species-impact">25% decline</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill species-fill" id="species-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Recovery Time:</span>
+                            <span class="metric-value" id="recovery-time">18 months</span>
+                            <div class="impact-indicators">
+                                <span class="indicator" id="biodiversity-risk">🦐 Biodiversity</span>
+                                <span class="indicator" id="sediment-risk">🏖️ Sediment</span>
+                                <span class="indicator" id="fisheries-risk">🐟 Fisheries</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-icon">🌊</span>
+                <span class="brand-text">TidalFlow Hub</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#science" class="nav-link active" data-tab="science">Science</a></li>
+                <li><a href="#impacts" class="nav-link" data-tab="impacts">Impacts</a></li>
+                <li><a href="#mechanisms" class="nav-link" data-tab="mechanisms">Mechanisms</a></li>
+                <li><a href="#solutions" class="nav-link" data-tab="solutions">Solutions</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section id="science" class="content-section active">
+            <div class="section-container">
+                <h2>The Science of Tidal Energy and Benthic Impacts</h2>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>Tidal Energy Technology</h3>
+                        <div class="technology-overview">
+                            <div class="tech-category">
+                                <h4>⚡ Turbine Types</h4>
+                                <div class="tech-metrics">
+                                    <div class="metric">Horizontal Axis: <span id="horizontal-axis">85%</span></div>
+                                    <div class="metric">Vertical Axis: <span id="vertical-axis">10%</span></div>
+                                    <div class="metric">Tidal Barrage: <span id="tidal-barrage">5%</span></div>
+                                    <div class="metric">Global Capacity: <span id="global-capacity">15 GW</span></div>
+                                </div>
+                            </div>
+                            <div class="tech-category">
+                                <h4>🌊 Operating Conditions</h4>
+                                <div class="tech-metrics">
+                                    <div class="metric">Current Speed: <span id="current-speed">2-4 m/s</span></div>
+                                    <div class="metric">Water Depth: <span id="water-depth">20-50 m</span></div>
+                                    <div class="metric">Tidal Range: <span id="tidal-range">2-8 m</span></div>
+                                    <div class="metric">Power Density: <span id="power-density">5-10 kW/m²</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h3>Benthic Habitat Types</h3>
+                        <div class="habitat-composition">
+                            <canvas id="habitatChart"></canvas>
+                        </div>
+                        <div class="habitat-legend">
+                            <div class="legend-item">
+                                <span class="legend-color soft-sediment"></span>
+                                <span>Soft Sediment (60%)</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color hard-substrate"></span>
+                                <span>Hard Substrate (25%)</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color mixed-habitat"></span>
+                                <span>Mixed Habitat (10%)</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color vegetated"></span>
+                                <span>Vegetated (5%)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h3>Impact Magnitude</h3>
+                        <div class="impact-metrics">
+                            <div class="impact-circle">
+                                <div class="circle-value">15-40%</div>
+                                <div class="circle-label">Species Richness Decline</div>
+                            </div>
+                            <div class="impact-arrow">→</div>
+                            <div class="impact-circle">
+                                <div class="circle-value">20-60%</div>
+                                <div class="circle-label">Abundance Reduction</div>
+                            </div>
+                            <div class="impact-stats">
+                                <div class="stat">Sediment deposition: 2-5x increase</div>
+                                <div class="stat">Turbidity: 5-20 NTU elevation</div>
+                                <div class="stat">Recovery time: 6-24 months</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="impacts" class="content-section">
+            <div class="section-container">
+                <h2>Regional Case Studies and Impacts</h2>
+                <div class="case-studies">
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Pentland Firth, Scotland</h3>
+                            <span class="case-location">Inner Sound - MeyGen Array</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">6 MW</div>
+                                <div class="stat">15-25%</div>
+                                <div class="stat">2-5 years</div>
+                            </div>
+                            <p>Significant benthic species richness reduction within 50m of turbines, increased sediment deposition in wakes, particle size changes.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Bay of Fundy, Canada</h3>
+                            <span class="case-location">Minas Passage - FORCE</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">16 m/s</div>
+                                <div class="stat">20-30%</div>
+                                <div class="stat">Habitat shift</div>
+                            </div>
+                            <p>High tidal currents, benthic community structure alteration, potential habitat enhancement through artificial reefs.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Puget Sound, USA</h3>
+                            <span class="case-location">Admiralty Inlet</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">10x</div>
+                                <div class="stat">1-2 years</div>
+                                <div class="stat">Species change</div>
+                            </div>
+                            <p>Temporary turbidity increases during installation, rapid benthic community recovery, long-term species composition changes.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>EMEC, Orkney</h3>
+                            <span class="case-location">Fall of Warness</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">Multi-year</div>
+                                <div class="stat">20-30%</div>
+                                <div class="stat">Opportunistic</div>
+                            </div>
+                            <p>Comprehensive monitoring shows macrofaunal abundance reduction, community composition favoring opportunistic species.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="global-impact">
+                    <h3>Global Tidal Energy Development Status</h3>
+                    <canvas id="globalTidalChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="mechanisms" class="content-section">
+            <div class="section-container">
+                <h2>Mechanisms of Benthic Habitat Alteration</h2>
+                <div class="mechanism-explorer">
+                    <div class="mechanism-tabs">
+                        <button class="mechanism-tab active" data-mechanism="physical">Physical</button>
+                        <button class="mechanism-tab" data-mechanism="sediment">Sediment</button>
+                        <button class="mechanism-tab" data-mechanism="biological">Biological</button>
+                    </div>
+
+                    <div class="mechanism-content">
+                        <div class="mechanism-panel active" id="physical-panel">
+                            <h3>Physical Disturbance Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Foundation Installation</h4>
+                                    <p>Pile driving creates extensive sediment resuspension and scouring, altering local seabed topography and creating artificial hard substrates.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Turbine Operation</h4>
+                                    <p>Rotating blades generate wake effects, reducing current velocities and altering hydrodynamic patterns in turbine vicinity.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Cable Infrastructure</h4>
+                                    <p>Underwater cable installation creates trenches and burial operations that fragment habitats and compact sediments.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mechanism-panel" id="sediment-panel">
+                            <h3>Sediment Dynamics Changes</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Current Velocity Reduction</h4>
+                                    <p>Turbine wakes slow water movement by 10-50%, affecting sediment transport and deposition patterns.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Turbidity Increases</h4>
+                                    <p>Installation and operation increase suspended sediment concentrations, reducing light penetration to benthic organisms.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Grain Size Alteration</h4>
+                                    <p>Changes in flow patterns modify sediment composition and stability, affecting habitat suitability for different species.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mechanism-panel" id="biological-panel">
+                            <h3>Biological Response Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Species Displacement</h4>
+                                    <p>Direct habitat loss and avoidance behavior lead to local species extirpation and changes in community composition.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Community Shifts</h4>
+                                    <p>Altered environmental conditions favor opportunistic species while disadvantaging sensitive benthic organisms.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Trophic Disruptions</h4>
+                                    <p>Changes in prey availability and habitat structure affect predator-prey dynamics and food web interactions.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solutions" class="content-section">
+            <div class="section-container">
+                <h2>Mitigation and Management Strategies</h2>
+                <div class="solutions-framework">
+                    <div class="solution-category">
+                        <h3>Technology Optimization</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Foundation Design</h4>
+                                <p>Minimized footprint monopiles and artificial reef structures that enhance rather than destroy benthic habitats.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Installation Methods</h4>
+                                <p>Vibration and noise reduction technologies, bubble curtains, and timing restrictions to minimize disturbance.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Cable Burial</h4>
+                                <p>Advanced trenching and burial techniques that minimize sediment disturbance and habitat fragmentation.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="solution-category">
+                        <h3>Monitoring and Management</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Baseline Surveys</h4>
+                                <p>Comprehensive benthic habitat mapping and species distribution studies before installation begins.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Real-time Monitoring</h4>
+                                <p>Continuous environmental monitoring with turbidity sensors, current meters, and benthic cameras.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Adaptive Management</h4>
+                                <p>Operational adjustments based on monitoring data, including speed reductions and seasonal restrictions.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="solution-category">
+                        <h3>Regulatory Framework</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Environmental Impact Assessment</h4>
+                                <p>Rigorous pre- and post-construction assessments with multi-year monitoring commitments.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Marine Spatial Planning</h4>
+                                <p>Integrated planning that considers benthic habitats alongside energy development and other uses.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Best Practice Standards</h4>
+                                <p>Development of international standards for tidal energy environmental assessment and mitigation.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="policy-framework">
+                        <h3>Research and Innovation Priorities</h3>
+                        <div class="policy-actions">
+                            <div class="policy-item">
+                                <h4>Technological Innovation</h4>
+                                <ul>
+                                    <li>Bio-inspired turbine designs with reduced environmental impact</li>
+                                    <li>Advanced materials for noise and vibration dampening</li>
+                                    <li>Floating platforms to minimize seabed footprint</li>
+                                    <li>Multi-use platforms combining energy and habitat enhancement</li>
+                                </ul>
+                            </div>
+                            <div class="policy-item">
+                                <h4>Research Priorities</h4>
+                                <ul>
+                                    <li>Long-term ecosystem recovery studies (5-10 year programs)</li>
+                                    <li>Cumulative impact assessments across multiple installations</li>
+                                    <li>Climate change interaction effects on benthic responses</li>
+                                    <li>Socio-ecological studies of tidal energy development</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>Issue #2330</h4>
+                <p>Tidal Energy Installations and Benthic Habitat Alteration</p>
+                <p>Investigating impacts on seabed organisms near tidal turbines</p>
+            </div>
+            <div class="footer-section">
+                <h4>Key Findings</h4>
+                <ul>
+                    <li>15-40% reduction in benthic species richness</li>
+                    <li>2-5x increase in sediment deposition rates</li>
+                    <li>50-200 m² habitat footprint per turbine</li>
+                    <li>6-24 month recovery periods</li>
+                    <li>20-60% abundance reduction in sensitive taxa</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Management Actions</h4>
+                <ul>
+                    <li>Implement comprehensive monitoring programs</li>
+                    <li>Optimize foundation and installation methods</li>
+                    <li>Develop adaptive management frameworks</li>
+                    <li>Establish marine spatial planning</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <a href="#science">Tidal Technology</a>
+                    <a href="#impacts">Case Studies</a>
+                    <a href="#mechanisms">Impact Mechanisms</a>
+                    <a href="#solutions">Mitigation Strategies</a>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Environment Animal Safety Hub - Issue #2330: Tidal Energy Research</p>
+        </div>
+    </footer>
+
+    <script src="tidal-energy-installations-benthic-habitat-alteration.js"></script>
+</body>
+</html>

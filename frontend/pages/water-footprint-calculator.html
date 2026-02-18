@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Water Footprint Calculator 💧 | EcoLife</title>
+  <link rel="stylesheet" href="../css/water-footprint-calculator.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="water-app">
+    <!-- Navbar will be injected -->
+    <div id="navbar-container"></div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1><i class="fas fa-tint"></i> Water Footprint Calculator</h1>
+          <p>Track your daily water consumption, identify wastage, and learn how to conserve this precious resource!</p>
+        </div>
+        <div class="hero-visual">
+          <div class="water-animation">
+            <div class="water-drop">
+              <i class="fas fa-droplet"></i>
+              <div class="ripple"></div>
+              <div class="ripple delay-1"></div>
+              <div class="ripple delay-2"></div>
+            </div>
+            <div class="water-value">
+              <span id="totalWaterLiters">0</span>
+              <span class="unit">L</span>
+            </div>
+            <p class="hero-stat">This Month</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Alert Banner -->
+    <div id="alertBanner" class="alert-banner hidden">
+      <i class="fas fa-exclamation-triangle"></i>
+      <span id="alertMessage"></span>
+      <button class="alert-close" onclick="closeAlert()">×</button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+      <!-- Quick Stats Dashboard -->
+      <section class="stats-dashboard">
+        <div class="stat-card today">
+          <div class="stat-icon">
+            <i class="fas fa-calendar-day"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Today's Usage</h3>
+            <p class="stat-value" id="todayUsage">0</p>
+            <span class="stat-unit">Liters</span>
+          </div>
+          <div class="stat-badge" id="todayStatus">Normal</div>
+        </div>
+
+        <div class="stat-card week">
+          <div class="stat-icon">
+            <i class="fas fa-water"></i>
+          </div>
+          <div class="stat-content">
+            <h3>This Week</h3>
+            <p class="stat-value" id="weekUsage">0</p>
+            <span class="stat-unit">Liters</span>
+          </div>
+          <div class="stat-change" id="weekChange">0%</div>
+        </div>
+
+        <div class="stat-card cost">
+          <div class="stat-icon">
+            <i class="fas fa-dollar-sign"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Water Cost</h3>
+            <p class="stat-value" id="waterCost">$0</p>
+            <span class="stat-unit">This Month</span>
+          </div>
+          <div class="stat-comparison" id="costTrend">Stable</div>
+        </div>
+
+        <div class="stat-card efficiency">
+          <div class="stat-icon">
+            <i class="fas fa-medal"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Conservation Score</h3>
+            <p class="stat-value" id="conservationScore">0</p>
+            <span class="stat-unit">/100</span>
+          </div>
+          <div class="goal-progress-mini">
+            <div class="progress-bar-mini">
+              <div class="progress-fill-mini" id="scoreProgressBar"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Log Water Usage Form -->
+      <section class="log-section">
+        <div class="section-header">
+          <h2><i class="fas fa-plus-circle"></i> Log Water Usage</h2>
+          <p>Track your water consumption by activity to understand your usage patterns</p>
+        </div>
+
+        <div class="log-form-container">
+          <form id="waterForm" class="water-form">
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label for="activityType">
+                  <i class="fas fa-list"></i> Activity Type
+                </label>
+                <select id="activityType" required>
+                  <option value="">Select Activity</option>
+                  <option value="shower">Shower/Bath</option>
+                  <option value="toilet">Toilet Flush</option>
+                  <option value="washing-machine">Washing Machine</option>
+                  <option value="dishwasher">Dishwasher</option>
+                  <option value="hand-wash-dishes">Hand Washing Dishes</option>
+                  <option value="garden">Garden Watering</option>
+                  <option value="car-wash">Car Wash</option>
+                  <option value="drinking-cooking">Drinking & Cooking</option>
+                  <option value="brushing-teeth">Brushing Teeth</option>
+                  <option value="hand-wash">Hand Washing</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="duration">
+                  <i class="fas fa-clock"></i> Duration (minutes)
+                </label>
+                <input 
+                  type="number" 
+                  id="duration" 
+                  placeholder="e.g., 10" 
+                  min="0.5"
+                  step="0.5"
+                  required 
+                />
+                <small class="hint">For applicable activities</small>
+              </div>
+
+              <div class="form-group">
+                <label for="quantity">
+                  <i class="fas fa-hashtag"></i> Quantity/Uses
+                </label>
+                <input 
+                  type="number" 
+                  id="quantity" 
+                  placeholder="e.g., 1" 
+                  min="1"
+                  value="1"
+                  required 
+                />
+                <small class="hint">Number of times</small>
+              </div>
+
+              <div class="form-group">
+                <label for="usageDate">
+                  <i class="fas fa-calendar"></i> Date
+                </label>
+                <input 
+                  type="date" 
+                  id="usageDate" 
+                  required 
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="notes">
+                  <i class="fas fa-comment"></i> Notes (Optional)
+                </label>
+                <input 
+                  type="text" 
+                  id="notes" 
+                  placeholder="Add any notes..." 
+                />
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-primary">
+                <i class="fas fa-plus"></i> Log Water Usage
+              </button>
+              <button type="button" class="btn-secondary" onclick="resetForm()">
+                <i class="fas fa-redo"></i> Reset
+              </button>
+            </div>
+          </form>
+
+          <!-- Quick Reference Info -->
+          <div class="reference-info">
+            <h4><i class="fas fa-info-circle"></i> Average Water Usage</h4>
+            <ul class="usage-list">
+              <li><i class="fas fa-shower"></i> <strong>Shower:</strong> 9-10 L/min</li>
+              <li><i class="fas fa-toilet"></i> <strong>Toilet:</strong> 6-9 L/flush</li>
+              <li><i class="fas fa-tshirt"></i> <strong>Washing Machine:</strong> 40-60 L/load</li>
+              <li><i class="fas fa-utensils"></i> <strong>Dishwasher:</strong> 15-20 L/cycle</li>
+              <li><i class="fas fa-seedling"></i> <strong>Garden:</strong> 15-20 L/min</li>
+              <li><i class="fas fa-car"></i> <strong>Car Wash:</strong> 150-200 L/wash</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Charts Section -->
+      <section class="charts-section">
+        <div class="chart-container">
+          <div class="chart-header">
+            <h3><i class="fas fa-chart-line"></i> Daily Water Consumption</h3>
+            <div class="chart-controls">
+              <button class="chart-btn active" onclick="updateChartPeriod('week')">7 Days</button>
+              <button class="chart-btn" onclick="updateChartPeriod('month')">30 Days</button>
+            </div>
+          </div>
+          <canvas id="dailyChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+          <div class="chart-header">
+            <h3><i class="fas fa-chart-pie"></i> Water by Activity</h3>
+          </div>
+          <canvas id="activityChart"></canvas>
+        </div>
+      </section>
+
+      <!-- Activity Log -->
+      <section class="activity-list-section">
+        <div class="section-header">
+          <h2><i class="fas fa-list"></i> Your Water Activities</h2>
+          <div class="list-controls">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input 
+                type="text" 
+                id="searchActivity" 
+                placeholder="Search activities..."
+                onkeyup="filterActivities()"
+              />
+            </div>
+            <select id="filterActivity" onchange="filterActivities()">
+              <option value="all">All Activities</option>
+              <option value="shower">Shower</option>
+              <option value="toilet">Toilet</option>
+              <option value="washing-machine">Washing Machine</option>
+              <option value="dishwasher">Dishwasher</option>
+              <option value="garden">Garden</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="activityList" class="activity-list">
+          <div class="empty-state">
+            <i class="fas fa-droplet"></i>
+            <p>No activities logged yet</p>
+            <span>Start tracking your water consumption above!</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Wastage Detection Section -->
+      <section class="wastage-section">
+        <div class="section-header">
+          <h2><i class="fas fa-exclamation-circle"></i> Water Wastage Detection</h2>
+          <p>Identify areas where you can save water and reduce waste</p>
+        </div>
+
+        <div class="wastage-grid" id="wastageGrid">
+          <!-- Wastage cards will be dynamically added here -->
+        </div>
+      </section>
+
+      <!-- Water Saving Tips -->
+      <section class="tips-section">
+        <div class="section-header">
+          <h2><i class="fas fa-lightbulb"></i> Water Conservation Tips</h2>
+          <p>Smart ways to reduce your water footprint</p>
+        </div>
+
+        <div class="tips-grid">
+          <div class="tip-card">
+            <div class="tip-icon shower-icon">
+              <i class="fas fa-shower"></i>
+            </div>
+            <h4>Shower & Bath</h4>
+            <ul>
+              <li>Take 5-minute showers instead of baths</li>
+              <li>Install low-flow showerheads (6 L/min)</li>
+              <li>Turn off water while soaping</li>
+              <li>Collect cold water while waiting for hot</li>
+            </ul>
+            <div class="saving-estimate">
+              <span class="saving-label">Save up to:</span>
+              <span class="saving-value">50 L/day</span>
+            </div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-icon toilet-icon">
+              <i class="fas fa-toilet"></i>
+            </div>
+            <h4>Toilet</h4>
+            <ul>
+              <li>Install dual-flush toilets (3/6 L)</li>
+              <li>Don't use toilet as trash bin</li>
+              <li>Fix leaks immediately</li>
+              <li>Use half-flush when possible</li>
+            </ul>
+            <div class="saving-estimate">
+              <span class="saving-label">Save up to:</span>
+              <span class="saving-value">30 L/day</span>
+            </div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-icon kitchen-icon">
+              <i class="fas fa-utensils"></i>
+            </div>
+            <h4>Kitchen</h4>
+            <ul>
+              <li>Run dishwasher only when full</li>
+              <li>Use basin for hand washing dishes</li>
+              <li>Keep drinking water in fridge</li>
+              <li>Thaw food in fridge, not under tap</li>
+            </ul>
+            <div class="saving-estimate">
+              <span class="saving-label">Save up to:</span>
+              <span class="saving-value">40 L/day</span>
+            </div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-icon laundry-icon">
+              <i class="fas fa-tshirt"></i>
+            </div>
+            <h4>Laundry</h4>
+            <ul>
+              <li>Only wash full loads</li>
+              <li>Use water-efficient machines</li>
+              <li>Reuse greywater for garden</li>
+              <li>Choose cold water cycles</li>
+            </ul>
+            <div class="saving-estimate">
+              <span class="saving-label">Save up to:</span>
+              <span class="saving-value">100 L/week</span>
+            </div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-icon garden-icon">
+              <i class="fas fa-seedling"></i>
+            </div>
+            <h4>Garden & Outdoor</h4>
+            <ul>
+              <li>Water early morning or evening</li>
+              <li>Use drip irrigation systems</li>
+              <li>Collect rainwater in barrels</li>
+              <li>Choose drought-resistant plants</li>
+            </ul>
+            <div class="saving-estimate">
+              <span class="saving-label">Save up to:</span>
+              <span class="saving-value">200 L/week</span>
+            </div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-icon general-icon">
+              <i class="fas fa-house-water"></i>
+            </div>
+            <h4>General Tips</h4>
+            <ul>
+              <li>Fix all leaks promptly</li>
+              <li>Install aerators on taps</li>
+              <li>Turn off taps when not needed</li>
+              <li>Monitor your water meter</li>
+            </ul>
+            <div class="saving-estimate">
+              <span class="saving-label">Save up to:</span>
+              <span class="saving-value">80 L/day</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Comparison Section -->
+      <section class="comparison-section">
+        <div class="section-header">
+          <h2><i class="fas fa-balance-scale"></i> How Do You Compare?</h2>
+          <p>See how your water usage compares to average households</p>
+        </div>
+
+        <div class="comparison-grid">
+          <div class="comparison-card">
+            <h4>Your Daily Average</h4>
+            <div class="comparison-value" id="yourAverage">0 L</div>
+            <div class="comparison-bar">
+              <div class="bar-fill your-bar" id="yourBar"></div>
+            </div>
+          </div>
+
+          <div class="comparison-card">
+            <h4>National Average</h4>
+            <div class="comparison-value">340 L</div>
+            <div class="comparison-bar">
+              <div class="bar-fill average-bar" style="width: 100%;"></div>
+            </div>
+          </div>
+
+          <div class="comparison-card">
+            <h4>Eco-Friendly Target</h4>
+            <div class="comparison-value">150 L</div>
+            <div class="comparison-bar">
+              <div class="bar-fill target-bar" style="width: 44%;"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Virtual Water Section -->
+      <section class="virtual-water-section">
+        <div class="section-header">
+          <h2><i class="fas fa-eye"></i> Virtual Water Footprint</h2>
+          <p>Hidden water used to produce everyday items</p>
+        </div>
+
+        <div class="virtual-water-grid">
+          <div class="virtual-item">
+            <div class="virtual-icon">🥩</div>
+            <h4>1kg Beef</h4>
+            <p class="virtual-amount">15,000 L</p>
+          </div>
+          <div class="virtual-item">
+            <div class="virtual-icon">👕</div>
+            <h4>Cotton T-Shirt</h4>
+            <p class="virtual-amount">2,700 L</p>
+          </div>
+          <div class="virtual-item">
+            <div class="virtual-icon">☕</div>
+            <h4>Cup of Coffee</h4>
+            <p class="virtual-amount">140 L</p>
+          </div>
+          <div class="virtual-item">
+            <div class="virtual-icon">📱</div>
+            <h4>Smartphone</h4>
+            <p class="virtual-amount">12,760 L</p>
+          </div>
+          <div class="virtual-item">
+            <div class="virtual-icon">🍎</div>
+            <h4>1kg Apples</h4>
+            <p class="virtual-amount">822 L</p>
+          </div>
+          <div class="virtual-item">
+            <div class="virtual-icon">📄</div>
+            <h4>Sheet of Paper</h4>
+            <p class="virtual-amount">10 L</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Monthly Summary -->
+      <section class="summary-section">
+        <div class="section-header">
+          <h2><i class="fas fa-chart-bar"></i> Monthly Summary</h2>
+          <button class="btn-export" onclick="exportData()">
+            <i class="fas fa-download"></i> Export Report
+          </button>
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="summary-icon water">
+              <i class="fas fa-water"></i>
+            </div>
+            <div class="summary-content">
+              <h4>Total Water Used</h4>
+              <p class="summary-value" id="summaryTotalWater">0 L</p>
+              <span class="summary-trend" id="summaryWaterTrend">
+                <i class="fas fa-arrow-down"></i> 8% from last month
+              </span>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-icon cost">
+              <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="summary-content">
+              <h4>Total Cost</h4>
+              <p class="summary-value" id="summaryTotalCost">$0.00</p>
+              <span class="summary-trend" id="summaryCostTrend">
+                <i class="fas fa-arrow-down"></i> $8 saved
+              </span>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-icon saved">
+              <i class="fas fa-leaf"></i>
+            </div>
+            <div class="summary-content">
+              <h4>Water Saved</h4>
+              <p class="summary-value" id="summaryWaterSaved">0 L</p>
+              <span class="summary-trend" id="summarySavedTrend">
+                <i class="fas fa-trophy"></i> Keep it up!
+              </span>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-icon streak">
+              <i class="fas fa-fire"></i>
+            </div>
+            <div class="summary-content">
+              <h4>Conservation Streak</h4>
+              <p class="summary-value" id="summaryStreak">0 days</p>
+              <span class="summary-trend">
+                <i class="fas fa-star"></i> Below target
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <p>
+          <i class="fas fa-droplet"></i> 
+          Every drop counts! | EcoLife 2026
+        </p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Load Navbar Component -->
+  <script src="../components/navbar/navbar.js"></script>
+  <!-- Main JavaScript -->
+  <script src="../js/water-footprint-calculator.js"></script>
+</body>
+</html>

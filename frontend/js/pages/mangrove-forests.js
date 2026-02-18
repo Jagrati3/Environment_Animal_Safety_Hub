@@ -234,6 +234,88 @@ function showRegionDetails(region) {
     }
 }
 
+function showMigrationBarrierDetails(barrier) {
+    const barriers = {
+        'urban-infrastructure': {
+            title: 'Urban Infrastructure Barriers',
+            content: `
+                <h4>Hardened Shorelines</h4>
+                <p>Seawalls, bulkheads, and concrete structures prevent natural shoreline migration. These artificial barriers stop mangroves from establishing new root systems landward.</p>
+
+                <h4>Impact on Migration</h4>
+                <ul>
+                    <li><strong>Blocked Pathways:</strong> Mangroves cannot colonize areas behind hard structures</li>
+                    <li><strong>Erosion Acceleration:</strong> Hard surfaces reflect wave energy, increasing erosion</li>
+                    <li><strong>Sediment Starvation:</strong> Reduced sediment deposition in protected areas</li>
+                    <li><strong>Ecosystem Fragmentation:</strong> Isolated mangrove patches lose connectivity</li>
+                </ul>
+
+                <h4>Case Studies</h4>
+                <p>In Miami, Florida, extensive seawall construction has prevented mangrove migration despite 20cm of sea level rise over the past century.</p>
+            `
+        },
+        'industrial-zones': {
+            title: 'Industrial Development Impact',
+            content: `
+                <h4>Port and Industrial Expansion</h4>
+                <p>Ports, shipping terminals, and industrial facilities occupy prime coastal real estate that would serve as migration corridors.</p>
+
+                <h4>Environmental Consequences</h4>
+                <ul>
+                    <li><strong>Habitat Loss:</strong> Direct destruction of existing mangrove forests</li>
+                    <li><strong>Pollution:</strong> Industrial runoff degrades water quality for remaining mangroves</li>
+                    <li><strong>Dredging:</strong> Port maintenance removes sediment needed for mangrove growth</li>
+                    <li><strong>Navigation Channels:</strong> Deep channels alter natural water flow patterns</li>
+                </ul>
+
+                <h4>Global Examples</h4>
+                <p>The Port of Rotterdam expansion has eliminated 80% of nearby mangrove habitats, blocking migration pathways for the remaining forests.</p>
+            `
+        },
+        'aquaculture-expansion': {
+            title: 'Aquaculture Industry Growth',
+            content: `
+                <h4>Shrimp Farm Proliferation</h4>
+                <p>Shrimp aquaculture has destroyed 38% of global mangroves, replacing diverse ecosystems with monoculture ponds.</p>
+
+                <h4>Migration Barriers Created</h4>
+                <ul>
+                    <li><strong>Land Conversion:</strong> Vast areas converted to ponds eliminate migration space</li>
+                    <li><strong>Water Management:</strong> Artificial water control prevents natural tidal flows</li>
+                    <li><strong>Chemical Pollution:</strong> Antibiotics and pesticides harm migrating propagules</li>
+                    <li><strong>Soil Degradation:</strong> Pond soils become unsuitable for mangrove recolonization</li>
+                </ul>
+
+                <h4>Sustainable Alternatives</h4>
+                <p>Integrated mangrove-aquaculture systems can maintain some ecosystem functions while allowing limited migration.</p>
+            `
+        },
+        'sea-level-rise': {
+            title: 'Sea Level Rise and Coastal Squeeze',
+            content: `
+                <h4>Coastal Squeeze Phenomenon</h4>
+                <p>Mangroves face extinction when squeezed between rising seas and human development with nowhere to migrate.</p>
+
+                <h4>Climate Change Impacts</h4>
+                <ul>
+                    <li><strong>Accelerated Rise:</strong> Sea levels rising 3x faster than global averages in some regions</li>
+                    <li><strong>Storm Intensification:</strong> More frequent extreme weather damages remaining forests</li>
+                    <li><strong>Salinity Changes:</strong> Altered freshwater inputs affect mangrove physiology</li>
+                    <li><strong>Temperature Stress:</strong> Warmer waters increase disease and pest pressures</li>
+                </ul>
+
+                <h4>Projected Losses</h4>
+                <p>Under high emissions scenarios, up to 70% of mangroves could be lost by 2100 due to migration barriers and sea level rise.</p>
+            `
+        }
+    };
+
+    const details = barriers[barrier];
+    if (details) {
+        showModal(details.title, details.content);
+    }
+}
+
 // Utility functions
 function showNotification(message, type = 'info') {
     // Create a simple notification

@@ -3,11 +3,15 @@
  * Handles 404, 500, and other HTTP errors with proper responses
  */
 
+const path = require('path');
+
 // 404 Error Handler - Must be placed AFTER all routes
 const handle404 = (req, res, next) => {
-  const error = new Error(`Route not found: ${req.method} ${req.originalUrl}`);
-  error.status = 404;
-  
+  // Check if headers have already been sent to prevent multiple responses
+  if (res.headersSent) {
+    return next();
+  }
+
   // Log the 404 error
   console.log(`❌ 404 Error: ${req.method} ${req.originalUrl} - IP: ${req.ip}`);
   
@@ -21,14 +25,27 @@ const handle404 = (req, res, next) => {
     });
   }
   
-  // For web requests, serve custom 404 page or redirect to home
-  res.status(404).sendFile(path.join(__dirname, '../frontend/404.html'));
+  // For web requests, serve custom 404 page
+  // Correct path: Go up two levels from backend/middleware to root, then to frontend
+  const filePath = path.join(__dirname, '../../frontend/404.html');
+  res.status(404).sendFile(filePath, (err) => {
+    if (err) {
+      console.error('Error sending 404 page:', err);
+      // Fallback simple 404 if file missing
+      res.status(404).send('<h1>404 Page Not Found</h1><p>The requested URL was not found on this server.</p>');
+    }
+  });
 };
 
 // Global Error Handler - Must be placed LAST
 const handleErrors = (err, req, res, next) => {
   console.error('🚨 Server Error:', err.stack);
   
+  // If headers already sent, delegate to default express handler
+  if (res.headersSent) {
+    return next(err);
+  }
+
   const status = err.status || 500;
   const message = err.message || 'Internal Server Error';
   
@@ -68,7 +85,8 @@ const handleErrors = (err, req, res, next) => {
       </html>
     `);
   } else {
-    res.status(status).redirect('/');
+    // For other errors, redirect to home or show generic error
+    res.status(status).send(`<h1>Error ${status}</h1><p>${message}</p>`);
   }
 };
 

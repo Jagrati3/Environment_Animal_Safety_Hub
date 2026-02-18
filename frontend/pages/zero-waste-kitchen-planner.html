@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zero-Waste Kitchen Planner | EcoLife</title>
+  <link rel="stylesheet" href="../css/zero-waste-kitchen-planner.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+<body>
+  <div class="kitchen-app">
+    <!-- Navbar will be injected -->
+    <div id="navbar-container"></div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1><i class="fas fa-utensils"></i> Zero-Waste Kitchen Planner</h1>
+          <p>Track pantry items, cook smarter, and reduce food waste with recipes, challenges, and achievements.</p>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-meter">
+            <div class="meter-ring">
+              <div class="meter-value" id="wasteSavedValue">0.0</div>
+              <div class="meter-label">kg saved</div>
+            </div>
+            <div class="meter-caption">This month</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Alert Banner -->
+    <div id="alertBanner" class="alert-banner hidden">
+      <i class="fas fa-check-circle"></i>
+      <span id="alertMessage"></span>
+      <button class="alert-close" onclick="closeAlert()">x</button>
+    </div>
+
+    <div class="container">
+      <!-- Quick Stats -->
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-carrot"></i></div>
+          <div class="stat-content">
+            <h3>Pantry Items</h3>
+            <p class="stat-value" id="pantryCount">0</p>
+            <span class="stat-unit">Active</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-fire"></i></div>
+          <div class="stat-content">
+            <h3>Meals Logged</h3>
+            <p class="stat-value" id="mealsLogged">0</p>
+            <span class="stat-unit">This month</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-hourglass-half"></i></div>
+          <div class="stat-content">
+            <h3>Expiring Soon</h3>
+            <p class="stat-value" id="expiringCount">0</p>
+            <span class="stat-unit">Next 3 days</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-award"></i></div>
+          <div class="stat-content">
+            <h3>Achievements</h3>
+            <p class="stat-value" id="achievementCount">0</p>
+            <span class="stat-unit">Unlocked</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pantry Input -->
+      <section class="panel">
+        <div class="section-header">
+          <h2><i class="fas fa-barcode"></i> Add Pantry Item</h2>
+          <p>Manually add items to your pantry and track expiration dates.</p>
+        </div>
+        <form id="pantryForm" class="form-grid">
+          <div class="field">
+            <label for="itemName">Item name</label>
+            <input id="itemName" type="text" placeholder="e.g., spinach, oats" required />
+          </div>
+          <div class="field">
+            <label for="itemQty">Quantity</label>
+            <input id="itemQty" type="number" min="1" value="1" required />
+          </div>
+          <div class="field">
+            <label for="itemUnit">Unit</label>
+            <select id="itemUnit">
+              <option value="pcs">pcs</option>
+              <option value="g">g</option>
+              <option value="kg">kg</option>
+              <option value="ml">ml</option>
+              <option value="l">l</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="itemCategory">Category</label>
+            <select id="itemCategory">
+              <option value="produce">Produce</option>
+              <option value="grains">Grains</option>
+              <option value="protein">Protein</option>
+              <option value="dairy">Dairy</option>
+              <option value="pantry">Pantry</option>
+              <option value="frozen">Frozen</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="itemExpiry">Expiration date</label>
+            <input id="itemExpiry" type="date" required />
+          </div>
+          <div class="field form-action">
+            <button type="submit" class="primary-btn"><i class="fas fa-plus"></i> Add item</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Pantry List -->
+      <section class="panel">
+        <div class="section-header">
+          <h2><i class="fas fa-boxes-stacked"></i> Pantry Overview</h2>
+          <p>See what you have and what needs to be used soon.</p>
+        </div>
+        <div class="filters">
+          <button class="filter-btn active" onclick="filterPantry('all')">All</button>
+          <button class="filter-btn" onclick="filterPantry('expiring')">Expiring soon</button>
+          <button class="filter-btn" onclick="filterPantry('expired')">Expired</button>
+        </div>
+        <div id="pantryList" class="pantry-list"></div>
+      </section>
+
+      <!-- Recipe Suggestions -->
+      <section class="panel">
+        <div class="section-header">
+          <h2><i class="fas fa-seedling"></i> Recipe Suggestions</h2>
+          <p>Recipes based on your pantry items. Log a meal to track waste saved.</p>
+        </div>
+        <div id="recipesGrid" class="recipes-grid"></div>
+      </section>
+
+      <!-- Quick Meal Log -->
+      <section class="panel">
+        <div class="section-header">
+          <h2><i class="fas fa-plate-wheat"></i> Quick Meal Log</h2>
+          <p>Log meals you cooked to update stats and challenges.</p>
+        </div>
+        <form id="mealForm" class="form-grid">
+          <div class="field">
+            <label for="mealName">Meal name</label>
+            <input id="mealName" type="text" placeholder="e.g., Veggie stir-fry" required />
+          </div>
+          <div class="field">
+            <label for="mealItems">Items used (comma separated)</label>
+            <input id="mealItems" type="text" placeholder="spinach, rice, eggs" required />
+          </div>
+          <div class="field">
+            <label for="mealWaste">Estimated waste saved (kg)</label>
+            <input id="mealWaste" type="number" min="0" step="0.1" value="0.3" required />
+          </div>
+          <div class="field form-action">
+            <button type="submit" class="primary-btn"><i class="fas fa-check"></i> Log meal</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Meal Log -->
+      <section class="panel">
+        <div class="section-header">
+          <h2><i class="fas fa-list"></i> Meal History</h2>
+          <p>Recent meals and waste savings.</p>
+        </div>
+        <div id="mealLog" class="meal-log"></div>
+      </section>
+
+      <!-- Challenges -->
+      <section class="panel">
+        <div class="section-header">
+          <h2><i class="fas fa-tasks"></i> Weekly Challenges</h2>
+          <p>Complete weekly challenges to stay consistent.</p>
+        </div>
+        <div id="challengesGrid" class="challenges-grid"></div>
+      </section>
+
+      <!-- Achievements -->
+      <section class="panel">
+        <div class="section-header">
+          <h2><i class="fas fa-medal"></i> Achievements</h2>
+          <p>Unlock milestones as you build zero-waste habits.</p>
+        </div>
+        <div id="achievementsGrid" class="achievements-grid"></div>
+      </section>
+
+      <!-- Waste Saved Dashboard -->
+      <section class="panel">
+        <div class="section-header">
+          <h2><i class="fas fa-chart-line"></i> Waste-Saved Dashboard</h2>
+          <p>See your waste reduction impact at a glance.</p>
+        </div>
+        <div class="dashboard">
+          <div class="dashboard-card">
+            <h3>Total Waste Saved</h3>
+            <div class="dashboard-value" id="totalWasteSaved">0.0 kg</div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="wasteProgress"></div>
+            </div>
+            <div class="progress-label">Goal: 10 kg</div>
+          </div>
+          <div class="dashboard-card">
+            <h3>Most Used Item</h3>
+            <div class="dashboard-value" id="mostUsedItem">-</div>
+            <div class="dashboard-subtext">Based on meal logs</div>
+          </div>
+          <div class="dashboard-card">
+            <h3>Pantry Health</h3>
+            <div class="dashboard-value" id="pantryHealth">0%</div>
+            <div class="dashboard-subtext">Items not expired</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="../js/zero-waste-kitchen-planner.js"></script>
+</body>
+</html>

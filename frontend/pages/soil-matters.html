@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Soil Matters</title>
+
+<style>
+:root{
+  --top:#7f5539;
+  --mid:#9c6644;
+  --deep:#6f4518;
+  --rock:#432818;
+  --accent:#ddb892;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(180deg,#1b4332,#081c15);
+  font-family:Segoe UI, sans-serif;
+  color:#fefae0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+h1{
+  margin-top:30px;
+  font-size:3rem;
+  text-align:center;
+}
+
+/* SOIL AREA */
+.soil-box{
+  margin-top:40px;
+  width:90%;
+  max-width:600px;
+  height:300px;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+/* LAYERS */
+.layer{
+  height:25%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.2rem;
+  transition:transform 0.6s ease, opacity 0.6s ease;
+}
+
+.layer1{background:var(--top)}
+.layer2{background:var(--mid)}
+.layer3{background:var(--deep)}
+.layer4{background:var(--rock)}
+
+.hidden{
+  transform:translateY(100%);
+  opacity:0;
+}
+
+/* MESSAGE */
+.message{
+  margin-top:30px;
+  background:rgba(0,0,0,0.3);
+  padding:20px 24px;
+  border-radius:18px;
+  max-width:650px;
+  animation:fadeIn 0.6s ease;
+  line-height:1.6;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(20px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+/* BUTTON */
+button{
+  margin-top:30px;
+  padding:14px 36px;
+  font-size:1rem;
+  background:var(--accent);
+  color:#432818;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  transition:0.3s;
+}
+button:hover{
+  transform:scale(1.05);
+}
+
+.footer{
+  margin-top:20px;
+  font-size:0.9rem;
+  opacity:0.8;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🟤 Soil Matters</h1>
+
+<div class="soil-box">
+  <div class="layer layer1">Topsoil</div>
+  <div class="layer layer2">Nutrients</div>
+  <div class="layer layer3">Roots</div>
+  <div class="layer layer4">Bedrock</div>
+</div>
+
+<div id="messages"></div>
+
+<button onclick="dig()">Dig Deeper</button>
+
+<p class="footer">Life begins beneath our feet.</p>
+
+<script>
+const layers = document.querySelectorAll(".layer");
+
+const texts = [
+  "Topsoil supports 95% of our food production.",
+  "Healthy soil stores water and nutrients.",
+  "Roots prevent erosion and support ecosystems.",
+  "Damaged soil takes centuries to recover."
+];
+
+let depth = 0;
+
+function dig(){
+  if(depth < layers.length){
+    layers[depth].classList.add("hidden");
+
+    const msg = document.createElement("div");
+    msg.className = "message";
+    msg.textContent = texts[depth];
+    document.getElementById("messages").appendChild(msg);
+
+    depth++;
+  } else {
+    alert("🌍 Soil is finite. Protect it.");
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soil Acidification from Acid Rain Recovery Lag - Long-term Ecological Effects</title>
+<link rel="stylesheet" href="css/soil-acidification-from-acid-rain-recovery-lag.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="accessibility-controls">
+        <button class="accessibility-btn" onclick="toggleHighContrast()">High Contrast</button>
+        <button class="accessibility-btn" onclick="toggleFontSize()">Font Size</button>
+        <button class="accessibility-btn" onclick="toggleReducedMotion()">Reduced Motion</button>
+    </div>
+
+    <header class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Soil Acidification from Acid Rain</h1>
+                <p class="hero-subtitle">Recovery Lag: Examining Long-term Ecological Effects Even After Emission Reductions</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">30-40%</span>
+                        <span class="stat-label">Forest Soils Affected</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">50-100</span>
+                        <span class="stat-label">Years Recovery Time</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">20-30%</span>
+                        <span class="stat-label">Soils Still Acidifying</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="acidification-simulator">
+                    <h3>Soil Acidification Simulator</h3>
+                    <div class="simulator-controls">
+                        <div class="control-group">
+                            <label for="emission-level">Emission Level (kg/ha/year):</label>
+                            <input type="range" id="emission-level" min="0" max="100" value="40">
+                            <span class="control-value" id="emission-value">40</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="recovery-years">Years Since Reduction:</label>
+                            <input type="range" id="recovery-years" min="0" max="50" value="20">
+                            <span class="control-value" id="recovery-value">20 years</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="soil-type">Soil Type:</label>
+                            <select id="soil-type">
+                                <option value="sand">Sandy</option>
+                                <option value="loam">Loamy</option>
+                                <option value="clay">Clay</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="management">Management:</label>
+                            <select id="management">
+                                <option value="none">No Intervention</option>
+                                <option value="liming">Liming</option>
+                                <option value="fertilizer">Fertilization</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="simulator-results">
+                        <div class="result-metric">
+                            <span class="metric-label">Soil pH:</span>
+                            <span class="metric-value" id="soil-ph">4.8</span>
+                            <div class="ph-indicator">
+                                <div class="ph-bar" id="ph-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Recovery Status:</span>
+                            <span class="metric-value" id="recovery-status">Slow Recovery</span>
+                            <div class="recovery-indicators">
+                                <span class="indicator" id="chemical-recovery">🧪 Chemical</span>
+                                <span class="indicator" id="biological-recovery">🦠 Biological</span>
+                                <span class="indicator" id="ecosystem-recovery">🌿 Ecosystem</span>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Nutrient Availability:</span>
+                            <span class="metric-value" id="nutrient-status">Limited</span>
+                            <div class="nutrient-bars">
+                                <div class="nutrient-bar">
+                                    <span class="nutrient-label">Ca:</span>
+                                    <div class="bar-container">
+                                        <div class="bar-fill calcium-fill" id="calcium-bar"></div>
+                                    </div>
+                                </div>
+                                <div class="nutrient-bar">
+                                    <span class="nutrient-label">Mg:</span>
+                                    <div class="bar-container">
+                                        <div class="bar-fill magnesium-fill" id="magnesium-bar"></div>
+                                    </div>
+                                </div>
+                                <div class="nutrient-bar">
+                                    <span class="nutrient-label">Al:</span>
+                                    <div class="bar-container">
+                                        <div class="bar-fill aluminum-fill" id="aluminum-bar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Forest Health:</span>
+                            <span class="metric-value" id="forest-health">Declining</span>
+                            <div class="health-indicators">
+                                <div class="health-meter">
+                                    <span class="health-label">Growth:</span>
+                                    <div class="health-bar">
+                                        <div class="health-fill growth-fill" id="growth-bar"></div>
+                                    </div>
+                                </div>
+                                <div class="health-meter">
+                                    <span class="health-label">Vitality:</span>
+                                    <div class="health-bar">
+                                        <div class="health-fill vitality-fill" id="vitality-bar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-icon">🧪</span>
+                <span class="brand-text">AcidRain Hub</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#science" class="nav-link active" data-tab="science">Science</a></li>
+                <li><a href="#impacts" class="nav-link" data-tab="impacts">Impacts</a></li>
+                <li><a href="#mechanisms" class="nav-link" data-tab="mechanisms">Mechanisms</a></li>
+                <li><a href="#solutions" class="nav-link" data-tab="solutions">Solutions</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section id="science" class="content-section active">
+            <div class="section-container">
+                <h2>The Science of Acid Rain Soil Acidification</h2>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>Acid Deposition Patterns</h3>
+                        <div class="deposition-characteristics">
+                            <div class="deposition-category">
+                                <h4>🌧️ Wet Deposition</h4>
+                                <div class="deposition-metrics">
+                                    <div class="metric">Sulfate: <span id="sulfate-dep">25-40 kg/ha</span></div>
+                                    <div class="metric">Nitrate: <span id="nitrate-dep">10-20 kg/ha</span></div>
+                                    <div class="metric">pH range: <span id="rain-ph">3.5-4.5</span></div>
+                                    <div class="metric">Annual total: <span id="total-dep">35-60 kg/ha</span></div>
+                                </div>
+                            </div>
+                            <div class="deposition-category">
+                                <h4>💨 Dry Deposition</h4>
+                                <div class="deposition-metrics">
+                                    <div class="metric">SO₂ gas: <span id="so2-gas">15-25 kg/ha</span></div>
+                                    <div class="metric">NO₂ gas: <span id="no2-gas">5-15 kg/ha</span></div>
+                                    <div class="metric">Particulates: <span id="particulates">10-20 kg/ha</span></div>
+                                    <div class="metric">Total dry: <span id="total-dry">30-60 kg/ha</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h3>Soil Acidification Trends</h3>
+                        <div class="acidification-chart">
+                            <canvas id="acidificationChart"></canvas>
+                        </div>
+                        <div class="acidification-legend">
+                            <div class="legend-item">
+                                <span class="legend-color surface"></span>
+                                <span>Surface Soil (0-10cm)</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color subsurface"></span>
+                                <span>Subsurface Soil (10-50cm)</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color recovery"></span>
+                                <span>Recovery Trend</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h3>Recovery Lag Effects</h3>
+                        <div class="recovery-lag">
+                            <div class="lag-metric">
+                                <div class="circle-value">50-100</div>
+                                <div class="circle-label">Years for Chemical Recovery</div>
+                            </div>
+                            <div class="lag-arrow">→</div>
+                            <div class="lag-metric">
+                                <div class="circle-value">100-200</div>
+                                <div class="circle-label">Years for Biological Recovery</div>
+                            </div>
+                            <div class="lag-stats">
+                                <div class="stat">Soil pH recovery: 0.1-0.3 units/decade</div>
+                                <div class="stat">Base saturation: 20-50% still depleted</div>
+                                <div class="stat">Aluminum toxicity: Persists 20-40 years</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="impacts" class="content-section">
+            <div class="section-container">
+                <h2>Regional Impacts and Case Studies</h2>
+                <div class="case-studies">
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Central Europe</h3>
+                            <span class="case-location">Black Forest, Germany</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">50-70 kg/ha</div>
+                                <div class="stat">pH 3.5-4.5</div>
+                                <div class="stat">€2-3B</div>
+                            </div>
+                            <p>Norway spruce decline, soil erosion, water quality degradation despite 70-80% emission reductions.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Northeastern US</h3>
+                            <span class="case-location">Adirondack Mountains</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">40-60 kg/ha</div>
+                                <div class="stat">pH 4.0-5.0</div>
+                                <div class="stat">$1-2B</div>
+                            </div>
+                            <p>Sugar maple decline, lake acidification, slow forest recovery despite 50-60% emission cuts.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Scandinavia</h3>
+                            <span class="case-location">Norway & Sweden</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">30-50 kg/ha</div>
+                                <div class="stat">pH 4.2-4.8</div>
+                                <div class="stat">€500M+</div>
+                            </div>
+                            <p>Salmon rivers affected, forest productivity reduced, continued acidification despite reductions.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>China</h3>
+                            <span class="case-location">Sichuan Basin</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">30-50 kg/ha</div>
+                                <div class="stat">pH 4.0-5.0</div>
+                                <div class="stat">¥50B+</div>
+                            </div>
+                            <p>Tea plantations damaged, forest decline, ongoing acidification from continued high emissions.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Southeastern Canada</h3>
+                            <span class="case-location">Nova Scotia</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">35-55 kg/ha</div>
+                                <div class="stat">pH 4.1-4.7</div>
+                                <div class="stat">CAD $300M+</div>
+                            </div>
+                            <p>Atlantic salmon populations, sugar maple forests, mixed recovery patterns.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="global-impact">
+                    <h3>Global Soil Acidification Status</h3>
+                    <canvas id="globalAcidificationChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="mechanisms" class="content-section">
+            <div class="section-container">
+                <h2>Mechanisms of Acidification and Recovery Lag</h2>
+                <div class="mechanism-explorer">
+                    <div class="mechanism-tabs">
+                        <button class="mechanism-tab active" data-mechanism="chemical">Chemical</button>
+                        <button class="mechanism-tab" data-mechanism="biological">Biological</button>
+                        <button class="mechanism-tab" data-mechanism="recovery">Recovery</button>
+                    </div>
+
+                    <div class="mechanism-content">
+                        <div class="mechanism-panel active" id="chemical-panel">
+                            <h3>Chemical Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Cation Exchange</h4>
+                                    <p>H⁺ ions from acid deposition displace base cations, reducing soil buffering capacity and nutrient availability.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Aluminum Mobilization</h4>
+                                    <p>Acid conditions increase Al³⁺ solubility, causing toxicity and P immobilization through Al-P complexes.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Base Cation Depletion</h4>
+                                    <p>Historical losses of Ca²⁺, Mg²⁺, K⁺ through leaching, with slow replenishment from weathering.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mechanism-panel" id="biological-panel">
+                            <h3>Biological Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Microbial Community Changes</h4>
+                                    <p>Acid conditions alter soil microbial composition, slowing decomposition and nutrient cycling.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Mycorrhizal Disruption</h4>
+                                    <p>Reduced mycorrhizal associations impair nutrient uptake, especially phosphorus acquisition.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Root Function Impairment</h4>
+                                    <p>Aluminum toxicity and nutrient deficiencies reduce root growth and fine root turnover.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mechanism-panel" id="recovery-panel">
+                            <h3>Recovery Lag Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Slow Chemical Reversal</h4>
+                                    <p>Base cation pools depleted, weathering rates slow, Al hysteresis prevents rapid pH recovery.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Biological Legacy Effects</h4>
+                                    <p>Microbial communities and mycorrhizal networks require decades to recover functional diversity.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Ecosystem Memory</h4>
+                                    <p>Historical acidification creates persistent changes in species composition and ecosystem processes.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solutions" class="content-section">
+            <div class="section-container">
+                <h2>Management and Remediation Strategies</h2>
+                <div class="solutions-framework">
+                    <div class="solution-category">
+                        <h3>Emission Controls</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>SO₂ Reduction</h4>
+                                <p>Continue aggressive sulfur emission reductions through power plant upgrades and fuel switching.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>NOₓ Controls</h4>
+                                <p>Implement vehicle emission standards and industrial NOₓ reduction technologies.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Ammonia Management</h4>
+                                <p>Reduce agricultural ammonia emissions through improved manure management and fertilizer practices.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="solution-category">
+                        <h3>Soil Remediation</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Liming Programs</h4>
+                                <p>Apply calcium carbonate or other liming materials to raise soil pH and restore base saturation.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Nutrient Additions</h4>
+                                <p>Add base cations (Ca, Mg, K) and micronutrients to correct deficiencies and improve soil fertility.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Organic Amendments</h4>
+                                <p>Incorporate organic matter to improve soil buffering capacity and microbial activity.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="solution-category">
+                        <h3>Monitoring & Research</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Long-term Networks</h4>
+                                <p>Maintain comprehensive monitoring networks to track recovery progress and guide management.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Predictive Modeling</h4>
+                                <p>Develop models to predict recovery trajectories and optimize remediation strategies.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Adaptive Management</h4>
+                                <p>Implement flexible management approaches that adjust based on monitoring results.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="policy-framework">
+                        <h3>Policy and Regulatory Framework</h3>
+                        <div class="policy-actions">
+                            <div class="policy-item">
+                                <h4>International Agreements</h4>
+                                <ul>
+                                    <li>CLRTAP Gothenburg Protocol amendments</li>
+                                    <li>EU National Emission Ceilings Directive</li>
+                                    <li>Critical loads approach implementation</li>
+                                    <li>Transboundary emission controls</li>
+                                </ul>
+                            </div>
+                            <div class="policy-item">
+                                <h4>National Strategies</h4>
+                                <ul>
+                                    <li>Acid rain remediation programs</li>
+                                    <li>Forest health monitoring systems</li>
+                                    <li>Agricultural emission controls</li>
+                                    <li>Water quality protection measures</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>Issue #2331</h4>
+                <p>Soil Acidification from Acid Rain Recovery Lag</p>
+                <p>Examining long-term ecological effects even after emission reductions</p>
+            </div>
+            <div class="footer-section">
+                <h4>Key Findings</h4>
+                <ul>
+                    <li>30-40% of temperate forest soils remain acidified</li>
+                    <li>50-100 years required for chemical recovery</li>
+                    <li>20-30% of soils still acidifying despite reductions</li>
+                    <li>$10B+ annual global economic impacts</li>
+                    <li>100-200 years for full ecosystem recovery</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Management Actions</h4>
+                <ul>
+                    <li>Continue aggressive emission reductions</li>
+                    <li>Implement large-scale liming programs</li>
+                    <li>Establish long-term monitoring networks</li>
+                    <li>Develop predictive recovery models</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <a href="#science">Acidification Science</a>
+                    <a href="#impacts">Case Studies</a>
+                    <a href="#mechanisms">Recovery Mechanisms</a>
+                    <a href="#solutions">Remediation Strategies</a>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Environment Animal Safety Hub - Issue #2331: Acid Rain Recovery Research</p>
+        </div>
+    </footer>
+
+    <script src="soil-acidification-from-acid-rain-recovery-lag.js"></script>
+</body>
+</html>

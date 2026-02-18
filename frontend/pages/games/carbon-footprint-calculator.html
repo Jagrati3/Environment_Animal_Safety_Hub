@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Footprint Calculator Game</title>
+    <link rel="stylesheet" href="../../css/pages/games/carbon-footprint-calculator.css">
+    <link rel="icon" type="image/png" href="/envirnoment-logo.png">
+    <link rel="stylesheet" href="../../css/global/utilities.css" />
+    <link rel="stylesheet" href="../../css/global/variables.css" />
+    <link rel="stylesheet" href="../../css/components/navbar.css" />
+    <link rel="stylesheet" href="../../css/components/card.css" />
+    <link rel="stylesheet" href="../../css/components/footer.css" />
+    <link rel="stylesheet" href="../../css/components/Login_SignUp.css" />
+</head>
+<body>
+    <div id="cursor-container"></div>
+    <script src="../../js/components/loadComponents.js"></script>
+
+    <header>
+        <nav>
+            <div>
+                <div id="navbar-container"></div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🌍 Carbon Footprint Calculator</h1>
+            <p class="subtitle">Calculate your daily carbon footprint and learn how to reduce it!</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-label">Footprint</div>
+                <div class="stat-value" id="footprint">0 kg CO2</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Badges</div>
+                <div class="stat-value" id="badgesEarned">0</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Level</div>
+                <div class="stat-value" id="level">Beginner</div>
+            </div>
+        </div>
+
+        <div class="input-section">
+            <h2>Your Daily Habits</h2>
+            <form id="habitForm">
+                <div class="form-group">
+                    <label for="transportation">Transportation:</label>
+                    <select id="transportation" name="transportation">
+                        <option value="0">Select...</option>
+                        <option value="2.4">Car (10 km)</option>
+                        <option value="0.5">Bus (10 km)</option>
+                        <option value="0.1">Bike (10 km)</option>
+                        <option value="0">Walk (10 km)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="food">Food Choices:</label>
+                    <select id="food" name="food">
+                        <option value="0">Select...</option>
+                        <option value="7">Meat-based meal</option>
+                        <option value="3">Vegetarian meal</option>
+                        <option value="1">Vegan meal</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="energy">Home Energy Use:</label>
+                    <select id="energy" name="energy">
+                        <option value="0">Select...</option>
+                        <option value="5">High (air conditioning, heating)</option>
+                        <option value="2">Medium (lights, appliances)</option>
+                        <option value="0.5">Low (energy-efficient)</option>
+                    </select>
+                </div>
+                <button type="button" id="calculateBtn">Calculate Footprint</button>
+            </form>
+        </div>
+
+        <div class="visualization-section">
+            <h2>Your Carbon Footprint Visualization</h2>
+            <div class="visualization" id="visualization">
+                <div class="tree" id="tree">
+                    🌳
+                </div>
+                <div class="planet" id="planet" style="display: none;">
+                    🌍
+                </div>
+            </div>
+            <p id="visualizationText">Enter your habits to see your footprint!</p>
+        </div>
+
+        <div class="tips-section" id="tipsSection" style="display: none;">
+            <h3>💡 Eco Tip</h3>
+            <p id="tipText"></p>
+        </div>
+
+        <div class="badges-section" id="badgesSection" style="display: none;">
+            <h3>🏆 Eco Badges Earned</h3>
+            <div class="badges" id="badges"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="badgeModal">
+        <div class="modal-content">
+            <h2 class="modal-title">🎉 New Badge Earned!</h2>
+            <p class="modal-text" id="badgeText"></p>
+            <div class="modal-buttons">
+                <button class="btn-modal btn-close" onclick="closeModal()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <audio id="calculateSound" src="../../assets/audio/point.mp3"></audio>
+    <audio id="badgeSound" src="../../assets/audio/correct.mp3"></audio>
+
+    <script src="../../js/pages/games/carbon-footprint-calculator.js"></script>
+
+    <div class="box">
+        <div id="footer-placeholder"></div>
+        <script src="/frontend/js/components/footer-loader.js"></script>
+    </div>
+
+    <script src="../../js/components/component-loader.js"></script>
+    <script src="../../js/components/navbar-loader.js"></script>
+</body>
+</html>

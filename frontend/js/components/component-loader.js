@@ -9,7 +9,7 @@
  * @since 2024
  */
 
-(function() {
+(function () {
     'use strict';
 
     /**
@@ -54,6 +54,42 @@
             console.error(`Error loading component ${fileName}:`, error);
             return false;
         }
+    }
+
+    /**
+     * Initializes the PreferencesManager before other components
+     * Loads preferences-manager.js script if not already present
+     */
+    function initPreferencesManager() {
+        return new Promise((resolve) => {
+            if (window.PreferencesManager) {
+                window.PreferencesManager.init();
+                resolve();
+                return;
+            }
+
+            if (document.querySelector('script[src*="preferences-manager.js"]')) {
+                // Script exists, wait for it to load
+                const checkInterval = setInterval(() => {
+                    if (window.PreferencesManager) {
+                        clearInterval(checkInterval);
+                        window.PreferencesManager.init();
+                        resolve();
+                    }
+                }, 50);
+                return;
+            }
+
+            const prefScript = document.createElement('script');
+            prefScript.src = prefix + 'js/global/preferences-manager.js';
+            prefScript.onload = () => {
+                if (window.PreferencesManager) {
+                    window.PreferencesManager.init();
+                }
+                resolve();
+            };
+            document.head.appendChild(prefScript);
+        });
     }
 
     /**
@@ -119,11 +155,18 @@
 
             links.forEach(link => {
                 const href = link.getAttribute('href');
-                if (href && !href.startsWith('http') && !href.startsWith('#') && !href.startsWith('mailto:')) {
+                        
+                if (
+                    href &&
+                    !href.startsWith('http') &&
+                    !href.startsWith('#') &&
+                    !href.startsWith('mailto:') &&
+                    !href.startsWith('/')
+                ) {
                     link.setAttribute('href', prefix + href);
                 }
             });
-
+            
             images.forEach(img => {
                 const src = img.getAttribute('src');
                 if (src && !src.startsWith('http')) {
@@ -135,6 +178,93 @@
         // Dispatch event that navbar is ready
         window.dispatchEvent(new CustomEvent('navbarLoaded'));
     }
+
+        /**
+     * Initializes mobile navbar interactions
+     * Handles hamburger toggle, submenu expand/collapse, and scroll safety
+     */
+    function initMobileNavbar() {
+    const navbarContainer = document.getElementById('navbar-container');
+    if (!navbarContainer) return;
+
+    const menuToggle = navbarContainer.querySelector('#navToggle');
+    const navMenu = navbarContainer.querySelector('#navLinks');
+
+    if (!menuToggle || !navMenu) return;
+
+    let menuJustOpened = false;
+
+    // ======================
+    // MAIN MENU TOGGLE
+    // ======================
+    menuToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const isOpening = !navMenu.classList.contains('active');
+
+        navMenu.classList.toggle('active');
+        menuToggle.classList.toggle('active');
+        document.body.classList.toggle('nav-open');
+
+        if (isOpening) {
+            menuJustOpened = true;
+            requestAnimationFrame(() => {
+                menuJustOpened = false;
+            });
+        }
+    });
+
+    // Prevent clicks inside menu
+    navMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
+    // ======================
+    // OUTSIDE CLICK CLOSE
+    // ======================
+    document.addEventListener('click', (e) => {
+        if (menuJustOpened) return;
+
+        if (
+            navMenu.classList.contains('active') &&
+            !navbarContainer.contains(e.target)
+        ) {
+            navMenu.classList.remove('active');
+            menuToggle.classList.remove('active');
+            document.body.classList.remove('nav-open');
+
+            navbarContainer
+                .querySelectorAll('.nav-group.open')
+                .forEach(item => item.classList.remove('open'));
+        }
+    });
+
+    // ======================
+    // SUBMENU ACCORDION
+    // ======================
+    const submenuButtons = navbarContainer.querySelectorAll('.submenu-toggle');
+
+    submenuButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const parent = button.closest('.nav-group');
+            if (!parent) return;
+
+            const isOpen = parent.classList.contains('open');
+
+            navbarContainer
+                .querySelectorAll('.nav-group.open')
+                .forEach(item => item.classList.remove('open'));
+
+            if (!isOpen) {
+                parent.classList.add('open');
+            }
+        });
+    });
+}
 
     /**
      * Sets up the footer component and loads associated CSS
@@ -183,12 +313,19 @@
     }
 
     // Run when DOM is ready
-    document.addEventListener('DOMContentLoaded', () => {
-        setupNavbar();
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Initialize PreferencesManager first (single source of truth)
+        await initPreferencesManager();
+
+        // Set up components
+        await setupNavbar();
+        initMobileNavbar();
         setupFooter();
         setupCursor();
         initTheme();
-        initFontSizeChanger();
+        if (typeof window.initFontSizeChanger === 'function') {
+            window.initFontSizeChanger();
+        }
 
         // Ensure FontAwesome is available
         if (!document.querySelector('link[href*="font-awesome"]')) {
@@ -196,6 +333,14 @@
             fa.rel = 'stylesheet';
             fa.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css';
             document.head.appendChild(fa);
+        }
+
+        // Initialize Global Progress UI
+        if (!document.querySelector('script[src*="progress-ui.js"]')) {
+            const progressScript = document.createElement('script');
+            progressScript.type = 'module';
+            progressScript.src = prefix + 'js/components/progress-ui.js';
+            document.head.appendChild(progressScript);
         }
     });
 

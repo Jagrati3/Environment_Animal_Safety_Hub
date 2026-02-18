@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Genetic Erosion in Small, Isolated Reserves | EcoLife</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Explore how small, isolated wildlife populations lose genetic diversity, reducing their ability to adapt and survive environmental changes">
+  <link rel="icon" type="image/png" href="/envirnoment-logo.png">
+  <link rel="stylesheet" href="../../css/global/utilities.css" />
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/pages/genetic-erosion.css">
+  <link rel="stylesheet" href="../css/components/footer.css" />
+  <link rel="stylesheet" href="../css/components/navbar.css" />
+</head>
+
+<body>
+
+  <div id="cursor-container"></div>
+  <script src="../../js/components/loadComponents.js"></script>
+
+      <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <div id="navbar-container"></div>
+
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">
+        <i class="fas fa-moon"></i>
+    </button>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>🧬 Genetic Erosion in Small, Isolated Reserves</h1>
+    <p>Investigating how population isolation leads to loss of genetic diversity and adaptive potential in wildlife conservation 🌿</p>
+  </section>
+
+  <!-- CONTENT -->
+  <section class="container">
+
+    <!-- Overview -->
+    <div class="overview-section">
+      <h2><i class="fas fa-dna"></i> The Silent Threat: Genetic Diversity Loss</h2>
+      <p>Genetic erosion occurs when small, isolated populations lose their genetic variation over time. This reduction in diversity diminishes the population's ability to adapt to environmental changes, resist diseases, and maintain long-term viability. Understanding and preventing genetic erosion is crucial for effective conservation management.</p>
+
+      <div class="genetic-stats">
+        <div class="stat-card">
+          <i class="fas fa-users"></i>
+          <h3>50%</h3>
+          <p>Genetic diversity lost in 5-10 generations</p>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-heartbeat"></i>
+          <h3>30-50%</h3>
+          <p>Fitness reduction from inbreeding</p>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-exclamation-triangle"></i>
+          <h3>1,000</h3>
+          <p>Minimum population for genetic health</p>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-clock"></i>
+          <h3>10-20 years</h3>
+          <p>Time for significant erosion</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Genetic Diversity Simulator -->
+    <div class="simulator-section">
+      <h2><i class="fas fa-chart-line"></i> Genetic Diversity Simulator</h2>
+      <p>Watch how population size and isolation affect genetic diversity over generations. Adjust the parameters to see the impact of different conservation strategies.</p>
+
+      <div class="simulator-container">
+        <div class="simulator-controls">
+          <div class="control-group">
+            <label for="populationSize">Starting Population Size:</label>
+            <input type="range" id="populationSize" min="10" max="1000" value="100">
+            <span id="popSizeValue">100 individuals</span>
+          </div>
+
+          <div class="control-group">
+            <label for="generations">Generations to Simulate:</label>
+            <input type="range" id="generations" min="5" max="50" value="20">
+            <span id="genValue">20 generations</span>
+          </div>
+
+          <div class="control-group">
+            <label for="isolationLevel">Isolation Level:</label>
+            <input type="range" id="isolationLevel" min="0" max="100" value="80">
+            <span id="isoValue">80% isolated</span>
+          </div>
+
+          <div class="control-buttons">
+            <button id="runSimulation" class="sim-btn">
+              <i class="fas fa-play"></i> Run Simulation
+            </button>
+            <button id="resetSimulation" class="sim-btn secondary">
+              <i class="fas fa-redo"></i> Reset
+            </button>
+          </div>
+        </div>
+
+        <div class="simulation-display">
+          <div id="diversityChart" class="diversity-chart">
+            <div class="chart-placeholder">
+              <i class="fas fa-chart-area"></i>
+              <p>Click "Run Simulation" to see genetic diversity changes over time</p>
+            </div>
+          </div>
+
+          <div class="simulation-results">
+            <div class="result-metric">
+              <h4>Final Heterozygosity</h4>
+              <div id="finalHeterozygosity" class="metric-value">--</div>
+            </div>
+            <div class="result-metric">
+              <h4>Alleles Lost</h4>
+              <div id="allelesLost" class="metric-value">--</div>
+            </div>
+            <div class="result-metric">
+              <h4>Inbreeding Risk</h4>
+              <div id="inbreedingRisk" class="metric-value">--</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inbreeding Calculator -->
+    <div class="calculator-section">
+      <h2><i class="fas fa-calculator"></i> Inbreeding Coefficient Calculator</h2>
+      <p>Calculate the inbreeding coefficient for different population structures and understand the risk of inbreeding depression.</p>
+
+      <div class="calculator-container">
+        <div class="calculator-inputs">
+          <div class="input-section">
+            <h3>Population Parameters</h3>
+            <div class="input-group">
+              <label for="totalPopulation">Total Population Size (N):</label>
+              <input type="number" id="totalPopulation" value="50" min="2" max="10000">
+            </div>
+            <div class="input-group">
+              <label for="breedingPopulation">Effective Breeding Size (Ne):</label>
+              <input type="number" id="breedingPopulation" value="25" min="2" max="5000">
+            </div>
+            <div class="input-group">
+              <label for="generationsIsolated">Generations Isolated:</label>
+              <input type="number" id="generationsIsolated" value="5" min="1" max="100">
+            </div>
+          </div>
+
+          <div class="input-section">
+            <h3>Relationship Analysis</h3>
+            <div class="input-group">
+              <label for="relationshipType">Common Relationships:</label>
+              <select id="relationshipType">
+                <option value="parent-offspring">Parent-Offspring</option>
+                <option value="full-siblings">Full Siblings</option>
+                <option value="half-siblings">Half Siblings</option>
+                <option value="first-cousins">First Cousins</option>
+                <option value="second-cousins">Second Cousins</option>
+              </select>
+            </div>
+            <button id="calculateInbreeding" class="calc-btn">
+              <i class="fas fa-calculator"></i> Calculate Inbreeding
+            </button>
+          </div>
+        </div>
+
+        <div class="calculator-results">
+          <div class="result-display">
+            <h3>Inbreeding Coefficient (F)</h3>
+            <div id="inbreedingCoefficient" class="coefficient-display">--</div>
+            <div id="inbreedingInterpretation" class="interpretation">--</div>
+          </div>
+
+          <div class="depression-effects">
+            <h3>Expected Effects of Inbreeding Depression</h3>
+            <div class="effect-bars">
+              <div class="effect-bar">
+                <span class="effect-name">Survival Rate</span>
+                <div class="bar-container">
+                  <div id="survivalBar" class="bar survival"></div>
+                  <span id="survivalPercent" class="percentage">--</span>
+                </div>
+              </div>
+              <div class="effect-bar">
+                <span class="effect-name">Reproductive Success</span>
+                <div class="bar-container">
+                  <div id="reproductionBar" class="bar reproduction"></div>
+                  <span id="reproductionPercent" class="percentage">--</span>
+                </div>
+              </div>
+              <div class="effect-bar">
+                <span class="effect-name">Disease Resistance</span>
+                <div class="bar-container">
+                  <div id="diseaseBar" class="bar disease"></div>
+                  <span id="diseasePercent" class="percentage">--</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Case Studies -->
+    <div class="case-studies-section">
+      <h2><i class="fas fa-book-open"></i> Case Studies: Genetic Erosion in Action</h2>
+      <p>Real-world examples demonstrate the consequences of genetic erosion and the success of intervention strategies.</p>
+
+      <div class="case-studies-grid">
+        <div class="case-study-card">
+          <div class="case-header">
+            <h3><i class="fas fa-cat"></i> Florida Panther</h3>
+            <span class="case-status success">Genetic Rescue Success</span>
+          </div>
+          <div class="case-content">
+            <p>Population reduced to 20-30 individuals, suffering severe inbreeding depression. Genetic rescue through Texas cougar introductions restored genetic diversity.</p>
+            <div class="case-metrics">
+              <div class="metric">Heterozygosity: +45%</div>
+              <div class="metric">Survival: +20%</div>
+              <div class="metric">Kitten Survival: +50%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="case-study-card">
+          <div class="case-header">
+            <h3><i class="fas fa-wolf"></i> Isle Royale Wolves</h3>
+            <span class="case-status warning">Ongoing Erosion</span>
+          </div>
+          <div class="case-content">
+            <p>Isolated island population of 2-50 wolves experiencing genetic erosion. Low genetic diversity increases disease susceptibility and reduces adaptability.</p>
+            <div class="case-metrics">
+              <div class="metric">Heterozygosity: 0.22</div>
+              <div class="metric">Inbreeding: High</div>
+              <div class="metric">Extinction Risk: Elevated</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="case-study-card">
+          <div class="case-header">
+            <h3><i class="fas fa-elephant"></i> Addo Elephant</h3>
+            <span class="case-status success">Managed Metapopulation</span>
+          </div>
+          <div class="case-content">
+            <p>South African reserve maintains genetic diversity through managed translocations between subpopulations, preventing erosion.</p>
+            <div class="case-metrics">
+              <div class="metric">Heterozygosity: Stable</div>
+              <div class="metric">Gene Flow: Active</div>
+              <div class="metric">Population: Growing</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="case-study-card">
+          <div class="case-header">
+            <h3><i class="fas fa-ghost"></i> Tasmanian Devil</h3>
+            <span class="case-status danger">Disease + Erosion</span>
+          </div>
+          <div class="case-content">
+            <p>Low genetic diversity exacerbated devil facial tumor disease. Population crash from 150,000 to ~25,000 individuals in 20 years.</p>
+            <div class="case-metrics">
+              <div class="metric">Heterozygosity: Very Low</div>
+              <div class="metric">Disease Impact: Severe</div>
+              <div class="metric">Recovery: Challenging</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conservation Strategies -->
+    <div class="strategies-section">
+      <h2><i class="fas fa-tools"></i> Conservation Strategies</h2>
+      <p>Effective approaches to prevent and reverse genetic erosion in isolated populations.</p>
+
+      <div class="strategies-grid">
+        <div class="strategy-card">
+          <div class="strategy-icon">
+            <i class="fas fa-route"></i>
+          </div>
+          <h3>Habitat Corridors</h3>
+          <p>Create wildlife corridors to maintain gene flow between isolated populations.</p>
+          <div class="strategy-effectiveness">
+            <span class="effectiveness high">High Effectiveness</span>
+          </div>
+        </div>
+
+        <div class="strategy-card">
+          <div class="strategy-icon">
+            <i class="fas fa-exchange-alt"></i>
+          </div>
+          <h3>Genetic Rescue</h3>
+          <p>Translocate individuals from related populations to increase genetic diversity.</p>
+          <div class="strategy-effectiveness">
+            <span class="effectiveness high">High Effectiveness</span>
+          </div>
+        </div>
+
+        <div class="strategy-card">
+          <div class="strategy-icon">
+            <i class="fas fa-flask"></i>
+          </div>
+          <h3>Captive Breeding</h3>
+          <p>Breeding programs to maintain genetic diversity during population bottlenecks.</p>
+          <div class="strategy-effectiveness">
+            <span class="effectiveness medium">Medium Effectiveness</span>
+          </div>
+        </div>
+
+        <div class="strategy-card">
+          <div class="strategy-icon">
+            <i class="fas fa-microscope"></i>
+          </div>
+          <h3>Genetic Monitoring</h3>
+          <p>Regular assessment of genetic diversity to guide management decisions.</p>
+          <div class="strategy-effectiveness">
+            <span class="effectiveness high">Essential Tool</span>
+          </div>
+        </div>
+
+        <div class="strategy-card">
+          <div class="strategy-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3>Minimum Viable Population</h3>
+          <p>Maintain populations above critical size thresholds for genetic health.</p>
+          <div class="strategy-effectiveness">
+            <span class="effectiveness high">Preventive Approach</span>
+          </div>
+        </div>
+
+        <div class="strategy-card">
+          <div class="strategy-icon">
+            <i class="fas fa-network-wired"></i>
+          </div>
+          <h3>Metapopulation Management</h3>
+          <p>Manage interconnected populations as a single conservation unit.</p>
+          <div class="strategy-effectiveness">
+            <span class="effectiveness high">Long-term Solution</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz Section -->
+    <div class="quiz-section">
+      <h2><i class="fas fa-brain"></i> Test Your Knowledge</h2>
+      <p>Challenge yourself with questions about genetic erosion and conservation genetics.</p>
+
+      <div id="geneticsQuiz" class="quiz-container">
+        <div class="quiz-progress">
+          <div class="progress-bar">
+            <div class="progress-fill" id="quizProgress"></div>
+          </div>
+          <span id="questionCounter">Question 1 of 10</span>
+        </div>
+
+        <div class="question-display">
+          <h3 id="questionText">Loading question...</h3>
+          <div id="answerOptions" class="answer-options">
+            <!-- Options will be populated by JavaScript -->
+          </div>
+        </div>
+
+        <div class="quiz-controls">
+          <button id="prevQuestion" class="quiz-btn secondary">Previous</button>
+          <button id="nextQuestion" class="quiz-btn primary">Next</button>
+          <button id="submitQuiz" class="quiz-btn success" style="display: none;">Submit Quiz</button>
+        </div>
+
+        <div id="quizResults" class="quiz-results" style="display: none;">
+          <h3>Quiz Complete!</h3>
+          <div class="score-display">
+            <div class="score-circle">
+              <span id="finalScore">0</span>
+              <span class="score-total">/10</span>
+            </div>
+            <p id="scoreMessage">Great effort!</p>
+          </div>
+          <button id="retakeQuiz" class="quiz-btn primary">Retake Quiz</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resources -->
+    <div class="resources-section">
+      <h2><i class="fas fa-book"></i> Learn More</h2>
+      <p>Explore these resources to deepen your understanding of conservation genetics.</p>
+
+      <div class="resource-cards">
+        <div class="resource-card">
+          <i class="fas fa-university"></i>
+          <h3>Conservation Genetics</h3>
+          <p>Academic resources and research papers on population genetics.</p>
+<a href="https://www.conservationgenetics.org/" 
+   target="_blank" 
+   rel="noopener noreferrer" 
+   class="resource-link">
+   Visit Site
+</a>
+        </div>
+
+        <div class="resource-card">
+          <i class="fas fa-microscope"></i>
+          <h3>Genetic Tools</h3>
+          <p>Software and tools for genetic analysis in conservation.</p>
+<a href="https://www.molecular-ecology-resources.com/software/" 
+   target="_blank" 
+   rel="noopener noreferrer" 
+   class="resource-link">
+   Visit Site
+</a>
+        </div>
+
+        <div class="resource-card">
+          <i class="fas fa-users"></i>
+          <h3>IUCN Guidelines</h3>
+          <p>International guidelines for genetic management in conservation.</p>
+<a href="https://www.iucn.org/" 
+   target="_blank" 
+   rel="noopener noreferrer" 
+   class="resource-link">
+   Visit Site
+</a>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <!-- Scripts -->
+  <script src="../../js/global/theme.js"></script>
+  <script src="../../js/global/scrollProgress.js"></script>
+  <script src="../../js/components/cursor.js"></script>
+  <script src="../js/pages/genetic-erosion.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ocean in Danger</title>
+
+<style>
+:root{
+  --bg1:#001f3f;
+  --bg2:#0077b6;
+  --accent:#90e0ef;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(180deg,var(--bg2),var(--bg1));
+  font-family:Segoe UI, sans-serif;
+  color:#e0fbff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  overflow:hidden;
+}
+
+h1{
+  margin-top:30px;
+  font-size:3rem;
+  text-align:center;
+}
+
+.ocean{
+  position:relative;
+  width:100%;
+  height:100%;
+  margin-top:40px;
+}
+
+.text{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:1.1rem;
+  background:rgba(255,255,255,0.15);
+  padding:16px 22px;
+  border-radius:16px;
+  animation:sink 5s linear forwards;
+}
+
+@keyframes sink{
+  from{top:0; opacity:1}
+  to{top:80%; opacity:0}
+}
+
+button{
+  margin:20px 0;
+  padding:12px 30px;
+  background:var(--accent);
+  color:#001f3f;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  transition:0.3s;
+}
+button:hover{
+  transform:scale(1.05);
+}
+</style>
+</head>
+
+<body>
+
+<h1>🌊 Ocean in Danger</h1>
+
+<button onclick="drop()">Drop a Fact</button>
+
+<div class="ocean" id="ocean"></div>
+
+<script>
+const facts = [
+  "Plastic waste kills marine life.",
+  "Oceans absorb most climate heat.",
+  "Coral reefs are bleaching rapidly.",
+  "Overfishing empties the seas.",
+  "Healthy oceans support all life."
+];
+
+let i = 0;
+
+function drop(){
+  if(i >= facts.length){
+    alert("🌍 The ocean has taken enough.");
+    return;
+  }
+
+  const text = document.createElement("div");
+  text.className = "text";
+  text.textContent = facts[i];
+  document.getElementById("ocean").appendChild(text);
+  i++;
+}
+</script>
+
+</body>
+</html>

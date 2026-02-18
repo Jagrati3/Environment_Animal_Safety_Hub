@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Whispering Leaves</title>
+
+<style>
+:root{
+  --bg1:#081c15;
+  --bg2:#1b4332;
+  --accent:#b7e4c7;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  font-family:Segoe UI, sans-serif;
+  color:#e9f5ef;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+h1{
+  margin-top:30px;
+  font-size:3rem;
+  letter-spacing:2px;
+  text-align:center;
+}
+
+/* FLOATING TEXT */
+.leaf-text{
+  position:absolute;
+  left:-40%;
+  white-space:nowrap;
+  font-size:1.1rem;
+  background:rgba(255,255,255,0.12);
+  padding:14px 20px;
+  border-radius:20px;
+  backdrop-filter:blur(6px);
+  animation:drift linear forwards;
+}
+
+/* DRIFT ANIMATION */
+@keyframes drift{
+  from{
+    transform:translateX(-40vw) translateY(0);
+    opacity:0;
+  }
+  10%{opacity:1}
+  to{
+    transform:translateX(140vw) translateY(40px);
+    opacity:0;
+  }
+}
+
+/* BUTTON */
+button{
+  margin-top:auto;
+  margin-bottom:40px;
+  padding:14px 34px;
+  font-size:1rem;
+  background:var(--accent);
+  color:#081c15;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  transition:0.3s;
+}
+button:hover{
+  transform:scale(1.05);
+  opacity:0.9;
+}
+
+.footer{
+  margin-bottom:10px;
+  font-size:0.9rem;
+  opacity:0.8;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🍃 Whispering Leaves</h1>
+
+<button onclick="release()">Release a Whisper</button>
+<p class="footer">Nature speaks softly. Are we listening?</p>
+
+<script>
+const messages = [
+  "Forests breathe life into the planet.",
+  "Trees remember what humans forget.",
+  "Silence grows when forests fall.",
+  "Nature whispers before it screams.",
+  "Protect forests before they vanish."
+];
+
+let index = 0;
+
+function release(){
+  if(index >= messages.length){
+    alert("🌿 The forest has spoken enough. Now act.");
+    return;
+  }
+
+  const leaf = document.createElement("div");
+  leaf.className = "leaf-text";
+  leaf.textContent = messages[index];
+
+  // Random vertical position & speed
+  const topPos = Math.random() * 60 + 20;
+  const duration = Math.random() * 6 + 8;
+
+  leaf.style.top = topPos + "vh";
+  leaf.style.animationDuration = duration + "s";
+
+  document.body.appendChild(leaf);
+  index++;
+
+  // Cleanup
+  setTimeout(()=>leaf.remove(), duration * 1000);
+}
+</script>
+
+</body>
+</html>

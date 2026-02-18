@@ -440,6 +440,11 @@ function endGame() {
     elements.finalCorrect.textContent = `${gameState.correct}/${gameState.questionsForGame.length}`;
     elements.finalScore.textContent = gameState.score;
 
+    // Report to UserProgress
+    if (window.UserProgress) {
+        window.UserProgress.recordGame('carbon-race', gameState.score);
+    }
+
     // Color-code carbon score
     if (gameState.carbon <= 30) {
         elements.finalCarbon.style.color = '#00FF87'; // Green

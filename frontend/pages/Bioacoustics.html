@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bioacoustics | EcoLife</title>
+    <meta name="description" content="Using sound to monitor and protect wildlife through bioacoustics technology.">
+    <link rel="icon" type="image/png" href="../assets/images/others/FAVICON.png">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/components/navbar.css">
+    <link rel="stylesheet" href="../css/components/footer.css">
+    <link rel="stylesheet" href="../css/bioacoustics.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Roboto+Slab:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <div id="navbar-container"></div>
+
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Audio Visualizer -->
+    <div class="audio-visualizer" id="audioVisualizer">
+        <canvas id="soundWave"></canvas>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="bioacoustics-hero" id="bioacousticsHero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fa-solid fa-wave-square"></i>
+                <span>Sound Science</span>
+            </div>
+            <h1 class="hero-title">
+                <span class="gradient-text">Bioacoustics</span> in Conservation
+            </h1>
+            <p class="hero-subtitle">
+                Listening to nature's symphony - using sound to monitor, protect, and understand wildlife
+            </p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <i class="fa-solid fa-ear-listen"></i>
+                    <div class="stat-content">
+                        <span class="stat-number" data-count="5000">0</span>
+                        <span class="stat-label">Species Monitored</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fa-solid fa-microphone"></i>
+                    <div class="stat-content">
+                        <span class="stat-number" data-count="24">0</span>
+                        <span class="stat-label">/7 Recording</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fa-solid fa-brain"></i>
+                    <div class="stat-content">
+                        <span class="stat-number" data-count="95">0</span>
+                        <span class="stat-label">% AI Accuracy</span>
+                    </div>
+                </div>
+            </div>
+            <button class="cta-button" id="playSoundscape">
+                <i class="fa-solid fa-play"></i>
+                <span>Listen to Soundscape</span>
+            </button>
+        </div>
+        <div class="sound-wave"></div>
+    </section>
+
+    <!-- What is Bioacoustics -->
+    <section class="definition-section" id="definitionSection">
+        <div class="section-container">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-wave-square"></i> What is Bioacoustics?</h2>
+                <p>The science of animal sound and its applications in conservation</p>
+            </div>
+
+            <div class="definition-content">
+                <div class="definition-card" data-aos="fade-up">
+                    <div class="definition-icon">
+                        <i class="fa-solid fa-ear-listen"></i>
+                    </div>
+                    <h3>Listening to Wildlife</h3>
+                    <p class="definition-text">
+                        Bioacoustics is the study of sound production, dispersion, and reception in animals. It combines biology and acoustics to understand animal communication, behavior, and ecology through their sounds.
+                    </p>
+                    <div class="sound-example">
+                        <div class="sound-item">
+                            <i class="fa-solid fa-dove"></i>
+                            <span>Bird Songs</span>
+                        </div>
+                        <div class="sound-item">
+                            <i class="fa-solid fa-whale"></i>
+                            <span>Whale Calls</span>
+                        </div>
+                        <div class="sound-item">
+                            <i class="fa-solid fa-frog"></i>
+                            <span>Frog Choruses</span>
+                        </div>
+                        <div class="sound-item">
+                            <i class="fa-solid fa-bug"></i>
+                            <span>Insect Stridulations</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="applications-grid">
+                    <div class="application-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="app-icon">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h4>Population Monitoring</h4>
+                        <p>Track species abundance and distribution through vocalizations</p>
+                    </div>
+                    <div class="application-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="app-icon">
+                            <i class="fa-solid fa-shield-alt"></i>
+                        </div>
+                        <h4>Anti-Poaching</h4>
+                        <p>Detect illegal activities like gunshots or chainsaws in protected areas</p>
+                    </div>
+                    <div class="application-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="app-icon">
+                            <i class="fa-solid fa-heartbeat"></i>
+                        </div>
+                        <h4>Health Assessment</h4>
+                        <p>Monitor animal stress levels and health through vocal changes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology -->
+    <section class="tech-section" id="techSection">
+        <div class="section-container">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-microchip"></i> Bioacoustic Technology</h2>
+                <p>Tools and devices for listening to nature</p>
+            </div>
+
+            <div class="tech-grid">
+                <div class="tech-card" data-aos="flip-left">
+                    <div class="tech-image">
+                        <i class="fa-solid fa-microphone"></i>
+                    </div>
+                    <div class="tech-content">
+                        <h3>Audio Recorders</h3>
+                        <p>Waterproof, weatherproof devices that record 24/7 for months</p>
+                        <div class="tech-specs">
+                            <span>Low power</span>
+                            <span>High sensitivity</span>
+                            <span>Remote deployment</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-card" data-aos="flip-left" data-aos-delay="100">
+                    <div class="tech-image">
+                        <i class="fa-solid fa-satellite"></i>
+                    </div>
+                    <div class="tech-content">
+                        <h3>Array Systems</h3>
+                        <p>Multiple microphones for sound localization and tracking</p>
+                        <div class="tech-specs">
+                            <span>3D tracking</span>
+                            <span>Distance estimation</span>
+                            <span>Movement patterns</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-card" data-aos="flip-left" data-aos-delay="200">
+                    <div class="tech-image">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <div class="tech-content">
+                        <h3>AI Analysis</h3>
+                        <p>Machine learning algorithms that identify species from sounds</p>
+                        <div class="tech-specs">
+                            <span>Real-time processing</span>
+                            <span>Species recognition</span>
+                            <span>Pattern detection</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recording-demo">
+                <h3><i class="fa-solid fa-headphones"></i> Sound Spectrum Analysis</h3>
+                <div class="spectrum-visualizer">
+                    <div class="frequency-bands">
+                        <div class="band" data-freq="low"></div>
+                        <div class="band" data-freq="mid"></div>
+                        <div class="band" data-freq="high"></div>
+                    </div>
+                    <div class="spectrum-labels">
+                        <span>Whales (10-100 Hz)</span>
+                        <span>Birds (1-5 kHz)</span>
+                        <span>Bats (20-100 kHz)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Applications -->
+    <section class="applications-section" id="applicationsSection">
+        <div class="section-container">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-tasks"></i> Conservation Applications</h2>
+                <p>Practical uses of bioacoustics in wildlife protection</p>
+            </div>
+
+            <div class="applications-showcase">
+                <div class="app-showcase" data-aos="fade-right">
+                    <div class="showcase-image marine"></div>
+                    <div class="showcase-content">
+                        <h3>Marine Conservation</h3>
+                        <p>Monitoring whale migrations and detecting ship strikes through underwater acoustics</p>
+                        <div class="showcase-stats">
+                            <div class="stat">
+                                <span class="value">1000+ km</span>
+                                <span class="label">Detection range</span>
+                            </div>
+                            <div class="stat">
+                                <span class="value">30+ species</span>
+                                <span class="label">Whales tracked</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="app-showcase" data-aos="fade-left">
+                    <div class="showcase-content">
+                        <h3>Forest Protection</h3>
+                        <p>Detecting illegal logging and poaching activities through sound monitoring networks</p>
+                        <div class="showcase-stats">
+                            <div class="stat">
+                                <span class="value">90% accuracy</span>
+                                <span class="label">Gunshot detection</span>
+                            </div>
+                            <div class="stat">
+                                <span class="value">24/7 monitoring</span>
+                                <span class="label">Protected areas</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showcase-image forest"></div>
+                </div>
+
+                <div class="app-showcase" data-aos="fade-right">
+                    <div class="showcase-image nocturnal"></div>
+                    <div class="showcase-content">
+                        <h3>Nocturnal Studies</h3>
+                        <p>Studying bats, owls, and other elusive nocturnal species through their vocalizations</p>
+                        <div class="showcase-stats">
+                            <div class="stat">
+                                <span class="value">40+ bat species</span>
+                                <span class="label">Identified by echo</span>
+                            </div>
+                            <div class="stat">
+                                <span class="value">Non-invasive</span>
+                                <span class="label">No disturbance</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Stories -->
+    <section class="stories-section" id="storiesSection">
+        <div class="section-container">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-star"></i> Sound Success Stories</h2>
+                <p>Real-world impacts of bioacoustic monitoring</p>
+            </div>
+
+            <div class="stories-grid">
+                <div class="story-card" data-aos="zoom-in">
+                    <div class="story-header">
+                        <div class="story-icon">
+                            <i class="fa-solid fa-whale"></i>
+                        </div>
+                        <h3>Right Whale Recovery</h3>
+                    </div>
+                    <div class="story-content">
+                        <p>Bioacoustic buoys detect endangered North Atlantic right whales and alert ships to slow down, reducing fatal collisions by 80%.</p>
+                        <div class="story-impact">
+                            <i class="fa-solid fa-arrow-up"></i>
+                            <span>Population increased by 25%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story-card" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="story-header">
+                        <div class="story-icon">
+                            <i class="fa-solid fa-tree"></i>
+                        </div>
+                        <h3>Amazon Protection</h3>
+                    </div>
+                    <div class="story-content">
+                        <p>Acoustic sensors across the Amazon detect illegal logging activities, leading to 300+ interventions and 50% reduction in deforestation.</p>
+                        <div class="story-impact">
+                            <i class="fa-solid fa-seedling"></i>
+                            <span>10,000+ hectares protected</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story-card" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="story-header">
+                        <div class="story-icon">
+                            <i class="fa-solid fa-frog"></i>
+                        </div>
+                        <h3>Amphibian Rescue</h3>
+                    </div>
+                    <div class="story-content">
+                        <p>Monitoring frog choruses detected population crashes from chytrid fungus, enabling early intervention and captive breeding programs.</p>
+                        <div class="story-impact">
+                            <i class="fa-solid fa-heart"></i>
+                            <span>5 species saved from extinction</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Citizen Science -->
+    <section class="citizen-section" id="citizenSection">
+        <div class="section-container">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-users"></i> Everyone Can Listen</h2>
+                <p>How you can contribute to bioacoustic research</p>
+            </div>
+
+            <div class="citizen-content">
+                <div class="citizen-card" data-aos="fade-up">
+                    <h3><i class="fa-solid fa-mobile-alt"></i> Mobile Apps</h3>
+                    <p>Record wildlife sounds with your smartphone and contribute to global databases</p>
+                    <div class="app-list">
+                        <div class="app-item">
+                            <i class="fa-brands fa-android"></i>
+                            <span>Merlin Bird ID</span>
+                        </div>
+                        <div class="app-item">
+                            <i class="fa-brands fa-apple"></i>
+                            <span>iNaturalist</span>
+                        </div>
+                        <div class="app-item">
+                            <i class="fa-solid fa-frog"></i>
+                            <span>FrogID</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="citizen-projects">
+                    <h3><i class="fa-solid fa-globe"></i> Global Projects</h3>
+                    <div class="projects-grid">
+                        <div class="project" data-aos="flip-up">
+                            <div class="project-icon">
+                                <i class="fa-solid fa-cloud"></i>
+                            </div>
+                            <h4>SoundClouds</h4>
+                            <p>Global network of audio recorders monitoring climate change impacts</p>
+                        </div>
+                        <div class="project" data-aos="flip-up" data-aos-delay="100">
+                            <div class="project-icon">
+                                <i class="fa-solid fa-water"></i>
+                            </div>
+                            <h4>Hydrophone Network</h4>
+                            <p>Community-maintained underwater listening stations</p>
+                        </div>
+                        <div class="project" data-aos="flip-up" data-aos-delay="200">
+                            <div class="project-icon">
+                                <i class="fa-solid fa-school"></i>
+                            </div>
+                            <h4>EduAcoustics</h4>
+                            <p>Bringing bioacoustics to classrooms worldwide</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Future Sound -->
+    <section class="future-section" id="futureSection">
+        <div class="section-container">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-satellite-dish"></i> The Sound Future</h2>
+                <p>Emerging trends in bioacoustic research</p>
+            </div>
+
+            <div class="future-grid">
+                <div class="future-card" data-aos="fade-up">
+                    <div class="future-icon">
+                        <i class="fa-solid fa-satellite"></i>
+                    </div>
+                    <h3>Space-based Listening</h3>
+                    <p>Satellite arrays monitoring global soundscapes from orbit</p>
+                </div>
+
+                <div class="future-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="future-icon">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <h3>Autonomous Networks</h3>
+                    <p>Self-powered, AI-driven acoustic monitoring stations</p>
+                </div>
+
+                <div class="future-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="future-icon">
+                        <i class="fa-solid fa-vr-cardboard"></i>
+                    </div>
+                    <h3>Acoustic VR</h3>
+                    <p>Immersive soundscape experiences for education and therapy</p>
+                </div>
+            </div>
+
+            <div class="sound-action">
+                <h3><i class="fa-solid fa-ear-listen"></i> Start Listening Today</h3>
+                <p>Download a bioacoustics app and begin contributing to wildlife conservation through sound</p>
+                <div class="action-buttons">
+                    <button class="action-btn primary">
+                        <i class="fa-solid fa-download"></i>
+                        Get Started
+                    </button>
+                    <button class="action-btn secondary">
+                        <i class="fa-solid fa-learn"></i>
+                        Learn More
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer placeholder -->
+    <div id="footer-container"></div>
+
+    <!-- Scripts -->
+    <script src="../js/main.js"></script>
+    <script src="../js/pages/bioacoustics.js"></script>
+    <script src="../js/components/navbar-loader.js"></script>
+    <script src="../js/components/footer-loader.js"></script>
+    
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize AOS
+            AOS.init({
+                duration: 800,
+                once: true,
+                offset: 100
+            });
+
+            // Theme Toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
+            
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                body.classList.add('dark-theme');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('dark-theme');
+                const isDark = body.classList.contains('dark-theme');
+                themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            });
+
+            // Number counters
+            const counters = document.querySelectorAll('.stat-number');
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-count'));
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                let current = 0;
+                
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.textContent = Math.floor(current);
+                        setTimeout(updateCounter, 16);
+                    } else {
+                        counter.textContent = target;
+                    }
+                };
+                
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            updateCounter();
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                });
+                
+                observer.observe(counter);
+            });
+
+            // Soundscape button
+            const playSoundscapeBtn = document.getElementById('playSoundscape');
+            let isPlaying = false;
+            
+            if (playSoundscapeBtn) {
+                playSoundscapeBtn.addEventListener('click', function() {
+                    if (!isPlaying) {
+                        // Simulate soundscape experience
+                        this.innerHTML = '<i class="fa-solid fa-pause"></i><span>Pause Soundscape</span>';
+                        isPlaying = true;
+                        
+                        // Animate sound wave in hero
+                        document.querySelector('.sound-wave').classList.add('active');
+                        
+                        // Show visualizer
+                        document.getElementById('audioVisualizer').style.opacity = '1';
+                        
+                        // Animate frequency bands
+                        const bands = document.querySelectorAll('.band');
+                        bands.forEach((band, index) => {
+                            setInterval(() => {
+                                const height = 20 + Math.random() * 80;
+                                band.style.height = `${height}%`;
+                            }, 300 + index * 100);
+                        });
+                    } else {
+                        this.innerHTML = '<i class="fa-solid fa-play"></i><span>Listen to Soundscape</span>';
+                        isPlaying = false;
+                        
+                        // Stop animations
+                        document.querySelector('.sound-wave').classList.remove('active');
+                        document.getElementById('audioVisualizer').style.opacity = '0';
+                    }
+                });
+            }
+
+            // Create simple audio visualizer
+            const canvas = document.getElementById('soundWave');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                canvas.width = window.innerWidth;
+                canvas.height = 100;
+                
+                function drawWave() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = 'rgba(124, 58, 237, 0.1)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(0, canvas.height / 2);
+                    
+                    for (let i = 0; i < canvas.width; i++) {
+                        const y = canvas.height / 2 + Math.sin(i * 0.02 + Date.now() * 0.002) * 
+                                Math.sin(i * 0.01) * 30;
+                        ctx.lineTo(i, y);
+                    }
+                    
+                    ctx.strokeStyle = 'rgba(124, 58, 237, 0.3)';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                    
+                    requestAnimationFrame(drawWave);
+                }
+                
+                drawWave();
+            }
+
+            // Scroll progress
+            window.addEventListener('scroll', () => {
+                const scrollProgress = document.getElementById('scrollProgress');
+                const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (window.scrollY / windowHeight) * 100;
+                scrollProgress.style.width = scrolled + '%';
+            });
+
+            // Resize canvas on window resize
+            window.addEventListener('resize', () => {
+                if (canvas) {
+                    canvas.width = window.innerWidth;
+                }
+            });
+        });
+
+        // Simple component loader
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load Navbar
+            fetch('../components/navbar.html')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to load navbar');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('navbar-container').innerHTML = data;
+                    if (typeof initNavbar === 'function') {
+                        initNavbar();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading navbar:', error);
+                    document.getElementById('navbar-container').innerHTML = 
+                        '<div style="padding: 20px; background: #f8d7da; color: #721c24;">Navbar failed to load</div>';
+                });
+
+            // Load Footer
+            fetch('../components/footer.html')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to load footer');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('footer-container').innerHTML = data;
+                    if (typeof initFooter === 'function') {
+                        initFooter();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading footer:', error);
+                    document.getElementById('footer-container').innerHTML = 
+                        '<div style="padding: 20px; background: #f8d7da; color: #721c24; text-align: center;">Footer failed to load</div>';
+                });
+        });
+    </script>
+</body>
+</html>

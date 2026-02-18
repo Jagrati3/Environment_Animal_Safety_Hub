@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pollinator Pathways Visualizer</title>
+    <link rel="stylesheet" href="/frontend/pages/styles/pollinator-pathways-visualizer.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f4f8fb;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 32px 40px 40px 40px;
+        }
+        h1 {
+            color: #7c4d1e;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            color: #a67c52;
+            margin-bottom: 24px;
+        }
+        .flex {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+        .map-section, .info-section {
+            flex: 1 1 350px;
+            min-width: 320px;
+        }
+        .map-section {
+            background: #f7faf7;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(124,77,30,0.04);
+        }
+        #map {
+            width: 100%;
+            height: 350px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(124,77,30,0.06);
+        }
+        .legend {
+            background: #fff;
+            border-radius: 6px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            padding: 10px 16px;
+            font-size: 0.95rem;
+            margin-bottom: 18px;
+        }
+        .legend span {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            border-radius: 3px;
+            vertical-align: middle;
+        }
+        .legend .habitat { background: #ffd54f; }
+        .legend .corridor { background: #81d4fa; }
+        .legend .gap { background: #e57373; }
+        .resources {
+            margin-top: 24px;
+        }
+        .resources h3 {
+            margin-bottom: 10px;
+            color: #7c4d1e;
+        }
+        .resources ul {
+            padding-left: 18px;
+        }
+        .resources li {
+            margin-bottom: 8px;
+        }
+        @media (max-width: 900px) {
+            .flex {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pollinator Pathways Visualizer</h1>
+        <div class="subtitle">Map and visualize pollinator-friendly habitats and corridors. Identify gaps and opportunities to support pollinators in your area.</div>
+        <div class="flex">
+            <div class="map-section">
+                <div id="map"></div>
+                <div class="legend">
+                    <span class="habitat"></span> Pollinator Habitat &nbsp;
+                    <span class="corridor"></span> Pathway Corridor &nbsp;
+                    <span class="gap"></span> Connectivity Gap
+                </div>
+            </div>
+            <div class="info-section">
+                <h2>How to Use</h2>
+                <ul>
+                    <li>Explore the map to find pollinator habitats and corridors.</li>
+                    <li>Click on features to view details and suggestions for improvement.</li>
+                    <li>Gaps in connectivity are highlighted in red.</li>
+                </ul>
+                <div class="resources">
+    <h3>Learn More</h3>
+    <ul>
+        <li>
+            <a href="https://www.pollinator.org/pollinator-pathway"
+               target="_blank"
+               rel="noopener noreferrer">
+               Pollinator Pathway Project
+            </a>
+        </li>
+        <li>
+            <a href="https://xerces.org/pollinator-conservation"
+               target="_blank"
+               rel="noopener noreferrer">
+               Xerces Society: Pollinator Conservation
+            </a>
+        </li>
+        <li>
+            <a href="https://www.fs.fed.us/wildflowers/pollinators/"
+               target="_blank"
+               rel="noopener noreferrer">
+               US Forest Service: Pollinators
+            </a>
+        </li>
+    </ul>
+</div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        // Initialize map
+        var map = L.map('map').setView([41.8781, -87.6298], 11); // Default to Chicago
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Example data (replace with real data or API)
+        var habitats = [
+            {
+                name: 'Lincoln Park Pollinator Garden',
+                coords: [41.9214, -87.6513],
+                description: 'Diverse native plantings supporting bees and butterflies.'
+            },
+            {
+                name: 'Garfield Park Prairie',
+                coords: [41.8810, -87.7164],
+                description: 'Restored prairie habitat for pollinators.'
+            }
+        ];
+        var corridors = [
+            {
+                from: [41.9214, -87.6513],
+                to: [41.8810, -87.7164],
+                description: 'Potential pollinator corridor.'
+            }
+        ];
+        var gaps = [
+            {
+                coords: [41.9000, -87.6800],
+                description: 'Gap in pollinator pathway. Opportunity for new habitat.'
+            }
+        ];
+
+        habitats.forEach(function(hab) {
+            var marker = L.circleMarker(hab.coords, {
+                radius: 12,
+                color: '#ffd54f',
+                fillColor: '#ffd54f',
+                fillOpacity: 0.8
+            }).addTo(map);
+            marker.bindPopup('<b>' + hab.name + '</b><br>' + hab.description);
+        });
+        corridors.forEach(function(corr) {
+            var polyline = L.polyline([corr.from, corr.to], {
+                color: '#81d4fa',
+                weight: 6,
+                opacity: 0.7
+            }).addTo(map);
+            polyline.bindPopup(corr.description);
+        });
+        gaps.forEach(function(gap) {
+            var marker = L.circleMarker(gap.coords, {
+                radius: 10,
+                color: '#e57373',
+                fillColor: '#e57373',
+                fillOpacity: 0.8
+            }).addTo(map);
+            marker.bindPopup('<b>Connectivity Gap</b><br>' + gap.description);
+        });
+    </script>
+</body>
+</html>

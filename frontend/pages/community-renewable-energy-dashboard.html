@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Renewable Energy Dashboard</title>
+  <style>
+    :root {
+      --black-1: #181818;
+      --black-2: #232323;
+      --black-3: #353535;
+      --accent: #00e676;
+      --accent2: #00bfae;
+      --white: #fff;
+      --gray: #bdbdbd;
+      --solar: #ffd600;
+      --wind: #00b8d4;
+    }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(120deg, var(--black-1) 0%, var(--black-3) 100%);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .dashboard {
+      background: var(--black-2);
+      margin-top: 40px;
+      padding: 32px 28px 24px 28px;
+      border-radius: 18px;
+      box-shadow: 0 6px 32px rgba(0,0,0,0.25);
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+      border: 1.5px solid var(--black-3);
+    }
+    h1 {
+      color: var(--accent);
+      margin-bottom: 10px;
+      font-size: 2rem;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px #000a;
+    }
+    .desc {
+      color: var(--gray);
+      margin-bottom: 24px;
+      font-size: 1.05rem;
+    }
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .stat-card {
+      flex: 1 1 180px;
+      background: var(--black-3);
+      border-radius: 12px;
+      padding: 18px 10px 14px 10px;
+      color: var(--white);
+      box-shadow: 0 2px 8px #0003;
+      margin: 0 0 8px 0;
+      min-width: 150px;
+      position: relative;
+    }
+    .stat-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--accent2);
+    }
+    .stat-value {
+      font-size: 2.1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .solar {
+      color: var(--solar);
+    }
+    .wind {
+      color: var(--wind);
+    }
+    .projects {
+      margin: 24px 0 18px 0;
+      text-align: left;
+    }
+    .projects-title {
+      color: var(--accent2);
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+    .project-list {
+      list-style: none;
+      padding: 0 0 0 4px;
+      margin: 0;
+    }
+    .project-list li {
+      background: var(--black-1);
+      color: var(--white);
+      border-radius: 7px;
+      margin-bottom: 8px;
+      padding: 10px 12px;
+      box-shadow: 0 1px 4px #0002;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .project-list .solar {
+      font-size: 1.2em;
+    }
+    .project-list .wind {
+      font-size: 1.2em;
+    }
+    .resources {
+      margin-top: 24px;
+      text-align: left;
+    }
+    .resources-title {
+      color: var(--accent2);
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+    .resource-list {
+      list-style: none;
+      padding: 0 0 0 4px;
+      margin: 0;
+    }
+    .resource-list li {
+      margin-bottom: 8px;
+    }
+    .resource-list a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .resource-list a:hover {
+      color: var(--accent2);
+      text-decoration: underline;
+    }
+    @media (max-width: 700px) {
+      .dashboard {
+        max-width: 98vw;
+        padding: 18px 4vw 18px 4vw;
+      }
+      .stats {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h1>Community Renewable Energy</h1>
+    <div class="desc">Track local solar and wind projects, see community impact, and get involved in renewable energy!</div>
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-title solar">Community Solar Output</div>
+        <div class="stat-value solar" id="solarOutput">-- kWh</div>
+        <div style="font-size:0.95em; color:var(--gray);">This month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title wind">Community Wind Output</div>
+        <div class="stat-value wind" id="windOutput">-- kWh</div>
+        <div style="font-size:0.95em; color:var(--gray);">This month</div>
+      </div>
+    </div>
+    <div class="projects">
+      <div class="projects-title">Local Renewable Projects</div>
+      <ul class="project-list" id="projectList">
+        <!-- Projects will be loaded here -->
+      </ul>
+    </div>
+    <div class="resources">
+      <div class="resources-title">Get Involved & Resources</div>
+      <ul class="resource-list">
+        <li><a href="https://www.energy.gov/eere/solar/community-solar-basics" target="_blank">Community Solar Basics</a></li>
+        <li><a href="https://www.energy.gov/eere/wind/community-wind" target="_blank">Community Wind Projects</a></li>
+        <li><a href="https://www.energysage.com/solar/community-solar/" target="_blank">Find Community Solar Near You</a></li>
+        <li><a href="https://www.volunteermatch.org/search?keywords=renewable%20energy" target="_blank">Volunteer for Renewable Energy</a></li>
+      </ul>
+    </div>
+  </div>
+  <script>
+    // Example data (replace with API or dynamic data as needed)
+    const solarOutput = 128500; // kWh this month
+    const windOutput = 94000; // kWh this month
+    const projects = [
+      { name: "Sunrise Community Solar Farm", type: "solar", status: "Active", output: 52000 },
+      { name: "Green Valley Wind Co-op", type: "wind", status: "Active", output: 41000 },
+      { name: "Eastside School Solar Roof", type: "solar", status: "Planned", output: 0 },
+      { name: "Riverbend Wind Turbine", type: "wind", status: "Active", output: 53000 },
+      { name: "Central Park Solar Array", type: "solar", status: "Active", output: 26400 }
+    ];
+
+    // Display stats
+    document.getElementById('solarOutput').textContent = solarOutput.toLocaleString() + ' kWh';
+    document.getElementById('windOutput').textContent = windOutput.toLocaleString() + ' kWh';
+
+    // Display projects
+    const projectList = document.getElementById('projectList');
+    projects.forEach(p => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <span class="${p.type}">${p.type === 'solar' ? '☀️' : '💨'}</span>
+        <b>${p.name}</b> <span style="color:var(--gray);font-size:0.97em;">(${p.status})</span>
+        <span style="float:right; color:var(--accent2); font-size:0.97em;">${p.output ? p.output.toLocaleString() + ' kWh' : ''}</span>
+      `;
+      projectList.appendChild(li);
+    });
+  </script>
+</body>
+</html>

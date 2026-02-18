@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +12,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #2D5016 0%, #4A7C59 50%, #8B7355 100%);
@@ -21,22 +27,57 @@
 
         /* Knowledge Fading Animation Effects */
         @keyframes knowledgeFade {
-            0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
-            25% { opacity: 0.7; transform: scale(1.02) rotate(0.5deg); }
-            50% { opacity: 0.5; transform: scale(0.98) rotate(-0.5deg); }
-            75% { opacity: 0.6; transform: scale(1.01) rotate(0.2deg); }
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+
+            25% {
+                opacity: 0.7;
+                transform: scale(1.02) rotate(0.5deg);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(0.98) rotate(-0.5deg);
+            }
+
+            75% {
+                opacity: 0.6;
+                transform: scale(1.01) rotate(0.2deg);
+            }
         }
 
         @keyframes earthPulse {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         @keyframes wisdomRise {
-            0% { transform: translateY(100px) scale(0.8); opacity: 0; }
-            50% { opacity: 0.8; }
-            100% { transform: translateY(-50px) scale(1.2); opacity: 0; }
+            0% {
+                transform: translateY(100px) scale(0.8);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(-50px) scale(1.2);
+                opacity: 0;
+            }
         }
 
         /* Level 3 Severity Indicator */
@@ -90,14 +131,45 @@
             opacity: 0.6;
         }
 
-        .wisdom-particle:nth-child(1) { left: 10%; animation-delay: 0s; }
-        .wisdom-particle:nth-child(2) { left: 25%; animation-delay: 2s; }
-        .wisdom-particle:nth-child(3) { left: 40%; animation-delay: 4s; }
-        .wisdom-particle:nth-child(4) { left: 60%; animation-delay: 1s; }
-        .wisdom-particle:nth-child(5) { left: 80%; animation-delay: 3s; }
-        .wisdom-particle:nth-child(6) { left: 15%; animation-delay: 5s; }
-        .wisdom-particle:nth-child(7) { left: 35%; animation-delay: 1.5s; }
-        .wisdom-particle:nth-child(8) { left: 55%; animation-delay: 3.5s; }
+        .wisdom-particle:nth-child(1) {
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .wisdom-particle:nth-child(2) {
+            left: 25%;
+            animation-delay: 2s;
+        }
+
+        .wisdom-particle:nth-child(3) {
+            left: 40%;
+            animation-delay: 4s;
+        }
+
+        .wisdom-particle:nth-child(4) {
+            left: 60%;
+            animation-delay: 1s;
+        }
+
+        .wisdom-particle:nth-child(5) {
+            left: 80%;
+            animation-delay: 3s;
+        }
+
+        .wisdom-particle:nth-child(6) {
+            left: 15%;
+            animation-delay: 5s;
+        }
+
+        .wisdom-particle:nth-child(7) {
+            left: 35%;
+            animation-delay: 1.5s;
+        }
+
+        .wisdom-particle:nth-child(8) {
+            left: 55%;
+            animation-delay: 3.5s;
+        }
 
         .earth-header h1 {
             font-size: 3.5rem;
@@ -112,7 +184,11 @@
             opacity: 0.9;
         }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
         .crisis-nav {
             background: rgba(0, 0, 0, 0.4);
@@ -132,15 +208,17 @@
 
         .nav-tab {
             padding: 15px 30px;
-            background: linear-gradient(45deg, rgba(205, 133, 63, 0.2), rgba(45, 80, 22, 0.3));
+            background: linear-gradient(135deg, rgba(205, 133, 63, 0.2), rgba(45, 80, 22, 0.3));
             border: 2px solid rgba(205, 133, 63, 0.5);
             border-radius: 30px;
             color: white;
             cursor: pointer;
-            transition: all 0.4s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             font-weight: 600;
             position: relative;
             overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
         .nav-tab:before {
@@ -154,20 +232,42 @@
             transition: left 0.5s;
         }
 
-        .nav-tab:hover:before { left: 100%; }
-        .nav-tab:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(205, 133, 63, 0.4); }
-        .nav-tab.active {
-            background: linear-gradient(45deg, #CD853F, #8B4513);
-            box-shadow: 0 0 30px rgba(205, 133, 63, 0.6);
-            transform: scale(1.05);
+        .nav-tab:hover:before {
+            left: 100%;
         }
 
-        .content-section { display: none; margin: 30px 0; }
-        .content-section.active { display: block; animation: fadeInUp 0.6s ease-out; }
+        .nav-tab:hover {
+            transform: translateY(-5px) rotateX(5deg);
+            box-shadow: 0 15px 35px rgba(205, 133, 63, 0.5);
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, #CD853F, #8B4513);
+            box-shadow: 0 10px 40px rgba(205, 133, 63, 0.7);
+            transform: scale(1.05) translateZ(20px);
+            border-color: #fff;
+        }
+
+        .content-section {
+            display: none;
+            margin: 30px 0;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeInUp 0.6s ease-out;
+        }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .impact-grid {
@@ -178,20 +278,39 @@
         }
 
         .impact-card {
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(45, 80, 22, 0.3));
-            backdrop-filter: blur(10px);
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(45, 80, 22, 0.4));
+            backdrop-filter: blur(15px);
             padding: 30px;
             border-radius: 20px;
-            border: 2px solid rgba(205, 133, 63, 0.3);
-            transition: all 0.4s;
+            border: 1px solid rgba(205, 133, 63, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             position: relative;
-            overflow: hidden;
+            overflow: visible;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
         .impact-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(205, 133, 63, 0.4);
-            border-color: rgba(205, 133, 63, 0.8);
+            transform: translateY(-15px) rotateX(5deg) scale(1.02);
+            box-shadow: 0 30px 60px rgba(205, 133, 63, 0.5), 0 0 20px rgba(205, 133, 63, 0.3) inset;
+            border-color: rgba(205, 133, 63, 0.9);
+            z-index: 10;
+        }
+
+        .impact-card i {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #CD853F, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            transition: transform 0.5s;
+        }
+
+        .impact-card:hover i {
+            transform: translateZ(30px) scale(1.2);
+            text-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
         }
 
         .impact-card:before {
@@ -256,7 +375,8 @@
             font-weight: 600;
         }
 
-        .input-group input, .input-group select {
+        .input-group input,
+        .input-group select {
             width: 100%;
             padding: 12px;
             border: 2px solid rgba(205, 133, 63, 0.3);
@@ -349,25 +469,83 @@
         }
 
         @media (max-width: 768px) {
-            .earth-header h1 { font-size: 2.5rem; }
-            .nav-tabs { 
-                gap: 10px; 
+            .earth-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-tabs {
+                gap: 10px;
                 flex-wrap: wrap;
                 justify-content: center;
             }
-            .nav-tab { 
-                padding: 10px 15px; 
+
+            .nav-tab {
+                padding: 10px 15px;
                 font-size: 0.8rem;
                 min-width: auto;
                 flex: 1;
                 max-width: 150px;
             }
-            .impact-grid { grid-template-columns: 1fr; }
-            .calculator-input { flex-direction: column; }
-            .calculator-input .input-group { min-width: auto; }
+
+            .impact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .calculator-input {
+                flex-direction: column;
+            }
+
+            .calculator-input .input-group {
+                min-width: auto;
+            }
+        }
+
+        .header-3d-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+        }
+
+        .floating-3d-icon {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            animation: float3D 6s ease-in-out infinite;
+            filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.6));
+            margin-bottom: 20px;
+        }
+
+        @keyframes float3D {
+
+            0%,
+            100% {
+                transform: translateY(0) rotateY(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotateY(10deg);
+            }
+        }
+
+        .main-3d-image {
+            width: 100%;
+            max-width: 800px;
+            border-radius: 20px;
+            margin: 40px auto;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+            transform: perspective(1000px) rotateX(2deg);
+            transition: transform 0.5s;
+            display: block;
+        }
+
+        .main-3d-image:hover {
+            transform: perspective(1000px) rotateX(0deg) scale(1.02);
         }
     </style>
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar">
@@ -404,9 +582,13 @@
             <div class="wisdom-particle"></div>
             <div class="wisdom-particle"></div>
         </div>
-        <div class="container">
+        <div class="container header-3d-container">
+            <img src="https://placehold.co/150x150?text=3D+Icon" alt="Indigenous Knowledge 3D Icon"
+                class="floating-3d-icon">
             <h1>Loss of Indigenous Ecological Knowledge</h1>
             <p>The Silent Crisis Eroding Biodiversity Management & Ecosystem Resilience</p>
+            <img src="https://placehold.co/800x400?text=3D+Header+Illustration"
+                alt="Loss of Indigenous Ecological Knowledge 3D Illustration" class="main-3d-image">
         </div>
     </header>
 
@@ -430,17 +612,20 @@
         <div class="impact-grid">
             <div class="impact-card">
                 <h3><i class="fas fa-language"></i> Language Extinction</h3>
-                <p>70% of indigenous languages lost in the past century, taking with them embedded ecological knowledge of local ecosystems, species identification, and sustainable resource management practices.</p>
+                <p>70% of indigenous languages lost in the past century, taking with them embedded ecological knowledge
+                    of local ecosystems, species identification, and sustainable resource management practices.</p>
             </div>
 
             <div class="impact-card">
                 <h3><i class="fas fa-globe-americas"></i> Territory Coverage</h3>
-                <p>Indigenous peoples manage 22% of Earth's land surface, including biodiversity hotspots with 36% more bird species than surrounding areas.</p>
+                <p>Indigenous peoples manage 22% of Earth's land surface, including biodiversity hotspots with 36% more
+                    bird species than surrounding areas.</p>
             </div>
 
             <div class="impact-card">
                 <h3><i class="fas fa-seedling"></i> Biodiversity Hotspots</h3>
-                <p>Traditional territories contain higher species diversity and serve as genetic reservoirs for climate adaptation and ecosystem resilience.</p>
+                <p>Traditional territories contain higher species diversity and serve as genetic reservoirs for climate
+                    adaptation and ecosystem resilience.</p>
             </div>
         </div>
 
@@ -461,12 +646,14 @@
 
         <div class="calculator-section">
             <h3><i class="fas fa-calculator"></i> Biodiversity Impact Calculator</h3>
-            <p>Calculate the projected impact of indigenous knowledge loss on species diversity and ecosystem health.</p>
+            <p>Calculate the projected impact of indigenous knowledge loss on species diversity and ecosystem health.
+            </p>
 
             <div class="calculator-input">
                 <div class="input-group">
                     <label for="knowledgeLoss">Knowledge Loss Percentage (%)</label>
-                    <input type="range" id="knowledgeLoss" min="0" max="100" value="50" oninput="updateKnowledgeValue()">
+                    <input type="range" id="knowledgeLoss" min="0" max="100" value="50"
+                        oninput="updateKnowledgeValue()">
                     <span id="knowledgeValue">50%</span>
                 </div>
 
@@ -500,17 +687,20 @@
         <div class="impact-grid">
             <div class="impact-card">
                 <h3><i class="fas fa-dna"></i> Species Identification</h3>
-                <p>Traditional taxonomic knowledge enables precise identification of species, subspecies, and ecological relationships that modern science often misses.</p>
+                <p>Traditional taxonomic knowledge enables precise identification of species, subspecies, and ecological
+                    relationships that modern science often misses.</p>
             </div>
 
             <div class="impact-card">
                 <h3><i class="fas fa-fire"></i> Fire Management</h3>
-                <p>Indigenous fire practices create mosaic landscapes that enhance biodiversity and prevent catastrophic wildfires.</p>
+                <p>Indigenous fire practices create mosaic landscapes that enhance biodiversity and prevent catastrophic
+                    wildfires.</p>
             </div>
 
             <div class="impact-card">
                 <h3><i class="fas fa-fish"></i> Resource Harvesting</h3>
-                <p>Sustainable harvesting techniques based on generational knowledge ensure long-term resource availability and ecosystem balance.</p>
+                <p>Sustainable harvesting techniques based on generational knowledge ensure long-term resource
+                    availability and ecosystem balance.</p>
             </div>
         </div>
     </section>
@@ -527,17 +717,20 @@
         <div class="impact-grid">
             <div class="impact-card">
                 <h3><i class="fas fa-cloud-rain"></i> Climate Adaptation</h3>
-                <p>Traditional knowledge provides adaptive strategies for climate variability, extreme weather events, and changing seasonal patterns.</p>
+                <p>Traditional knowledge provides adaptive strategies for climate variability, extreme weather events,
+                    and changing seasonal patterns.</p>
             </div>
 
             <div class="impact-card">
                 <h3><i class="fas fa-shield-alt"></i> Disaster Response</h3>
-                <p>Indigenous early warning systems and recovery practices based on historical environmental patterns enhance community resilience.</p>
+                <p>Indigenous early warning systems and recovery practices based on historical environmental patterns
+                    enhance community resilience.</p>
             </div>
 
             <div class="impact-card">
                 <h3><i class="fas fa-route"></i> Migration Corridors</h3>
-                <p>Knowledge of wildlife migration routes and seasonal movements ensures connectivity between habitats.</p>
+                <p>Knowledge of wildlife migration routes and seasonal movements ensures connectivity between habitats.
+                </p>
             </div>
         </div>
 
@@ -548,13 +741,15 @@
             <div class="calculator-input">
                 <div class="input-group">
                     <label for="climateKnowledge">Climate Adaptation Knowledge (% retained)</label>
-                    <input type="range" id="climateKnowledge" min="0" max="100" value="60" oninput="updateClimateValue()">
+                    <input type="range" id="climateKnowledge" min="0" max="100" value="60"
+                        oninput="updateClimateValue()">
                     <span id="climateValue">60%</span>
                 </div>
 
                 <div class="input-group">
                     <label for="speciesKnowledge">Species Relationship Knowledge (% retained)</label>
-                    <input type="range" id="speciesKnowledge" min="0" max="100" value="40" oninput="updateSpeciesValue()">
+                    <input type="range" id="speciesKnowledge" min="0" max="100" value="40"
+                        oninput="updateSpeciesValue()">
                     <span id="speciesValue">40%</span>
                 </div>
             </div>
@@ -577,17 +772,20 @@
         <div class="practice-grid">
             <div class="practice-card">
                 <h3><i class="fas fa-fire"></i> Controlled Burning</h3>
-                <p>Indigenous fire management creates habitat diversity, controls invasive species, and promotes regeneration of fire-adapted plants.</p>
+                <p>Indigenous fire management creates habitat diversity, controls invasive species, and promotes
+                    regeneration of fire-adapted plants.</p>
             </div>
 
             <div class="practice-card">
                 <h3><i class="fas fa-seedling"></i> Seed Banking</h3>
-                <p>Traditional seed saving and cultivation practices preserve genetic diversity and adaption to local conditions.</p>
+                <p>Traditional seed saving and cultivation practices preserve genetic diversity and adaption to local
+                    conditions.</p>
             </div>
 
             <div class="practice-card">
                 <h3><i class="fas fa-water"></i> Water Management</h3>
-                <p>Ancient water harvesting and conservation techniques ensure water availability during drought periods.</p>
+                <p>Ancient water harvesting and conservation techniques ensure water availability during drought
+                    periods.</p>
             </div>
 
             <div class="practice-card">
@@ -623,7 +821,8 @@
                 <div class="action-number">1</div>
                 <div>
                     <h4>Knowledge Documentation</h4>
-                    <p>Urgent recording and digital preservation of remaining traditional ecological knowledge before it disappears.</p>
+                    <p>Urgent recording and digital preservation of remaining traditional ecological knowledge before it
+                        disappears.</p>
                 </div>
             </div>
 
@@ -631,7 +830,8 @@
                 <div class="action-number">2</div>
                 <div>
                     <h4>Community Partnerships</h4>
-                    <p>Establish collaborative programs between indigenous communities and conservation organizations.</p>
+                    <p>Establish collaborative programs between indigenous communities and conservation organizations.
+                    </p>
                 </div>
             </div>
 
@@ -639,7 +839,8 @@
                 <div class="action-number">3</div>
                 <div>
                     <h4>Policy Integration</h4>
-                    <p>Include traditional knowledge in environmental policies, land management plans, and conservation strategies.</p>
+                    <p>Include traditional knowledge in environmental policies, land management plans, and conservation
+                        strategies.</p>
                 </div>
             </div>
 
@@ -647,7 +848,8 @@
                 <div class="action-number">4</div>
                 <div>
                     <h4>Education Programs</h4>
-                    <p>Integrate indigenous ecological knowledge into school curricula and public education programs.</p>
+                    <p>Integrate indigenous ecological knowledge into school curricula and public education programs.
+                    </p>
                 </div>
             </div>
         </div>
@@ -655,7 +857,8 @@
         <div class="impact-grid">
             <div class="impact-card">
                 <h3><i class="fas fa-graduation-cap"></i> Digital Archives</h3>
-                <p>Create secure digital repositories for traditional knowledge with appropriate cultural protocols and access controls.</p>
+                <p>Create secure digital repositories for traditional knowledge with appropriate cultural protocols and
+                    access controls.</p>
             </div>
 
             <div class="impact-card">
@@ -704,4 +907,5 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="indigenous-knowledge-loss.js"></script>
 </body>
+
 </html>

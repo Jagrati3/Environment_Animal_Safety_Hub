@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyanobacterial Bloom Expansion into Cold Regions - Toxin Proliferation in Temperate Lakes</title>
+<link rel="stylesheet" href="css/cyanobacterial-bloom-expansion-cold-regions.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="accessibility-controls">
+        <button class="accessibility-btn" onclick="toggleHighContrast()">High Contrast</button>
+        <button class="accessibility-btn" onclick="toggleFontSize()">Font Size</button>
+        <button class="accessibility-btn" onclick="toggleReducedMotion()">Reduced Motion</button>
+    </div>
+
+    <header class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Cyanobacterial Bloom Expansion into Cold Regions</h1>
+                <p class="hero-subtitle">Studying Toxin Proliferation in Previously Unaffected Temperate Lakes</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">40+</span>
+                        <span class="stat-label">Countries Affected</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">5-10°C</span>
+                        <span class="stat-label">Lower Temperature Threshold</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">2-3</span>
+                        <span class="stat-label">Months Longer Season</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="bloom-simulator">
+                    <h3>Lake Bloom Risk Simulator</h3>
+                    <div class="simulator-controls">
+                        <div class="control-group">
+                            <label for="temperature">Water Temperature (°C):</label>
+                            <input type="range" id="temperature" min="5" max="30" value="15">
+                            <span class="control-value" id="temperature-value">15°C</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="phosphorus">Phosphorus Loading:</label>
+                            <input type="range" id="phosphorus" min="1" max="10" value="5">
+                            <span class="control-value" id="phosphorus-value">5</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="stratification">Lake Stratification:</label>
+                            <select id="stratification">
+                                <option value="weak">Weak</option>
+                                <option value="moderate">Moderate</option>
+                                <option value="strong">Strong</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="simulator-results">
+                        <div class="result-metric">
+                            <span class="metric-label">Bloom Risk Level:</span>
+                            <span class="metric-value" id="bloom-risk">Medium</span>
+                            <div class="risk-indicator">
+                                <div class="risk-bar" id="risk-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Toxin Concentration:</span>
+                            <span class="metric-value" id="toxin-level">12 µg/L</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill toxin-fill" id="toxin-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Bloom Duration:</span>
+                            <span class="metric-value" id="bloom-duration">45 days</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill duration-fill" id="duration-bar"></div>
+                            </div>
+                        </div>
+                        <div class="result-metric">
+                            <span class="metric-label">Public Health Risk:</span>
+                            <span class="metric-value" id="health-risk">Moderate</span>
+                            <div class="health-indicators">
+                                <span class="indicator" id="drinking-risk">🚰 Drinking</span>
+                                <span class="indicator" id="recreation-risk">🏊 Recreation</span>
+                                <span class="indicator" id="ecosystem-risk">🌿 Ecosystem</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-icon">🌊</span>
+                <span class="brand-text">BloomWatch Hub</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#science" class="nav-link active" data-tab="science">Science</a></li>
+                <li><a href="#impacts" class="nav-link" data-tab="impacts">Impacts</a></li>
+                <li><a href="#mechanisms" class="nav-link" data-tab="mechanisms">Mechanisms</a></li>
+                <li><a href="#solutions" class="nav-link" data-tab="solutions">Solutions</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section id="science" class="content-section active">
+            <div class="section-container">
+                <h2>The Science of Bloom Expansion</h2>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>Climate Change Drivers</h3>
+                        <div class="climate-drivers">
+                            <div class="driver-category">
+                                <h4>🌡️ Temperature Effects</h4>
+                                <div class="driver-metrics">
+                                    <div class="metric">Extended stratification: <span id="stratification-days">+45 days</span></div>
+                                    <div class="metric">Warmer hypolimnion: <span id="hypolimnion-temp">+3°C</span></div>
+                                    <div class="metric">Earlier ice-out: <span id="ice-out">3 weeks</span></div>
+                                    <div class="metric">Reduced mixing: <span id="mixing-reduction">60%</span></div>
+                                </div>
+                            </div>
+                            <div class="driver-category">
+                                <h4>🌧️ Hydrological Changes</h4>
+                                <div class="driver-metrics">
+                                    <div class="metric">Nutrient runoff: <span id="nutrient-runoff">+25%</span></div>
+                                    <div class="metric">Storm frequency: <span id="storm-frequency">+40%</span></div>
+                                    <div class="metric">Snowmelt timing: <span id="snowmelt">2 weeks earlier</span></div>
+                                    <div class="metric">Lake level variation: <span id="lake-level">±1.5m</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h3>Toxin Production Dynamics</h3>
+                        <div class="toxin-chart">
+                            <canvas id="toxinChart"></canvas>
+                        </div>
+                        <div class="toxin-legend">
+                            <div class="legend-item">
+                                <span class="legend-color microcystins"></span>
+                                <span>Microcystins</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color anatoxins"></span>
+                                <span>Anatoxins</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color cylindrospermopsins"></span>
+                                <span>Cylindrospermopsins</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color saxitoxins"></span>
+                                <span>Saxitoxins</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <h3>Species Range Expansion</h3>
+                        <div class="species-expansion">
+                            <div class="expansion-metric">
+                                <div class="circle-value">15°C</div>
+                                <div class="circle-label">Historical Threshold</div>
+                            </div>
+                            <div class="expansion-arrow">↓</div>
+                            <div class="expansion-metric">
+                                <div class="circle-value">10°C</div>
+                                <div class="circle-label">Current Threshold</div>
+                            </div>
+                            <div class="expansion-stats">
+                                <div class="stat">40+ countries affected</div>
+                                <div class="stat">25 new species recorded</div>
+                                <div class="stat">60% increase in toxin diversity</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="impacts" class="content-section">
+            <div class="section-container">
+                <h2>Regional Impacts and Case Studies</h2>
+                <div class="case-studies">
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Baltic Sea Lakes</h3>
+                            <span class="case-location">Sweden</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">+2.5°C warming</div>
+                                <div class="stat">25 µg/L microcystins</div>
+                                <div class="stat">€2M annual losses</div>
+                            </div>
+                            <p>First major blooms in 2010s, now annual events with significant economic and recreational impacts.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Lake Erie</h3>
+                            <span class="case-location">USA/Canada</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">Annual blooms</div>
+                                <div class="stat">10x WHO limits</div>
+                                <div class="stat">$65M management</div>
+                            </div>
+                            <p>Microcystis dominance with Toledo water crisis, requiring massive phosphorus reduction programs.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Lake Biwa</h3>
+                            <span class="case-location">Japan</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">Warmer winters</div>
+                                <div class="stat">Mixed toxins</div>
+                                <div class="stat">Fisheries impact</div>
+                            </div>
+                            <p>Cyanobacteria now dominant in spring blooms, affecting water quality and fisheries.</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <div class="case-header">
+                            <h3>Lake Taupo</h3>
+                            <span class="case-location">New Zealand</span>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-stats">
+                                <div class="stat">Reduced rainfall</div>
+                                <div class="stat">Cylindrospermopsin</div>
+                                <div class="stat">Water restrictions</div>
+                            </div>
+                            <p>First cyanobacterial blooms in 2010s, requiring new monitoring and management approaches.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="global-impact">
+                    <h3>Global Expansion Map</h3>
+                    <canvas id="expansionChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="mechanisms" class="content-section">
+            <div class="section-container">
+                <h2>Mechanisms of Expansion and Toxin Production</h2>
+                <div class="mechanism-explorer">
+                    <div class="mechanism-tabs">
+                        <button class="mechanism-tab active" data-mechanism="physiological">Physiological</button>
+                        <button class="mechanism-tab" data-mechanism="ecological">Ecological</button>
+                        <button class="mechanism-tab" data-mechanism="climatic">Climatic</button>
+                    </div>
+
+                    <div class="mechanism-content">
+                        <div class="mechanism-panel active" id="physiological-panel">
+                            <h3>Physiological Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Cold Adaptation Strategies</h4>
+                                    <p>Cyanobacteria employ various physiological adaptations to survive and proliferate in colder waters, including altered membrane composition, enhanced photosynthesis efficiency, and modified toxin production pathways.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Toxin Biosynthesis Regulation</h4>
+                                    <p>Temperature, light, and nutrient availability regulate toxin production genes. Lower temperature thresholds for toxin synthesis allow proliferation in previously unsuitable habitats.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Competitive Advantages</h4>
+                                    <p>Gas vesicle production for buoyancy, nitrogen fixation capabilities, and toxin-mediated competition provide cyanobacteria with advantages over eukaryotic phytoplankton in changing conditions.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mechanism-panel" id="ecological-panel">
+                            <h3>Ecological Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Food Web Disruptions</h4>
+                                    <p>Blooms alter zooplankton communities, reduce grazing pressure, and create trophic cascades that favor further cyanobacterial dominance.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Nutrient Cycling Changes</h4>
+                                    <p>Modified decomposition processes and nutrient regeneration patterns create feedback loops that sustain bloom conditions.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Species Interactions</h4>
+                                    <p>Allelopathic compounds and toxin release influence interspecific competition and community assembly processes.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mechanism-panel" id="climatic-panel">
+                            <h3>Climatic Mechanisms</h3>
+                            <div class="mechanism-details">
+                                <div class="detail-section">
+                                    <h4>Thermal Stratification</h4>
+                                    <p>Extended periods of water column stability create optimal conditions for buoyant cyanobacteria in the epilimnion.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Precipitation Patterns</h4>
+                                    <p>Altered runoff and nutrient loading patterns, combined with extreme weather events, enhance bloom formation potential.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Phenological Shifts</h4>
+                                    <p>Earlier spring warming and later autumn cooling extend the growing season for cyanobacteria.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solutions" class="content-section">
+            <div class="section-container">
+                <h2>Management and Mitigation Strategies</h2>
+                <div class="solutions-framework">
+                    <div class="solution-category">
+                        <h3>Prevention Strategies</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Nutrient Management</h4>
+                                <p>Implement phosphorus reduction programs and control nitrogen loading from agricultural and urban sources.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Watershed Protection</h4>
+                                <p>Establish riparian buffer zones and implement best management practices to reduce nutrient runoff.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Climate Adaptation</h4>
+                                <p>Develop adaptive management strategies that account for changing temperature and precipitation patterns.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="solution-category">
+                        <h3>Monitoring and Detection</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Advanced Sensors</h4>
+                                <p>Deploy real-time fluorescence sensors and automated sampling systems for early bloom detection.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Remote Sensing</h4>
+                                <p>Use satellite imagery and drone surveys for large-scale bloom monitoring and prediction.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Predictive Modeling</h4>
+                                <p>Develop forecasting models that integrate climate data, nutrient loading, and cyanobacterial physiology.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="solution-category">
+                        <h3>Control and Treatment</h3>
+                        <div class="solution-cards">
+                            <div class="solution-card">
+                                <h4>Biological Control</h4>
+                                <p>Enhance natural grazing pressure through biomanipulation and introduction of cyanobacterial predators.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Physical Methods</h4>
+                                <p>Use artificial mixing and sediment removal to disrupt bloom formation and reduce nutrient availability.</p>
+                            </div>
+                            <div class="solution-card">
+                                <h4>Chemical Treatments</h4>
+                                <p>Apply targeted algicides and phosphate binders for emergency bloom control when necessary.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="policy-framework">
+                        <h3>Policy and Research Framework</h3>
+                        <div class="policy-actions">
+                            <div class="policy-item">
+                                <h4>Regulatory Approaches</h4>
+                                <ul>
+                                    <li>Establish site-specific nutrient criteria for temperate lakes</li>
+                                    <li>Implement bloom monitoring and early warning systems</li>
+                                    <li>Develop multi-agency response coordination frameworks</li>
+                                    <li>Create public health protection standards for cyanotoxins</li>
+                                </ul>
+                            </div>
+                            <div class="policy-item">
+                                <h4>Research Priorities</h4>
+                                <ul>
+                                    <li>Cold adaptation mechanisms in cyanobacteria</li>
+                                    <li>Toxin production regulation under changing conditions</li>
+                                    <li>Climate-bloom interaction modeling</li>
+                                    <li>Long-term ecosystem recovery processes</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>Issue #2325</h4>
+                <p>Cyanobacterial Bloom Expansion into Cold Regions</p>
+                <p>Studying toxin proliferation in previously unaffected temperate lakes</p>
+            </div>
+            <div class="footer-section">
+                <h4>Key Findings</h4>
+                <ul>
+                    <li>40+ countries experiencing bloom expansion</li>
+                    <li>5-10°C lower temperature thresholds</li>
+                    <li>2-3 months extended bloom seasons</li>
+                    <li>Multiple toxin classes proliferating</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Management Actions</h4>
+                <ul>
+                    <li>Implement nutrient reduction programs</li>
+                    <li>Deploy advanced monitoring systems</li>
+                    <li>Develop climate-adaptive strategies</li>
+                    <li>Establish early warning networks</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <a href="#science">Climate Drivers</a>
+                    <a href="#impacts">Case Studies</a>
+                    <a href="#mechanisms">Expansion Mechanisms</a>
+                    <a href="#solutions">Control Strategies</a>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Environment Animal Safety Hub - Issue #2325: Cyanobacterial Bloom Research</p>
+        </div>
+    </footer>
+</div>
+
+    <script src="cyanobacterial-bloom-expansion-cold-regions.js"></script>
+</body>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Circular Swap Marketplace</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/circular-swap-marketplace.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="brand">
+          <i class="fas fa-arrows-alt"></i>
+          <h1>Circular Swap Hub</h1>
+        </div>
+        <nav class="nav-tabs">
+          <button class="nav-tab active" data-tab="marketplace">
+            <i class="fas fa-store"></i> Marketplace
+          </button>
+          <button class="nav-tab" data-tab="my-listings">
+            <i class="fas fa-list"></i> My Listings
+          </button>
+          <button class="nav-tab" data-tab="inbox">
+            <i class="fas fa-inbox"></i> Inbox
+            <span class="badge" id="inbox-badge" style="display: none;">0</span>
+          </button>
+          <button class="nav-tab" data-tab="history">
+            <i class="fas fa-history"></i> History
+          </button>
+          <button class="nav-tab" data-tab="leaderboard">
+            <i class="fas fa-crown"></i> Leaderboard
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Impact Banner -->
+    <div class="impact-banner">
+      <div class="impact-item">
+        <div class="impact-icon">
+          <i class="fas fa-recycle"></i>
+        </div>
+        <div class="impact-text">
+          <div class="impact-label">Items Reused</div>
+          <div class="impact-value" id="items-reused">0</div>
+        </div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-icon">
+          <i class="fas fa-trash-alt"></i>
+        </div>
+        <div class="impact-text">
+          <div class="impact-label">Waste Avoided</div>
+          <div class="impact-value" id="waste-avoided">0 kg</div>
+        </div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-icon">
+          <i class="fas fa-leaf"></i>
+        </div>
+        <div class="impact-text">
+          <div class="impact-label">CO₂ Saved</div>
+          <div class="impact-value" id="co2-saved">0 kg</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Marketplace Tab -->
+      <section class="tab-content active" id="marketplace">
+        <!-- Search & Filters -->
+        <div class="search-filters">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search-input" placeholder="Search items...">
+            <button id="clear-search" class="clear-btn" style="display: none;">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+
+          <div class="filter-group">
+            <select id="category-filter" class="filter-select">
+              <option value="">All Categories</option>
+              <option value="electronics">Electronics</option>
+              <option value="furniture">Furniture</option>
+              <option value="clothing">Clothing</option>
+              <option value="books">Books</option>
+              <option value="sports">Sports & Outdoors</option>
+              <option value="kitchen">Kitchen & Dining</option>
+              <option value="toys">Toys & Games</option>
+              <option value="art">Art & Crafts</option>
+              <option value="other">Other</option>
+            </select>
+
+            <select id="type-filter" class="filter-select">
+              <option value="">All Types</option>
+              <option value="swap">Swap</option>
+              <option value="donate">Donate</option>
+              <option value="both">Both</option>
+            </select>
+
+            <select id="condition-filter" class="filter-select">
+              <option value="">All Conditions</option>
+              <option value="like-new">Like New</option>
+              <option value="good">Good</option>
+              <option value="fair">Fair</option>
+              <option value="needs-repair">Needs Repair</option>
+            </select>
+
+            <select id="sort-by" class="filter-select">
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="most-requested">Most Requested</option>
+              <option value="nearby">Nearby First</option>
+            </select>
+          </div>
+
+          <button id="post-item-btn" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Post Item
+          </button>
+        </div>
+
+        <!-- Item Grid -->
+        <div class="items-grid" id="items-grid">
+          <div class="no-items">
+            <i class="fas fa-inbox"></i>
+            <p>No items match your search. Try adjusting filters or post your first item!</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- My Listings Tab -->
+      <section class="tab-content" id="my-listings">
+        <div class="my-listings-container">
+          <div class="section-header">
+            <h2>My Listings</h2>
+            <button id="my-listings-post-btn" class="btn btn-primary btn-sm">
+              <i class="fas fa-plus"></i> Post New Item
+            </button>
+          </div>
+          <div class="my-listings-grid" id="my-listings-grid">
+            <div class="no-items">
+              <i class="fas fa-inbox"></i>
+              <p>You haven't posted any items yet. Start by posting your first item!</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Inbox Tab -->
+      <section class="tab-content" id="inbox">
+        <div class="inbox-container">
+          <div class="section-header">
+            <h2>Swap Requests & Messages</h2>
+            <select id="inbox-filter" class="filter-select">
+              <option value="">All</option>
+              <option value="pending">Pending</option>
+              <option value="accepted">Accepted</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+          <div class="inbox-list" id="inbox-list">
+            <div class="no-items">
+              <i class="fas fa-inbox"></i>
+              <p>No requests yet. Start swapping with community members!</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- History Tab -->
+      <section class="tab-content" id="history">
+        <div class="history-container">
+          <div class="section-header">
+            <h2>Swap History</h2>
+          </div>
+          <div class="history-stats">
+            <div class="history-stat">
+              <div class="stat-label">Total Swaps</div>
+              <div class="stat-value" id="total-swaps">0</div>
+            </div>
+            <div class="history-stat">
+              <div class="stat-label">Items Traded</div>
+              <div class="stat-value" id="total-items-traded">0</div>
+            </div>
+            <div class="history-stat">
+              <div class="stat-label">Community Rating</div>
+              <div class="stat-value" id="user-rating">5.0 ⭐</div>
+            </div>
+          </div>
+          <div class="history-timeline" id="history-timeline">
+            <div class="no-items">
+              <i class="fas fa-history"></i>
+              <p>Your swap history will appear here once you complete your first swap.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Leaderboard Tab -->
+      <section class="tab-content" id="leaderboard">
+        <div class="leaderboard-container">
+          <div class="section-header">
+            <h2>Community Leaderboard</h2>
+            <select id="leaderboard-filter" class="filter-select">
+              <option value="reusers">Top Reusers</option>
+              <option value="donors">Top Donors</option>
+              <option value="impact">Most Impact</option>
+            </select>
+          </div>
+          <div class="leaderboard-table">
+            <div class="leaderboard-header">
+              <div class="rank-col">#</div>
+              <div class="name-col">Member</div>
+              <div class="stat-col">Swaps</div>
+              <div class="stat-col">Items</div>
+              <div class="stat-col">Impact</div>
+              <div class="rating-col">Rating</div>
+            </div>
+            <div id="leaderboard-body"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Post Item Modal -->
+  <div class="modal" id="post-item-modal">
+    <div class="modal-content post-item-form">
+      <div class="modal-header">
+        <h2>Post an Item</h2>
+        <button class="close-btn" data-close="post-item-modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <form id="item-form">
+        <div class="form-group">
+          <label for="item-title">Item Title *</label>
+          <input type="text" id="item-title" required placeholder="e.g., Vintage Oak Bookshelf">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="item-category">Category *</label>
+            <select id="item-category" required>
+              <option value="">Select Category</option>
+              <option value="electronics">Electronics</option>
+              <option value="furniture">Furniture</option>
+              <option value="clothing">Clothing</option>
+              <option value="books">Books</option>
+              <option value="sports">Sports & Outdoors</option>
+              <option value="kitchen">Kitchen & Dining</option>
+              <option value="toys">Toys & Games</option>
+              <option value="art">Art & Crafts</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="item-condition">Condition *</label>
+            <select id="item-condition" required>
+              <option value="">Select Condition</option>
+              <option value="like-new">Like New</option>
+              <option value="good">Good</option>
+              <option value="fair">Fair</option>
+              <option value="needs-repair">Needs Repair</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="item-description">Description *</label>
+          <textarea id="item-description" required placeholder="Describe the item, its condition, and why you're sharing..." rows="4"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="item-weight">Estimated Weight (kg)</label>
+            <input type="number" id="item-weight" min="0" step="0.1" placeholder="e.g., 15.5">
+          </div>
+
+          <div class="form-group">
+            <label for="item-type">Item Type *</label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="item-type" value="swap" checked>
+                <span>Swap</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="item-type" value="donate">
+                <span>Donate</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="item-type" value="both">
+                <span>Both</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="item-location">Your Location *</label>
+          <input type="text" id="item-location" required placeholder="City, State">
+        </div>
+
+        <div class="form-group">
+          <label for="item-image">Item Image URL</label>
+          <input type="url" id="item-image" placeholder="https://example.com/image.jpg">
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" data-close="post-item-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Post Item</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Swap Request Modal -->
+  <div class="modal" id="request-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Send Swap Request</h2>
+        <button class="close-btn" data-close="request-modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <form id="request-form">
+        <div class="form-group">
+          <label>Item You're Interested In</label>
+          <div class="interested-item-info" id="interested-item-info"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="request-message">Message to Seller</label>
+          <textarea id="request-message" placeholder="Tell them why you're interested and what you might offer..." rows="4"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="request-contact">Your Phone Number</label>
+          <input type="tel" id="request-contact" placeholder="(Optional) So they can reach you">
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" data-close="request-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Send Request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Item Detail Modal -->
+  <div class="modal" id="item-detail-modal">
+    <div class="modal-content item-detail">
+      <div class="modal-header">
+        <h2>Item Details</h2>
+        <button class="close-btn" data-close="item-detail-modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="item-detail-content"></div>
+    </div>
+  </div>
+
+  <!-- Inbox Request Detail Modal -->
+  <div class="modal" id="inbox-detail-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Request Details</h2>
+        <button class="close-btn" data-close="inbox-detail-modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="inbox-detail-content"></div>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div class="modal" id="confirm-modal">
+    <div class="modal-content small">
+      <div class="modal-header">
+        <h2 id="confirm-title">Confirm Action</h2>
+        <button class="close-btn" data-close="confirm-modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <p id="confirm-message"></p>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" data-close="confirm-modal">Cancel</button>
+        <button type="button" id="confirm-btn" class="btn btn-primary">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-container">
+    <div class="toast" id="toast">
+      <i class="fas fa-check-circle"></i>
+      <span id="toast-message"></span>
+    </div>
+  </div>
+
+  <script src="../js/circular-swap-marketplace.js"></script>
+</body>
+</html>
