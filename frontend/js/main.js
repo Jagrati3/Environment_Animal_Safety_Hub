@@ -316,7 +316,8 @@ function initNavbar() {
 
     // Mobile Menu Toggle
     if (mobileBtn && navLinks) {
-      mobileBtn.addEventListener("click", () => {
+      mobileBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
         const isExpanded = mobileBtn.getAttribute("aria-expanded") === "true";
         mobileBtn.setAttribute("aria-expanded", !isExpanded);
 
@@ -325,14 +326,44 @@ function initNavbar() {
         document.body.classList.toggle("no-scroll");
       });
 
-      // Close menu when clicking a link
+      // Close menu when clicking a link (but not dropdown toggle links)
       navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          navLinks.classList.remove("active");
-          mobileBtn.classList.remove("active");
-          mobileBtn.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("no-scroll");
+        link.addEventListener("click", (e) => {
+          // Check if this is a dropdown toggle (href="#")
+          if (link.getAttribute("href") !== "#") {
+            navLinks.classList.remove("active");
+            mobileBtn.classList.remove("active");
+            mobileBtn.setAttribute("aria-expanded", "false");
+            document.body.classList.remove("no-scroll");
+          }
         });
+      });
+
+      // Handle mobile dropdown toggles (click to expand/collapse)
+      const navGroups = navLinks.querySelectorAll(".nav-group");
+      navGroups.forEach((group) => {
+        const link = group.querySelector(".nav-link");
+        const dropdown = group.querySelector(".dropdown");
+
+        if (link && dropdown) {
+          link.addEventListener("click", (e) => {
+            // Only prevent default for dropdown toggles on mobile
+            if (link.getAttribute("href") === "#") {
+              e.preventDefault();
+              e.stopPropagation();
+              
+              // Close other dropdowns
+              navGroups.forEach((otherGroup) => {
+                if (otherGroup !== group) {
+                  otherGroup.classList.remove("mobile-open");
+                }
+              });
+              
+              // Toggle current dropdown
+              group.classList.toggle("mobile-open");
+            }
+          });
+        }
       });
 
       // Close menu when clicking outside
@@ -342,6 +373,11 @@ function initNavbar() {
           mobileBtn.classList.remove("active");
           mobileBtn.setAttribute("aria-expanded", "false");
           document.body.classList.remove("no-scroll");
+          
+          // Close all dropdowns
+          navGroups.forEach((group) => {
+            group.classList.remove("mobile-open");
+          });
         }
       });
     }
