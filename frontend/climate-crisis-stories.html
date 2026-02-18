@@ -6,9 +6,11 @@
 
 <style>
 :root{
-  --bg1:#240046;
-  --bg2:#3c096c;
-  --accent:#ffb703;
+  --bg1:#1b263b;
+  --bg2:#415a77;
+  --accent:#ffd166;
+  --card:#ffffff18;
+  --white:#f8f9fa;
 }
 
 body{
@@ -16,54 +18,164 @@ body{
   min-height:100vh;
   background:linear-gradient(135deg,var(--bg1),var(--bg2));
   font-family:Segoe UI, sans-serif;
-  color:#f8f7ff;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+  color:var(--white);
 }
 
-h1{
-  margin-top:30px;
+/* Header */
+.header{
+  text-align:center;
+  padding:40px 20px 20px;
+  animation:fadeDown 1s ease;
+}
+
+@keyframes fadeDown{
+  from{opacity:0; transform:translateY(-30px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+.header h1{
   font-size:3rem;
+  margin-bottom:10px;
+}
+
+.header p{
+  opacity:0.9;
+}
+
+/* Info Cards */
+.info-section{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:25px;
+  max-width:900px;
+  margin:40px auto;
+  padding:0 20px;
+}
+
+.info-card{
+  background:var(--card);
+  padding:25px;
+  border-radius:18px;
+  text-align:center;
+  box-shadow:0 5px 15px rgba(0,0,0,0.3);
+  transition:0.4s;
+  animation:fadeUp 1s ease;
+}
+
+.info-card:hover{
+  transform:translateY(-8px) scale(1.03);
+}
+
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(30px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+.info-card h3{
+  color:var(--accent);
+}
+
+/* Story Section */
+.story-section{
+  max-width:900px;
+  margin:50px auto;
+  padding:0 20px;
   text-align:center;
 }
 
-.deck{
-  margin-top:60px;
-  perspective:1000px;
+/* Counter */
+.counter{
+  margin-bottom:12px;
+  font-weight:600;
+  color:var(--accent);
 }
 
-.card{
-  width:300px;
-  height:180px;
-  background:rgba(255,255,255,0.15);
-  border-radius:18px;
+/* Progress Bar */
+.progress-container{
+  width:100%;
+  height:8px;
+  background:#ffffff20;
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:25px;
+}
+
+.progress-bar{
+  height:100%;
+  width:0%;
+  background:var(--accent);
+  transition:0.5s;
+}
+
+/* Flip Card */
+.flip-container{
+  perspective:1200px;
+}
+
+.story-card{
+  background:var(--card);
+  border-radius:20px;
+  padding:40px 30px;
+  min-height:150px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:1.1rem;
-  text-align:center;
-  padding:20px;
-  cursor:pointer;
-  transform-style:preserve-3d;
+  font-size:1.2rem;
+  line-height:1.6;
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
   transition:transform 0.8s;
+  transform-style:preserve-3d;
+  position:relative;
 }
 
-.card.flip{
+.story-card.flip{
   transform:rotateY(180deg);
 }
 
-.front, .back{
+.story-face{
   position:absolute;
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:30px;
   backface-visibility:hidden;
 }
 
-.back{
+.story-back{
   transform:rotateY(180deg);
 }
 
-.footer{
+/* Controls */
+.controls{
   margin-top:30px;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+button{
+  padding:12px 26px;
+  border:none;
+  border-radius:25px;
+  background:var(--accent);
+  color:#1b263b;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  transform:scale(1.1);
+  background:#ffe599;
+}
+
+/* Footer */
+.footer{
+  margin:40px 0 20px;
+  text-align:center;
   font-size:0.9rem;
   opacity:0.8;
 }
@@ -72,40 +184,164 @@ h1{
 
 <body>
 
-<h1>🔄 Climate Crisis Stories</h1>
-
-<div class="deck">
-  <div class="card" id="card" onclick="flip()">
-    <div class="front">Tap to reveal a story</div>
-    <div class="back" id="story"></div>
-  </div>
+<!-- Header -->
+<div class="header">
+  <h1>🌍 Climate Crisis Stories</h1>
+  <p>Understanding today to protect tomorrow</p>
 </div>
 
-<p class="footer">Each flip reveals a reality we face.</p>
+<!-- Info Cards -->
+<div class="info-section">
+
+  <div class="info-card">
+    <h3>🌱 Awareness</h3>
+    <p>Learn how climate change affects life.</p>
+  </div>
+
+  <div class="info-card">
+    <h3>🔥 Impact</h3>
+    <p>See how pollution damages Earth.</p>
+  </div>
+
+  <div class="info-card">
+    <h3>🤝 Action</h3>
+    <p>Find simple ways to protect nature.</p>
+  </div>
+
+</div>
+
+<!-- Story Section -->
+<div class="story-section">
+
+  <!-- Counter -->
+  <div class="counter" id="counter">
+    Story 0 / 10
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Flip Card -->
+  <div class="flip-container">
+
+    <div class="story-card" id="card">
+
+      <div class="story-face story-front" id="frontText">
+        Click "Next Story" to start 🌎
+      </div>
+
+      <div class="story-face story-back" id="backText"></div>
+
+    </div>
+
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+
+    <button onclick="nextStory()">Next Story</button>
+
+    <button onclick="restart()">Restart</button>
+
+    <button onclick="goHome()">Back to Home</button>
+
+  </div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  Every story is a reminder to care for our planet.
+</div>
 
 <script>
+
 const stories = [
-  "Rising temperatures intensify wildfires worldwide.",
-  "Floods displace millions every year.",
-  "Glaciers are melting faster than predicted.",
-  "Heatwaves threaten food security.",
-  "Climate action today decides tomorrow."
+
+  "Rising temperatures are increasing wildfires worldwide.",
+
+  "Floods are forcing millions to leave their homes.",
+
+  "Glaciers are melting faster than expected.",
+
+  "Sea levels are threatening coastal cities.",
+
+  "Heatwaves reduce food production.",
+
+  "Air pollution damages human health.",
+
+  "Plastic waste destroys marine life.",
+
+  "Deforestation reduces biodiversity.",
+
+  "Water scarcity affects millions.",
+
+  "Our actions decide Earth's future."
+
 ];
 
-let i = 0;
-const card = document.getElementById("card");
-const storyBox = document.getElementById("story");
+let index = 0;
 
-function flip(){
-  if(i >= stories.length){
-    alert("🌍 No more stories left. Now act.");
+const card = document.getElementById("card");
+const front = document.getElementById("frontText");
+const back = document.getElementById("backText");
+const counter = document.getElementById("counter");
+const progress = document.getElementById("progressBar");
+
+
+function updateUI(){
+
+  counter.textContent = `Story ${index} / ${stories.length}`;
+
+  progress.style.width = (index / stories.length) * 100 + "%";
+}
+
+
+function nextStory(){
+
+  if(index >= stories.length){
+    front.textContent = "🌍 All stories completed!";
+    back.textContent = "Now it's time to act!";
     return;
   }
 
-  storyBox.textContent = stories[i];
+  back.textContent = stories[index];
+
   card.classList.toggle("flip");
-  i++;
+
+  setTimeout(()=>{
+    front.textContent = stories[index];
+    card.classList.toggle("flip");
+  },400);
+
+  index++;
+
+  updateUI();
 }
+
+
+function restart(){
+
+  index = 0;
+
+  front.textContent = "Click \"Next Story\" to start 🌎";
+  back.textContent = "";
+
+  progress.style.width = "0%";
+
+  counter.textContent = "Story 0 / 10";
+}
+
+
+function goHome(){
+
+  window.location.href = "index.html";
+}
+
+updateUI();
+
 </script>
 
 </body>
