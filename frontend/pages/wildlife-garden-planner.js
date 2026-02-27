@@ -13,22 +13,31 @@ document.addEventListener('DOMContentLoaded', function() {
   ];
   const plantGrid = document.getElementById('plantGrid');
   let selectedPlants = [];
-  plants.forEach((p, idx) => {
-    const card = document.createElement('div');
-    card.className = 'plant-card';
-    card.innerHTML = `<div class="plant-icon">${p.icon}</div><div class="plant-title">${p.title}</div><div class="plant-desc">${p.desc}</div>`;
-    card.addEventListener('click', function() {
-      if (selectedPlants.includes(idx)) {
-        selectedPlants = selectedPlants.filter(i => i !== idx);
-        card.classList.remove('selected');
-      } else {
-        selectedPlants.push(idx);
-        card.classList.add('selected');
-      }
-      updateHabitatTips();
+  if (!plantGrid) {
+    // Show error and skip appending cards
+    const errorDiv = document.createElement('div');
+    errorDiv.style.color = 'red';
+    errorDiv.style.margin = '1rem';
+    errorDiv.textContent = 'Error: Required element #plantGrid not found. Plant selection UI cannot be rendered.';
+    document.body.appendChild(errorDiv);
+  } else {
+    plants.forEach((p, idx) => {
+      const card = document.createElement('div');
+      card.className = 'plant-card';
+      card.innerHTML = `<div class="plant-icon">${p.icon}</div><div class="plant-title">${p.title}</div><div class="plant-desc">${p.desc}</div>`;
+      card.addEventListener('click', function() {
+        if (selectedPlants.includes(idx)) {
+          selectedPlants = selectedPlants.filter(i => i !== idx);
+          card.classList.remove('selected');
+        } else {
+          selectedPlants.push(idx);
+          card.classList.add('selected');
+        }
+        updateHabitatTips();
+      });
+      plantGrid.appendChild(card);
     });
-    plantGrid.appendChild(card);
-  });
+  }
 
   // --- Habitat Tips ---
   function updateHabitatTips() {
