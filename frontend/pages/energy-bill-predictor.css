@@ -1,6 +1,6 @@
 /* Energy Bill Predictor Styles */
 .predictor-container {
-  max-width: 600px;
+  max-width: 1000px;
   margin: 40px auto;
   background: #fff;
   border-radius: 12px;
@@ -8,72 +8,363 @@
   padding: 32px 24px 24px 24px;
   font-family: 'Segoe UI', Arial, sans-serif;
 }
+
 h1 {
   text-align: center;
   color: #2e7d32;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
 }
+
+h2, h3 {
+  color: #1976d2;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
 form {
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
+
+label {
+  font-weight: 600;
+  color: #333;
+}
+
 .manual-entry {
   background: #f4f8f6;
   border-radius: 8px;
-  padding: 14px 12px;
+  padding: 16px;
 }
+
 .bill-row {
   display: flex;
   gap: 12px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
+
 .bill-month, .bill-amount {
-  padding: 6px;
-  border-radius: 5px;
+  flex: 1;
+  padding: 8px;
+  border-radius: 6px;
   border: 1px solid #bdbdbd;
-  font-size: 1rem;
+  font-size: 0.95rem;
 }
+
+.bill-month {
+  flex: 1.2;
+}
+
 button[type="button"] {
   background: #388e3c;
   color: #fff;
   border: none;
-  border-radius: 5px;
-  padding: 7px 18px;
-  font-size: 1rem;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.3s;
+  align-self: flex-start;
 }
+
 button[type="button"]:hover {
   background: #2e7d32;
 }
+
 button[type="submit"] {
   background: #1976d2;
   color: #fff;
   border: none;
-  border-radius: 5px;
-  padding: 9px 22px;
-  font-size: 1.1rem;
+  border-radius: 6px;
+  padding: 10px 24px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
   margin-top: 12px;
-  transition: background 0.2s;
+  transition: background 0.3s;
 }
+
 button[type="submit"]:hover {
   background: #1565c0;
 }
+
+/* Results Section */
 .results-section {
-  margin-top: 28px;
-  background: #e8f5e9;
+  margin-top: 32px;
+  animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.results-header h2 {
+  margin: 0;
+}
+
+.export-btn {
+  background: #66bb6a;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.export-btn:hover {
+  background: #43a047;
+}
+
+/* Prediction Cards */
+.prediction-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.prediction-card {
+  background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  border-left: 6px solid #1976d2;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.1);
+  transition: transform 0.3s;
+}
+
+.prediction-card:hover {
+  transform: translateY(-4px);
+}
+
+.card-label {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-value {
+  font-size: 1.8rem;
+  color: #1976d2;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+}
+
+/* Chart Container */
+.chart-container {
+  background: #f9f9f9;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 32px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  position: relative;
+  width: 100%;
+  height: 400px;
+}
+
+#billChart {
+  max-height: 350px;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Seasonal Breakdown */
+.seasonal-breakdown {
+  margin-bottom: 32px;
+}
+
+.seasonal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.seasonal-card {
+  background: white;
   border-radius: 8px;
-  padding: 18px 14px;
+  padding: 16px;
+  text-align: center;
+  border: 2px solid #e0e0e0;
+  transition: border-color 0.3s;
+}
+
+.seasonal-card:hover {
+  border-color: #1976d2;
+}
+
+.seasonal-emoji {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.seasonal-season {
+  font-weight: 700;
+  color: #333;
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+}
+
+.seasonal-avg {
+  color: #1976d2;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.seasonal-trend {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.seasonal-trend.trend-higher {
+  color: #d32f2f;
+}
+
+.seasonal-trend.trend-lower {
+  color: #388e3c;
+}
+
+.seasonal-count {
+  font-size: 0.8rem;
+  color: #999;
+}
+
+/* Recommendations Section */
+.recommendations-section {
+  margin-bottom: 20px;
+}
+
+.recommendations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.recommendation-card {
+  border-radius: 8px;
+  padding: 16px;
+  border-left: 6px solid;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: transform 0.3s;
+}
+
+.recommendation-card:hover {
+  transform: translateY(-2px);
+}
+
+.recommendation-card.urgency-high {
+  background: #ffebee;
+  border-left-color: #c62828;
+}
+
+.recommendation-card.urgency-medium {
+  background: #fff3e0;
+  border-left-color: #ff6f00;
+}
+
+.recommendation-card.urgency-low {
+  background: #e8f5e9;
+  border-left-color: #388e3c;
+}
+
+.recommendation-title {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 8px;
   color: #222;
 }
-.seasonal-trend {
-  color: #388e3c;
-  font-weight: 600;
+
+.recommendation-card.urgency-high .recommendation-title {
+  color: #c62828;
 }
-.recommendation {
-  color: #1976d2;
-  font-weight: 500;
-  margin-top: 8px;
+
+.recommendation-card.urgency-medium .recommendation-title {
+  color: #ff6f00;
+}
+
+.recommendation-card.urgency-low .recommendation-title {
+  color: #388e3c;
+}
+
+.recommendation-description {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .predictor-container {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  .prediction-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .seasonal-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .recommendations-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bill-row {
+    flex-direction: column;
+  }
+
+  .bill-month, .bill-amount {
+    width: 100%;
+  }
+
+  .results-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .export-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .prediction-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .seasonal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card-value {
+    font-size: 1.4rem;
+  }
+
+  .seasonal-emoji {
+    font-size: 1.5rem;
+  }
 }
