@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎭 Nature Roleplay Simulator · become the wild</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Google Fonts: expressive & adventurous -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Fredoka+One&display=swap" rel="stylesheet">
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #244d3b;
+            background: radial-gradient(circle at 10% 30%, #3f725a, #1c3d2f);
+            min-height: 100vh;
+            color: #f3f0d9;
+            line-height: 1.6;
+        }
+
+        /* header – theatrical & wild */
+        .roleplay-header {
+            background: linear-gradient(145deg, #3c6b53, #1b4d39);
+            padding: 5rem 2rem 4.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+            border-bottom: 6px solid #edd49b;
+            box-shadow: 0 20px 30px #1d4735;
+        }
+
+        .roleplay-header::before {
+            content: '🎭🌲';
+            position: absolute;
+            font-size: 18rem;
+            opacity: 0.1;
+            left: -3rem;
+            bottom: -6rem;
+            transform: rotate(-15deg);
+        }
+
+        .roleplay-header h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 4rem;
+            color: #faf0bb;
+            text-shadow: 6px 6px 0 #1d6342;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .roleplay-header h1 i {
+            color: #fbdea4;
+            filter: drop-shadow(0 0 8px #ffeba0);
+        }
+
+        .roleplay-header p {
+            font-size: 1.5rem;
+            max-width: 750px;
+            margin: 1.5rem auto;
+            background: #dbedd0c0;
+            padding: 0.8rem 2.2rem;
+            border-radius: 60px;
+            color: #1b5436;
+            font-weight: 700;
+            backdrop-filter: blur(5px);
+            border: 3px solid #edd49b;
+        }
+
+        .character-badge {
+            margin-top: 1.5rem;
+            display: inline-block;
+            background: #c5b06b;
+            color: #173e28;
+            padding: 0.5rem 2.2rem;
+            border-radius: 60px;
+            font-weight: 700;
+            border: 3px solid #ffe49e;
+        }
+
+        /* container */
+        .container {
+            max-width: 1300px;
+            margin: -3.5rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* role selection panel */
+        .role-panel {
+            background: #f5faecee;
+            backdrop-filter: blur(8px);
+            border-radius: 80px;
+            padding: 2rem 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 40px #2f604570, 0 0 0 3px #e4d69f inset;
+            border: 3px solid #edd8a3;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            color: #1a5336;
+        }
+
+        .role-selector {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .role-btn {
+            background: #aacf9e;
+            border: none;
+            padding: 0.8rem 2.2rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #153d24;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border: 3px solid transparent;
+            transition: 0.2s;
+        }
+
+        .role-btn i { color: #704e1c; }
+
+        .role-btn.active {
+            background: #edd896;
+            border-color: #a8813d;
+            transform: scale(1.05);
+        }
+
+        .role-btn:hover {
+            background: #e0eab3;
+            border-color: #c09b4c;
+        }
+
+        /* story / scene card */
+        .story-card {
+            background: #ecf7e4;
+            border-radius: 80px;
+            padding: 2.8rem;
+            margin: 2rem 0 3rem;
+            border: 8px solid #fae3a0;
+            box-shadow: 0 30px 40px #23563b;
+            color: #1c502f;
+        }
+
+        .scene-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            color: #5d4a1c;
+        }
+
+        .scene-desc {
+            font-size: 1.4rem;
+            margin: 1.8rem 0;
+            line-height: 1.8;
+            background: #f9ffe6;
+            padding: 2rem;
+            border-radius: 60px;
+            border: 3px dashed #b3d09c;
+        }
+
+        .choice-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin: 2.5rem 0;
+        }
+
+        .choice-card {
+            background: #f4ffe0;
+            border-radius: 70px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            border: 4px solid #c8e2b4;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #1d532e;
+        }
+
+        .choice-card:hover {
+            background: #fbffcf;
+            border-color: #f0bc6c;
+            transform: translateY(-6px);
+        }
+
+        .choice-card i {
+            font-size: 2.5rem;
+            color: #ab7d35;
+        }
+
+        .reset-btn {
+            background: #dbb167;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #1d4529;
+            cursor: pointer;
+            border: 4px solid #fef3c0;
+            margin-top: 1.5rem;
+        }
+
+        /* journal / outcome */
+        .journal-box {
+            background: #ece3c6;
+            border-radius: 70px;
+            padding: 2rem;
+            margin-top: 2.5rem;
+            border: 5px solid #bfa668;
+            color: #2e502b;
+        }
+
+        /* character cards grid (previews) */
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.8rem;
+            margin: 4rem 0;
+        }
+
+        .character-card {
+            background: #e1f0d6;
+            border-radius: 60px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px #235638;
+            transition: all 0.3s;
+            border: 4px solid #d8f0b0;
+            cursor: pointer;
+            color: #1c4a2b;
+        }
+
+        .character-card:hover {
+            transform: translateY(-12px);
+            border-color: #f3cd7a;
+        }
+
+        .character-image {
+            height: 140px;
+            background: linear-gradient(145deg, #82b785, #569761);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #fcf9cf;
+        }
+
+        .character-content {
+            padding: 1.5rem;
+        }
+
+        .character-name {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .character-desc {
+            color: #3d693f;
+        }
+
+        /* modal */
+        .modal {
+            display: none; position: fixed; inset:0; background: #204d33e6;
+            align-items: center; justify-content: center; z-index:2000;
+            backdrop-filter: blur(6px);
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #f3fbe6;
+            border-radius: 80px;
+            max-width: 700px;
+            width:100%;
+            border: 8px solid #fad68b;
+            color: #1b582c;
+        }
+
+        .back-to-top {
+            position: fixed; bottom:2rem; right:2rem;
+            background: #cfa55c; width:70px; height:70px; border-radius:50%;
+            display: none; align-items:center; justify-content:center;
+            font-size:2.2rem; color:#1e4624; border:5px solid #fcf0b5;
+            cursor:pointer; z-index:1000;
+        }
+        .back-to-top.visible { display: flex; }
+
+        @media (max-width:700px){
+            .choice-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- header -->
+    <header class="roleplay-header">
+        <h1>
+            <i class="fas fa-mask"></i> Nature Roleplay Simulator
+            <i class="fas fa-tree"></i>
+        </h1>
+        <p>choose your wild character · live the story</p>
+        <div class="character-badge"><i class="fas fa-feather"></i> 6 playable roles</div>
+    </header>
+
+    <div class="container">
+        <!-- role selection panel (dynamic) -->
+        <div class="role-panel" data-aos="fade-up">
+            <span style="font-weight:700; font-size:1.5rem;"><i class="fas fa-user"></i> you are:</span>
+            <div class="role-selector" id="roleSelector">
+                <!-- JS will populate -->
+            </div>
+        </div>
+
+        <!-- main story card -->
+        <div class="story-card" id="storyCard" data-aos="zoom-in">
+            <div class="scene-title" id="sceneTitle">🌲 dawn in the ancient forest</div>
+            <div class="scene-desc" id="sceneDesc">you wake as a fox. the world smells of damp earth and opportunity. what do you do?</div>
+            <div class="choice-grid" id="choiceContainer"></div>
+            <div class="journal-box" id="journalBox">
+                <i class="fas fa-scroll"></i> <span id="journalText">your journey begins ...</span>
+            </div>
+            <button class="reset-btn" onclick="resetGame()"><i class="fas fa-undo-alt"></i> start over</button>
+        </div>
+
+        <!-- character cards (all roles) -->
+        <h2 style="font-size:2.5rem; margin:3rem 0 1rem;">🎭 playable characters</h2>
+        <div class="character-grid" id="characterGrid"></div>
+    </div>
+
+    <!-- modal for character details -->
+    <div class="modal" id="roleModal">
+        <div class="modal-content" style="padding:2.5rem;">
+            <button style="float:right; background:none; border:none; font-size:3rem; color:#1f623a;" onclick="closeModal()">✕</button>
+            <div style="text-align:center;">
+                <div style="font-size:5rem;" id="modalRoleEmoji">🦊</div>
+                <h2 id="modalRoleName" style="font-size:2.8rem;">fox</h2>
+                <p id="modalRoleDesc" style="margin:2rem 0;">cunning, swift, forest dweller</p>
+                <button class="reset-btn" onclick="selectRoleFromModal()" style="font-size:1.2rem;">play this role</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({duration:800,once:true});
+
+        // ---------- ROLE DATA ----------
+        const roles = [
+            { id: "fox", name: "🦊 Fox", desc: "cunning, swift, forest dweller", emoji: "🦊", icon:"fa-fox" },
+            { id: "wolf", name: "🐺 Wolf", desc: "loyal pack hunter, wild spirit", emoji: "🐺", icon:"fa-wolf" },
+            { id: "deer", name: "🦌 Deer", desc: "gentle, alert, grazer", emoji: "🦌", icon:"fa-deer" },
+            { id: "owl", name: "🦉 Owl", desc: "wise, silent, night hunter", emoji: "🦉", icon:"fa-owl" },
+            { id: "bear", name: "🐻 Bear", desc: "strong, solitary, forager", emoji: "🐻", icon:"fa-bear" },
+            { id: "raven", name: "🐦‍⬛ Raven", desc: "clever, trickster, storyteller", emoji: "🐦‍⬛", icon:"fa-crow" }
+        ];
+
+        // ---------- STORY STATE ----------
+        let currentRole = "fox";       // default
+        let step = 0;                  // 0 = intro, etc.
+
+        // role-specific story branches (simplified)
+        const stories = {
+            fox: [
+                { scene: "🌲 dawn in the forest", desc: "You are a fox. Your den is warm, but hunger stirs.", choices: ["hunt a mouse", "explore the stream"] },
+                { scene: "🪹 edge of the meadow", desc: "You spot a rabbit. Also a rustling in the bushes.", choices: ["stalk rabbit", "investigate rustling"] }
+            ],
+            wolf: [
+                { scene: "🐺 pack waking", desc: "You howl – the pack responds. A elk herd is near.", choices: ["lead the hunt", "scout alone"] },
+                { scene: "🏔️ ridge", desc: "Scent of elk. But also a rival pack in distance.", choices: ["confront rivals", "circle around"] }
+            ],
+            deer: [
+                { scene: "🦌 morning graze", desc: "Sun rays filter through leaves. You nibble dewy grass.", choices: ["move to open field", "stay near thicket"] },
+                { scene: "🌿警觉", desc: "A twig snaps. Could be a predator.", choices: ["freeze & listen", "bound away"] }
+            ],
+            owl: [
+                { scene: "🦉 twilight", desc: "You launch from your oak. Mice below.", choices: ["silent dive", "scan from branch"] },
+                { scene: "🌌 moonlit hunt", desc: "A rustling below – a vole or maybe a snake.", choices: ["swoop", "wait"] }
+            ],
+            bear: [
+                { scene: "🐻 emerging", desc: "You wake, hungry. Berries or fish?", choices: ["head to stream", "search for berries"] },
+                { scene: "🍓 berry patch", desc: "Sweet scent. But a rustle – another bear?", choices: ["assert dominance", "share the patch"] }
+            ],
+            raven: [
+                { scene: "🐦‍⬛ treetop", desc: "You spot a shiny object near the hikers' trail.", choices: ["investigate shiny", "tease the hikers"] },
+                { scene: "🎭 clever trick", desc: "A campfire – you can steal food or perform.", choices: ["steal sandwich", "do a dance"] }
+            ]
+        };
+
+        // render role selector buttons
+        function renderRoleSelector() {
+            const container = document.getElementById('roleSelector');
+            container.innerHTML = roles.map(r => `
+                <button class="role-btn ${r.id === currentRole ? 'active' : ''}" onclick="setRole('${r.id}')">
+                    <i class="fas ${r.icon || 'fa-paw'}"></i> ${r.name}
+                </button>
+            `).join('');
+        }
+
+        // set current role and reset story
+        window.setRole = (roleId) => {
+            currentRole = roleId;
+            step = 0;
+            renderRoleSelector();
+            updateStory();
+        };
+
+        // update story based on role & step
+        function updateStory() {
+            const story = stories[currentRole] || stories.fox;
+            const current = story[step] || story[0];
+            document.getElementById('sceneTitle').innerText = current.scene;
+            document.getElementById('sceneDesc').innerText = current.desc;
+
+            let choicesHtml = '';
+            current.choices.forEach((ch, idx) => {
+                choicesHtml += `<div class="choice-card" onclick="makeChoice(${idx})"><i class="fas fa-paw"></i> ${ch}</div>`;
+            });
+            document.getElementById('choiceContainer').innerHTML = choicesHtml;
+
+            // journal update
+            document.getElementById('journalText').innerText = `you are playing as ${roles.find(r=>r.id===currentRole)?.name}. step ${step+1}`;
+        }
+
+        window.makeChoice = (choiceIdx) => {
+            const story = stories[currentRole] || stories.fox;
+            if (step < story.length - 1) {
+                step++;
+                updateStory();
+                // journal entry flavor
+                const journal = document.getElementById('journalText');
+                journal.innerText = `you chose option ${choiceIdx+1} and continued your journey.`;
+            } else {
+                // end of branch
+                document.getElementById('sceneDesc').innerText = "✨ the story continues in the wild... (demo limit)";
+                document.getElementById('choiceContainer').innerHTML = `<div class="choice-card" onclick="resetGame()"><i class="fas fa-undo"></i> play again</div>`;
+            }
+        };
+
+        window.resetGame = () => {
+            step = 0;
+            updateStory();
+        };
+
+        // character grid
+        function renderCharacterGrid() {
+            const grid = document.getElementById('characterGrid');
+            grid.innerHTML = roles.map(r => `
+                <div class="character-card" onclick="showRoleModal('${r.name}','${r.desc}','${r.emoji}','${r.id}')">
+                    <div class="character-image">${r.emoji}</div>
+                    <div class="character-content">
+                        <div class="character-name">${r.name}</div>
+                        <div class="character-desc">${r.desc}</div>
+                    </div>
+                </div>`).join('');
+        }
+
+        window.showRoleModal = (name, desc, emoji, roleId) => {
+            document.getElementById('modalRoleName').innerText = name;
+            document.getElementById('modalRoleDesc').innerText = desc;
+            document.getElementById('modalRoleEmoji').innerText = emoji;
+            document.getElementById('roleModal').classList.add('active');
+            // store roleId for modal selection
+            window.modalRoleId = roleId;
+        };
+
+        window.selectRoleFromModal = () => {
+            if (window.modalRoleId) {
+                setRole(window.modalRoleId);
+            }
+            closeModal();
+        };
+
+        window.closeModal = () => document.getElementById('roleModal').classList.remove('active');
+
+        // initial render
+        renderRoleSelector();
+        renderCharacterGrid();
+        updateStory();
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // modal escape
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('roleModal')) closeModal(); };
+    </script>
+</body>
+</html>

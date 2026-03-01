@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Noise Refuge Locator - EcoLife</title>
+    <link rel="stylesheet" href="../css/noise-refuge.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <header class="noise-header">
+        <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back</a>
+        <div class="header-center">
+            <i class="fas fa-volume-mute"></i>
+            <h1>Urban Noise Refuge Locator</h1>
+            <p>Find Your Quiet Spaces</p>
+        </div>
+        <button id="locate-btn" class="locate-btn"><i class="fas fa-crosshairs"></i> My Location</button>
+    </header>
+
+    <main class="main-grid">
+        <aside class="sidebar">
+            <div class="section">
+                <h3><i class="fas fa-sliders-h"></i> Filters</h3>
+                <label>Maximum Noise Level (dB)
+                    <input type="range" id="noise-threshold" min="30" max="80" value="50">
+                    <span id="noise-val">50 dB</span>
+                </label>
+                <label>Time of Day
+                    <select id="time-period">
+                        <option value="current">Current Time</option>
+                        <option value="morning">Morning (6-9 AM)</option>
+                        <option value="midday">Midday (12-2 PM)</option>
+                        <option value="evening">Evening (5-8 PM)</option>
+                        <option value="night">Night (9 PM-6 AM)</option>
+                    </select>
+                </label>
+                <label>Distance (km)
+                    <select id="distance">
+                        <option value="1">Within 1 km</option>
+                        <option value="2">Within 2 km</option>
+                        <option value="5">Within 5 km</option>
+                        <option value="10">Within 10 km</option>
+                    </select>
+                </label>
+                <button id="find-refuges" class="btn-primary">
+                    <i class="fas fa-search"></i> Find Quiet Spaces
+                </button>
+            </div>
+
+            <div class="section">
+                <h3><i class="fas fa-layer-group"></i> Show</h3>
+                <label><input type="checkbox" id="show-parks" checked> Parks</label>
+                <label><input type="checkbox" id="show-libraries" checked> Libraries</label>
+                <label><input type="checkbox" id="show-streets" checked> Quiet Streets</label>
+                <label><input type="checkbox" id="show-indoor"> Indoor Spaces</label>
+            </div>
+
+            <div class="section legend">
+                <h3><i class="fas fa-palette"></i> Noise Levels</h3>
+                <div class="legend-item"><span class="dot quiet"></span> Quiet (&lt;40 dB)</div>
+                <div class="legend-item"><span class="dot moderate"></span> Moderate (40-55 dB)</div>
+                <div class="legend-item"><span class="dot loud"></span> Loud (55-70 dB)</div>
+                <div class="legend-item"><span class="dot noisy"></span> Noisy (&gt;70 dB)</div>
+            </div>
+
+            <div class="section stats">
+                <h3><i class="fas fa-chart-bar"></i> Stats</h3>
+                <div class="stat-box">
+                    <div class="stat-val" id="refuge-count">0</div>
+                    <div class="stat-label">Quiet Refuges</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-val" id="avg-noise">-- dB</div>
+                    <div class="stat-label">Avg Noise Level</div>
+                </div>
+            </div>
+        </aside>
+
+        <section class="map-section">
+            <div id="noise-map"></div>
+        </section>
+
+        <aside class="sidebar">
+            <div class="tabs">
+                <button class="tab active" data-tab="refuges">Refuges</button>
+                <button class="tab" data-tab="details">Details</button>
+                <button class="tab" data-tab="times">Calm Times</button>
+            </div>
+
+            <div class="tab-panel active" id="refuges">
+                <div class="placeholder">
+                    <i class="fas fa-search"></i>
+                    <p>Search to find quiet refuges</p>
+                </div>
+            </div>
+
+            <div class="tab-panel" id="details">
+                <div class="placeholder">
+                    <i class="fas fa-mouse-pointer"></i>
+                    <p>Click a refuge for details</p>
+                </div>
+            </div>
+
+            <div class="tab-panel" id="times">
+                <h4 style="margin-bottom: 1rem;">Calm Windows</h4>
+                <div class="time-window">
+                    <h5>Early Morning</h5>
+                    <p>5:00 AM - 7:00 AM</p>
+                    <p>Avg: 38 dB | Best for meditation</p>
+                </div>
+                <div class="time-window">
+                    <h5>Late Night</h5>
+                    <p>10:00 PM - 12:00 AM</p>
+                    <p>Avg: 42 dB | Peaceful walks</p>
+                </div>
+                <div class="time-window">
+                    <h5>Sunday Morning</h5>
+                    <p>7:00 AM - 10:00 AM</p>
+                    <p>Avg: 40 dB | Quietest day</p>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script src="../js/noise-refuge.js"></script>
+</body>
+</html>

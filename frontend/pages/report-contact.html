@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report & Contact | Environmental Issues & Animal Welfare | EcoLife</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Leaflet CSS for Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8f5e9 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Header */
+        .report-header {
+            background: linear-gradient(135deg, #b71c1c, #d32f2f);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+
+        .report-header::before {
+            content: '📢';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.1;
+            right: -2rem;
+            bottom: -3rem;
+            transform: rotate(15deg);
+        }
+
+        .report-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .report-header h1 i {
+            color: #ffd700;
+        }
+
+        .report-header p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        .emergency-banner {
+            background: #ffd700;
+            color: #b71c1c;
+            padding: 1rem;
+            margin-top: 2rem;
+            border-radius: 60px;
+            display: inline-block;
+            font-weight: 700;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: -2rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Emergency Contacts */
+        .emergency-section {
+            background: white;
+            border-radius: 60px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 3px solid #b71c1c;
+        }
+
+        .emergency-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #b71c1c;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .emergency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .emergency-card {
+            background: #ffebee;
+            border-radius: 40px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .emergency-card:hover {
+            transform: translateY(-10px);
+            border-color: #b71c1c;
+            box-shadow: 0 15px 30px rgba(183,28,28,0.2);
+        }
+
+        .emergency-icon {
+            width: 80px;
+            height: 80px;
+            background: #b71c1c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            margin: 0 auto 1rem;
+        }
+
+        .emergency-card h3 {
+            color: #b71c1c;
+            margin-bottom: 0.5rem;
+        }
+
+        .emergency-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #333;
+            margin: 0.5rem 0;
+        }
+
+        .emergency-btn {
+            display: inline-block;
+            background: #b71c1c;
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+
+        .emergency-btn:hover {
+            background: #8b0000;
+            transform: scale(1.05);
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Report Form */
+        .form-section {
+            background: white;
+            border-radius: 60px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .form-section h2 {
+            color: #2e7d32;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 2rem;
+        }
+
+        .report-type-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .report-tab {
+            flex: 1;
+            min-width: 150px;
+            padding: 1rem;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f5f5f5;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .report-tab i {
+            font-size: 1.2rem;
+        }
+
+        .report-tab.active {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .report-tab.active i {
+            color: #ffd700;
+        }
+
+        .report-tab.environment.active { background: #2e7d32; }
+        .report-tab.animal.active { background: #b71c1c; }
+
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group label i {
+            color: #ff9800;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 30px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2e7d32;
+            box-shadow: 0 0 0 4px rgba(46,125,50,0.1);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .file-upload {
+            border: 3px dashed #ccc;
+            border-radius: 30px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload:hover {
+            border-color: #2e7d32;
+            background: #f1f8e9;
+        }
+
+        .file-upload i {
+            font-size: 3rem;
+            color: #999;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-upload p {
+            color: #666;
+        }
+
+        .file-upload small {
+            color: #999;
+        }
+
+        .urgency-options {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .urgency-option {
+            flex: 1;
+            min-width: 100px;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .urgency-option:hover {
+            border-color: #ff9800;
+        }
+
+        .urgency-option.selected {
+            background: #ff9800;
+            color: white;
+            border-color: #ff9800;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: white;
+            border: none;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(46,125,50,0.3);
+        }
+
+        /* Contact Info Sidebar */
+        .contact-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 60px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .info-card h3 {
+            color: #2e7d32;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 1.5rem;
+        }
+
+        .contact-list {
+            list-style: none;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: #e8f5e9;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2e7d32;
+            font-size: 1.3rem;
+        }
+
+        .contact-details h4 {
+            color: #333;
+            margin-bottom: 0.2rem;
+        }
+
+        .contact-details p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .contact-details a {
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            background: #f5f5f5;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            background: #2e7d32;
+            color: white;
+            transform: translateY(-5px);
+        }
+
+        /* Map Section */
+        .map-section {
+            background: white;
+            border-radius: 60px;
+            padding: 2rem;
+            margin: 3rem 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .map-header h2 {
+            color: #2e7d32;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .map-container {
+            height: 400px;
+            border-radius: 40px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .report-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: #f5f5f5;
+            border-radius: 30px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2e7d32;
+            display: block;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Reporting Centers */
+        .centers-section {
+            background: white;
+            border-radius: 60px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        .centers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .center-card {
+            background: #f8f9fa;
+            border-radius: 40px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .center-card:hover {
+            border-color: #2e7d32;
+            transform: translateY(-5px);
+        }
+
+        .center-type {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .center-type.environment { background: #e8f5e9; color: #2e7d32; }
+        .center-type.animal { background: #ffebee; color: #b71c1c; }
+        .center-type.wildlife { background: #fff3e0; color: #e65100; }
+
+        .center-card h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .center-address {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .center-phone {
+            color: #2e7d32;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Resources Section */
+        .resources-section {
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 3rem 0;
+            color: white;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .resource-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .resource-icon {
+            font-size: 3rem;
+            color: #ffd700;
+            margin-bottom: 1rem;
+        }
+
+        .resource-card h3 {
+            margin-bottom: 1rem;
+        }
+
+        .resource-card p {
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .resource-btn {
+            background: #ffd700;
+            color: #2e7d32;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .resource-btn:hover {
+            background: white;
+            transform: translateY(-3px);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            background: white;
+            border-radius: 60px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .faq-item {
+            background: #f8f9fa;
+            border-radius: 30px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .faq-item:hover {
+            background: #e8f5e9;
+            transform: translateX(5px);
+        }
+
+        .faq-question {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 600;
+            color: #2e7d32;
+        }
+
+        .faq-answer {
+            margin-top: 1rem;
+            color: #666;
+            line-height: 1.6;
+            display: none;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            background: white;
+            border-radius: 60px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        .testimonials-slider {
+            position: relative;
+            overflow: hidden;
+            min-height: 200px;
+        }
+
+        .testimonial-slide {
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.5s;
+            background: #f8f9fa;
+            border-radius: 40px;
+            padding: 2rem;
+        }
+
+        .testimonial-slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .testimonial-text {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            background: #2e7d32;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+        }
+
+        .author-info h4 {
+            color: #333;
+            margin-bottom: 0.2rem;
+        }
+
+        .author-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            background: #ccc;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .slider-dot.active {
+            background: #2e7d32;
+            transform: scale(1.3);
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(46,125,50,0.3);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        .back-to-top:hover {
+            background: #1b5e20;
+            transform: translateY(-5px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 60px;
+            max-width: 500px;
+            width: 100%;
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+            animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            color: #4caf50;
+            margin-bottom: 1rem;
+        }
+
+        .modal h3 {
+            color: #2e7d32;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .modal p {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .modal-btn {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .report-header h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .report-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .emergency-number {
+                font-size: 1.4rem;
+            }
+            
+            .report-type-tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="report-header">
+        <h1>
+            <i class="fas fa-bullhorn"></i>
+            Report & Contact Hub
+        </h1>
+        <p>Speak up for the environment and animals. Report issues, find help, and connect with organizations.</p>
+        <div class="emergency-banner">
+            <i class="fas fa-exclamation-triangle"></i>
+            For Emergencies: Call 911 or Local Animal Control Immediately
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Emergency Contacts -->
+        <div class="emergency-section" data-aos="fade-up">
+            <h2 class="emergency-title">
+                <i class="fas fa-phone-alt"></i>
+                Emergency Contacts
+            </h2>
+            <div class="emergency-grid">
+                <div class="emergency-card">
+                    <div class="emergency-icon">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                    <h3>Animal Cruelty</h3>
+                    <div class="emergency-number">1-800-555-1234</div>
+                    <p>24/7 Animal Abuse Hotline</p>
+                    <a href="tel:18005551234" class="emergency-btn">Call Now</a>
+                </div>
+                <div class="emergency-card">
+                    <div class="emergency-icon">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <h3>Environmental Crimes</h3>
+                    <div class="emergency-number">1-800-555-5678</div>
+                    <p>EPA Emergency Response</p>
+                    <a href="tel:18005555678" class="emergency-btn">Call Now</a>
+                </div>
+                <div class="emergency-card">
+                    <div class="emergency-icon">
+                        <i class="fas fa-dove"></i>
+                    </div>
+                    <h3>Wildlife Rescue</h3>
+                    <div class="emergency-number">1-800-555-9012</div>
+                    <p>Injured Wildlife Hotline</p>
+                    <a href="tel:18005559012" class="emergency-btn">Call Now</a>
+                </div>
+                <div class="emergency-card">
+                    <div class="emergency-icon">
+                        <i class="fas fa-oil-can"></i>
+                    </div>
+                    <h3>Oil/Chemical Spill</h3>
+                    <div class="emergency-number">1-800-555-3456</div>
+                    <p>National Response Center</p>
+                    <a href="tel:18005553456" class="emergency-btn">Call Now</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Report Form -->
+            <div class="form-section" data-aos="fade-right">
+                <h2>
+                    <i class="fas fa-edit"></i>
+                    Report an Issue
+                </h2>
+
+                <div class="report-type-tabs">
+                    <button class="report-tab environment active" onclick="switchReportType('environment')">
+                        <i class="fas fa-tree"></i> Environmental
+                    </button>
+                    <button class="report-tab animal" onclick="switchReportType('animal')">
+                        <i class="fas fa-paw"></i> Animal Welfare
+                    </button>
+                </div>
+
+                <form id="reportForm" onsubmit="submitReport(event)">
+                    <div class="form-group">
+                        <label><i class="fas fa-tag"></i> Report Type</label>
+                        <select id="reportType" required>
+                            <option value="">Select type...</option>
+                            <option value="pollution">Pollution / Dumping</option>
+                            <option value="poaching">Poaching / Hunting</option>
+                            <option value="abuse">Animal Abuse / Neglect</option>
+                            <option value="deforestation">Illegal Logging</option>
+                            <option value="injured">Injured Animal</option>
+                            <option value="stray">Stray Animal</option>
+                            <option value="waste">Illegal Waste Dumping</option>
+                            <option value="water">Water Pollution</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-user"></i> Your Name</label>
+                            <input type="text" id="reporterName" placeholder="Full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-envelope"></i> Email</label>
+                            <input type="email" id="reporterEmail" placeholder="your@email.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-phone"></i> Phone</label>
+                            <input type="tel" id="reporterPhone" placeholder="(555) 123-4567">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-map-pin"></i> Location</label>
+                            <input type="text" id="incidentLocation" placeholder="Address or description" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar"></i> Date & Time Observed</label>
+                        <input type="datetime-local" id="incidentDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-align-left"></i> Description</label>
+                        <textarea id="incidentDescription" placeholder="Please describe what you witnessed in detail..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-exclamation-circle"></i> Urgency Level</label>
+                        <div class="urgency-options">
+                            <div class="urgency-option" onclick="selectUrgency('low')" id="urgencyLow">
+                                <i class="fas fa-clock"></i> Low
+                            </div>
+                            <div class="urgency-option" onclick="selectUrgency('medium')" id="urgencyMedium">
+                                <i class="fas fa-exclamation"></i> Medium
+                            </div>
+                            <div class="urgency-option" onclick="selectUrgency('high')" id="urgencyHigh">
+                                <i class="fas fa-exclamation-triangle"></i> High
+                            </div>
+                            <div class="urgency-option" onclick="selectUrgency('emergency')" id="urgencyEmergency">
+                                <i class="fas fa-ambulance"></i> Emergency
+                            </div>
+                        </div>
+                        <input type="hidden" id="urgency" value="medium">
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-camera"></i> Upload Evidence</label>
+                        <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload photos or videos</p>
+                            <small>Supports: JPG, PNG, MP4 (Max 50MB)</small>
+                        </div>
+                        <input type="file" id="fileInput" multiple accept="image/*,video/*" style="display: none;">
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="anonymous" onclick="toggleAnonymous()">
+                            Report anonymously
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="contactConsent" required>
+                            I consent to be contacted about this report
+                        </label>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit Report
+                    </button>
+                </form>
+            </div>
+
+            <!-- Contact Sidebar -->
+            <div class="contact-sidebar" data-aos="fade-left">
+                <!-- Direct Contact -->
+                <div class="info-card">
+                    <h3><i class="fas fa-address-card"></i> Direct Contact</h3>
+                    <ul class="contact-list">
+                        <li class="contact-item">
+                            <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                            <div class="contact-details">
+                                <h4>Phone</h4>
+                                <p><a href="tel:+18005550123">1-800-555-0123</a></p>
+                                <p>Mon-Fri, 9am-5pm</p>
+                            </div>
+                        </li>
+                        <li class="contact-item">
+                            <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="contact-details">
+                                <h4>Email</h4>
+                                <p><a href="mailto:reports@ecolife.org">reports@ecolife.org</a></p>
+                                <p>24hr response time</p>
+                            </div>
+                        </li>
+                        <li class="contact-item">
+                            <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="contact-details">
+                                <h4>Office</h4>
+                                <p>123 Green Street</p>
+                                <p>Eco City, EC 12345</p>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <!-- Office Hours -->
+                <div class="info-card">
+                    <h3><i class="fas fa-clock"></i> Office Hours</h3>
+                    <ul class="contact-list">
+                        <li class="contact-item">
+                            <span>Monday - Friday</span>
+                            <span>9:00 AM - 5:00 PM</span>
+                        </li>
+                        <li class="contact-item">
+                            <span>Saturday</span>
+                            <span>10:00 AM - 2:00 PM</span>
+                        </li>
+                        <li class="contact-item">
+                            <span>Sunday</span>
+                            <span>Closed</span>
+                        </li>
+                        <li class="contact-item">
+                            <span>Emergency</span>
+                            <span>24/7 Hotline</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Quick Tips -->
+                <div class="info-card">
+                    <h3><i class="fas fa-lightbulb"></i> Reporting Tips</h3>
+                    <ul style="list-style: none; color: #666;">
+                        <li style="margin-bottom: 1rem;">✓ Take photos/videos safely</li>
+                        <li style="margin-bottom: 1rem;">✓ Note exact location</li>
+                        <li style="margin-bottom: 1rem;">✓ Get license plates if relevant</li>
+                        <li style="margin-bottom: 1rem;">✓ Don't confront offenders</li>
+                        <li style="margin-bottom: 1rem;">✓ Save evidence securely</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Section -->
+        <div class="map-section" data-aos="fade-up">
+            <div class="map-header">
+                <h2>
+                    <i class="fas fa-map-marked-alt"></i>
+                    Recent Reports in Your Area
+                </h2>
+                <select id="mapFilter" onchange="filterMap()">
+                    <option value="all">All Reports</option>
+                    <option value="environment">Environmental</option>
+                    <option value="animal">Animal Welfare</option>
+                </select>
+            </div>
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+            <div class="report-stats">
+                <div class="stat-card">
+                    <span class="stat-number">24</span>
+                    <span class="stat-label">Reports This Week</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">156</span>
+                    <span class="stat-label">Resolved Cases</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">89%</span>
+                    <span class="stat-label">Response Rate</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reporting Centers -->
+        <div class="centers-section" data-aos="fade-up">
+            <h2 style="color: #2e7d32; margin-bottom: 2rem;">
+                <i class="fas fa-building"></i>
+                Local Reporting Centers
+            </h2>
+            <div class="centers-grid">
+                <div class="center-card">
+                    <span class="center-type environment">Environmental Protection</span>
+                    <h3>City Environmental Services</h3>
+                    <p class="center-address"><i class="fas fa-map-pin"></i> 456 Green Ave, Eco City</p>
+                    <p class="center-phone"><i class="fas fa-phone"></i> (555) 123-4567</p>
+                    <p>Mon-Fri 8am-6pm</p>
+                </div>
+                <div class="center-card">
+                    <span class="center-type animal">Animal Control</span>
+                    <h3>City Animal Services</h3>
+                    <p class="center-address"><i class="fas fa-map-pin"></i> 789 Paws Lane, Eco City</p>
+                    <p class="center-phone"><i class="fas fa-phone"></i> (555) 234-5678</p>
+                    <p>24/7 Emergency</p>
+                </div>
+                <div class="center-card">
+                    <span class="center-type wildlife">Wildlife Rescue</span>
+                    <h3>Wildlife Rehabilitation Center</h3>
+                    <p class="center-address"><i class="fas fa-map-pin"></i> 321 Forest Rd, Eco City</p>
+                    <p class="center-phone"><i class="fas fa-phone"></i> (555) 345-6789</p>
+                    <p>Open 24/7 for emergencies</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resources Section -->
+        <div class="resources-section" data-aos="fade-up">
+            <h2 style="color: white; margin-bottom: 2rem;">
+                <i class="fas fa-download"></i>
+                Resources & Guides
+            </h2>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-file-pdf"></i></div>
+                    <h3>Reporting Guide</h3>
+                    <p>How to document and report environmental crimes effectively</p>
+                    <button class="resource-btn" onclick="downloadGuide('reporting')">Download PDF</button>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-file-pdf"></i></div>
+                    <h3>Emergency Contacts</h3>
+                    <p>Printable list of all emergency numbers by region</p>
+                    <button class="resource-btn" onclick="downloadGuide('emergency')">Download PDF</button>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-file-pdf"></i></div>
+                    <h3>Know Your Rights</h3>
+                    <p>Legal guide for environmental and animal advocates</p>
+                    <button class="resource-btn" onclick="downloadGuide('rights')">Download PDF</button>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon"><i class="fas fa-file-pdf"></i></div>
+                    <h3>Wildlife First Aid</h3>
+                    <p>What to do if you find an injured animal</p>
+                    <button class="resource-btn" onclick="downloadGuide('firstaid')">Download PDF</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section" data-aos="fade-up">
+            <h2 style="color: #2e7d32; margin-bottom: 2rem;">
+                <i class="fas fa-question-circle"></i>
+                Frequently Asked Questions
+            </h2>
+            <div class="faq-grid">
+                <div class="faq-item" onclick="toggleFAQ(this)">
+                    <div class="faq-question">
+                        <i class="fas fa-chevron-right"></i>
+                        What happens after I submit a report?
+                    </div>
+                    <div class="faq-answer">
+                        Your report is reviewed within 24-48 hours. If urgent, it's forwarded to appropriate authorities immediately. You'll receive a tracking number to follow up.
+                    </div>
+                </div>
+                <div class="faq-item" onclick="toggleFAQ(this)">
+                    <div class="faq-question">
+                        <i class="fas fa-chevron-right"></i>
+                        Can I report anonymously?
+                    </div>
+                    <div class="faq-answer">
+                        Yes! You can check the "Report anonymously" box. However, providing contact information helps us follow up and gather more details if needed.
+                    </div>
+                </div>
+                <div class="faq-item" onclick="toggleFAQ(this)">
+                    <div class="faq-question">
+                        <i class="fas fa-chevron-right"></i>
+                        What should I do in an emergency?
+                    </div>
+                    <div class="faq-answer">
+                        Call emergency services (911) immediately if there's immediate danger to people, animals, or the environment. Then use our emergency hotline.
+                    </div>
+                </div>
+                <div class="faq-item" onclick="toggleFAQ(this)">
+                    <div class="faq-question">
+                        <i class="fas fa-chevron-right"></i>
+                        How do I know if my report was acted upon?
+                    </div>
+                    <div class="faq-answer">
+                        You'll receive updates via email. You can also check your report status using your tracking number on our website.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonials -->
+        <div class="testimonials-section" data-aos="fade-up">
+            <h2 style="color: #2e7d32; margin-bottom: 2rem;">
+                <i class="fas fa-star"></i>
+                Success Stories
+            </h2>
+            <div class="testimonials-slider" id="testimonialSlider">
+                <div class="testimonial-slide active">
+                    <div class="testimonial-text">
+                        "I reported illegal dumping in our neighborhood park. Within a week, the area was cleaned up and cameras were installed. Thank you!"
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">M</div>
+                        <div class="author-info">
+                            <h4>Maria Garcia</h4>
+                            <p>Reported: Illegal Dumping</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-slide">
+                    <div class="testimonial-text">
+                        "Found an injured owl in my backyard. The wildlife rescue team arrived within an hour and saved its life. So grateful!"
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">J</div>
+                        <div class="author-info">
+                            <h4>James Wilson</h4>
+                            <p>Reported: Injured Wildlife</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-slide">
+                    <div class="testimonial-text">
+                        "Reported a case of animal neglect in my neighborhood. The authorities intervened and the animals are now in a loving home."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">S</div>
+                        <div class="author-info">
+                            <h4>Sarah Johnson</h4>
+                            <p>Reported: Animal Neglect</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slider-dots">
+                <span class="slider-dot active" onclick="showTestimonial(0)"></span>
+                <span class="slider-dot" onclick="showTestimonial(1)"></span>
+                <span class="slider-dot" onclick="showTestimonial(2)"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Report Submitted!</h3>
+            <p>Your report has been received. Tracking number: <strong id="trackingNumber">RPT-2024-0001</strong></p>
+            <p>We'll contact you within 24-48 hours.</p>
+            <button class="modal-btn" onclick="closeModal()">Done</button>
+        </div>
+    </div>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- AOS Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Initialize Map
+        let map;
+        let markers = [];
+
+        function initMap() {
+            map = L.map('map').setView([34.0522, -118.2437], 11);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Add sample report markers
+            const sampleReports = [
+                { lat: 34.0522, lng: -118.2437, type: 'environment', title: 'Illegal Dumping' },
+                { lat: 34.0622, lng: -118.2337, type: 'animal', title: 'Injured Dog' },
+                { lat: 34.0722, lng: -118.2237, type: 'environment', title: 'Water Pollution' },
+                { lat: 34.0422, lng: -118.2537, type: 'animal', title: 'Stray Cats' }
+            ];
+
+            sampleReports.forEach(report => {
+                const marker = L.marker([report.lat, report.lng]).addTo(map);
+                marker.bindPopup(`
+                    <b>${report.title}</b><br>
+                    Type: ${report.type}<br>
+                    <button onclick="viewReportDetails()" style="background: #2e7d32; color: white; border: none; padding: 5px 10px; border-radius: 5px; margin-top: 5px;">View Details</button>
+                `);
+                markers.push({ marker, type: report.type });
+            });
+        }
+
+        // Filter map markers
+        function filterMap() {
+            const filter = document.getElementById('mapFilter').value;
+            markers.forEach(item => {
+                if (filter === 'all' || item.type === filter) {
+                    map.addLayer(item.marker);
+                } else {
+                    map.removeLayer(item.marker);
+                }
+            });
+        }
+
+        // Switch report type
+        function switchReportType(type) {
+            const tabs = document.querySelectorAll('.report-tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            if (type === 'environment') {
+                tabs[0].classList.add('active');
+                document.getElementById('reportType').innerHTML = `
+                    <option value="">Select type...</option>
+                    <option value="pollution">Pollution / Dumping</option>
+                    <option value="deforestation">Illegal Logging</option>
+                    <option value="waste">Illegal Waste Dumping</option>
+                    <option value="water">Water Pollution</option>
+                    <option value="air">Air Pollution</option>
+                `;
+            } else {
+                tabs[1].classList.add('active');
+                document.getElementById('reportType').innerHTML = `
+                    <option value="">Select type...</option>
+                    <option value="abuse">Animal Abuse / Neglect</option>
+                    <option value="poaching">Poaching / Hunting</option>
+                    <option value="injured">Injured Animal</option>
+                    <option value="stray">Stray Animal</option>
+                    <option value="abandoned">Abandoned Animal</option>
+                `;
+            }
+        }
+
+        // Select urgency
+        function selectUrgency(level) {
+            document.querySelectorAll('.urgency-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            document.getElementById(`urgency${level.charAt(0).toUpperCase() + level.slice(1)}`).classList.add('selected');
+            document.getElementById('urgency').value = level;
+        }
+
+        // Toggle anonymous
+        function toggleAnonymous() {
+            const nameField = document.getElementById('reporterName');
+            const emailField = document.getElementById('reporterEmail');
+            
+            if (document.getElementById('anonymous').checked) {
+                nameField.disabled = true;
+                emailField.disabled = true;
+                nameField.value = '';
+                emailField.value = '';
+            } else {
+                nameField.disabled = false;
+                emailField.disabled = false;
+            }
+        }
+
+        // Submit report
+        function submitReport(event) {
+            event.preventDefault();
+            
+            // Generate tracking number
+            const trackingNum = 'RPT-' + new Date().getFullYear() + '-' + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            document.getElementById('trackingNumber').textContent = trackingNum;
+            
+            // Show success modal
+            document.getElementById('successModal').classList.add('active');
+            
+            // Reset form
+            document.getElementById('reportForm').reset();
+            document.querySelectorAll('.urgency-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            document.getElementById('urgency').value = 'medium';
+            
+            return false;
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('active');
+        }
+
+        // Toggle FAQ
+        function toggleFAQ(element) {
+            element.classList.toggle('active');
+            const icon = element.querySelector('i');
+            if (element.classList.contains('active')) {
+                icon.classList.remove('fa-chevron-right');
+                icon.classList.add('fa-chevron-down');
+            } else {
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-right');
+            }
+        }
+
+        // Testimonial slider
+        let currentTestimonial = 0;
+        const testimonials = document.querySelectorAll('.testimonial-slide');
+        const dots = document.querySelectorAll('.slider-dot');
+
+        function showTestimonial(index) {
+            testimonials.forEach(t => t.classList.remove('active'));
+            dots.forEach(d => d.classList.remove('active'));
+            
+            testimonials[index].classList.add('active');
+            dots[index].classList.add('active');
+            currentTestimonial = index;
+        }
+
+        function nextTestimonial() {
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+            showTestimonial(currentTestimonial);
+        }
+
+        // Auto-advance testimonials
+        setInterval(nextTestimonial, 5000);
+
+        // Download guides
+        function downloadGuide(type) {
+            const guides = {
+                reporting: 'Reporting_Guide.pdf',
+                emergency: 'Emergency_Contacts.pdf',
+                rights: 'Legal_Rights.pdf',
+                firstaid: 'Wildlife_First_Aid.pdf'
+            };
+            alert(`📥 Downloading ${guides[type]}... (Demo - PDF would download here)`);
+        }
+
+        // View report details
+        function viewReportDetails() {
+            alert('Report details would open here');
+        }
+
+        // Back to top
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Close modal on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('successModal').classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            initMap();
+        });
+    </script>
+</body>
+</html>

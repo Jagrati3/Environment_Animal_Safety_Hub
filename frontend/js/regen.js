@@ -1,0 +1,53 @@
+        AOS.init({duration:800,once:true});
+
+        // practices data
+        const practices = [
+            { name:"No-Till Farming", type:"soil", org:"Rodale Institute", description:"leave soil undisturbed, increase carbon", benefit:"carbon sequestration", icon:"fa-tractor" },
+            { name:"Cover Cropping", type:"soil", org:"USDA NRCS", description:"rye, clover, buckwheat between cash crops", benefit:"soil fertility", icon:"fa-leaf" },
+            { name:"Rotational Grazing", type:"grazing", org:"Savory Institute", description:"mimic nature, regenerate pasture", benefit:"biodiversity", icon:"fa-cow" },
+            { name:"Silvopasture", type:"agroforestry", org:"Yale", description:"trees + pasture + livestock", benefit:"carbon drawdown", icon:"fa-tree" },
+            { name:"Keyline Design", type:"water", org:"Permaculture", description:"water harvesting, erosion control", benefit:"drought resilience", icon:"fa-droplet" },
+            { name:"Biochar", type:"soil", org:"International Biochar", description:"ancient charcoal for soil", benefit:"long-term carbon storage", icon:"fa-fire" },
+            { name:"Alley Cropping", type:"agroforestry", org:"USDA", description:"crops between tree rows", benefit:"windbreak, nutrients", icon:"fa-seedling" },
+            { name:"Compost Tea", type:"soil", org:"Regenerative Ag", description:"liquid biology for soil", benefit:"microbe boost", icon:"fa-flask" },
+        ];
+
+        function renderPractices() {
+            const grid = document.getElementById('practicesGrid');
+            grid.innerHTML = practices.map(p => `
+                <div class="practice-card" onclick="showPractice('${p.name}','${p.type} · ${p.org} · ${p.description} · ${p.benefit}','${p.icon}')">
+                    <div class="card-image"><i class="fas ${p.icon}"></i><span class="type-tag">${p.type}</span></div>
+                    <div class="card-content">
+                        <span class="card-category">${p.type}</span>
+                        <div class="card-title">${p.name}</div>
+                        <div class="card-source"><i class="fas fa-building"></i> ${p.org}</div>
+                        <div class="card-description">${p.description}</div>
+                        <div class="card-footer">
+                            <span class="benefit">✨ ${p.benefit}</span>
+                            <button class="explore-btn" onclick="event.stopPropagation(); explorePractice('${p.name}')">explore</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+        renderPractices();
+
+        window.showPractice = (title, desc, icon) => {
+            document.getElementById('modalPracticeTitle').innerText = title;
+            document.getElementById('modalPracticeDesc').innerText = desc;
+            document.getElementById('modalPracticeEmoji').innerHTML = `<i class="fas ${icon}"></i>`;
+            document.getElementById('practiceModal').classList.add('active');
+        };
+
+        window.closeModal = () => document.getElementById('practiceModal').classList.remove('active');
+        window.learnPractice = (name) => alert(`📘 loading deep dive on ${name || 'practice'}...`);
+        window.explorePractice = (name) => alert(`🔍 exploring details of ${name}`);
+        window.viewCaseStudy = () => { alert('📊 case study: farm data and results (demo).'); closeModal(); };
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // modal escape
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('practiceModal')) closeModal(); };

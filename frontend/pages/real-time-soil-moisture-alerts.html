@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Soil Moisture Alerts - Environment Animal Safety Hub</title>
+    <meta name="description" content="Monitor soil moisture levels in real-time with alerts and recommendations for optimal irrigation and water conservation.">
+    <meta name="keywords" content="soil moisture, irrigation, water conservation, drought monitoring, smart farming, IoT sensors">
+    <link rel="stylesheet" href="../css/real-time-soil-moisture-alerts.css">
+    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@3.0.0"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html" class="brand-link">
+                    <img src="../assets/icons/logo.png" alt="Environment Animal Safety Hub Logo" class="brand-logo">
+                    <span class="brand-text">Environment Animal Safety Hub</span>
+                </a>
+            </div>
+            <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+            <div class="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="../index.html" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="eco-home-audit.html" class="nav-link">Eco Audit</a></li>
+                    <li class="nav-item"><a href="eco-product-finder.html" class="nav-link">Product Finder</a></li>
+                    <li class="nav-item"><a href="energy-bill-predictor.html" class="nav-link">Energy Predictor</a></li>
+                    <li class="nav-item"><a href="impact-calculator.html" class="nav-link">Impact Calculator</a></li>
+                    <li class="nav-item"><a href="wildlife-reporting.html" class="nav-link">Wildlife Reporting</a></li>
+                    <li class="nav-item"><a href="dynamic-crop-rotation-planner.html" class="nav-link">Crop Rotation</a></li>
+                    <li class="nav-item"><a href="real-time-soil-moisture-alerts.html" class="nav-link active">Soil Moisture</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1 class="hero-title">Real-Time Soil Moisture Alerts</h1>
+                    <p class="hero-subtitle">Monitor soil moisture levels and receive timely alerts for optimal irrigation and water conservation</p>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">95%</div>
+                            <div class="stat-label">Water Savings</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">30%</div>
+                            <div class="stat-label">Yield Increase</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">24/7</div>
+                            <div class="stat-label">Monitoring</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="moisture-gauge">
+                        <div class="gauge-container">
+                            <div class="gauge-fill" style="height: 75%"></div>
+                            <div class="gauge-label">75%</div>
+                        </div>
+                        <div class="gauge-status optimal">Optimal</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Overview -->
+        <section class="dashboard-section" id="dashboard-overview">
+            <div class="container">
+                <h2 class="section-title">Moisture Dashboard</h2>
+                <p class="section-description">Real-time monitoring of soil moisture across your fields</p>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-card main-gauge">
+                        <h3 class="card-title">Current Moisture Level</h3>
+                        <div class="moisture-display">
+                            <div class="circular-gauge">
+                                <svg class="gauge-svg" viewBox="0 0 120 120">
+                                    <circle cx="60" cy="60" r="50" fill="none" stroke="#e0e0e0" stroke-width="8"/>
+                                    <circle cx="60" cy="60" r="50" fill="none" stroke="#4caf50" stroke-width="8"
+                                            stroke-dasharray="314" stroke-dashoffset="78.5"
+                                            transform="rotate(-90 60 60)"/>
+                                    <text x="60" y="55" text-anchor="middle" class="gauge-value">75%</text>
+                                    <text x="60" y="70" text-anchor="middle" class="gauge-unit">Moisture</text>
+                                </svg>
+                            </div>
+                            <div class="moisture-status">
+                                <div class="status-indicator optimal"></div>
+                                <div class="status-text">Optimal Range</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card alerts-panel">
+                        <h3 class="card-title">Active Alerts</h3>
+                        <div id="alerts-container" class="alerts-list">
+                            <div class="alert-item warning">
+                                <div class="alert-icon">⚠️</div>
+                                <div class="alert-content">
+                                    <div class="alert-title">Field 3 - Low Moisture</div>
+                                    <div class="alert-message">Moisture level at 35%. Irrigation recommended within 24 hours.</div>
+                                    <div class="alert-time">2 hours ago</div>
+                                </div>
+                                <button class="alert-action">View Details</button>
+                            </div>
+                            <div class="alert-item info">
+                                <div class="alert-icon">ℹ️</div>
+                                <div class="alert-content">
+                                    <div class="alert-title">Weather Update</div>
+                                    <div class="alert-message">Rain expected tomorrow. Consider delaying irrigation.</div>
+                                    <div class="alert-time">4 hours ago</div>
+                                </div>
+                                <button class="alert-action">Dismiss</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card field-status">
+                        <h3 class="card-title">Field Status Overview</h3>
+                        <div class="field-grid">
+                            <div class="field-item">
+                                <div class="field-name">Field 1</div>
+                                <div class="field-moisture">72%</div>
+                                <div class="field-status optimal">Optimal</div>
+                            </div>
+                            <div class="field-item">
+                                <div class="field-name">Field 2</div>
+                                <div class="field-moisture">68%</div>
+                                <div class="field-status optimal">Optimal</div>
+                            </div>
+                            <div class="field-item">
+                                <div class="field-name">Field 3</div>
+                                <div class="field-moisture">35%</div>
+                                <div class="field-status low">Low</div>
+                            </div>
+                            <div class="field-item">
+                                <div class="field-name">Field 4</div>
+                                <div class="field-moisture">45%</div>
+                                <div class="field-status moderate">Moderate</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card quick-actions">
+                        <h3 class="card-title">Quick Actions</h3>
+                        <div class="action-buttons">
+                            <button id="schedule-irrigation" class="btn btn-primary">Schedule Irrigation</button>
+                            <button id="view-trends" class="btn btn-secondary">View Trends</button>
+                            <button id="export-data" class="btn btn-outline">Export Data</button>
+                            <button id="configure-alerts" class="btn btn-outline">Configure Alerts</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sensor Configuration -->
+        <section class="sensors-section" id="sensor-config">
+            <div class="container">
+                <h2 class="section-title">Sensor Configuration</h2>
+                <p class="section-description">Set up and manage your soil moisture sensors</p>
+
+                <div class="sensors-grid">
+                    <div class="sensor-card">
+                        <div class="sensor-header">
+                            <div class="sensor-icon">📡</div>
+                            <h3 class="sensor-name">Field Sensor 1</h3>
+                            <div class="sensor-status online">Online</div>
+                        </div>
+                        <div class="sensor-details">
+                            <div class="sensor-info">
+                                <span class="info-label">Location:</span>
+                                <span class="info-value">North Field, Zone A</span>
+                            </div>
+                            <div class="sensor-info">
+                                <span class="info-label">Depth:</span>
+                                <span class="info-value">6 inches</span>
+                            </div>
+                            <div class="sensor-info">
+                                <span class="info-label">Last Reading:</span>
+                                <span class="info-value">72% - 5 min ago</span>
+                            </div>
+                        </div>
+                        <div class="sensor-controls">
+                            <button class="btn btn-sm">Calibrate</button>
+                            <button class="btn btn-sm btn-outline">Settings</button>
+                        </div>
+                    </div>
+
+                    <div class="sensor-card">
+                        <div class="sensor-header">
+                            <div class="sensor-icon">📡</div>
+                            <h3 class="sensor-name">Field Sensor 2</h3>
+                            <div class="sensor-status online">Online</div>
+                        </div>
+                        <div class="sensor-details">
+                            <div class="sensor-info">
+                                <span class="info-label">Location:</span>
+                                <span class="info-value">South Field, Zone B</span>
+                            </div>
+                            <div class="sensor-info">
+                                <span class="info-label">Depth:</span>
+                                <span class="info-value">6 inches</span>
+                            </div>
+                            <div class="sensor-info">
+                                <span class="info-label">Last Reading:</span>
+                                <span class="info-value">68% - 3 min ago</span>
+                            </div>
+                        </div>
+                        <div class="sensor-controls">
+                            <button class="btn btn-sm">Calibrate</button>
+                            <button class="btn btn-sm btn-outline">Settings</button>
+                        </div>
+                    </div>
+
+                    <div class="sensor-card">
+                        <div class="sensor-header">
+                            <div class="sensor-icon">📡</div>
+                            <h3 class="sensor-name">Field Sensor 3</h3>
+                            <div class="sensor-status warning">Low Battery</div>
+                        </div>
+                        <div class="sensor-details">
+                            <div class="sensor-info">
+                                <span class="info-label">Location:</span>
+                                <span class="info-value">East Field, Zone C</span>
+                            </div>
+                            <div class="sensor-info">
+                                <span class="info-label">Depth:</span>
+                                <span class="info-value">6 inches</span>
+                            </div>
+                            <div class="sensor-info">
+                                <span class="info-label">Last Reading:</span>
+                                <span class="info-value">35% - 12 min ago</span>
+                            </div>
+                        </div>
+                        <div class="sensor-controls">
+                            <button class="btn btn-sm btn-warning">Replace Battery</button>
+                            <button class="btn btn-sm btn-outline">Settings</button>
+                        </div>
+                    </div>
+
+                    <div class="sensor-card add-sensor">
+                        <div class="add-sensor-content">
+                            <div class="add-icon">➕</div>
+                            <h3>Add New Sensor</h3>
+                            <p>Connect additional soil moisture sensors</p>
+                            <button class="btn btn-primary">Add Sensor</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="thresholds-section">
+                    <h3 class="subsection-title">Alert Thresholds</h3>
+                    <div class="thresholds-grid">
+                        <div class="threshold-card">
+                            <h4 class="threshold-title">Low Moisture Alert</h4>
+                            <div class="threshold-controls">
+                                <label for="low-threshold" class="threshold-label">Threshold (%)</label>
+                                <input type="number" id="low-threshold" class="threshold-input" value="40" min="0" max="100">
+                            </div>
+                            <div class="threshold-description">Alert when moisture drops below this level</div>
+                        </div>
+                        <div class="threshold-card">
+                            <h4 class="threshold-title">High Moisture Alert</h4>
+                            <div class="threshold-controls">
+                                <label for="high-threshold" class="threshold-label">Threshold (%)</label>
+                                <input type="number" id="high-threshold" class="threshold-input" value="85" min="0" max="100">
+                            </div>
+                            <div class="threshold-description">Alert when moisture exceeds this level</div>
+                        </div>
+                        <div class="threshold-card">
+                            <h4 class="threshold-title">Optimal Range</h4>
+                            <div class="threshold-controls">
+                                <div class="range-inputs">
+                                    <div>
+                                        <label for="optimal-min" class="threshold-label">Min (%)</label>
+                                        <input type="number" id="optimal-min" class="threshold-input" value="60" min="0" max="100">
+                                    </div>
+                                    <div>
+                                        <label for="optimal-max" class="threshold-label">Max (%)</label>
+                                        <input type="number" id="optimal-max" class="threshold-input" value="80" min="0" max="100">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="threshold-description">Target moisture range for healthy crops</div>
+                        </div>
+                    </div>
+                    <button id="save-thresholds" class="btn btn-primary">Save Thresholds</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Historical Trends -->
+        <section class="trends-section" id="historical-trends">
+            <div class="container">
+                <h2 class="section-title">Historical Trends</h2>
+                <p class="section-description">Analyze moisture patterns over time to optimize irrigation scheduling</p>
+
+                <div class="trends-controls">
+                    <div class="control-group">
+                        <label for="time-range" class="control-label">Time Range</label>
+                        <select id="time-range" class="form-select">
+                            <option value="24h">Last 24 Hours</option>
+                            <option value="7d">Last 7 Days</option>
+                            <option value="30d">Last 30 Days</option>
+                            <option value="90d">Last 90 Days</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="selected-field" class="control-label">Field</label>
+                        <select id="selected-field" class="form-select">
+                            <option value="all">All Fields</option>
+                            <option value="field1">Field 1</option>
+                            <option value="field2">Field 2</option>
+                            <option value="field3">Field 3</option>
+                            <option value="field4">Field 4</option>
+                        </select>
+                    </div>
+                    <button id="refresh-trends" class="btn btn-secondary">Refresh Data</button>
+                </div>
+
+                <div class="trends-chart">
+                    <canvas id="moisture-trends-chart"></canvas>
+                </div>
+
+                <div class="trends-insights">
+                    <div class="insight-card">
+                        <h3 class="insight-title">Moisture Patterns</h3>
+                        <div class="insight-content">
+                            <div class="insight-metric">
+                                <span class="metric-label">Average Moisture:</span>
+                                <span class="metric-value" id="avg-moisture">65%</span>
+                            </div>
+                            <div class="insight-metric">
+                                <span class="metric-label">Peak Moisture:</span>
+                                <span class="metric-value" id="peak-moisture">85%</span>
+                            </div>
+                            <div class="insight-metric">
+                                <span class="metric-label">Low Moisture:</span>
+                                <span class="metric-value" id="low-moisture">35%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="insight-card">
+                        <h3 class="insight-title">Irrigation Efficiency</h3>
+                        <div class="insight-content">
+                            <div class="insight-metric">
+                                <span class="metric-label">Water Usage:</span>
+                                <span class="metric-value" id="water-usage">2.4 acre-ft</span>
+                            </div>
+                            <div class="insight-metric">
+                                <span class="metric-label">Efficiency Rating:</span>
+                                <span class="metric-value" id="efficiency-rating">85%</span>
+                            </div>
+                            <div class="insight-metric">
+                                <span class="metric-label">Savings Potential:</span>
+                                <span class="metric-value" id="savings-potential">$1,200</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="insight-card">
+                        <h3 class="insight-title">Weather Correlation</h3>
+                        <div class="insight-content">
+                            <div class="insight-metric">
+                                <span class="metric-label">Rainfall Impact:</span>
+                                <span class="metric-value" id="rainfall-impact">High</span>
+                            </div>
+                            <div class="insight-metric">
+                                <span class="metric-label">Temperature Effect:</span>
+                                <span class="metric-value" id="temp-effect">Moderate</span>
+                            </div>
+                            <div class="insight-metric">
+                                <span class="metric-label">ET Rate:</span>
+                                <span class="metric-value" id="et-rate">0.15 in/day</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recommendations -->
+        <section class="recommendations-section" id="recommendations">
+            <div class="container">
+                <h2 class="section-title">Water Conservation Recommendations</h2>
+                <p class="section-description">Actionable suggestions to optimize water usage and maintain soil health</p>
+
+                <div class="recommendations-grid">
+                    <div class="recommendation-card urgent">
+                        <div class="rec-header">
+                            <div class="rec-icon">🚨</div>
+                            <h3 class="rec-title">Immediate Action Required</h3>
+                            <div class="rec-priority">High Priority</div>
+                        </div>
+                        <div class="rec-content">
+                            <p class="rec-description">Field 3 moisture levels are critically low at 35%. Immediate irrigation is recommended to prevent crop stress.</p>
+                            <div class="rec-actions">
+                                <button class="btn btn-sm btn-primary">Start Irrigation</button>
+                                <button class="btn btn-sm btn-outline">Schedule for Tonight</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-card irrigation">
+                        <div class="rec-header">
+                            <div class="rec-icon">💧</div>
+                            <h3 class="rec-title">Drip Irrigation System</h3>
+                            <div class="rec-priority">Recommended</div>
+                        </div>
+                        <div class="rec-content">
+                            <p class="rec-description">Switch to drip irrigation to reduce water usage by up to 50% and deliver water directly to plant roots.</p>
+                            <div class="rec-benefits">
+                                <div class="benefit">50% water savings</div>
+                                <div class="benefit">Reduced weed growth</div>
+                                <div class="benefit">Better nutrient delivery</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-card mulching">
+                        <div class="rec-header">
+                            <div class="rec-icon">🌿</div>
+                            <h3 class="rec-title">Organic Mulching</h3>
+                            <div class="rec-priority">Recommended</div>
+                        </div>
+                        <div class="rec-content">
+                            <p class="rec-description">Apply organic mulch around plants to retain soil moisture and reduce evaporation by up to 70%.</p>
+                            <div class="rec-benefits">
+                                <div class="benefit">70% less evaporation</div>
+                                <div class="benefit">Improved soil structure</div>
+                                <div class="benefit">Natural weed control</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-card rainwater">
+                        <div class="rec-header">
+                            <div class="rec-icon">🌧️</div>
+                            <h3 class="rec-title">Rainwater Harvesting</h3>
+                            <div class="rec-priority">Long-term</div>
+                        </div>
+                        <div class="rec-content">
+                            <p class="rec-description">Install rainwater collection systems to capture and store precipitation for irrigation use.</p>
+                            <div class="rec-benefits">
+                                <div class="benefit">Free water source</div>
+                                <div class="benefit">Reduced runoff</div>
+                                <div class="benefit">Environmental benefit</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-card scheduling">
+                        <div class="rec-header">
+                            <div class="rec-icon">📅</div>
+                            <h3 class="rec-title">Smart Irrigation Scheduling</h3>
+                            <div class="rec-priority">Recommended</div>
+                        </div>
+                        <div class="rec-content">
+                            <p class="rec-description">Use sensor data to create automated irrigation schedules based on actual soil moisture needs.</p>
+                            <div class="rec-benefits">
+                                <div class="benefit">Precise water delivery</div>
+                                <div class="benefit">Energy savings</div>
+                                <div class="benefit">Optimal plant health</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-card soil">
+                        <div class="rec-header">
+                            <div class="rec-icon">🌱</div>
+                            <h3 class="rec-title">Soil Health Improvement</h3>
+                            <div class="rec-priority">Long-term</div>
+                        </div>
+                        <div class="rec-content">
+                            <p class="rec-description">Improve soil structure with organic matter to increase water-holding capacity by up to 30%.</p>
+                            <div class="rec-benefits">
+                                <div class="benefit">30% more water retention</div>
+                                <div class="benefit">Better drainage</div>
+                                <div class="benefit">Enhanced fertility</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources -->
+        <section class="resources-section" id="resources">
+            <div class="container">
+                <h2 class="section-title">Resources & Guides</h2>
+                <p class="section-description">Learn more about soil moisture management and water conservation</p>
+
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <div class="resource-icon">📖</div>
+                        <h3 class="resource-title">Soil Moisture Monitoring Guide</h3>
+                        <p class="resource-description">Complete guide to understanding and monitoring soil moisture for optimal crop production.</p>
+                        <a href="#" class="resource-link">Read Guide →</a>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-icon">💧</div>
+                        <h3 class="resource-title">Water Conservation Techniques</h3>
+                        <p class="resource-description">Practical methods to reduce water usage while maintaining crop yields and quality.</p>
+                        <a href="#" class="resource-link">View Techniques →</a>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-icon">📊</div>
+                        <h3 class="resource-title">Irrigation Efficiency Calculator</h3>
+                        <p class="resource-description">Calculate your irrigation system's efficiency and identify potential improvements.</p>
+                        <a href="#" class="resource-link">Use Calculator →</a>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-icon">🌾</div>
+                        <h3 class="resource-title">Crop Water Requirements</h3>
+                        <p class="resource-description">Understand water needs for different crops and how to meet them efficiently.</p>
+                        <a href="#" class="resource-link">Learn More →</a>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-icon">🔧</div>
+                        <h3 class="resource-title">Sensor Installation Guide</h3>
+                        <p class="resource-description">Step-by-step instructions for installing and calibrating soil moisture sensors.</p>
+                        <a href="#" class="resource-link">Installation Guide →</a>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-icon">📈</div>
+                        <h3 class="resource-title">Data Analysis Tools</h3>
+                        <p class="resource-description">Tools and techniques for analyzing soil moisture data to improve decision-making.</p>
+                        <a href="#" class="resource-link">Explore Tools →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Sources -->
+        <section class="data-sources-section" id="data-sources">
+            <div class="container">
+                <h2 class="section-title">Data Sources & Methodology</h2>
+                <p class="section-description">Understanding how we monitor and analyze soil moisture data</p>
+
+                <div class="methodology-content">
+                    <div class="methodology-intro">
+                        <h3>Soil Moisture Monitoring Technology</h3>
+                        <p>Our system uses advanced sensors and algorithms to provide accurate, real-time soil moisture monitoring. The technology combines:</p>
+                        <ul class="methodology-list">
+                            <li><strong>Capacitive Sensors:</strong> Measure soil dielectric constant to determine moisture content</li>
+                            <li><strong>Tensiometers:</strong> Measure soil water potential and plant-available water</li>
+                            <li><strong>IoT Integration:</strong> Wireless data transmission for real-time monitoring</li>
+                            <li><strong>Weather Correlation:</strong> Integration with local weather data for accurate predictions</li>
+                            <li><strong>Machine Learning:</strong> Predictive algorithms for irrigation optimization</li>
+                        </ul>
+                    </div>
+
+                    <div class="data-sources-grid">
+                        <div class="data-source-card">
+                            <h4 class="source-title">USDA Soil Data</h4>
+                            <p class="source-description">Comprehensive soil classification and moisture-holding capacity data from USDA databases.</p>
+                            <div class="source-link">
+                                <a href="https://www.nrcs.usda.gov/" target="_blank">nrcs.usda.gov</a>
+                            </div>
+                        </div>
+
+                        <div class="data-source-card">
+                            <h4 class="source-title">NOAA Weather Data</h4>
+                            <p class="source-description">Real-time weather conditions and forecasts for irrigation planning and moisture predictions.</p>
+                            <div class="source-link">
+                                <a href="https://www.noaa.gov/" target="_blank">noaa.gov</a>
+                            </div>
+                        </div>
+
+                        <div class="data-source-card">
+                            <h4 class="source-title">Research Institutions</h4>
+                            <p class="source-description">Latest research on soil moisture dynamics and irrigation efficiency from agricultural universities.</p>
+                            <div class="source-link">
+                                <a href="https://extension.org/" target="_blank">extension.org</a>
+                            </div>
+                        </div>
+
+                        <div class="data-source-card">
+                            <h4 class="source-title">IoT Sensor Networks</h4>
+                            <p class="source-description">Real-time data from deployed sensor networks providing continuous moisture monitoring.</p>
+                            <div class="source-link">
+                                <a href="https://www.arduino.cc/" target="_blank">arduino.cc</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="footer-title">Environment Animal Safety Hub</h3>
+                    <p class="footer-description">Promoting sustainable agriculture and environmental stewardship through innovative technology and data-driven insights.</p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-subtitle">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="eco-home-audit.html">Eco Audit</a></li>
+                        <li><a href="eco-product-finder.html">Product Finder</a></li>
+                        <li><a href="energy-bill-predictor.html">Energy Predictor</a></li>
+                        <li><a href="impact-calculator.html">Impact Calculator</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-subtitle">Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="../docs/API_DOCUMENTATION.md">API Documentation</a></li>
+                        <li><a href="../docs/CONTRIBUTING.md">Contributing</a></li>
+                        <li><a href="../docs/PERFORMANCE_OPTIMIZATION_README.md">Performance Guide</a></li>
+                        <li><a href="../docs/ROADMAP.md">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-subtitle">Connect</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="GitHub">🐙</a>
+                        <a href="#" class="social-link" aria-label="Twitter">🐦</a>
+                        <a href="#" class="social-link" aria-label="LinkedIn">💼</a>
+                        <a href="#" class="social-link" aria-label="Email">📧</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="copyright">&copy; 2026 Environment Animal Safety Hub. All rights reserved.</p>
+                <div class="footer-legal">
+                    <a href="../docs/CODE_OF_CONDUCT.md">Code of Conduct</a>
+                    <a href="../docs/PRIVACY_POLICY.md">Privacy Policy</a>
+                    <a href="../docs/LICENSE">License</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/real-time-soil-moisture-alerts.js"></script>
+</body>
+</html>

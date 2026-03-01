@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌍 Global Green Projects Explorer · support change</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Google Fonts: clear, worldly, optimistic -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Leaflet (open-source map) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #e4f0e0;
+            background: radial-gradient(circle at 10% 20%, #d4eed0, #b8dfbc);
+            min-height: 100vh;
+            color: #1d5430;
+            line-height: 1.6;
+        }
+
+        /* header – explorer's mantle */
+        .explorer-header {
+            background: linear-gradient(145deg, #3f8053, #2a6a41);
+            padding: 5rem 2rem 4.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+            border-bottom: 8px solid #fbeba0;
+            box-shadow: 0 20px 40px #2a6a41;
+        }
+
+        .explorer-header::before {
+            content: '🌍🌱';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.1;
+            left: -4rem;
+            bottom: -6rem;
+            transform: rotate(-10deg);
+        }
+
+        .explorer-header h1 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 4.2rem;
+            color: #fcf9cf;
+            text-shadow: 6px 6px 0 #1d6236;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .explorer-header h1 i {
+            color: #ffecaa;
+            filter: drop-shadow(0 0 8px #ffeeaa);
+        }
+
+        .explorer-header p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 1.5rem auto;
+            background: #deffd6c0;
+            padding: 0.8rem 2.5rem;
+            border-radius: 60px;
+            color: #0d4b29;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            border: 3px solid #fbeba0;
+        }
+
+        .global-badge {
+            margin-top: 1.8rem;
+            display: inline-block;
+            background: #fedb86;
+            color: #1b6133;
+            padding: 0.6rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #fff2b5;
+        }
+
+        /* container */
+        .container {
+            max-width: 1500px;
+            margin: -3rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* filter bar */
+        .filter-bar {
+            background: #fafff2e0;
+            backdrop-filter: blur(8px);
+            border-radius: 80px;
+            padding: 1.5rem 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 30px #2b754b70, 0 0 0 3px #dcf5c0 inset;
+            border: 3px solid #daf0c0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3e9462;
+            font-size: 1.3rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 5rem;
+            border: 3px solid #cef0b5;
+            border-radius: 60px;
+            font-size: 1rem;
+            background: white;
+            color: #1e5a30;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.8rem 2rem;
+            border: 3px solid #c8eab2;
+            border-radius: 60px;
+            background: white;
+            font-weight: 600;
+            color: #1b6839;
+            cursor: pointer;
+        }
+
+        /* category chips */
+        .category-chips {
+            margin-bottom: 2.5rem;
+        }
+
+        .chip-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: #fad676 #c0e8b0;
+        }
+
+        .chip-scroll::-webkit-scrollbar { height: 8px; }
+        .chip-scroll::-webkit-scrollbar-track { background: #d6f0ca; border-radius: 10px; }
+        .chip-scroll::-webkit-scrollbar-thumb { background: #fad676; border-radius: 10px; }
+
+        .category-chip {
+            flex: 0 0 auto;
+            background: #faffea;
+            padding: 1rem 2.5rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 6px 14px #4d986d70;
+            cursor: pointer;
+            font-weight: 600;
+            border: 3px solid transparent;
+            transition: 0.2s;
+            font-size: 1.1rem;
+        }
+
+        .category-chip i { color: #d68d2c; font-size: 1.5rem; }
+        .category-chip:hover { transform: translateY(-5px); border-color: #f7c468; background: #ffffdf; }
+        .category-chip.active { background: #ffeaaf; border-color: #be9539; }
+
+        /* map + stats row */
+        .map-stats-row {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        #project-map {
+            height: 450px;
+            border-radius: 70px;
+            border: 6px solid #b7e0a8;
+            box-shadow: 0 25px 35px #266342;
+            z-index: 5;
+        }
+
+        .stats-panel {
+            background: #f2ffeae0;
+            backdrop-filter: blur(6px);
+            border-radius: 70px;
+            padding: 2rem;
+            border: 5px solid #c0e8b0;
+            box-shadow: 0 20px 30px #2b754b70;
+        }
+
+        .global-stat {
+            background: #e4fad8;
+            border-radius: 50px;
+            padding: 1.5rem;
+            margin-bottom: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            color: #36804b;
+        }
+
+        .stat-content h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #29663c;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1f6e39;
+        }
+
+        .project-spotlight {
+            background: #cceec0;
+            border-radius: 50px;
+            padding: 1.5rem;
+        }
+
+        /* projects grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .project-card {
+            background: #fafff0;
+            border-radius: 70px;
+            overflow: hidden;
+            box-shadow: 0 20px 30px #2a784d80;
+            transition: all 0.3s;
+            border: 5px solid #ccf0b5;
+            cursor: pointer;
+            color: #1e562e;
+        }
+
+        .project-card:hover {
+            transform: translateY(-15px);
+            border-color: #faca6b;
+            box-shadow: 0 35px 45px #175a32;
+        }
+
+        .card-image {
+            height: 160px;
+            background: linear-gradient(145deg, #74b386, #4d9a65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #fcfcd2;
+            position: relative;
+        }
+
+        .region-tag {
+            position: absolute;
+            bottom: 0.8rem;
+            left: 1rem;
+            background: #1e5837;
+            color: #ffea9e;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            border: 2px solid #fdd67a;
+        }
+
+        .card-content {
+            padding: 1.8rem;
+        }
+
+        .card-category {
+            background: #cbeac0;
+            padding: 0.3rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .card-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0.7rem 0;
+        }
+
+        .card-org {
+            color: #4b7a55;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-desc {
+            color: #366f49;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .supporters {
+            background: #f1cba5;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+
+        .support-btn {
+            background: #5daf7c;
+            border: none;
+            color: white;
+            padding: 0.6rem 1.8rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            border: 2px solid #fde287;
+        }
+
+        /* get involved */
+        .involve-section {
+            background: #ebf7e0;
+            border-radius: 70px;
+            padding: 2.5rem;
+            margin: 4rem 0;
+            border: 6px solid #fad97a;
+            text-align: center;
+        }
+
+        .impact-btn {
+            background: #fecf5e;
+            border: none;
+            color: #1a6232;
+            font-weight: 800;
+            font-size: 1.8rem;
+            padding: 1.2rem 4rem;
+            border-radius: 60px;
+            cursor: pointer;
+            border: 4px solid #ffffcc;
+            box-shadow: 0 6px 0 #8f9440;
+        }
+
+        /* modal */
+        .modal {
+            display: none; position: fixed; inset:0; background: #1d6139e6;
+            align-items: center; justify-content: center; z-index:2000;
+            backdrop-filter: blur(6px);
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #f6ffe6;
+            border-radius: 80px;
+            max-width: 700px;
+            width:100%;
+            border: 8px solid #ffe28b;
+            color: #195a2c;
+        }
+
+        .back-to-top {
+            position: fixed; bottom:2rem; right:2rem;
+            background: #f8bd48; width:70px; height:70px; border-radius:50%;
+            display: none; align-items:center; justify-content:center;
+            font-size:2.2rem; color:#1c5c28; border:5px solid #fff3b0;
+            cursor:pointer; z-index:1000;
+        }
+        .back-to-top.visible { display: flex; }
+
+        @media (max-width:1000px){
+            .map-stats-row { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- header -->
+    <header class="explorer-header">
+        <h1>
+            <i class="fas fa-globe-asia"></i> Global Green Projects Explorer
+            <i class="fas fa-leaf"></i>
+        </h1>
+        <p>discover · support · scale solutions worldwide</p>
+        <div class="global-badge"><i class="fas fa-tree"></i> 1,428 active projects</div>
+    </header>
+
+    <div class="container">
+        <!-- filter bar -->
+        <div class="filter-bar" data-aos="fade-up">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="search projects, region, organization...">
+            </div>
+            <div class="filter-options">
+                <select class="filter-select"><option>all regions</option><option>africa</option><option>asia</option><option>americas</option><option>europe</option><option>oceania</option></select>
+                <select class="filter-select"><option>by impact</option></select>
+            </div>
+        </div>
+
+        <!-- category chips -->
+        <div class="category-chips" data-aos="fade-up">
+            <div class="chip-scroll">
+                <div class="category-chip active"><i class="fas fa-leaf"></i> all projects</div>
+                <div class="category-chip"><i class="fas fa-tree"></i> reforestation</div>
+                <div class="category-chip"><i class="fas fa-solar-panel"></i> renewable energy</div>
+                <div class="category-chip"><i class="fas fa-water"></i> ocean cleanup</div>
+                <div class="category-chip"><i class="fas fa-seedling"></i> regenerative ag</div>
+                <div class="category-chip"><i class="fas fa-city"></i> urban greening</div>
+            </div>
+        </div>
+
+        <!-- map + stats panel -->
+        <div class="map-stats-row" data-aos="fade-up">
+            <div id="project-map"></div>
+            <div class="stats-panel">
+                <div class="global-stat">
+                    <div class="stat-icon"><i class="fas fa-tree"></i></div>
+                    <div class="stat-content">
+                        <h3>trees planted</h3>
+                        <div class="stat-number">8.2M</div>
+                    </div>
+                </div>
+                <div class="global-stat">
+                    <div class="stat-icon"><i class="fas fa-solar-panel"></i></div>
+                    <div class="stat-content">
+                        <h3>MW clean energy</h3>
+                        <div class="stat-number">1,420</div>
+                    </div>
+                </div>
+                <div class="global-stat">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-content">
+                        <h3>volunteers</h3>
+                        <div class="stat-number">64k</div>
+                    </div>
+                </div>
+                <div class="project-spotlight">
+                    <h3><i class="fas fa-star"></i> spotlight: amazon alliance</h3>
+                    <p>protecting 50,000 hectares with indigenous communities</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- projects grid (js) -->
+        <div class="projects-grid" id="projectsGrid"></div>
+
+        <!-- get involved -->
+        <div class="involve-section" data-aos="fade-up">
+            <h2 style="font-size:2.5rem; margin-bottom:1.5rem;">🤝 make a difference</h2>
+            <button class="impact-btn" onclick="supportAll()"><i class="fas fa-heart"></i> support a project</button>
+        </div>
+    </div>
+
+    <!-- modal -->
+    <div class="modal" id="projectModal">
+        <div class="modal-content" style="padding:2.5rem;">
+            <button style="float:right; background:none; border:none; font-size:3rem; color:#1b6735;" onclick="closeModal()">✕</button>
+            <div style="text-align:center;">
+                <div style="font-size:5rem;" id="modalProjectEmoji">🌳</div>
+                <h2 id="modalProjectTitle" style="font-size:2.8rem;">amazon rainforest alliance</h2>
+                <p id="modalProjectDesc" style="margin:2rem 0;">protecting 50,000 hectares with indigenous communities · 1,200 supporters</p>
+                <button class="impact-btn" onclick="donate()" style="font-size:1.2rem;">💚 support this project</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({duration:800,once:true});
+
+        // ---------- leaflet map ----------
+        const map = L.map('project-map').setView([20, 0], 2); // world view
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // sample project markers (global)
+        const markers = [
+            { lat: -3.465, lng: -62.215, name: "Amazon Alliance", type: "reforestation" },
+            { lat: 6.5, lng: 34.5, name: "Great Green Wall", type: "reforestation" },
+            { lat: 51.0, lng: 10.0, name: "Europe Renewables", type: "energy" },
+            { lat: -8.5, lng: 115.0, name: "Coral Triangle", type: "ocean" },
+            { lat: 40.0, lng: -100.0, name: "Great Plains Regeneration", type: "agro" },
+        ];
+
+        markers.forEach(m => {
+            L.marker([m.lat, m.lng]).addTo(map)
+                .bindPopup(`<b>${m.name}</b><br>${m.type} project`);
+        });
+
+        // ---------- projects data ----------
+        const projects = [
+            { name:"Amazon Alliance", region:"S. America", type:"reforestation", desc:"indigenous-led forest protection", supporters:"1.2k", icon:"fa-tree", org:"COICA" },
+            { name:"Great Green Wall", region:"Africa", type:"reforestation", desc:"restoring sahel, 100M trees", supporters:"3.4k", icon:"fa-leaf", org:"UNCCD" },
+            { name:"North Sea Wind", region:"Europe", type:"energy", desc:"offshore wind expansion", supporters:"2.1k", icon:"fa-wind", org:"Ørsted" },
+            { name:"Coral Triangle", region:"Asia", type:"ocean", desc:"coral restoration, sustainable fishing", supporters:"980", icon:"fa-fish", org:"ReefLife" },
+            { name:"Andes Glacier", region:"S. America", type:"water", desc:"glacier monitoring & adaptation", supporters:"760", icon:"fa-snowflake", org:"ICU" },
+            { name:"Great Plains", region:"N. America", type:"agro", desc:"regenerative grazing", supporters:"1.5k", icon:"fa-tractor", org:"Savory" },
+            { name:"Mangrove Coast", region:"Asia", type:"ocean", desc:"mangrove planting, cyclone protection", supporters:"2.2k", icon:"fa-tree", org:"Wetlands" },
+            { name:"Solar Sahel", region:"Africa", type:"energy", desc:"off-grid solar for villages", supporters:"3.1k", icon:"fa-sun", org:"SolarAid" },
+        ];
+
+        function renderProjects() {
+            const grid = document.getElementById('projectsGrid');
+            grid.innerHTML = projects.map(p => `
+                <div class="project-card" onclick="showProject('${p.name}','${p.region} · ${p.type} · ${p.desc} · ${p.supporters} supporters','${p.icon}')">
+                    <div class="card-image"><i class="fas ${p.icon}"></i><span class="region-tag">${p.region}</span></div>
+                    <div class="card-content">
+                        <span class="card-category">${p.type}</span>
+                        <div class="card-title">${p.name}</div>
+                        <div class="card-org">${p.org}</div>
+                        <p class="card-desc">${p.desc}</p>
+                        <div class="card-footer">
+                            <span class="supporters"><i class="fas fa-heart"></i> ${p.supporters}</span>
+                            <button class="support-btn" onclick="event.stopPropagation(); supportProject('${p.name}')">support</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+        renderProjects();
+
+        window.showProject = (title, desc, icon) => {
+            document.getElementById('modalProjectTitle').innerText = title;
+            document.getElementById('modalProjectDesc').innerText = desc;
+            document.getElementById('modalProjectEmoji').innerHTML = `<i class="fas ${icon}"></i>`;
+            document.getElementById('projectModal').classList.add('active');
+        };
+
+        window.closeModal = () => document.getElementById('projectModal').classList.remove('active');
+        window.supportProject = (name) => { alert(`💚 thank you for supporting ${name || 'this project'}!`); };
+        window.supportAll = () => alert('🌍 explore projects and make a difference. every contribution counts.');
+        window.donate = () => { alert('🙏 donation simulation · thank you for your support.'); closeModal(); };
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // modal escape
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('projectModal')) closeModal(); };
+    </script>
+</body>
+</html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polar Albedo Loss & Climate Feedback Loops - EcoLife</title>
+    <link rel="stylesheet" href="../../css/global/variables.css">
+    <link rel="stylesheet" href="../../css/global/utilities.css">
+    <link rel="stylesheet" href="../../css/components/navbar.css">
+    <link rel="stylesheet" href="../../css/components/footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #f5fbff;
+            background: radial-gradient(circle at 15% 15%, #20486f 0%, #0f2740 40%, #081726 100%);
+            overflow-x: hidden;
+        }
+
+        .severity-badge {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            z-index: 1000;
+            border: 2px solid #d7f4ff;
+            border-radius: 999px;
+            padding: 12px 18px;
+            color: #fff;
+            font-weight: 700;
+            background: linear-gradient(45deg, #0c5a82, #0d95b8);
+            box-shadow: 0 0 20px rgba(13, 149, 184, 0.55);
+            animation: pulse 2.2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        .hero {
+            padding: 100px 20px 54px;
+            text-align: center;
+            background: linear-gradient(145deg, rgba(194, 241, 255, 0.12), rgba(9, 58, 86, 0.35));
+            border-bottom: 1px solid rgba(164, 228, 255, 0.25);
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 4.2vw, 3.3rem);
+            margin-bottom: 12px;
+            text-shadow: 0 0 14px rgba(147, 226, 255, 0.5);
+        }
+
+        .hero p {
+            max-width: 900px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 18px 40px;
+        }
+
+        .tab-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .tab-btn {
+            border: 1px solid rgba(177, 236, 255, 0.35);
+            background: rgba(13, 57, 82, 0.55);
+            color: #def6ff;
+            border-radius: 999px;
+            padding: 11px 16px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .tab-btn:hover { transform: translateY(-1px); }
+        .tab-btn.active { background: linear-gradient(45deg, #0c95ba, #1fb4d8); color: #fff; }
+
+        .section { display: none; }
+        .section.active { display: block; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .card {
+            border: 1px solid rgba(168, 233, 255, 0.25);
+            border-radius: 14px;
+            padding: 18px;
+            background: linear-gradient(150deg, rgba(6, 40, 63, 0.76), rgba(22, 81, 116, 0.32));
+            backdrop-filter: blur(6px);
+        }
+
+        .card h3 { margin-bottom: 8px; }
+
+        .stat-list { list-style: none; margin-top: 8px; }
+        .stat-list li {
+            margin: 10px 0;
+            padding: 8px 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .sim-row {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 16px;
+        }
+
+        .slider-wrap { margin: 16px 0; }
+        .slider-wrap input { width: 100%; }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        .kpi {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .kpi strong { display: block; font-size: 1.35rem; margin-top: 4px; }
+
+        .canvas-wrap {
+            border-radius: 12px;
+            padding: 12px;
+            background: rgba(3, 29, 45, 0.62);
+            border: 1px solid rgba(171, 234, 255, 0.2);
+        }
+
+        canvas { width: 100%; height: 280px; display: block; }
+
+        .impact-map {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .region {
+            border-radius: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .bar {
+            width: 100%;
+            height: 10px;
+            border-radius: 10px;
+            margin-top: 8px;
+            background: rgba(255, 255, 255, 0.14);
+            overflow: hidden;
+        }
+
+        .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #64d5f8, #f4c35b, #ef6f6f);
+            width: 0;
+            transition: width 0.4s ease;
+        }
+
+        .mitigation .card { min-height: 210px; }
+
+        .cta-btn {
+            margin-top: 10px;
+            display: inline-block;
+            border: 1px solid rgba(183, 237, 255, 0.35);
+            background: rgba(255, 255, 255, 0.1);
+            color: #e8f9ff;
+            border-radius: 999px;
+            padding: 9px 14px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        @media (max-width: 900px) {
+            .sim-row { grid-template-columns: 1fr; }
+            .impact-map { grid-template-columns: 1fr; }
+            .severity-badge { position: static; margin: 14px auto 0; display: table; }
+        }
+    </style>
+</head>
+<body>
+    <div class="severity-badge"><i class="fas fa-temperature-three-quarters"></i> LEVEL 3 CRITICAL</div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand"><i class="fas fa-leaf"></i><span>EcoLife</span></div>
+            <div class="nav-menu">
+                <a href="../../index.html" class="nav-link">Home</a>
+                <a href="../science/climate/climate-challenges.html" class="nav-link">Climate Issues</a>
+                <a href="polar-albedo-feedback-loop.html" class="nav-link active">Polar Albedo Crisis</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1><i class="fas fa-snowflake"></i> Global Crisis Alert: Polar Albedo Loss & Accelerating Feedback Loops</h1>
+        <p>The Arctic is warming nearly 4x faster than the global average. As reflective ice disappears, dark oceans absorb far more heat, pushing a self-reinforcing climate spiral toward a potential Blue Ocean Event.</p>
+    </header>
+
+    <main class="container">
+        <div class="tab-nav">
+            <button class="tab-btn active" data-tab="overview"><i class="fas fa-circle-info"></i> Crisis Overview</button>
+            <button class="tab-btn" data-tab="simulator"><i class="fas fa-microchip"></i> Feedback Loop Simulator</button>
+            <button class="tab-btn" data-tab="impact"><i class="fas fa-earth-americas"></i> Global Impact Map</button>
+            <button class="tab-btn" data-tab="mitigation"><i class="fas fa-life-ring"></i> Mitigation Strategies</button>
+        </div>
+
+        <section class="section active" id="overview">
+            <div class="grid">
+                <article class="card">
+                    <h3><i class="fas fa-rotate"></i> The Feedback Loop</h3>
+                    <p>Warming melts bright sea ice. Dark ocean water is exposed, absorbing much more solar energy. Warmer water melts ice from below, causing more heat absorption in a compounding cycle.</p>
+                </article>
+                <article class="card">
+                    <h3><i class="fas fa-sun"></i> Absorption Multiplier</h3>
+                    <ul class="stat-list">
+                        <li>🧊 White ice reflects ~80% of incoming sunlight.</li>
+                        <li>🌊 Dark ocean absorbs ~90% of incoming heat.</li>
+                        <li>⚠️ A small temperature rise can trigger disproportionate ice loss.</li>
+                    </ul>
+                </article>
+                <article class="card">
+                    <h3><i class="fas fa-triangle-exclamation"></i> Cascading Global Risks</h3>
+                    <ul class="stat-list">
+                        <li>Jet stream destabilization → amplified floods, freezes, heatwaves.</li>
+                        <li>Permafrost thaw → large methane pulse risk (~80x CO₂ over 20 years).</li>
+                        <li>Sea-ice ecosystem loss → polar bear, walrus, and ivory gull habitat collapse.</li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+
+        <section class="section" id="simulator">
+            <div class="sim-row">
+                <article class="card">
+                    <h3><i class="fas fa-sliders"></i> Interactive Feedback Loop Visualizer</h3>
+                    <p>Increase global warming and watch reflective surface collapse, heat absorption rise, and projected sea-ice extent decline.</p>
+
+                    <div class="slider-wrap">
+                        <label for="tempRise"><strong>Temperature increase since pre-industrial:</strong> <span id="tempValue">1.2°C</span></label>
+                        <input id="tempRise" type="range" min="0.8" max="4" step="0.1" value="1.2" />
+                    </div>
+
+                    <div class="kpi-grid">
+                        <div class="kpi">Albedo Index<strong id="albedoIndex">0.62</strong></div>
+                        <div class="kpi">Ocean Heat Absorption<strong id="heatAbsorb">59%</strong></div>
+                        <div class="kpi">Summer Ice Extent<strong id="iceExtent">4.3 M km²</strong></div>
+                        <div class="kpi">Feedback Severity<strong id="severityText">High</strong></div>
+                    </div>
+                </article>
+
+                <article class="canvas-wrap">
+                    <h3>Projected Ice Loss Curve</h3>
+                    <canvas id="simChart" width="560" height="280"></canvas>
+                </article>
+            </div>
+        </section>
+
+        <section class="section" id="impact">
+            <article class="canvas-wrap">
+                <h3>40-Year Polar Ice Trend (Observed vs Projection)</h3>
+                <canvas id="trendChart" width="1000" height="280"></canvas>
+            </article>
+
+            <div class="impact-map">
+                <article class="region">
+                    <h4>Arctic Ocean</h4>
+                    <p id="arcticLabel">Observed decline: 38%</p>
+                    <div class="bar"><div class="fill" id="arcticFill"></div></div>
+                </article>
+                <article class="region">
+                    <h4>Greenland Margin</h4>
+                    <p id="greenlandLabel">Observed decline: 22%</p>
+                    <div class="bar"><div class="fill" id="greenlandFill"></div></div>
+                </article>
+                <article class="region">
+                    <h4>Antarctic Sea Ice</h4>
+                    <p id="antarcticLabel">Observed decline: 14%</p>
+                    <div class="bar"><div class="fill" id="antarcticFill"></div></div>
+                </article>
+            </div>
+        </section>
+
+        <section class="section mitigation" id="mitigation">
+            <div class="grid">
+                <article class="card">
+                    <h3><i class="fas fa-bolt"></i> Rapid Emissions Reduction</h3>
+                    <p>Fast CO₂ and methane cuts are the highest-confidence intervention to slow warming and reduce further albedo collapse.</p>
+                    <a class="cta-btn" href="#">Prioritize near-term methane cuts</a>
+                </article>
+                <article class="card">
+                    <h3><i class="fas fa-cloud"></i> Marine Cloud Brightening Research</h3>
+                    <p>Targeted, carefully governed research may test temporary regional cooling options while emissions decline is accelerated.</p>
+                    <a class="cta-btn" href="#">Review governance safeguards</a>
+                </article>
+                <article class="card">
+                    <h3><i class="fas fa-satellite"></i> Polar Monitoring & Early Warning</h3>
+                    <p>Expand satellite + in-situ observation for sea-ice thickness, permafrost thaw, and jet stream anomalies to improve response time.</p>
+                    <a class="cta-btn" href="#">Support open climate data</a>
+                </article>
+                <article class="card">
+                    <h3><i class="fas fa-users"></i> Public Mobilization</h3>
+                    <p>Turn invisible climate dynamics into understandable visuals and local risk translation for decision-makers and communities.</p>
+                    <a class="cta-btn" href="#">Start local climate briefings</a>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Polar Emergency Brief</h3>
+                <p>Blue Ocean Event risk is increasing. Immediate mitigation is essential to avoid irreversible climate tipping dynamics.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/polar-albedo-feedback-loop.js"></script>
+</body>
+</html>

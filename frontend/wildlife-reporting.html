@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Citizen Science Wildlife Reporting</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f4f8f6;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      padding: 32px 24px 24px 24px;
+    }
+    h1 {
+      text-align: center;
+      color: #1565c0;
+      margin-bottom: 8px;
+    }
+    h2 {
+      color: #1976d2;
+      margin-top: 32px;
+      margin-bottom: 12px;
+    }
+    .form-section {
+      margin-bottom: 32px;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 24px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    input[type="text"], input[type="date"], textarea, select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #bdbdbd;
+      margin-bottom: 14px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    textarea {
+      min-height: 60px;
+      resize: vertical;
+    }
+    input[type="file"] {
+      margin-bottom: 14px;
+    }
+    .photo-preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .photo-preview img {
+      max-width: 120px;
+      max-height: 90px;
+      border-radius: 6px;
+      border: 1px solid #bdbdbd;
+      object-fit: cover;
+    }
+    button, .btn {
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 22px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 8px;
+      margin-right: 8px;
+      transition: background 0.2s;
+      display: inline-block;
+    }
+    button:hover, .btn:hover {
+      background: #1565c0;
+    }
+    .observation-list {
+      margin-top: 24px;
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .observation-list th, .observation-list td {
+      border: 1px solid #e0e0e0;
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .observation-list th {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+    .status-badge {
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.95em;
+      font-weight: 600;
+      display: inline-block;
+    }
+    .status-pending { background: #fffde7; color: #fbc02d; }
+    .status-approved { background: #e8f5e9; color: #388e3c; }
+    .status-rejected { background: #ffebee; color: #c62828; }
+    .moderation-btns button {
+      font-size: 0.95em;
+      padding: 6px 14px;
+      margin: 0 2px;
+    }
+    .export-section {
+      margin-top: 32px;
+      text-align: right;
+    }
+    @media (max-width: 1000px) {
+      .container { padding: 18px 2vw; }
+      .observation-list th, .observation-list td { font-size: 0.98em; }
+    }
+    @media (max-width: 700px) {
+      .container { padding: 8px 1vw; }
+      .observation-list th, .observation-list td { font-size: 0.93em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Citizen Science Wildlife Reporting</h1>
+    <div class="form-section">
+      <h2>Submit Wildlife Observation</h2>
+      <form id="observationForm">
+        <label for="species">Species Name *</label>
+        <input type="text" id="species" name="species" required placeholder="e.g. Red Fox">
+        <label for="location">Location *</label>
+        <input type="text" id="location" name="location" required placeholder="e.g. Yellowstone National Park">
+        <label for="date">Date of Observation *</label>
+        <input type="date" id="date" name="date" required>
+        <label for="notes">Notes</label>
+        <textarea id="notes" name="notes" placeholder="Behavior, habitat, weather, etc."></textarea>
+        <label for="photo">Photo(s)</label>
+        <input type="file" id="photo" name="photo" accept="image/*" multiple>
+        <div class="photo-preview" id="photoPreview"></div>
+        <button type="submit">Submit Observation</button>
+      </form>
+    </div>
+    <div class="form-section">
+      <h2>Submitted Observations</h2>
+      <table class="observation-list" id="observationTable">
+        <thead>
+          <tr>
+            <th>Species</th>
+            <th>Location</th>
+            <th>Date</th>
+            <th>Notes</th>
+            <th>Photo(s)</th>
+            <th>Status</th>
+            <th>Moderation</th>
+          </tr>
+        </thead>
+        <tbody id="observationTableBody">
+          <!-- Observations will be injected here -->
+        </tbody>
+      </table>
+    </div>
+    <div class="export-section">
+      <span>Export Data:</span>
+      <button class="btn" onclick="exportData('csv')">CSV</button>
+      <button class="btn" onclick="exportData('json')">JSON</button>
+    </div>
+  </div>
+  <script>
+    // --- Data Model ---
+    let observations = [];
+    let photoFiles = [];
+
+    // --- Utility Functions ---
+    function formatDate(dateStr) {
+      if (!dateStr) return '';
+      const d = new Date(dateStr);
+      return d.toLocaleDateString();
+    }
+    function statusBadge(status) {
+      if (status === 'pending') return '<span class="status-badge status-pending">Pending</span>';
+      if (status === 'approved') return '<span class="status-badge status-approved">Approved</span>';
+      if (status === 'rejected') return '<span class="status-badge status-rejected">Rejected</span>';
+      return '';
+    }
+    function escapeHTML(str) {
+      return str.replace(/[&<>"']/g, function(tag) {
+        const chars = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'};
+        return chars[tag] || tag;
+      });
+    }
+
+    // --- Photo Preview ---
+    document.getElementById('photo').addEventListener('change', function(e) {
+      const preview = document.getElementById('photoPreview');
+      preview.innerHTML = '';
+      photoFiles = Array.from(this.files);
+      photoFiles.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          const img = document.createElement('img');
+          img.src = ev.target.result;
+          preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    // --- Observation Submission ---
+    document.getElementById('observationForm').onsubmit = function(e) {
+      e.preventDefault();
+      const species = this.species.value.trim();
+      const location = this.location.value.trim();
+      const date = this.date.value;
+      const notes = this.notes.value.trim();
+      if (!species || !location || !date) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+      // Prepare photo data (base64)
+      let photos = [];
+      if (photoFiles.length > 0) {
+        let loaded = 0;
+        photoFiles.forEach((file, idx) => {
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            photos[idx] = ev.target.result;
+            loaded++;
+            if (loaded === photoFiles.length) {
+              addObservation(species, location, date, notes, photos);
+            }
+          };
+          reader.readAsDataURL(file);
+        });
+      } else {
+        addObservation(species, location, date, notes, photos);
+      }
+    };
+
+    function addObservation(species, location, date, notes, photos) {
+      observations.push({
+        id: Date.now() + Math.random().toString(36).slice(2),
+        species,
+        location,
+        date,
+        notes,
+        photos,
+        status: 'pending'
+      });
+      document.getElementById('observationForm').reset();
+      document.getElementById('photoPreview').innerHTML = '';
+      photoFiles = [];
+      renderObservations();
+    }
+
+    // --- Render Observations ---
+    function renderObservations() {
+      const tbody = document.getElementById('observationTableBody');
+      tbody.innerHTML = '';
+      if (observations.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#888;">No observations submitted yet.</td></tr>';
+        return;
+      }
+      observations.forEach((obs, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${escapeHTML(obs.species)}</td>
+          <td>${escapeHTML(obs.location)}</td>
+          <td>${formatDate(obs.date)}</td>
+          <td>${escapeHTML(obs.notes || '')}</td>
+          <td>${obs.photos && obs.photos.length ? obs.photos.map(p => `<img src="${p}" style="max-width:60px;max-height:45px;border-radius:4px;margin:2px;">`).join('') : ''}</td>
+          <td>${statusBadge(obs.status)}</td>
+          <td class="moderation-btns">
+            <button onclick="moderateObservation(${idx},'approved')" ${obs.status==='approved'?'disabled':''}>Approve</button>
+            <button onclick="moderateObservation(${idx},'rejected')" ${obs.status==='rejected'?'disabled':''}>Reject</button>
+            <button onclick="deleteObservation(${idx})">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // --- Moderation ---
+    window.moderateObservation = function(idx, status) {
+      if (observations[idx]) {
+        observations[idx].status = status;
+        renderObservations();
+      }
+    };
+    window.deleteObservation = function(idx) {
+      if (confirm('Delete this observation?')) {
+        observations.splice(idx, 1);
+        renderObservations();
+      }
+    };
+
+    // --- Data Export ---
+    window.exportData = function(type) {
+      if (observations.length === 0) {
+        alert('No data to export.');
+        return;
+      }
+      if (type === 'csv') {
+        let csv = 'Species,Location,Date,Notes,Status\n';
+        observations.forEach(obs => {
+          csv += `"${obs.species.replace(/"/g,'""')}","${obs.location.replace(/"/g,'""')}","${formatDate(obs.date)}","${(obs.notes||'').replace(/"/g,'""')}",${obs.status}\n`;
+        });
+        downloadFile(csv, 'wildlife_observations.csv', 'text/csv');
+      } else if (type === 'json') {
+        const json = JSON.stringify(observations.map(obs => ({
+          species: obs.species,
+          location: obs.location,
+          date: obs.date,
+          notes: obs.notes,
+          status: obs.status
+        })), null, 2);
+        downloadFile(json, 'wildlife_observations.json', 'application/json');
+      }
+    };
+    function downloadFile(data, filename, mime) {
+      const blob = new Blob([data], {type: mime});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 100);
+    }
+
+    // --- Load Demo Data (optional, for demo purposes) ---
+    /*
+    observations = [
+      { id: '1', species: 'Red Fox', location: 'Yellowstone', date: '2026-02-20', notes: 'Seen near riverbank.', photos: [], status: 'approved' },
+      { id: '2', species: 'Bald Eagle', location: 'Lake Tahoe', date: '2026-02-18', notes: '', photos: [], status: 'pending' }
+    ];
+    */
+    renderObservations();
+  </script>
+</body>
+</html>

@@ -1,0 +1,387 @@
+// Refrigerant Leak Awareness System
+class RefrigerantApp {
+    constructor() {
+        this.symptoms = [];
+        this.init();
+    }
+
+    init() {
+        this.setupEventListeners();
+    }
+
+    setupEventListeners() {
+        document.getElementById('analyze-symptoms').addEventListener('click', () => {
+            this.analyzeSymptoms();
+        });
+
+        document.getElementById('emergency-btn').addEventListener('click', () => {
+            this.showEmergencyContacts();
+        });
+
+        document.querySelector('.close-modal').addEventListener('click', () => {
+            document.getElementById('modal').classList.add('hidden');
+        });
+
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') {
+                document.getElementById('modal').classList.add('hidden');
+            }
+        });
+    }
+
+    analyzeSymptoms() {
+        const checkboxes = document.querySelectorAll('input[name="symptom"]:checked');
+        this.symptoms = Array.from(checkboxes).map(cb => cb.value);
+
+        if (this.symptoms.length === 0) {
+            alert('Please select at least one symptom');
+            return;
+        }
+
+        const riskLevel = this.calculateRiskLevel();
+        this.displayResults(riskLevel);
+    }
+
+    calculateRiskLevel() {
+        const count = this.symptoms.length;
+        const criticalSymptoms = ['smell', 'hissing', 'oil'];
+        const hasCritical = this.symptoms.some(s => criticalSymptoms.includes(s));
+
+        if (hasCritical || count >= 5) {
+            return 'high';
+        } else if (count >= 3) {
+            return 'medium';
+        } else {
+            return 'low';
+        }
+    }
+
+    displayResults(riskLevel) {
+        const resultCard = document.getElementById('result-card');
+        
+        const recommendations = this.getRecommendations(riskLevel);
+        const actions = this.getActions(riskLevel);
+
+        resultCard.innerHTML = `
+            <div class="risk-result">
+                <h3>Assessment Results</h3>
+                <span class="risk-level ${riskLevel}">${riskLevel.toUpperCase()} RISK</span>
+                
+                <h4>Detected Symptoms (${this.symptoms.length})</h4>
+                <ul>
+                    ${this.symptoms.map(s => `<li>${this.getSymptomName(s)}</li>`).join('')}
+                </ul>
+
+                <h4>Recommendations</h4>
+                <ul>
+                    ${recommendations.map(r => `<li>${r}</li>`).join('')}
+                </ul>
+
+                <h4>Immediate Actions</h4>
+                <ul>
+                    ${actions.map(a => `<li><strong>${a}</strong></li>`).join('')}
+                </ul>
+
+                ${riskLevel === 'high' ? 
+                    '<div class="warning-box"><strong>⚠️ URGENT: Contact a certified technician immediately</strong></div>' : 
+                    ''}
+            </div>
+        `;
+    }
+
+    getSymptomName(value) {
+        const names = {
+            cooling: 'Reduced cooling performance',
+            ice: 'Ice buildup on coils',
+            hissing: 'Hissing or bubbling sounds',
+            bills: 'Higher energy bills',
+            smell: 'Chemical smell',
+            oil: 'Oil residue near unit',
+            running: 'Unit runs constantly',
+            water: 'Water pooling around unit'
+        };
+        return names[value] || value;
+    }
+
+    getRecommendations(riskLevel) {
+        if (riskLevel === 'high') {
+            return [
+                'Turn off the unit immediately to prevent further refrigerant loss',
+                'Ventilate the area by opening windows and doors',
+                'Contact EPA-certified HVAC technician within 24 hours',
+                'Do not attempt DIY repairs - refrigerant handling requires certification',
+                'Document all symptoms with photos for technician reference',
+                'Check warranty coverage before scheduling repair'
+            ];
+        } else if (riskLevel === 'medium') {
+            return [
+                'Schedule professional inspection within 1 week',
+                'Monitor symptoms daily and document any changes',
+                'Reduce unit usage to minimize refrigerant loss',
+                'Check air filters and clean if necessary',
+                'Review maintenance history and warranty status',
+                'Get multiple quotes from certified technicians'
+            ];
+        } else {
+            return [
+                'Schedule routine maintenance check within 1 month',
+                'Continue monitoring for symptom progression',
+                'Perform basic maintenance (clean filters, clear debris)',
+                'Keep log of energy consumption for comparison',
+                'Consider preventive maintenance contract',
+                'Review proper unit operation guidelines'
+            ];
+        }
+    }
+
+    getActions(riskLevel) {
+        if (riskLevel === 'high') {
+            return [
+                'STOP using the unit immediately',
+                'CALL certified technician today',
+                'EVACUATE if health symptoms appear',
+                'DOCUMENT all visible issues'
+            ];
+        } else if (riskLevel === 'medium') {
+            return [
+                'Schedule professional inspection',
+                'Monitor energy bills closely',
+                'Reduce unit usage when possible',
+                'Prepare for potential repair costs'
+            ];
+        } else {
+            return [
+                'Continue normal operation',
+                'Schedule routine maintenance',
+                'Keep monitoring symptoms',
+                'Maintain regular cleaning schedule'
+            ];
+        }
+    }
+
+    calculateCost() {
+        const unitType = document.getElementById('unit-type').value;
+        const age = parseInt(document.getElementById('unit-age').value);
+        const bill = parseFloat(document.getElementById('energy-bill').value);
+        const severity = document.getElementById('leak-severity').value;
+
+        const energyIncrease = severity === 'severe' ? 0.3 : severity === 'moderate' ? 0.2 : 0.1;
+        const monthlyWaste = bill * energyIncrease;
+        const annualWaste = monthlyWaste * 12;
+
+        const repairCost = this.estimateRepairCost(unitType, severity, age);
+        const replacementCost = this.estimateReplacementCost(unitType);
+
+        const resultsDiv = document.getElementById('cost-results');
+        resultsDiv.innerHTML = `
+            <div class="cost-breakdown">
+                <h3>Cost Impact Analysis</h3>
+                
+                <div class="cost-item">
+                    <span>Current Monthly Bill</span>
+                    <strong>$${bill.toFixed(2)}</strong>
+                </div>
+                <div class="cost-item">
+                    <span>Estimated Monthly Waste</span>
+                    <strong style="color: var(--danger);">$${monthlyWaste.toFixed(2)}</strong>
+                </div>
+                <div class="cost-item">
+                    <span>Annual Energy Waste</span>
+                    <strong style="color: var(--danger);">$${annualWaste.toFixed(2)}</strong>
+                </div>
+                <div class="cost-item">
+                    <span>Estimated Repair Cost</span>
+                    <strong>$${repairCost.min} - $${repairCost.max}</strong>
+                </div>
+                <div class="cost-item">
+                    <span>Replacement Cost (if needed)</span>
+                    <strong>$${replacementCost.min} - $${replacementCost.max}</strong>
+                </div>
+                <div class="cost-item">
+                    <span>Total 1-Year Impact (if unrepaired)</span>
+                    <strong>$${(annualWaste + repairCost.min).toFixed(2)}</strong>
+                </div>
+
+                <div style="margin-top: 1.5rem; padding: 1rem; background: #E8F5E9; border-radius: 6px;">
+                    <strong style="color: var(--success);">💡 Savings Tip:</strong>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                        Repairing now saves $${annualWaste.toFixed(2)}/year in energy costs. 
+                        ${age > 15 ? 'Consider replacement for better efficiency.' : 'Repair is likely more cost-effective.'}
+                    </p>
+                </div>
+            </div>
+        `;
+    }
+
+    estimateRepairCost(unitType, severity, age) {
+        let base = unitType === 'ac' ? 500 : 300;
+        
+        if (severity === 'severe') base *= 1.5;
+        else if (severity === 'moderate') base *= 1.2;
+        
+        if (age > 10) base *= 1.3;
+        
+        return {
+            min: Math.round(base * 0.8),
+            max: Math.round(base * 1.5)
+        };
+    }
+
+    estimateReplacementCost(unitType) {
+        const costs = {
+            ac: { min: 3000, max: 7000 },
+            fridge: { min: 800, max: 2500 },
+            freezer: { min: 600, max: 1800 }
+        };
+        return costs[unitType];
+    }
+
+    showEmergencyContacts() {
+        const modalBody = document.getElementById('modal-body');
+        modalBody.innerHTML = `
+            <h2 style="color: var(--danger); margin-bottom: 1rem;">
+                <i class="fas fa-phone-alt"></i> Emergency Contacts
+            </h2>
+            <div style="line-height: 2;">
+                <p><strong>EPA Safe Drinking Water Hotline:</strong><br>1-800-426-4791</p>
+                <p><strong>National Poison Control:</strong><br>1-800-222-1222</p>
+                <p><strong>HVAC Emergency Service:</strong><br>Call local certified technician</p>
+                <p><strong>Fire Department (Gas Leak):</strong><br>911</p>
+            </div>
+            <div style="margin-top: 1.5rem; padding: 1rem; background: #FFEBEE; border-radius: 6px;">
+                <strong>⚠️ If you experience:</strong>
+                <ul style="margin-top: 0.5rem;">
+                    <li>Difficulty breathing</li>
+                    <li>Severe dizziness or nausea</li>
+                    <li>Loss of consciousness</li>
+                    <li>Chemical burns</li>
+                </ul>
+                <p style="margin-top: 0.5rem;"><strong>Call 911 immediately and evacuate the area</strong></p>
+            </div>
+        `;
+        document.getElementById('modal').classList.remove('hidden');
+    }
+
+    findTechnicians() {
+        const modalBody = document.getElementById('modal-body');
+        modalBody.innerHTML = `
+            <h2 style="color: var(--primary); margin-bottom: 1rem;">
+                <i class="fas fa-search"></i> Find Certified Technicians
+            </h2>
+            <p>Look for EPA Section 608 certified technicians who are authorized to handle refrigerants.</p>
+            
+            <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Verification Checklist:</h3>
+            <ul style="line-height: 1.8;">
+                <li>✓ EPA Section 608 certification</li>
+                <li>✓ State/local HVAC license</li>
+                <li>✓ Liability insurance</li>
+                <li>✓ Written estimates</li>
+                <li>✓ Warranty on repairs</li>
+                <li>✓ Proper refrigerant recovery equipment</li>
+            </ul>
+
+            <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Where to Find:</h3>
+            <ul style="line-height: 1.8;">
+                <li>🔍 EPA Technician Locator: epa.gov/section608</li>
+                <li>🔍 HVAC Excellence: hvacexcellence.org</li>
+                <li>🔍 NATE Certified: natex.org</li>
+                <li>🔍 Local Better Business Bureau</li>
+            </ul>
+
+            <div style="margin-top: 1.5rem; padding: 1rem; background: #FFF3E0; border-radius: 6px;">
+                <strong>⚠️ Red Flags:</strong>
+                <ul style="margin-top: 0.5rem;">
+                    <li>No certification proof</li>
+                    <li>Cash-only payments</li>
+                    <li>Pressure to decide immediately</li>
+                    <li>Unusually low quotes</li>
+                </ul>
+            </div>
+        `;
+        document.getElementById('modal').classList.remove('hidden');
+    }
+
+    findDisposalCenters() {
+        const modalBody = document.getElementById('modal-body');
+        modalBody.innerHTML = `
+            <h2 style="color: var(--success); margin-bottom: 1rem;">
+                <i class="fas fa-recycle"></i> Proper Disposal Centers
+            </h2>
+            <p>Refrigerant must be recovered by certified professionals before disposal.</p>
+
+            <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Disposal Options:</h3>
+            <ul style="line-height: 1.8;">
+                <li><strong>Municipal Hazardous Waste:</strong> Check local collection events</li>
+                <li><strong>Appliance Retailers:</strong> Many offer haul-away services</li>
+                <li><strong>Scrap Metal Recyclers:</strong> Must certify refrigerant removal</li>
+                <li><strong>Utility Rebate Programs:</strong> Free pickup + cash incentive</li>
+            </ul>
+
+            <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Before Disposal:</h3>
+            <ul style="line-height: 1.8;">
+                <li>✓ Hire certified technician to recover refrigerant</li>
+                <li>✓ Get recovery certificate</li>
+                <li>✓ Remove doors (safety requirement)</li>
+                <li>✓ Check for utility rebates</li>
+                <li>✓ Keep disposal documentation</li>
+            </ul>
+
+            <div style="margin-top: 1.5rem; padding: 1rem; background: #FFEBEE; border-radius: 6px;">
+                <strong>🚫 NEVER:</strong>
+                <ul style="margin-top: 0.5rem;">
+                    <li>Release refrigerant to atmosphere (illegal, $37,500 fine)</li>
+                    <li>Dispose without refrigerant recovery</li>
+                    <li>Leave on curb without proper handling</li>
+                </ul>
+            </div>
+        `;
+        document.getElementById('modal').classList.remove('hidden');
+    }
+
+    showMaintenanceTips() {
+        const modalBody = document.getElementById('modal-body');
+        modalBody.innerHTML = `
+            <h2 style="color: var(--primary); margin-bottom: 1rem;">
+                <i class="fas fa-calendar-check"></i> Maintenance Schedule
+            </h2>
+
+            <h3 style="margin-bottom: 0.5rem;">Monthly Tasks:</h3>
+            <ul style="line-height: 1.8; margin-bottom: 1.5rem;">
+                <li>Clean or replace air filters</li>
+                <li>Check for unusual sounds or smells</li>
+                <li>Inspect visible refrigerant lines</li>
+                <li>Monitor energy consumption</li>
+            </ul>
+
+            <h3 style="margin-bottom: 0.5rem;">Quarterly Tasks:</h3>
+            <ul style="line-height: 1.8; margin-bottom: 1.5rem;">
+                <li>Clean condenser coils</li>
+                <li>Check drain lines for clogs</li>
+                <li>Inspect electrical connections</li>
+                <li>Test thermostat accuracy</li>
+            </ul>
+
+            <h3 style="margin-bottom: 0.5rem;">Annual Tasks:</h3>
+            <ul style="line-height: 1.8; margin-bottom: 1.5rem;">
+                <li>Professional inspection by certified technician</li>
+                <li>Refrigerant level check</li>
+                <li>System performance test</li>
+                <li>Leak detection scan</li>
+                <li>Electrical system inspection</li>
+            </ul>
+
+            <div style="margin-top: 1.5rem; padding: 1rem; background: #E8F5E9; border-radius: 6px;">
+                <strong>💡 Pro Tips:</strong>
+                <ul style="margin-top: 0.5rem;">
+                    <li>Keep outdoor units clear of debris (3-foot clearance)</li>
+                    <li>Shade outdoor units to improve efficiency</li>
+                    <li>Use programmable thermostat to reduce strain</li>
+                    <li>Document all maintenance in a log</li>
+                </ul>
+            </div>
+        `;
+        document.getElementById('modal').classList.remove('hidden');
+    }
+}
+
+const refrigerantApp = new RefrigerantApp();

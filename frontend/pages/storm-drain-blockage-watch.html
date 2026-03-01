@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storm Drain Blockage Watch - EcoLife</title>
+    <link rel="stylesheet" href="../css/storm-drain-blockage.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <header class="drain-header">
+        <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back</a>
+        <div class="header-center">
+            <i class="fas fa-water"></i>
+            <h1>Storm Drain Blockage Watch</h1>
+            <p>Community Flood Prevention Dashboard</p>
+        </div>
+        <button id="report-btn" class="report-btn"><i class="fas fa-plus"></i> Report Blockage</button>
+    </header>
+
+    <main class="main-grid">
+        <aside class="sidebar">
+            <div class="stats-panel">
+                <h3><i class="fas fa-chart-bar"></i> Live Stats</h3>
+                <div class="stat-box">
+                    <div class="stat-value" id="total-reports">0</div>
+                    <div class="stat-label">Total Reports</div>
+                </div>
+                <div class="stat-box critical">
+                    <div class="stat-value" id="critical-drains">0</div>
+                    <div class="stat-label">Critical Drains</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="cleaned-today">0</div>
+                    <div class="stat-label">Cleaned Today</div>
+                </div>
+            </div>
+
+            <div class="filter-panel">
+                <h3><i class="fas fa-filter"></i> Filters</h3>
+                <label><input type="checkbox" id="filter-critical" checked> Critical (3+ reports)</label>
+                <label><input type="checkbox" id="filter-high" checked> High (2 reports)</label>
+                <label><input type="checkbox" id="filter-low" checked> Low (1 report)</label>
+                <label><input type="checkbox" id="filter-cleaned"> Cleaned</label>
+            </div>
+
+            <div class="hotspot-panel">
+                <h3><i class="fas fa-fire"></i> Priority Hotspots</h3>
+                <div id="hotspot-list"></div>
+            </div>
+        </aside>
+
+        <section class="map-section">
+            <div id="drain-map"></div>
+            <div class="map-legend">
+                <div class="legend-item"><span class="dot critical"></span> Critical (3+)</div>
+                <div class="legend-item"><span class="dot high"></span> High (2)</div>
+                <div class="legend-item"><span class="dot low"></span> Low (1)</div>
+                <div class="legend-item"><span class="dot cleaned"></span> Cleaned</div>
+            </div>
+        </section>
+
+        <aside class="details-panel">
+            <div class="panel-tabs">
+                <button class="tab-btn active" data-tab="drain-info">Drain Info</button>
+                <button class="tab-btn" data-tab="reports">Reports</button>
+                <button class="tab-btn" data-tab="cleanup">Cleanup</button>
+            </div>
+
+            <div class="tab-content active" id="drain-info">
+                <div class="placeholder">
+                    <i class="fas fa-mouse-pointer"></i>
+                    <p>Click a drain marker to view details</p>
+                </div>
+            </div>
+
+            <div class="tab-content" id="reports">
+                <div class="placeholder">
+                    <p>Select a drain to view reports</p>
+                </div>
+            </div>
+
+            <div class="tab-content" id="cleanup">
+                <div class="placeholder">
+                    <p>Select a drain to schedule cleanup</p>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <div id="report-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2><i class="fas fa-exclamation-triangle"></i> Report Drain Blockage</h2>
+            <form id="report-form">
+                <label>Location <span class="required">*</span>
+                    <input type="text" id="location-input" placeholder="Click map or enter address" required>
+                </label>
+                <label>Blockage Severity <span class="required">*</span>
+                    <select id="severity-select" required>
+                        <option value="">Select severity</option>
+                        <option value="minor">Minor - Partial blockage</option>
+                        <option value="moderate">Moderate - Significant blockage</option>
+                        <option value="severe">Severe - Complete blockage</option>
+                    </select>
+                </label>
+                <label>Description
+                    <textarea id="description-input" placeholder="What's blocking the drain? (leaves, trash, debris, etc.)"></textarea>
+                </label>
+                <label>Photo (Optional)
+                    <input type="file" id="photo-input" accept="image/*">
+                </label>
+                <label>Your Name
+                    <input type="text" id="reporter-name" placeholder="Anonymous">
+                </label>
+                <label>Contact (Optional)
+                    <input type="email" id="reporter-contact" placeholder="email@example.com">
+                </label>
+                <button type="submit" class="submit-btn">Submit Report</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="cleanup-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2><i class="fas fa-broom"></i> Schedule Cleanup</h2>
+            <form id="cleanup-form">
+                <p><strong>Drain ID:</strong> <span id="cleanup-drain-id"></span></p>
+                <label>Cleanup Date
+                    <input type="date" id="cleanup-date" required>
+                </label>
+                <label>Assigned Team
+                    <select id="cleanup-team" required>
+                        <option value="team-a">Team A - North District</option>
+                        <option value="team-b">Team B - South District</option>
+                        <option value="team-c">Team C - East District</option>
+                        <option value="team-d">Team D - West District</option>
+                        <option value="volunteer">Volunteer Group</option>
+                    </select>
+                </label>
+                <label>Priority
+                    <select id="cleanup-priority">
+                        <option value="urgent">Urgent - Within 24 hours</option>
+                        <option value="high">High - Within 3 days</option>
+                        <option value="normal">Normal - Within 1 week</option>
+                    </select>
+                </label>
+                <label>Notes
+                    <textarea id="cleanup-notes" placeholder="Special equipment needed, access restrictions, etc."></textarea>
+                </label>
+                <button type="submit" class="submit-btn">Schedule Cleanup</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/storm-drain-blockage.js"></script>
+</body>
+</html>

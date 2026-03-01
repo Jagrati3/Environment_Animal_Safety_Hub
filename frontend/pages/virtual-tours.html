@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Eco-Tours | Explore Nature from Home | EcoLife</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);
+            min-height: 100vh;
+            color: #004d40;
+        }
+
+        /* Header */
+        .tours-header {
+            background: linear-gradient(135deg, #00695c, #004d40);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+
+        .tours-header::before {
+            content: '🌍';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.1;
+            right: -2rem;
+            bottom: -3rem;
+            transform: rotate(15deg);
+        }
+
+        .tours-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .tours-header h1 i {
+            color: #ffd54f;
+        }
+
+        .tours-header p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: -2rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Search & Filter Bar */
+        .filter-bar {
+            background: white;
+            border-radius: 60px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 4rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 60px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #00695c;
+            box-shadow: 0 0 0 4px rgba(0,105,92,0.1);
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.8rem 2rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 40px;
+            font-family: inherit;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-select:hover {
+            border-color: #ffd54f;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #00695c;
+        }
+
+        /* Categories Pills */
+        .categories-section {
+            margin-bottom: 3rem;
+        }
+
+        .categories-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: #ffd54f #e0e0e0;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .categories-scroll::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .categories-scroll::-webkit-scrollbar-track {
+            background: #e0e0e0;
+            border-radius: 10px;
+        }
+
+        .categories-scroll::-webkit-scrollbar-thumb {
+            background: #ffd54f;
+            border-radius: 10px;
+        }
+
+        .category-pill {
+            flex: 0 0 auto;
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .category-pill i {
+            font-size: 1.2rem;
+            color: #00695c;
+        }
+
+        .category-pill:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,105,92,0.2);
+            border-color: #ffd54f;
+        }
+
+        .category-pill.active {
+            background: #00695c;
+            color: white;
+        }
+
+        .category-pill.active i {
+            color: #ffd54f;
+        }
+
+        /* Featured Tour */
+        .featured-tour {
+            background: linear-gradient(135deg, #004d40, #00695c);
+            border-radius: 60px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            border: 4px solid #ffd54f;
+        }
+
+        .featured-tour::before {
+            content: '🌟';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.1;
+            right: -2rem;
+            bottom: -3rem;
+            transform: rotate(15deg);
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: #ffd54f;
+            color: #004d40;
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .featured-content {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .featured-text h2 {
+            font-size: 1.5rem;
+            color: #ffd54f;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .featured-text h3 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .featured-meta {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .featured-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .featured-meta-item i {
+            font-size: 1.5rem;
+            color: #ffd54f;
+        }
+
+        .featured-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .featured-btn {
+            background: #ffd54f;
+            color: #004d40;
+            border: none;
+            padding: 1.2rem 3rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .featured-btn:hover {
+            background: white;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+
+        .featured-image {
+            height: 350px;
+            background: linear-gradient(135deg, #2a5f5a, #1a4f4a);
+            border-radius: 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border: 3px solid #ffd54f;
+        }
+
+        .featured-image i {
+            position: absolute;
+            font-size: 8rem;
+            color: rgba(255,213,79,0.3);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: float 4s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, -50%); }
+            50% { transform: translate(-50%, -60%); }
+        }
+
+        /* Tours Grid */
+        .tours-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .tour-card {
+            background: white;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            transition: all 0.4s;
+            cursor: pointer;
+            border: 3px solid transparent;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tour-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px rgba(0,105,92,0.3);
+            border-color: #ffd54f;
+        }
+
+        .tour-image {
+            height: 220px;
+            background: linear-gradient(135deg, #004d40, #00695c);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tour-image i {
+            position: absolute;
+            font-size: 5rem;
+            color: rgba(255,213,79,0.3);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s;
+        }
+
+        .tour-card:hover .tour-image i {
+            transform: translate(-50%, -50%) scale(1.1);
+            color: rgba(255,213,79,0.5);
+        }
+
+        .tour-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #ffd54f;
+            color: #004d40;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            z-index: 2;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .tour-duration {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .tour-content {
+            padding: 2rem;
+        }
+
+        .tour-category {
+            display: inline-block;
+            background: #e0f2f1;
+            color: #00695c;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .tour-title {
+            font-size: 1.8rem;
+            color: #004d40;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .tour-location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .tour-location i {
+            color: #ffd54f;
+        }
+
+        .tour-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .tour-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tour-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .tour-meta-item i {
+            color: #ffd54f;
+        }
+
+        .tour-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tour-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00695c;
+        }
+
+        .tour-price small {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #999;
+        }
+
+        .tour-btn {
+            background: #00695c;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tour-btn:hover {
+            background: #004d40;
+            transform: scale(1.05);
+        }
+
+        /* Virtual Experience Features */
+        .features-section {
+            background: white;
+            border-radius: 60px;
+            padding: 4rem;
+            margin: 4rem 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .features-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #004d40;
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 40px;
+            background: #f5f5f5;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            background: #e0f2f1;
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #00695c, #004d40);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #ffd54f;
+            margin: 0 auto 1.5rem;
+        }
+
+        .feature-card h3 {
+            color: #004d40;
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* 360° View Demo */
+        .demo-section {
+            background: linear-gradient(135deg, #263238, #37474f);
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 4rem 0;
+            color: white;
+        }
+
+        .demo-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .demo-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .demo-header p {
+            color: #b0bec5;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .demo-360 {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: #1e2a2f;
+            border-radius: 40px;
+            overflow: hidden;
+            border: 4px solid #ffd54f;
+        }
+
+        .demo-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .demo-controls {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            background: rgba(0,0,0,0.7);
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            backdrop-filter: blur(10px);
+        }
+
+        .demo-control {
+            width: 50px;
+            height: 50px;
+            background: #ffd54f;
+            border: none;
+            border-radius: 50%;
+            color: #004d40;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .demo-control:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        /* Tour Guides */
+        .guides-section {
+            background: white;
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 4rem 0;
+        }
+
+        .guides-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .guides-header h2 {
+            color: #004d40;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .guides-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .guide-card {
+            text-align: center;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 40px;
+            transition: all 0.3s;
+        }
+
+        .guide-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,105,92,0.2);
+        }
+
+        .guide-avatar {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #00695c, #004d40);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #ffd54f;
+            margin: 0 auto 1.5rem;
+            border: 4px solid #ffd54f;
+        }
+
+        .guide-name {
+            font-size: 1.5rem;
+            color: #004d40;
+            margin-bottom: 0.3rem;
+        }
+
+        .guide-role {
+            color: #00695c;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .guide-bio {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .guide-social {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .guide-social a {
+            width: 40px;
+            height: 40px;
+            background: #e0f2f1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00695c;
+            transition: all 0.3s;
+        }
+
+        .guide-social a:hover {
+            background: #00695c;
+            color: white;
+        }
+
+        /* Equipment Needed */
+        .equipment-section {
+            background: #f5f5f5;
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 4rem 0;
+        }
+
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .equipment-card {
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .equipment-card:hover {
+            border-color: #ffd54f;
+            transform: translateY(-5px);
+        }
+
+        .equipment-icon {
+            font-size: 3rem;
+            color: #00695c;
+            margin-bottom: 1rem;
+        }
+
+        .equipment-card h3 {
+            color: #004d40;
+            margin-bottom: 0.5rem;
+        }
+
+        .equipment-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .equipment-badge {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.3rem 1rem;
+            background: #ffd54f;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #004d40;
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            background: white;
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 4rem 0;
+        }
+
+        .testimonials-slider {
+            position: relative;
+            overflow: hidden;
+            min-height: 250px;
+        }
+
+        .testimonial-slide {
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.5s;
+        }
+
+        .testimonial-slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .testimonial-content {
+            background: #f8f9fa;
+            border-radius: 40px;
+            padding: 2rem;
+            border-left: 6px solid #ffd54f;
+        }
+
+        .testimonial-text {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            background: #00695c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #ffd54f;
+        }
+
+        .testimonial-info h4 {
+            color: #004d40;
+            margin-bottom: 0.2rem;
+        }
+
+        .testimonial-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 2rem;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            background: #ccc;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .slider-dot.active {
+            background: #00695c;
+            transform: scale(1.3);
+        }
+
+        /* Booking CTA */
+        .booking-cta {
+            background: linear-gradient(135deg, #ffd54f, #ffb74d);
+            border-radius: 60px;
+            padding: 4rem;
+            text-align: center;
+            margin: 4rem 0;
+        }
+
+        .booking-cta h2 {
+            font-size: 2.5rem;
+            color: #004d40;
+            margin-bottom: 1rem;
+        }
+
+        .booking-cta p {
+            font-size: 1.2rem;
+            color: #00695c;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .booking-btn {
+            background: #004d40;
+            color: white;
+            border: none;
+            padding: 1.5rem 4rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .booking-btn:hover {
+            background: #00695c;
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: #00695c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,105,92,0.3);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        .back-to-top:hover {
+            background: #004d40;
+            transform: translateY(-5px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 60px;
+            max-width: 1000px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: #ffd54f;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: #ffb74d;
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #00695c, #004d40);
+            color: white;
+            padding: 3rem;
+            border-radius: 60px 60px 0 0;
+        }
+
+        .modal-body {
+            padding: 3rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .guides-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .equipment-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .featured-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .featured-image {
+                height: 250px;
+            }
+            
+            .tours-header h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .guides-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .equipment-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-bar {
+                flex-direction: column;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .featured-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .demo-360 {
+                height: 300px;
+            }
+            
+            .booking-cta {
+                padding: 2rem;
+            }
+            
+            .booking-cta h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="tours-header">
+        <h1>
+            <i class="fas fa-vr-cardboard"></i>
+            Virtual Eco-Tours
+        </h1>
+        <p>Explore the world's most amazing natural wonders from the comfort of your home 🌍✨</p>
+    </header>
+
+    <div class="container">
+        <!-- Search & Filter Bar -->
+        <div class="filter-bar" data-aos="fade-up">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search tours, destinations, or wildlife...">
+            </div>
+            <div class="filter-options">
+                <select class="filter-select" id="continentFilter">
+                    <option value="all">All Continents</option>
+                    <option value="africa">Africa</option>
+                    <option value="asia">Asia</option>
+                    <option value="europe">Europe</option>
+                    <option value="north-america">North America</option>
+                    <option value="south-america">South America</option>
+                    <option value="australia">Australia</option>
+                    <option value="antarctica">Antarctica</option>
+                </select>
+                <select class="filter-select" id="durationFilter">
+                    <option value="all">Any Duration</option>
+                    <option value="short">Short (15-30 min)</option>
+                    <option value="medium">Medium (30-60 min)</option>
+                    <option value="long">Long (60+ min)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="categories-section" data-aos="fade-up">
+            <div class="categories-scroll">
+                <div class="category-pill active" onclick="filterCategory('all')">
+                    <i class="fas fa-globe"></i> All Tours
+                </div>
+                <div class="category-pill" onclick="filterCategory('rainforest')">
+                    <i class="fas fa-tree"></i> Rainforests
+                </div>
+                <div class="category-pill" onclick="filterCategory('ocean')">
+                    <i class="fas fa-water"></i> Oceans
+                </div>
+                <div class="category-pill" onclick="filterCategory('desert')">
+                    <i class="fas fa-sun"></i> Deserts
+                </div>
+                <div class="category-pill" onclick="filterCategory('mountains')">
+                    <i class="fas fa-mountain"></i> Mountains
+                </div>
+                <div class="category-pill" onclick="filterCategory('wildlife')">
+                    <i class="fas fa-paw"></i> Wildlife
+                </div>
+                <div class="category-pill" onclick="filterCategory('coral')">
+                    <i class="fas fa-fish"></i> Coral Reefs
+                </div>
+                <div class="category-pill" onclick="filterCategory('arctic')">
+                    <i class="fas fa-snowflake"></i> Arctic
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Tour -->
+        <div class="featured-tour" data-aos="fade-up">
+            <div class="featured-badge">🌟 HIGHLY RECOMMENDED</div>
+            <div class="featured-content">
+                <div class="featured-text">
+                    <h2>TOUR OF THE MONTH</h2>
+                    <h3>Amazon Rainforest Expedition</h3>
+                    <div class="featured-meta">
+                        <div class="featured-meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span>75 minutes</span>
+                        </div>
+                        <div class="featured-meta-item">
+                            <i class="fas fa-users"></i>
+                            <span>Live Guide</span>
+                        </div>
+                        <div class="featured-meta-item">
+                            <i class="fas fa-video"></i>
+                            <span>4K 360°</span>
+                        </div>
+                    </div>
+                    <p class="featured-description">
+                        Immerse yourself in the world's most biodiverse rainforest. Fly over the canopy,
+                        explore the forest floor, and encounter exotic wildlife including toucans, sloths,
+                        and pink river dolphins. Live narration by expert naturalists.
+                    </p>
+                    <button class="featured-btn" onclick="startTour(1)">
+                        <i class="fas fa-play"></i> Start Virtual Tour
+                    </button>
+                </div>
+                <div class="featured-image">
+                    <i class="fas fa-tree"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tours Grid -->
+        <div class="tours-grid" id="toursGrid">
+            <!-- Tour cards will be populated by JavaScript -->
+        </div>
+
+        <!-- Virtual Experience Features -->
+        <div class="features-section" data-aos="fade-up">
+            <h2 class="features-title">✨ Virtual Tour Experience</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-vr-cardboard"></i>
+                    </div>
+                    <h3>360° Views</h3>
+                    <p>Fully immersive 360° video from the world's most beautiful locations</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-microphone-alt"></i>
+                    </div>
+                    <h3>Live Guides</h3>
+                    <p>Expert naturalists guide you through every step of the journey</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-headphones"></i>
+                    </div>
+                    <h3>Nature Sounds</h3>
+                    <p>High-fidelity audio captures the authentic sounds of nature</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-comment"></i>
+                    </div>
+                    <h3>Live Q&A</h3>
+                    <p>Ask questions and interact with guides during live sessions</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 360° Demo Section -->
+        <div class="demo-section" data-aos="fade-up">
+            <div class="demo-header">
+                <h2>🎮 Try Our 360° Viewer</h2>
+                <p>Drag to look around • Pinch to zoom • Experience full immersion</p>
+            </div>
+            <div class="demo-360">
+                <iframe class="demo-iframe" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <div class="demo-controls">
+                    <button class="demo-control"><i class="fas fa-rotate-left"></i></button>
+                    <button class="demo-control"><i class="fas fa-rotate-right"></i></button>
+                    <button class="demo-control"><i class="fas fa-search-plus"></i></button>
+                    <button class="demo-control"><i class="fas fa-search-minus"></i></button>
+                    <button class="demo-control"><i class="fas fa-expand"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tour Guides -->
+        <div class="guides-section" data-aos="fade-up">
+            <div class="guides-header">
+                <h2><i class="fas fa-users"></i> Meet Your Virtual Guides</h2>
+                <span class="join-date">8 Expert Naturalists</span>
+            </div>
+            <div class="guides-grid">
+                <div class="guide-card">
+                    <div class="guide-avatar">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3 class="guide-name">Dr. Sarah Chen</h3>
+                    <div class="guide-role">Rainforest Ecologist</div>
+                    <p class="guide-bio">15 years studying Amazon biodiversity. PhD in Tropical Ecology.</p>
+                    <div class="guide-social">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                <div class="guide-card">
+                    <div class="guide-avatar">
+                        <i class="fas fa-fish"></i>
+                    </div>
+                    <h3 class="guide-name">James O'Malley</h3>
+                    <div class="guide-role">Marine Biologist</div>
+                    <p class="guide-bio">National Geographic explorer. Coral reef conservation expert.</p>
+                    <div class="guide-social">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                <div class="guide-card">
+                    <div class="guide-avatar">
+                        <i class="fas fa-mountain"></i>
+                    </div>
+                    <h3 class="guide-name">Elena Rodriguez</h3>
+                    <div class="guide-role">Wildlife Photographer</div>
+                    <p class="guide-bio">Award-winning nature photographer. Mountain ecology specialist.</p>
+                    <div class="guide-social">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Equipment Needed -->
+        <div class="equipment-section" data-aos="fade-up">
+            <h2 class="features-title" style="color: #004d40;">🎧 Recommended Equipment</h2>
+            <div class="equipment-grid">
+                <div class="equipment-card">
+                    <div class="equipment-icon"><i class="fas fa-vr-cardboard"></i></div>
+                    <h3>VR Headset</h3>
+                    <p>For full immersion (optional)</p>
+                    <span class="equipment-badge">Best Experience</span>
+                </div>
+                <div class="equipment-card">
+                    <div class="equipment-icon"><i class="fas fa-headphones"></i></div>
+                    <h3>Headphones</h3>
+                    <p>For spatial audio</p>
+                    <span class="equipment-badge">Recommended</span>
+                </div>
+                <div class="equipment-card">
+                    <div class="equipment-icon"><i class="fas fa-tv"></i></div>
+                    <h3>4K Monitor</h3>
+                    <p>For crisp visuals</p>
+                    <span class="equipment-badge">Great</span>
+                </div>
+                <div class="equipment-card">
+                    <div class="equipment-icon"><i class="fas fa-wifi"></i></div>
+                    <h3>Fast Internet</h3>
+                    <p>25+ Mbps recommended</p>
+                    <span class="equipment-badge">Required</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonials -->
+        <div class="testimonials-section" data-aos="fade-up">
+            <h2 class="features-title" style="color: #004d40;">💚 Traveler Stories</h2>
+            <div class="testimonials-slider" id="testimonialSlider">
+                <div class="testimonial-slide active">
+                    <div class="testimonial-content">
+                        <div class="testimonial-text">
+                            "The Amazon tour was breathtaking! I felt like I was really there. Saw monkeys, toucans, and even a jaguar! The guide was so knowledgeable."
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar">M</div>
+                            <div class="testimonial-info">
+                                <h4>Michael Torres</h4>
+                                <p>Amazon Rainforest Tour</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-slide">
+                    <div class="testimonial-content">
+                        <div class="testimonial-text">
+                            "Great Barrier Reef in 360° was incredible. Swam with sea turtles and saw colorful corals. My kids loved it!"
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar">L</div>
+                            <div class="testimonial-info">
+                                <h4>Lisa Chen</h4>
+                                <p>Great Barrier Reef Tour</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-slide">
+                    <div class="testimonial-content">
+                        <div class="testimonial-text">
+                            "The Northern Lights tour from Norway was magical. I actually cried. Best virtual experience I've ever had."
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar">D</div>
+                            <div class="testimonial-info">
+                                <h4>David Kim</h4>
+                                <p>Northern Lights Tour</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slider-dots">
+                <span class="slider-dot active" onclick="showTestimonial(0)"></span>
+                <span class="slider-dot" onclick="showTestimonial(1)"></span>
+                <span class="slider-dot" onclick="showTestimonial(2)"></span>
+            </div>
+        </div>
+
+        <!-- Booking CTA -->
+        <div class="booking-cta" data-aos="fade-up">
+            <h2>🌍 Ready for Your Adventure?</h2>
+            <p>Book any tour today and get 20% off your first virtual journey!</p>
+            <button class="booking-btn" onclick="bookTour()">
+                <i class="fas fa-ticket-alt"></i> Explore All Tours
+            </button>
+        </div>
+    </div>
+
+    <!-- Tour Modal -->
+    <div class="modal" id="tourModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-header" id="modalHeader">
+                <h2 id="modalTitle">Amazon Rainforest</h2>
+                <p id="modalSubtitle">Live Virtual Expedition</p>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- AOS Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Tours Data
+        const tours = [
+            {
+                id: 1,
+                title: "Amazon Rainforest",
+                location: "Brazil/Peru",
+                category: "rainforest",
+                continent: "south-america",
+                duration: "75 min",
+                rating: 4.9,
+                reviews: 1243,
+                price: "$19.99",
+                description: "Explore the world's most biodiverse rainforest. Encounter toucans, sloths, monkeys, and pink river dolphins.",
+                guide: "Dr. Sarah Chen",
+                language: "English/Spanish",
+                viewers: 234,
+                icon: "fa-tree"
+            },
+            {
+                id: 2,
+                title: "Great Barrier Reef",
+                location: "Australia",
+                category: "coral",
+                continent: "australia",
+                duration: "60 min",
+                rating: 4.8,
+                reviews: 987,
+                price: "$17.99",
+                description: "Snorkel the world's largest coral reef system. See sea turtles, colorful fish, and vibrant corals.",
+                guide: "James O'Malley",
+                language: "English",
+                viewers: 156,
+                icon: "fa-fish"
+            },
+            {
+                id: 3,
+                title: "Sahara Desert",
+                location: "Morocco",
+                category: "desert",
+                continent: "africa",
+                duration: "45 min",
+                rating: 4.7,
+                reviews: 654,
+                price: "$14.99",
+                description: "Experience the vast Sahara. Ride camels, camp under stars, and meet Berber communities.",
+                guide: "Ahmed Hassan",
+                language: "English/Arabic",
+                viewers: 89,
+                icon: "fa-sun"
+            },
+            {
+                id: 4,
+                title: "Himalayan Trek",
+                location: "Nepal/Tibet",
+                category: "mountains",
+                continent: "asia",
+                duration: "90 min",
+                rating: 4.9,
+                reviews: 876,
+                price: "$21.99",
+                description: "Trek through the Himalayas. See Everest, visit monasteries, and learn about Sherpa culture.",
+                guide: "Tenzing Norgay Jr.",
+                language: "English/Nepali",
+                viewers: 312,
+                icon: "fa-mountain"
+            },
+            {
+                id: 5,
+                title: "Arctic Expedition",
+                location: "Svalbard, Norway",
+                category: "arctic",
+                continent: "europe",
+                duration: "80 min",
+                rating: 4.8,
+                reviews: 543,
+                price: "$19.99",
+                description: "Polar bear spotting, Northern Lights, and ice fjords. Live from the Arctic Circle.",
+                guide: "Erik Johansen",
+                language: "English/Norwegian",
+                viewers: 178,
+                icon: "fa-snowflake"
+            },
+            {
+                id: 6,
+                title: "Serengeti Safari",
+                location: "Tanzania",
+                category: "wildlife",
+                continent: "africa",
+                duration: "70 min",
+                rating: 5.0,
+                reviews: 1567,
+                price: "$22.99",
+                description: "Witness the great migration. Lions, elephants, giraffes, and zebras in their natural habitat.",
+                guide: "Grace Mbeki",
+                language: "English/Swahili",
+                viewers: 445,
+                icon: "fa-paw"
+            },
+            {
+                id: 7,
+                title: "Galapagos Islands",
+                location: "Ecuador",
+                category: "wildlife",
+                continent: "south-america",
+                duration: "65 min",
+                rating: 4.9,
+                reviews: 765,
+                price: "$18.99",
+                description: "Follow in Darwin's footsteps. Giant tortoises, marine iguanas, and blue-footed boobies.",
+                guide: "Dr. Maria Santos",
+                language: "English/Spanish",
+                viewers: 201,
+                icon: "fa-turtle"
+            },
+            {
+                id: 8,
+                title: "Northern Lights",
+                location: "Tromsø, Norway",
+                category: "arctic",
+                continent: "europe",
+                duration: "50 min",
+                rating: 5.0,
+                reviews: 2345,
+                price: "$16.99",
+                description: "Chase the aurora borealis. Learn the science and mythology behind the lights.",
+                guide: "Astrid Larsen",
+                language: "English",
+                viewers: 567,
+                icon: "fa-star"
+            }
+        ];
+
+        // DOM Elements
+        const toursGrid = document.getElementById('toursGrid');
+        const backToTop = document.getElementById('backToTop');
+        const modal = document.getElementById('tourModal');
+
+        // Render tours
+        function renderTours() {
+            toursGrid.innerHTML = tours.map(tour => `
+                <div class="tour-card" onclick="showTourDetails(${tour.id})">
+                    <div class="tour-image">
+                        <i class="fas ${tour.icon}"></i>
+                        <span class="tour-badge">⭐ ${tour.rating}</span>
+                        <span class="tour-duration"><i class="fas fa-clock"></i> ${tour.duration}</span>
+                    </div>
+                    <div class="tour-content">
+                        <span class="tour-category">${tour.category.charAt(0).toUpperCase() + tour.category.slice(1)}</span>
+                        <h3 class="tour-title">${tour.title}</h3>
+                        <div class="tour-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>${tour.location}</span>
+                        </div>
+                        <p class="tour-description">${tour.description}</p>
+                        <div class="tour-meta">
+                            <span class="tour-meta-item"><i class="fas fa-user"></i> ${tour.guide}</span>
+                            <span class="tour-meta-item"><i class="fas fa-users"></i> ${tour.viewers} watching</span>
+                        </div>
+                        <div class="tour-footer">
+                            <span class="tour-price">${tour.price} <small>/person</small></span>
+                            <button class="tour-btn" onclick="startTour(${tour.id}, event)">
+                                <i class="fas fa-play"></i> Start
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter category
+        window.filterCategory = function(category) {
+            document.querySelectorAll('.category-pill').forEach(pill => {
+                pill.classList.remove('active');
+                if (pill.textContent.toLowerCase().includes(category) || 
+                    (category === 'all' && pill.textContent.includes('All'))) {
+                    pill.classList.add('active');
+                }
+            });
+            
+            // Filter logic would go here
+            console.log('Filtering by:', category);
+        };
+
+        // Show tour details
+        window.showTourDetails = function(id) {
+            const tour = tours.find(t => t.id === id);
+            if (!tour) return;
+
+            document.getElementById('modalTitle').textContent = tour.title;
+            document.getElementById('modalSubtitle').textContent = tour.location;
+            
+            document.getElementById('modalBody').innerHTML = `
+                <div style="text-align: center;">
+                    <i class="fas ${tour.icon}" style="font-size: 5rem; color: #00695c; margin: 2rem;"></i>
+                    <h3 style="color: #004d40; margin-bottom: 1rem;">About This Tour</h3>
+                    <p style="color: #666; line-height: 1.8; margin-bottom: 2rem;">${tour.description}</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 2rem 0;">
+                        <div style="background: #f5f5f5; padding: 1rem; border-radius: 20px;">
+                            <i class="fas fa-user" style="color: #ffd54f;"></i>
+                            <h4>Guide</h4>
+                            <p>${tour.guide}</p>
+                        </div>
+                        <div style="background: #f5f5f5; padding: 1rem; border-radius: 20px;">
+                            <i class="fas fa-language" style="color: #ffd54f;"></i>
+                            <h4>Language</h4>
+                            <p>${tour.language}</p>
+                        </div>
+                        <div style="background: #f5f5f5; padding: 1rem; border-radius: 20px;">
+                            <i class="fas fa-clock" style="color: #ffd54f;"></i>
+                            <h4>Duration</h4>
+                            <p>${tour.duration}</p>
+                        </div>
+                        <div style="background: #f5f5f5; padding: 1rem; border-radius: 20px;">
+                            <i class="fas fa-star" style="color: #ffd54f;"></i>
+                            <h4>Rating</h4>
+                            <p>${tour.rating} (${tour.reviews} reviews)</p>
+                        </div>
+                    </div>
+                    
+                    <button class="featured-btn" style="margin-top: 2rem;" onclick="startTour(${tour.id})">
+                        <i class="fas fa-play"></i> Start Virtual Tour Now
+                    </button>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        };
+
+        // Start tour
+        window.startTour = function(id, event) {
+            if (event) event.stopPropagation();
+            alert(`🎬 Starting virtual tour! (Demo - Full 360° video experience would open here)`);
+        };
+
+        // Book tour
+        window.bookTour = function() {
+            alert('📅 Booking page coming soon! Tours are free during beta testing.');
+        };
+
+        // Close modal
+        window.closeModal = function() {
+            modal.classList.remove('active');
+        };
+
+        // Testimonial slider
+        let currentTestimonial = 0;
+        const testimonials = document.querySelectorAll('.testimonial-slide');
+        const dots = document.querySelectorAll('.slider-dot');
+
+        window.showTestimonial = function(index) {
+            testimonials.forEach(t => t.classList.remove('active'));
+            dots.forEach(d => d.classList.remove('active'));
+            
+            testimonials[index].classList.add('active');
+            dots[index].classList.add('active');
+            currentTestimonial = index;
+        };
+
+        function nextTestimonial() {
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+            showTestimonial(currentTestimonial);
+        }
+
+        setInterval(nextTestimonial, 5000);
+
+        // Back to top
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Close modal on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTours();
+        });
+    </script>
+</body>
+</html>

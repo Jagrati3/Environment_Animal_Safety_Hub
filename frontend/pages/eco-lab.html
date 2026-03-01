@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Experiment Lab | Science for Kids | EcoLife</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f7da 0%, #e1f0e8 100%);
+            min-height: 100vh;
+            color: #2d5a2d;
+        }
+
+        /* Fun Lab Header */
+        .lab-header {
+            background: linear-gradient(135deg, #4a90e2, #7b68ee);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+
+        .flask-animation {
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.1;
+            animation: bubbleFloat 10s infinite;
+        }
+
+        @keyframes bubbleFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, -20px) rotate(10deg); }
+            50% { transform: translate(40px, -40px) rotate(20deg); }
+            75% { transform: translate(20px, -20px) rotate(10deg); }
+        }
+
+        .flask-1 { top: 10%; left: 5%; }
+        .flask-2 { bottom: 10%; right: 5%; font-size: 8rem; animation-delay: 2s; }
+
+        .lab-header h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            font-family: 'Comic Neue', cursive;
+        }
+
+        .lab-header h1 i {
+            color: #ffd966;
+            animation: spin 10s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .lab-header p {
+            font-size: 1.4rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+            background: rgba(255,255,255,0.2);
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: -2rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Safety Banner */
+        .safety-banner {
+            background: #ffd966;
+            border-radius: 60px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            border: 4px solid #ff8c42;
+        }
+
+        .safety-icon {
+            width: 80px;
+            height: 80px;
+            background: #ff8c42;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .safety-text {
+            flex: 1;
+        }
+
+        .safety-text h2 {
+            color: #b85e00;
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .safety-text p {
+            color: #7a4500;
+            font-size: 1.1rem;
+        }
+
+        .safety-badge {
+            background: #ff8c42;
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        /* Experiment Categories */
+        .categories-section {
+            margin-bottom: 3rem;
+        }
+
+        .categories-title {
+            font-size: 2.2rem;
+            color: #2d5a2d;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 40px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            border-color: #4a90e2;
+            box-shadow: 0 20px 40px rgba(74,144,226,0.2);
+        }
+
+        .category-card.active {
+            background: #4a90e2;
+            color: white;
+            border-color: #ffd966;
+        }
+
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #4a90e2;
+        }
+
+        .category-card.active .category-icon {
+            color: #ffd966;
+        }
+
+        .category-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Featured Experiment */
+        .featured-experiment {
+            background: linear-gradient(135deg, #7b68ee, #4a90e2);
+            border-radius: 60px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            border: 4px solid #ffd966;
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: #ffd966;
+            color: #4a90e2;
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transform: rotate(5deg);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .featured-content {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .featured-text h2 {
+            font-size: 1.5rem;
+            color: #ffd966;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .featured-text h3 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-family: 'Comic Neue', cursive;
+        }
+
+        .featured-meta {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .featured-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: rgba(255,255,255,0.2);
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px;
+            backdrop-filter: blur(5px);
+        }
+
+        .featured-meta-item i {
+            font-size: 1.3rem;
+            color: #ffd966;
+        }
+
+        .featured-description {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .featured-btn {
+            background: #ffd966;
+            color: #4a90e2;
+            border: none;
+            padding: 1.2rem 3rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .featured-btn:hover {
+            background: white;
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .featured-image {
+            height: 350px;
+            background: linear-gradient(135deg, #ffb347, #ff8c42);
+            border-radius: 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border: 3px solid #ffd966;
+            animation: bounce 3s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .featured-image i {
+            position: absolute;
+            font-size: 8rem;
+            color: rgba(255,255,255,0.3);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .bubbles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .bubble {
+            position: absolute;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            animation: bubble 3s infinite;
+        }
+
+        @keyframes bubble {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100px) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* Experiments Grid */
+        .experiments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .experiment-card {
+            background: white;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            transition: all 0.4s;
+            cursor: pointer;
+            border: 3px solid transparent;
+            position: relative;
+        }
+
+        .experiment-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px rgba(74,144,226,0.3);
+            border-color: #ffd966;
+        }
+
+        .experiment-image {
+            height: 180px;
+            background: linear-gradient(135deg, #4a90e2, #7b68ee);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .experiment-image i {
+            position: absolute;
+            font-size: 5rem;
+            color: rgba(255,255,255,0.3);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .difficulty-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            z-index: 2;
+        }
+
+        .difficulty-badge.easy {
+            background: #4caf50;
+            color: white;
+        }
+
+        .difficulty-badge.medium {
+            background: #ff9800;
+            color: white;
+        }
+
+        .difficulty-badge.hard {
+            background: #f44336;
+            color: white;
+        }
+
+        .time-badge {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .experiment-content {
+            padding: 2rem;
+        }
+
+        .experiment-category {
+            display: inline-block;
+            background: #e8f0fe;
+            color: #4a90e2;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .experiment-title {
+            font-size: 1.8rem;
+            color: #2d5a2d;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .experiment-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .experiment-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .meta-item i {
+            color: #ff8c42;
+        }
+
+        .materials-preview {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .material-tag {
+            background: #f0f0f0;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            color: #555;
+        }
+
+        .experiment-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #4a90e2, #7b68ee);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .experiment-btn:hover {
+            background: linear-gradient(135deg, #7b68ee, #4a90e2);
+            transform: scale(1.02);
+        }
+
+        /* Lab Equipment Section */
+        .equipment-section {
+            background: white;
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 4rem 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .equipment-title {
+            font-size: 2.2rem;
+            color: #2d5a2d;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 1.5rem;
+        }
+
+        .equipment-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 40px;
+            transition: all 0.3s;
+        }
+
+        .equipment-item:hover {
+            background: #4a90e2;
+            color: white;
+            transform: translateY(-10px);
+        }
+
+        .equipment-item i {
+            font-size: 3rem;
+            color: #4a90e2;
+            margin-bottom: 0.5rem;
+        }
+
+        .equipment-item:hover i {
+            color: #ffd966;
+        }
+
+        .equipment-item span {
+            font-weight: 600;
+        }
+
+        /* Science Facts Ticker */
+        .facts-ticker {
+            background: #2d5a2d;
+            border-radius: 60px;
+            padding: 1.5rem 2rem;
+            margin: 3rem 0;
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .ticker-content {
+            display: flex;
+            gap: 3rem;
+            animation: ticker 30s linear infinite;
+            white-space: nowrap;
+        }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .ticker-item i {
+            color: #ffd966;
+            font-size: 1.5rem;
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-200%); }
+        }
+
+        /* Video Tutorials */
+        .videos-section {
+            background: white;
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 4rem 0;
+        }
+
+        .videos-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .videos-header h2 {
+            color: #2d5a2d;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .video-card {
+            border-radius: 40px;
+            overflow: hidden;
+            background: #f8f9fa;
+            transition: all 0.3s;
+        }
+
+        .video-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(74,144,226,0.2);
+        }
+
+        .video-thumbnail {
+            height: 200px;
+            background: linear-gradient(135deg, #4a90e2, #7b68ee);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-thumbnail i {
+            font-size: 4rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .play-button {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: #ffd966;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4a90e2;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .play-button:hover {
+            transform: scale(1.2);
+            background: white;
+        }
+
+        .video-info {
+            padding: 1.5rem;
+        }
+
+        .video-info h4 {
+            color: #2d5a2d;
+            margin-bottom: 0.3rem;
+        }
+
+        .video-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Printable Worksheets */
+        .worksheets-section {
+            background: linear-gradient(135deg, #ffb347, #ff8c42);
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 4rem 0;
+            color: white;
+        }
+
+        .worksheets-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .worksheet-card {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .worksheet-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .worksheet-card h3 {
+            margin-bottom: 1rem;
+        }
+
+        .worksheet-card p {
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .worksheet-btn {
+            background: white;
+            color: #ff8c42;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .worksheet-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Young Scientists Community */
+        .community-section {
+            background: white;
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 4rem 0;
+        }
+
+        .community-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .community-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat-bubble {
+            background: #4a90e2;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+
+        .community-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .scientist-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 40px;
+            transition: all 0.3s;
+        }
+
+        .scientist-card:hover {
+            background: #e8f0fe;
+            transform: translateY(-10px);
+        }
+
+        .scientist-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #4a90e2, #7b68ee);
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #ffd966;
+        }
+
+        .scientist-name {
+            font-weight: 700;
+            color: #2d5a2d;
+            margin-bottom: 0.2rem;
+        }
+
+        .scientist-project {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .scientist-badge {
+            display: inline-block;
+            background: #ffd966;
+            color: #2d5a2d;
+            padding: 0.2rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Experiment Log Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 60px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: #ff8c42;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: #ff6b1a;
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #4a90e2, #7b68ee);
+            color: white;
+            padding: 3rem;
+            border-radius: 60px 60px 0 0;
+        }
+
+        .modal-body {
+            padding: 3rem;
+        }
+
+        .experiment-step {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 40px;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: #ff8c42;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            color: #2d5a2d;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-content p {
+            color: #666;
+        }
+
+        .science-explanation {
+            background: #e8f0fe;
+            padding: 2rem;
+            border-radius: 40px;
+            margin: 2rem 0;
+            border-left: 6px solid #4a90e2;
+        }
+
+        .science-explanation h4 {
+            color: #4a90e2;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .log-entry {
+            background: #fff3cd;
+            border: 2px solid #ffd966;
+            border-radius: 40px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .log-entry h4 {
+            color: #856404;
+            margin-bottom: 1rem;
+        }
+
+        .log-field {
+            margin-bottom: 1rem;
+        }
+
+        .log-field label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+            color: #856404;
+        }
+
+        .log-field input,
+        .log-field textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ffd966;
+            border-radius: 30px;
+            font-family: inherit;
+        }
+
+        .save-log-btn {
+            background: #ff8c42;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(74,144,226,0.3);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        .back-to-top:hover {
+            background: #7b68ee;
+            transform: translateY(-5px);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .equipment-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .videos-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .worksheets-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .community-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .featured-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .featured-image {
+                height: 250px;
+            }
+            
+            .lab-header h1 {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .equipment-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .videos-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .worksheets-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .community-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .safety-banner {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .featured-meta {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="lab-header">
+        <div class="flask-animation flask-1">🧪</div>
+        <div class="flask-animation flask-2">🔬</div>
+        <h1>
+            <i class="fas fa-flask"></i>
+            Eco Experiment Lab
+        </h1>
+        <p>Put on your lab coat! Fun science experiments to help you understand our planet 🌍🔍</p>
+    </header>
+
+    <div class="container">
+        <!-- Safety Banner -->
+        <div class="safety-banner" data-aos="fade-up">
+            <div class="safety-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="safety-text">
+                <h2>👨‍🔬 Safety First!</h2>
+                <p>Always ask a grown-up for help, wear safety goggles, and never taste your experiments!</p>
+            </div>
+            <div class="safety-badge">
+                <i class="fas fa-shield-alt"></i> Adult Supervision Required
+            </div>
+        </div>
+
+        <!-- Experiment Categories -->
+        <div class="categories-section" data-aos="fade-up">
+            <h2 class="categories-title">
+                <i class="fas fa-filter"></i>
+                Choose Your Experiment Type
+            </h2>
+            <div class="categories-grid">
+                <div class="category-card active" onclick="filterExperiments('all')">
+                    <div class="category-icon">🔬</div>
+                    <h3>All Experiments</h3>
+                </div>
+                <div class="category-card" onclick="filterExperiments('water')">
+                    <div class="category-icon">💧</div>
+                    <h3>Water Science</h3>
+                </div>
+                <div class="category-card" onclick="filterExperiments('plants')">
+                    <div class="category-icon">🌱</div>
+                    <h3>Plants & Growth</h3>
+                </div>
+                <div class="category-card" onclick="filterExperiments('weather')">
+                    <div class="category-icon">☁️</div>
+                    <h3>Weather & Air</h3>
+                </div>
+                <div class="category-card" onclick="filterExperiments('recycle')">
+                    <div class="category-icon">♻️</div>
+                    <h3>Recycling</h3>
+                </div>
+                <div class="category-card" onclick="filterExperiments('energy')">
+                    <div class="category-icon">☀️</div>
+                    <h3>Energy & Light</h3>
+                </div>
+                <div class="category-card" onclick="filterExperiments('soil')">
+                    <div class="category-icon">⛰️</div>
+                    <h3>Soil & Rocks</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Experiment -->
+        <div class="featured-experiment" data-aos="fade-up">
+            <div class="featured-badge">🌟 EXPERIMENT OF THE WEEK</div>
+            <div class="featured-content">
+                <div class="featured-text">
+                    <h2>FEATURED</h2>
+                    <h3>Build a Solar Oven</h3>
+                    <div class="featured-meta">
+                        <div class="featured-meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span>45 minutes</span>
+                        </div>
+                        <div class="featured-meta-item">
+                            <i class="fas fa-star"></i>
+                            <span>Easy</span>
+                        </div>
+                        <div class="featured-meta-item">
+                            <i class="fas fa-users"></i>
+                            <span>Ages 8+</span>
+                        </div>
+                    </div>
+                    <p class="featured-description">
+                        Use the power of the sun to cook food! Build your own solar oven from a pizza box 
+                        and learn about renewable energy, heat absorption, and insulation.
+                    </p>
+                    <button class="featured-btn" onclick="startExperiment(1)">
+                        <i class="fas fa-flask"></i> Try This Experiment
+                    </button>
+                </div>
+                <div class="featured-image">
+                    <i class="fas fa-sun"></i>
+                    <div class="bubbles">
+                        <div class="bubble" style="width: 20px; height: 20px; left: 10%;"></div>
+                        <div class="bubble" style="width: 30px; height: 30px; left: 30%; animation-delay: 0.5s;"></div>
+                        <div class="bubble" style="width: 15px; height: 15px; left: 60%; animation-delay: 1s;"></div>
+                        <div class="bubble" style="width: 25px; height: 25px; left: 80%; animation-delay: 1.5s;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Experiments Grid -->
+        <div class="experiments-grid" id="experimentsGrid"></div>
+
+        <!-- Science Facts Ticker -->
+        <div class="facts-ticker" data-aos="fade-up">
+            <div class="ticker-content" id="ticker">
+                <div class="ticker-item"><i class="fas fa-lightbulb"></i> Did you know? Trees can communicate with each other!</div>
+                <div class="ticker-item"><i class="fas fa-flask"></i> A single recycled glass bottle saves enough energy to power a computer for 30 minutes!</div>
+                <div class="ticker-item"><i class="fas fa-leaf"></i> Bamboo grows faster than any other plant on Earth!</div>
+                <div class="ticker-item"><i class="fas fa-water"></i> 97% of Earth's water is in the oceans!</div>
+            </div>
+        </div>
+
+        <!-- Lab Equipment You'll Need -->
+        <div class="equipment-section" data-aos="fade-up">
+            <h2 class="equipment-title">
+                <i class="fas fa-tools"></i>
+                Common Lab Equipment
+            </h2>
+            <div class="equipment-grid">
+                <div class="equipment-item">
+                    <i class="fas fa-flask"></i>
+                    <span>Beakers</span>
+                </div>
+                <div class="equipment-item">
+                    <i class="fas fa-vial"></i>
+                    <span>Test Tubes</span>
+                </div>
+                <div class="equipment-item">
+                    <i class="fas fa-microscope"></i>
+                    <span>Microscope</span>
+                </div>
+                <div class="equipment-item">
+                    <i class="fas fa-weight"></i>
+                    <span>Scale</span>
+                </div>
+                <div class="equipment-item">
+                    <i class="fas fa-thermometer-half"></i>
+                    <span>Thermometer</span>
+                </div>
+                <div class="equipment-item">
+                    <i class="fas fa-magnifying-glass"></i>
+                    <span>Magnifying Glass</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Video Tutorials -->
+        <div class="videos-section" data-aos="fade-up">
+            <div class="videos-header">
+                <h2><i class="fas fa-video"></i> Video Tutorials</h2>
+                <span class="stat-bubble">8 New Videos</span>
+            </div>
+            <div class="videos-grid">
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-play"></i>
+                        <div class="play-button" onclick="playVideo(1)">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h4>How to Make a Rain Gauge</h4>
+                        <p>5 min • Beginner</p>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-leaf"></i>
+                        <div class="play-button" onclick="playVideo(2)">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h4>Seed Germination Experiment</h4>
+                        <p>8 min • Easy</p>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-water"></i>
+                        <div class="play-button" onclick="playVideo(3)">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h4>Water Filtration at Home</h4>
+                        <p>10 min • Medium</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Printable Worksheets -->
+        <div class="worksheets-section" data-aos="fade-up">
+            <h2 style="color: white; margin-bottom: 2rem;">
+                <i class="fas fa-download"></i>
+                Printable Lab Worksheets
+            </h2>
+            <div class="worksheets-grid">
+                <div class="worksheet-card">
+                    <div class="worksheet-icon">📝</div>
+                    <h3>Observation Log</h3>
+                    <p>Record your experiment results</p>
+                    <button class="worksheet-btn" onclick="downloadWorksheet('observation')">
+                        <i class="fas fa-download"></i> Download PDF
+                    </button>
+                </div>
+                <div class="worksheet-card">
+                    <div class="worksheet-icon">📊</div>
+                    <h3>Data Chart</h3>
+                    <p>Track measurements over time</p>
+                    <button class="worksheet-btn" onclick="downloadWorksheet('data')">
+                        <i class="fas fa-download"></i> Download PDF
+                    </button>
+                </div>
+                <div class="worksheet-card">
+                    <div class="worksheet-icon">🎨</div>
+                    <h3>Lab Coloring Pages</h3>
+                    <p>Fun science coloring sheets</p>
+                    <button class="worksheet-btn" onclick="downloadWorksheet('coloring')">
+                        <i class="fas fa-download"></i> Download PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Young Scientists Community -->
+        <div class="community-section" data-aos="fade-up">
+            <div class="community-header">
+                <h2><i class="fas fa-users"></i> Young Scientists Community</h2>
+                <div class="community-stats">
+                    <span class="stat-bubble">👥 1,234 members</span>
+                    <span class="stat-bubble">📸 456 projects</span>
+                </div>
+            </div>
+            <div class="community-grid">
+                <div class="scientist-card">
+                    <div class="scientist-avatar">🧪</div>
+                    <div class="scientist-name">Emma, 10</div>
+                    <div class="scientist-project">Built a solar oven</div>
+                    <span class="scientist-badge">⭐ Super Scientist</span>
+                </div>
+                <div class="scientist-card">
+                    <div class="scientist-avatar">🔬</div>
+                    <div class="scientist-name">Alex, 9</div>
+                    <div class="scientist-project">Grew crystals</div>
+                    <span class="scientist-badge">🌱 Plant Expert</span>
+                </div>
+                <div class="scientist-card">
+                    <div class="scientist-avatar">🌱</div>
+                    <div class="scientist-name">Maya, 11</div>
+                    <div class="scientist-project">Water filtration</div>
+                    <span class="scientist-badge">💧 Water Wizard</span>
+                </div>
+                <div class="scientist-card">
+                    <div class="scientist-avatar">⚡</div>
+                    <div class="scientist-name">Leo, 8</div>
+                    <div class="scientist-project">Static electricity</div>
+                    <span class="scientist-badge">⚡ Energy Star</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Experiment Modal -->
+    <div class="modal" id="experimentModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-header" id="modalHeader">
+                <h2 id="modalTitle">Experiment Title</h2>
+                <p id="modalSubtitle">Hands-on science for young environmentalists</p>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- AOS Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Experiments Data
+        const experiments = [
+            {
+                id: 1,
+                title: "Solar Oven",
+                category: "energy",
+                difficulty: "easy",
+                time: "45 min",
+                age: "8+",
+                materials: ["Pizza box", "Aluminum foil", "Plastic wrap", "Black paper", "Tape"],
+                description: "Build a solar oven from a pizza box and cook food using the power of the sun!",
+                longDescription: "Learn how the sun's energy can be harnessed for cooking. This experiment demonstrates greenhouse effect, heat absorption, and renewable energy.",
+                steps: [
+                    "Cut a flap in the pizza box lid, leaving one edge attached",
+                    "Cover the inside of the flap with aluminum foil (shiny side out)",
+                    "Line the bottom of the box with black paper",
+                    "Cover the window opening with plastic wrap to trap heat",
+                    "Place food on a plate inside and angle the flap to reflect sunlight"
+                ],
+                science: "The aluminum foil reflects sunlight into the box, the black paper absorbs heat, and the plastic wrap traps the warm air inside (greenhouse effect). The box can reach up to 200°F!",
+                safety: "Use oven mitts - the box gets hot! Adult supervision required.",
+                icon: "fa-sun"
+            },
+            {
+                id: 2,
+                title: "Water Filtration",
+                category: "water",
+                difficulty: "medium",
+                time: "60 min",
+                age: "10+",
+                materials: ["2-liter bottle", "Sand", "Gravel", "Activated charcoal", "Coffee filter", "Dirty water"],
+                description: "Create your own water filter and learn how communities clean water.",
+                longDescription: "Build a multi-layer water filter to understand how water is purified naturally and in treatment plants.",
+                steps: [
+                    "Cut the 2-liter bottle in half and invert the top into the bottom",
+                    "Layer materials: coffee filter (bottom), charcoal, sand, gravel (top)",
+                    "Pour dirty water slowly into the top",
+                    "Watch clean water collect in the bottom container",
+                    "Compare before and after - it won't be drinkable, but much cleaner!"
+                ],
+                science: "Each layer traps different particles: gravel catches large debris, sand traps smaller particles, charcoal absorbs chemicals and odors.",
+                safety: "Do NOT drink the filtered water - it's not safe for consumption.",
+                icon: "fa-water"
+            },
+            {
+                id: 3,
+                title: "Seed Germination",
+                category: "plants",
+                difficulty: "easy",
+                time: "7 days",
+                age: "6+",
+                materials: ["Beans", "Paper towels", "Ziploc bag", "Water", "Sunlight"],
+                description: "Watch seeds sprout and grow in a bag - no soil needed!",
+                longDescription: "Observe the magic of plant growth as seeds germinate right before your eyes. Track daily changes!",
+                steps: [
+                    "Dampen a paper towel (not soaking wet)",
+                    "Place 3-4 beans on the towel",
+                    "Fold the towel and place in a ziploc bag",
+                    "Tape the bag to a sunny window",
+                    "Observe and record changes daily for one week"
+                ],
+                science: "Seeds contain everything needed to start growing. Water activates enzymes that break down stored food, and the embryo begins to grow roots and shoots.",
+                safety: "Wash hands after handling seeds and soil.",
+                icon: "fa-seedling"
+            },
+            {
+                id: 4,
+                title: "Make a Rain Gauge",
+                category: "weather",
+                difficulty: "easy",
+                time: "30 min",
+                age: "7+",
+                materials: ["Plastic bottle", "Ruler", "Tape", "Stones", "Water", "Marker"],
+                description: "Measure rainfall in your area with your own weather station.",
+                longDescription: "Build a simple rain gauge and become a citizen scientist by tracking precipitation patterns.",
+                steps: [
+                    "Cut the top off a plastic bottle",
+                    "Place stones in the bottom for weight",
+                    "Tape a ruler to the side",
+                    "Fill to the 0 mark with water (for calibration)",
+                    "Place outside and check after each rain"
+                ],
+                science: "Rain collects in the bottle and the ruler measures precipitation in millimeters or inches. Compare your data with local weather reports!",
+                safety: "Be careful cutting the bottle - ask an adult for help.",
+                icon: "fa-cloud-rain"
+            },
+            {
+                id: 5,
+                title: "Recycled Paper",
+                category: "recycle",
+                difficulty: "medium",
+                time: "2 hours",
+                age: "8+",
+                materials: ["Scrap paper", "Blender", "Screen", "Tub", "Sponge", "Rolling pin"],
+                description: "Turn old newspapers and scrap paper into beautiful handmade paper.",
+                longDescription: "Learn the paper recycling process by making your own paper from scratch.",
+                steps: [
+                    "Tear paper into small pieces and soak in water",
+                    "Blend into pulp (add flowers or leaves for decoration!)",
+                    "Pour pulp into tub with water",
+                    "Dip screen and lift - pulp should cover screen",
+                    "Press with sponge to remove water",
+                    "Flip onto cloth and let dry for 24 hours"
+                ],
+                science: "Paper fibers break down in water and can be reformed. This is exactly how paper recycling plants work, just on a smaller scale!",
+                safety: "Adult help needed for blender and screen handling.",
+                icon: "fa-recycle"
+            },
+            {
+                id: 6,
+                title: "Static Electricity Butterfly",
+                category: "energy",
+                difficulty: "easy",
+                time: "20 min",
+                age: "5+",
+                materials: ["Balloon", "Tissue paper", "Scissors", "Wool sweater"],
+                description: "Make butterfly wings move without touching them!",
+                longDescription: "Explore the magic of static electricity by making a tissue paper butterfly come to life.",
+                steps: [
+                    "Cut a butterfly shape from tissue paper",
+                    "Place it on a table",
+                    "Inflate a balloon and rub it on wool",
+                    "Hold the balloon near the butterfly",
+                    "Watch the wings lift and move!"
+                ],
+                science: "Rubbing the balloon transfers electrons, giving it a negative charge. The neutral butterfly is attracted to the charged balloon, just like lightning forms in storms!",
+                safety: "No safety concerns - just fun!",
+                icon: "fa-bolt"
+            },
+            {
+                id: 7,
+                title: "Soil Layers Jar",
+                category: "soil",
+                difficulty: "easy",
+                time: "30 min",
+                age: "6+",
+                materials: ["Mason jar", "Soil from garden", "Water", "Ruler"],
+                description: "Discover what's really in the soil beneath your feet.",
+                longDescription: "Separate soil into its different components and learn about soil composition.",
+                steps: [
+                    "Fill jar 1/3 with soil",
+                    "Fill rest with water, leave air space",
+                    "Shake vigorously",
+                    "Let settle for 24 hours",
+                    "Observe the layers: clay, silt, sand, organic matter"
+                ],
+                science: "Heavier particles (sand) sink first, then silt, then clay. Organic matter floats. Different plants need different soil types!",
+                safety: "Wash hands after handling soil.",
+                icon: "fa-mountain"
+            },
+            {
+                id: 8,
+                title: "Ocean Acidification",
+                category: "water",
+                difficulty: "medium",
+                time: "40 min",
+                age: "10+",
+                materials: ["2 glasses", "Water", "Straw", "pH paper", "Vinegar", "Shells"],
+                description: "See how CO2 affects our oceans and sea life.",
+                longDescription: "Model the process of ocean acidification and its impact on shell-forming animals.",
+                steps: [
+                    "Fill both glasses with water",
+                    "Add vinegar to one glass (acidic ocean)",
+                    "Use straw to blow bubbles into both glasses (add CO2)",
+                    "Test pH with paper",
+                    "Add shells and observe over 24 hours"
+                ],
+                science: "CO2 dissolves in water to form carbonic acid. This same process happens in oceans, making it harder for animals to build shells.",
+                safety: "Vinegar is safe but avoid eyes.",
+                icon: "fa-fish"
+            }
+        ];
+
+        // DOM Elements
+        const experimentsGrid = document.getElementById('experimentsGrid');
+        const backToTop = document.getElementById('backToTop');
+        const modal = document.getElementById('experimentModal');
+
+        // Render experiments
+        function renderExperiments(category = 'all') {
+            const filtered = category === 'all' 
+                ? experiments 
+                : experiments.filter(e => e.category === category);
+
+            experimentsGrid.innerHTML = filtered.map(exp => `
+                <div class="experiment-card" onclick="showExperiment(${exp.id})">
+                    <div class="experiment-image">
+                        <i class="fas ${exp.icon}"></i>
+                        <span class="difficulty-badge ${exp.difficulty}">${exp.difficulty}</span>
+                        <span class="time-badge"><i class="fas fa-clock"></i> ${exp.time}</span>
+                    </div>
+                    <div class="experiment-content">
+                        <span class="experiment-category">
+                            ${exp.category === 'water' ? '💧' : 
+                              exp.category === 'plants' ? '🌱' :
+                              exp.category === 'weather' ? '☁️' :
+                              exp.category === 'recycle' ? '♻️' :
+                              exp.category === 'energy' ? '⚡' :
+                              exp.category === 'soil' ? '⛰️' : '🔬'} 
+                            ${exp.category.charAt(0).toUpperCase() + exp.category.slice(1)}
+                        </span>
+                        <h3 class="experiment-title">${exp.title}</h3>
+                        <p class="experiment-description">${exp.description}</p>
+                        <div class="experiment-meta">
+                            <span class="meta-item"><i class="fas fa-hourglass"></i> ${exp.time}</span>
+                            <span class="meta-item"><i class="fas fa-child"></i> Ages ${exp.age}</span>
+                        </div>
+                        <div class="materials-preview">
+                            ${exp.materials.slice(0, 3).map(m => `
+                                <span class="material-tag">${m}</span>
+                            `).join('')}
+                            ${exp.materials.length > 3 ? '<span class="material-tag">+more</span>' : ''}
+                        </div>
+                        <button class="experiment-btn">
+                            <i class="fas fa-flask"></i> Start Experiment
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter experiments
+        window.filterExperiments = function(category) {
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.classList.remove('active');
+                if (card.textContent.toLowerCase().includes(category) || 
+                    (category === 'all' && card.textContent.includes('All'))) {
+                    card.classList.add('active');
+                }
+            });
+            renderExperiments(category);
+        };
+
+        // Show experiment details
+        window.showExperiment = function(id) {
+            const exp = experiments.find(e => e.id === id);
+            if (!exp) return;
+
+            document.getElementById('modalTitle').textContent = exp.title;
+            document.getElementById('modalSubtitle').textContent = `Ages ${exp.age} • ${exp.time} • ${exp.difficulty} difficulty`;
+            
+            document.getElementById('modalBody').innerHTML = `
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <i class="fas ${exp.icon}" style="font-size: 4rem; color: #4a90e2;"></i>
+                </div>
+                
+                <h3 style="color: #2d5a2d; margin-bottom: 1rem;">📋 Materials You'll Need</h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem;">
+                    ${exp.materials.map(m => `
+                        <span style="background: #f0f0f0; padding: 0.5rem 1rem; border-radius: 30px;">✓ ${m}</span>
+                    `).join('')}
+                </div>
+                
+                <h3 style="color: #2d5a2d; margin-bottom: 1rem;">📝 Step-by-Step Instructions</h3>
+                ${exp.steps.map((step, index) => `
+                    <div class="experiment-step">
+                        <div class="step-number">${index + 1}</div>
+                        <div class="step-content">
+                            <p>${step}</p>
+                        </div>
+                    </div>
+                `).join('')}
+                
+                <div class="science-explanation">
+                    <h4><i class="fas fa-lightbulb"></i> The Science Behind It</h4>
+                    <p>${exp.science}</p>
+                </div>
+                
+                <div style="background: #ffebee; padding: 1.5rem; border-radius: 40px; margin: 2rem 0;">
+                    <h4 style="color: #c62828; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <i class="fas fa-exclamation-triangle"></i> Safety Note
+                    </h4>
+                    <p style="color: #b71c1c;">${exp.safety}</p>
+                </div>
+                
+                <div class="log-entry">
+                    <h4><i class="fas fa-pen"></i> Your Experiment Log</h4>
+                    <div class="log-field">
+                        <label>Date:</label>
+                        <input type="date" id="logDate" value="${new Date().toISOString().split('T')[0]}">
+                    </div>
+                    <div class="log-field">
+                        <label>What happened?</label>
+                        <textarea id="logNotes" rows="3" placeholder="Write your observations..."></textarea>
+                    </div>
+                    <button class="save-log-btn" onclick="saveLog(${exp.id})">
+                        <i class="fas fa-save"></i> Save to My Lab Notebook
+                    </button>
+                </div>
+            `;
+
+            modal.classList.add('active');
+        };
+
+        // Close modal
+        window.closeModal = function() {
+            modal.classList.remove('active');
+        };
+
+        // Start experiment (from featured)
+        window.startExperiment = function(id) {
+            showExperiment(id);
+        };
+
+        // Play video
+        window.playVideo = function(id) {
+            alert(`🎬 Playing video tutorial! (Video ${id} would open here)`);
+        };
+
+        // Download worksheet
+        window.downloadWorksheet = function(type) {
+            const worksheets = {
+                observation: 'Observation_Log.pdf',
+                data: 'Data_Chart.pdf',
+                coloring: 'Lab_Coloring_Pages.pdf'
+            };
+            alert(`📥 Downloading ${worksheets[type]}... (PDF would download here)`);
+        };
+
+        // Save experiment log
+        window.saveLog = function(id) {
+            const exp = experiments.find(e => e.id === id);
+            const date = document.getElementById('logDate').value;
+            const notes = document.getElementById('logNotes').value;
+            
+            alert(`✅ Experiment log saved for "${exp.title}" on ${date}! Great job scientist!`);
+        };
+
+        // Back to top
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Close modal on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderExperiments();
+        });
+    </script>
+</body>
+</html>

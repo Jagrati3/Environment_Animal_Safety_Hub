@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adopt Pets | EcoLife – give a home, save a life</title>
+  <link rel="icon" type="image/png" href="/envirnoment-logo.png">
+  <meta name="description" content="Find your perfect furry companion. Browse adoptable pets and give them a loving forever home." />
+
+  <!-- Google Fonts & Font Awesome (inline) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- AOS animation library (lightweight) -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <style>
+    /* ----- GLOBAL VARIABLES (light/dark friendly) ----- */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary-color: #2ecc71; --primary-dark: #27ae60; --primary-rgb: 46, 204, 113;
+      --secondary-color: #3498db; --accent-color: #e67e22;
+      --bg-primary: #ffffff; --bg-secondary: #f8fafc; --bg-card: #ffffff;
+      --bg-input: #f1f5f9; --text-primary: #1e293b; --text-secondary: #475569;
+      --border-color: #e2e8f0; --bg-hover: #f1f5f9;
+    }
+    [data-theme="dark"] {
+      --bg-primary: #0f172a; --bg-secondary: #1e293b; --bg-card: #1e293b;
+      --bg-input: #334155; --text-primary: #f1f5f9; --text-secondary: #cbd5e1;
+      --border-color: #334155; --bg-hover: #2d3a4f;
+    }
+    html { font-size: 62.5%; scroll-behavior: smooth; }
+    body {
+      font-family: 'Poppins', sans-serif; font-size: 1.6rem; background: var(--bg-primary);
+      color: var(--text-primary); transition: background 0.3s, color 0.3s;
+      line-height: 1.5; overflow-x: hidden;
+    }
+    a { text-decoration: none; } ul { list-style: none; }
+    .section-container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; }
+
+    /* ----- NAVBAR (inline simulation) ----- */
+    #navbar-container { background: var(--bg-card); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
+    .navbar { display: flex; align-items: center; justify-content: space-between; max-width: 1400px; margin: 0 auto; padding: 1.5rem 2rem; }
+    .logo { font-size: 2.2rem; font-weight: 700; color: var(--primary-color); display: flex; align-items: center; gap: 0.8rem; }
+    .nav-links { display: flex; gap: 3rem; }
+    .nav-links a { color: var(--text-secondary); font-weight: 500; transition: color 0.2s; font-size: 1.6rem; }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary-color); }
+    .theme-toggle { background: none; border: none; color: var(--text-secondary); font-size: 2rem; cursor: pointer; }
+
+    /* ----- FOOTER (inline) ----- */
+    #footer-placeholder { background: var(--bg-secondary); border-top: 1px solid var(--border-color); padding: 4rem 2rem 2rem; margin-top: 6rem; }
+    .footer-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 3rem; }
+    .footer-col h4 { font-size: 1.8rem; margin-bottom: 2rem; color: var(--text-primary); }
+    .footer-col ul li { margin-bottom: 1rem; }
+    .footer-col ul li a { color: var(--text-secondary); font-size: 1.4rem; }
+    .footer-col ul li a:hover { color: var(--primary-color); }
+    .social-links { display: flex; gap: 1.5rem; margin-top: 1.5rem; }
+    .social-links a { color: var(--text-secondary); font-size: 2rem; }
+    .footer-bottom { text-align: center; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); color: var(--text-secondary); font-size: 1.4rem; }
+
+    /* ----- rest of the page styles (compacted but complete) ----- */
+    .adopt-hero { position: relative; min-height: 90vh; display: flex; align-items: center; padding: 8rem 2rem 6rem; background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%); overflow: hidden; }
+    .adopt-hero-bg { position: absolute; inset:0; z-index:0; }
+    .hero-shape { position: absolute; border-radius:50%; filter:blur(80px); opacity:0.2; animation:floatShape 20s infinite; }
+    .shape-1 { width:500px; height:500px; background:var(--primary-color); top:-150px; right:-100px; }
+    .shape-2 { width:400px; height:400px; background:var(--secondary-color); bottom:-100px; left:-50px; animation-delay:-5s; }
+    .shape-3 { width:300px; height:300px; background:var(--accent-color); top:30%; left:20%; animation-delay:-10s; }
+    @keyframes floatShape { 0%,100%{transform:translate(0,0) rotate(0deg);} 25%{transform:translate(30px,-30px) rotate(5deg);} 50%{transform:translate(-20px,20px) rotate(-5deg);} 75%{transform:translate(20px,-20px) rotate(3deg);} }
+    .floating-paw, .floating-heart { position:absolute; font-size:2.5rem; color:rgba(var(--primary-rgb),0.3); z-index:1; animation:float 6s infinite; }
+    .paw-1 { top:15%; left:10%; animation-delay:0s; font-size:3rem; transform:rotate(-15deg); }
+    .paw-2 { bottom:20%; right:15%; animation-delay:2s; font-size:4rem; transform:rotate(25deg); }
+    .heart-1 { top:25%; right:20%; animation-delay:3s; color:rgba(255,107,107,0.3); }
+    @keyframes float { 0%,100%{transform:translateY(0) rotate(0deg);} 50%{transform:translateY(-30px) rotate(10deg);} }
+    .adopt-hero-container { position:relative; z-index:2; max-width:1400px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
+    .hero-badge { display:inline-flex; align-items:center; gap:1rem; padding:1rem 2rem; background:rgba(var(--primary-rgb),0.15); backdrop-filter:blur(10px); border:1px solid rgba(var(--primary-rgb),0.3); border-radius:50px; font-size:1.5rem; font-weight:600; color:var(--primary-color); margin-bottom:2rem; }
+    .adopt-hero-content h1 { font-size:5.2rem; font-weight:800; line-height:1.2; margin-bottom:2rem; color:var(--text-primary); }
+    .gradient-text { background:linear-gradient(135deg,var(--primary-color),var(--secondary-color)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .hero-stats { display:flex; gap:3rem; margin-bottom:3rem; background:rgba(255,255,255,0.1); backdrop-filter:blur(10px); padding:2rem 3rem; border-radius:60px; border:1px solid rgba(255,255,255,0.2); }
+    .hero-stat { text-align:center; flex:1; border-right:1px solid rgba(255,255,255,0.2); padding-right:2rem; }
+    .hero-stat:last-child { border-right:none; }
+    .hero-stat-number { display:block; font-size:3.6rem; font-weight:800; color:var(--primary-color); }
+    .stat-label { font-size:1.4rem; color:var(--text-secondary); }
+    .hero-cta { display:flex; gap:1.6rem; flex-wrap:wrap; }
+    .btn { display:inline-flex; align-items:center; gap:1rem; padding:1.4rem 3rem; border-radius:50px; font-size:1.6rem; font-weight:600; cursor:pointer; border:none; transition:all 0.3s; font-family:inherit; }
+    .btn-primary { background:var(--primary-color); color:white; box-shadow:0 10px 20px rgba(var(--primary-rgb),0.3); }
+    .btn-primary:hover { background:var(--primary-dark); transform:translateY(-3px); }
+    .btn-secondary { background:rgba(255,255,255,0.15); backdrop-filter:blur(10px); color:var(--text-primary); border:1px solid rgba(255,255,255,0.3); }
+    .hero-image-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:2rem; }
+    .hero-img { border-radius:20px; overflow:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.2); transition:0.3s; height:200px; }
+    .hero-img-1 { grid-column:1/-1; height:250px; }
+    .hero-img img { width:100%; height:100%; object-fit:cover; }
+    .img-badge { position:absolute; bottom:1rem; right:1rem; background:#2ed573; color:white; padding:0.6rem 1.2rem; border-radius:50px; font-size:1.2rem; display:flex; gap:0.5rem; }
+    .wave-divider { position:absolute; bottom:0; left:0; width:100%; line-height:0; }
+    .wave-divider svg { width:100%; fill:white; }
+    [data-theme="dark"] .wave-divider path { fill:#1e293b; }
+
+    /* quick search */
+    .quick-search-section { padding:4rem 2rem; background:var(--bg-primary); }
+    .quick-search-box { background:var(--bg-card); border-radius:30px; padding:3rem; box-shadow:0 15px 40px rgba(0,0,0,0.1); border:1px solid var(--border-color); }
+    .search-filters { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:2rem; }
+    .filter-group { display:flex; flex-direction:column; gap:0.8rem; }
+    .filter-group label { font-size:1.4rem; color:var(--text-secondary); }
+    .filter-group select, .filter-group input { padding:1.2rem 1.6rem; border:2px solid var(--border-color); border-radius:12px; background:var(--bg-input); color:var(--text-primary); }
+
+    /* categories */
+    .pet-categories-section { padding:6rem 2rem; background:var(--bg-secondary); }
+    .section-header { text-align:center; margin-bottom:5rem; }
+    .section-tag { display:inline-flex; gap:0.8rem; background:rgba(var(--primary-rgb),0.1); padding:0.8rem 1.6rem; border-radius:50px; color:var(--primary-color); margin-bottom:1.5rem; }
+    .section-title { font-size:4rem; font-weight:700; margin-bottom:1.5rem; color:var(--text-primary); }
+    .categories-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:3rem; }
+    .category-card { background:var(--bg-card); padding:3rem 2rem; border-radius:20px; text-align:center; cursor:pointer; border:1px solid var(--border-color); transition:0.3s; }
+    .category-icon img { width:80px; height:80px; object-fit:contain; margin-bottom:1.5rem; }
+    .category-count { color:var(--primary-color); font-weight:600; }
+
+    /* featured pets */
+    .featured-pets-section { padding:8rem 2rem; background:var(--bg-primary); }
+    .filter-tabs { display:flex; justify-content:center; gap:1rem; margin-bottom:4rem; flex-wrap:wrap; }
+    .filter-tab { padding:1.2rem 2.8rem; background:var(--bg-card); border:none; border-radius:50px; font-size:1.6rem; color:var(--text-secondary); cursor:pointer; }
+    .filter-tab.active { background:var(--primary-color); color:white; }
+    .pets-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:3rem; }
+    .pet-card { background:var(--bg-card); border-radius:20px; overflow:hidden; border:1px solid var(--border-color); transition:0.3s; }
+    .pet-image { position:relative; height:280px; overflow:hidden; }
+    .pet-image img { width:100%; height:100%; object-fit:cover; }
+    .pet-badges { position:absolute; top:1.5rem; left:1.5rem; display:flex; gap:0.8rem; }
+    .badge { padding:0.4rem 1rem; border-radius:50px; font-size:1.2rem; color:white; }
+    .badge-new { background:#1e90ff; }
+    .favorite-btn { position:absolute; top:1.5rem; right:1.5rem; background:white; border:none; width:4rem; height:4rem; border-radius:50%; color:#ff4757; font-size:2rem; cursor:pointer; }
+    .pet-info { padding:2rem; }
+    .pet-header { display:flex; justify-content:space-between; }
+    .pet-gender.male { color:#1e90ff; }
+    .pet-details { display:flex; gap:1.5rem; margin:1rem 0; color:var(--text-secondary); }
+    .pet-status.available i { color:#2ed573; }
+    .adopt-btn { color:var(--primary-color); font-weight:600; display:flex; align-items:center; gap:0.5rem; }
+
+    /* how it works */
+    .how-it-works-section { background:var(--bg-secondary); padding:8rem 2rem; }
+    .process-timeline { max-width:800px; margin:0 auto; }
+    .process-step { display:flex; gap:3rem; background:var(--bg-card); padding:3rem; border-radius:20px; margin-bottom:2rem; border:1px solid var(--border-color); }
+    .step-icon { width:6rem; height:6rem; background:rgba(var(--primary-rgb),0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2.5rem; color:var(--primary-color); }
+
+    /* adoption form */
+    .adoption-form-section { padding:8rem 2rem; }
+    .adoption-form-content { display:grid; grid-template-columns:0.8fr 1.2fr; gap:5rem; }
+    .form-info { background:var(--bg-card); padding:4rem; border-radius:30px; border:1px solid var(--border-color); position:sticky; top:2rem; }
+    .adoption-form-wrapper { background:var(--bg-card); padding:4rem; border-radius:30px; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-bottom:2rem; }
+    .form-group { margin-bottom:2rem; }
+    label { font-size:1.4rem; color:var(--text-secondary); margin-bottom:0.5rem; display:block; }
+    input, select, textarea { width:100%; padding:1.2rem 1.6rem; border:2px solid var(--border-color); border-radius:12px; background:var(--bg-input); color:var(--text-primary); }
+    .radio-group { display:flex; gap:2rem; }
+    .checkbox-item { display:flex; align-items:center; gap:1rem; }
+    .btn-block { width:100%; }
+
+    /* footer placeholder already defined */
+
+    /* modal and back to top */
+    .pet-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .pet-modal.show { display:flex; }
+    .pet-modal-content { background:var(--bg-card); border-radius:30px; max-width:1000px; width:90%; max-height:90vh; overflow-y:auto; padding:2rem; }
+    .back-to-top { position:fixed; bottom:3rem; right:3rem; background:var(--primary-color); color:white; width:5rem; height:5rem; border-radius:50%; border:none; cursor:pointer; opacity:0; transition:0.3s; }
+    .back-to-top.show { opacity:1; }
+
+    /* responsive */
+    @media (max-width:992px) { .adopt-hero-container { grid-template-columns:1fr; } .adoption-form-content { grid-template-columns:1fr; } .form-info { position:static; } }
+    @media (max-width:768px) { html { font-size:55%; } }
+  </style>
+  <!-- extra light theme fixes -->
+  <style>
+    [data-theme="light"] .hero-stats { background:rgba(255,255,255,0.85); color:#333; }
+    [data-theme="light"] .adopt-hero h1 { color:#1a1a1a !important; }
+    [data-theme="light"] .stat-label { color:#4b5563; }
+  </style>
+</head>
+<body>
+  <!-- Navbar inline -->
+  <div id="navbar-container">
+    <nav class="navbar">
+      <div class="logo"><i class="fa-solid fa-leaf"></i> EcoLife</div>
+      <div class="nav-links">
+        <a href="#" class="active">Home</a>
+        <a href="#">Adopt</a>
+        <a href="#">Safety</a>
+        <a href="#">Contact</a>
+      </div>
+      <button class="theme-toggle" id="themeToggle"><i class="fa-solid fa-moon"></i></button>
+    </nav>
+  </div>
+
+  <!-- Hero section (truncated for brevity, but fully functional) -->
+  <section class="adopt-hero">
+    <div class="adopt-hero-bg">
+      <div class="hero-shape shape-1"></div><div class="hero-shape shape-2"></div><div class="hero-shape shape-3"></div>
+      <div class="floating-paw paw-1"><i class="fa-solid fa-paw"></i></div>
+      <div class="floating-paw paw-2"><i class="fa-solid fa-paw"></i></div>
+      <div class="floating-heart heart-1"><i class="fa-solid fa-heart"></i></div>
+    </div>
+    <div class="adopt-hero-container">
+      <div class="adopt-hero-content" data-aos="fade-right">
+        <span class="hero-badge"><i class="fa-solid fa-heart-pulse"></i> Save a Life Today</span>
+        <h1>Find Your <span class="gradient-text">Perfect</span> Furry Companion</h1>
+        <p>Every pet deserves a loving home. Browse our adorable animals waiting for their forever families.</p>
+        <div class="hero-stats">
+          <div class="hero-stat"><span class="hero-stat-number">500</span><span class="stat-label">Pets Adopted</span></div>
+          <div class="hero-stat"><span class="hero-stat-number">200</span><span class="stat-label">Available</span></div>
+          <div class="hero-stat"><span class="hero-stat-number">50</span><span class="stat-label">Shelters</span></div>
+        </div>
+        <div class="hero-cta">
+          <a href="#pets" class="btn btn-primary"><i class="fa-solid fa-paw"></i> Browse Pets</a>
+          <a href="#how-it-works" class="btn btn-secondary"><i class="fa-solid fa-circle-info"></i> How It Works</a>
+        </div>
+      </div>
+      <div class="adopt-hero-images">
+        <div class="hero-image-grid">
+          <div class="hero-img hero-img-1"><img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400" alt="dog"><div class="img-badge"><i class="fa-solid fa-heart"></i> Adopted!</div></div>
+          <div class="hero-img hero-img-2"><img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400" alt="cat"></div>
+          <div class="hero-img hero-img-3"><img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=400" alt="puppy"><div class="img-badge available"><i class="fa-solid fa-clock"></i> Available</div></div>
+          <div class="hero-img hero-img-4"><img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=400" alt="kitten"></div>
+        </div>
+      </div>
+    </div>
+    <div class="wave-divider"><svg viewBox="0 0 1440 120"><path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="white"/></svg></div>
+  </section>
+
+  <!-- Quick search -->
+  <section class="quick-search-section">
+    <div class="section-container">
+      <div class="quick-search-box">
+        <h3><i class="fa-solid fa-magnifying-glass"></i> Find Your Perfect Match</h3>
+        <div class="search-filters">
+          <div class="filter-group"><label>Pet Type</label><select id="petType"><option>All Types</option><option>Dogs</option><option>Cats</option></select></div>
+          <div class="filter-group"><label>Age</label><select><option>Any Age</option></select></div>
+          <div class="filter-group"><label>Size</label><select><option>Any Size</option></select></div>
+          <button class="btn btn-primary search-btn" onclick="alert('Search demo')"><i class="fa-solid fa-search"></i> Search</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- categories -->
+  <section class="pet-categories-section">
+    <div class="section-header"><span class="section-tag"><i class="fa-solid fa-paw"></i> Browse by Category</span><h2 class="section-title">What Type of Pet Are You Looking For?</h2></div>
+    <div class="categories-grid">
+      <div class="category-card" onclick="filterBy('dog')"><div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="dog"></div><h3>Dogs</h3><span class="category-count">85 Available</span></div>
+      <div class="category-card" onclick="filterBy('cat')"><div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/1864/1864514.png" alt="cat"></div><h3>Cats</h3><span class="category-count">62 Available</span></div>
+      <div class="category-card" onclick="filterBy('bird')"><div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/3069/3069172.png" alt="bird"></div><h3>Birds</h3><span class="category-count">28 Available</span></div>
+      <div class="category-card" onclick="filterBy('rabbit')"><div class="category-icon"><img src="https://cdn-icons-png.flaticon.com/512/3069/3069186.png" alt="rabbit"></div><h3>Rabbits</h3><span class="category-count">15 Available</span></div>
+    </div>
+  </section>
+
+  <!-- featured pets (just a couple cards for demo) -->
+  <section id="pets" class="featured-pets-section">
+    <div class="section-header"><span class="section-tag"><i class="fa-solid fa-star"></i> Featured Pets</span><h2 class="section-title">Meet Our Adorable Friends</h2></div>
+    <div class="filter-tabs"><button class="filter-tab active">All Pets</button><button class="filter-tab">Dogs</button><button class="filter-tab">Cats</button></div>
+    <div class="pets-grid">
+      <div class="pet-card" data-category="dog">
+        <div class="pet-image"><img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400" alt="Max"><div class="pet-badges"><span class="badge badge-new">New</span></div><button class="favorite-btn" onclick="toggleFavorite(this)"><i class="fa-regular fa-heart"></i></button></div>
+        <div class="pet-info"><div class="pet-header"><h3>Max</h3><span class="pet-gender male"><i class="fa-solid fa-mars"></i></span></div><p class="pet-breed">Golden Retriever</p><div class="pet-details"><span><i class="fa-solid fa-cake-candles"></i> 2 Years</span><span><i class="fa-solid fa-location-dot"></i> Delhi</span></div><div class="pet-footer"><div class="pet-status available"><i class="fa-solid fa-circle"></i> Available</div><a href="#adopt-form" class="adopt-btn">Adopt Me <i class="fa-solid fa-arrow-right"></i></a></div></div>
+      </div>
+      <div class="pet-card" data-category="cat">
+        <div class="pet-image"><img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400" alt="Luna"><div class="pet-badges"><span class="badge badge-urgent">Urgent</span></div><button class="favorite-btn" onclick="toggleFavorite(this)"><i class="fa-regular fa-heart"></i></button></div>
+        <div class="pet-info"><div class="pet-header"><h3>Luna</h3><span class="pet-gender female"><i class="fa-solid fa-venus"></i></span></div><p class="pet-breed">Persian Cat</p><div class="pet-details"><span><i class="fa-solid fa-cake-candles"></i> 1 Year</span><span><i class="fa-solid fa-location-dot"></i> Mumbai</span></div><div class="pet-footer"><div class="pet-status available"><i class="fa-solid fa-circle"></i> Available</div><a href="#adopt-form" class="adopt-btn">Adopt Me <i class="fa-solid fa-arrow-right"></i></a></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works (short) -->
+  <section id="how-it-works" class="how-it-works-section">
+    <div class="section-header"><span class="section-tag"><i class="fa-solid fa-lightbulb"></i> How It Works</span><h2 class="section-title">Adoption Process Made Simple</h2></div>
+    <div class="process-timeline">
+      <div class="process-step"><div class="step-icon"><i class="fa-solid fa-magnifying-glass"></i></div><div><h3>Browse & Choose</h3><p>Find your perfect companion.</p></div></div>
+      <div class="process-step"><div class="step-icon"><i class="fa-solid fa-file-pen"></i></div><div><h3>Fill Application</h3><p>Simple form, 5 minutes.</p></div></div>
+    </div>
+  </section>
+
+  <!-- Adoption form (short version) -->
+  <section id="adopt-form" class="adoption-form-section">
+    <div class="section-container">
+      <div class="adoption-form-content">
+        <div class="form-info"><span class="section-tag"><i class="fa-solid fa-file-pen"></i> Apply Now</span><h2 class="section-title">Ready to Adopt?</h2><p>Fill out our adoption application.</p><div class="contact-info-box"><h4>Need help?</h4><a href="tel:+911234567890"><i class="fa-solid fa-phone"></i> +91 123 456 7890</a></div></div>
+        <div class="adoption-form-wrapper">
+          <form id="adoptionForm" onsubmit="event.preventDefault(); alert('Application submitted (demo)');">
+            <h3><i class="fa-solid fa-paw"></i> Adoption Application</h3>
+            <div class="form-row"><div class="form-group"><label>First Name *</label><input type="text" required></div><div class="form-group"><label>Last Name *</label><input type="text" required></div></div>
+            <div class="form-row"><div class="form-group"><label>Email *</label><input type="email" required></div><div class="form-group"><label>Phone *</label><input type="tel"></div></div>
+            <div class="form-group"><label>Interested pet (optional)</label><select><option>Max (Golden Retriever)</option><option>Luna (Persian Cat)</option></select></div>
+            <button type="submit" class="btn btn-primary btn-block">Submit Application</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer placeholder inline -->
+  <div id="footer-placeholder">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>EcoLife</h4><ul><li><a href="#">About us</a></li><li><a href="#">Contact</a></li></ul></div>
+      <div class="footer-col"><h4>Adopt</h4><ul><li><a href="#">Dogs</a></li><li><a href="#">Cats</a></li><li><a href="#">Other pets</a></li></ul></div>
+      <div class="footer-col"><h4>Support</h4><ul><li><a href="#">FAQ</a></li><li><a href="#">Donate</a></li></ul></div>
+      <div class="footer-col"><h4>Follow us</h4><div class="social-links"><a href="#"><i class="fa-brands fa-facebook"></i></a><a href="#"><i class="fa-brands fa-instagram"></i></a></div></div>
+    </div>
+    <div class="footer-bottom"><p>© 2025 EcoLife. All rights reserved.</p></div>
+  </div>
+
+  <!-- Back to top -->
+  <button class="back-to-top" id="backToTop"><i class="fa-solid fa-arrow-up"></i></button>
+
+  <!-- Modal (empty but present) -->
+  <div class="pet-modal" id="petModal"><div class="pet-modal-content"><button class="modal-close" onclick="document.getElementById('petModal').classList.remove('show')">✕</button> <p>Pet details would appear here.</p></div></div>
+
+  <!-- AOS script -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <!-- all inline JavaScript -->
+  <script>
+    (function() {
+      AOS.init({ duration: 800, once: true });
+
+      // theme toggle
+      const themeToggle = document.getElementById('themeToggle');
+      const html = document.documentElement;
+      if (localStorage.getItem('theme') === 'dark') html.setAttribute('data-theme', 'dark');
+      themeToggle.addEventListener('click', () => {
+        let theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        themeToggle.innerHTML = theme === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+      });
+
+      // back to top
+      const toTop = document.getElementById('backToTop');
+      window.addEventListener('scroll', () => toTop.classList.toggle('show', window.scrollY > 300));
+      toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+      // favorite toggle
+      window.toggleFavorite = (btn) => { btn.classList.toggle('active'); btn.innerHTML = btn.classList.contains('active') ? '<i class="fa-solid fa-heart"></i>' : '<i class="fa-regular fa-heart"></i>'; };
+
+      // filter by category (demo)
+      window.filterBy = (cat) => alert('Filter by ' + cat + ' (demo)');
+
+      // modal open demo (attached to some "view details" if needed)
+      window.openPetModal = () => document.getElementById('petModal').classList.add('show');
+    })();
+  </script>
+</body>
+</html>

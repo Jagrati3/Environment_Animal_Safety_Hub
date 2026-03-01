@@ -1,0 +1,336 @@
+        // DIY Projects Data
+        const projects = [
+            {
+                id: 1,
+                title: "Plastic Bottle Bird Feeder",
+                description: "Turn empty plastic bottles into a cozy feeding station for your feathered friends!",
+                category: "plastic",
+                difficulty: "easy",
+                time: "20 mins",
+                materials: ["Plastic bottle", "Wooden spoons", "String", "Bird seed"],
+                steps: [
+                    "Clean the plastic bottle thoroughly and remove the label",
+                    "Cut two holes opposite each other near the bottom for spoons",
+                    "Make smaller holes above for the seed to dispense",
+                    "Insert wooden spoons through the holes",
+                    "Fill with bird seed and hang from a tree branch"
+                ],
+                icon: "fa-tree"
+            },
+            {
+                id: 2,
+                title: "Newspaper Seed Pots",
+                description: "Create biodegradable seed starters from old newspapers - plant them directly in soil!",
+                category: "paper",
+                difficulty: "easy",
+                time: "15 mins",
+                materials: ["Old newspapers", "A small glass or jar", "Potting soil", "Seeds"],
+                steps: [
+                    "Cut newspaper into long strips",
+                    "Wrap around a glass jar to form a pot shape",
+                    "Fold the bottom edges to create a base",
+                    "Fill with potting soil and plant your seeds",
+                    "Water gently and watch them grow!"
+                ],
+                icon: "fa-seedling"
+            },
+            {
+                id: 3,
+                title: "Tin Can Wind Chimes",
+                description: "Make musical wind chimes from recycled tin cans and bottle caps.",
+                category: "metal",
+                difficulty: "medium",
+                time: "45 mins",
+                materials: ["Tin cans (various sizes)", "Bottle caps", "String", "A stick", "Paint"],
+                steps: [
+                    "Clean cans thoroughly and remove sharp edges with sandpaper",
+                    "Paint cans in bright colors and let dry",
+                    "Punch holes in bottom of cans and bottle caps",
+                    "String them at different lengths from the stick",
+                    "Hang outside and enjoy the music!"
+                ],
+                icon: "fa-music"
+            },
+            {
+                id: 4,
+                title: "T-Shirt Tote Bag",
+                description: "Transform old t-shirts into reusable shopping bags - no sewing required!",
+                category: "fabric",
+                difficulty: "easy",
+                time: "30 mins",
+                materials: ["Old t-shirt", "Scissors", "Ruler", "Marker"],
+                steps: [
+                    "Lay t-shirt flat and cut off sleeves",
+                    "Cut a wider neck opening",
+                    "Turn shirt inside out and cut fringe along bottom",
+                    "Tie fringe strips together in double knots",
+                    "Turn right side out - your bag is ready!"
+                ],
+                icon: "fa-bag-shopping"
+            },
+            {
+                id: 5,
+                title: "Glass Jar Lanterns",
+                description: "Create magical lanterns from glass jars for outdoor evening decor.",
+                category: "glass",
+                difficulty: "medium",
+                time: "40 mins",
+                materials: ["Glass jars", "Tissue paper", "Mod podge", "Tea lights", "String"],
+                steps: [
+                    "Clean jars and remove labels",
+                    "Cut tissue paper into small pieces",
+                    "Apply mod podge to jar and stick paper pieces",
+                    "Add another layer of mod podge on top",
+                    "Let dry, add tea light, and hang with string"
+                ],
+                icon: "fa-lightbulb"
+            },
+            {
+                id: 6,
+                title: "CD Case Greenhouse",
+                description: "Build a mini greenhouse for seedlings using old CD cases.",
+                category: "plastic",
+                difficulty: "hard",
+                time: "60 mins",
+                materials: ["Old CD cases (5-6)", "Strong tape", "Soil", "Seeds"],
+                steps: [
+                    "Collect 5-6 clear CD cases",
+                    "Arrange them to form a box shape",
+                    "Tape edges securely to create structure",
+                    "Leave one side open for access",
+                    "Fill with soil, plant seeds, and close the lid"
+                ],
+                icon: "fa-sun"
+            },
+            {
+                id: 7,
+                title: "Cardboard Birdhouse",
+                description: "Build a cozy birdhouse from cardboard boxes and natural materials.",
+                category: "paper",
+                difficulty: "medium",
+                time: "50 mins",
+                materials: ["Cardboard box", "Twigs", "Leaves", "Non-toxic glue", "String"],
+                steps: [
+                    "Cut a round entrance hole in cardboard box",
+                    "Cover box with twigs and leaves using glue",
+                    "Create a small perch below entrance",
+                    "Waterproof with eco-friendly sealant",
+                    "Hang securely in a sheltered spot"
+                ],
+                icon: "fa-dove"
+            },
+            {
+                id: 8,
+                title: "Bottle Cap Magnets",
+                description: "Make colorful fridge magnets from plastic bottle caps.",
+                category: "plastic",
+                difficulty: "easy",
+                time: "15 mins",
+                materials: ["Plastic bottle caps", "Small magnets", "Glue", "Paint", "Googly eyes"],
+                steps: [
+                    "Clean and dry bottle caps thoroughly",
+                    "Paint caps in fun colors",
+                    "Glue magnet to back of cap",
+                    "Decorate front with googly eyes or drawings",
+                    "Let dry completely before using"
+                ],
+                icon: "fa-magnet"
+            },
+            {
+                id: 9,
+                title: "Egg Carton Caterpillar",
+                description: "Create a cute caterpillar from recycled egg cartons - fun for kids!",
+                category: "paper",
+                difficulty: "easy",
+                time: "25 mins",
+                materials: ["Egg carton", "Paint", "Pipe cleaners", "Googly eyes", "Glue"],
+                steps: [
+                    "Cut egg carton into individual cups",
+                    "Paint each cup in different colors",
+                    "Glue cups together in a line",
+                    "Add pipe cleaner antennae",
+                    "Attach googly eyes to front cup"
+                ],
+                icon: "fa-bug"
+            }
+        ];
+
+        // DOM Elements
+        const projectsGrid = document.getElementById('projectsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const materialTags = document.querySelectorAll('.material-tag');
+        const backToTop = document.getElementById('backToTop');
+        const modal = document.getElementById('projectModal');
+        const modalBody = document.getElementById('modalBody');
+
+        // State
+        let currentFilter = 'all';
+        let currentMaterial = 'all';
+        let searchTerm = '';
+
+        // Initialize
+        function init() {
+            updateStats();
+            renderProjects();
+            setupEventListeners();
+        }
+
+        // Update stats
+        function updateStats() {
+            document.getElementById('total-projects').textContent = projects.length;
+            document.getElementById('easy-projects').textContent = projects.filter(p => p.difficulty === 'easy').length;
+            document.getElementById('medium-projects').textContent = projects.filter(p => p.difficulty === 'medium').length;
+            document.getElementById('hard-projects').textContent = projects.filter(p => p.difficulty === 'hard').length;
+        }
+
+        // Render projects
+        function renderProjects() {
+            const filtered = projects.filter(project => {
+                const matchesFilter = currentFilter === 'all' || project.difficulty === currentFilter;
+                const matchesMaterial = currentMaterial === 'all' || project.category === currentMaterial;
+                const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                     project.description.toLowerCase().includes(searchTerm.toLowerCase());
+                return matchesFilter && matchesMaterial && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                projectsGrid.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <p>No projects found. Try adjusting your filters!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            projectsGrid.innerHTML = filtered.map(project => `
+                <div class="project-card" data-id="${project.id}">
+                    <span class="project-badge">${project.time}</span>
+                    <div class="project-image">
+                        <i class="fas ${project.icon}"></i>
+                    </div>
+                    <div class="project-content">
+                        <span class="project-category">${project.category.toUpperCase()}</span>
+                        <h3 class="project-title">${project.title}</h3>
+                        <p class="project-description">${project.description}</p>
+                        <div class="project-meta">
+                            <span class="meta-item">
+                                <i class="fas fa-clock"></i> ${project.time}
+                            </span>
+                            <span class="meta-item">
+                                <i class="fas fa-signal"></i> ${project.difficulty}
+                            </span>
+                        </div>
+                        <div class="materials-list">
+                            ${project.materials.slice(0, 3).map(m => `
+                                <span class="material-item">${m}</span>
+                            `).join('')}
+                            ${project.materials.length > 3 ? '<span class="material-item">+more</span>' : ''}
+                        </div>
+                        <button class="project-btn" onclick="showProjectDetails(${project.id})">
+                            <i class="fas fa-tools"></i>
+                            View Instructions
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Show project details in modal
+        window.showProjectDetails = function(id) {
+            const project = projects.find(p => p.id === id);
+            if (!project) return;
+
+            modalBody.innerHTML = `
+                <h2 class="modal-title">${project.title}</h2>
+                <div style="margin-bottom: 2rem;">
+                    <span class="project-category">${project.category.toUpperCase()}</span>
+                    <span style="margin-left: 1rem;"><i class="fas fa-clock"></i> ${project.time}</span>
+                    <span style="margin-left: 1rem;"><i class="fas fa-signal"></i> ${project.difficulty}</span>
+                </div>
+                
+                <h3 style="color: #2e7d32; margin-bottom: 1rem;">📦 Materials Needed:</h3>
+                <ul style="margin-bottom: 2rem;">
+                    ${project.materials.map(m => `<li style="margin-bottom: 0.5rem;">✓ ${m}</li>`).join('')}
+                </ul>
+                
+                <h3 style="color: #2e7d32; margin-bottom: 1rem;">📝 Step-by-Step Instructions:</h3>
+                <ol class="steps-list">
+                    ${project.steps.map((step, index) => `
+                        <li>
+                            <span class="step-number">${index + 1}</span>
+                            <span>${step}</span>
+                        </li>
+                    `).join('')}
+                </ol>
+                
+                <div style="background: #e8f5e9; padding: 1.5rem; border-radius: 20px; margin-top: 2rem;">
+                    <i class="fas fa-leaf" style="color: #2e7d32; margin-right: 0.5rem;"></i>
+                    <strong>Eco Tip:</strong> Take photos of your creation and share them with us!
+                </div>
+            `;
+
+            modal.classList.add('active');
+        };
+
+        // Close modal
+        window.closeModal = function() {
+            modal.classList.remove('active');
+        };
+
+        // Filter by difficulty
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                renderProjects();
+            });
+        });
+
+        // Filter by material
+        materialTags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                materialTags.forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                currentMaterial = tag.dataset.material;
+                renderProjects();
+            });
+        });
+
+        // Search functionality
+        searchInput.addEventListener('input', (e) => {
+            searchTerm = e.target.value;
+            renderProjects();
+        });
+
+        // Back to top
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Escape key to close modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', init);

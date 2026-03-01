@@ -2,40 +2,675 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>EcoSphere | EcoLife</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoSphere · green revolution</title>
   
+  <!-- Fonts + Icons (optimised) -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <link rel="stylesheet" href="../../css/global/utilities.css" />
     <link rel="stylesheet" href="../../css/components/navbar.css" />
     
     <link rel="stylesheet" href="../../css/pages/community.css">
 </head>
+  <style>
+    /* === DESIGN SYSTEM — fresh, airy, premium === */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-<body class="auth-body">
+    :root {
+      --primary: #2ecc71;
+      --primary-dark: #27ae60;
+      --primary-glow: rgba(46, 204, 113, 0.5);
+      --secondary: #3498db;
+      --accent: #e74c3c;
+      --sun: #f1c40f;
+      --bg-deep: #0c2b0c;
+      --bg-card: rgba(15, 40, 15, 0.6);
+      --text-bright: #ffffff;
+      --text-soft: #e2f0e2;
+      --glass-edge: rgba(46, 204, 113, 0.2);
+      --shadow-heavy: 0 30px 60px rgba(0, 20, 0, 0.7);
+      --transition-spring: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    }
 
-  <div id="cursor-container"></div>
-<script src="../../js/../../components/component-loader.js"></script>
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 30% 10%, #1b4e1b, #0a240a);
+      overflow-x: hidden;
+      position: relative;
+    }
 
-  <div id="navbar-container"></div>
+    /* ===== LIVING BACKGROUND ===== */
+    .living-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
 
-  <!-- Animated eco background -->
-  <div id="eco-bg"></div>
+    .living-bg::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(circle at 20% 30%, rgba(70, 200, 100, 0.12) 2px, transparent 2px),
+        radial-gradient(circle at 80% 70%, rgba(52, 152, 219, 0.12) 2px, transparent 2px),
+        radial-gradient(circle at 40% 80%, rgba(241, 196, 15, 0.1) 3px, transparent 3px);
+      background-size: 70px 70px, 90px 90px, 120px 120px;
+      animation: drift 60s infinite linear;
+    }
 
-  <!-- Login Card -->
-  <div class="auth-card">
-    <div class="emoji">🌱</div>
-    <h2>Welcome to EcoSphere</h2>
+    @keyframes drift {
+      0% { background-position: 0 0, 20px 20px, -30px -30px; }
+      100% { background-position: 200px 200px, 300px 150px, 150px 300px; }
+    }
 
-    <input type="text" placeholder="Username or Email" class="input" required>
-    <input type="password" placeholder="Password" class="input" required>
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      mix-blend-mode: screen;
+      opacity: 0.3;
+      animation: levitate 22s infinite alternate ease-in-out;
+    }
 
-    <button onclick="login()" class="btn">Log In</button>
+    .orb-1 { width: 600px; height: 600px; background: #2ecc71; top: -200px; right: -200px; }
+    .orb-2 { width: 550px; height: 550px; background: #3498db; bottom: -250px; left: -150px; animation-duration: 28s; }
+    .orb-3 { width: 400px; height: 400px; background: #f1c40f; top: 35%; left: 20%; filter: blur(120px); opacity: 0.2; }
 
-    <a class="forgot" href="otp.html">Forgot password?</a>
+    @keyframes levitate {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(80px, -60px) scale(1.3); }
+    }
+
+    .floating-emoji {
+      position: absolute;
+      font-size: 4rem;
+      opacity: 0.12;
+      pointer-events: none;
+      animation: sway 18s infinite alternate;
+    }
+    .floating-emoji:nth-child(4) { top: 15%; left: 8%; animation-delay: -3s; }
+    .floating-emoji:nth-child(5) { bottom: 20%; right: 12%; animation-delay: -7s; font-size: 5rem; }
+    .floating-emoji:nth-child(6) { top: 55%; left: 70%; animation-delay: -11s; }
+
+    @keyframes sway {
+      0% { transform: rotate(-8deg) translateY(0); }
+      100% { transform: rotate(8deg) translateY(-40px); }
+    }
+
+    /* ===== CURSOR ===== */
+    #cursor-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .cursor-dot {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #2ecc71;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 30px #8effb2, 0 0 60px #2ecc71;
+      transition: width 0.2s, height 0.2s, background 0.2s;
+    }
+
+    .cursor-ring {
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      border: 2.5px solid rgba(46, 204, 113, 0.4);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 0.25s ease;
+      backdrop-filter: blur(2px);
+    }
+
+    .cursor-ring.hover {
+      width: 75px;
+      height: 75px;
+      border-color: #2ecc71;
+      border-width: 3px;
+      background: rgba(46, 204, 113, 0.1);
+      box-shadow: 0 0 60px #2ecc71;
+    }
+
+    /* ===== PREMIUM NAVBAR ===== */
+    .navbar-floating {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 92%;
+      max-width: 1400px;
+      z-index: 1000;
+      animation: dropIn 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes dropIn {
+      0% { opacity: 0; transform: translate(-50%, -100%); }
+      100% { opacity: 1; transform: translate(-50%, 0); }
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2.2rem;
+      background: rgba(8, 30, 8, 0.65);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1.5px solid var(--glass-edge);
+      border-radius: 80px;
+      box-shadow: 0 20px 45px -10px rgba(0, 30, 0, 0.7), 0 0 0 1px rgba(46, 204, 113, 0.1) inset;
+    }
+
+    .logo {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo i {
+      color: var(--primary);
+      font-size: 2.5rem;
+      filter: drop-shadow(0 0 12px var(--primary));
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.7rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-soft);
+      text-decoration: none;
+      font-size: 1.4rem;
+      font-weight: 500;
+      padding: 0.8rem 1.8rem;
+      border-radius: 60px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition-spring);
+      background: transparent;
+      white-space: nowrap;
+    }
+
+    .nav-links a i { font-size: 1.7rem; }
+    .nav-links a:hover {
+      background: rgba(46, 204, 113, 0.15);
+      color: #a7f0c0;
+      transform: scale(1.05);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .nav-btn {
+      padding: 0.8rem 2.2rem;
+      border-radius: 60px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--primary);
+      color: #0a1f0a;
+      box-shadow: 0 12px 28px -8px var(--primary);
+      transform: translateY(-2px);
+    }
+
+    /* ===== AUTH CARD — CLEAN & MAGICAL ===== */
+    .auth-card {
+      position: relative;
+      z-index: 50;
+      width: 520px;
+      max-width: 92%;
+      background: rgba(18, 40, 18, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 70px;
+      padding: 3.5rem 3rem;
+      text-align: center;
+      border: 2px solid rgba(46, 204, 113, 0.2);
+      box-shadow: var(--shadow-heavy), 0 0 120px rgba(46, 204, 113, 0.3);
+      animation: appear 1.1s cubic-bezier(0.2, 0.9, 0.3, 1), softGlow 4s infinite alternate;
+    }
+
+    @keyframes appear {
+      0% { opacity: 0; transform: scale(0.85) translateY(50px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    @keyframes softGlow {
+      0% { box-shadow: var(--shadow-heavy), 0 0 60px rgba(46, 204, 113, 0.2); }
+      100% { box-shadow: var(--shadow-heavy), 0 0 130px rgba(46, 204, 113, 0.5); }
+    }
+
+    .greeting-emoji {
+      font-size: 7rem;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      filter: drop-shadow(0 8px 18px #2ecc71);
+      animation: wave 8s infinite alternate;
+    }
+    @keyframes wave {
+      0% { transform: rotate(-5deg) scale(1); }
+      100% { transform: rotate(5deg) scale(1.1); }
+    }
+
+    .auth-card h2 {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(145deg, #ffffff, #adffc6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 2.5rem;
+      letter-spacing: -0.5px;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #4eda7a;
+      font-size: 1.8rem;
+      z-index: 2;
+    }
+
+    .input {
+      width: 100%;
+      padding: 1.6rem 2rem 1.6rem 5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(46, 204, 113, 0.25);
+      border-radius: 60px;
+      font-size: 1.6rem;
+      color: white;
+      font-family: inherit;
+      transition: all 0.4s;
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: #2ecc71;
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 25px #2ecc71, 0 0 0 4px rgba(46, 204, 113, 0.1);
+      transform: scale(1.02);
+    }
+
+    .input::placeholder { color: rgba(220, 255, 220, 0.35); font-weight: 300; }
+
+    .btn-primary {
+      width: 100%;
+      padding: 1.6rem;
+      background: linear-gradient(120deg, #2ecc71, #28b463);
+      border: none;
+      border-radius: 60px;
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: #0b2b0b;
+      cursor: pointer;
+      margin: 2.2rem 0 1.2rem;
+      box-shadow: 0 14px 30px -5px #1e8449;
+      transition: all 0.35s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 28px 40px -8px #2ecc71;
+      background: linear-gradient(120deg, #3be386, #2ecc71);
+    }
+
+    .forgot-link {
+      color: rgba(230, 255, 230, 0.7);
+      font-size: 1.5rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0.5rem 1rem;
+      border-radius: 40px;
+      transition: 0.3s;
+    }
+    .forgot-link i { font-size: 1.4rem; }
+    .forgot-link:hover { color: #b3ffc0; background: rgba(46, 204, 113, 0.1); }
+
+    .signup-cta {
+      margin-top: 2rem;
+      padding-top: 1.8rem;
+      border-top: 2px dashed rgba(46, 204, 113, 0.3);
+      color: #d0e6d0;
+      font-size: 1.5rem;
+    }
+    .signup-cta a {
+      color: #b3ffba;
+      font-weight: 700;
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: 0.2s;
+    }
+    .signup-cta a:hover { border-bottom-color: #2ecc71; }
+
+    /* ===== LOADING OVERLAY ===== */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 20, 2, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .loading-overlay.active { display: flex; animation: fadeIn 0.35s; }
+    @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+
+    .spinner {
+      width: 85px;
+      height: 85px;
+      border: 5px solid rgba(46, 204, 113, 0.3);
+      border-top: 5px solid #2ecc71;
+      border-radius: 50%;
+      animation: spin 1s infinite cubic-bezier(0.6, 0.2, 0.4, 1);
+    }
+    @keyframes spin { 0% { transform: rotate(0); } 100% { transform: rotate(360deg); } }
+
+    .loading-message {
+      font-size: 2rem;
+      font-weight: 500;
+      color: white;
+      text-shadow: 0 0 20px #2ecc71;
+      animation: breathe 1.8s infinite;
+    }
+    @keyframes breathe { 0% { opacity: 0.7; } 50% { opacity: 1; } }
+
+    /* ===== NOTIFICATION ===== */
+    .notification {
+      position: fixed;
+      top: 100px;
+      right: 25px;
+      padding: 1.5rem 2.8rem;
+      background: rgba(0, 30, 0, 0.85);
+      backdrop-filter: blur(16px);
+      color: white;
+      border-radius: 60px;
+      font-size: 1.6rem;
+      font-weight: 500;
+      border-left: 8px solid #2ecc71;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+      z-index: 11000;
+      animation: notifIn 0.5s;
+    }
+    @keyframes notifIn { 0% { transform: translateX(100%); opacity: 0; } 100% { transform: 0; opacity: 1; } }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 800px) {
+      .navbar { flex-wrap: wrap; justify-content: center; gap: 0.8rem; }
+      .nav-links { order: 3; width: 100%; justify-content: center; }
+      .nav-links a { padding: 0.7rem 1.4rem; font-size: 1.3rem; }
+    }
+    @media (max-width: 550px) {
+      .auth-card { padding: 2.5rem 1.8rem; }
+      .greeting-emoji { font-size: 5rem; }
+      .auth-card h2 { font-size: 2.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- background alive -->
+  <div class="living-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="floating-emoji">🌿</div>
+    <div class="floating-emoji">🍃</div>
+    <div class="floating-emoji">🌱</div>
   </div>
 
-  <script src="../../js/pages/community/community.js"></script>
-    <script src="../../js/../../components/navbar-loader.js"></script>
+  <!-- custom cursor container -->
+  <div id="cursor-container"></div>
+
+  <!-- navbar -->
+  <div class="navbar-floating">
+    <nav class="navbar">
+      <a href="#" class="logo"><i class="fas fa-seedling"></i><span>EcoSphere</span></a>
+      <ul class="nav-links">
+        <li><a href="#"><i class="fas fa-home"></i><span>Home</span></a></li>
+        <li><a href="#"><i class="fas fa-globe"></i><span>Community</span></a></li>
+        <li><a href="#"><i class="fas fa-tree"></i><span>Forest</span></a></li>
+        <li><a href="#"><i class="fas fa-chart-simple"></i><span>Impact</span></a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="nav-btn" onclick="showLoader('login')">Login</button>
+        <button class="nav-btn" onclick="showLoader('signup')">Join</button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- main auth card -->
+  <div class="auth-card">
+    <div class="greeting-emoji">🌱</div>
+    <h2>welcome, green soul</h2>
+
+    <div class="input-group">
+      <i class="fas fa-user input-icon"></i>
+      <input type="text" placeholder="username / email" class="input" id="username" autocomplete="off">
+    </div>
+    <div class="input-group">
+      <i class="fas fa-lock input-icon"></i>
+      <input type="password" placeholder="password" class="input" id="password">
+    </div>
+
+    <button class="btn-primary" onclick="handleLogin()">
+      <i class="fas fa-leaf"></i> enter ecosystem
+    </button>
+
+    <a href="#" class="forgot-link"><i class="fas fa-question-circle"></i> forgot password?</a>
+
+    <div class="signup-cta">
+      new to the sphere? <a href="#">create account 🌿</a>
+    </div>
+  </div>
+
+  <!-- loading overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-message" id="loadingMessage">planting seeds ...</div>
+  </div>
+
+  <script>
+    (function(){
+      // === cursor magic ===
+      function initCursor() {
+        const container = document.getElementById('cursor-container');
+        if (!container) return;
+        container.innerHTML = '<div class="cursor-dot"></div><div class="cursor-ring"></div>';
+        const dot = container.querySelector('.cursor-dot');
+        const ring = container.querySelector('.cursor-ring');
+
+        let mouseX = 0, mouseY = 0;
+        let dotX = 0, dotY = 0;
+        let ringX = 0, ringY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+        });
+
+        function animate() {
+          dotX += (mouseX - dotX) * 0.28;
+          dotY += (mouseY - dotY) * 0.28;
+          ringX += (mouseX - ringX) * 0.12;
+          ringY += (mouseY - ringY) * 0.12;
+
+          dot.style.transform = `translate(${dotX}px, ${dotY}px) translate(-50%, -50%)`;
+          ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+          requestAnimationFrame(animate);
+        }
+        animate();
+
+        // hover effect
+        document.querySelectorAll('a, button, .input, .btn-primary, .forgot-link').forEach(el => {
+          el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+          el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+        });
+
+        document.addEventListener('mousedown', () => { dot.style.width = '15px'; dot.style.height = '15px'; dot.style.background = '#f1c40f'; });
+        document.addEventListener('mouseup', () => { dot.style.width = '10px'; dot.style.height = '10px'; dot.style.background = '#2ecc71'; });
+      }
+
+      // === loader with dynamic messages ===
+      window.showLoader = function(type) {
+        const overlay = document.getElementById('loadingOverlay');
+        const msg = document.getElementById('loadingMessage');
+        overlay.classList.add('active');
+        msg.textContent = type === 'login' ? '🌱 opening green door ...' : '🌿 sprouting new account ...';
+        setTimeout(() => {
+          overlay.classList.remove('active');
+          showNotif(`🌎 redirect to ${type}`, '#2ecc71');
+        }, 1600);
+      };
+
+      // === login simulation with field check ===
+      window.handleLogin = function() {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        const btn = document.querySelector('.btn-primary');
+
+        if (!username || !password) {
+          showNotif('🌱 both fields need love', '#e67e22');
+          return;
+        }
+
+        btn.style.transform = 'scale(0.97)';
+        setTimeout(() => btn.style.transform = '', 200);
+
+        const overlay = document.getElementById('loadingOverlay');
+        const msg = document.getElementById('loadingMessage');
+        overlay.classList.add('active');
+
+        const phrases = ['🌲 connecting to forest...', '🍃 gathering leaves...', '💚 almost there...', '🌍 welcome back!'];
+        let i = 0;
+        const interval = setInterval(() => {
+          msg.textContent = phrases[i % phrases.length];
+          i++;
+        }, 700);
+
+        setTimeout(() => {
+          clearInterval(interval);
+          overlay.classList.remove('active');
+          showNotif('✨ Welcome to EcoSphere, warrior!', '#2ecc71');
+          // optional redirect simulation: window.location = '#'
+        }, 2800);
+      };
+
+      // === toast notification ===
+      function showNotif(text, color) {
+        const notif = document.createElement('div');
+        notif.className = 'notification';
+        notif.style.borderLeftColor = color;
+        notif.textContent = text;
+        document.body.appendChild(notif);
+        setTimeout(() => notif.remove(), 3300);
+      }
+
+      // === floating leaves generator (extra vibe) ===
+      function sprinkleLeaves() {
+        const bg = document.querySelector('.living-bg');
+        const leaves = ['🌿', '🍃', '🍂', '🌾', '🌸', '🌻'];
+        setInterval(() => {
+          const span = document.createElement('span');
+          span.innerHTML = leaves[Math.floor(Math.random() * leaves.length)];
+          span.style.position = 'absolute';
+          span.style.left = Math.random() * 100 + '%';
+          span.style.top = '-10%';
+          span.style.fontSize = (20 + Math.random() * 35) + 'px';
+          span.style.opacity = '0.2';
+          span.style.pointerEvents = 'none';
+          span.style.animation = `floatFall ${12 + Math.random() * 18}s linear`;
+          span.style.filter = 'drop-shadow(0 0 8px #2ecc71)';
+          bg.appendChild(span);
+          setTimeout(() => span.remove(), 24000);
+        }, 600);
+      }
+
+      // add float keyframe if missing
+      const styleSheet = document.createElement("style");
+      styleSheet.innerHTML = `@keyframes floatFall { 0% { transform: translateY(0) rotate(0deg); opacity:0.25; } 100% { transform: translateY(105vh) rotate(400deg); opacity:0; } }`;
+      document.head.appendChild(styleSheet);
+
+      // input field subtle scale
+      document.querySelectorAll('.input').forEach(inp => {
+        inp.addEventListener('focus', () => inp.parentElement.style.transform = 'scale(1.02)');
+        inp.addEventListener('blur', () => inp.parentElement.style.transform = 'scale(1)');
+      });
+
+      // navbar scroll effect
+      window.addEventListener('scroll', ()=> {
+        const nav = document.querySelector('.navbar');
+        if (window.scrollY > 40) {
+          nav.style.background = 'rgba(3, 22, 3, 0.8)';
+          nav.style.padding = '0.7rem 2.2rem';
+        } else {
+          nav.style.background = 'rgba(8, 30, 8, 0.65)';
+          nav.style.padding = '1rem 2.2rem';
+        }
+      });
+
+      // init everything after dom ready
+      document.addEventListener('DOMContentLoaded', () => {
+        initCursor();
+        sprinkleLeaves();
+        // small extra: hide cursor container when mouse leaves
+        document.addEventListener('mouseleave', ()=> {
+          document.querySelectorAll('.cursor-dot, .cursor-ring').forEach(el => el.style.opacity = '0');
+        });
+        document.addEventListener('mouseenter', ()=> {
+          document.querySelectorAll('.cursor-dot, .cursor-ring').forEach(el => el.style.opacity = '1');
+        });
+      });
+    })();
+  </script>
+  <!-- dummy external (kept) -->
+  <script src="js/components/component-loader.js"></script>
+  <script src="js/pages/community/community.js"></script>
 </body>
 </html>
-

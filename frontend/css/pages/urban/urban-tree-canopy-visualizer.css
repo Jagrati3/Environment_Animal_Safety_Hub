@@ -1,127 +1,214 @@
+/* ===== ROOT THEME VARIABLES ===== */
+:root {
+  --primary: #2e7d32;
+  --primary-light: #66bb6a;
+  --accent: #fbc02d;
+  --bg-gradient: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  --glass: rgba(255, 255, 255, 0.65);
+  --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --shadow-strong: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== BODY ===== */
 body {
+  font-family: 'Montserrat', Arial, sans-serif;
+  background: var(--bg-gradient);
   margin: 0;
-  font-family: 'Roboto', Arial, sans-serif;
-  background: linear-gradient(135deg, #e0ffe6 0%, #b3e6ff 100%);
+  padding: 0;
+  color: #263238;
   min-height: 100vh;
 }
 
-.utc-header {
-  background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
-  color: #fff;
-  text-align: center;
-  padding: 2rem 1rem 1rem 1rem;
-  border-bottom-left-radius: 40px;
-  border-bottom-right-radius: 40px;
-  box-shadow: 0 4px 16px rgba(24,90,157,0.15);
+/* ===== MAIN CONTAINER ===== */
+.container {
+  max-width: 1100px;
+  margin: 50px auto;
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+  border-radius: 20px;
+  box-shadow: var(--shadow-soft);
+  padding: 45px 35px;
+  transition: 0.3s ease-in-out;
 }
 
-.utc-header h1 {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 2.8rem;
-  margin: 0 0 0.5rem 0;
-  letter-spacing: 2px;
+.container:hover {
+  box-shadow: var(--shadow-strong);
 }
 
-.utc-header p {
-  font-size: 1.2rem;
-  margin: 0;
+/* ===== HEADER ===== */
+h1 {
+  font-size: 2.7rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
 }
 
-.utc-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2rem;
-  margin: 2rem auto;
-  max-width: 1200px;
+.subtitle {
+  font-size: 1.15rem;
+  color: #2e7d32;
+  margin-bottom: 35px;
+  opacity: 0.9;
 }
 
-.utc-map-section {
-  flex: 2 1 500px;
-  min-width: 350px;
-  max-width: 700px;
-  position: relative;
+/* ===== MAP SECTION ===== */
+.map-section {
+  background: linear-gradient(145deg, #e8f5e9, #f1f8e9);
+  border-radius: 16px;
+  padding: 30px 24px;
+  margin-bottom: 40px;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.04);
 }
 
-#utc-map {
+#treeMap {
   width: 100%;
-  height: 480px;
-  border-radius: 24px;
-  box-shadow: 0 2px 12px rgba(67,206,162,0.15);
-  margin-bottom: 1rem;
+  height: 450px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transition: transform 0.3s ease;
 }
 
-.utc-legend {
+#treeMap:hover {
+  transform: scale(1.01);
+}
+
+/* ===== LEGEND ===== */
+.legend {
   display: flex;
-  gap: 1.5rem;
-  align-items: center;
-  justify-content: center;
+  gap: 22px;
+  margin-top: 15px;
   font-size: 1rem;
-  margin-top: 0.5rem;
+  color: var(--primary);
+  font-weight: 600;
 }
 
-.legend-green, .legend-yellow, .legend-red {
+.legend-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
   display: inline-block;
-  width: 18px;
-  height: 18px;
-  border-radius: 4px;
-  margin-right: 0.5rem;
-}
-.legend-green { background: #43cea2; }
-.legend-yellow { background: #ffe066; }
-.legend-red { background: #ff6f61; }
-
-.utc-info-section {
-  flex: 1 1 320px;
-  min-width: 280px;
-  background: #fff;
-  border-radius: 24px;
-  box-shadow: 0 2px 12px rgba(24,90,157,0.10);
-  padding: 2rem 1.5rem;
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
 }
 
-.utc-info-section h2, .utc-info-section h3 {
-  font-family: 'Montserrat', sans-serif;
-  color: #185a9d;
-  margin-top: 0;
+.dot-tree {
+  background: var(--primary);
+  box-shadow: 0 0 8px var(--primary-light);
 }
 
-#utc-neighborhood-info {
-  font-size: 1.1rem;
-  color: #333;
-  min-height: 60px;
+.dot-suggest {
+  background: var(--accent);
+  box-shadow: 0 0 8px #ffe082;
 }
 
-#utc-initiatives {
+/* ===== BENEFITS SECTION ===== */
+.benefits-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 18px;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 25px;
+}
+
+.benefit-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.benefit-card::before {
+  content: "";
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle at top left, rgba(102,187,106,0.15), transparent 70%);
+  top: -50%;
+  left: -50%;
+}
+
+.benefit-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-strong);
+}
+
+.benefit-icon {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: var(--primary);
+}
+
+.benefit-title {
+  font-weight: 700;
+  font-size: 1.15rem;
+  margin-bottom: 6px;
+}
+
+.benefit-desc {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* ===== SUGGESTION SECTION ===== */
+.suggest-section {
+  margin-top: 40px;
+  background: linear-gradient(145deg, #fffde7, #fff8e1);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: var(--shadow-soft);
+}
+
+.suggest-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #f9a825;
+  margin-bottom: 12px;
+}
+
+.suggest-list {
   list-style: none;
-  padding: 0;
-  margin: 0;
+  padding-left: 0;
 }
 
-#utc-initiatives li {
-  background: #e0ffe6;
-  color: #185a9d;
-  margin-bottom: 0.5rem;
-  padding: 0.7rem 1rem;
-  border-radius: 12px;
-  font-weight: 500;
-  box-shadow: 0 1px 4px rgba(67,206,162,0.10);
-  transition: background 0.2s;
-}
-#utc-initiatives li:hover {
-  background: #b3e6ff;
+.suggest-list li {
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  background: rgba(251, 192, 45, 0.15);
+  transition: all 0.2s ease;
+  cursor: pointer;
 }
 
-@media (max-width: 900px) {
-  .utc-container {
-    flex-direction: column;
-    align-items: center;
+.suggest-list li:hover {
+  background: rgba(251, 192, 45, 0.35);
+  transform: translateX(6px);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .container {
+    padding: 25px 20px;
   }
-  .utc-map-section, .utc-info-section {
-    max-width: 95vw;
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  #treeMap {
+    height: 350px;
+  }
+
+  .benefits-grid {
+    grid-template-columns: 1fr;
   }
 }

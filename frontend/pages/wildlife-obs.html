@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐾 Wildlife Observation Journal · track wild encounters</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Google Fonts: organic, field-notes style -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #eaf3e0;
+            background: radial-gradient(circle at 20% 30%, #d8efd0, #c0e0bc);
+            min-height: 100vh;
+            color: #1b4f2f;
+            line-height: 1.6;
+        }
+
+        /* journal header – naturalist's notebook */
+        .journal-header {
+            background: linear-gradient(145deg, #557d4a, #3b6133);
+            padding: 5rem 2rem 4.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+            border-bottom: 8px solid #e9cf8b;
+            box-shadow: 0 20px 40px #3b6133;
+        }
+
+        .journal-header::before {
+            content: '🐾🌿';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.1;
+            left: -4rem;
+            bottom: -6rem;
+            transform: rotate(-10deg);
+        }
+
+        .journal-header h1 {
+            font-family: 'Kalam', cursive;
+            font-weight: 700;
+            font-size: 4.2rem;
+            color: #fcf2cf;
+            text-shadow: 6px 6px 0 #2e6b3a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .journal-header h1 i {
+            color: #ffe78c;
+            filter: drop-shadow(0 0 8px #ffeeaa);
+        }
+
+        .journal-header p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 1.5rem auto;
+            background: #deffd6c0;
+            padding: 0.8rem 2.5rem;
+            border-radius: 60px;
+            color: #0d4b29;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            border: 3px solid #e9cf8b;
+        }
+
+        .sightings-badge {
+            margin-top: 1.8rem;
+            display: inline-block;
+            background: #fedb86;
+            color: #1b6133;
+            padding: 0.6rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #fff2b5;
+        }
+
+        /* container */
+        .container {
+            max-width: 1400px;
+            margin: -3rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* filter/search bar */
+        .filter-bar {
+            background: #fafff2e0;
+            backdrop-filter: blur(8px);
+            border-radius: 80px;
+            padding: 1.5rem 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 30px #2b754b70, 0 0 0 3px #dcf5c0 inset;
+            border: 3px solid #daf0c0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3e9462;
+            font-size: 1.3rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 5rem;
+            border: 3px solid #cef0b5;
+            border-radius: 60px;
+            font-size: 1rem;
+            background: white;
+            color: #1e5a30;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.8rem 2rem;
+            border: 3px solid #c8eab2;
+            border-radius: 60px;
+            background: white;
+            font-weight: 600;
+            color: #1b6839;
+            cursor: pointer;
+        }
+
+        /* animal class chips */
+        .class-chips {
+            margin-bottom: 2.5rem;
+        }
+
+        .chip-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: #9fc99b #b8e0b0;
+        }
+
+        .chip-scroll::-webkit-scrollbar { height: 8px; }
+        .chip-scroll::-webkit-scrollbar-track { background: #d6f0ca; border-radius: 10px; }
+        .chip-scroll::-webkit-scrollbar-thumb { background: #9fc99b; border-radius: 10px; }
+
+        .animal-chip {
+            flex: 0 0 auto;
+            background: #faffea;
+            padding: 1rem 2.5rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 6px 14px #4d986d70;
+            cursor: pointer;
+            font-weight: 600;
+            border: 3px solid transparent;
+            transition: 0.2s;
+            font-size: 1.1rem;
+        }
+
+        .animal-chip i { color: #d68d2c; font-size: 1.5rem; }
+        .animal-chip:hover { transform: translateY(-5px); border-color: #aacc88; background: #ffffdf; }
+        .animal-chip.active { background: #e0f0c0; border-color: #7ba55b; }
+
+        /* featured observation */
+        .featured-observation {
+            background: linear-gradient(145deg, #568f64, #3b734b);
+            border-radius: 80px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            border: 8px solid #ecd996;
+            box-shadow: 0 30px 40px #1f603a;
+            color: #fcfae6;
+            position: relative;
+        }
+
+        .featured-observation::before {
+            content: '🐺';
+            font-size: 14rem;
+            opacity: 0.1;
+            position: absolute;
+            bottom: -2rem;
+            right: 2rem;
+            transform: rotate(5deg);
+        }
+
+        .obs-ribbon {
+            position: absolute;
+            top: 2rem;
+            right: 2.5rem;
+            background: #ecd259;
+            color: #17582b;
+            padding: 0.6rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #fff8b0;
+        }
+
+        .obs-grid {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .obs-text h2 {
+            font-size: 2rem;
+            color: #fff2b0;
+            letter-spacing: 2px;
+        }
+
+        .obs-text h3 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin: 0.5rem 0;
+        }
+
+        .obs-meta {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            background: #479d6bb0;
+            padding: 0.6rem 2rem;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border: 2px solid #ffea8f;
+        }
+
+        .meta-item i { color: #ffe684; }
+
+        .obs-desc {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+
+        .log-btn {
+            background: #ecd259;
+            border: none;
+            color: #1a6232;
+            font-weight: 800;
+            font-size: 1.6rem;
+            padding: 1.2rem 3.5rem;
+            border-radius: 60px;
+            display: inline-flex;
+            align-items: center;
+            gap: 1.2rem;
+            cursor: pointer;
+            border: 4px solid #ffffcc;
+            box-shadow: 0 8px 0 #8f9440;
+            transition: 0.1s;
+        }
+
+        .log-btn:active {
+            transform: translateY(8px);
+            box-shadow: none;
+        }
+
+        .obs-image {
+            height: 260px;
+            background: #67b384;
+            border-radius: 70px;
+            border: 6px solid #ecd996;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            color: #fffed0;
+        }
+
+        /* journal entries grid */
+        .journal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .entry-card {
+            background: #fafff0;
+            border-radius: 70px;
+            overflow: hidden;
+            box-shadow: 0 20px 30px #2a784d80;
+            transition: all 0.3s;
+            border: 5px solid #ccf0b5;
+            cursor: pointer;
+            color: #1e562e;
+        }
+
+        .entry-card:hover {
+            transform: translateY(-15px);
+            border-color: #e0c46c;
+            box-shadow: 0 35px 45px #175a32;
+        }
+
+        .card-image {
+            height: 160px;
+            background: linear-gradient(145deg, #8fc093, #6da075);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #fcfcd2;
+            position: relative;
+        }
+
+        .species-tag {
+            position: absolute;
+            bottom: 0.8rem;
+            left: 1rem;
+            background: #1e5837;
+            color: #ffea9e;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            border: 2px solid #fdd67a;
+        }
+
+        .card-content {
+            padding: 1.8rem;
+        }
+
+        .card-date {
+            background: #cbeac0;
+            padding: 0.3rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .card-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0.7rem 0;
+        }
+
+        .card-location {
+            color: #4b7a55;
+            margin-bottom: 0.8rem;
+        }
+
+        .card-notes {
+            color: #366f49;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .weather {
+            background: #f1cba5;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+
+        .view-btn {
+            background: #5daf7c;
+            border: none;
+            color: white;
+            padding: 0.6rem 1.8rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            border: 2px solid #fde287;
+        }
+
+        /* new entry quick form */
+        .new-entry {
+            background: #eaf7da;
+            border-radius: 70px;
+            padding: 2.5rem;
+            margin: 4rem 0;
+            border: 6px solid #ecd996;
+        }
+
+        .field {
+            background: #f2ffe6;
+            border-radius: 60px;
+            padding: 1rem 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* modal */
+        .modal {
+            display: none; position: fixed; inset:0; background: #1d6139e6;
+            align-items: center; justify-content: center; z-index:2000;
+            backdrop-filter: blur(6px);
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #f6ffe6;
+            border-radius: 80px;
+            max-width: 700px;
+            width:100%;
+            border: 8px solid #ffe28b;
+            color: #195a2c;
+        }
+
+        .back-to-top {
+            position: fixed; bottom:2rem; right:2rem;
+            background: #b8b04c; width:70px; height:70px; border-radius:50%;
+            display: none; align-items:center; justify-content:center;
+            font-size:2.2rem; color:#1c5c28; border:5px solid #fff3b0;
+            cursor:pointer; z-index:1000;
+        }
+        .back-to-top.visible { display: flex; }
+
+        @media (max-width:800px){
+            .obs-grid { template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- header -->
+    <header class="journal-header">
+        <h1>
+            <i class="fas fa-paw"></i> Wildlife Observation Journal
+            <i class="fas fa-feather"></i>
+        </h1>
+        <p>record your encounters · celebrate biodiversity</p>
+        <div class="sightings-badge"><i class="fas fa-eye"></i> 142 sightings logged</div>
+    </header>
+
+    <div class="container">
+        <!-- filter bar -->
+        <div class="filter-bar" data-aos="fade-up">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="search species, location, date...">
+            </div>
+            <div class="filter-options">
+                <select class="filter-select"><option>all classes</option><option>mammals</option><option>birds</option><option>reptiles</option><option>amphibians</option></select>
+                <select class="filter-select"><option>recent first</option></select>
+            </div>
+        </div>
+
+        <!-- animal class chips -->
+        <div class="class-chips" data-aos="fade-up">
+            <div class="chip-scroll">
+                <div class="animal-chip active"><i class="fas fa-paw"></i> all</div>
+                <div class="animal-chip"><i class="fas fa-dog"></i> mammals</div>
+                <div class="animal-chip"><i class="fas fa-dove"></i> birds</div>
+                <div class="animal-chip"><i class="fas fa-lizard"></i> reptiles</div>
+                <div class="animal-chip"><i class="fas fa-frog"></i> amphibians</div>
+                <div class="animal-chip"><i class="fas fa-bug"></i> insects</div>
+            </div>
+        </div>
+
+        <!-- featured observation -->
+        <div class="featured-observation" data-aos="zoom-in">
+            <span class="obs-ribbon"><i class="fas fa-star"></i> recent sighting</span>
+            <div class="obs-grid">
+                <div class="obs-text">
+                    <h2>🐺 may 24, 2026</h2>
+                    <h3>Gray Wolf · Canis lupus</h3>
+                    <div class="obs-meta">
+                        <span class="meta-item"><i class="fas fa-map-pin"></i> Yellowstone</span>
+                        <span class="meta-item"><i class="fas fa-cloud-sun"></i> 14°C · partly cloudy</span>
+                    </div>
+                    <p class="obs-desc">A pack of five wolves observed near the Lamar Valley. They were resting after a hunt. One young pup approached the river.</p>
+                    <button class="log-btn" onclick="addEntry()"><i class="fas fa-pen"></i> log your sighting</button>
+                </div>
+                <div class="obs-image"><i class="fas fa-wolf"></i></div>
+            </div>
+        </div>
+
+        <!-- journal entries grid (js) -->
+        <div class="journal-grid" id="journalGrid"></div>
+
+        <!-- quick add section -->
+        <div class="new-entry" data-aos="fade-up">
+            <h2 style="font-size:2rem; margin-bottom:1rem;"><i class="fas fa-plus-circle"></i> new observation</h2>
+            <div class="field"><i class="fas fa-paw"></i> <span style="flex:1;">species</span> <i class="fas fa-chevron-right"></i></div>
+            <div class="field"><i class="fas fa-map-pin"></i> <span style="flex:1;">location</span> <i class="fas fa-chevron-right"></i></div>
+            <div class="field"><i class="fas fa-calendar"></i> <span style="flex:1;">date & time</span> <i class="fas fa-chevron-right"></i></div>
+            <button class="log-btn" style="width:100%;" onclick="addEntry()"><i class="fas fa-save"></i> save entry</button>
+        </div>
+    </div>
+
+    <!-- modal -->
+    <div class="modal" id="journalModal">
+        <div class="modal-content" style="padding:2.5rem;">
+            <button style="float:right; background:none; border:none; font-size:3rem; color:#1b6735;" onclick="closeModal()">✕</button>
+            <div style="text-align:center;">
+                <div style="font-size:5rem;" id="modalAnimalEmoji">🐿️</div>
+                <h2 id="modalAnimalTitle" style="font-size:2.8rem;">eastern gray squirrel</h2>
+                <p id="modalAnimalDesc" style="margin:2rem 0;">observed in central park · may 22</p>
+                <button class="log-btn" onclick="editEntry()" style="font-size:1.2rem;">✏️ edit notes</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({duration:800,once:true});
+
+        // sample journal entries
+        const entries = [
+            { species:"Red Fox", location:"Shenandoah", date:"May 20, 2026", notes:"vixen with two kits playing", icon:"fa-fox", class:"mammal", weather:"sunny" },
+            { species:"Bald Eagle", location:"Chesapeake", date:"May 18, 2026", notes:"soaring above the bay, then dove for fish", icon:"fa-dove", class:"bird", weather:"breezy" },
+            { species:"Box Turtle", location:"Local park", date:"May 16, 2026", notes:"slowly crossing the trail", icon:"fa-turtle", class:"reptile", weather:"humid" },
+            { species:"Monarch Butterfly", location:"Meadow", date:"May 14, 2026", notes:"first monarch of the season", icon:"fa-butterfly", class:"insect", weather:"sunny" },
+            { species:"White-tailed Deer", location:"Forest edge", date:"May 12, 2026", notes:"doe and two fawns grazing", icon:"fa-deer", class:"mammal", weather:"clear" },
+            { species:"Pileated Woodpecker", location:"Swamp", date:"May 10, 2026", notes:"drumming on old oak", icon:"fa-crow", class:"bird", weather:"cloudy" },
+        ];
+
+        function renderEntries() {
+            const grid = document.getElementById('journalGrid');
+            grid.innerHTML = entries.map(e => `
+                <div class="entry-card" onclick="showEntry('${e.species}','${e.location} · ${e.date} · ${e.notes}','${e.icon}')">
+                    <div class="card-image"><i class="fas ${e.icon}"></i><span class="species-tag">${e.class}</span></div>
+                    <div class="card-content">
+                        <span class="card-date">${e.date}</span>
+                        <div class="card-title">${e.species}</div>
+                        <div class="card-location"><i class="fas fa-map-pin"></i> ${e.location}</div>
+                        <p class="card-notes">“${e.notes}”</p>
+                        <div class="card-footer">
+                            <span class="weather"><i class="fas fa-cloud-sun"></i> ${e.weather}</span>
+                            <button class="view-btn" onclick="event.stopPropagation(); viewEntry('${e.species}')">view</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+        renderEntries();
+
+        window.showEntry = (title, desc, icon) => {
+            document.getElementById('modalAnimalTitle').innerText = title;
+            document.getElementById('modalAnimalDesc').innerText = desc;
+            document.getElementById('modalAnimalEmoji').innerHTML = `<i class="fas ${icon}"></i>`;
+            document.getElementById('journalModal').classList.add('active');
+        };
+
+        window.closeModal = () => document.getElementById('journalModal').classList.remove('active');
+        window.addEntry = () => alert('📝 new observation form would open. record your wildlife moment!');
+        window.editEntry = () => { alert('✏️ edit your notes (demo).'); closeModal(); };
+        window.viewEntry = (s) => { alert(`viewing details for ${s}`); };
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // modal escape
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('journalModal')) closeModal(); };
+    </script>
+</body>
+</html>

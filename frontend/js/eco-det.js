@@ -1,0 +1,53 @@
+        AOS.init({duration:800,once:true});
+
+        // mystery cases data
+        const cases = [
+            { name:"Mill Creek Poisoning", type:"water", location:"Blue Ridge", clues:"pH anomaly, dead fish, solvent traces", difficulty:"hard", icon:"fa-water", status:"cold" },
+            { name:"Redwood Heist", type:"logging", location:"California", clues:"fresh stumps, tire tracks, helicopter noise", difficulty:"medium", icon:"fa-tree", status:"active" },
+            { name:"Desert Dumping", type:"waste", location:"Mojave", clues:"barrels, chemical smell, raven activity", difficulty:"easy", icon:"fa-trash", status:"active" },
+            { name:"Ivory Coast Poaching", type:"poaching", location:"Kenya", clues:"carcasses, snares, footprints", difficulty:"hard", icon:"fa-paw", status:"cold" },
+            { name:"River Acid Spill", type:"water", location:"Poland", clues:"dead fish, low pH, factory upstream", difficulty:"medium", icon:"fa-flask", status:"active" },
+            { name:"Smokestack Cover-up", type:"corporate", location:"Ohio", clues:"black smoke, health complaints, night operation", difficulty:"hard", icon:"fa-industry", status:"cold" },
+        ];
+
+        function renderCases() {
+            const grid = document.getElementById('casesGrid');
+            grid.innerHTML = cases.map(c => `
+                <div class="case-card" onclick="showCase('${c.name}','${c.type} · ${c.location} · clues: ${c.clues} · difficulty ${c.difficulty}','${c.icon}')">
+                    <div class="card-image"><i class="fas ${c.icon}"></i><span class="status-tag">${c.status}</span></div>
+                    <div class="card-content">
+                        <span class="card-type">${c.type}</span>
+                        <div class="card-title">${c.name}</div>
+                        <div class="card-location"><i class="fas fa-map-pin"></i> ${c.location}</div>
+                        <div class="card-clues">🔎 ${c.clues.substring(0,35)}…</div>
+                        <div class="card-footer">
+                            <span class="difficulty">${c.difficulty}</span>
+                            <button class="solve-btn" onclick="event.stopPropagation(); examine('${c.name}')">examine</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+        renderCases();
+
+        window.showCase = (title, desc, icon) => {
+            document.getElementById('modalCaseTitle').innerText = title;
+            document.getElementById('modalCaseDesc').innerText = desc;
+            document.getElementById('modalCaseEmoji').innerHTML = `<i class="fas ${icon}"></i>`;
+            document.getElementById('mysteryModal').classList.add('active');
+        };
+
+        window.closeModal = () => document.getElementById('mysteryModal').classList.remove('active');
+        window.investigate = (name) => alert(`🕵️ investigating ${name || 'the case'}... clues revealed.`);
+        window.solveCase = () => { alert('🔍 you present your findings. case closed (demo).'); closeModal(); };
+        window.examine = (name) => alert(`examining evidence for ${name}`);
+        window.openEvidence = () => alert('📦 evidence locker: hair samples, water tests, photos.');
+        window.openNotebook = () => alert('📓 detective notes: witness interviews, timeline.');
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // modal escape
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('mysteryModal')) closeModal(); };

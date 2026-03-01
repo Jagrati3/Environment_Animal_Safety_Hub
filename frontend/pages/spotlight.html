@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Species in Spotlight | Endangered of the Month | EcoLife</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a1929 0%, #1a2f3f 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        /* Spotlight Header */
+        .spotlight-header {
+            background: linear-gradient(135deg, #1a3f2f, #0a2f1f);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+        }
+
+        .spotlight-header::before {
+            content: '🔦';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.1;
+            right: -2rem;
+            bottom: -3rem;
+            transform: rotate(15deg);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        .spotlight-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(255,215,0,0.3);
+        }
+
+        .spotlight-header h1 span {
+            color: #ffd700;
+            display: inline-block;
+            animation: glow 3s infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px #ffd700; }
+            50% { text-shadow: 0 0 30px #ffd700; }
+        }
+
+        .spotlight-header p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            background: rgba(0,0,0,0.3);
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Month Indicator */
+        .month-indicator {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+
+        .month-badge {
+            background: #ffd700;
+            color: #0a1929;
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 0 10px 30px rgba(255,215,0,0.3);
+        }
+
+        .month-badge i {
+            font-size: 1.5rem;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: -3rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 20;
+        }
+
+        /* Hero Species Card */
+        .hero-card {
+            background: linear-gradient(145deg, #1e3a2a, #0d2a1a);
+            border-radius: 60px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            border: 2px solid #ffd700;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-image {
+            height: 500px;
+            background: linear-gradient(135deg, #2a5a3a, #1a3a2a);
+            border-radius: 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border: 4px solid #ffd700;
+        }
+
+        .hero-image i {
+            position: absolute;
+            font-size: 12rem;
+            color: rgba(255,215,0,0.2);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: float 4s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, -50%); }
+            50% { transform: translate(-50%, -60%); }
+        }
+
+        .hero-image .featured-badge {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            color: #ffd700;
+            font-weight: 700;
+            border: 2px solid #ffd700;
+        }
+
+        .hero-text h2 {
+            font-size: 1.5rem;
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .hero-text h1 {
+            font-size: 4rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-text .scientific-name {
+            font-size: 1.3rem;
+            color: #a0a0a0;
+            font-style: italic;
+            margin-bottom: 2rem;
+            border-left: 4px solid #ffd700;
+            padding-left: 1rem;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .hero-stat {
+            background: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 30px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,215,0,0.3);
+        }
+
+        .hero-stat .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffd700;
+            display: block;
+        }
+
+        .hero-stat .label {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .info-card {
+            background: #1e2f3a;
+            border-radius: 40px;
+            padding: 2rem;
+            border: 1px solid #3a4f5a;
+            transition: all 0.3s;
+        }
+
+        .info-card:hover {
+            transform: translateY(-10px);
+            border-color: #ffd700;
+            box-shadow: 0 20px 40px rgba(255,215,0,0.1);
+        }
+
+        .info-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(255,215,0,0.1);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #ffd700;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-card h3 {
+            color: #ffd700;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .info-card p {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        /* Threat Level Meter */
+        .threat-meter {
+            background: #1e2f3a;
+            border-radius: 60px;
+            padding: 2rem;
+            margin: 3rem 0;
+            border: 2px solid #ff4444;
+        }
+
+        .threat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .threat-header h3 {
+            color: #ff4444;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .threat-level {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ff4444;
+            background: rgba(255,68,68,0.1);
+            padding: 0.5rem 2rem;
+            border-radius: 60px;
+        }
+
+        .meter-bar {
+            height: 30px;
+            background: #2a3f4a;
+            border-radius: 30px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .meter-fill {
+            height: 100%;
+            width: 85%;
+            background: linear-gradient(90deg, #ffaa00, #ff4444);
+            border-radius: 30px;
+            position: relative;
+            animation: meterFill 1.5s ease-out;
+        }
+
+        @keyframes meterFill {
+            from { width: 0; }
+            to { width: 85%; }
+        }
+
+        .meter-labels {
+            display: flex;
+            justify-content: space-between;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Threats List */
+        .threats-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .threat-item {
+            background: rgba(255,68,68,0.1);
+            border-radius: 30px;
+            padding: 1.5rem;
+            border-left: 6px solid #ff4444;
+        }
+
+        .threat-item h4 {
+            color: #ff4444;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .threat-item p {
+            color: #ccc;
+            font-size: 0.95rem;
+        }
+
+        /* Conservation Efforts */
+        .conservation-section {
+            background: linear-gradient(135deg, #1a4a2a, #0a3a1a);
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 3rem 0;
+            border: 2px solid #4caf50;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #4caf50;
+        }
+
+        .efforts-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .effort-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 40px;
+            padding: 2rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(76,175,80,0.3);
+        }
+
+        .effort-icon {
+            width: 80px;
+            height: 80px;
+            background: #4caf50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            margin: 0 auto 1.5rem;
+        }
+
+        .effort-card h3 {
+            color: #4caf50;
+            margin-bottom: 1rem;
+        }
+
+        .effort-card p {
+            color: #ccc;
+        }
+
+        .progress-badge {
+            margin-top: 1rem;
+            background: rgba(76,175,80,0.2);
+            color: #4caf50;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+
+        /* Timeline */
+        .timeline-section {
+            background: #1e2f3a;
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #ffd700, #4caf50);
+            border-radius: 4px;
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-date {
+            width: 120px;
+            background: #ffd700;
+            color: #0a1929;
+            padding: 0.8rem;
+            border-radius: 40px;
+            text-align: center;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(255,215,0,0.3);
+        }
+
+        .timeline-content {
+            width: calc(50% - 80px);
+            background: #2a3f4a;
+            padding: 1.5rem;
+            border-radius: 30px;
+            border: 1px solid #3a4f5a;
+        }
+
+        .timeline-content h4 {
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+        }
+
+        /* How to Help */
+        .help-section {
+            background: linear-gradient(135deg, #2a4a6a, #1a3a5a);
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 3rem 0;
+            border: 2px solid #00bcd4;
+        }
+
+        .help-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .help-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 40px;
+            padding: 2rem;
+            border: 1px solid rgba(0,188,212,0.3);
+        }
+
+        .help-icon {
+            width: 70px;
+            height: 70px;
+            background: #00bcd4;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .help-card h3 {
+            color: #00bcd4;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .help-card p {
+            color: #ccc;
+            margin-bottom: 1.5rem;
+        }
+
+        .help-link {
+            color: #00bcd4;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .help-link:hover {
+            gap: 1rem;
+        }
+
+        /* Gallery */
+        .gallery-section {
+            margin: 3rem 0;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            height: 200px;
+            background: linear-gradient(135deg, #2a5a3a, #1a3a2a);
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(255,215,0,0.3);
+        }
+
+        .gallery-item i {
+            position: absolute;
+            font-size: 4rem;
+            color: rgba(255,215,0,0.3);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+            padding: 1rem;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover .gallery-caption {
+            transform: translateY(0);
+        }
+
+        /* Previous Species */
+        .previous-section {
+            background: #1e2f3a;
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .previous-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .previous-card {
+            background: #2a3f4a;
+            border-radius: 30px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .previous-card:hover {
+            transform: translateY(-10px);
+            border: 2px solid #ffd700;
+        }
+
+        .previous-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: #0a1929;
+            margin: 0 auto 1rem;
+        }
+
+        .previous-card h4 {
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+        }
+
+        .previous-card p {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        .month-tag {
+            background: rgba(255,215,0,0.2);
+            color: #ffd700;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        /* Newsletter */
+        .newsletter-section {
+            background: linear-gradient(135deg, #2a2a4a, #1a1a3a);
+            border-radius: 60px;
+            padding: 3rem;
+            text-align: center;
+            margin: 3rem 0;
+            border: 2px solid #9c27b0;
+        }
+
+        .newsletter-section h2 {
+            color: #9c27b0;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .newsletter-section p {
+            color: #ccc;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 1.2rem;
+            border: none;
+            border-radius: 60px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1rem;
+            border: 2px solid transparent;
+        }
+
+        .newsletter-input:focus {
+            outline: none;
+            border-color: #9c27b0;
+        }
+
+        .newsletter-btn {
+            padding: 1.2rem 2.5rem;
+            background: #9c27b0;
+            color: white;
+            border: none;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .newsletter-btn:hover {
+            background: #7b1fa2;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(156,39,176,0.3);
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: #ffd700;
+            color: #0a1929;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(255,215,0,0.3);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        .back-to-top:hover {
+            background: #ffaa00;
+            transform: translateY(-5px);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-image {
+                height: 300px;
+            }
+            
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .efforts-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .previous-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-item,
+            .timeline-item:nth-child(odd) {
+                flex-direction: column;
+                align-items: flex-start;
+                margin-left: 60px;
+            }
+            
+            .timeline-date {
+                margin-bottom: 1rem;
+            }
+            
+            .timeline-content {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .spotlight-header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .efforts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .previous-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="spotlight-header">
+        <div class="header-content">
+            <div class="header-icon">🔦</div>
+            <h1>
+                <span>S</span>pecies in <span>S</span>potlight
+            </h1>
+            <p>Every month, we shine a light on an endangered species and how you can help</p>
+            <div class="month-indicator">
+                <div class="month-badge">
+                    <i class="fas fa-calendar-alt"></i>
+                    March 2026 Spotlight
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Hero Species Card -->
+        <div class="hero-card" data-aos="fade-up">
+            <div class="hero-content">
+                <div class="hero-image" data-aos="fade-right">
+                    <i class="fas fa-paw"></i>
+                    <div class="featured-badge">
+                        <i class="fas fa-crown"></i> Species of the Month
+                    </div>
+                </div>
+                <div class="hero-text" data-aos="fade-left">
+                    <h2>🌟 Spotlight On</h2>
+                    <h1>Amur Leopard</h1>
+                    <div class="scientific-name">Panthera pardus orientalis</div>
+                    
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <span class="value">100+</span>
+                            <span class="label">Population</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="value">Critically</span>
+                            <span class="label">Endangered</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="value">Russia/China</span>
+                            <span class="label">Range</span>
+                        </div>
+                    </div>
+
+                    <p style="color: #ccc; line-height: 1.8;">
+                        The Amur leopard is one of the rarest big cats on Earth. With its beautiful 
+                        spotted coat and incredible agility, it's a symbol of the wild forests of 
+                        eastern Russia and northern China. But these magnificent creatures are 
+                        fighting for survival.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Info Grid -->
+        <div class="info-grid">
+            <div class="info-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="info-icon">
+                    <i class="fas fa-ruler"></i>
+                </div>
+                <h3>Size & Weight</h3>
+                <p><strong>Length:</strong> 2-3 meters (including tail)</p>
+                <p><strong>Weight:</strong> 25-75 kg</p>
+                <p><strong>Height:</strong> 50-70 cm at shoulder</p>
+            </div>
+
+            <div class="info-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="info-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3>Lifespan</h3>
+                <p><strong>Wild:</strong> 10-15 years</p>
+                <p><strong>Captivity:</strong> Up to 20 years</p>
+                <p><strong>Sexual Maturity:</strong> 2-3 years</p>
+            </div>
+
+            <div class="info-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="info-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <h3>Diet</h3>
+                <p><strong>Primary:</strong> Deer, wild boar</p>
+                <p><strong>Secondary:</strong> Hares, badgers, mice</p>
+                <p><strong>Hunting:</strong> Solitary, nocturnal</p>
+            </div>
+        </div>
+
+        <!-- Threat Level Meter -->
+        <div class="threat-meter" data-aos="fade-up">
+            <div class="threat-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> Threat Level</h3>
+                <span class="threat-level">CRITICAL</span>
+            </div>
+            <div class="meter-bar">
+                <div class="meter-fill"></div>
+            </div>
+            <div class="meter-labels">
+                <span>Vulnerable</span>
+                <span>Endangered</span>
+                <span>Critically Endangered</span>
+                <span>Extinct in Wild</span>
+            </div>
+        </div>
+
+        <!-- Threats List -->
+        <h2 class="section-title" style="color: #ff4444; margin-top: 2rem;" data-aos="fade-right">
+            <i class="fas fa-skull-crosswalk"></i> Major Threats
+        </h2>
+        <div class="threats-list">
+            <div class="threat-item" data-aos="fade-up" data-aos-delay="100">
+                <h4><i class="fas fa-gun"></i> Poaching</h4>
+                <p>Hunted for their beautiful spotted coats and body parts used in traditional medicine. Despite protection, poaching remains a serious threat.</p>
+            </div>
+            <div class="threat-item" data-aos="fade-up" data-aos-delay="200">
+                <h4><i class="fas fa-tree"></i> Habitat Loss</h4>
+                <p>Forests are cleared for agriculture, development, and logging. Their territory has shrunk by over 80% in the past century.</p>
+            </div>
+            <div class="threat-item" data-aos="fade-up" data-aos-delay="300">
+                <h4><i class="fas fa-dna"></i> Inbreeding</h4>
+                <p>With such a small population, genetic diversity is extremely low, making them vulnerable to diseases and birth defects.</p>
+            </div>
+            <div class="threat-item" data-aos="fade-up" data-aos-delay="400">
+                <h4><i class="fas fa-car"></i> Road Kill</h4>
+                <p>New roads through their habitat increase the risk of vehicle collisions, especially when they cross territories.</p>
+            </div>
+        </div>
+
+        <!-- Conservation Efforts -->
+        <div class="conservation-section" data-aos="fade-up">
+            <h2 class="section-title">
+                <i class="fas fa-heart"></i> Conservation Efforts
+            </h2>
+            <div class="efforts-grid">
+                <div class="effort-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="effort-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Protected Areas</h3>
+                    <p>Landzou Nature Reserve in Russia protects about 60% of remaining habitat. Anti-poaching teams patrol regularly.</p>
+                    <span class="progress-badge">📈 +30% since 2020</span>
+                </div>
+                <div class="effort-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="effort-icon">
+                        <i class="fas fa-dna"></i>
+                    </div>
+                    <h3>Breeding Programs</h3>
+                    <p>Zoos worldwide participate in breeding programs. Over 200 leopards in captivity ensure genetic diversity.</p>
+                    <span class="progress-badge">🐾 12 births in 2025</span>
+                </div>
+                <div class="effort-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="effort-icon">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h3>Community Engagement</h3>
+                    <p>Local communities are hired as rangers and given alternative livelihoods to reduce poaching.</p>
+                    <span class="progress-badge">👥 50+ families involved</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline-section" data-aos="fade-up">
+            <h2 class="section-title" style="color: #ffd700;">
+                <i class="fas fa-history"></i> Conservation Timeline
+            </h2>
+            <div class="timeline">
+                <div class="timeline-item" data-aos="fade-right">
+                    <div class="timeline-date">1970</div>
+                    <div class="timeline-content">
+                        <h4>Population Crash</h4>
+                        <p>Only 30 individuals estimated left in the wild due to heavy poaching.</p>
+                    </div>
+                </div>
+                <div class="timeline-item" data-aos="fade-left">
+                    <div class="timeline-date">1998</div>
+                    <div class="timeline-content">
+                        <h4>Landzou Reserve Created</h4>
+                        <p>Russian government establishes 250,000 hectare protected area.</p>
+                    </div>
+                </div>
+                <div class="timeline-item" data-aos="fade-right">
+                    <div class="timeline-date">2007</div>
+                    <div class="timeline-content">
+                        <h4>Camera Trap Success</h4>
+                        <p>First camera trap photos confirm breeding population.</p>
+                    </div>
+                </div>
+                <div class="timeline-item" data-aos="fade-left">
+                    <div class="timeline-date">2015</div>
+                    <div class="timeline-content">
+                        <h4>Population Doubles</h4>
+                        <p>Estimated 60-80 individuals in the wild.</p>
+                    </div>
+                </div>
+                <div class="timeline-item" data-aos="fade-right">
+                    <div class="timeline-date">2025</div>
+                    <div class="timeline-content">
+                        <h4>Hope on the Horizon</h4>
+                        <p>Population exceeds 100 for first time in 50 years.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How You Can Help -->
+        <div class="help-section" data-aos="fade-up">
+            <h2 class="section-title" style="color: #00bcd4;">
+                <i class="fas fa-hands-helping"></i> How You Can Help
+            </h2>
+            <div class="help-grid">
+                <div class="help-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="help-icon">
+                        <i class="fas fa-donate"></i>
+                    </div>
+                    <h3>Adopt a Leopard</h3>
+                    <p>Symbolically adopt an Amur leopard through WWF or wildlife organizations. Your donation supports anti-poaching efforts.</p>
+                    <a href="#" class="help-link" onclick="alert('Adoption program coming soon!')">Adopt Now <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="help-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="help-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3>Spread Awareness</h3>
+                    <p>Share this page with friends and family. The more people know, the more support for conservation.</p>
+                    <a href="#" class="help-link" onclick="sharePage()">Share Now <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="help-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="help-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Reduce Paper Use</h3>
+                    <p>Amur leopard habitat is threatened by logging. Use less paper, recycle, and choose sustainable products.</p>
+                    <a href="#" class="help-link" onclick="alert('Learn more about sustainable choices!')">Learn How <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="help-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="help-icon">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                    <h3>Report Illegal Wildlife Trade</h3>
+                    <p>Never buy products made from endangered species. Report suspicious sales to authorities.</p>
+                    <a href="#" class="help-link" onclick="alert('Wildlife crime reporting hotline: +1-800-555-0199')">Report Now <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery -->
+        <h2 class="section-title" style="color: #ffd700; margin-top: 2rem;" data-aos="fade-right">
+            <i class="fas fa-images"></i> Photo Gallery
+        </h2>
+        <div class="gallery-section">
+            <div class="gallery-grid">
+                <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100">
+                    <i class="fas fa-paw"></i>
+                    <div class="gallery-caption">Amur leopard in snow, Russia</div>
+                </div>
+                <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
+                    <i class="fas fa-tree"></i>
+                    <div class="gallery-caption">Mother with cub in reserve</div>
+                </div>
+                <div class="gallery-item" data-aos="zoom-in" data-aos-delay="300">
+                    <i class="fas fa-moon"></i>
+                    <div class="gallery-caption">Night camera trap photo</div>
+                </div>
+                <div class="gallery-item" data-aos="zoom-in" data-aos-delay="400">
+                    <i class="fas fa-mountain"></i>
+                    <div class="gallery-caption">Leopard resting on rocky outcrop</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Previous Months -->
+        <div class="previous-section" data-aos="fade-up">
+            <h2 class="section-title" style="color: #ffd700;">
+                <i class="fas fa-history"></i> Previous Spotlights
+            </h2>
+            <div class="previous-grid">
+                <div class="previous-card" onclick="loadSpecies('vaquita')">
+                    <div class="previous-icon">
+                        <i class="fas fa-fish"></i>
+                    </div>
+                    <h4>Vaquita</h4>
+                    <p>The world's rarest marine mammal</p>
+                    <span class="month-tag">February 2026</span>
+                </div>
+                <div class="previous-card" onclick="loadSpecies('rhino')">
+                    <div class="previous-icon">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                    <h4>Javan Rhino</h4>
+                    <p>Only 76 individuals remain</p>
+                    <span class="month-tag">January 2026</span>
+                </div>
+                <div class="previous-card" onclick="loadSpecies('orangutan')">
+                    <div class="previous-icon">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <h4>Orangutan</h4>
+                    <p>Rainforest guardians in peril</p>
+                    <span class="month-tag">December 2025</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="newsletter-section" data-aos="fade-up">
+            <h2><i class="fas fa-envelope"></i> Never Miss a Spotlight</h2>
+            <p>Get monthly updates on endangered species and learn how you can make a difference.</p>
+            <div class="newsletter-form">
+                <input type="email" class="newsletter-input" placeholder="Your email address" id="newsletterEmail">
+                <button class="newsletter-btn" onclick="subscribeNewsletter()">
+                    <i class="fas fa-bell"></i> Subscribe
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- AOS Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Species data for different months
+        const speciesData = {
+            current: {
+                name: "Amur Leopard",
+                scientific: "Panthera pardus orientalis",
+                population: "100+",
+                status: "Critically Endangered",
+                range: "Russia/China",
+                description: "The Amur leopard is one of the rarest big cats on Earth...",
+                threats: ["Poaching", "Habitat Loss", "Inbreeding", "Road Kill"],
+                conservation: ["Protected Areas", "Breeding Programs", "Community Engagement"]
+            },
+            vaquita: {
+                name: "Vaquita",
+                scientific: "Phocoena sinus",
+                population: "10-15",
+                status: "Critically Endangered",
+                range: "Gulf of California, Mexico",
+                description: "The vaquita is the world's rarest marine mammal...",
+                threats: ["Gillnet Fishing", "Illegal Totoaba Trade"],
+                conservation: ["Gillnet Ban", "Enforcement Patrols"]
+            },
+            rhino: {
+                name: "Javan Rhino",
+                scientific: "Rhinoceros sondaicus",
+                population: "76",
+                status: "Critically Endangered",
+                range: "Ujung Kulon, Indonesia",
+                description: "The Javan rhino is one of the rarest large mammals...",
+                threats: ["Poaching", "Natural Disasters", "Disease"],
+                conservation: ["Protected Park", "Habitat Management"]
+            },
+            orangutan: {
+                name: "Orangutan",
+                scientific: "Pongo pygmaeus",
+                population: "104,700",
+                status: "Endangered",
+                range: "Borneo, Sumatra",
+                description: "Orangutans are great apes sharing 97% DNA with humans...",
+                threats: ["Deforestation", "Palm Oil", "Poaching"],
+                conservation: ["Habitat Protection", "Rehabilitation Centers"]
+            }
+        };
+
+        // Share page
+        function sharePage() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Amur Leopard - Species in Spotlight',
+                    text: 'Learn about this critically endangered species and how to help!',
+                    url: window.location.href
+                }).catch(() => {
+                    alert('📋 Link copied to clipboard! Share with friends!');
+                });
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert('📋 Link copied to clipboard! Share with friends!');
+            }
+        }
+
+        // Load previous species
+        function loadSpecies(species) {
+            const data = speciesData[species];
+            if (data) {
+                alert(`📖 Loading ${data.name} spotlight... (Feature coming soon!)`);
+                // In a real implementation, this would reload the page with new data
+                // window.location.href = `?species=${species}`;
+            }
+        }
+
+        // Newsletter subscription
+        function subscribeNewsletter() {
+            const email = document.getElementById('newsletterEmail').value;
+            if (email && email.includes('@')) {
+                alert(`✅ Thank you for subscribing! You'll receive monthly species updates at ${email}`);
+                document.getElementById('newsletterEmail').value = '';
+            } else {
+                alert('❌ Please enter a valid email address');
+            }
+        }
+
+        // Back to top
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Gallery item click
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const caption = this.querySelector('.gallery-caption').textContent;
+                alert(`🖼️ Gallery: ${caption}\n(Full image gallery coming soon!)`);
+            });
+        });
+
+        // Initialize newsletter input animation
+        const newsletterInput = document.querySelector('.newsletter-input');
+        if (newsletterInput) {
+            newsletterInput.addEventListener('focus', () => {
+                newsletterInput.style.transform = 'scale(1.02)';
+            });
+            newsletterInput.addEventListener('blur', () => {
+                newsletterInput.style.transform = 'scale(1)';
+            });
+        }
+
+        console.log('Species Spotlight page loaded! Current species: Amur Leopard');
+    </script>
+</body>
+</html>

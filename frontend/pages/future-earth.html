@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔮 Future Earth Simulator · Page #2805</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0b1a2e 0%, #1a2f3f 100%);
+            min-height: 100vh;
+            color: #b0e0ff;
+        }
+
+        /* Header – futuristic version */
+        .simulator-header {
+            background: linear-gradient(135deg, #0f2a44, #071a2b);
+            color: #b3e5ff;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            border-bottom: 3px solid #5bc0de;
+        }
+
+        .simulator-header::before {
+            content: '🔮';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.08;
+            right: -2rem;
+            bottom: -3rem;
+            transform: rotate(15deg);
+        }
+
+        .simulator-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            color: #e0f2fe;
+        }
+
+        .simulator-header h1 i {
+            color: #ffd966;
+            text-shadow: 0 0 12px cyan;
+        }
+
+        .simulator-header p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+            color: #b0e0ff;
+        }
+
+        .version-badge {
+            background: #2a4b6e;
+            padding: 0.3rem 1rem;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-top: 1rem;
+            border: 1px solid #5bc0de;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: -2rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Filter bar – neon tech */
+        .filter-bar {
+            background: #112b3f;
+            border-radius: 60px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 30px rgba(0, 191, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            border: 1px solid #3a7ca5;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7fc9ff;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 4rem;
+            border: 2px solid #2e577a;
+            border-radius: 60px;
+            font-size: 1rem;
+            background: #0a1b28;
+            color: #e6f3ff;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #5bc0de;
+            box-shadow: 0 0 0 4px rgba(91, 192, 222, 0.2);
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.8rem 2rem;
+            border: 2px solid #2e577a;
+            border-radius: 40px;
+            font-family: inherit;
+            background: #0a1b28;
+            color: #b3e5ff;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-select:hover {
+            border-color: #ffd966;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #5bc0de;
+        }
+
+        /* Categories Pills – cyber style */
+        .categories-section {
+            margin-bottom: 3rem;
+        }
+
+        .categories-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: #ffd966 #2a4b6e;
+        }
+
+        .categories-scroll::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .categories-scroll::-webkit-scrollbar-track {
+            background: #2a4b6e;
+            border-radius: 10px;
+        }
+
+        .categories-scroll::-webkit-scrollbar-thumb {
+            background: #ffd966;
+            border-radius: 10px;
+        }
+
+        .category-pill {
+            flex: 0 0 auto;
+            background: #112b3f;
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 5px 15px rgba(0,150,255,0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            color: #b3e5ff;
+        }
+
+        .category-pill i {
+            font-size: 1.2rem;
+            color: #5bc0de;
+        }
+
+        .category-pill:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(91, 192, 222, 0.5);
+            border-color: #ffd966;
+            background: #1d405b;
+        }
+
+        .category-pill.active {
+            background: #0f3550;
+            color: #ffd966;
+            border: 2px solid #ffd966;
+        }
+
+        .category-pill.active i {
+            color: #ffd966;
+        }
+
+        /* Featured simulation */
+        .featured-sim {
+            background: linear-gradient(135deg, #0a253a, #123f5a);
+            border-radius: 60px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            color: #e2f0fa;
+            position: relative;
+            overflow: hidden;
+            border: 4px solid #5bc0de;
+            box-shadow: 0 0 30px #5bc0de88;
+        }
+
+        .featured-sim::before {
+            content: '⏳';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.1;
+            right: -2rem;
+            bottom: -3rem;
+            transform: rotate(15deg);
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: #ffd966;
+            color: #0a1a2a;
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 0 20px cyan;
+        }
+
+        .featured-content {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .featured-text h2 {
+            font-size: 1.5rem;
+            color: #ffd966;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .featured-text h3 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            color: #d2f0ff;
+        }
+
+        .featured-meta {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .featured-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .featured-meta-item i {
+            font-size: 1.5rem;
+            color: #ffd966;
+        }
+
+        .featured-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .featured-btn {
+            background: #ffd966;
+            color: #001d33;
+            border: none;
+            padding: 1.2rem 3rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .featured-btn:hover {
+            background: white;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px #5bc0de;
+        }
+
+        .featured-image {
+            height: 350px;
+            background: linear-gradient(135deg, #1d5b7a, #0b3550);
+            border-radius: 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,255,255,0.4);
+            border: 3px solid #ffd966;
+        }
+
+        .featured-image i {
+            position: absolute;
+            font-size: 8rem;
+            color: rgba(255,217,102,0.4);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: float 4s infinite;
+            text-shadow: 0 0 20px cyan;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, -50%); }
+            50% { transform: translate(-50%, -60%); }
+        }
+
+        /* Sim grid */
+        .sim-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .sim-card {
+            background: #112b3f;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 20px 30px rgba(0,150,200,0.4);
+            transition: all 0.4s;
+            cursor: pointer;
+            border: 3px solid transparent;
+            animation: fadeInUp 0.6s ease-out;
+            color: #e2f0fa;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sim-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 50px rgba(91,192,222,0.7);
+            border-color: #ffd966;
+        }
+
+        .sim-image {
+            height: 220px;
+            background: linear-gradient(135deg, #145a82, #0e3b5e);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sim-image i {
+            position: absolute;
+            font-size: 5rem;
+            color: rgba(255,217,102,0.4);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s;
+        }
+
+        .sim-card:hover .sim-image i {
+            transform: translate(-50%, -50%) scale(1.1);
+            color: #ffd966aa;
+        }
+
+        .sim-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #ffd966;
+            color: #002b44;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            z-index: 2;
+        }
+
+        .sim-era {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            background: rgba(0,50,70,0.9);
+            color: white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .sim-content {
+            padding: 2rem;
+        }
+
+        .sim-category {
+            display: inline-block;
+            background: #0f4b6e;
+            color: #b3eaff;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .sim-title {
+            font-size: 1.8rem;
+            color: #cde9ff;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .sim-location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #aaccee;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .sim-location i {
+            color: #ffd966;
+        }
+
+        .sim-description {
+            color: #bfd9f0;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .sim-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .sim-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #b0d0f0;
+            font-size: 0.9rem;
+        }
+
+        .sim-meta-item i {
+            color: #ffd966;
+        }
+
+        .sim-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sim-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #5bc0de;
+        }
+
+        .sim-price small {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #8bb4cc;
+        }
+
+        .sim-btn {
+            background: #0f4b6e;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sim-btn:hover {
+            background: #146b9e;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #5bc0de;
+        }
+
+        /* Quantum features */
+        .quantum-section {
+            background: #112b3f;
+            border-radius: 60px;
+            padding: 4rem;
+            margin: 4rem 0;
+            box-shadow: 0 20px 40px #0f3550;
+            border: 1px solid #3a7ca5;
+        }
+
+        .features-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #ffd966;
+            margin-bottom: 3rem;
+        }
+
+        .quantum-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .quantum-card {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 40px;
+            background: #0a253a;
+            transition: all 0.3s;
+            border: 1px solid #26648b;
+        }
+
+        .quantum-card:hover {
+            background: #124f73;
+            transform: translateY(-10px);
+        }
+
+        .quantum-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #26648b, #0a3550);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #ffd966;
+            margin: 0 auto 1.5rem;
+            border: 2px solid #5bc0de;
+        }
+
+        .quantum-card h3 {
+            color: #b3e5ff;
+            margin-bottom: 0.5rem;
+        }
+
+        .quantum-card p {
+            color: #a0c6e0;
+        }
+
+        /* timeline */
+        .timeline-demo {
+            background: #0b263b;
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 4rem 0;
+            border: 2px solid #5bc0de;
+        }
+
+        .demo-360 {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background: #092b40;
+            border-radius: 40px;
+            overflow: hidden;
+            border: 4px solid #ffd966;
+        }
+
+        .demo-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            filter: hue-rotate(10deg);
+        }
+
+        .demo-controls {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            background: rgba(0,30,50,0.8);
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            backdrop-filter: blur(8px);
+        }
+
+        .demo-control {
+            width: 50px;
+            height: 50px;
+            background: #ffd966;
+            border: none;
+            border-radius: 50%;
+            color: #001d33;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .demo-control:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        /* back to top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: #0f4b6e;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 30px #5bc0de;
+            z-index: 1000;
+            transition: all 0.3s;
+            border: 2px solid #ffd966;
+        }
+
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        .back-to-top:hover {
+            background: #146b9e;
+            transform: translateY(-5px);
+        }
+
+        /* modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #0b263b;
+            border-radius: 60px;
+            max-width: 1000px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            border: 3px solid #5bc0de;
+            color: #d2f0ff;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: #ffd966;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+            color: #001d33;
+        }
+
+        .modal-close:hover {
+            background: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #1a4e72, #0a2b40);
+            color: white;
+            padding: 3rem;
+            border-radius: 60px 60px 0 0;
+        }
+
+        .modal-body {
+            padding: 3rem;
+        }
+
+        @media (max-width: 1200px) {
+            .quantum-grid { grid-template-columns: repeat(2,1fr); }
+        }
+        @media (max-width: 768px) {
+            .quantum-grid { grid-template-columns: 1fr; }
+            .featured-content { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="simulator-header">
+        <h1>
+            <i class="fas fa-atom"></i>
+            Future Earth Simulator <span style="font-size: 2rem;">#2805</span>
+        </h1>
+        <p>witness possible futures • climate • evolution • tech • beyond</p>
+        <div class="version-badge"><i class="fas fa-crystal"></i> QUANTUM CORE v2.8</div>
+    </header>
+
+    <div class="container">
+        <!-- filter bar -->
+        <div class="filter-bar" data-aos="fade-up">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchSim" placeholder="simulate timeline, region, scenario...">
+            </div>
+            <div class="filter-options">
+                <select class="filter-select" id="eraFilter">
+                    <option value="all">All Eras</option>
+                    <option value="2100">Year 2100</option>
+                    <option value="2200">Year 2200</option>
+                    <option value="2500">Year 2500</option>
+                    <option value="3000">Year 3000+</option>
+                </select>
+                <select class="filter-select" id="typeFilter">
+                    <option value="all">All Scenarios</option>
+                    <option value="climate">Climate</option>
+                    <option value="tech">Tech Evolution</option>
+                    <option value="biodome">Biodome</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- categories -->
+        <div class="categories-section" data-aos="fade-up">
+            <div class="categories-scroll">
+                <div class="category-pill active" onclick="filterCategory('all')"><i class="fas fa-globe"></i> All Futures</div>
+                <div class="category-pill" onclick="filterCategory('ocean')"><i class="fas fa-water"></i> Rising Oceans</div>
+                <div class="category-pill" onclick="filterCategory('arctic')"><i class="fas fa-snowflake"></i> New Arctic</div>
+                <div class="category-pill" onclick="filterCategory('desert')"><i class="fas fa-sun"></i> Mega Deserts</div>
+                <div class="category-pill" onclick="filterCategory('forest')"><i class="fas fa-tree"></i> Eco-Cities</div>
+                <div class="category-pill" onclick="filterCategory('space')"><i class="fas fa-rocket"></i> Space Habitats</div>
+            </div>
+        </div>
+
+        <!-- featured sim -->
+        <div class="featured-sim" data-aos="fade-up">
+            <div class="featured-badge">⚡ QUANTUM PROBABILITY 94%</div>
+            <div class="featured-content">
+                <div class="featured-text">
+                    <h2>SIMULATION OF THE CYCLE</h2>
+                    <h3>Earth 2500: The Great Merge</h3>
+                    <div class="featured-meta">
+                        <div class="featured-meta-item"><i class="fas fa-hourglass"></i><span> 2.5 billion steps</span></div>
+                        <div class="featured-meta-item"><i class="fas fa-microchip"></i><span> AI prediction</span></div>
+                        <div class="featured-meta-item"><i class="fas fa-360-degrees"></i><span> 4D immersion</span></div>
+                    </div>
+                    <p class="featured-description">Witness the merging of nature and hyperstructures. Floating biodomes, carbon-negative cities, and new human evolution. Based on real IPCC+ data.</p>
+                    <button class="featured-btn" onclick="startSim(1)"><i class="fas fa-play"></i> RUN SIMULATION</button>
+                </div>
+                <div class="featured-image"><i class="fas fa-city"></i></div>
+            </div>
+        </div>
+
+        <!-- sim grid -->
+        <div class="sim-grid" id="simGrid"></div>
+
+        <!-- quantum features -->
+        <div class="quantum-section" data-aos="fade-up">
+            <h2 class="features-title">⚛️ simulation engines</h2>
+            <div class="quantum-grid">
+                <div class="quantum-card"><div class="quantum-icon"><i class="fas fa-cloud-sun"></i></div><h3>Climate AI</h3><p>1000-year weather & biome evolution</p></div>
+                <div class="quantum-card"><div class="quantum-icon"><i class="fas fa-dna"></i></div><h3>BioFuture</h3><p>speciation & adaptation models</p></div>
+                <div class="quantum-card"><div class="quantum-icon"><i class="fas fa-robot"></i></div><h3>Technogenesis</h3><p>AI / posthuman scenarios</p></div>
+                <div class="quantum-card"><div class="quantum-icon"><i class="fas fa-satellite"></i></div><h3>Geoengineering</h3><p>terraforming earth 2.0</p></div>
+            </div>
+        </div>
+
+        <!-- 360 timeline -->
+        <div class="timeline-demo" data-aos="fade-up">
+            <div class="demo-header" style="text-align:center; margin-bottom:2rem;">
+                <h2 style="color:#ffd966;">🌀 TIMELINE SCROLLER (2805 · fragment)</h2>
+                <p style="color:#b0e0ff;">drag to see centuries pass</p>
+            </div>
+            <div class="demo-360">
+                <iframe class="demo-iframe" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&loop=1" frameborder="0" allow="autoplay; encrypted-media;" allowfullscreen></iframe>
+                <div class="demo-controls">
+                    <button class="demo-control"><i class="fas fa-backward-fast"></i></button>
+                    <button class="demo-control"><i class="fas fa-play"></i></button>
+                    <button class="demo-control"><i class="fas fa-forward-fast"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- cta -->
+        <div style="background: #0f2a44; border-radius:60px; padding:4rem; text-align:center; border:2px solid #ffd966; margin:4rem 0;">
+            <h2 style="font-size:2.5rem;">🔮 initialize your own future</h2>
+            <p style="margin:1rem 0; color:#a0d0ff;">become the observer. page #2805.</p>
+            <button class="featured-btn" onclick="bookSim()"><i class="fas fa-crystal"></i> start free simulation</button>
+        </div>
+    </div>
+
+    <!-- modal -->
+    <div class="modal" id="simModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            <div class="modal-header" id="modalHeader">
+                <h2 id="modalTitle">simulation loading...</h2>
+                <p id="modalSubtitle">quantum state</p>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <!-- AOS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+
+        // sim data (future earth)
+        const simulations = [
+            { id:1, title:"Neo Amazonia", era:"2100", category:"forest", type:"climate", duration:"4.5 Gy", rating:4.9, price:"FREE", desc:"Re-greened amazon with bio-domes.", guide:"S. Alvarez", icon:"fa-tree", viewers:"2.1k" },
+            { id:2, title:"Atlantis Reborn", era:"2200", category:"ocean", type:"climate", duration:"3.2 Gy", rating:4.8, price:"FREE", desc:"Sea-level rise cities, floating ecologies.", guide:"Dr. M. Okonkwo", icon:"fa-water", viewers:"1.7k" },
+            { id:3, title:"Aurora Borealis 24/7", era:"2500", category:"arctic", type:"tech", duration:"6.0 Gy", rating:5.0, price:"FREE", desc:"Permanent aurora due to magneto-engineering.", guide:"E. Vinter", icon:"fa-star", viewers:"3.4k" },
+            { id:4, title:"Sahara Oasis", era:"2100", category:"desert", type:"geo", duration:"2.8 Gy", rating:4.7, price:"FREE", desc:"Vast solarpunk oases and carbon farms.", guide:"A. Idriss", icon:"fa-sun", viewers:"953" },
+            { id:5, title:"Orbital Ring", era:"3000", category:"space", type:"tech", duration:"8.1 Gy", rating:5.0, price:"FREE", desc:"Earth’s orbital habitat ring, 10M people.", guide:"C. Wei", icon:"fa-rocket", viewers:"5.6k" },
+            { id:6, title:"Pangaea Ultima", era:"2500", category:"forest", type:"climate", duration:"7.3 Gy", rating:4.8, price:"FREE", desc:"Continental merge simulation + super biodiversity.", guide:"Dr. K. Jones", icon:"fa-mountain", viewers:"2.2k" }
+        ];
+
+        const grid = document.getElementById('simGrid');
+        function renderSims() {
+            grid.innerHTML = simulations.map(s => `
+                <div class="sim-card" onclick="showSimDetails(${s.id})">
+                    <div class="sim-image"><i class="fas ${s.icon}"></i><span class="sim-badge">⭐ ${s.rating}</span><span class="sim-era"><i class="far fa-clock"></i> year ${s.era}</span></div>
+                    <div class="sim-content"><span class="sim-category">${s.category}</span><h3 class="sim-title">${s.title}</h3>
+                    <div class="sim-location"><i class="fas fa-map-pin"></i> future earth</div>
+                    <p class="sim-description">${s.desc}</p><div class="sim-meta"><span class="sim-meta-item"><i class="fas fa-user-astronaut"></i> ${s.guide}</span><span class="sim-meta-item"><i class="fas fa-eye"></i> ${s.viewers} observing</span></div>
+                    <div class="sim-footer"><span class="sim-price">${s.price} <small>/observer</small></span><button class="sim-btn" onclick="startSim(${s.id}, event)"><i class="fas fa-play"></i> simulate</button></div></div>
+                </div>`).join('');
+        }
+        renderSims();
+
+        window.filterCategory = (cat) => {
+            document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
+            event.target.closest('.category-pill').classList.add('active');
+        };
+
+        window.showSimDetails = (id) => {
+            const s = simulations.find(x=>x.id===id);
+            document.getElementById('modalTitle').innerText = s.title + ' · ' + s.era;
+            document.getElementById('modalSubtitle').innerText = s.desc;
+            document.getElementById('modalBody').innerHTML = `<div style="text-align:center;"><i class="fas ${s.icon}" style="font-size:5rem;color:#ffd966;"></i><p style="margin:2rem">🔮 quantum simulation of ${s.title}. guide: ${s.guide}. duration: ${s.duration}. <br/> ⚡ real-time collaborative viewing.</p><button class="featured-btn" onclick="startSim(${s.id})"><i class="fas fa-play"></i> enter timeline</button></div>`;
+            document.getElementById('simModal').classList.add('active');
+        };
+        window.closeModal = () => document.getElementById('simModal').classList.remove('active');
+        window.startSim = (id, e) => { e?.stopPropagation(); alert('🌀 simulation running (quantum demo) · page #2805'); };
+        window.bookSim = () => alert('✨ you may start any simulation for free. future earth awaits.');
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll',()=>{ window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // modal escape
+        document.addEventListener('keydown',(e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('simModal')) closeModal(); };
+    </script>
+</body>
+</html>

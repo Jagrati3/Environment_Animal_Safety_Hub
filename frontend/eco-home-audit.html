@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Home Audit Tool</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f4f8f6;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      padding: 32px 24px 24px 24px;
+    }
+    h1 {
+      text-align: center;
+      color: #2e7d32;
+      margin-bottom: 8px;
+    }
+    h2 {
+      color: #388e3c;
+      margin-top: 32px;
+      margin-bottom: 12px;
+    }
+    .progress {
+      width: 100%;
+      background: #e0e0e0;
+      border-radius: 8px;
+      margin: 16px 0 24px 0;
+      height: 12px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #66bb6a, #43a047);
+      width: 0%;
+      transition: width 0.4s;
+    }
+    .question {
+      margin-bottom: 24px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    input[type="number"], select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #bdbdbd;
+      margin-bottom: 12px;
+      font-size: 1rem;
+    }
+    button {
+      background: #388e3c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #2e7d32;
+    }
+    .recommendations {
+      background: #e8f5e9;
+      border-radius: 8px;
+      padding: 18px 16px;
+      margin-top: 24px;
+      color: #1b5e20;
+    }
+    .summary {
+      margin-top: 18px;
+      font-size: 1.1rem;
+      color: #333;
+    }
+    @media (max-width: 700px) {
+      .container { padding: 18px 4vw; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Eco Home Audit Tool</h1>
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+    <form id="auditForm">
+      <!-- Questions will be injected here -->
+    </form>
+    <div id="result"></div>
+  </div>
+  <script>
+    // Audit questions definition
+    const auditSections = [
+      {
+        title: 'Energy Usage',
+        questions: [
+          { q: 'How many people live in your home?', type: 'number', name: 'occupants', min: 1, max: 20, required: true },
+          { q: 'What is your average monthly electricity bill (USD)?', type: 'number', name: 'electricity', min: 0, max: 1000, required: true },
+          { q: 'Do you use LED bulbs in most rooms?', type: 'select', name: 'led_bulbs', options: ['Yes', 'Some', 'No'], required: true },
+          { q: 'Do you have energy-efficient appliances?', type: 'select', name: 'efficient_appliances', options: ['All', 'Some', 'None'], required: true },
+          { q: 'How often do you turn off lights when leaving a room?', type: 'select', name: 'lights_off', options: ['Always', 'Sometimes', 'Rarely'], required: true },
+        ]
+      },
+      {
+        title: 'Water Usage',
+        questions: [
+          { q: 'What is your average monthly water bill (USD)?', type: 'number', name: 'water_bill', min: 0, max: 500, required: true },
+          { q: 'Do you have low-flow showerheads/faucets?', type: 'select', name: 'low_flow', options: ['Yes', 'Some', 'No'], required: true },
+          { q: 'How long are your typical showers (minutes)?', type: 'number', name: 'shower_length', min: 1, max: 60, required: true },
+          { q: 'Do you fix leaks promptly?', type: 'select', name: 'fix_leaks', options: ['Always', 'Sometimes', 'Rarely'], required: true },
+        ]
+      },
+      {
+        title: 'Waste Management',
+        questions: [
+          { q: 'Do you recycle paper, plastic, and glass?', type: 'select', name: 'recycle', options: ['Always', 'Sometimes', 'Never'], required: true },
+          { q: 'Do you compost food waste?', type: 'select', name: 'compost', options: ['Yes', 'No'], required: true },
+          { q: 'How many trash bags do you put out per week?', type: 'number', name: 'trash_bags', min: 0, max: 20, required: true },
+          { q: 'Do you avoid single-use plastics?', type: 'select', name: 'single_use', options: ['Always', 'Sometimes', 'Rarely'], required: true },
+        ]
+      }
+    ];
+
+    let currentSection = 0;
+    let answers = {};
+
+    function renderSection() {
+      const form = document.getElementById('auditForm');
+      form.innerHTML = '';
+      const section = auditSections[currentSection];
+      const totalSections = auditSections.length;
+      document.getElementById('progressBar').style.width = ((currentSection) / totalSections * 100) + '%';
+      const h2 = document.createElement('h2');
+      h2.textContent = section.title;
+      form.appendChild(h2);
+      section.questions.forEach(q => {
+        const div = document.createElement('div');
+        div.className = 'question';
+        const label = document.createElement('label');
+        label.textContent = q.q;
+        label.htmlFor = q.name;
+        div.appendChild(label);
+        let input;
+        if (q.type === 'number') {
+          input = document.createElement('input');
+          input.type = 'number';
+          input.name = q.name;
+          input.id = q.name;
+          input.min = q.min;
+          input.max = q.max;
+          input.required = q.required;
+          if (answers[q.name] !== undefined) input.value = answers[q.name];
+        } else if (q.type === 'select') {
+          input = document.createElement('select');
+          input.name = q.name;
+          input.id = q.name;
+          input.required = q.required;
+          q.options.forEach(opt => {
+            const option = document.createElement('option');
+            option.value = opt;
+            option.textContent = opt;
+            if (answers[q.name] === opt) option.selected = true;
+            input.appendChild(option);
+          });
+        }
+        div.appendChild(input);
+        form.appendChild(div);
+      });
+      const btn = document.createElement('button');
+      btn.type = 'submit';
+      btn.textContent = currentSection === totalSections - 1 ? 'See Recommendations' : 'Next';
+      form.appendChild(btn);
+      if (currentSection > 0) {
+        const backBtn = document.createElement('button');
+        backBtn.type = 'button';
+        backBtn.textContent = 'Back';
+        backBtn.style.marginLeft = '12px';
+        backBtn.onclick = () => {
+          currentSection--;
+          renderSection();
+        };
+        form.appendChild(backBtn);
+      }
+    }
+
+    document.getElementById('auditForm').onsubmit = function(e) {
+      e.preventDefault();
+      // Save answers
+      const section = auditSections[currentSection];
+      section.questions.forEach(q => {
+        const val = this[q.name].value;
+        answers[q.name] = q.type === 'number' ? Number(val) : val;
+      });
+      if (currentSection < auditSections.length - 1) {
+        currentSection++;
+        renderSection();
+      } else {
+        showResults();
+      }
+    };
+
+    function showResults() {
+      document.getElementById('progressBar').style.width = '100%';
+      document.getElementById('auditForm').style.display = 'none';
+      const result = document.getElementById('result');
+      result.innerHTML = '<h2>Personalized Recommendations</h2>';
+      let recs = [];
+      // Energy
+      if (answers.electricity > 150) recs.push('Consider reducing electricity usage. Switch to LED bulbs, unplug devices, and use energy-efficient appliances.');
+      if (answers.led_bulbs === 'No') recs.push('Switch to LED bulbs in all rooms to save energy.');
+      if (answers.efficient_appliances === 'None') recs.push('Upgrade to energy-efficient appliances for long-term savings.');
+      if (answers.lights_off === 'Rarely') recs.push('Make a habit of turning off lights when leaving rooms.');
+      // Water
+      if (answers.water_bill > 60) recs.push('Reduce water usage: take shorter showers, fix leaks, and consider low-flow fixtures.');
+      if (answers.low_flow === 'No') recs.push('Install low-flow showerheads and faucets to save water.');
+      if (answers.shower_length > 10) recs.push('Try to keep showers under 10 minutes.');
+      if (answers.fix_leaks === 'Rarely') recs.push('Fix leaks promptly to prevent water waste.');
+      // Waste
+      if (answers.recycle === 'Never') recs.push('Start recycling paper, plastic, and glass to reduce landfill waste.');
+      if (answers.compost === 'No') recs.push('Compost food waste to reduce trash and create natural fertilizer.');
+      if (answers.trash_bags > 3) recs.push('Reduce trash output by recycling, composting, and avoiding single-use items.');
+      if (answers.single_use === 'Rarely') recs.push('Avoid single-use plastics by using reusable bags, bottles, and containers.');
+      // General
+      if (recs.length === 0) recs.push('Great job! Your home is already quite eco-friendly.');
+      result.innerHTML += '<div class="recommendations"><ul>' + recs.map(r => `<li>${r}</li>`).join('') + '</ul></div>';
+      // Summary
+      result.innerHTML += '<div class="summary"><strong>Your Inputs:</strong><ul>' +
+        Object.entries(answers).map(([k,v]) => `<li>${k.replace(/_/g,' ')}: ${v}</li>`).join('') + '</ul></div>';
+      result.innerHTML += '<button onclick="location.reload()">Start Over</button>';
+    }
+
+    // Initial render
+    renderSection();
+  </script>
+</body>
+</html>

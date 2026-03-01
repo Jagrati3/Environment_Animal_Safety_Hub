@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Food Rescue Grid - EcoLife</title>
+    <link rel="stylesheet" href="../css/food-rescue-grid.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <header class="rescue-header">
+        <div class="header-container">
+            <a href="../index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+            <div class="header-center">
+                <i class="fas fa-hands-helping"></i>
+                <h1>Community Food Rescue Grid</h1>
+                <p>Connecting Surplus Food with Those in Need</p>
+            </div>
+            <div class="header-actions">
+                <button id="donate-btn" class="action-btn donate">
+                    <i class="fas fa-plus-circle"></i> Donate Food
+                </button>
+                <button id="volunteer-btn" class="action-btn volunteer">
+                    <i class="fas fa-user-plus"></i> Volunteer
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-nav">
+        <button class="nav-btn active" data-view="dashboard">
+            <i class="fas fa-th-large"></i> Dashboard
+        </button>
+        <button class="nav-btn" data-view="map">
+            <i class="fas fa-map-marked-alt"></i> Live Map
+        </button>
+        <button class="nav-btn" data-view="donations">
+            <i class="fas fa-box-open"></i> Active Donations
+        </button>
+        <button class="nav-btn" data-view="requests">
+            <i class="fas fa-hand-holding-heart"></i> Requests
+        </button>
+        <button class="nav-btn" data-view="analytics">
+            <i class="fas fa-chart-line"></i> Impact
+        </button>
+    </nav>
+
+    <main class="main-content">
+        <!-- Dashboard View -->
+        <section id="dashboard-view" class="view active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-utensils stat-icon"></i>
+                    <div class="stat-content">
+                        <div class="stat-value" id="meals-rescued">0</div>
+                        <div class="stat-label">Meals Rescued Today</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-clock stat-icon"></i>
+                    <div class="stat-content">
+                        <div class="stat-value" id="active-donations">0</div>
+                        <div class="stat-label">Active Donations</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-users stat-icon"></i>
+                    <div class="stat-content">
+                        <div class="stat-value" id="volunteers-active">0</div>
+                        <div class="stat-label">Volunteers Online</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-leaf stat-icon"></i>
+                    <div class="stat-content">
+                        <div class="stat-value" id="waste-prevented">0 kg</div>
+                        <div class="stat-label">Waste Prevented</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-section urgent-section">
+                    <h2><i class="fas fa-exclamation-triangle"></i> Urgent Pickups</h2>
+                    <div id="urgent-list" class="urgent-list"></div>
+                </div>
+
+                <div class="dashboard-section nearby-section">
+                    <h2><i class="fas fa-location-arrow"></i> Nearby Opportunities</h2>
+                    <div id="nearby-list" class="opportunity-list"></div>
+                </div>
+
+                <div class="dashboard-section activity-section">
+                    <h2><i class="fas fa-stream"></i> Recent Activity</h2>
+                    <div id="activity-feed" class="activity-feed"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Map View -->
+        <section id="map-view" class="view">
+            <div class="map-container">
+                <div id="rescue-map"></div>
+                <div class="map-controls">
+                    <div class="map-legend">
+                        <h4>Legend</h4>
+                        <div class="legend-item">
+                            <span class="marker-dot donor"></span> Food Donors
+                        </div>
+                        <div class="legend-item">
+                            <span class="marker-dot receiver"></span> Recipients
+                        </div>
+                        <div class="legend-item">
+                            <span class="marker-dot volunteer"></span> Volunteers
+                        </div>
+                    </div>
+                    <div class="map-filters">
+                        <h4>Filters</h4>
+                        <label>
+                            <input type="checkbox" id="filter-restaurants" checked> Restaurants
+                        </label>
+                        <label>
+                            <input type="checkbox" id="filter-events" checked> Events
+                        </label>
+                        <label>
+                            <input type="checkbox" id="filter-households" checked> Households
+                        </label>
+                        <label>
+                            <input type="checkbox" id="filter-ngos" checked> NGOs
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Donations View -->
+        <section id="donations-view" class="view">
+            <div class="view-header">
+                <h2>Active Food Donations</h2>
+                <div class="view-actions advanced-filters">
+                    <select id="donation-type-filter">
+                        <option value="all">All Types</option>
+                        <option value="restaurant">Restaurant</option>
+                        <option value="hotel">Hotel/Hostel</option>
+                        <option value="event">Event/Catering</option>
+                        <option value="household">Household</option>
+                        <option value="grocery">Grocery Store</option>
+                        <option value="bakery">Bakery</option>
+                    </select>
+                    <select id="donation-urgency-filter">
+                        <option value="all">All Urgencies</option>
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                        <option value="critical">Critical</option>
+                    </select>
+                    <select id="donation-status-filter">
+                        <option value="all">All Statuses</option>
+                        <option value="available">Available</option>
+                        <option value="claimed">Claimed</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                    <input type="date" id="donation-date-from" placeholder="From">
+                    <input type="date" id="donation-date-to" placeholder="To">
+                    <input type="text" id="donation-location-filter" placeholder="Location">
+                    <input type="text" id="donation-search" placeholder="Search donations...">
+                </div>
+            </div>
+            <div id="donations-grid" class="donations-grid"></div>
+        </section>
+
+        <!-- Requests View -->
+        <section id="requests-view" class="view">
+            <div class="view-header">
+                <h2>Food Requests from Community</h2>
+                <button id="new-request-btn" class="btn-primary">
+                    <i class="fas fa-plus"></i> New Request
+                </button>
+                <div class="view-actions advanced-filters">
+                    <select id="request-type-filter">
+                        <option value="all">All Types</option>
+                        <option value="restaurant">Restaurant</option>
+                        <option value="hotel">Hotel/Hostel</option>
+                        <option value="event">Event/Catering</option>
+                        <option value="household">Household</option>
+                        <option value="grocery">Grocery Store</option>
+                        <option value="bakery">Bakery</option>
+                    </select>
+                    <select id="request-urgency-filter">
+                        <option value="all">All Urgencies</option>
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                        <option value="critical">Critical</option>
+                    </select>
+                    <select id="request-status-filter">
+                        <option value="all">All Statuses</option>
+                        <option value="available">Available</option>
+                        <option value="claimed">Claimed</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                    <input type="date" id="request-date-from" placeholder="From">
+                    <input type="date" id="request-date-to" placeholder="To">
+                    <input type="text" id="request-location-filter" placeholder="Location">
+                    <input type="text" id="request-search" placeholder="Search requests...">
+                </div>
+            </div>
+            <div id="requests-grid" class="requests-grid"></div>
+        </section>
+
+        <!-- Analytics View -->
+        <section id="analytics-view" class="view">
+            <div class="analytics-header">
+                <h2>Community Impact Analytics</h2>
+                <select id="analytics-period">
+                    <option value="today">Today</option>
+                    <option value="week">This Week</option>
+                    <option value="month">This Month</option>
+                    <option value="year">This Year</option>
+                </select>
+            </div>
+
+            <div class="impact-summary">
+                <div class="impact-card">
+                    <h3>Total Meals Rescued</h3>
+                    <div class="impact-value">12,847</div>
+                    <div class="impact-change positive">+23% from last month</div>
+                </div>
+                <div class="impact-card">
+                    <h3>Food Waste Prevented</h3>
+                    <div class="impact-value">3,421 kg</div>
+                    <div class="impact-change positive">+18% from last month</div>
+                </div>
+                <div class="impact-card">
+                    <h3>CO₂ Emissions Saved</h3>
+                    <div class="impact-value">8,552 kg</div>
+                    <div class="impact-change positive">+15% from last month</div>
+                </div>
+                <div class="impact-card">
+                    <h3>People Served</h3>
+                    <div class="impact-value">4,283</div>
+                    <div class="impact-change positive">+31% from last month</div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <h3>Donations by Source</h3>
+                    <canvas id="source-chart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Weekly Rescue Trend</h3>
+                    <canvas id="trend-chart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Food Categories</h3>
+                    <canvas id="category-chart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Response Time</h3>
+                    <canvas id="response-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="leaderboard-section">
+                <h3><i class="fas fa-trophy"></i> Top Contributors</h3>
+                <div class="leaderboard">
+                    <div class="leaderboard-item">
+                        <span class="rank">1</span>
+                        <span class="name">Green Valley Restaurant</span>
+                        <span class="score">847 meals</span>
+                    </div>
+                    <div class="leaderboard-item">
+                        <span class="rank">2</span>
+                        <span class="name">Community Kitchen NGO</span>
+                        <span class="score">623 pickups</span>
+                    </div>
+                    <div class="leaderboard-item">
+                        <span class="rank">3</span>
+                        <span class="name">Sarah Johnson (Volunteer)</span>
+                        <span class="score">412 deliveries</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Donate Food Modal -->
+    <div id="donate-modal" class="modal hidden">
+        <div class="modal-content large">
+            <span class="close-modal">&times;</span>
+            <h2><i class="fas fa-utensils"></i> Donate Surplus Food</h2>
+            <form id="donate-form">
+                <div class="form-grid">
+                    <div class="form-section">
+                        <h3>Donor Information</h3>
+                        <label>
+                            Donor Type <span class="required">*</span>
+                            <select id="donor-type" required>
+                                <option value="">Select type</option>
+                                <option value="restaurant">Restaurant</option>
+                                <option value="hotel">Hotel/Hostel</option>
+                                <option value="event">Event/Catering</option>
+                                <option value="household">Household</option>
+                                <option value="grocery">Grocery Store</option>
+                                <option value="bakery">Bakery</option>
+                            </select>
+                        </label>
+                        <label>
+                            Organization/Name <span class="required">*</span>
+                            <input type="text" id="donor-name" required>
+                        </label>
+                        <label>
+                            Contact Person
+                            <input type="text" id="contact-person">
+                        </label>
+                        <label>
+                            Phone Number <span class="required">*</span>
+                            <input type="tel" id="donor-phone" required>
+                        </label>
+                        <label>
+                            Email
+                            <input type="email" id="donor-email">
+                        </label>
+                        <label>
+                            Pickup Address <span class="required">*</span>
+                            <textarea id="pickup-address" rows="2" required></textarea>
+                        </label>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Food Details</h3>
+                        <label>
+                            Food Category <span class="required">*</span>
+                            <select id="food-category" required>
+                                <option value="">Select category</option>
+                                <option value="cooked">Cooked Meals</option>
+                                <option value="packaged">Packaged Food</option>
+                                <option value="produce">Fresh Produce</option>
+                                <option value="bakery">Bakery Items</option>
+                                <option value="dairy">Dairy Products</option>
+                                <option value="mixed">Mixed Items</option>
+                            </select>
+                        </label>
+                        <label>
+                            Estimated Servings <span class="required">*</span>
+                            <input type="number" id="servings" min="1" required>
+                        </label>
+                        <label>
+                            Food Description
+                            <textarea id="food-description" rows="3" placeholder="Describe the food items..."></textarea>
+                        </label>
+                        <label>
+                            Dietary Information
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" id="veg"> Vegetarian</label>
+                                <label><input type="checkbox" id="vegan"> Vegan</label>
+                                <label><input type="checkbox" id="halal"> Halal</label>
+                                <label><input type="checkbox" id="kosher"> Kosher</label>
+                                <label><input type="checkbox" id="gluten-free"> Gluten-Free</label>
+                            </div>
+                        </label>
+                        <label>
+                            Allergen Information
+                            <input type="text" id="allergens" placeholder="e.g., nuts, dairy, eggs">
+                        </label>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Pickup Details</h3>
+                        <label>
+                            Available From <span class="required">*</span>
+                            <input type="datetime-local" id="available-from" required>
+                        </label>
+                        <label>
+                            Available Until <span class="required">*</span>
+                            <input type="datetime-local" id="available-until" required>
+                        </label>
+                        <label>
+                            Urgency Level
+                            <select id="urgency">
+                                <option value="low">Low - Flexible timing</option>
+                                <option value="medium">Medium - Within 4 hours</option>
+                                <option value="high">High - Within 2 hours</option>
+                                <option value="critical">Critical - Within 1 hour</option>
+                            </select>
+                        </label>
+                        <label>
+                            Storage Condition
+                            <select id="storage">
+                                <option value="room">Room Temperature</option>
+                                <option value="refrigerated">Refrigerated</option>
+                                <option value="frozen">Frozen</option>
+                                <option value="hot">Hot (needs immediate pickup)</option>
+                            </select>
+                        </label>
+                        <label>
+                            Packaging
+                            <select id="packaging">
+                                <option value="containers">In containers (returnable)</option>
+                                <option value="disposable">Disposable packaging</option>
+                                <option value="bulk">Bulk (needs containers)</option>
+                            </select>
+                        </label>
+                        <label>
+                            Special Instructions
+                            <textarea id="special-instructions" rows="2" placeholder="Parking, access codes, etc."></textarea>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="foodRescue.closeModal('donate-modal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Submit Donation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Volunteer Registration Modal -->
+    <div id="volunteer-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2><i class="fas fa-user-plus"></i> Volunteer Registration</h2>
+            <form id="volunteer-form">
+                <label>
+                    Full Name <span class="required">*</span>
+                    <input type="text" id="volunteer-name" required>
+                </label>
+                <label>
+                    Phone Number <span class="required">*</span>
+                    <input type="tel" id="volunteer-phone" required>
+                </label>
+                <label>
+                    Email <span class="required">*</span>
+                    <input type="email" id="volunteer-email" required>
+                </label>
+                <label>
+                    Location/Area
+                    <input type="text" id="volunteer-location">
+                </label>
+                <label>
+                    Transportation
+                    <select id="volunteer-transport">
+                        <option value="car">Car</option>
+                        <option value="bike">Bike/Scooter</option>
+                        <option value="walk">Walking</option>
+                        <option value="public">Public Transport</option>
+                    </select>
+                </label>
+                <label>
+                    Availability
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" value="morning"> Morning</label>
+                        <label><input type="checkbox" value="afternoon"> Afternoon</label>
+                        <label><input type="checkbox" value="evening"> Evening</label>
+                        <label><input type="checkbox" value="night"> Night</label>
+                    </div>
+                </label>
+                <label>
+                    Maximum Distance (km)
+                    <input type="number" id="max-distance" min="1" max="50" value="5">
+                </label>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="foodRescue.closeModal('volunteer-modal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Register as Volunteer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Claim Donation Modal -->
+    <div id="claim-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2><i class="fas fa-hand-holding-heart"></i> Claim Food Donation</h2>
+            <div id="claim-details"></div>
+            <form id="claim-form">
+                <label>
+                    Organization/Name <span class="required">*</span>
+                    <input type="text" id="claimer-name" required>
+                </label>
+                <label>
+                    Organization Type
+                    <select id="claimer-type">
+                        <option value="ngo">NGO/Charity</option>
+                        <option value="shelter">Shelter</option>
+                        <option value="community">Community Kitchen</option>
+                        <option value="volunteer">Individual Volunteer</option>
+                    </select>
+                </label>
+                <label>
+                    Contact Number <span class="required">*</span>
+                    <input type="tel" id="claimer-phone" required>
+                </label>
+                <label>
+                    Estimated Pickup Time
+                    <input type="datetime-local" id="pickup-time" required>
+                </label>
+                <label>
+                    Number of People to Serve
+                    <input type="number" id="people-serve" min="1">
+                </label>
+                <label>
+                    Additional Notes
+                    <textarea id="claim-notes" rows="2"></textarea>
+                </label>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="foodRescue.closeModal('claim-modal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Confirm Claim</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="../js/food-rescue-grid.js"></script>
+</body>
+</html>

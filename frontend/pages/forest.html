@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌲 Forest Conservation · rewilding the planet</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Google Fonts: earthy, natural, clean -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #e3f0d8;
+            background: radial-gradient(circle at 10% 30%, #d2e8ca, #b8dba8);
+            min-height: 100vh;
+            color: #1d5430;
+            line-height: 1.6;
+        }
+
+        /* header – forest canopy, hopeful */
+        .forest-header {
+            background: linear-gradient(145deg, #3f8053, #2a6a41);
+            padding: 5rem 2rem 4.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+            border-bottom: 8px solid #fbeba0;
+            box-shadow: 0 20px 40px #2a6a41;
+        }
+
+        .forest-header::before {
+            content: '🌲🌳';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.1;
+            left: -4rem;
+            bottom: -6rem;
+            transform: rotate(-10deg);
+        }
+
+        .forest-header h1 {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 800;
+            font-size: 4rem;
+            color: #fcf9cf;
+            text-shadow: 6px 6px 0 #1d6236;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .forest-header h1 i {
+            color: #ffecaa;
+            filter: drop-shadow(0 0 8px #ffeeaa);
+        }
+
+        .forest-header p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 1.5rem auto;
+            background: #deffd6c0;
+            padding: 0.8rem 2.5rem;
+            border-radius: 60px;
+            color: #0d4b29;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            border: 3px solid #fbeba0;
+        }
+
+        .forest-badge {
+            margin-top: 1.8rem;
+            display: inline-block;
+            background: #fedb86;
+            color: #1b6133;
+            padding: 0.6rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #fff2b5;
+        }
+
+        /* container */
+        .container {
+            max-width: 1400px;
+            margin: -3rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* filter/search bar */
+        .filter-bar {
+            background: #fafff2e0;
+            backdrop-filter: blur(8px);
+            border-radius: 80px;
+            padding: 1.5rem 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 30px #2b754b70, 0 0 0 3px #dcf5c0 inset;
+            border: 3px solid #daf0c0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3e9462;
+            font-size: 1.3rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 5rem;
+            border: 3px solid #cef0b5;
+            border-radius: 60px;
+            font-size: 1rem;
+            background: white;
+            color: #1e5a30;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.8rem 2rem;
+            border: 3px solid #c8eab2;
+            border-radius: 60px;
+            background: white;
+            font-weight: 600;
+            color: #1b6839;
+            cursor: pointer;
+        }
+
+        /* topic chips */
+        .topic-chips {
+            margin-bottom: 2.5rem;
+        }
+
+        .chip-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: #9fc99b #b8e0b0;
+        }
+
+        .chip-scroll::-webkit-scrollbar { height: 8px; }
+        .chip-scroll::-webkit-scrollbar-track { background: #d6f0ca; border-radius: 10px; }
+        .chip-scroll::-webkit-scrollbar-thumb { background: #9fc99b; border-radius: 10px; }
+
+        .topic-chip {
+            flex: 0 0 auto;
+            background: #faffea;
+            padding: 1rem 2.5rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 6px 14px #4d986d70;
+            cursor: pointer;
+            font-weight: 600;
+            border: 3px solid transparent;
+            transition: 0.2s;
+            font-size: 1.1rem;
+        }
+
+        .topic-chip i { color: #d68d2c; font-size: 1.5rem; }
+        .topic-chip:hover { transform: translateY(-5px); border-color: #aacc88; background: #ffffdf; }
+        .topic-chip.active { background: #e0f0c0; border-color: #7ba55b; }
+
+        /* featured topic */
+        .featured-topic {
+            background: linear-gradient(145deg, #568f64, #3b734b);
+            border-radius: 80px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            border: 8px solid #ecd996;
+            box-shadow: 0 30px 40px #1f603a;
+            color: #fcfae6;
+            position: relative;
+        }
+
+        .featured-topic::before {
+            content: '🌳';
+            font-size: 14rem;
+            opacity: 0.1;
+            position: absolute;
+            bottom: -2rem;
+            right: 2rem;
+            transform: rotate(5deg);
+        }
+
+        .topic-ribbon {
+            position: absolute;
+            top: 2rem;
+            right: 2.5rem;
+            background: #ecd259;
+            color: #17582b;
+            padding: 0.6rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #fff8b0;
+        }
+
+        .topic-grid {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .topic-text h2 {
+            font-size: 2rem;
+            color: #fff2b0;
+            letter-spacing: 2px;
+        }
+
+        .topic-text h3 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 0.5rem 0;
+        }
+
+        .topic-meta {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            background: #479d6bb0;
+            padding: 0.6rem 2rem;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border: 2px solid #ffea8f;
+        }
+
+        .meta-item i { color: #ffe684; }
+
+        .topic-desc {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+
+        .explore-btn {
+            background: #ecd259;
+            border: none;
+            color: #1a6232;
+            font-weight: 800;
+            font-size: 1.6rem;
+            padding: 1.2rem 3.5rem;
+            border-radius: 60px;
+            display: inline-flex;
+            align-items: center;
+            gap: 1.2rem;
+            cursor: pointer;
+            border: 4px solid #ffffcc;
+            box-shadow: 0 8px 0 #8f9440;
+            transition: 0.1s;
+        }
+
+        .explore-btn:active {
+            transform: translateY(8px);
+            box-shadow: none;
+        }
+
+        .topic-image {
+            height: 260px;
+            background: #67b384;
+            border-radius: 70px;
+            border: 6px solid #ecd996;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            color: #fffed0;
+        }
+
+        /* resources grid */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .resource-card {
+            background: #fafff0;
+            border-radius: 70px;
+            overflow: hidden;
+            box-shadow: 0 20px 30px #2a784d80;
+            transition: all 0.3s;
+            border: 5px solid #ccf0b5;
+            cursor: pointer;
+            color: #1e562e;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-15px);
+            border-color: #faca6b;
+            box-shadow: 0 35px 45px #175a32;
+        }
+
+        .card-image {
+            height: 140px;
+            background: linear-gradient(145deg, #74b386, #4d9a65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #fcfcd2;
+            position: relative;
+        }
+
+        .type-tag {
+            position: absolute;
+            bottom: 0.8rem;
+            left: 1rem;
+            background: #1e5837;
+            color: #ffea9e;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            border: 2px solid #fdd67a;
+        }
+
+        .card-content {
+            padding: 1.8rem;
+        }
+
+        .card-category {
+            background: #cbeac0;
+            padding: 0.3rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 0.7rem 0;
+        }
+
+        .card-source {
+            color: #4b7a55;
+            margin-bottom: 0.8rem;
+        }
+
+        .card-description {
+            color: #366f49;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .focus {
+            background: #f1cba5;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+
+        .learn-btn {
+            background: #5daf7c;
+            border: none;
+            color: white;
+            padding: 0.6rem 1.8rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            border: 2px solid #fde287;
+        }
+
+        /* key indicators */
+        .indicators-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .indicator-card {
+            background: #ebf7e0;
+            border-radius: 70px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 4px solid #ecd996;
+        }
+
+        .indicator-number {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #1f6e39;
+        }
+
+        /* modal */
+        .modal {
+            display: none; position: fixed; inset:0; background: #1d6139e6;
+            align-items: center; justify-content: center; z-index:2000;
+            backdrop-filter: blur(6px);
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #f6ffe6;
+            border-radius: 80px;
+            max-width: 700px;
+            width:100%;
+            border: 8px solid #ffe28b;
+            color: #195a2c;
+        }
+
+        .back-to-top {
+            position: fixed; bottom:2rem; right:2rem;
+            background: #b8b04c; width:70px; height:70px; border-radius:50%;
+            display: none; align-items:center; justify-content:center;
+            font-size:2.2rem; color:#1c5c28; border:5px solid #fff3b0;
+            cursor:pointer; z-index:1000;
+        }
+        .back-to-top.visible { display: flex; }
+
+        @media (max-width:800px){
+            .topic-grid { grid-template-columns:1fr; }
+            .indicators-row { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- header -->
+    <header class="forest-header">
+        <h1>
+            <i class="fas fa-tree"></i> Forest Conservation & Rewilding
+            <i class="fas fa-leaf"></i>
+        </h1>
+        <p>protect ancient woods · restore ecosystems · rewild the earth</p>
+        <div class="forest-badge"><i class="fas fa-heart"></i> 30x30 target</div>
+    </header>
+
+    <div class="container">
+        <!-- filter bar -->
+        <div class="filter-bar" data-aos="fade-up">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="search forests, species, projects...">
+            </div>
+            <div class="filter-options">
+                <select class="filter-select"><option>all topics</option><option>rainforest</option><option>boreal</option><option>temperate</option><option>mangrove</option></select>
+                <select class="filter-select"><option>by region</option></select>
+            </div>
+        </div>
+
+        <!-- topic chips -->
+        <div class="topic-chips" data-aos="fade-up">
+            <div class="chip-scroll">
+                <div class="topic-chip active"><i class="fas fa-tree"></i> all</div>
+                <div class="topic-chip"><i class="fas fa-umbrella-beach"></i> rainforest</div>
+                <div class="topic-chip"><i class="fas fa-snowflake"></i> boreal</div>
+                <div class="topic-chip"><i class="fas fa-leaf"></i> temperate</div>
+                <div class="topic-chip"><i class="fas fa-water"></i> mangrove</div>
+                <div class="topic-chip"><i class="fas fa-paw"></i> wildlife</div>
+            </div>
+        </div>
+
+        <!-- featured topic -->
+        <div class="featured-topic" data-aos="zoom-in">
+            <span class="topic-ribbon"><i class="fas fa-star"></i> carbon superpower</span>
+            <div class="topic-grid">
+                <div class="topic-text">
+                    <h2>🌿 the lungs of the earth</h2>
+                    <h3>Amazon Rainforest</h3>
+                    <div class="topic-meta">
+                        <span class="meta-item"><i class="fas fa-tree"></i> 390B trees</span>
+                        <span class="meta-item"><i class="fas fa-droplet"></i> 20% of oxygen</span>
+                    </div>
+                    <p class="topic-desc">The Amazon spans 9 countries and stores 150-200 billion tons of carbon. Home to 10% of known species. Currently threatened by deforestation.</p>
+                    <button class="explore-btn" onclick="exploreTopic('amazon')"><i class="fas fa-compass"></i> explore</button>
+                </div>
+                <div class="topic-image"><i class="fas fa-tree"></i></div>
+            </div>
+        </div>
+
+        <!-- key indicators -->
+        <div class="indicators-row" data-aos="fade-up">
+            <div class="indicator-card"><span class="indicator-number">10M</span> <br>ha lost annually</div>
+            <div class="indicator-card"><span class="indicator-number">15%</span> <br>of global emissions</div>
+            <div class="indicator-card"><span class="indicator-number">1.6B</span> <br>people depend on forests</div>
+        </div>
+
+        <!-- resources grid (js) -->
+        <div class="resources-grid" id="resourcesGrid"></div>
+    </div>
+
+    <!-- modal -->
+    <div class="modal" id="forestModal">
+        <div class="modal-content" style="padding:2.5rem;">
+            <button style="float:right; background:none; border:none; font-size:3rem; color:#1b6735;" onclick="closeModal()">✕</button>
+            <div style="text-align:center;">
+                <div style="font-size:5rem;" id="modalForestEmoji">🌲</div>
+                <h2 id="modalForestTitle" style="font-size:2.8rem;">Great Bear Rainforest</h2>
+                <p id="modalForestDesc" style="margin:2rem 0;">coastal temperate rainforest · spirit bears</p>
+                <button class="explore-btn" onclick="viewForest()" style="font-size:1.2rem;">🔍 learn more</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({duration:800,once:true});
+
+        // forest resources data
+        const forestResources = [
+            { name:"Great Bear Rainforest", type:"temperate", org:"Coast Funds", description:"spirit bears, ancient cedars, protected 2023", focus:"conservation", icon:"fa-tree" },
+            { name:"Amazon Sacred Headwaters", type:"rainforest", org:"Ceibo Alliance", description:"indigenous-led protection", focus:"advocacy", icon:"fa-leaf" },
+            { name:"Boreal Forest Guide", type:"boreal", org:"CPAWS", description:"carbon store, peatlands, caribou", focus:"education", icon:"fa-snowflake" },
+            { name:"Mangrove Restoration", type:"mangrove", org:"Wetlands Intl", description:"coastal protection, blue carbon", focus:"restoration", icon:"fa-water" },
+            { name:"Rewilding Europe", type:"temperate", org:"Rewilding Europe", description:"bison, vultures, free rivers", focus:"rewilding", icon:"fa-paw" },
+            { name:"Forest Footprint Tool", type:"data", org:"Global Forest Watch", description:"real-time deforestation alerts", focus:"technology", icon:"fa-chart-line" },
+            { name:"Yakushima Cedar", type:"temperate", org:"UNESCO", description:"ancient forest, Japan, World Heritage", focus:"protection", icon:"fa-tree" },
+            { name:"Daintree Rainforest", type:"rainforest", org:"Rainforest Rescue", description:"oldest rainforest on Earth", focus:"conservation", icon:"fa-leaf" },
+        ];
+
+        function renderResources() {
+            const grid = document.getElementById('resourcesGrid');
+            grid.innerHTML = forestResources.map(r => `
+                <div class="resource-card" onclick="showForestResource('${r.name}','${r.type} · ${r.org} · ${r.description} · focus: ${r.focus}','${r.icon}')">
+                    <div class="card-image"><i class="fas ${r.icon}"></i><span class="type-tag">${r.type}</span></div>
+                    <div class="card-content">
+                        <span class="card-category">${r.focus}</span>
+                        <div class="card-title">${r.name}</div>
+                        <div class="card-source"><i class="fas fa-building"></i> ${r.org}</div>
+                        <div class="card-description">${r.description}</div>
+                        <div class="card-footer">
+                            <span class="focus">✨ ${r.focus}</span>
+                            <button class="learn-btn" onclick="event.stopPropagation(); learnForest('${r.name}')">learn</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+        renderResources();
+
+        window.showForestResource = (title, desc, icon) => {
+            document.getElementById('modalForestTitle').innerText = title;
+            document.getElementById('modalForestDesc').innerText = desc;
+            document.getElementById('modalForestEmoji').innerHTML = `<i class="fas ${icon}"></i>`;
+            document.getElementById('forestModal').classList.add('active');
+        };
+
+        window.closeModal = () => document.getElementById('forestModal').classList.remove('active');
+        window.exploreTopic = (name) => alert(`🧭 exploring ${name || 'forest'} ecosystem...`);
+        window.learnForest = (name) => alert(`📘 opening resource: ${name}`);
+        window.viewForest = () => { alert('🌲 forest profile (demo).'); closeModal(); };
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // modal escape
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('forestModal')) closeModal(); };
+    </script>
+</body>
+</html>

@@ -9,8 +9,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 
-<link rel="stylesheet" href="../../css/pages/quizzes/pollution-awareness-quiz.css">
-<link rel="stylesheet" href="../../css/global/utilities.css" />
+<link rel="stylesheet" href="css/pages/quizzes/pollution-awareness-quiz.css">
+<link rel="stylesheet" href="css/global/utilities.css" />
   
   
 
@@ -85,18 +85,19 @@
       }
     }
   </style>
-    <link rel="stylesheet" href="../../css/components/navbar.css" />
-    <link rel="stylesheet" href="../../css/components/footer.css" />
-    <link rel="stylesheet" href="../../css/components/quiz.css">
+    <link rel="stylesheet" href="css/components/navbar.css" />
+    <link rel="stylesheet" href="css/components/footer.css" />
+    <link rel="stylesheet" href="css/components/quiz.css">
 </head>
 
 <body>
 
   <div id="cursor-container"></div>
-<script src="../../js/components/loadComponents.js"></script>
+<script src="js/components/loadComponents.js"></script>
 
-  <div id="navbar-container"></div>
+<div id="navbar-container"></div>
 
+<!-- HERO -->
 <div class="hero">
   <h1>🌫️ Pollution Awareness Quiz</h1>
   <p>Learn about pollution types & how to protect our planet 🌍</p>
@@ -104,70 +105,88 @@
 
 <div class="card">
 
-  <!-- START -->
+  <!-- START SCREEN -->
   <div id="startScreen">
     <h2>Ready to Fight Pollution?</h2>
     <p>10 questions • 3 minutes</p>
-    <button id="startQuizBtn">Start Quiz</button>
+
+    <button onclick="startQuiz()">Start Quiz</button>
 
     <!-- Resume Section -->
-    <div id="resumeSection" style="display: none; margin-top: 20px; padding: 15px; background: #f0f8ff; border-radius: 8px; border: 2px solid #4CAF50;">
-      <h3 style="color: #2E7D32; margin-bottom: 10px;">📚 Resume Your Previous Quiz</h3>
-      <p style="margin-bottom: 15px; color: #555;">You have an unfinished quiz. Would you like to continue where you left off?</p>
-      <button id="resumeSavedQuizBtn" style="background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">Resume Quiz</button>
+    <div id="resumeSection" style="display:none; margin-top:20px; padding:15px; background:#f0f8ff; border-radius:8px; border:2px solid #4CAF50;">
+      <h3 style="color:#2E7D32;">📚 Resume Your Previous Quiz</h3>
+      <p>You have an unfinished quiz.</p>
+      <button onclick="resumeQuiz()">Resume Quiz</button>
     </div>
   </div>
 
-  <!-- QUIZ -->
-  <div id="quizScreen">
-    <div class="timer">⏳ Time Left: <span id="time">03:00</span></div>
+  <!-- QUIZ SCREEN -->
+  <div id="quizScreen" style="display:none;">
+
+    <div class="timer">
+      ⏳ Time Left: <span id="time">03:00</span>
+    </div>
+
+    <!-- Progress -->
     <div class="progress-bar-container">
       <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
       </div>
+
       <div class="progress-metrics">
-        <span id="timeSpent">Time Spent: 0s</span> | <span id="questionsCompleted">Completed: 0/10</span>
+        <span id="timeSpent">Time Spent: 0s</span> |
+        <span id="questionsCompleted">Completed: 0/10</span>
       </div>
     </div>
+
+    <!-- Pause Resume -->
     <div class="pause-resume-buttons">
-      <button class="btn-secondary" id="pauseBtn">⏸️ Pause</button>
-      <button class="btn-secondary" id="resumeBtn" style="display:none;">▶️ Resume</button>
+      <button onclick="pauseQuiz()">⏸️ Pause</button>
+      <button onclick="resumeCurrentQuiz()">▶️ Resume</button>
     </div>
+
+    <!-- Question -->
     <div class="question" id="question"></div>
+
+    <!-- Options -->
     <div id="options"></div>
-    <button id="nextQuestionBtn">Next</button>
+
+    <button onclick="nextQuestion()">Next</button>
+
   </div>
 
   <!-- RESULT -->
-  <div id="resultScreen">
+  <div id="resultScreen" style="display:none;">
     <h2>🎉 Quiz Completed!</h2>
+
     <div class="score" id="score"></div>
     <p id="remark"></p>
 
-    <div class="result-buttons">
-      <button id="playAgainBtn">Play Again</button>
-      <!-- WhatsApp Share Button Added Here -->
-      <button class="whatsapp-btn" id="whatsappShareBtn">
-        <i class="fab fa-whatsapp"></i> Share Score
-      </button>
-    </div>
+    <button onclick="location.reload()">Play Again</button>
+
+    <!-- WhatsApp -->
+    <button onclick="shareOnWhatsApp()">
+      <i class="fab fa-whatsapp"></i> Share Score
+    </button>
   </div>
 
 </div>
 
 <div class="back-wrapper">
-  <button id="backBtn">⬅ Back to Dashboard</button>
+  <button onclick="window.location.href='../games/kids-zone.html'">
+    ⬅ Back to Dashboard
+  </button>
 </div>
 
 <!-- Footer placeholder -->
   <div id="footer-placeholder"></div>
-<script src="../../js/components/progress-manager.js"></script>
-<script src="../../js/components/quiz-base.js"></script>
-<script src="../../js/pages/quizzes/pollution-awareness-quiz.js"></script>
+<script src="js/components/progress-manager.js"></script>
+<script src="js/components/quiz-base.js"></script>
+<script src="js/pages/quizzes/pollution-awareness-quiz.js"></script>
 
-<script src="../../js/components/footer-loader.js"></script>
-<script src="../../js/components/component-loader.js"></script>
-    <script src="../../js/components/navbar-loader.js"></script>
+<script src="js/components/footer-loader.js"></script>
+<script src="js/components/component-loader.js"></script>
+    <script src="js/components/navbar-loader.js"></script>
 
   <!-- WhatsApp Share JavaScript -->
   <script>
@@ -227,3 +246,5 @@
 </body>
 </html>
 
+</body>
+</html>

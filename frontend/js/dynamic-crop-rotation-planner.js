@@ -1,0 +1,1000 @@
+// Dynamic Crop Rotation Planner JavaScript
+// Comprehensive implementation with simulation, planning, and interactive features
+
+// Configuration constants
+const CONFIG = {
+  CHART_COLORS: {
+    primary: '#2e7d32',
+    secondary: '#ff9800',
+    accent: '#2196f3',
+    success: '#4caf50',
+    warning: '#ff9800',
+    error: '#f44336',
+    info: '#2196f3',
+    corn: '#ffb74d',
+    soybean: '#81c784',
+    wheat: '#ffb74d',
+    alfalfa: '#4caf50',
+    clover: '#66bb6a',
+    barley: '#a1887f'
+  },
+  ANIMATION_DURATION: 1000,
+  RESPONSIVE_BREAKPOINTS: {
+    mobile: 480,
+    tablet: 768,
+    desktop: 1024
+  },
+  DATA_REFRESH_INTERVAL: 30000,
+  MAX_ROTATION_YEARS: 6,
+  MIN_ROTATION_YEARS: 3,
+  DEFAULT_SEASONS: 4
+};
+
+// Utility functions
+const utils = {
+  // Generate random data for demo purposes
+  generateRandomData: (count, min, max) => {
+    return Array.from({ length: count }, () => Math.floor(Math.random() * (max - min + 1)) + min);
+  },
+
+  // Format numbers with commas
+  formatNumber: (num) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  },
+
+  // Debounce function for performance
+  debounce: (func, wait) => {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  },
+
+  // Throttle function for performance
+  throttle: (func, limit) => {
+    let inThrottle;
+    return function() {
+      const args = arguments;
+      const context = this;
+      if (!inThrottle) {
+        func.apply(context, args);
+        inThrottle = true;
+        setTimeout(() => inThrottle = false, limit);
+      }
+    }
+  },
+
+  // Deep clone object
+  deepClone: (obj) => {
+    if (obj === null || typeof obj !== 'object') return obj;
+    if (obj instanceof Date) return new Date(obj.getTime());
+    if (obj instanceof Array) return obj.map(item => utils.deepClone(item));
+    if (typeof obj === 'object') {
+      const clonedObj = {};
+      for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          clonedObj[key] = utils.deepClone(obj[key]);
+        }
+      }
+      return clonedObj;
+    }
+  },
+
+  // Validate data structure
+  validateData: (data, schema) => {
+    if (!data || typeof data !== 'object') return false;
+    for (const key in schema) {
+      if (!(key in data)) return false;
+      if (typeof data[key] !== schema[key]) return false;
+    }
+    return true;
+  },
+
+  // Export data to CSV
+  exportToCSV: (data, filename) => {
+    const csvContent = 'data:text/csv;charset=utf-8,' +
+      Object.keys(data[0]).join(',') + '\n' +
+      data.map(row => Object.values(row).join(',')).join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  },
+
+  // Show notification
+  showNotification: (message, type = 'info', duration = 3000) => {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.classList.add('show');
+    }, 100);
+
+    setTimeout(() => {
+      notification.classList.remove('show');
+      setTimeout(() => {
+        document.body.removeChild(notification);
+      }, 300);
+    }, duration);
+  },
+
+  // Calculate rotation score
+  calculateRotationScore: (rotation, criteria) => {
+    let score = 0;
+    const weights = {
+      diversity: 0.3,
+      health: 0.25,
+      pestControl: 0.2,
+      nutrientBalance: 0.15,
+      profitability: 0.1
+    };
+
+    // Diversity score
+    const uniqueCrops = new Set(rotation.flat()).size;
+    score += (uniqueCrops / 6) * 100 * weights.diversity;
+
+    // Health score based on crop sequences
+    let healthScore = 0;
+    rotation.forEach(year => {
+      for (let i = 0; i < year.length - 1; i++) {
+        if (year[i] !== year[i + 1]) healthScore += 10;
+      }
+    });
+    score += Math.min(healthScore, 100) * weights.health;
+
+    // Pest control score
+    const pestResistantSequences = rotation.flat().filter((crop, index, arr) =>
+      index > 0 && crop !== arr[index - 1]
+    ).length;
+    score += (pestResistantSequences / rotation.flat().length) * 100 * weights.pestControl;
+
+    return Math.round(score);
+  }
+};
+
+// Data management class
+class DataManager {
+  constructor() {
+    this.data = {};
+    this.listeners = [];
+    this.initializeDefaultData();
+  }
+
+  // Initialize default data
+  initializeDefaultData() {
+    this.data = {
+      crops: {
+        corn: {
+          name: 'Corn',
+          type: 'grain',
+          soilHealth: 'medium',
+          nutrientDemand: 'high',
+          pestResistance: 'low',
+          plantingSeason: 'spring',
+          harvestSeason: 'fall',
+          nitrogenContribution: -50,
+          goodFollowers: ['soybean', 'wheat', 'alfalfa'],
+          badFollowers: ['corn']
+        },
+        soybean: {
+          name: 'Soybean',
+          type: 'legume',
+          soilHealth: 'high',
+          nutrientDemand: 'medium',
+          pestResistance: 'medium',
+          plantingSeason: 'spring',
+          harvestSeason: 'fall',
+          nitrogenContribution: 40,
+          goodFollowers: ['corn', 'wheat', 'barley'],
+          badFollowers: ['soybean']
+        },
+        wheat: {
+          name: 'Wheat',
+          type: 'grain',
+          soilHealth: 'medium',
+          nutrientDemand: 'medium',
+          pestResistance: 'high',
+          plantingSeason: 'fall',
+          harvestSeason: 'summer',
+          nitrogenContribution: -30,
+          goodFollowers: ['soybean', 'corn', 'cotton'],
+          badFollowers: ['wheat']
+        },
+        alfalfa: {
+          name: 'Alfalfa',
+          type: 'forage',
+          soilHealth: 'very-high',
+          nutrientDemand: 'low',
+          pestResistance: 'high',
+          plantingSeason: 'spring',
+          harvestSeason: 'multiple',
+          nitrogenContribution: 80,
+          goodFollowers: ['corn', 'wheat', 'barley'],
+          badFollowers: ['alfalfa']
+        },
+        clover: {
+          name: 'Clover',
+          type: 'cover-crop',
+          soilHealth: 'high',
+          nutrientDemand: 'low',
+          pestResistance: 'high',
+          plantingSeason: 'fall',
+          harvestSeason: 'spring',
+          nitrogenContribution: 100,
+          goodFollowers: ['corn', 'wheat'],
+          badFollowers: []
+        },
+        barley: {
+          name: 'Barley',
+          type: 'grain',
+          soilHealth: 'medium',
+          nutrientDemand: 'medium',
+          pestResistance: 'medium',
+          plantingSeason: 'fall',
+          harvestSeason: 'summer',
+          nitrogenContribution: -25,
+          goodFollowers: ['soybean', 'corn'],
+          badFollowers: ['barley']
+        }
+      },
+      regions: {
+        midwest: {
+          name: 'Midwest',
+          soilTypes: ['clay', 'loam'],
+          climate: 'continental',
+          growingSeason: '150-180',
+          commonCrops: ['corn', 'soybean', 'wheat'],
+          challenges: ['soil-erosion', 'nutrient-depletion']
+        },
+        south: {
+          name: 'Southern US',
+          soilTypes: ['sandy', 'clay'],
+          climate: 'subtropical',
+          growingSeason: '200-240',
+          commonCrops: ['cotton', 'peanuts', 'soybean'],
+          challenges: ['drought', 'pest-pressure']
+        },
+        northeast: {
+          name: 'Northeast',
+          soilTypes: ['loam', 'silt'],
+          climate: 'temperate',
+          growingSeason: '140-160',
+          commonCrops: ['corn', 'wheat', 'apples'],
+          challenges: ['short-season', 'frost']
+        }
+      },
+      scenarios: {
+        current: {
+          name: 'Current Practice',
+          rotation: [
+            ['corn', 'corn', 'corn', 'corn'],
+            ['corn', 'corn', 'corn', 'corn'],
+            ['corn', 'corn', 'corn', 'corn']
+          ],
+          yield: [180, 175, 170],
+          soilHealth: [65, 60, 55],
+          profit: [45000, 42000, 39000]
+        },
+        recommended: {
+          name: 'Recommended Plan',
+          rotation: [
+            ['corn', 'soybean', 'wheat', 'alfalfa'],
+            ['corn', 'soybean', 'wheat', 'alfalfa'],
+            ['corn', 'soybean', 'wheat', 'alfalfa']
+          ],
+          yield: [185, 190, 195],
+          soilHealth: [75, 80, 85],
+          profit: [48000, 50000, 52000]
+        },
+        alternative: {
+          name: 'Alternative A',
+          rotation: [
+            ['corn', 'wheat', 'soybean', 'clover'],
+            ['corn', 'wheat', 'soybean', 'clover'],
+            ['corn', 'wheat', 'soybean', 'clover']
+          ],
+          yield: [182, 187, 192],
+          soilHealth: [72, 77, 82],
+          profit: [47000, 48500, 50000]
+        },
+        'alternative-b': {
+          name: 'Alternative B',
+          rotation: [
+            ['soybean', 'corn', 'barley', 'alfalfa'],
+            ['soybean', 'corn', 'barley', 'alfalfa'],
+            ['soybean', 'corn', 'barley', 'alfalfa']
+          ],
+          yield: [178, 183, 188],
+          soilHealth: [78, 83, 88],
+          profit: [46000, 47500, 49000]
+        }
+      }
+    };
+  }
+
+  // Set data with validation
+  setData(key, value, schema = null) {
+    if (schema && !utils.validateData(value, schema)) {
+      throw new Error(`Invalid data structure for ${key}`);
+    }
+    this.data[key] = utils.deepClone(value);
+    this.notifyListeners(key, value);
+  }
+
+  // Get data
+  getData(key) {
+    return utils.deepClone(this.data[key]);
+  }
+
+  // Subscribe to data changes
+  subscribe(callback) {
+    this.listeners.push(callback);
+    return () => {
+      const index = this.listeners.indexOf(callback);
+      if (index > -1) {
+        this.listeners.splice(index, 1);
+      }
+    };
+  }
+
+  // Notify listeners of data changes
+  notifyListeners(key, value) {
+    this.listeners.forEach(callback => callback(key, value));
+  }
+
+  // Generate rotation plan
+  generateRotationPlan(config) {
+    const { region, soilType, goal, years, seasons } = config;
+    const regionData = this.data.regions[region];
+    const availableCrops = regionData.commonCrops;
+
+    const rotation = [];
+    for (let year = 0; year < years; year++) {
+      const yearRotation = [];
+      for (let season = 0; season < seasons; season++) {
+        // Simple rotation logic - can be made more sophisticated
+        const cropIndex = (year * seasons + season) % availableCrops.length;
+        yearRotation.push(availableCrops[cropIndex]);
+      }
+      rotation.push(yearRotation);
+    }
+
+    return {
+      rotation,
+      score: utils.calculateRotationScore(rotation, { goal }),
+      benefits: this.calculateBenefits(rotation),
+      recommendations: this.generateRecommendations(rotation, config)
+    };
+  }
+
+  // Calculate benefits of a rotation
+  calculateBenefits(rotation) {
+    const benefits = {
+      soilHealth: 0,
+      pestControl: 0,
+      nutrientBalance: 0,
+      biodiversity: 0
+    };
+
+    rotation.forEach(year => {
+      year.forEach(crop => {
+        const cropData = this.data.crops[crop];
+        if (cropData) {
+          benefits.soilHealth += cropData.soilHealth === 'high' ? 20 :
+                                cropData.soilHealth === 'medium' ? 10 : 5;
+          benefits.pestControl += cropData.pestResistance === 'high' ? 15 :
+                                 cropData.pestResistance === 'medium' ? 10 : 5;
+          benefits.nutrientBalance += cropData.nitrogenContribution > 0 ? 10 : 5;
+          benefits.biodiversity += 10;
+        }
+      });
+    });
+
+    // Normalize to 0-100 scale
+    Object.keys(benefits).forEach(key => {
+      benefits[key] = Math.min(Math.round(benefits[key] / rotation.length), 100);
+    });
+
+    return benefits;
+  }
+
+  // Generate recommendations
+  generateRecommendations(rotation, config) {
+    const recommendations = [];
+    const flatRotation = rotation.flat();
+    const uniqueCrops = new Set(flatRotation);
+
+    if (uniqueCrops.size < 3) {
+      recommendations.push('Consider adding more crop diversity to improve soil health and pest resistance.');
+    }
+
+    const cornCount = flatRotation.filter(crop => crop === 'corn').length;
+    if (cornCount > flatRotation.length * 0.5) {
+      recommendations.push('Reduce corn frequency to prevent nutrient depletion and pest buildup.');
+    }
+
+    const legumes = flatRotation.filter(crop => this.data.crops[crop]?.type === 'legume').length;
+    if (legumes < flatRotation.length * 0.25) {
+      recommendations.push('Include more legumes to naturally fix nitrogen in the soil.');
+    }
+
+    if (config.goal === 'soil-health' && !flatRotation.includes('alfalfa')) {
+      recommendations.push('Consider adding alfalfa for excellent soil health benefits.');
+    }
+
+    return recommendations;
+  }
+}
+
+// Chart manager class
+class ChartManager {
+  constructor() {
+    this.charts = {};
+    this.chartConfigs = {};
+  }
+
+  // Create chart
+  createChart(canvasId, config) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    this.charts[canvasId] = new Chart(ctx, config);
+    this.chartConfigs[canvasId] = config;
+  }
+
+  // Update chart data
+  updateChart(canvasId, newData) {
+    if (this.charts[canvasId]) {
+      this.charts[canvasId].data = newData;
+      this.charts[canvasId].update();
+    }
+  }
+
+  // Destroy chart
+  destroyChart(canvasId) {
+    if (this.charts[canvasId]) {
+      this.charts[canvasId].destroy();
+      delete this.charts[canvasId];
+      delete this.chartConfigs[canvasId];
+    }
+  }
+
+  // Resize all charts
+  resizeCharts() {
+    Object.values(this.charts).forEach(chart => {
+      chart.resize();
+    });
+  }
+
+  // Export chart as image
+  exportChart(canvasId, filename) {
+    const canvas = document.getElementById(canvasId);
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = canvas.toDataURL();
+    link.click();
+  }
+}
+
+// UI manager class
+class UIManager {
+  constructor() {
+    this.elements = {};
+    this.eventListeners = {};
+    this.currentScenario = 'recommended';
+  }
+
+  // Cache DOM elements
+  cacheElements() {
+    this.elements = {
+      // Farm setup
+      farmLocation: document.getElementById('farm-location'),
+      soilType: document.getElementById('soil-type'),
+      climateZone: document.getElementById('climate-zone'),
+      primaryGoal: document.getElementById('primary-goal'),
+      farmSize: document.getElementById('farm-size'),
+      hasTillage: document.getElementById('has-tillage'),
+      hasIrrigation: document.getElementById('has-irrigation'),
+      hasOrganic: document.getElementById('has-organic'),
+      cropInput: document.getElementById('crop-input'),
+      rotationHistory: document.getElementById('rotation-history'),
+      generatePlan: document.getElementById('generate-plan'),
+
+      // Plan controls
+      rotationYears: document.getElementById('rotation-years'),
+      seasons: document.getElementById('seasons'),
+      simulateScenarios: document.getElementById('simulate-scenarios'),
+      exportPlan: document.getElementById('export-plan'),
+
+      // Plan display
+      rotationGrid: document.getElementById('rotation-grid'),
+      soilBenefits: document.getElementById('soil-benefits'),
+      pestControl: document.getElementById('pest-control'),
+      nutrientManagement: document.getElementById('nutrient-management'),
+
+      // Simulation
+      simulationChart: document.getElementById('simulation-chart'),
+      primaryMetric: document.getElementById('primary-metric'),
+      yieldImpact: document.getElementById('yield-impact'),
+      soilHealthScore: document.getElementById('soil-health-score'),
+      costSavings: document.getElementById('cost-savings'),
+      carbonImpact: document.getElementById('carbon-impact')
+    };
+  }
+
+  // Setup event listeners
+  setupEventListeners() {
+    // Farm setup events
+    this.addEventListener('generate-plan', 'click', () => this.generatePlan());
+    this.addEventListener('crop-input', 'keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        this.addCrop(e.target.value);
+        e.target.value = '';
+      }
+    });
+
+    // Plan control events
+    this.addEventListener('rotation-years', 'change', () => this.updateRotationDisplay());
+    this.addEventListener('seasons', 'change', () => this.updateRotationDisplay());
+    this.addEventListener('simulate-scenarios', 'click', () => this.showSimulation());
+    this.addEventListener('export-plan', 'click', () => this.exportPlan());
+
+    // Simulation events
+    this.addEventListener('primary-metric', 'change', () => this.updateSimulationChart());
+
+    // Scenario tabs
+    document.querySelectorAll('.scenario-tab').forEach(tab => {
+      this.addEventListener(tab.id, 'click', () => this.switchScenario(tab.dataset.scenario));
+    });
+  }
+
+  // Add event listener
+  addEventListener(elementId, event, callback) {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.addEventListener(event, callback);
+      if (!this.eventListeners[elementId]) {
+        this.eventListeners[elementId] = {};
+      }
+      this.eventListeners[elementId][event] = callback;
+    }
+  }
+
+  // Update element content
+  updateElement(elementId, content) {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.innerHTML = content;
+    }
+  }
+
+  // Add crop to selection
+  addCrop(cropName) {
+    if (!cropName.trim()) return;
+
+    const cropTag = document.createElement('div');
+    cropTag.className = 'crop-tag';
+    cropTag.setAttribute('data-crop', cropName.toLowerCase());
+    cropTag.innerHTML = `${cropName} <span class="remove-tag">×</span>`;
+
+    cropTag.querySelector('.remove-tag').addEventListener('click', () => {
+      cropTag.remove();
+    });
+
+    document.querySelector('.crop-selector').appendChild(cropTag);
+  }
+
+  // Generate rotation plan
+  generatePlan() {
+    const config = {
+      region: this.elements.farmLocation.value,
+      soilType: this.elements.soilType.value,
+      goal: this.elements.primaryGoal.value,
+      years: parseInt(this.elements.rotationYears.value),
+      seasons: parseInt(this.elements.seasons.value)
+    };
+
+    const plan = window.cropRotationApp.dataManager.generateRotationPlan(config);
+    window.cropRotationApp.currentPlan = plan;
+
+    this.updateRotationDisplay();
+    this.updatePlanBenefits(plan.benefits);
+    this.updateRecommendations(plan.recommendations);
+
+    utils.showNotification('Rotation plan generated successfully!', 'success');
+  }
+
+  // Update rotation display
+  updateRotationDisplay() {
+    const plan = window.cropRotationApp.currentPlan;
+    if (!plan) return;
+
+    const years = parseInt(this.elements.rotationYears.value);
+    const seasons = parseInt(this.elements.seasons.value);
+
+    let gridHTML = '';
+    for (let year = 0; year < years; year++) {
+      gridHTML += '<div class="rotation-row">';
+      gridHTML += `<div class="rotation-cell year-cell">Year ${year + 1}</div>`;
+
+      for (let season = 0; season < seasons; season++) {
+        const crop = plan.rotation[year]?.[season] || 'fallow';
+        const cropData = window.cropRotationApp.dataManager.getData('crops')[crop];
+        const cropName = cropData ? cropData.name : crop.charAt(0).toUpperCase() + crop.slice(1);
+
+        gridHTML += `
+          <div class="rotation-cell">
+            <div class="crop-item" style="background-color: ${CONFIG.CHART_COLORS[crop] || CONFIG.CHART_COLORS.primary}">
+              ${cropName}
+            </div>
+          </div>
+        `;
+      }
+      gridHTML += '</div>';
+    }
+
+    this.updateElement('rotation-grid', gridHTML);
+  }
+
+  // Update plan benefits
+  updatePlanBenefits(benefits) {
+    const soilBenefits = `
+      <div class="benefit-item">
+        <span class="benefit-label">Soil Structure:</span>
+        <span class="benefit-value">${benefits.soilHealth}%</span>
+      </div>
+      <div class="benefit-item">
+        <span class="benefit-label">Organic Matter:</span>
+        <span class="benefit-value">${benefits.nutrientBalance}%</span>
+      </div>
+      <div class="benefit-item">
+        <span class="benefit-label">Erosion Control:</span>
+        <span class="benefit-value">${Math.round((benefits.soilHealth + benefits.nutrientBalance) / 2)}%</span>
+      </div>
+    `;
+
+    const pestControl = `
+      <div class="benefit-item">
+        <span class="benefit-label">Disease Resistance:</span>
+        <span class="benefit-value">${benefits.pestControl}%</span>
+      </div>
+      <div class="benefit-item">
+        <span class="benefit-label">Pest Pressure Reduction:</span>
+        <span class="benefit-value">${benefits.biodiversity}%</span>
+      </div>
+      <div class="benefit-item">
+        <span class="benefit-label">Natural Balance:</span>
+        <span class="benefit-value">${Math.round((benefits.pestControl + benefits.biodiversity) / 2)}%</span>
+      </div>
+    `;
+
+    const nutrientManagement = `
+      <div class="benefit-item">
+        <span class="benefit-label">Nitrogen Balance:</span>
+        <span class="benefit-value">${benefits.nutrientBalance}%</span>
+      </div>
+      <div class="benefit-item">
+        <span class="benefit-label">Nutrient Cycling:</span>
+        <span class="benefit-value">${benefits.biodiversity}%</span>
+      </div>
+      <div class="benefit-item">
+        <span class="benefit-label">Fertilizer Efficiency:</span>
+        <span class="benefit-value">${Math.round((benefits.nutrientBalance + benefits.biodiversity) / 2)}%</span>
+      </div>
+    `;
+
+    this.updateElement('soil-benefits', soilBenefits);
+    this.updateElement('pest-control', pestControl);
+    this.updateElement('nutrient-management', nutrientManagement);
+  }
+
+  // Update recommendations
+  updateRecommendations(recommendations) {
+    const recommendationsList = recommendations.map(rec => `<li>${rec}</li>`).join('');
+    this.updateElement('recommendations-list', recommendationsList);
+  }
+
+  // Show simulation
+  showSimulation() {
+    document.getElementById('scenario-simulation').scrollIntoView({ behavior: 'smooth' });
+    this.updateSimulationChart();
+  }
+
+  // Switch scenario
+  switchScenario(scenario) {
+    this.currentScenario = scenario;
+
+    // Update tab active state
+    document.querySelectorAll('.scenario-tab').forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.scenario === scenario);
+    });
+
+    this.updateSimulationChart();
+  }
+
+  // Update simulation chart
+  updateSimulationChart() {
+    const scenario = window.cropRotationApp.dataManager.getData('scenarios')[this.currentScenario];
+    const metric = this.elements.primaryMetric.value;
+
+    if (!scenario) return;
+
+    const data = {
+      labels: scenario.yield.map((_, i) => `Year ${i + 1}`),
+      datasets: [{
+        label: scenario.name,
+        data: scenario[metric],
+        borderColor: CONFIG.CHART_COLORS.primary,
+        backgroundColor: 'rgba(46, 125, 50, 0.1)',
+        fill: true,
+        tension: 0.4
+      }]
+    };
+
+    window.cropRotationApp.chartManager.updateChart('simulation-chart', data);
+    this.updateSimulationSummary(scenario);
+  }
+
+  // Update simulation summary
+  updateSimulationSummary(scenario) {
+    const latestYield = scenario.yield[scenario.yield.length - 1];
+    const initialYield = scenario.yield[0];
+    const yieldIncrease = Math.round(((latestYield - initialYield) / initialYield) * 100);
+
+    const latestSoilHealth = scenario.soilHealth[scenario.soilHealth.length - 1];
+    const latestProfit = scenario.profit[scenario.profit.length - 1];
+    const initialProfit = scenario.profit[0];
+    const profitIncrease = Math.round(((latestProfit - initialProfit) / initialProfit) * 100);
+
+    this.updateElement('yield-impact', `+${yieldIncrease}%`);
+    this.updateElement('soil-health-score', `${latestSoilHealth}/100`);
+    this.updateElement('cost-savings', `$${utils.formatNumber(profitIncrease * 1000)}`);
+    this.updateElement('carbon-impact', `+${Math.round(latestSoilHealth * 0.8)} tons`);
+  }
+
+  // Export plan
+  exportPlan() {
+    const plan = window.cropRotationApp.currentPlan;
+    if (!plan) {
+      utils.showNotification('Please generate a plan first', 'warning');
+      return;
+    }
+
+    const exportData = plan.rotation.map((year, yearIndex) => ({
+      year: yearIndex + 1,
+      spring: year[0] || '',
+      summer: year[1] || '',
+      fall: year[2] || '',
+      winter: year[3] || ''
+    }));
+
+    utils.exportToCSV(exportData, 'crop-rotation-plan.csv');
+    utils.showNotification('Plan exported successfully!', 'success');
+  }
+}
+
+// Main application class
+class CropRotationPlannerApp {
+  constructor() {
+    this.dataManager = new DataManager();
+    this.chartManager = new ChartManager();
+    this.uiManager = new UIManager();
+    this.currentPlan = null;
+    this.init();
+  }
+
+  // Initialize the application
+  async init() {
+    try {
+      this.uiManager.cacheElements();
+      this.uiManager.setupEventListeners();
+      this.createCharts();
+      this.setupPeriodicUpdates();
+      utils.showNotification('Crop Rotation Planner initialized successfully', 'success');
+    } catch (error) {
+      console.error('Failed to initialize application:', error);
+      utils.showNotification('Failed to initialize application', 'error');
+    }
+  }
+
+  // Create charts
+  createCharts() {
+    // Simulation chart
+    const simulationConfig = {
+      type: 'line',
+      data: {
+        labels: ['Year 1', 'Year 2', 'Year 3'],
+        datasets: [{
+          label: 'Recommended Plan',
+          data: [185, 190, 195],
+          borderColor: CONFIG.CHART_COLORS.primary,
+          backgroundColor: 'rgba(46, 125, 50, 0.1)',
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Crop Rotation Performance Over Time'
+          },
+          legend: {
+            display: true,
+            position: 'top'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: false,
+            title: {
+              display: true,
+              text: 'Performance Metric'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Year'
+            }
+          }
+        },
+        animation: {
+          duration: CONFIG.ANIMATION_DURATION
+        }
+      }
+    };
+    this.chartManager.createChart('simulation-chart', simulationConfig);
+  }
+
+  // Setup periodic updates
+  setupPeriodicUpdates() {
+    setInterval(() => {
+      // Update simulation data periodically for demo purposes
+      this.updateSimulationData();
+    }, CONFIG.DATA_REFRESH_INTERVAL);
+  }
+
+  // Update simulation data
+  updateSimulationData() {
+    // Simulate data updates
+    const scenarios = this.dataManager.getData('scenarios');
+    Object.keys(scenarios).forEach(key => {
+      const scenario = scenarios[key];
+      // Add some random variation
+      scenario.yield = scenario.yield.map(val => val + Math.floor(Math.random() * 5) - 2);
+      scenario.soilHealth = scenario.soilHealth.map(val => Math.min(100, val + Math.floor(Math.random() * 3) - 1));
+      scenario.profit = scenario.profit.map(val => val + Math.floor(Math.random() * 1000) - 500);
+    });
+
+    if (this.uiManager.currentScenario) {
+      this.uiManager.updateSimulationChart();
+    }
+  }
+
+  // Export data
+  exportData(type) {
+    switch (type) {
+      case 'rotation':
+        if (this.currentPlan) {
+          utils.exportToCSV(
+            this.currentPlan.rotation.flat().map((crop, index) => ({
+              year: Math.floor(index / 4) + 1,
+              season: ['Spring', 'Summer', 'Fall', 'Winter'][index % 4],
+              crop: crop
+            })),
+            'crop-rotation-data.csv'
+          );
+        }
+        break;
+      case 'simulation':
+        const scenario = this.dataManager.getData('scenarios')[this.uiManager.currentScenario];
+        if (scenario) {
+          utils.exportToCSV(
+            scenario.yield.map((yield_val, index) => ({
+              year: index + 1,
+              yield: yield_val,
+              soilHealth: scenario.soilHealth[index],
+              profit: scenario.profit[index]
+            })),
+            'crop-rotation-simulation.csv'
+          );
+        }
+        break;
+    }
+    utils.showNotification('Data exported successfully', 'success');
+  }
+
+  // Export chart
+  exportChart(chartId) {
+    this.chartManager.exportChart(chartId, `crop-rotation-${chartId}.png`);
+    utils.showNotification('Chart exported successfully', 'success');
+  }
+}
+
+// Initialize the application when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  window.cropRotationApp = new CropRotationPlannerApp();
+});
+
+// Global functions for HTML event handlers
+function exportData(type) {
+  if (window.cropRotationApp) {
+    window.cropRotationApp.exportData(type);
+  }
+}
+
+function exportChart(chartId) {
+  if (window.cropRotationApp) {
+    window.cropRotationApp.exportChart(chartId);
+  }
+}
+
+// Error handling
+window.addEventListener('error', (event) => {
+  console.error('Global error:', event.error);
+  utils.showNotification('An error occurred. Please refresh the page.', 'error');
+});
+
+window.addEventListener('unhandledrejection', (event) => {
+  console.error('Unhandled promise rejection:', event.reason);
+  utils.showNotification('An unexpected error occurred.', 'error');
+});
+
+// Performance monitoring
+if ('performance' in window && 'mark' in window.performance) {
+  performance.mark('app-start');
+}
+
+// Service worker registration (for PWA features)
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(registration => {
+        console.log('ServiceWorker registration successful');
+      })
+      .catch(error => {
+        console.log('ServiceWorker registration failed:', error);
+      });
+  });
+}
+
+// Window resize handler
+window.addEventListener('resize', utils.debounce(() => {
+  if (window.cropRotationApp) {
+    window.cropRotationApp.chartManager.resizeCharts();
+  }
+}, 250));
+
+// Keyboard navigation
+document.addEventListener('keydown', (event) => {
+  // Add keyboard shortcuts
+  if (event.ctrlKey || event.metaKey) {
+    switch (event.key) {
+      case 'e':
+        event.preventDefault();
+        if (window.cropRotationApp) {
+          window.cropRotationApp.uiManager.exportPlan();
+        }
+        break;
+      case 's':
+        event.preventDefault();
+        if (window.cropRotationApp) {
+          window.cropRotationApp.uiManager.showSimulation();
+        }
+        break;
+    }
+  }
+});
+
+// End of dynamic-crop-rotation-planner.js

@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco-Tales | Fun Stories for Kids | EcoLife</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f9f7e8 0%, #f0f7da 100%);
+            min-height: 100vh;
+            color: #2d4a2d;
+            overflow-x: hidden;
+        }
+
+        /* Floating Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            75% { transform: rotate(-5deg); }
+        }
+
+        /* Custom Cursor */
+        .magic-cursor {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #ffaa00;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.1s ease;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .magic-cursor {
+                display: block;
+            }
+        }
+
+        /* Header - Whimsical Style */
+        .tales-header {
+            background: linear-gradient(135deg, #7cb342, #558b2f);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+        }
+
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .float-element {
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.2;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        .float-1 { top: 20%; left: 10%; animation-delay: 0s; }
+        .float-2 { top: 60%; right: 15%; animation-delay: 1s; }
+        .float-3 { bottom: 20%; left: 20%; animation-delay: 2s; }
+        .float-4 { top: 30%; right: 25%; animation-delay: 3s; }
+        .float-5 { bottom: 40%; left: 80%; animation-delay: 4s; }
+
+        .header-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .story-book-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: bounce 3s infinite;
+            display: inline-block;
+        }
+
+        .tales-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            text-shadow: 5px 5px 0 rgba(0,0,0,0.1);
+        }
+
+        .tales-header h1 span {
+            display: inline-block;
+            animation: wiggle 2s infinite;
+        }
+
+        .tales-header p {
+            font-size: 1.3rem;
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.2);
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: -3rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 20;
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background: white;
+            border-radius: 60px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            border: 4px solid #ffaa00;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-banner::before {
+            content: '📚';
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.05;
+            right: -1rem;
+            bottom: -2rem;
+            transform: rotate(-10deg);
+        }
+
+        .welcome-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #ffaa00, #ff8800);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            border: 5px solid #558b2f;
+            animation: bounce 3s infinite;
+        }
+
+        .welcome-text h2 {
+            font-size: 2rem;
+            color: #558b2f;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-text p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .welcome-stats {
+            margin-left: auto;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat-bubble {
+            background: #f0f7da;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-align: center;
+            border: 3px solid #ffaa00;
+        }
+
+        .stat-bubble .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffaa00;
+            display: block;
+        }
+
+        .stat-bubble .label {
+            color: #558b2f;
+            font-weight: 600;
+        }
+
+        /* Story Categories */
+        .categories-section {
+            margin-bottom: 3rem;
+        }
+
+        .categories-title {
+            font-size: 2rem;
+            color: #558b2f;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .categories-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: #ffaa00 #f0f0f0;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .categories-scroll::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .categories-scroll::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        .categories-scroll::-webkit-scrollbar-thumb {
+            background: #ffaa00;
+            border-radius: 10px;
+        }
+
+        .category-pill {
+            flex: 0 0 auto;
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+            font-weight: 600;
+        }
+
+        .category-pill i {
+            font-size: 1.3rem;
+            color: #ffaa00;
+        }
+
+        .category-pill:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255,170,0,0.2);
+            border-color: #ffaa00;
+        }
+
+        .category-pill.active {
+            background: #ffaa00;
+            color: white;
+        }
+
+        .category-pill.active i {
+            color: white;
+        }
+
+        /* Story Grid */
+        .story-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        /* Story Card - Book Style */
+        .story-card {
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            cursor: pointer;
+            border: 4px solid #fff;
+            transform-origin: center;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .story-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(255,170,0,0.3);
+            border-color: #ffaa00;
+        }
+
+        .story-cover {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-cover::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.3));
+        }
+
+        .story-cover i {
+            position: absolute;
+            font-size: 6rem;
+            color: rgba(255,255,255,0.3);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            animation: float 3s infinite;
+        }
+
+        .story-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #ffaa00;
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .story-badge i {
+            font-size: 0.8rem;
+            animation: none;
+            position: static;
+            transform: none;
+        }
+
+        .story-age {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            background: rgba(255,255,255,0.9);
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #558b2f;
+            z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+
+        .story-content {
+            padding: 2rem;
+        }
+
+        .story-category {
+            display: inline-block;
+            background: #f0f7da;
+            color: #558b2f;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .story-title {
+            font-size: 1.6rem;
+            color: #2d4a2d;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .story-author {
+            color: #999;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .story-excerpt {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .story-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        .meta-item i {
+            color: #ffaa00;
+        }
+
+        .read-story-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #ffaa00, #ff8800);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .read-story-btn:hover {
+            background: linear-gradient(135deg, #ff8800, #ff6600);
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(255,170,0,0.3);
+        }
+
+        /* Featured Story */
+        .featured-story {
+            background: white;
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 3rem 0;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            border: 4px solid #ffaa00;
+        }
+
+        .featured-ribbon {
+            position: absolute;
+            top: 2rem;
+            left: -3rem;
+            background: #ffaa00;
+            color: white;
+            padding: 0.5rem 3rem;
+            transform: rotate(-45deg);
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .featured-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .featured-cover {
+            height: 400px;
+            background: linear-gradient(135deg, #43a047, #1b5e20);
+            border-radius: 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .featured-cover i {
+            position: absolute;
+            font-size: 8rem;
+            color: rgba(255,255,255,0.2);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: float 4s infinite;
+        }
+
+        .featured-cover .characters {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            font-size: 3rem;
+            opacity: 0.5;
+        }
+
+        .featured-text h2 {
+            font-size: 2.5rem;
+            color: #558b2f;
+            margin-bottom: 0.5rem;
+        }
+
+        .featured-text h3 {
+            font-size: 2rem;
+            color: #2d4a2d;
+            margin-bottom: 1rem;
+        }
+
+        .featured-description {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .featured-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .featured-stat {
+            text-align: center;
+        }
+
+        .featured-stat .number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffaa00;
+            display: block;
+        }
+
+        .featured-stat .label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .featured-btn {
+            background: #ffaa00;
+            color: white;
+            border: none;
+            padding: 1.2rem 3rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .featured-btn:hover {
+            background: #ff8800;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255,170,0,0.3);
+        }
+
+        /* Story Activities */
+        .activities-section {
+            background: linear-gradient(135deg, #f9f7e8, #f0f7da);
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .activities-title {
+            font-size: 2.2rem;
+            color: #558b2f;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 4px solid transparent;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-10px);
+            border-color: #ffaa00;
+            box-shadow: 0 20px 40px rgba(255,170,0,0.2);
+        }
+
+        .activity-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #ffaa00, #ff8800);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            margin: 0 auto 1.5rem;
+            animation: bounce 3s infinite;
+        }
+
+        .activity-card h3 {
+            color: #558b2f;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .activity-card p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .activity-btn {
+            background: none;
+            border: 3px solid #ffaa00;
+            color: #ffaa00;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .activity-btn:hover {
+            background: #ffaa00;
+            color: white;
+        }
+
+        /* Story Reader Modal */
+        .story-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .story-modal.active {
+            display: flex;
+        }
+
+        .story-reader {
+            background: white;
+            border-radius: 60px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .story-reader-header {
+            background: linear-gradient(135deg, #ffaa00, #ff8800);
+            padding: 2rem;
+            border-radius: 60px 60px 0 0;
+            color: white;
+            position: relative;
+        }
+
+        .story-reader-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .story-reader-close:hover {
+            background: white;
+            color: #ffaa00;
+            transform: rotate(90deg);
+        }
+
+        .story-reader-title {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            padding-right: 3rem;
+        }
+
+        .story-reader-author {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .story-reader-content {
+            padding: 2rem;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .story-reader-content p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .story-illustration {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .story-illustration i {
+            font-size: 5rem;
+            color: #ffaa00;
+            animation: float 3s infinite;
+        }
+
+        .story-moral {
+            background: #f0f7da;
+            padding: 2rem;
+            border-radius: 40px;
+            margin: 2rem 0;
+            border-left: 8px solid #ffaa00;
+        }
+
+        .story-moral h4 {
+            color: #558b2f;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .audio-controls {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .audio-btn {
+            background: #ffaa00;
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .audio-btn:hover {
+            background: #ff8800;
+            transform: scale(1.1);
+        }
+
+        .comic-panel {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .comic-cell {
+            background: #f0f7da;
+            border-radius: 30px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 3px solid #ffaa00;
+        }
+
+        .comic-cell i {
+            font-size: 3rem;
+            color: #558b2f;
+            margin-bottom: 1rem;
+        }
+
+        /* Create Story Section */
+        .create-story {
+            background: white;
+            border-radius: 60px;
+            padding: 3rem;
+            text-align: center;
+            margin: 3rem 0;
+            border: 4px dashed #ffaa00;
+        }
+
+        .create-story h2 {
+            color: #558b2f;
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .create-story p {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .create-story-btn {
+            background: #ffaa00;
+            color: white;
+            border: none;
+            padding: 1.2rem 3rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .create-story-btn:hover {
+            background: #ff8800;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255,170,0,0.3);
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: #ffaa00;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(255,170,0,0.3);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        .back-to-top:hover {
+            background: #ff8800;
+            transform: translateY(-5px);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .featured-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .tales-header h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .welcome-banner {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .welcome-stats {
+                margin: 0 auto;
+            }
+            
+            .story-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .activities-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .comic-panel {
+                grid-template-columns: 1fr;
+            }
+            
+            .story-reader {
+                margin: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Magic Cursor -->
+    <div class="magic-cursor" id="magicCursor">✨</div>
+
+    <!-- Header -->
+    <header class="tales-header">
+        <div class="floating-elements">
+            <div class="float-element float-1">📖</div>
+            <div class="float-element float-2">🐘</div>
+            <div class="float-element float-3">🌿</div>
+            <div class="float-element float-4">🦊</div>
+            <div class="float-element float-5">🌈</div>
+        </div>
+        <div class="header-content">
+            <div class="story-book-icon">📚</div>
+            <h1>
+                <span>E</span>
+                <span>c</span>
+                <span>o</span>
+                <span>-</span>
+                <span>T</span>
+                <span>a</span>
+                <span>l</span>
+                <span>e</span>
+                <span>s</span>
+                <span>!</span>
+            </h1>
+            <p>Magical stories where kids save the planet! 🌍✨</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <div class="welcome-avatar">
+                <i class="fas fa-smile"></i>
+            </div>
+            <div class="welcome-text">
+                <h2>Welcome to the Story Corner!</h2>
+                <p>Join Ollie the Owl on eco-adventures around the world!</p>
+            </div>
+            <div class="welcome-stats">
+                <div class="stat-bubble">
+                    <span class="number">12</span>
+                    <span class="label">Stories</span>
+                </div>
+                <div class="stat-bubble">
+                    <span class="number">5</span>
+                    <span class="label">Activities</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="categories-section">
+            <h2 class="categories-title">
+                <i class="fas fa-filter"></i>
+                Choose a Story Type
+            </h2>
+            <div class="categories-scroll" id="categoryScroll">
+                <div class="category-pill active" data-category="all">
+                    <i class="fas fa-globe"></i>
+                    All Stories
+                </div>
+                <div class="category-pill" data-category="animals">
+                    <i class="fas fa-paw"></i>
+                    Animal Friends
+                </div>
+                <div class="category-pill" data-category="ocean">
+                    <i class="fas fa-water"></i>
+                    Ocean Tales
+                </div>
+                <div class="category-pill" data-category="forest">
+                    <i class="fas fa-tree"></i>
+                    Forest Adventures
+                </div>
+                <div class="category-pill" data-category="recycle">
+                    <i class="fas fa-recycle"></i>
+                    Recycling Heroes
+                </div>
+                <div class="category-pill" data-category="garden">
+                    <i class="fas fa-seedling"></i>
+                    Garden Magic
+                </div>
+            </div>
+        </div>
+
+        <!-- Story Grid -->
+        <div class="story-grid" id="storyGrid"></div>
+
+        <!-- Featured Story -->
+        <div class="featured-story">
+            <div class="featured-ribbon">🌟 Story of the Week</div>
+            <div class="featured-content">
+                <div class="featured-cover">
+                    <i class="fas fa-tree"></i>
+                    <div class="characters">🐿️ 🦊 🐦</div>
+                </div>
+                <div class="featured-text">
+                    <h2>✨ New!</h2>
+                    <h3>The Little Squirrel's Big Plan</h3>
+                    <p class="featured-description">
+                        When Saffron the squirrel discovers her forest home is in danger, 
+                        she gathers all her animal friends for the most amazing plan ever! 
+                        A heartwarming tale about teamwork, courage, and how even the smallest 
+                        creatures can make a BIG difference.
+                    </p>
+                    <div class="featured-stats">
+                        <div class="featured-stat">
+                            <span class="number">1,234</span>
+                            <span class="label">Reads</span>
+                        </div>
+                        <div class="featured-stat">
+                            <span class="number">89</span>
+                            <span class="label">Activities</span>
+                        </div>
+                        <div class="featured-stat">
+                            <span class="number">⭐ 4.9</span>
+                            <span class="label">Rating</span>
+                        </div>
+                    </div>
+                    <button class="featured-btn" onclick="readStory(7)">
+                        <i class="fas fa-book-open"></i>
+                        Read This Story
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Story Activities -->
+        <div class="activities-section">
+            <h2 class="activities-title">
+                <i class="fas fa-gamepad"></i>
+                Story Activities
+            </h2>
+            <div class="activities-grid">
+                <div class="activity-card">
+                    <div class="activity-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3>Draw a Scene</h3>
+                    <p>Draw your favorite part of the story and share with friends!</p>
+                    <button class="activity-btn" onclick="alert('Drawing activity coming soon! ✨')">Start Drawing</button>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-icon">
+                        <i class="fas fa-puzzle-piece"></i>
+                    </div>
+                    <h3>Story Puzzle</h3>
+                    <p>Put the story events in the correct order!</p>
+                    <button class="activity-btn" onclick="alert('Puzzle game coming soon! 🧩')">Play Now</button>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-icon">
+                        <i class="fas fa-mask"></i>
+                    </div>
+                    <h3>Make a Mask</h3>
+                    <p>Create animal masks from the stories!</p>
+                    <button class="activity-btn" onclick="alert('Mask craft coming soon! 🎭')">Print Template</button>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h3>Story Song</h3>
+                    <p>Sing along with our eco-song!</p>
+                    <button class="activity-btn" onclick="playStorySong()">Listen</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Story -->
+        <div class="create-story">
+            <h2>✍️ Write Your Own Story!</h2>
+            <p>Have a magical eco-adventure in mind? Become an author!</p>
+            <button class="create-story-btn" onclick="alert('Story Creator coming soon! Get your ideas ready! 📝')">
+                <i class="fas fa-feather-alt"></i>
+                Start Writing
+            </button>
+        </div>
+    </div>
+
+    <!-- Story Reader Modal -->
+    <div class="story-modal" id="storyModal">
+        <div class="story-reader" id="storyReader"></div>
+    </div>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Stories Data
+        const stories = [
+            {
+                id: 1,
+                title: "The Adventure of the Plastic Bottle",
+                author: "EcoPen",
+                age: "4-8 years",
+                category: "recycle",
+                readTime: "8 mins",
+                pages: 12,
+                rating: 4.8,
+                reads: 3421,
+                excerpt: "Follow Pipp the plastic bottle on an unexpected journey through rivers to the ocean, and discover how he finds a new purpose!",
+                cover: "fa-bottle-water",
+                moral: "Every plastic bottle can have a second life if we recycle properly!",
+                content: `
+                    <p>Pipp was a happy plastic bottle, filled with refreshing lemonade. But one day, after his drink was finished, he was accidentally dropped on the ground.</p>
+                    <p>"Oh no!" thought Pipp. "What will happen to me now?"</p>
+                    <p>The wind blew him into a stream. Splash! Pipp was floating! He met Freddy the Fish, who looked worried. "Please don't pollute my home!" said Freddy.</p>
+                    <p>Pipp floated further and met Tessa the Turtle, tangled in a plastic bag. "Help!" cried Tessa. A kind human came and freed her.</p>
+                    <p>Finally, Pipp reached the ocean. But then - a net scooped him up! He was at a recycling center!</p>
+                    <p>"Welcome home!" said the machines. Pipp was washed, melted, and transformed into... a beautiful new water bottle!</p>
+                    <p>Now Pipp sits on a school desk, ready for new adventures, reminding everyone: "Recycle me again!"</p>
+                `,
+                characters: ["Pipp the Bottle", "Freddy Fish", "Tessa Turtle"],
+                activities: ["Draw Pipp's journey", "Make a craft from a bottle"]
+            },
+            {
+                id: 2,
+                title: "How the Squirrel Found a Home",
+                author: "Forest Friends",
+                age: "3-7 years",
+                category: "forest",
+                readTime: "6 mins",
+                pages: 10,
+                rating: 4.9,
+                reads: 2876,
+                excerpt: "Sammy Squirrel's tree home is chopped down. With help from forest friends, she discovers that a new home means new friends!",
+                cover: "fa-tree",
+                moral: "Even when things change, friendship and community help us find new homes.",
+                content: `
+                    <p>Sammy Squirrel loved her cozy oak tree. She stored acorns in every hole and played hide-and-seek with her friends.</p>
+                    <p>RUMBLE! One morning, big machines came. "Oh no! My tree!" cried Sammy as her home came down.</p>
+                    <p>She ran with her acorns, not knowing where to go. Ollie Owl swooped down. "Follow me, little one! I know a place."</p>
+                    <p>Ollie showed her an old pine tree. "It's not an oak," he said, "but look - it has many cozy corners!"</p>
+                    <p>Benny Bird brought soft moss for her bed. Daisy Deer shared her favorite berries. All the animals helped!</p>
+                    <p>Soon, Sammy's new home was even cozier than before. And now she had even more friends nearby.</p>
+                    <p>"Sometimes," said Sammy, "when one door closes, a window opens. Or in my case, a hollow in a pine tree!"</p>
+                `,
+                characters: ["Sammy Squirrel", "Ollie Owl", "Benny Bird", "Daisy Deer"],
+                activities: ["Build a squirrel nest craft", "Learn about different tree homes"]
+            },
+            {
+                id: 3,
+                title: "Luna the Sea Turtle's Mission",
+                author: "Ocean Explorer",
+                age: "5-10 years",
+                category: "ocean",
+                readTime: "10 mins",
+                pages: 15,
+                rating: 5.0,
+                reads: 4123,
+                excerpt: "Luna the sea turtle embarks on an underwater mission to save her coral reef home from plastic pollution.",
+                cover: "fa-water",
+                moral: "Working together, we can clean our oceans and protect marine life.",
+                content: `
+                    <p>Luna glided gracefully through the coral reef, her flippers moving like gentle wings. But something was wrong.</p>
+                    <p>The reef was losing its colors. Corals were turning white. Fish were swimming away, looking worried.</p>
+                    <p>"What's happening?" Luna asked her friend, Coral the Clownfish.</p>
+                    <p>"It's the plastic," Coral sighed. "It blocks our sunlight and makes us sick."</p>
+                    <p>Luna decided to act. She gathered all the sea creatures: "We must clean our home!"</p>
+                    <p>The dolphins pushed plastic bags with their noses. The crabs snipped fishing nets with their claws. Even the tiny fish carried small bits away.</p>
+                    <p>Then Luna saw children on the beach. She swam close and splashed her flipper, as if waving.</p>
+                    <p>"Look! A turtle is asking for help!" said Maya, a little girl. She and her friends organized a beach clean-up.</p>
+                    <p>Day by day, the reef grew brighter. Colors returned. Fish came back.</p>
+                    <p>"Thank you," Luna seemed to say with her wise eyes. "You saved our home."</p>
+                `,
+                characters: ["Luna the Turtle", "Coral the Clownfish", "Dolphin Duo", "Maya (human friend)"],
+                activities: ["Ocean cleanup game", "Draw a healthy coral reef"]
+            },
+            {
+                id: 4,
+                title: "The Magical Compost Bin",
+                author: "Garden Gnome",
+                age: "4-9 years",
+                category: "garden",
+                readTime: "7 mins",
+                pages: 11,
+                rating: 4.7,
+                reads: 1987,
+                excerpt: "When Leo throws away an apple core, he discovers a magical compost bin that turns scraps into garden treasure!",
+                cover: "fa-seedling",
+                moral: "Food waste can become food for plants - nature's magic recycling!",
+                content: `
+                    <p>Leo finished his apple and was about to throw the core in the trash when something sparkled.</p>
+                    <p>The compost bin in the garden was glowing! Leo peeked inside and... WHEE! He shrank and fell in!</p>
+                    <p>"Welcome!" said Wiggly the Worm, wearing a tiny top hat. "Welcome to the Transformation Station!"</p>
+                    <p>Leo saw banana peels turning into dark, rich soil. Eggshells crumbling into white sparkles. Leaves dancing in a colorful pile.</p>
+                    <p>"We're making magic food for plants!" sang a chorus of tiny microbes.</p>
+                    <p>Wiggly explained: "Apple cores become apple tree food. Carrot peels help carrots grow. Everything works together!"</p>
+                    <p>Leo helped turn the pile. He added water. He watched the magic happen.</p>
+                    <p>Suddenly, he was back in the garden, normal size. In his hand was a tiny packet of compost.</p>
+                    <p>He sprinkled it around a small seed. The next day - a tiny green shoot! "It really IS magic!" he laughed.</p>
+                `,
+                characters: ["Leo", "Wiggly the Worm", "Microbe Chorus"],
+                activities: ["Start a compost jar", "Worm observation journal"]
+            },
+            {
+                id: 5,
+                title: "Benny the Bee's Busy Day",
+                author: "Buzz Books",
+                age: "3-6 years",
+                category: "animals",
+                readTime: "5 mins",
+                pages: 8,
+                rating: 4.8,
+                reads: 3562,
+                excerpt: "Join Benny the Bee on a busy day of flower-hopping, nectar-sipping, and learning why bees are so important!",
+                cover: "fa-bug",
+                moral: "Bees help flowers grow, and flowers help bees - nature's perfect partnership!",
+                content: `
+                    <p>BUZZ! BUZZ! Benny woke up with the sun. Time to work!</p>
+                    <p>He flew to a purple flower. SIP! Sweet nectar for breakfast.</p>
+                    <p>"Thank you for visiting!" said the flower. "Please take some pollen to my friends."</p>
+                    <p>Benny's legs got covered in yellow pollen dust. Off he flew to the next flower.</p>
+                    <p>Flower to flower, garden to garden. Benny worked and worked.</p>
+                    <p>Back at the hive, he did a special wiggle dance. "I found flowers! Follow me!"</p>
+                    <p>The other bees cheered and followed. Soon, the whole garden was buzzing.</p>
+                    <p>"Bees are the best!" said the farmer. "Without them, we wouldn't have apples, blueberries, or pumpkins!"</p>
+                    <p>Benny buzzed happily. Being a bee was the best job in the world!</p>
+                `,
+                characters: ["Benny Bee", "Flower Friends", "Farmer Fred"],
+                activities: ["Bee dance game", "Plant bee-friendly flowers"]
+            },
+            {
+                id: 6,
+                title: "The Lights-Out Adventure",
+                author: "Energy Saver",
+                age: "5-9 years",
+                category: "recycle",
+                readTime: "8 mins",
+                pages: 12,
+                rating: 4.6,
+                reads: 1654,
+                excerpt: "When the lights go out, twins Mia and Max discover the magic of energy and learn how to save it!",
+                cover: "fa-lightbulb",
+                moral: "Saving energy helps the planet and is fun too!",
+                content: `
+                    <p>FLICKER! FLICKER! The lights went out. Mia and Max were playing video games.</p>
+                    <p>"Oh no!" they cried.</p>
+                    <p>But then - something magical happened. The moon glowed brighter. Stars appeared. And a tiny Sparkle Sprite floated in!</p>
+                    <p>"I'm Sparky!" said the sprite. "Want to see where energy comes from?"</p>
+                    <p>POOF! They were at a wind farm, watching giant blades spin. "Wind energy!" Sparky grinned.</p>
+                    <p>POOF! They saw the sun warming solar panels. "Sun energy!"</p>
+                    <p>POOF! They watched water rushing through a dam. "Water energy!"</p>
+                    <p>"But sometimes," Sparky explained, "we use too much. That's why the lights went out."</p>
+                    <p>Mia and Max learned to turn off lights, unplug devices, and open curtains for sunlight.</p>
+                    <p>The next night, the lights stayed on. And Sparky visited just to say, "Great job, energy heroes!"</p>
+                `,
+                characters: ["Mia", "Max", "Sparky the Sprite"],
+                activities: ["Energy audit checklist", "Make a solar oven"]
+            },
+            {
+                id: 7,
+                title: "The Little Squirrel's Big Plan",
+                author: "Forest Friends",
+                age: "4-8 years",
+                category: "forest",
+                readTime: "9 mins",
+                pages: 14,
+                rating: 4.9,
+                reads: 1234,
+                excerpt: "Saffron the squirrel discovers her forest home is in danger and gathers all her animal friends for an amazing plan!",
+                cover: "fa-paw",
+                moral: "Even the smallest creatures can make a BIG difference when they work together.",
+                content: `
+                    <p>Saffron Squirrel was gathering acorns when she saw something strange - orange ribbons tied around trees.</p>
+                    <p>"What are those?" she asked Rocky Raccoon.</p>
+                    <p>"They mean the trees will be cut down," Rocky said sadly. "For a new road."</p>
+                    <p>Saffron's heart sank. "We have to do something!"</p>
+                    <p>She called a meeting. All the animals gathered: birds, deer, rabbits, even the shy foxes.</p>
+                    <p>"We need a plan," said Saffron. "Who has ideas?"</p>
+                    <p>"I can carry seeds far away!" offered a blue jay.</p>
+                    <p>"I can dig new homes!" said a rabbit.</p>
+                    <p>"I can lead everyone to a safe place," said an old deer.</p>
+                    <p>But Saffron had a bigger idea. "What if we show the humans we need this forest?"</p>
+                    <p>The next day, children came to play. The animals didn't hide. Squirrels played nearby. Birds sang loudly. Deer grazed peacefully.</p>
+                    <p>"Look how beautiful this place is!" said a girl. "We can't build a road here."</p>
+                    <p>The humans had another meeting. They decided to save the forest!</p>
+                    <p>Saffron danced with joy. "See? Little creatures, BIG plan!"</p>
+                `,
+                characters: ["Saffron Squirrel", "Rocky Raccoon", "Forest Friends"],
+                activities: ["Animal puppet show", "Forest diorama"]
+            },
+            {
+                id: 8,
+                title: "Penny's Plastic-Free Birthday",
+                author: "EcoKids",
+                age: "5-10 years",
+                category: "recycle",
+                readTime: "8 mins",
+                pages: 12,
+                rating: 4.8,
+                reads: 2103,
+                excerpt: "Penny wants a birthday party, but she doesn't want any plastic. Can she pull off a plastic-free celebration?",
+                cover: "fa-birthday-cake",
+                moral: "Celebrations can be fun AND planet-friendly!",
+                content: `
+                    <p>Penny's birthday was coming. She wanted a party - but no plastic!</p>
+                    <p>"No plastic?" Mom asked. "How will we do that?"</p>
+                    <p>Penny showed her plan:</p>
+                    <p>Invitations: Made from recycled paper with flower seeds inside. Plant them after reading!</p>
+                    <p>Decorations: Paper streamers and balloons made from fabric that can be reused.</p>
+                    <p>Cups and Plates: Bamboo and palm leaf - they compost after!</p>
+                    <p>Goody Bags: Cloth bags with homemade treats and seed bombs.</p>
+                    <p>Activities: Craft table with recyclables. Kids made robots from boxes and bottle caps!</p>
+                    <p>Food: Homemade lemonade in glass jars, fruit skewers, and a cake with beeswax candles.</p>
+                    <p>The party was a huge hit. "This is the best party ever!" friends said.</p>
+                    <p>Afterwards, Penny's mom smiled. "You did it! No plastic, all fun!"</p>
+                    <p>"Next year," Penny grinned, "let's try zero waste!"</p>
+                `,
+                characters: ["Penny", "Mom", "Party Friends"],
+                activities: ["Plan your own eco-party", "Make seed paper invitations"]
+            }
+        ];
+
+        // DOM Elements
+        const storyGrid = document.getElementById('storyGrid');
+        const categoryPills = document.querySelectorAll('.category-pill');
+        const backToTop = document.getElementById('backToTop');
+        const storyModal = document.getElementById('storyModal');
+        const storyReader = document.getElementById('storyReader');
+        const magicCursor = document.getElementById('magicCursor');
+
+        // State
+        let currentCategory = 'all';
+        let currentAudio = null;
+
+        // Magic cursor
+        document.addEventListener('mousemove', (e) => {
+            if (window.innerWidth > 768) {
+                magicCursor.style.left = e.clientX + 'px';
+                magicCursor.style.top = e.clientY + 'px';
+            }
+        });
+
+        // Render stories
+        function renderStories() {
+            const filtered = currentCategory === 'all' 
+                ? stories 
+                : stories.filter(s => s.category === currentCategory);
+
+            storyGrid.innerHTML = filtered.map(story => `
+                <div class="story-card" onclick="openStoryReader(${story.id})">
+                    <div class="story-cover">
+                        <i class="fas ${story.cover}"></i>
+                        <span class="story-badge">
+                            <i class="fas fa-star"></i> ${story.rating}
+                        </span>
+                        <span class="story-age">👶 ${story.age}</span>
+                    </div>
+                    <div class="story-content">
+                        <span class="story-category">
+                            ${story.category === 'recycle' ? '♻️' : 
+                              story.category === 'forest' ? '🌲' : 
+                              story.category === 'ocean' ? '🌊' : 
+                              story.category === 'animals' ? '🐾' : 
+                              story.category === 'garden' ? '🌸' : '📖'} 
+                            ${story.category.charAt(0).toUpperCase() + story.category.slice(1)}
+                        </span>
+                        <h3 class="story-title">${story.title}</h3>
+                        <p class="story-author"><i class="fas fa-pen"></i> ${story.author}</p>
+                        <p class="story-excerpt">${story.excerpt}</p>
+                        <div class="story-meta">
+                            <span class="meta-item"><i class="fas fa-clock"></i> ${story.readTime}</span>
+                            <span class="meta-item"><i class="fas fa-book"></i> ${story.pages} pages</span>
+                            <span class="meta-item"><i class="fas fa-eye"></i> ${story.reads} reads</span>
+                        </div>
+                        <button class="read-story-btn" onclick="openStoryReader(${story.id}, event)">
+                            <i class="fas fa-book-open"></i> Read Story
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Open story reader
+        window.openStoryReader = function(id, event) {
+            if (event) event.stopPropagation();
+            
+            const story = stories.find(s => s.id === id);
+            if (!story) return;
+
+            storyReader.innerHTML = `
+                <div class="story-reader-header">
+                    <button class="story-reader-close" onclick="closeStoryReader()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <h2 class="story-reader-title">${story.title}</h2>
+                    <p class="story-reader-author">
+                        <i class="fas fa-pen"></i> ${story.author} • 
+                        <i class="fas fa-clock"></i> ${story.readTime} • 
+                        <i class="fas fa-child"></i> Ages ${story.age}
+                    </p>
+                </div>
+                <div class="story-reader-content">
+                    <div class="story-illustration">
+                        <i class="fas ${story.cover}"></i>
+                    </div>
+                    
+                    ${story.content}
+                    
+                    <div class="comic-panel">
+                        ${story.characters.map(char => `
+                            <div class="comic-cell">
+                                <i class="fas ${story.cover}"></i>
+                                <p>${char}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="story-moral">
+                        <h4><i class="fas fa-lightbulb"></i> Story Moral</h4>
+                        <p>${story.moral}</p>
+                    </div>
+                    
+                    <div class="audio-controls">
+                        <button class="audio-btn" onclick="playAudio()">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <span>Listen to Story</span>
+                        <button class="audio-btn" onclick="pauseAudio()">
+                            <i class="fas fa-pause"></i>
+                        </button>
+                    </div>
+                    
+                    <p style="text-align: center; color: #999; margin-top: 2rem;">
+                        <i class="fas fa-heart" style="color: #ffaa00;"></i>
+                        Read with a grown-up and talk about how you can help the Earth!
+                    </p>
+                </div>
+            `;
+
+            storyModal.classList.add('active');
+        };
+
+        // Close story reader
+        window.closeStoryReader = function() {
+            storyModal.classList.remove('active');
+        };
+
+        // Audio functions
+        window.playAudio = function() {
+            alert("🔊 Audio story coming soon! For now, read aloud with a grown-up!");
+        };
+
+        window.pauseAudio = function() {
+            if (currentAudio) {
+                currentAudio.pause();
+            }
+        };
+
+        // Play story song
+        window.playStorySong = function() {
+            alert("🎵 Eco-Song: 'We Can Save the World!' (Lyrics coming soon!)");
+        };
+
+        // Category filter
+        categoryPills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                categoryPills.forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                currentCategory = pill.dataset.category;
+                renderStories();
+            });
+        });
+
+        // Back to top
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Close modal with escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && storyModal.classList.contains('active')) {
+                closeStoryReader();
+            }
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target === storyModal) {
+                closeStoryReader();
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderStories();
+        });
+    </script>
+</body>
+</html>

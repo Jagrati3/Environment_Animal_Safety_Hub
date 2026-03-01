@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Care & Animal Feeding Guide | EcoLife</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f1f9f1 0%, #d4eed4 100%);
+            min-height: 100vh;
+            color: #2d4a2d;
+        }
+
+        /* Header */
+        .care-header {
+            background: linear-gradient(135deg, #2d6a4f, #1b4d3d);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+
+        .care-header::before {
+            content: '🌱';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.1;
+            right: -2rem;
+            bottom: -3rem;
+            transform: rotate(15deg);
+        }
+
+        .care-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .care-header h1 i {
+            color: #ffd966;
+        }
+
+        .care-header p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: -2rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Quick Tips Bar */
+        .quick-tips {
+            background: white;
+            border-radius: 60px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-tips-icon {
+            width: 60px;
+            height: 60px;
+            background: #ffd966;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #2d6a4f;
+        }
+
+        .quick-tips-text {
+            flex: 1;
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        .quick-tips-text i {
+            color: #ffd966;
+            margin-right: 0.5rem;
+        }
+
+        /* Category Tabs */
+        .category-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .category-tab {
+            padding: 1rem 2rem;
+            background: white;
+            border: none;
+            border-radius: 60px;
+            font-weight: 600;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+        }
+
+        .category-tab i {
+            font-size: 1.2rem;
+            color: #2d6a4f;
+        }
+
+        .category-tab:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(45,106,79,0.2);
+        }
+
+        .category-tab.active {
+            background: #2d6a4f;
+            color: white;
+            border-color: #ffd966;
+        }
+
+        .category-tab.active i {
+            color: #ffd966;
+        }
+
+        /* Plants Grid */
+        .plants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .plant-card {
+            background: white;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            transition: all 0.4s;
+            border: 3px solid transparent;
+        }
+
+        .plant-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(45,106,79,0.2);
+            border-color: #ffd966;
+        }
+
+        .plant-header {
+            height: 200px;
+            background: linear-gradient(135deg, #2d6a4f, #40916c);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .plant-header i {
+            font-size: 5rem;
+            color: rgba(255,255,255,0.3);
+            animation: float 3s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .difficulty-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .difficulty-badge.easy { background: #4caf50; }
+        .difficulty-badge.medium { background: #ff9800; }
+        .difficulty-badge.hard { background: #f44336; }
+
+        .plant-content {
+            padding: 2rem;
+        }
+
+        .plant-title {
+            font-size: 1.8rem;
+            color: #2d6a4f;
+            margin-bottom: 0.3rem;
+        }
+
+        .plant-scientific {
+            font-size: 0.9rem;
+            color: #999;
+            font-style: italic;
+            margin-bottom: 1.5rem;
+        }
+
+        .care-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 30px;
+        }
+
+        .care-item {
+            text-align: center;
+        }
+
+        .care-item i {
+            font-size: 1.3rem;
+            color: #ffd966;
+            margin-bottom: 0.3rem;
+        }
+
+        .care-item span {
+            display: block;
+            font-size: 0.8rem;
+            color: #555;
+        }
+
+        .care-item .value {
+            font-weight: 600;
+            color: #2d6a4f;
+            font-size: 0.9rem;
+        }
+
+        .care-details {
+            margin: 1.5rem 0;
+        }
+
+        .care-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .care-detail-item i {
+            width: 24px;
+            color: #ffd966;
+        }
+
+        .care-detail-item span {
+            color: #555;
+        }
+
+        .care-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #2d6a4f, #40916c);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .care-btn:hover {
+            background: linear-gradient(135deg, #1b4d3d, #2d6a4f);
+            transform: scale(1.02);
+        }
+
+        /* Animal Feeding Section */
+        .feeding-section {
+            background: linear-gradient(135deg, #f8f3e0, #f0e6cc);
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 3rem 0;
+            border: 3px solid #ffd966;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            color: #2d6a4f;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title i {
+            color: #ffd966;
+        }
+
+        .animal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .animal-card {
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .animal-card:hover {
+            transform: translateY(-10px);
+            border-color: #ffd966;
+            box-shadow: 0 20px 40px rgba(255,217,102,0.2);
+        }
+
+        .animal-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #ffd966, #ffe69b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #2d6a4f;
+            margin: 0 auto 1.5rem;
+        }
+
+        .animal-name {
+            font-size: 1.8rem;
+            color: #2d6a4f;
+            margin-bottom: 1rem;
+        }
+
+        .food-list {
+            text-align: left;
+            margin: 1.5rem 0;
+        }
+
+        .food-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed #f0f0f0;
+        }
+
+        .food-item i {
+            width: 24px;
+            color: #ffd966;
+        }
+
+        .food-item.yes i { color: #4caf50; }
+        .food-item.no i { color: #f44336; }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 6px solid #ffc107;
+            padding: 1rem;
+            border-radius: 20px;
+            margin-top: 1rem;
+        }
+
+        .warning-box i {
+            color: #ffc107;
+            margin-right: 0.5rem;
+        }
+
+        /* Seasonal Care */
+        .seasonal-section {
+            background: white;
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 3rem 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .seasonal-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .season-card {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 40px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .season-card.spring { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); }
+        .season-card.summer { background: linear-gradient(135deg, #fff3e0, #ffe0b2); }
+        .season-card.fall { background: linear-gradient(135deg, #fff8e1, #ffecb3); }
+        .season-card.winter { background: linear-gradient(135deg, #e3f2fd, #bbdefb); }
+
+        .season-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .season-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .season-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #2d6a4f;
+        }
+
+        .season-tip {
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        /* Poisonous Plants Warning */
+        .warning-section {
+            background: #ffebee;
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 3rem 0;
+            border: 3px solid #f44336;
+        }
+
+        .warning-title {
+            color: #f44336;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .warning-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .warning-plant {
+            background: white;
+            border-radius: 30px;
+            padding: 1.5rem;
+            border-left: 6px solid #f44336;
+        }
+
+        .warning-plant h4 {
+            color: #f44336;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .warning-plant p {
+            color: #555;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .danger-level {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            background: #ffcdd2;
+            color: #f44336;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Garden Planner */
+        .planner-section {
+            background: linear-gradient(135deg, #2d6a4f, #40916c);
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 3rem 0;
+            color: white;
+        }
+
+        .planner-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .planner-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .planner-card i {
+            font-size: 3rem;
+            color: #ffd966;
+            margin-bottom: 1rem;
+        }
+
+        .planner-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .planner-btn {
+            background: #ffd966;
+            color: #2d6a4f;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .planner-btn:hover {
+            background: white;
+            transform: translateY(-3px);
+        }
+
+        /* Monthly Calendar */
+        .calendar-section {
+            background: white;
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .calendar-header h2 {
+            color: #2d6a4f;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .calendar-nav button {
+            width: 50px;
+            height: 50px;
+            border: none;
+            background: #f0f0f0;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .calendar-nav button:hover {
+            background: #ffd966;
+            color: white;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+        }
+
+        .calendar-day-header {
+            text-align: center;
+            font-weight: 600;
+            color: #2d6a4f;
+            padding: 1rem;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .calendar-day:hover {
+            background: #ffd966;
+            transform: scale(1.05);
+        }
+
+        .calendar-day.has-task {
+            background: #e8f5e9;
+            border: 2px solid #2d6a4f;
+        }
+
+        .task-indicator {
+            display: flex;
+            gap: 0.2rem;
+            margin-top: 0.2rem;
+        }
+
+        .task-dot {
+            width: 6px;
+            height: 6px;
+            background: #2d6a4f;
+            border-radius: 50%;
+        }
+
+        /* Plant Doctor */
+        .doctor-section {
+            background: #f8f9fa;
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 3rem 0;
+            border: 3px solid #ffd966;
+        }
+
+        .doctor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .symptom-card {
+            background: white;
+            border-radius: 30px;
+            padding: 1.5rem;
+            border-left: 6px solid;
+        }
+
+        .symptom-card.yellow { border-color: #ffc107; }
+        .symptom-card.brown { border-color: #795548; }
+        .symptom-card.white { border-color: #9e9e9e; }
+        .symptom-card.wilt { border-color: #2196f3; }
+
+        .symptom-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .symptom-card.yellow .symptom-icon { background: #fff3e0; color: #ffc107; }
+        .symptom-card.brown .symptom-icon { background: #efebe9; color: #795548; }
+        .symptom-card.white .symptom-icon { background: #f5f5f5; color: #9e9e9e; }
+        .symptom-card.wilt .symptom-icon { background: #e3f2fd; color: #2196f3; }
+
+        .symptom-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .symptom-card p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .cure-btn {
+            background: none;
+            border: 2px solid;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .symptom-card.yellow .cure-btn { border-color: #ffc107; color: #ffc107; }
+        .symptom-card.brown .cure-btn { border-color: #795548; color: #795548; }
+        .symptom-card.white .cure-btn { border-color: #9e9e9e; color: #9e9e9e; }
+        .symptom-card.wilt .cure-btn { border-color: #2196f3; color: #2196f3; }
+
+        .cure-btn:hover {
+            background: currentColor;
+            color: white;
+        }
+
+        /* Watering Calculator */
+        .water-section {
+            background: linear-gradient(135deg, #2196f3, #1976d2);
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 3rem 0;
+            color: white;
+        }
+
+        .water-calculator {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .water-info h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .water-info p {
+            opacity: 0.95;
+            margin-bottom: 2rem;
+        }
+
+        .water-input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .water-input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .water-input-group select {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 30px;
+            font-family: inherit;
+        }
+
+        .water-result {
+            background: rgba(255,255,255,0.2);
+            padding: 2rem;
+            border-radius: 40px;
+            text-align: center;
+        }
+
+        .water-amount {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 1rem 0;
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: #2d6a4f;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(45,106,79,0.3);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        .back-to-top:hover {
+            background: #1b4d3d;
+            transform: translateY(-5px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 60px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 3rem;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .modal-close:hover {
+            color: #333;
+            transform: rotate(90deg);
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            color: #2d6a4f;
+            margin-bottom: 1rem;
+        }
+
+        .care-instructions {
+            margin: 2rem 0;
+        }
+
+        .instruction-step {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 20px;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            background: #ffd966;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #2d6a4f;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .seasonal-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .planner-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .water-calculator {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .care-header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .plants-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .seasonal-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .planner-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .calendar-grid {
+                font-size: 0.8rem;
+            }
+            
+            .quick-tips {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="care-header">
+        <h1>
+            <i class="fas fa-seedling"></i>
+            Plant Care & Animal Feeding
+        </h1>
+        <p>Learn how to nurture nature - from houseplants to garden visitors! Complete guides for plant parents and animal friends 🌿🐾</p>
+    </header>
+
+    <div class="container">
+        <!-- Quick Tips Bar -->
+        <div class="quick-tips" data-aos="fade-up">
+            <div class="quick-tips-icon">
+                <i class="fas fa-lightbulb"></i>
+            </div>
+            <div class="quick-tips-text">
+                <i class="fas fa-check-circle"></i> Water in the morning • 
+                <i class="fas fa-check-circle"></i> Check soil before watering • 
+                <i class="fas fa-check-circle"></i> Keep pets away from toxic plants
+            </div>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="category-tabs" data-aos="fade-up">
+            <button class="category-tab active" onclick="filterPlants('all')">
+                <i class="fas fa-leaf"></i> All Plants
+            </button>
+            <button class="category-tab" onclick="filterPlants('indoor')">
+                <i class="fas fa-home"></i> Indoor
+            </button>
+            <button class="category-tab" onclick="filterPlants('outdoor')">
+                <i class="fas fa-tree"></i> Outdoor
+            </button>
+            <button class="category-tab" onclick="filterPlants('succulent')">
+                <i class="fas fa-cactus"></i> Succulents
+            </button>
+            <button class="category-tab" onclick="filterPlants('herbs')">
+                <i class="fas fa-seedling"></i> Herbs
+            </button>
+            <button class="category-tab" onclick="filterPlants('vegetables')">
+                <i class="fas fa-carrot"></i> Vegetables
+            </button>
+        </div>
+
+        <!-- Plants Grid -->
+        <div class="plants-grid" id="plantsGrid"></div>
+
+        <!-- Animal Feeding Section -->
+        <div class="feeding-section" data-aos="fade-up">
+            <h2 class="section-title">
+                <i class="fas fa-paw"></i>
+                Safe Animal Feeding Guide
+            </h2>
+            <div class="animal-grid" id="animalGrid"></div>
+        </div>
+
+        <!-- Seasonal Care -->
+        <div class="seasonal-section" data-aos="fade-up">
+            <h2 class="section-title">
+                <i class="fas fa-calendar-alt"></i>
+                Seasonal Plant Care
+            </h2>
+            <div class="seasonal-grid">
+                <div class="season-card spring" onclick="showSeasonalTips('spring')">
+                    <div class="season-icon">🌸</div>
+                    <h3>Spring</h3>
+                    <p class="season-tip">Time to repot, fertilize, and watch new growth!</p>
+                </div>
+                <div class="season-card summer" onclick="showSeasonalTips('summer')">
+                    <div class="season-icon">☀️</div>
+                    <h3>Summer</h3>
+                    <p class="season-tip">Water more frequently, protect from midday sun</p>
+                </div>
+                <div class="season-card fall" onclick="showSeasonalTips('fall')">
+                    <div class="season-icon">🍂</div>
+                    <h3>Fall</h3>
+                    <p class="season-tip">Reduce watering, prepare for dormancy</p>
+                </div>
+                <div class="season-card winter" onclick="showSeasonalTips('winter')">
+                    <div class="season-icon">❄️</div>
+                    <h3>Winter</h3>
+                    <p class="season-tip">Minimal water, watch for dry air</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Poisonous Plants Warning -->
+        <div class="warning-section" data-aos="fade-up">
+            <h2 class="warning-title">
+                <i class="fas fa-exclamation-triangle"></i>
+                ⚠️ Plants Toxic to Pets
+            </h2>
+            <div class="warning-grid" id="toxicPlants"></div>
+        </div>
+
+        <!-- Plant Doctor -->
+        <div class="doctor-section" data-aos="fade-up">
+            <h2 class="section-title">
+                <i class="fas fa-stethoscope"></i>
+                Plant Doctor - Diagnose Problems
+            </h2>
+            <div class="doctor-grid">
+                <div class="symptom-card yellow">
+                    <div class="symptom-icon"><i class="fas fa-leaf"></i></div>
+                    <h4>Yellow Leaves</h4>
+                    <p>Overwatering or nutrient deficiency</p>
+                    <button class="cure-btn" onclick="showCure('yellow')">View Cure</button>
+                </div>
+                <div class="symptom-card brown">
+                    <div class="symptom-icon"><i class="fas fa-leaf"></i></div>
+                    <h4>Brown, Crispy Edges</h4>
+                    <p>Underwatering or low humidity</p>
+                    <button class="cure-btn" onclick="showCure('brown')">View Cure</button>
+                </div>
+                <div class="symptom-card white">
+                    <div class="symptom-icon"><i class="fas fa-flask"></i></div>
+                    <h4>White Powder on Leaves</h4>
+                    <p>Powdery mildew fungus</p>
+                    <button class="cure-btn" onclick="showCure('mildew')">View Cure</button>
+                </div>
+                <div class="symptom-card wilt">
+                    <div class="symptom-icon"><i class="fas fa-droplet"></i></div>
+                    <h4>Wilting</h4>
+                    <p>Root rot or underwatering</p>
+                    <button class="cure-btn" onclick="showCure('wilt')">View Cure</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Garden Planner -->
+        <div class="planner-section" data-aos="fade-up">
+            <h2 class="section-title" style="color: white;">
+                <i class="fas fa-calendar-plus"></i>
+                Garden Planner
+            </h2>
+            <div class="planner-grid">
+                <div class="planner-card">
+                    <i class="fas fa-seedling"></i>
+                    <h3>What to Plant Now</h3>
+                    <p>Based on your location and season</p>
+                    <button class="planner-btn" onclick="showPlantingGuide()">View Guide</button>
+                </div>
+                <div class="planner-card">
+                    <i class="fas fa-calendar-check"></i>
+                    <h3>Reminder Calendar</h3>
+                    <p>Set watering and fertilizing reminders</p>
+                    <button class="planner-btn" onclick="showReminders()">Set Reminders</button>
+                </div>
+                <div class="planner-card">
+                    <i class="fas fa-ruler-combined"></i>
+                    <h3>Garden Layout</h3>
+                    <p>Plan your garden spacing</p>
+                    <button class="planner-btn" onclick="showLayout()">Plan Garden</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Watering Calculator -->
+        <div class="water-section" data-aos="fade-up">
+            <div class="water-calculator">
+                <div class="water-info">
+                    <h3>💧 Watering Calculator</h3>
+                    <p>Not sure how much to water? Use our calculator to get personalized recommendations.</p>
+                    
+                    <div class="water-input-group">
+                        <label>Plant Type</label>
+                        <select id="plantType">
+                            <option value="succulent">Succulent / Cactus</option>
+                            <option value="tropical">Tropical / Foliage</option>
+                            <option value="herb">Herbs</option>
+                            <option value="vegetable">Vegetables</option>
+                            <option value="flower">Flowering Plants</option>
+                        </select>
+                    </div>
+
+                    <div class="water-input-group">
+                        <label>Pot Size</label>
+                        <select id="potSize">
+                            <option value="small">Small (4-6 inches)</option>
+                            <option value="medium">Medium (6-8 inches)</option>
+                            <option value="large">Large (8-12 inches)</option>
+                            <option value="xlarge">Extra Large (12+ inches)</option>
+                        </select>
+                    </div>
+
+                    <div class="water-input-group">
+                        <label>Location</label>
+                        <select id="location">
+                            <option value="indoor">Indoor</option>
+                            <option value="outdoor">Outdoor</option>
+                            <option value="greenhouse">Greenhouse</option>
+                        </select>
+                    </div>
+
+                    <div class="water-input-group">
+                        <label>Season</label>
+                        <select id="season">
+                            <option value="spring">Spring</option>
+                            <option value="summer">Summer</option>
+                            <option value="fall">Fall</option>
+                            <option value="winter">Winter</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="water-result">
+                    <h4>Recommended Watering</h4>
+                    <div class="water-amount" id="waterAmount">1 cup</div>
+                    <p id="wateringFrequency">Every 7-10 days</p>
+                    <p id="wateringTip">🌅 Water in the morning for best results</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Plant Care Modal -->
+    <div class="modal" id="plantModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- AOS Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Plants Data
+        const plants = [
+            {
+                id: 1,
+                name: "Snake Plant",
+                scientific: "Sansevieria trifasciata",
+                category: "indoor",
+                difficulty: "easy",
+                light: "Low to bright",
+                water: "Every 2-3 weeks",
+                humidity: "Low",
+                soil: "Well-draining",
+                petSafe: false,
+                description: "Almost impossible to kill! Perfect for beginners.",
+                icon: "fa-leaf"
+            },
+            {
+                id: 2,
+                name: "Monstera Deliciosa",
+                scientific: "Swiss Cheese Plant",
+                category: "indoor",
+                difficulty: "medium",
+                light: "Bright indirect",
+                water: "Weekly",
+                humidity: "High",
+                soil: "Rich, well-draining",
+                petSafe: false,
+                description: "Famous for its split leaves. A tropical beauty!",
+                icon: "fa-leaf"
+            },
+            {
+                id: 3,
+                name: "Lavender",
+                scientific: "Lavandula angustifolia",
+                category: "outdoor",
+                difficulty: "easy",
+                light: "Full sun",
+                water: "Every 1-2 weeks",
+                humidity: "Low",
+                soil: "Well-draining, sandy",
+                petSafe: true,
+                description: "Fragrant herb that attracts pollinators.",
+                icon: "fa-seedling"
+            },
+            {
+                id: 4,
+                name: "Aloe Vera",
+                scientific: "Aloe barbadensis",
+                category: "succulent",
+                difficulty: "easy",
+                light: "Bright indirect",
+                water: "Every 3 weeks",
+                humidity: "Low",
+                soil: "Cactus mix",
+                petSafe: false,
+                description: "Healing gel inside leaves. Great for burns!",
+                icon: "fa-leaf"
+            },
+            {
+                id: 5,
+                name: "Basil",
+                scientific: "Ocimum basilicum",
+                category: "herbs",
+                difficulty: "easy",
+                light: "Full sun",
+                water: "Regular",
+                humidity: "Medium",
+                soil: "Rich, moist",
+                petSafe: true,
+                description: "Delicious culinary herb. Pinch leaves to encourage growth!",
+                icon: "fa-seedling"
+            },
+            {
+                id: 6,
+                name: "Tomato",
+                scientific: "Solanum lycopersicum",
+                category: "vegetables",
+                difficulty: "medium",
+                light: "Full sun",
+                water: "Regular",
+                humidity: "Medium",
+                soil: "Rich, well-draining",
+                petSafe: false,
+                description: "Homegrown tomatoes taste amazing! Stake for support.",
+                icon: "fa-carrot"
+            },
+            {
+                id: 7,
+                name: "Peace Lily",
+                scientific: "Spathiphyllum",
+                category: "indoor",
+                difficulty: "easy",
+                light: "Low to medium",
+                water: "Weekly",
+                humidity: "Medium",
+                soil: "Rich, moist",
+                petSafe: false,
+                description: "Elegant white flowers. Tells you when it needs water by drooping!",
+                icon: "fa-leaf"
+            },
+            {
+                id: 8,
+                name: "Rosemary",
+                scientific: "Salvia rosmarinus",
+                category: "herbs",
+                difficulty: "easy",
+                light: "Full sun",
+                water: "Every 1-2 weeks",
+                humidity: "Low",
+                soil: "Well-draining",
+                petSafe: true,
+                description: "Fragrant herb for cooking. Drought tolerant once established.",
+                icon: "fa-seedling"
+            }
+        ];
+
+        // Animal Feeding Data
+        const animals = [
+            {
+                name: "Dogs",
+                icon: "fa-dog",
+                safe: ["Carrots", "Green beans", "Apple slices", "Plain cooked chicken"],
+                unsafe: ["Chocolate", "Grapes", "Onions", "Xylitol"],
+                warning: "Never feed chocolate, grapes, or onions - they're toxic!"
+            },
+            {
+                name: "Cats",
+                icon: "fa-cat",
+                safe: ["Cooked fish", "Pumpkin", "Cat grass", "Small meat pieces"],
+                unsafe: ["Onions", "Garlic", "Raw dough", "Dairy (in excess)"],
+                warning: "Many cats are lactose intolerant - avoid too much milk!"
+            },
+            {
+                name: "Birds",
+                icon: "fa-dove",
+                safe: ["Fresh fruits", "Leafy greens", "Cooked grains", "Bird pellets"],
+                unsafe: ["Avocado", "Chocolate", "Caffeine", "Salty foods"],
+                warning: "Avocado is highly toxic to birds!"
+            },
+            {
+                name: "Squirrels",
+                icon: "fa-paw",
+                safe: ["Unsalted nuts", "Fresh fruits", "Corn", "Sunflower seeds"],
+                unsafe: ["Processed foods", "Salty snacks", "Bread"],
+                warning: "Avoid feeding too many peanuts - they need variety!"
+            },
+            {
+                name: "Ducks",
+                icon: "fa-water",
+                safe: ["Frozen peas", "Corn", "Oats", "Lettuce"],
+                unsafe: ["Bread", "Popcorn", "Citrus fruits"],
+                warning: "Bread fills them up without nutrition - opt for peas instead!"
+            },
+            {
+                name: "Rabbits",
+                icon: "fa-paw",
+                safe: ["Hay", "Leafy greens", "Carrot tops", "Apple branches"],
+                unsafe: ["Lettuce (iceberg)", "Cabbage", "Processed foods"],
+                warning: "Fresh hay should make up 80% of their diet!"
+            }
+        ];
+
+        // Toxic Plants Data
+        const toxicPlants = [
+            {
+                name: "Lilies",
+                danger: "Highly toxic to cats",
+                symptoms: "Kidney failure, vomiting",
+                level: "Critical"
+            },
+            {
+                name: "Sago Palm",
+                danger: "All parts toxic to dogs",
+                symptoms: "Liver failure, seizures",
+                level: "Critical"
+            },
+            {
+                name: "Philodendron",
+                danger: "Toxic to cats & dogs",
+                symptoms: "Oral irritation, vomiting",
+                level: "Moderate"
+            },
+            {
+                name: "Pothos",
+                danger: "Toxic to pets",
+                symptoms: "Oral irritation, drooling",
+                level: "Moderate"
+            },
+            {
+                name: "Aloe Vera",
+                danger: "Mildly toxic to dogs",
+                symptoms: "Vomiting, diarrhea",
+                level: "Mild"
+            },
+            {
+                name: "Dieffenbachia",
+                danger: "Toxic to pets",
+                symptoms: "Swelling, difficulty swallowing",
+                level: "High"
+            }
+        ];
+
+        // DOM Elements
+        const plantsGrid = document.getElementById('plantsGrid');
+        const animalGrid = document.getElementById('animalGrid');
+        const toxicGrid = document.getElementById('toxicPlants');
+        const backToTop = document.getElementById('backToTop');
+        const modal = document.getElementById('plantModal');
+        const modalContent = document.getElementById('modalContent');
+
+        // Render plants
+        function renderPlants(category = 'all') {
+            const filtered = category === 'all' 
+                ? plants 
+                : plants.filter(p => p.category === category);
+
+            plantsGrid.innerHTML = filtered.map(plant => `
+                <div class="plant-card" data-aos="fade-up">
+                    <div class="plant-header">
+                        <i class="fas ${plant.icon}"></i>
+                        <span class="difficulty-badge ${plant.difficulty}">${plant.difficulty}</span>
+                    </div>
+                    <div class="plant-content">
+                        <h3 class="plant-title">${plant.name}</h3>
+                        <p class="plant-scientific">${plant.scientific}</p>
+                        
+                        <div class="care-grid">
+                            <div class="care-item">
+                                <i class="fas fa-sun"></i>
+                                <span class="value">${plant.light}</span>
+                            </div>
+                            <div class="care-item">
+                                <i class="fas fa-droplet"></i>
+                                <span class="value">${plant.water}</span>
+                            </div>
+                            <div class="care-item">
+                                <i class="fas fa-temperature-high"></i>
+                                <span class="value">${plant.humidity}</span>
+                            </div>
+                        </div>
+
+                        <div class="care-details">
+                            <div class="care-detail-item">
+                                <i class="fas fa-seedling"></i>
+                                <span>Soil: ${plant.soil}</span>
+                            </div>
+                            <div class="care-detail-item">
+                                <i class="fas ${plant.petSafe ? 'fa-check-circle' : 'fa-exclamation-triangle'}" 
+                                   style="color: ${plant.petSafe ? '#4caf50' : '#f44336'}"></i>
+                                <span>${plant.petSafe ? 'Pet Safe' : 'Toxic to Pets'}</span>
+                            </div>
+                        </div>
+
+                        <p style="color: #666; margin: 1rem 0;">${plant.description}</p>
+
+                        <button class="care-btn" onclick="showPlantCare(${plant.id})">
+                            <i class="fas fa-leaf"></i> Detailed Care Guide
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render animal feeding guides
+        function renderAnimals() {
+            animalGrid.innerHTML = animals.map(animal => `
+                <div class="animal-card">
+                    <div class="animal-icon">
+                        <i class="fas ${animal.icon}"></i>
+                    </div>
+                    <h3 class="animal-name">${animal.name}</h3>
+                    
+                    <div class="food-list">
+                        <h4 style="color: #2d6a4f; margin-bottom: 0.5rem;">✅ Safe Foods</h4>
+                        ${animal.safe.map(food => `
+                            <div class="food-item yes">
+                                <i class="fas fa-check-circle"></i>
+                                <span>${food}</span>
+                            </div>
+                        `).join('')}
+                        
+                        <h4 style="color: #f44336; margin: 1rem 0 0.5rem;">❌ Unsafe Foods</h4>
+                        ${animal.unsafe.map(food => `
+                            <div class="food-item no">
+                                <i class="fas fa-times-circle"></i>
+                                <span>${food}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="warning-box">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        ${animal.warning}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render toxic plants
+        function renderToxicPlants() {
+            toxicGrid.innerHTML = toxicPlants.map(plant => `
+                <div class="warning-plant">
+                    <h4><i class="fas fa-skull-crosswalk"></i> ${plant.name}</h4>
+                    <p><strong>Danger:</strong> ${plant.danger}</p>
+                    <p><strong>Symptoms:</strong> ${plant.symptoms}</p>
+                    <span class="danger-level">${plant.level} Toxicity</span>
+                </div>
+            `).join('');
+        }
+
+        // Filter plants
+        window.filterPlants = function(category) {
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.textContent.toLowerCase().includes(category) || 
+                    (category === 'all' && tab.textContent.includes('All'))) {
+                    tab.classList.add('active');
+                }
+            });
+            renderPlants(category);
+        };
+
+        // Show plant care details
+        window.showPlantCare = function(id) {
+            const plant = plants.find(p => p.id === id);
+            if (!plant) return;
+
+            modalContent.innerHTML = `
+                <h2 class="modal-title">${plant.name}</h2>
+                <p style="color: #666; font-style: italic; margin-bottom: 2rem;">${plant.scientific}</p>
+                
+                <div class="care-instructions">
+                    <div class="instruction-step">
+                        <span class="step-number">1</span>
+                        <div>
+                            <h4 style="color: #2d6a4f;">Light Requirements</h4>
+                            <p>Place in ${plant.light.toLowerCase()} light. ${plant.light.includes('Low') ? 'Perfect for rooms with small windows!' : plant.light.includes('Bright') ? 'Near a sunny window is ideal.' : 'Loves being outdoors in the sun.'}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="instruction-step">
+                        <span class="step-number">2</span>
+                        <div>
+                            <h4 style="color: #2d6a4f;">Watering Schedule</h4>
+                            <p>Water ${plant.water.toLowerCase()}. Always check soil moisture first - if top inch is dry, it's time to water.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="instruction-step">
+                        <span class="step-number">3</span>
+                        <div>
+                            <h4 style="color: #2d6a4f;">Soil & Potting</h4>
+                            <p>Use ${plant.soil.toLowerCase()} soil. Repot every 1-2 years in spring.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="instruction-step">
+                        <span class="step-number">4</span>
+                        <div>
+                            <h4 style="color: #2d6a4f;">Humidity & Temperature</h4>
+                            <p>Prefers ${plant.humidity.toLowerCase()} humidity. ${plant.humidity === 'High' ? 'Mist leaves regularly or use a pebble tray.' : 'Normal room humidity is fine.'}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="instruction-step">
+                        <span class="step-number">5</span>
+                        <div>
+                            <h4 style="color: #2d6a4f;">Fertilizing</h4>
+                            <p>Feed monthly during growing season (spring/summer) with balanced fertilizer. No fertilizer in winter.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: #fff3cd; border-radius: 30px; padding: 1.5rem; margin-top: 2rem;">
+                    <h4 style="color: #856404; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <i class="fas fa-heart"></i> Pro Tip
+                    </h4>
+                    <p style="color: #856404;">${plant.description}</p>
+                </div>
+            `;
+
+            modal.classList.add('active');
+        };
+
+        // Close modal
+        window.closeModal = function() {
+            modal.classList.remove('active');
+        };
+
+        // Watering calculator
+        function updateWaterCalculator() {
+            const plantType = document.getElementById('plantType').value;
+            const potSize = document.getElementById('potSize').value;
+            const location = document.getElementById('location').value;
+            const season = document.getElementById('season').value;
+            
+            let amount = "1 cup";
+            let frequency = "Every 7-10 days";
+            let tip = "🌅 Water in the morning for best results";
+            
+            // Simple logic for demo
+            if (plantType === 'succulent') {
+                amount = "1/4 cup";
+                frequency = "Every 2-3 weeks";
+            } else if (plantType === 'tropical') {
+                amount = "1-2 cups";
+                frequency = "Every 5-7 days";
+            }
+            
+            if (potSize === 'large' || potSize === 'xlarge') {
+                amount = "2-3 cups";
+            }
+            
+            if (season === 'summer') {
+                frequency = frequency.replace('7-10', '5-7');
+            } else if (season === 'winter') {
+                frequency = frequency.replace('7-10', '10-14');
+            }
+            
+            document.getElementById('waterAmount').textContent = amount;
+            document.getElementById('wateringFrequency').textContent = frequency;
+            document.getElementById('wateringTip').textContent = tip;
+        }
+
+        // Show seasonal tips
+        window.showSeasonalTips = function(season) {
+            const tips = {
+                spring: "🌸 Spring Care: Time to repot! Remove dead leaves, start fertilizing, and watch for new growth.",
+                summer: "☀️ Summer Care: Water more frequently, provide shade during hottest hours, and watch for pests.",
+                fall: "🍂 Fall Care: Reduce watering, stop fertilizing, and bring sensitive plants indoors before frost.",
+                winter: "❄️ Winter Care: Water sparingly, increase humidity, and keep away from cold drafts."
+            };
+            
+            modalContent.innerHTML = `
+                <h2 class="modal-title">${season.charAt(0).toUpperCase() + season.slice(1)} Care Guide</h2>
+                <div style="text-align: center; font-size: 4rem; margin: 2rem 0;">
+                    ${season === 'spring' ? '🌸' : season === 'summer' ? '☀️' : season === 'fall' ? '🍂' : '❄️'}
+                </div>
+                <p style="color: #555; line-height: 1.8; font-size: 1.1rem;">${tips[season]}</p>
+            `;
+            modal.classList.add('active');
+        };
+
+        // Show cure for plant problems
+        window.showCure = function(problem) {
+            const cures = {
+                yellow: "💛 Yellow Leaves: Usually overwatering. Let soil dry out completely before next watering. Check drainage holes.",
+                brown: "🤎 Brown, Crispy Edges: Increase humidity with a pebble tray or mister. Water more consistently.",
+                mildew: "🤍 Powdery Mildew: Improve air circulation. Remove affected leaves. Spray with milk solution (1:10 with water).",
+                wilt: "💧 Wilting: Check roots. If mushy and brown, repot in fresh soil and reduce watering. If dry, water thoroughly."
+            };
+            
+            modalContent.innerHTML = `
+                <h2 class="modal-title">Plant Doctor Diagnosis</h2>
+                <div style="background: #f8f9fa; border-radius: 30px; padding: 2rem;">
+                    <p style="color: #555; line-height: 1.8; font-size: 1.1rem;">${cures[problem]}</p>
+                </div>
+            `;
+            modal.classList.add('active');
+        };
+
+        // Other modal functions
+        window.showPlantingGuide = function() {
+            modalContent.innerHTML = `
+                <h2 class="modal-title">What to Plant Now</h2>
+                <p style="color: #555; margin-bottom: 1rem;">Based on current season and your location, here's what you can plant:</p>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 0.5rem 0;">🌿 Herbs: Basil, Mint, Parsley</li>
+                    <li style="padding: 0.5rem 0;">🥬 Vegetables: Lettuce, Spinach, Radishes</li>
+                    <li style="padding: 0.5rem 0;">🌸 Flowers: Marigolds, Petunias, Sunflowers</li>
+                </ul>
+            `;
+            modal.classList.add('active');
+        };
+
+        window.showReminders = function() {
+            alert("⏰ Reminder feature coming soon! You'll be able to set notifications for watering and fertilizing.");
+        };
+
+        window.showLayout = function() {
+            alert("📐 Garden layout planner coming soon! You'll be able to design your garden online.");
+        };
+
+        // Back to top
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Event listeners for calculator
+        document.querySelectorAll('#plantType, #potSize, #location, #season').forEach(input => {
+            input.addEventListener('change', updateWaterCalculator);
+        });
+
+        // Close modal on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPlants();
+            renderAnimals();
+            renderToxicPlants();
+            updateWaterCalculator();
+        });
+    </script>
+</body>
+</html>

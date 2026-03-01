@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌱 Regenerative Agriculture · heal the soil</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Google Fonts: earthy, clean, friendly -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #e8f0da;
+            background: radial-gradient(circle at 10% 30%, #dae8c5, #c0dba8);
+            min-height: 100vh;
+            color: #2a5730;
+            line-height: 1.6;
+        }
+
+        /* header – grounded, hopeful */
+        .agro-header {
+            background: linear-gradient(145deg, #5c8c5a, #3b6a41);
+            padding: 5rem 2rem 4.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+            border-bottom: 8px solid #e9d594;
+            box-shadow: 0 20px 40px #3b6a41;
+        }
+
+        .agro-header::before {
+            content: '🌱🚜';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.1;
+            left: -4rem;
+            bottom: -6rem;
+            transform: rotate(-10deg);
+        }
+
+        .agro-header h1 {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 800;
+            font-size: 4rem;
+            color: #fcf2cf;
+            text-shadow: 6px 6px 0 #1d6236;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .agro-header h1 i {
+            color: #f8e2a0;
+            filter: drop-shadow(0 0 8px #ffeeaa);
+        }
+
+        .agro-header p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 1.5rem auto;
+            background: #ecfadcc0;
+            padding: 0.8rem 2.5rem;
+            border-radius: 60px;
+            color: #1e542c;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            border: 3px solid #e9d594;
+        }
+
+        .soil-badge {
+            margin-top: 1.8rem;
+            display: inline-block;
+            background: #f5d889;
+            color: #256335;
+            padding: 0.6rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #fff2b5;
+        }
+
+        /* container */
+        .container {
+            max-width: 1400px;
+            margin: -3rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* filter/search bar */
+        .filter-bar {
+            background: #fafff2e0;
+            backdrop-filter: blur(8px);
+            border-radius: 80px;
+            padding: 1.5rem 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 30px #2b754b70, 0 0 0 3px #dcf5c0 inset;
+            border: 3px solid #daf0c0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3e9462;
+            font-size: 1.3rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 5rem;
+            border: 3px solid #cef0b5;
+            border-radius: 60px;
+            font-size: 1rem;
+            background: white;
+            color: #1e5a30;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.8rem 2rem;
+            border: 3px solid #c8eab2;
+            border-radius: 60px;
+            background: white;
+            font-weight: 600;
+            color: #1b6839;
+            cursor: pointer;
+        }
+
+        /* topic chips */
+        .topic-chips {
+            margin-bottom: 2.5rem;
+        }
+
+        .chip-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: #c0b56b #c0e8b0;
+        }
+
+        .chip-scroll::-webkit-scrollbar { height: 8px; }
+        .chip-scroll::-webkit-scrollbar-track { background: #d6f0ca; border-radius: 10px; }
+        .chip-scroll::-webkit-scrollbar-thumb { background: #c0b56b; border-radius: 10px; }
+
+        .topic-chip {
+            flex: 0 0 auto;
+            background: #faffea;
+            padding: 1rem 2.5rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 6px 14px #4d986d70;
+            cursor: pointer;
+            font-weight: 600;
+            border: 3px solid transparent;
+            transition: 0.2s;
+            font-size: 1.1rem;
+        }
+
+        .topic-chip i { color: #d68d2c; font-size: 1.5rem; }
+        .topic-chip:hover { transform: translateY(-5px); border-color: #c0b56b; background: #ffffdf; }
+        .topic-chip.active { background: #f5e5a0; border-color: #a58f4a; }
+
+        /* featured practice */
+        .featured-practice {
+            background: linear-gradient(145deg, #568f64, #3b734b);
+            border-radius: 80px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            border: 8px solid #e9d594;
+            box-shadow: 0 30px 40px #1f603a;
+            color: #fcfae6;
+            position: relative;
+        }
+
+        .featured-practice::before {
+            content: '🌾';
+            font-size: 14rem;
+            opacity: 0.1;
+            position: absolute;
+            bottom: -2rem;
+            right: 2rem;
+            transform: rotate(5deg);
+        }
+
+        .practice-ribbon {
+            position: absolute;
+            top: 2rem;
+            right: 2.5rem;
+            background: #ecd259;
+            color: #17582b;
+            padding: 0.6rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #fff8b0;
+        }
+
+        .practice-grid {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .practice-text h2 {
+            font-size: 2rem;
+            color: #f8e2a0;
+            letter-spacing: 2px;
+        }
+
+        .practice-text h3 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 0.5rem 0;
+        }
+
+        .practice-meta {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            background: #479d6bb0;
+            padding: 0.6rem 2rem;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border: 2px solid #ffea8f;
+        }
+
+        .meta-item i { color: #ffe684; }
+
+        .practice-desc {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+
+        .learn-btn {
+            background: #ecd259;
+            border: none;
+            color: #1a6232;
+            font-weight: 800;
+            font-size: 1.6rem;
+            padding: 1.2rem 3.5rem;
+            border-radius: 60px;
+            display: inline-flex;
+            align-items: center;
+            gap: 1.2rem;
+            cursor: pointer;
+            border: 4px solid #ffffcc;
+            box-shadow: 0 8px 0 #8f9440;
+            transition: 0.1s;
+        }
+
+        .learn-btn:active {
+            transform: translateY(8px);
+            box-shadow: none;
+        }
+
+        .practice-image {
+            height: 260px;
+            background: #67b384;
+            border-radius: 70px;
+            border: 6px solid #e9d594;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            color: #fffed0;
+        }
+
+        /* practices grid */
+        .practices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .practice-card {
+            background: #fafff0;
+            border-radius: 70px;
+            overflow: hidden;
+            box-shadow: 0 20px 30px #2a784d80;
+            transition: all 0.3s;
+            border: 5px solid #ccf0b5;
+            cursor: pointer;
+            color: #1e562e;
+        }
+
+        .practice-card:hover {
+            transform: translateY(-15px);
+            border-color: #e9d594;
+            box-shadow: 0 35px 45px #175a32;
+        }
+
+        .card-image {
+            height: 140px;
+            background: linear-gradient(145deg, #74b386, #4d9a65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #fcfcd2;
+            position: relative;
+        }
+
+        .type-tag {
+            position: absolute;
+            bottom: 0.8rem;
+            left: 1rem;
+            background: #1e5837;
+            color: #ffea9e;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            border: 2px solid #fdd67a;
+        }
+
+        .card-content {
+            padding: 1.8rem;
+        }
+
+        .card-category {
+            background: #cbeac0;
+            padding: 0.3rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 0.7rem 0;
+        }
+
+        .card-source {
+            color: #4b7a55;
+            margin-bottom: 0.8rem;
+        }
+
+        .card-description {
+            color: #366f49;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .benefit {
+            background: #f1cba5;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+
+        .explore-btn {
+            background: #5daf7c;
+            border: none;
+            color: white;
+            padding: 0.6rem 1.8rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            border: 2px solid #fde287;
+        }
+
+        /* soil health indicators */
+        .indicators-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .indicator-card {
+            background: #ebf7e0;
+            border-radius: 70px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 4px solid #e9d594;
+        }
+
+        .indicator-number {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #1f6e39;
+        }
+
+        /* modal */
+        .modal {
+            display: none; position: fixed; inset:0; background: #1d6139e6;
+            align-items: center; justify-content: center; z-index:2000;
+            backdrop-filter: blur(6px);
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #f6ffe6;
+            border-radius: 80px;
+            max-width: 700px;
+            width:100%;
+            border: 8px solid #ffe28b;
+            color: #195a2c;
+        }
+
+        .back-to-top {
+            position: fixed; bottom:2rem; right:2rem;
+            background: #c0b56b; width:70px; height:70px; border-radius:50%;
+            display: none; align-items:center; justify-content:center;
+            font-size:2.2rem; color:#1c5c28; border:5px solid #fff3b0;
+            cursor:pointer; z-index:1000;
+        }
+        .back-to-top.visible { display: flex; }
+
+        @media (max-width:800px){
+            .practice-grid { grid-template-columns:1fr; }
+            .indicators-row { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- header -->
+    <header class="agro-header">
+        <h1>
+            <i class="fas fa-seedling"></i> Regenerative Agriculture
+            <i class="fas fa-leaf"></i>
+        </h1>
+        <p>farm in harmony · restore soil · draw down carbon</p>
+        <div class="soil-badge"><i class="fas fa-spa"></i> healing the land</div>
+    </header>
+
+    <div class="container">
+        <!-- filter bar -->
+        <div class="filter-bar" data-aos="fade-up">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="search practices, crops, case studies...">
+            </div>
+            <div class="filter-options">
+                <select class="filter-select"><option>all practices</option><option>no-till</option><option>cover crops</option><option>rotational grazing</option><option>agroforestry</option></select>
+                <select class="filter-select"><option>by climate</option></select>
+            </div>
+        </div>
+
+        <!-- topic chips -->
+        <div class="topic-chips" data-aos="fade-up">
+            <div class="chip-scroll">
+                <div class="topic-chip active"><i class="fas fa-layer-group"></i> all</div>
+                <div class="topic-chip"><i class="fas fa-tractor"></i> no-till</div>
+                <div class="topic-chip"><i class="fas fa-leaf"></i> cover crops</div>
+                <div class="topic-chip"><i class="fas fa-cow"></i> grazing</div>
+                <div class="topic-chip"><i class="fas fa-tree"></i> agroforestry</div>
+                <div class="topic-chip"><i class="fas fa-droplet"></i> water management</div>
+            </div>
+        </div>
+
+        <!-- featured practice -->
+        <div class="featured-practice" data-aos="zoom-in">
+            <span class="practice-ribbon"><i class="fas fa-star"></i> keystone practice</span>
+            <div class="practice-grid">
+                <div class="practice-text">
+                    <h2>🌾 soil building</h2>
+                    <h3>cover cropping</h3>
+                    <div class="practice-meta">
+                        <span class="meta-item"><i class="fas fa-globe"></i> global</span>
+                        <span class="meta-item"><i class="fas fa-cloud-sun"></i> all climates</span>
+                    </div>
+                    <p class="practice-desc">Planting between cash crops to protect soil, fix nitrogen, and boost organic matter. Roots feed soil life, prevent erosion.</p>
+                    <button class="learn-btn" onclick="learnPractice('cover cropping')"><i class="fas fa-book-open"></i> deep dive</button>
+                </div>
+                <div class="practice-image"><i class="fas fa-leaf"></i></div>
+            </div>
+        </div>
+
+        <!-- soil health indicators -->
+        <div class="indicators-row" data-aos="fade-up">
+            <div class="indicator-card"><span class="indicator-number">+4%</span> <br>soil organic matter (vs 2% avg)</div>
+            <div class="indicator-card"><span class="indicator-number">20M</span> <br>hectares regeneratively managed</div>
+            <div class="indicator-card"><span class="indicator-number">1.2B</span> <br>tons CO₂e sequestered (potential)</div>
+        </div>
+
+        <!-- practices grid (js) -->
+        <div class="practices-grid" id="practicesGrid"></div>
+    </div>
+
+    <!-- modal -->
+    <div class="modal" id="practiceModal">
+        <div class="modal-content" style="padding:2.5rem;">
+            <button style="float:right; background:none; border:none; font-size:3rem; color:#1b6735;" onclick="closeModal()">✕</button>
+            <div style="text-align:center;">
+                <div style="font-size:5rem;" id="modalPracticeEmoji">🌽</div>
+                <h2 id="modalPracticeTitle" style="font-size:2.8rem;">no-till farming</h2>
+                <p id="modalPracticeDesc" style="margin:2rem 0;">reduce erosion · build soil · save fuel</p>
+                <button class="learn-btn" onclick="viewCaseStudy()" style="font-size:1.2rem;">📊 see case study</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({duration:800,once:true});
+
+        // practices data
+        const practices = [
+            { name:"No-Till Farming", type:"soil", org:"Rodale Institute", description:"leave soil undisturbed, increase carbon", benefit:"carbon sequestration", icon:"fa-tractor" },
+            { name:"Cover Cropping", type:"soil", org:"USDA NRCS", description:"rye, clover, buckwheat between cash crops", benefit:"soil fertility", icon:"fa-leaf" },
+            { name:"Rotational Grazing", type:"grazing", org:"Savory Institute", description:"mimic nature, regenerate pasture", benefit:"biodiversity", icon:"fa-cow" },
+            { name:"Silvopasture", type:"agroforestry", org:"Yale", description:"trees + pasture + livestock", benefit:"carbon drawdown", icon:"fa-tree" },
+            { name:"Keyline Design", type:"water", org:"Permaculture", description:"water harvesting, erosion control", benefit:"drought resilience", icon:"fa-droplet" },
+            { name:"Biochar", type:"soil", org:"International Biochar", description:"ancient charcoal for soil", benefit:"long-term carbon storage", icon:"fa-fire" },
+            { name:"Alley Cropping", type:"agroforestry", org:"USDA", description:"crops between tree rows", benefit:"windbreak, nutrients", icon:"fa-seedling" },
+            { name:"Compost Tea", type:"soil", org:"Regenerative Ag", description:"liquid biology for soil", benefit:"microbe boost", icon:"fa-flask" },
+        ];
+
+        function renderPractices() {
+            const grid = document.getElementById('practicesGrid');
+            grid.innerHTML = practices.map(p => `
+                <div class="practice-card" onclick="showPractice('${p.name}','${p.type} · ${p.org} · ${p.description} · ${p.benefit}','${p.icon}')">
+                    <div class="card-image"><i class="fas ${p.icon}"></i><span class="type-tag">${p.type}</span></div>
+                    <div class="card-content">
+                        <span class="card-category">${p.type}</span>
+                        <div class="card-title">${p.name}</div>
+                        <div class="card-source"><i class="fas fa-building"></i> ${p.org}</div>
+                        <div class="card-description">${p.description}</div>
+                        <div class="card-footer">
+                            <span class="benefit">✨ ${p.benefit}</span>
+                            <button class="explore-btn" onclick="event.stopPropagation(); explorePractice('${p.name}')">explore</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+        renderPractices();
+
+        window.showPractice = (title, desc, icon) => {
+            document.getElementById('modalPracticeTitle').innerText = title;
+            document.getElementById('modalPracticeDesc').innerText = desc;
+            document.getElementById('modalPracticeEmoji').innerHTML = `<i class="fas ${icon}"></i>`;
+            document.getElementById('practiceModal').classList.add('active');
+        };
+
+        window.closeModal = () => document.getElementById('practiceModal').classList.remove('active');
+        window.learnPractice = (name) => alert(`📘 loading deep dive on ${name || 'practice'}...`);
+        window.explorePractice = (name) => alert(`🔍 exploring details of ${name}`);
+        window.viewCaseStudy = () => { alert('📊 case study: farm data and results (demo).'); closeModal(); };
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // modal escape
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('practiceModal')) closeModal(); };
+    </script>
+</body>
+</html>

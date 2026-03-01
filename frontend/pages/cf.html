@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Footprint Calculator | EcoLife</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            min-height: 100vh;
+            color: #1b5e20;
+        }
+
+        /* Header */
+        .calculator-header {
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+
+        .calculator-header::before {
+            content: '🌍';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.1;
+            right: -2rem;
+            bottom: -3rem;
+            transform: rotate(15deg);
+        }
+
+        .calculator-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .calculator-header h1 i {
+            color: #ff9800;
+        }
+
+        .calculator-header p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: -2rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            background: white;
+            border-radius: 60px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            color: #1b5e20;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 30px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #4caf50, #ff9800);
+            border-radius: 30px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .progress-steps .completed {
+            color: #4caf50;
+        }
+
+        /* Calculator Grid */
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Form Section */
+        .form-section {
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .form-section h2 {
+            color: #1b5e20;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 1.8rem;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .category-tab {
+            flex: 1;
+            min-width: 120px;
+            padding: 1rem;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .category-tab i {
+            font-size: 1.2rem;
+        }
+
+        .category-tab:hover {
+            background: #e0e0e0;
+        }
+
+        .category-tab.active {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .category-tab.active i {
+            color: #ff9800;
+        }
+
+        /* Form Groups */
+        .form-group {
+            margin-bottom: 1.8rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: #555;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group label i {
+            color: #ff9800;
+            width: 24px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 1rem;
+            color: #999;
+        }
+
+        .input-wrapper input,
+        .input-wrapper select {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .input-wrapper input:focus,
+        .input-wrapper select:focus {
+            outline: none;
+            border-color: #2e7d32;
+            box-shadow: 0 0 0 4px rgba(46,125,50,0.1);
+        }
+
+        .input-suffix {
+            position: absolute;
+            right: 1rem;
+            color: #999;
+        }
+
+        .range-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .range-wrapper input[type="range"] {
+            flex: 1;
+            height: 8px;
+            -webkit-appearance: none;
+            background: #e0e0e0;
+            border-radius: 10px;
+        }
+
+        .range-wrapper input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 25px;
+            height: 25px;
+            background: #ff9800;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .range-wrapper input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .range-value {
+            min-width: 60px;
+            text-align: center;
+            font-weight: 600;
+            color: #2e7d32;
+        }
+
+        .hint {
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 0.3rem;
+            margin-left: 2.5rem;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 2rem;
+        }
+
+        .results-panel h2 {
+            color: #1b5e20;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 1.8rem;
+        }
+
+        .total-emissions {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-radius: 30px;
+            margin-bottom: 2rem;
+        }
+
+        .total-label {
+            color: #1b5e20;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .total-value {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #2e7d32;
+            line-height: 1;
+        }
+
+        .total-unit {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .comparison {
+            margin-top: 0.5rem;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .comparison i {
+            color: #ff9800;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            height: 200px;
+            margin-bottom: 2rem;
+        }
+
+        /* Breakdown List */
+        .breakdown-list {
+            margin-bottom: 2rem;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .breakdown-label {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #555;
+        }
+
+        .breakdown-label i {
+            width: 24px;
+            color: #ff9800;
+        }
+
+        .breakdown-value {
+            font-weight: 600;
+            color: #1b5e20;
+        }
+
+        .breakdown-percent {
+            color: #999;
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+        }
+
+        /* Equivalencies */
+        .equivalencies {
+            background: #f8f9fa;
+            border-radius: 30px;
+            padding: 1.5rem;
+        }
+
+        .equivalencies h3 {
+            color: #1b5e20;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .equivalency-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .equivalency-item:last-child {
+            border-bottom: none;
+        }
+
+        .equivalency-icon {
+            width: 40px;
+            height: 40px;
+            background: #e8f5e9;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2e7d32;
+            font-size: 1.2rem;
+        }
+
+        .equivalency-text {
+            flex: 1;
+            color: #555;
+        }
+
+        .equivalency-value {
+            font-weight: 700;
+            color: #ff9800;
+        }
+
+        /* Tips Section */
+        .tips-section {
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .tips-section h2 {
+            color: #1b5e20;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tip-card {
+            background: #f8f9fa;
+            border-radius: 30px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .tip-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(46,125,50,0.1);
+        }
+
+        .tip-icon {
+            width: 50px;
+            height: 50px;
+            background: #2e7d32;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tip-card h3 {
+            color: #1b5e20;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .tip-card p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .tip-impact {
+            color: #ff9800;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            flex: 1;
+            min-width: 200px;
+            padding: 1.2rem;
+            border: none;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: white;
+        }
+
+        .action-btn.primary:hover {
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(46,125,50,0.3);
+        }
+
+        .action-btn.secondary {
+            background: #ff9800;
+            color: white;
+        }
+
+        .action-btn.secondary:hover {
+            background: #f57c00;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255,152,0,0.3);
+        }
+
+        /* Challenge Card */
+        .challenge-card {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+            border-radius: 40px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .challenge-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .challenge-card p {
+            margin-bottom: 1.5rem;
+            opacity: 0.95;
+        }
+
+        .challenge-btn {
+            background: white;
+            color: #f57c00;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .challenge-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(46,125,50,0.3);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        .back-to-top:hover {
+            background: #1b5e20;
+            transform: translateY(-5px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 60px;
+            max-width: 500px;
+            width: 100%;
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+            animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            color: #4caf50;
+            margin-bottom: 1rem;
+        }
+
+        .modal h3 {
+            color: #1b5e20;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .modal p {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .modal-btn {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-panel {
+                position: static;
+            }
+            
+            .calculator-header h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .category-tabs {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .progress-steps {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="calculator-header">
+        <h1>
+            <i class="fas fa-calculator"></i>
+            Carbon Footprint Calculator
+        </h1>
+        <p>Calculate your household's CO₂ emissions and discover ways to reduce your impact on the planet</p>
+    </header>
+
+    <div class="container">
+        <!-- Progress Bar -->
+        <div class="progress-section">
+            <div class="progress-header">
+                <span>Questionnaire Progress</span>
+                <span id="progressPercent">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <div class="progress-steps">
+                <span class="completed" id="step1">1. Energy</span>
+                <span id="step2">2. Transport</span>
+                <span id="step3">3. Food</span>
+                <span id="step4">4. Waste</span>
+                <span id="step5">5. Goods</span>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="calculator-grid">
+            <!-- Form Section -->
+            <div class="form-section">
+                <h2>
+                    <i class="fas fa-clipboard-list"></i>
+                    Your Information
+                </h2>
+
+                <!-- Category Tabs -->
+                <div class="category-tabs">
+                    <button class="category-tab active" data-category="energy" onclick="switchCategory('energy')">
+                        <i class="fas fa-bolt"></i> Energy
+                    </button>
+                    <button class="category-tab" data-category="transport" onclick="switchCategory('transport')">
+                        <i class="fas fa-car"></i> Transport
+                    </button>
+                    <button class="category-tab" data-category="food" onclick="switchCategory('food')">
+                        <i class="fas fa-utensils"></i> Food
+                    </button>
+                    <button class="category-tab" data-category="waste" onclick="switchCategory('waste')">
+                        <i class="fas fa-trash"></i> Waste
+                    </button>
+                    <button class="category-tab" data-category="goods" onclick="switchCategory('goods')">
+                        <i class="fas fa-shopping-bag"></i> Goods
+                    </button>
+                </div>
+
+                <!-- Energy Category -->
+                <div id="energy-category" class="category-form">
+                    <div class="form-group">
+                        <label><i class="fas fa-home"></i> Household Size</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-users"></i>
+                            <input type="number" id="householdSize" value="2" min="1" max="10" onchange="updateCalculations()">
+                        </div>
+                        <div class="hint">Number of people in your household</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-bolt"></i> Electricity Usage</label>
+                        <div class="range-wrapper">
+                            <input type="range" id="electricity" min="0" max="2000" value="500" step="50" oninput="updateRange('electricityValue', this.value); updateCalculations()">
+                            <span class="range-value" id="electricityValue">500 kWh</span>
+                        </div>
+                        <div class="hint">Average monthly electricity consumption (500 kWh is typical for a small household)</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-gas-pump"></i> Heating Fuel</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-fire"></i>
+                            <select id="heatingFuel" onchange="updateCalculations()">
+                                <option value="naturalGas">Natural Gas</option>
+                                <option value="oil">Heating Oil</option>
+                                <option value="electric">Electric</option>
+                                <option value="wood">Wood</option>
+                                <option value="none">None / Renewable</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-thermometer-half"></i> Heating Usage</label>
+                        <div class="range-wrapper">
+                            <input type="range" id="heating" min="0" max="1000" value="300" step="25" oninput="updateRange('heatingValue', this.value); updateCalculations()">
+                            <span class="range-value" id="heatingValue">300 therms</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transport Category (hidden by default) -->
+                <div id="transport-category" class="category-form" style="display: none;">
+                    <div class="form-group">
+                        <label><i class="fas fa-car"></i> Car Type</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-car-side"></i>
+                            <select id="carType" onchange="updateCalculations()">
+                                <option value="small">Small / Hybrid</option>
+                                <option value="medium">Medium / Sedan</option>
+                                <option value="large">Large / SUV</option>
+                                <option value="electric">Electric</option>
+                                <option value="none">No Car</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-road"></i> Weekly Mileage</label>
+                        <div class="range-wrapper">
+                            <input type="range" id="carMileage" min="0" max="500" value="100" step="10" oninput="updateRange('mileageValue', this.value); updateCalculations()">
+                            <span class="range-value" id="mileageValue">100 miles</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-bus"></i> Public Transport</label>
+                        <div class="range-wrapper">
+                            <input type="range" id="publicTransport" min="0" max="100" value="10" step="5" oninput="updateRange('publicValue', this.value); updateCalculations()">
+                            <span class="range-value" id="publicValue">10 miles</span>
+                        </div>
+                        <div class="hint">Weekly miles on bus/train</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-plane"></i> Flights Per Year</label>
+                        <div class="range-wrapper">
+                            <input type="range" id="flights" min="0" max="20" value="1" step="1" oninput="updateRange('flightsValue', this.value); updateCalculations()">
+                            <span class="range-value" id="flightsValue">1 flight</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food Category -->
+                <div id="food-category" class="category-form" style="display: none;">
+                    <div class="form-group">
+                        <label><i class="fas fa-drumstick-bite"></i> Meat Consumption</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-cow"></i>
+                            <select id="meatConsumption" onchange="updateCalculations()">
+                                <option value="high">Daily meat (multiple meals)</option>
+                                <option value="medium">Daily meat (once a day)</option>
+                                <option value="low">Occasional (few times/week)</option>
+                                <option value="vegetarian">Vegetarian</option>
+                                <option value="vegan">Vegan</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-milk"></i> Dairy Consumption</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-cheese"></i>
+                            <select id="dairyConsumption" onchange="updateCalculations()">
+                                <option value="high">High (daily cheese/milk)</option>
+                                <option value="medium">Moderate</option>
+                                <option value="low">Low (occasional)</option>
+                                <option value="none">Non-dairy alternatives</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-apple-alt"></i> Food Waste</label>
+                        <div class="range-wrapper">
+                            <input type="range" id="foodWaste" min="0" max="50" value="15" step="5" oninput="updateRange('foodWasteValue', this.value); updateCalculations()">
+                            <span class="range-value" id="foodWasteValue">15%</span>
+                        </div>
+                        <div class="hint">Percentage of food wasted</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-truck"></i> Food Miles</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-store"></i>
+                            <select id="foodMiles" onchange="updateCalculations()">
+                                <option value="local">Mostly local / farmers market</option>
+                                <option value="mixed">Mixed sources</option>
+                                <option value="imported">Mostly imported</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Waste Category -->
+                <div id="waste-category" class="category-form" style="display: none;">
+                    <div class="form-group">
+                        <label><i class="fas fa-trash-alt"></i> Weekly Trash</label>
+                        <div class="range-wrapper">
+                            <input type="range" id="trashAmount" min="0" max="100" value="30" step="5" oninput="updateRange('trashValue', this.value); updateCalculations()">
+                            <span class="range-value" id="trashValue">30 lbs</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-recycle"></i> Recycling Habits</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-separator"></i>
+                            <select id="recycling" onchange="updateCalculations()">
+                                <option value="full">Full recycling (all materials)</option>
+                                <option value="partial">Partial recycling</option>
+                                <option value="minimal">Minimal recycling</option>
+                                <option value="none">No recycling</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-apple-alt"></i> Composting</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-seedling"></i>
+                            <select id="composting" onchange="updateCalculations()">
+                                <option value="full">Full composting</option>
+                                <option value="partial">Partial composting</option>
+                                <option value="none">No composting</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Goods Category -->
+                <div id="goods-category" class="category-form" style="display: none;">
+                    <div class="form-group">
+                        <label><i class="fas fa-tshirt"></i> Clothing Purchases</label>
+                        <div class="range-wrapper">
+                            <input type="range" id="clothing" min="0" max="50" value="10" step="5" oninput="updateRange('clothingValue', this.value); updateCalculations()">
+                            <span class="range-value" id="clothingValue">10 items/year</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-tv"></i> Electronics</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-laptop"></i>
+                            <select id="electronics" onchange="updateCalculations()">
+                                <option value="minimal">Minimal (replace when broken)</option>
+                                <option value="moderate">Moderate (2-3 years)</option>
+                                <option value="frequent">Frequent (yearly upgrades)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-gift"></i> Other Purchases</label>
+                        <div class="range-wrapper">
+                            <input type="range" id="otherGoods" min="0" max="100" value="30" step="10" oninput="updateRange('otherValue', this.value); updateCalculations()">
+                            <span class="range-value" id="otherValue">$30/week</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button class="action-btn secondary" onclick="previousCategory()" style="flex: 0.5;">
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                    <button class="action-btn primary" onclick="nextCategory()" style="flex: 0.5;">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Panel -->
+            <div class="results-panel">
+                <h2>
+                    <i class="fas fa-chart-pie"></i>
+                    Your Results
+                </h2>
+
+                <!-- Total Emissions -->
+                <div class="total-emissions">
+                    <div class="total-label">Annual Carbon Footprint</div>
+                    <div class="total-value" id="totalCarbon">8.2</div>
+                    <div class="total-unit">tons CO₂e</div>
+                    <div class="comparison">
+                        <i class="fas fa-chart-line"></i>
+                        <span id="comparison">Below US average (16 tons)</span>
+                    </div>
+                </div>
+
+                <!-- Chart -->
+                <div class="chart-container">
+                    <canvas id="carbonChart"></canvas>
+                </div>
+
+                <!-- Breakdown -->
+                <div class="breakdown-list" id="breakdownList">
+                    <div class="breakdown-item">
+                        <span class="breakdown-label"><i class="fas fa-bolt"></i> Energy</span>
+                        <span><span class="breakdown-value" id="energyAmount">3.2</span> <span class="breakdown-percent" id="energyPercent">(39%)</span></span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label"><i class="fas fa-car"></i> Transport</span>
+                        <span><span class="breakdown-value" id="transportAmount">2.4</span> <span class="breakdown-percent" id="transportPercent">(29%)</span></span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label"><i class="fas fa-utensils"></i> Food</span>
+                        <span><span class="breakdown-value" id="foodAmount">1.5</span> <span class="breakdown-percent" id="foodPercent">(18%)</span></span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label"><i class="fas fa-trash"></i> Waste</span>
+                        <span><span class="breakdown-value" id="wasteAmount">0.6</span> <span class="breakdown-percent" id="wastePercent">(7%)</span></span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label"><i class="fas fa-shopping-bag"></i> Goods</span>
+                        <span><span class="breakdown-value" id="goodsAmount">0.5</span> <span class="breakdown-percent" id="goodsPercent">(6%)</span></span>
+                    </div>
+                </div>
+
+                <!-- Equivalencies -->
+                <div class="equivalencies">
+                    <h3><i class="fas fa-leaf"></i> Your footprint equals...</h3>
+                    <div class="equivalency-item">
+                        <div class="equivalency-icon"><i class="fas fa-tree"></i></div>
+                        <div class="equivalency-text"><span class="equivalency-value" id="treesNeeded">410</span> trees need to absorb for a year</div>
+                    </div>
+                    <div class="equivalency-item">
+                        <div class="equivalency-icon"><i class="fas fa-car-side"></i></div>
+                        <div class="equivalency-text">Driving <span class="equivalency-value" id="carMilesEquiv">20,500</span> miles in a car</div>
+                    </div>
+                    <div class="equivalency-item">
+                        <div class="equivalency-icon"><i class="fas fa-home"></i></div>
+                        <div class="equivalency-text">Powering <span class="equivalency-value" id="homesEquiv">0.8</span> homes for a year</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="action-btn primary" onclick="saveResults()">
+                <i class="fas fa-save"></i> Save My Results
+            </button>
+            <button class="action-btn secondary" onclick="downloadReport()">
+                <i class="fas fa-download"></i> Download Report
+            </button>
+        </div>
+
+        <!-- Personalized Tips -->
+        <div class="tips-section">
+            <h2>
+                <i class="fas fa-lightbulb"></i>
+                Personalized Tips to Reduce Your Footprint
+            </h2>
+            <div class="tips-grid" id="tipsGrid">
+                <!-- Tips will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Challenge Card -->
+        <div class="challenge-card">
+            <h3>🌍 Take the 30-Day Carbon Challenge!</h3>
+            <p>Commit to reducing your footprint and track your progress with our challenge tracker.</p>
+            <button class="challenge-btn" onclick="window.location.href='challenges.html'">
+                Join Challenge <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div class="modal" id="resultsModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Results Saved!</h3>
+            <p>Your carbon footprint has been saved. Track your progress over time!</p>
+            <button class="modal-btn" onclick="closeModal()">Great!</button>
+        </div>
+    </div>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Current category
+        let currentCategory = 'energy';
+        let carbonChart = null;
+
+        // Update range display
+        function updateRange(elementId, value) {
+            document.getElementById(elementId).textContent = value + 
+                (elementId.includes('electricity') ? ' kWh' : 
+                 elementId.includes('heating') ? ' therms' :
+                 elementId.includes('mileage') ? ' miles' :
+                 elementId.includes('public') ? ' miles' :
+                 elementId.includes('flights') ? ' flight' + (value > 1 ? 's' : '') :
+                 elementId.includes('foodWaste') ? '%' :
+                 elementId.includes('trash') ? ' lbs' :
+                 elementId.includes('clothing') ? ' items/year' :
+                 elementId.includes('other') ? '$/week' : '');
+        }
+
+        // Switch category
+        function switchCategory(category) {
+            // Hide all categories
+            document.querySelectorAll('.category-form').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Show selected category
+            document.getElementById(category + '-category').style.display = 'block';
+            
+            // Update active tab
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.dataset.category === category) {
+                    tab.classList.add('active');
+                }
+            });
+            
+            currentCategory = category;
+            updateProgress();
+        }
+
+        // Next category
+        function nextCategory() {
+            const categories = ['energy', 'transport', 'food', 'waste', 'goods'];
+            const currentIndex = categories.indexOf(currentCategory);
+            if (currentIndex < categories.length - 1) {
+                switchCategory(categories[currentIndex + 1]);
+            }
+        }
+
+        // Previous category
+        function previousCategory() {
+            const categories = ['energy', 'transport', 'food', 'waste', 'goods'];
+            const currentIndex = categories.indexOf(currentCategory);
+            if (currentIndex > 0) {
+                switchCategory(categories[currentIndex - 1]);
+            }
+        }
+
+        // Update progress
+        function updateProgress() {
+            const categories = ['energy', 'transport', 'food', 'waste', 'goods'];
+            const currentIndex = categories.indexOf(currentCategory);
+            const progress = ((currentIndex + 1) / categories.length) * 100;
+            
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressPercent').textContent = Math.round(progress) + '%';
+            
+            // Update step indicators
+            categories.forEach((cat, index) => {
+                const stepEl = document.getElementById('step' + (index + 1));
+                if (index <= currentIndex) {
+                    stepEl.classList.add('completed');
+                } else {
+                    stepEl.classList.remove('completed');
+                }
+            });
+        }
+
+        // Calculate carbon footprint
+        function calculateCarbon() {
+            // Energy calculations
+            const electricity = parseFloat(document.getElementById('electricity').value) * 12 * 0.0004; // tons CO2 per kWh
+            const heating = parseFloat(document.getElementById('heating').value) * 0.0053; // tons CO2 per therm
+            const householdSize = parseFloat(document.getElementById('householdSize').value);
+            const energyTotal = (electricity + heating) / householdSize;
+
+            // Transport calculations
+            const carType = document.getElementById('carType').value;
+            const carMileage = parseFloat(document.getElementById('carMileage').value) * 52; // annual miles
+            let carEmissionFactor = 0.0004; // tons per mile
+            if (carType === 'small') carEmissionFactor = 0.0003;
+            if (carType === 'medium') carEmissionFactor = 0.0004;
+            if (carType === 'large') carEmissionFactor = 0.0006;
+            if (carType === 'electric') carEmissionFactor = 0.0001;
+            if (carType === 'none') carMileage = 0;
+            
+            const carEmissions = carMileage * carEmissionFactor;
+            const publicTransport = parseFloat(document.getElementById('publicTransport').value) * 52 * 0.0001;
+            const flights = parseFloat(document.getElementById('flights').value) * 0.4; // tons per short flight
+            const transportTotal = (carEmissions + publicTransport + flights) / householdSize;
+
+            // Food calculations
+            const meatConsumption = document.getElementById('meatConsumption').value;
+            let meatFactor = 2.5; // tons per year
+            if (meatConsumption === 'high') meatFactor = 3.0;
+            if (meatConsumption === 'medium') meatFactor = 2.0;
+            if (meatConsumption === 'low') meatFactor = 1.0;
+            if (meatConsumption === 'vegetarian') meatFactor = 0.5;
+            if (meatConsumption === 'vegan') meatFactor = 0.3;
+            
+            const dairyConsumption = document.getElementById('dairyConsumption').value;
+            let dairyFactor = 0.8;
+            if (dairyConsumption === 'high') dairyFactor = 1.0;
+            if (dairyConsumption === 'medium') dairyFactor = 0.6;
+            if (dairyConsumption === 'low') dairyFactor = 0.3;
+            if (dairyConsumption === 'none') dairyFactor = 0.1;
+            
+            const foodWaste = parseFloat(document.getElementById('foodWaste').value) / 100;
+            const foodTotal = (meatFactor + dairyFactor) * (1 + foodWaste * 0.5);
+
+            // Waste calculations
+            const trashAmount = parseFloat(document.getElementById('trashAmount').value) * 52 * 0.0005; // tons CO2 per lb
+            const recycling = document.getElementById('recycling').value;
+            let recyclingFactor = 1;
+            if (recycling === 'full') recyclingFactor = 0.5;
+            if (recycling === 'partial') recyclingFactor = 0.7;
+            if (recycling === 'minimal') recyclingFactor = 0.9;
+            if (recycling === 'none') recyclingFactor = 1;
+            
+            const composting = document.getElementById('composting').value;
+            let compostingFactor = 1;
+            if (composting === 'full') compostingFactor = 0.7;
+            if (composting === 'partial') compostingFactor = 0.85;
+            
+            const wasteTotal = trashAmount * recyclingFactor * compostingFactor / householdSize;
+
+            // Goods calculations
+            const clothing = parseFloat(document.getElementById('clothing').value) * 0.02; // tons per item
+            const electronics = document.getElementById('electronics').value;
+            let electronicsFactor = 0.3;
+            if (electronics === 'moderate') electronicsFactor = 0.5;
+            if (electronics === 'frequent') electronicsFactor = 0.8;
+            
+            const otherGoods = parseFloat(document.getElementById('otherGoods').value) * 52 * 0.0001; // tons per dollar
+            const goodsTotal = (clothing + electronicsFactor + otherGoods) / householdSize;
+
+            return {
+                energy: Math.round(energyTotal * 10) / 10,
+                transport: Math.round(transportTotal * 10) / 10,
+                food: Math.round(foodTotal * 10) / 10,
+                waste: Math.round(wasteTotal * 10) / 10,
+                goods: Math.round(goodsTotal * 10) / 10,
+                total: Math.round((energyTotal + transportTotal + foodTotal + wasteTotal + goodsTotal) * 10) / 10
+            };
+        }
+
+        // Update all displays
+        function updateCalculations() {
+            const results = calculateCarbon();
+            
+            // Update total
+            document.getElementById('totalCarbon').textContent = results.total;
+            
+            // Update breakdown
+            document.getElementById('energyAmount').textContent = results.energy;
+            document.getElementById('transportAmount').textContent = results.transport;
+            document.getElementById('foodAmount').textContent = results.food;
+            document.getElementById('wasteAmount').textContent = results.waste;
+            document.getElementById('goodsAmount').textContent = results.goods;
+            
+            // Update percentages
+            document.getElementById('energyPercent').textContent = '(' + Math.round(results.energy / results.total * 100) + '%)';
+            document.getElementById('transportPercent').textContent = '(' + Math.round(results.transport / results.total * 100) + '%)';
+            document.getElementById('foodPercent').textContent = '(' + Math.round(results.food / results.total * 100) + '%)';
+            document.getElementById('wastePercent').textContent = '(' + Math.round(results.waste / results.total * 100) + '%)';
+            document.getElementById('goodsPercent').textContent = '(' + Math.round(results.goods / results.total * 100) + '%)';
+            
+            // Update comparison
+            const comparison = results.total < 10 ? 'Below' : results.total < 16 ? 'Near' : 'Above';
+            document.getElementById('comparison').textContent = comparison + ' US average (16 tons)';
+            
+            // Update equivalencies
+            document.getElementById('treesNeeded').textContent = Math.round(results.total * 50);
+            document.getElementById('carMilesEquiv').textContent = Math.round(results.total * 2500);
+            document.getElementById('homesEquiv').textContent = (results.total / 10).toFixed(1);
+            
+            // Update chart
+            updateChart(results);
+            
+            // Update tips
+            updateTips(results);
+        }
+
+        // Update chart
+        function updateChart(results) {
+            const ctx = document.getElementById('carbonChart').getContext('2d');
+            
+            if (carbonChart) {
+                carbonChart.destroy();
+            }
+            
+            carbonChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Energy', 'Transport', 'Food', 'Waste', 'Goods'],
+                    datasets: [{
+                        data: [results.energy, results.transport, results.food, results.waste, results.goods],
+                        backgroundColor: [
+                            '#ff9800',
+                            '#4caf50',
+                            '#2196f3',
+                            '#f44336',
+                            '#9c27b0'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        // Update personalized tips
+        function updateTips(results) {
+            const tips = [];
+            
+            if (results.energy > 3) {
+                tips.push({
+                    icon: 'fa-bolt',
+                    title: 'Reduce Energy Use',
+                    description: 'Switch to LED bulbs, unplug devices, and consider solar panels.',
+                    impact: 'Potential savings: 1.2 tons CO₂'
+                });
+            }
+            
+            if (results.transport > 2) {
+                tips.push({
+                    icon: 'fa-car',
+                    title: 'Green Your Commute',
+                    description: 'Try carpooling, public transport, or biking for short trips.',
+                    impact: 'Potential savings: 0.8 tons CO₂'
+                });
+            }
+            
+            if (results.food > 1.5) {
+                tips.push({
+                    icon: 'fa-utensils',
+                    title: 'Eat Lower Carbon',
+                    description: 'Try meat-free Mondays and buy local, seasonal food.',
+                    impact: 'Potential savings: 0.5 tons CO₂'
+                });
+            }
+            
+            if (results.waste > 0.5) {
+                tips.push({
+                    icon: 'fa-recycle',
+                    title: 'Reduce Waste',
+                    description: 'Compost food scraps and recycle everything possible.',
+                    impact: 'Potential savings: 0.3 tons CO₂'
+                });
+            }
+            
+            tips.push({
+                icon: 'fa-tree',
+                title: 'Plant Trees',
+                description: 'Offset your remaining footprint by planting trees.',
+                impact: 'Trees needed: ' + Math.round(results.total * 50)
+            });
+            
+            const tipsGrid = document.getElementById('tipsGrid');
+            tipsGrid.innerHTML = tips.map(tip => `
+                <div class="tip-card">
+                    <div class="tip-icon"><i class="fas ${tip.icon}"></i></div>
+                    <h3>${tip.title}</h3>
+                    <p>${tip.description}</p>
+                    <div class="tip-impact">
+                        <i class="fas fa-leaf"></i> ${tip.impact}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Save results
+        function saveResults() {
+            const results = calculateCarbon();
+            localStorage.setItem('carbonFootprint', JSON.stringify({
+                date: new Date().toISOString(),
+                results: results
+            }));
+            document.getElementById('resultsModal').classList.add('active');
+        }
+
+        // Download report
+        function downloadReport() {
+            const results = calculateCarbon();
+            const report = `
+CARBON FOOTPRINT REPORT
+Generated: ${new Date().toLocaleString()}
+
+YOUR TOTAL: ${results.total} tons CO₂e per year
+
+Breakdown:
+- Energy: ${results.energy} tons (${Math.round(results.energy/results.total*100)}%)
+- Transport: ${results.transport} tons (${Math.round(results.transport/results.total*100)}%)
+- Food: ${results.food} tons (${Math.round(results.food/results.total*100)}%)
+- Waste: ${results.waste} tons (${Math.round(results.waste/results.total*100)}%)
+- Goods: ${results.goods} tons (${Math.round(results.goods/results.total*100)}%)
+
+Your footprint equals:
+• ${Math.round(results.total * 50)} trees needed for absorption
+• Driving ${Math.round(results.total * 2500)} miles in a car
+• Powering ${(results.total/10).toFixed(1)} homes for a year
+
+Thank you for calculating your carbon footprint!
+Together we can make a difference. 🌍
+            `;
+            
+            const blob = new Blob([report], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'carbon-footprint-report.txt';
+            a.click();
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('resultsModal').classList.remove('active');
+        }
+
+        // Back to top
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCalculations();
+            updateProgress();
+            
+            // Set up range inputs
+            document.querySelectorAll('input[type="range"]').forEach(input => {
+                input.addEventListener('input', function() {
+                    updateCalculations();
+                });
+            });
+            
+            // Set up select inputs
+            document.querySelectorAll('select').forEach(select => {
+                select.addEventListener('change', updateCalculations);
+            });
+        });
+    </script>
+</body>
+</html>

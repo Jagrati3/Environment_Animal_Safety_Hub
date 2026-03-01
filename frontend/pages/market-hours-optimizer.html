@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heat-Safe Market Hours - EcoLife</title>
+    <link rel="stylesheet" href="../css/market-hours.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <header class="market-header">
+        <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back</a>
+        <div class="header-center">
+            <i class="fas fa-store"></i>
+            <h1>Heat-Safe Market Hours Optimizer</h1>
+            <p>Climate-Adaptive Market Scheduling</p>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <section class="input-section">
+            <h2><i class="fas fa-sliders-h"></i> Market Parameters</h2>
+            <div class="input-grid">
+                <label>Market Name
+                    <input type="text" id="market-name" value="Downtown Street Market">
+                </label>
+                <label>Current Hours
+                    <input type="text" id="current-hours" value="9 AM - 5 PM">
+                </label>
+                <label>Expected Crowd
+                    <select id="crowd-level">
+                        <option value="low">Low (< 100 people)</option>
+                        <option value="medium" selected>Medium (100-300)</option>
+                        <option value="high">High (> 300)</option>
+                    </select>
+                </label>
+                <label>Shade Coverage
+                    <select id="shade-coverage">
+                        <option value="none">None (0-20%)</option>
+                        <option value="partial" selected>Partial (20-50%)</option>
+                        <option value="good">Good (50-80%)</option>
+                        <option value="full">Full (> 80%)</option>
+                    </select>
+                </label>
+                <label>Date
+                    <input type="date" id="market-date">
+                </label>
+                <button id="optimize-btn" class="btn-primary">
+                    <i class="fas fa-chart-line"></i> Optimize Hours
+                </button>
+            </div>
+        </section>
+
+        <section class="results-section">
+            <div class="results-grid">
+                <div class="result-card current">
+                    <h3>Current Schedule Risk</h3>
+                    <div class="risk-score" id="current-risk">--</div>
+                    <div class="risk-label">Heat Risk Score</div>
+                    <div class="risk-details" id="current-details"></div>
+                </div>
+
+                <div class="result-card optimized">
+                    <h3>Recommended Schedule</h3>
+                    <div class="recommended-hours" id="recommended-hours">--</div>
+                    <div class="risk-score safe" id="optimized-risk">--</div>
+                    <div class="risk-label">Reduced Risk Score</div>
+                    <div class="improvement" id="improvement">--</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="chart-section">
+            <h2><i class="fas fa-chart-area"></i> Hourly Heat Index Analysis</h2>
+            <canvas id="heat-chart"></canvas>
+        </section>
+
+        <section class="timeline-section">
+            <h2><i class="fas fa-clock"></i> Hour-by-Hour Breakdown</h2>
+            <div id="hourly-breakdown"></div>
+        </section>
+
+        <section class="recommendations-section">
+            <h2><i class="fas fa-lightbulb"></i> Safety Recommendations</h2>
+            <div id="recommendations-list"></div>
+        </section>
+    </main>
+
+    <script src="../js/market-hours.js"></script>
+</body>
+</html>

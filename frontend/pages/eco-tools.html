@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛠️ Eco Tools & Resource Hub · practical sustainability</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Google Fonts: clean, technical, approachable -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #ecf7e8;
+            background: radial-gradient(circle at 10% 20%, #daf0d5, #c0e2bc);
+            min-height: 100vh;
+            color: #1d4f31;
+            line-height: 1.6;
+        }
+
+        /* header – workshop / toolbox vibe */
+        .tools-header {
+            background: linear-gradient(145deg, #467b59, #2b5f40);
+            padding: 5rem 2rem 4.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+            border-bottom: 8px solid #f9da9a;
+            box-shadow: 0 20px 40px #2b5f40;
+        }
+
+        .tools-header::before {
+            content: '🛠️🌱';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.1;
+            left: -4rem;
+            bottom: -6rem;
+            transform: rotate(-10deg);
+        }
+
+        .tools-header h1 {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 800;
+            font-size: 4.2rem;
+            color: #fcf9cf;
+            text-shadow: 6px 6px 0 #1f6b41;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .tools-header h1 i {
+            color: #ffecaa;
+            filter: drop-shadow(0 0 8px #ffeeaa);
+        }
+
+        .tools-header p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 1.5rem auto;
+            background: #deffd6c0;
+            padding: 0.8rem 2.5rem;
+            border-radius: 60px;
+            color: #0d4b29;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            border: 3px solid #f9da9a;
+        }
+
+        .resource-badge {
+            margin-top: 1.8rem;
+            display: inline-block;
+            background: #fedb86;
+            color: #1b6133;
+            padding: 0.6rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #fff2b5;
+        }
+
+        /* container */
+        .container {
+            max-width: 1400px;
+            margin: -3rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* filter bar */
+        .filter-bar {
+            background: #fafff2e0;
+            backdrop-filter: blur(8px);
+            border-radius: 80px;
+            padding: 1.5rem 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 30px #2b754b70, 0 0 0 3px #dcf5c0 inset;
+            border: 3px solid #daf0c0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3e9462;
+            font-size: 1.3rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 5rem;
+            border: 3px solid #cef0b5;
+            border-radius: 60px;
+            font-size: 1rem;
+            background: white;
+            color: #1e5a30;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.8rem 2rem;
+            border: 3px solid #c8eab2;
+            border-radius: 60px;
+            background: white;
+            font-weight: 600;
+            color: #1b6839;
+            cursor: pointer;
+        }
+
+        /* category chips */
+        .category-chips {
+            margin-bottom: 2.5rem;
+        }
+
+        .chip-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: #fad676 #c0e8b0;
+        }
+
+        .chip-scroll::-webkit-scrollbar { height: 8px; }
+        .chip-scroll::-webkit-scrollbar-track { background: #d6f0ca; border-radius: 10px; }
+        .chip-scroll::-webkit-scrollbar-thumb { background: #fad676; border-radius: 10px; }
+
+        .category-chip {
+            flex: 0 0 auto;
+            background: #faffea;
+            padding: 1rem 2.5rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 6px 14px #4d986d70;
+            cursor: pointer;
+            font-weight: 600;
+            border: 3px solid transparent;
+            transition: 0.2s;
+            font-size: 1.1rem;
+        }
+
+        .category-chip i { color: #d68d2c; font-size: 1.5rem; }
+        .category-chip:hover { transform: translateY(-5px); border-color: #f7c468; background: #ffffdf; }
+        .category-chip.active { background: #ffeaaf; border-color: #be9539; }
+
+        /* featured tool */
+        .featured-tool {
+            background: linear-gradient(145deg, #39855c, #1f6a42);
+            border-radius: 80px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            border: 8px solid #fbe38a;
+            box-shadow: 0 30px 40px #1f603a;
+            color: #fcfae6;
+            position: relative;
+        }
+
+        .featured-tool::before {
+            content: '🔧';
+            font-size: 14rem;
+            opacity: 0.1;
+            position: absolute;
+            bottom: -2rem;
+            right: 2rem;
+            transform: rotate(5deg);
+        }
+
+        .tool-ribbon {
+            position: absolute;
+            top: 2rem;
+            right: 2.5rem;
+            background: #fecf5e;
+            color: #17582b;
+            padding: 0.6rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #fff8b0;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .tool-text h2 {
+            font-size: 2rem;
+            color: #fff2b0;
+            letter-spacing: 2px;
+        }
+
+        .tool-text h3 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin: 0.5rem 0;
+        }
+
+        .tool-meta {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .meta-item {
+            background: #2f885fb0;
+            padding: 0.6rem 2rem;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border: 2px solid #ffea8f;
+        }
+
+        .meta-item i { color: #ffe684; }
+
+        .tool-desc {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+
+        .use-btn {
+            background: #fecf5e;
+            border: none;
+            color: #1a6232;
+            font-weight: 800;
+            font-size: 1.6rem;
+            padding: 1.2rem 3.5rem;
+            border-radius: 60px;
+            display: inline-flex;
+            align-items: center;
+            gap: 1.2rem;
+            cursor: pointer;
+            border: 4px solid #ffffcc;
+            box-shadow: 0 8px 0 #8f9440;
+            transition: 0.1s;
+        }
+
+        .use-btn:active {
+            transform: translateY(8px);
+            box-shadow: none;
+        }
+
+        .tool-image {
+            height: 260px;
+            background: #67b384;
+            border-radius: 70px;
+            border: 6px solid #fbe38a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            color: #fffed0;
+        }
+
+        /* tools grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .tool-card {
+            background: #fafff0;
+            border-radius: 70px;
+            overflow: hidden;
+            box-shadow: 0 20px 30px #2a784d80;
+            transition: all 0.3s;
+            border: 5px solid #ccf0b5;
+            cursor: pointer;
+            color: #1e562e;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-15px);
+            border-color: #faca6b;
+            box-shadow: 0 35px 45px #175a32;
+        }
+
+        .card-image {
+            height: 160px;
+            background: linear-gradient(145deg, #74b386, #4d9a65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #fcfcd2;
+            position: relative;
+        }
+
+        .card-tag {
+            position: absolute;
+            bottom: 0.8rem;
+            left: 1rem;
+            background: #1e5837;
+            color: #ffea9e;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            border: 2px solid #fdd67a;
+        }
+
+        .card-content {
+            padding: 1.8rem;
+        }
+
+        .card-type {
+            background: #cbeac0;
+            padding: 0.3rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .card-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0.7rem 0;
+        }
+
+        .card-desc {
+            color: #366f49;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .popularity {
+            background: #f1cba5;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+
+        .access-btn {
+            background: #5daf7c;
+            border: none;
+            color: white;
+            padding: 0.6rem 1.8rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            border: 2px solid #fde287;
+        }
+
+        /* resource library */
+        .library-section {
+            background: #ebf7e0;
+            border-radius: 70px;
+            padding: 2.5rem;
+            margin: 4rem 0;
+            border: 6px solid #fad97a;
+        }
+
+        .lib-item {
+            background: #daf0ca;
+            border-radius: 60px;
+            padding: 1.2rem 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        /* modal */
+        .modal {
+            display: none; position: fixed; inset:0; background: #1d6139e6;
+            align-items: center; justify-content: center; z-index:2000;
+            backdrop-filter: blur(6px);
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #f6ffe6;
+            border-radius: 80px;
+            max-width: 700px;
+            width:100%;
+            border: 8px solid #ffe28b;
+            color: #195a2c;
+        }
+
+        .back-to-top {
+            position: fixed; bottom:2rem; right:2rem;
+            background: #f8bd48; width:70px; height:70px; border-radius:50%;
+            display: none; align-items:center; justify-content:center;
+            font-size:2.2rem; color:#1c5c28; border:5px solid #fff3b0;
+            cursor:pointer; z-index:1000;
+        }
+        .back-to-top.visible { display: flex; }
+
+        @media (max-width:800px){
+            .tool-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- header -->
+    <header class="tools-header">
+        <h1>
+            <i class="fas fa-tools"></i> Eco Tools & Resource Hub
+            <i class="fas fa-leaf"></i>
+        </h1>
+        <p>calculators · guides · open data · all in one place</p>
+        <div class="resource-badge"><i class="fas fa-book-open"></i> 40+ free resources</div>
+    </header>
+
+    <div class="container">
+        <!-- filter bar -->
+        <div class="filter-bar" data-aos="fade-up">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="search tools, guides, datasets...">
+            </div>
+            <div class="filter-options">
+                <select class="filter-select"><option>all categories</option><option>calculators</option><option>guides</option><option>datasets</option></select>
+                <select class="filter-select"><option>most popular</option></select>
+            </div>
+        </div>
+
+        <!-- category chips -->
+        <div class="category-chips" data-aos="fade-up">
+            <div class="chip-scroll">
+                <div class="category-chip active"><i class="fas fa-layer-group"></i> all tools</div>
+                <div class="category-chip"><i class="fas fa-calculator"></i> calculators</div>
+                <div class="category-chip"><i class="fas fa-file-pdf"></i> guides</div>
+                <div class="category-chip"><i class="fas fa-chart-bar"></i> datasets</div>
+                <div class="category-chip"><i class="fas fa-map"></i> mapping</div>
+                <div class="category-chip"><i class="fas fa-mobile-alt"></i> apps</div>
+                <div class="category-chip"><i class="fas fa-school"></i> curricula</div>
+            </div>
+        </div>
+
+        <!-- featured tool -->
+        <div class="featured-tool" data-aos="zoom-in">
+            <span class="tool-ribbon"><i class="fas fa-star"></i> staff pick</span>
+            <div class="tool-grid">
+                <div class="tool-text">
+                    <h2>⚡ interactive</h2>
+                    <h3>Household Carbon Calculator</h3>
+                    <div class="tool-meta">
+                        <span class="meta-item"><i class="fas fa-users"></i> 12k uses</span>
+                        <span class="meta-item"><i class="fas fa-clock"></i> 5 min</span>
+                    </div>
+                    <p class="tool-desc">Estimate your home's carbon footprint – energy, transport, waste – and get personalized reduction tips.</p>
+                    <button class="use-btn" onclick="useTool('carbon calculator')"><i class="fas fa-play"></i> use tool</button>
+                </div>
+                <div class="tool-image"><i class="fas fa-calculator"></i></div>
+            </div>
+        </div>
+
+        <!-- tools grid (js) -->
+        <div class="tools-grid" id="toolsGrid"></div>
+
+        <!-- resource library -->
+        <div class="library-section" data-aos="fade-up">
+            <h2 style="font-size:2.2rem; margin-bottom:1.5rem;"><i class="fas fa-book"></i> free library</h2>
+            <div class="lib-item"><i class="fas fa-file-pdf" style="font-size:2rem;"></i> <span style="flex:1;">beginner's guide to composting</span> <i class="fas fa-download"></i></div>
+            <div class="lib-item"><i class="fas fa-file-excel" style="font-size:2rem;"></i> <span style="flex:1;">solar potential dataset – global</span> <i class="fas fa-download"></i></div>
+            <div class="lib-item"><i class="fas fa-file-video" style="font-size:2rem;"></i> <span style="flex:1;">webinar: urban gardening 101</span> <i class="fas fa-play-circle"></i></div>
+        </div>
+    </div>
+
+    <!-- modal -->
+    <div class="modal" id="toolModal">
+        <div class="modal-content" style="padding:2.5rem;">
+            <button style="float:right; background:none; border:none; font-size:3rem; color:#1b6735;" onclick="closeModal()">✕</button>
+            <div style="text-align:center;">
+                <div style="font-size:5rem;" id="modalToolEmoji">🛠️</div>
+                <h2 id="modalToolTitle" style="font-size:2.8rem;">water footprint tool</h2>
+                <p id="modalToolDesc" style="margin:2rem 0;">calculate your water use</p>
+                <button class="use-btn" onclick="launchTool()" style="font-size:1.3rem;">open tool</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({duration:800,once:true});
+
+        // tools data
+        const tools = [
+            { name:"Carbon Footprint", type:"calculator", desc:"household, travel, diet", icon:"fa-calculator", uses:"12k" },
+            { name:"Water Footprint", type:"calculator", desc:"daily usage + virtual water", icon:"fa-water", uses:"8.2k" },
+            { name:"Solar Estimator", type:"calculator", desc:"rooftop potential", icon:"fa-sun", uses:"6.7k" },
+            { name:"Waste Audit", type:"guide", desc:"track & reduce waste", icon:"fa-trash", uses:"4.1k" },
+            { name:"Native Plant DB", type:"dataset", desc:"find local species", icon:"fa-tree", uses:"3.9k" },
+            { name:"EV Savings", type:"calculator", desc:"compare vs gas", icon:"fa-car", uses:"5.5k" },
+            { name:"Diet CO₂e", type:"calculator", desc:"meal-based emissions", icon:"fa-utensils", uses:"7.2k" },
+            { name:"Green Jobs Board", type:"resource", desc:"careers in sustainability", icon:"fa-briefcase", uses:"2.8k" },
+        ];
+
+        function renderTools() {
+            const grid = document.getElementById('toolsGrid');
+            grid.innerHTML = tools.map(t => `
+                <div class="tool-card" onclick="showTool('${t.name}','${t.type} · ${t.desc} · ${t.uses} uses','${t.icon}')">
+                    <div class="card-image"><i class="fas ${t.icon}"></i><span class="card-tag">${t.type}</span></div>
+                    <div class="card-content">
+                        <span class="card-type">${t.type}</span>
+                        <div class="card-title">${t.name}</div>
+                        <p class="card-desc">${t.desc}</p>
+                        <div class="card-footer">
+                            <span class="popularity"><i class="fas fa-users"></i> ${t.uses}</span>
+                            <button class="access-btn" onclick="event.stopPropagation(); useTool('${t.name}')">access</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+        renderTools();
+
+        window.showTool = (title, desc, icon) => {
+            document.getElementById('modalToolTitle').innerText = title;
+            document.getElementById('modalToolDesc').innerText = desc;
+            document.getElementById('modalToolEmoji').innerHTML = `<i class="fas ${icon}"></i>`;
+            document.getElementById('toolModal').classList.add('active');
+        };
+
+        window.closeModal = () => document.getElementById('toolModal').classList.remove('active');
+        window.useTool = (name) => { alert(`🛠️ launching tool: ${name || 'resource'} (demo).`); };
+        window.launchTool = () => { alert('📊 interactive tool would open here.'); closeModal(); };
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // modal escape
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('toolModal')) closeModal(); };
+    </script>
+</body>
+</html>

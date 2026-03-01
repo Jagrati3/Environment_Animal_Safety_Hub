@@ -1,0 +1,58 @@
+        AOS.init({duration:800,once:true});
+
+        // sample native plants data (for demo region: SoCal)
+        const plants = [
+            { name:"California Poppy", scientific:"Eschscholzia californica", sun:"full sun", water:"low", benefits:"pollinators, drought tolerant", zone:"8-10", icon:"fa-flower", type:"wildflower" },
+            { name:"Toyon", scientific:"Heteromeles arbutifolia", sun:"full/part", water:"low", benefits:"berries for birds", zone:"7-10", icon:"fa-tree", type:"shrub" },
+            { name:"Cleveland Sage", scientific:"Salvia clevelandii", sun:"full sun", water:"very low", benefits:"hummingbirds, fragrant", zone:"8-11", icon:"fa-leaf", type:"perennial" },
+            { name:"California Lilac", scientific:"Ceanothus", sun:"full sun", water:"low", benefits:"nitrogen fixer, bees", zone:"8-10", icon:"fa-leaf", type:"shrub" },
+            { name:"Monkeyflower", scientific:"Mimulus aurantiacus", sun:"part shade", water:"moderate", benefits:"pollinators", zone:"8-11", icon:"fa-flower", type:"wildflower" },
+            { name:"Coast Live Oak", scientific:"Quercus agrifolia", sun:"full sun", water:"low", benefits:"keystone, acorns", zone:"9-10", icon:"fa-tree", type:"tree" },
+            { name:"California Fuchsia", scientific:"Epilobium canum", sun:"full sun", water:"low", benefits:"hummingbirds", zone:"8-10", icon:"fa-flower", type:"perennial" },
+            { name:"Buckwheat", scientific:"Eriogonum", sun:"full sun", water:"very low", benefits:"butterflies", zone:"7-10", icon:"fa-leaf", type:"perennial" },
+        ];
+
+        function renderPlants() {
+            const grid = document.getElementById('plantsGrid');
+            grid.innerHTML = plants.map(p => `
+                <div class="plant-card" onclick="showPlant('${p.name}','${p.scientific} · ${p.sun} · ${p.water} water · ${p.benefits}','${p.icon}')">
+                    <div class="card-image"><i class="fas ${p.icon}"></i><span class="type-tag">${p.type}</span></div>
+                    <div class="card-content">
+                        <span class="card-sun"><i class="fas fa-sun"></i> ${p.sun}</span>
+                        <div class="card-title">${p.name}</div>
+                        <div class="card-scientific">${p.scientific}</div>
+                        <div class="card-benefits">✨ ${p.benefits}</div>
+                        <div class="card-footer">
+                            <span class="zone">🌾 zone ${p.zone}</span>
+                            <button class="details-btn" onclick="event.stopPropagation(); viewPlant('${p.name}')">details</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+        renderPlants();
+
+        window.showPlant = (title, desc, icon) => {
+            document.getElementById('modalPlantTitle').innerText = title;
+            document.getElementById('modalPlantDesc').innerText = desc;
+            document.getElementById('modalPlantEmoji').innerHTML = `<i class="fas ${icon}"></i>`;
+            document.getElementById('plantModal').classList.add('active');
+        };
+
+        window.closeModal = () => document.getElementById('plantModal').classList.remove('active');
+        window.savePlant = (name) => alert(`🌿 added ${name || 'native plant'} to your garden list.`);
+        window.saveFromModal = () => { alert('🌱 plant saved to your native garden list!'); closeModal(); };
+        window.viewPlant = (name) => alert(`viewing details for ${name}`);
+        window.setLocation = () => {
+            let zip = document.getElementById('zipInput').value;
+            document.getElementById('regionDisplay').innerHTML = `🌎 region based on ${zip || 'your area'} · plants updated`;
+            alert(`📍 location set to ${zip || 'your area'} (demo).`);
+        };
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // modal escape
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('plantModal')) closeModal(); };

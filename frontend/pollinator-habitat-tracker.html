@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pollinator Habitat Tracker - Environment & Animal Safety Hub</title>
+    <link rel="stylesheet" href="../css/pollinator-habitat-tracker.css">
+    <link rel="icon" href="../assets/icons/bee-icon.png" type="image/png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i class="fas fa-bug"></i>
+                    <span>Pollinator Hub</span>
+                </div>
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#maps" class="nav-item" data-section="maps">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span>Habitat Maps</span>
+                </a>
+                <a href="#alerts" class="nav-item" data-section="alerts">
+                    <i class="fas fa-bell"></i>
+                    <span>Seasonal Alerts</span>
+                </a>
+                <a href="#recommendations" class="nav-item" data-section="recommendations">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>Recommendations</span>
+                </a>
+                <a href="#statistics" class="nav-item" data-section="statistics">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Biodiversity Stats</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="theme-toggle-container">
+                    <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle theme">
+                        <i class="fas fa-moon"></i>
+                        <span>Dark Mode</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <div class="header-content">
+                    <h1 class="page-title">Pollinator Habitat Tracker</h1>
+                    <p class="page-subtitle">Monitor and enhance habitats for bees, butterflies, and beneficial insects</p>
+                </div>
+                <div class="header-actions">
+                    <div class="current-date">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span id="current-date"></span>
+                    </div>
+                </div>
+            </header>
+        <section id="dashboard" class="dashboard-section">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h1>Pollinator Habitat Tracker</h1>
+                    <p class="dashboard-subtitle">Monitor and enhance habitats for bees, butterflies, and beneficial insects</p>
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon">🐝</div>
+                            <div class="stat-content">
+                                <div class="stat-value" id="active-pollinators">247</div>
+                                <div class="stat-label">Active Pollinators</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🌸</div>
+                            <div class="stat-content">
+                                <div class="stat-value" id="habitat-score">8.7</div>
+                                <div class="stat-label">Habitat Quality</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📊</div>
+                            <div class="stat-content">
+                                <div class="stat-value" id="biodiversity-index">92%</div>
+                                <div class="stat-label">Biodiversity Index</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🌱</div>
+                            <div class="stat-content">
+                                <div class="stat-value" id="planted-species">156</div>
+                                <div class="stat-label">Pollen Species</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-card activity-monitor">
+                        <div class="card-header">
+                            <h3>Real-Time Activity Monitor</h3>
+                            <div class="card-controls">
+                                <select id="time-range" class="time-select">
+                                    <option value="1h">Last Hour</option>
+                                    <option value="24h" selected>Last 24 Hours</option>
+                                    <option value="7d">Last 7 Days</option>
+                                    <option value="30d">Last 30 Days</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <canvas id="activity-chart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card species-distribution">
+                        <div class="card-header">
+                            <h3>Species Distribution</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="species-list">
+                                <div class="species-item">
+                                    <div class="species-info">
+                                        <span class="species-name">Honey Bee</span>
+                                        <span class="species-count">89</span>
+                                    </div>
+                                    <div class="species-bar">
+                                        <div class="species-bar-fill" style="width: 89%"></div>
+                                    </div>
+                                </div>
+                                <div class="species-item">
+                                    <div class="species-info">
+                                        <span class="species-name">Bumble Bee</span>
+                                        <span class="species-count">67</span>
+                                    </div>
+                                    <div class="species-bar">
+                                        <div class="species-bar-fill" style="width: 67%"></div>
+                                    </div>
+                                </div>
+                                <div class="species-item">
+                                    <div class="species-info">
+                                        <span class="species-name">Butterfly</span>
+                                        <span class="species-count">45</span>
+                                    </div>
+                                    <div class="species-bar">
+                                        <div class="species-bar-fill" style="width: 45%"></div>
+                                    </div>
+                                </div>
+                                <div class="species-item">
+                                    <div class="species-info">
+                                        <span class="species-name">Hoverfly</span>
+                                        <span class="species-count">32</span>
+                                    </div>
+                                    <div class="species-bar">
+                                        <div class="species-bar-fill" style="width: 32%"></div>
+                                    </div>
+                                </div>
+                                <div class="species-item">
+                                    <div class="species-info">
+                                        <span class="species-name">Other Species</span>
+                                        <span class="species-count">14</span>
+                                    </div>
+                                    <div class="species-bar">
+                                        <div class="species-bar-fill" style="width: 14%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card habitat-health">
+                        <div class="card-header">
+                            <h3>Habitat Health Indicators</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="health-indicators">
+                                <div class="indicator">
+                                    <div class="indicator-label">Flower Diversity</div>
+                                    <div class="indicator-bar">
+                                        <div class="indicator-fill excellent" style="width: 85%"></div>
+                                    </div>
+                                    <div class="indicator-value">85%</div>
+                                </div>
+                                <div class="indicator">
+                                    <div class="indicator-label">Nesting Sites</div>
+                                    <div class="indicator-bar">
+                                        <div class="indicator-fill good" style="width: 72%"></div>
+                                    </div>
+                                    <div class="indicator-value">72%</div>
+                                </div>
+                                <div class="indicator">
+                                    <div class="indicator-label">Water Sources</div>
+                                    <div class="indicator-bar">
+                                        <div class="indicator-fill good" style="width: 68%"></div>
+                                    </div>
+                                    <div class="indicator-value">68%</div>
+                                </div>
+                                <div class="indicator">
+                                    <div class="indicator-label">Pesticide Risk</div>
+                                    <div class="indicator-bar">
+                                        <div class="indicator-fill moderate" style="width: 45%"></div>
+                                    </div>
+                                    <div class="indicator-value">45%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card weather-impact">
+                        <div class="card-header">
+                            <h3>Weather Impact Analysis</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="weather-metrics">
+                                <div class="weather-metric">
+                                    <div class="metric-icon">🌡️</div>
+                                    <div class="metric-info">
+                                        <div class="metric-value">24°C</div>
+                                        <div class="metric-label">Temperature</div>
+                                    </div>
+                                </div>
+                                <div class="weather-metric">
+                                    <div class="metric-icon">💧</div>
+                                    <div class="metric-info">
+                                        <div class="metric-value">65%</div>
+                                        <div class="metric-label">Humidity</div>
+                                    </div>
+                                </div>
+                                <div class="weather-metric">
+                                    <div class="metric-icon">💨</div>
+                                    <div class="metric-info">
+                                        <div class="metric-value">12 km/h</div>
+                                        <div class="metric-label">Wind Speed</div>
+                                    </div>
+                                </div>
+                                <div class="weather-metric">
+                                    <div class="metric-icon">☀️</div>
+                                    <div class="metric-info">
+                                        <div class="metric-value">Sunny</div>
+                                        <div class="metric-label">Conditions</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="activity-prediction">
+                                <h4>Activity Prediction</h4>
+                                <p class="prediction-text">Optimal conditions for pollinator activity. Expect high bee activity in the next 2-3 hours.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="maps" class="maps-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Habitat Maps</h2>
+                    <p>Interactive maps showing pollinator habitats, biodiversity hotspots, and conservation areas</p>
+                </div>
+
+                <div class="map-container">
+                    <div class="map-controls">
+                        <div class="map-layers">
+                            <button class="layer-btn active" data-layer="habitats">Habitat Zones</button>
+                            <button class="layer-btn" data-layer="species">Species Distribution</button>
+                            <button class="layer-btn" data-layer="threats">Threat Areas</button>
+                            <button class="layer-btn" data-layer="improvements">Improvement Sites</button>
+                        </div>
+                        <div class="map-legend">
+                            <div class="legend-item">
+                                <div class="legend-color excellent"></div>
+                                <span>High Quality Habitat</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color good"></div>
+                                <span>Good Habitat</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color moderate"></div>
+                                <span>Moderate Habitat</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color poor"></div>
+                                <span>Poor Habitat</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="habitat-map" class="habitat-map"></div>
+                </div>
+
+                <div class="map-insights">
+                    <div class="insight-card">
+                        <h3>Habitat Analysis</h3>
+                        <div class="insight-content">
+                            <div class="insight-metric">
+                                <span class="metric-label">Total Habitat Area:</span>
+                                <span class="metric-value">247 acres</span>
+                            </div>
+                            <div class="insight-metric">
+                                <span class="metric-label">High Quality Zones:</span>
+                                <span class="metric-value">89 acres (36%)</span>
+                            </div>
+                            <div class="insight-metric">
+                                <span class="metric-label">Improvement Potential:</span>
+                                <span class="metric-value">156 acres</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="insight-card">
+                        <h3>Conservation Priority</h3>
+                        <div class="insight-content">
+                            <div class="priority-list">
+                                <div class="priority-item high">
+                                    <div class="priority-indicator"></div>
+                                    <div class="priority-text">North Meadow - Critical nesting area</div>
+                                </div>
+                                <div class="priority-item medium">
+                                    <div class="priority-indicator"></div>
+                                    <div class="priority-text">East Woodland - Flower diversity expansion</div>
+                                </div>
+                                <div class="priority-item medium">
+                                    <div class="priority-indicator"></div>
+                                    <div class="priority-text">South Field - Water source development</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="alerts" class="alerts-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Seasonal Alerts</h2>
+                    <p>Timely notifications for pollinator-friendly planting and habitat maintenance</p>
+                </div>
+
+                <div class="alerts-container">
+                    <div class="alert-card urgent">
+                        <div class="alert-header">
+                            <div class="alert-icon">🌸</div>
+                            <div class="alert-meta">
+                                <span class="alert-type">Planting Alert</span>
+                                <span class="alert-date">March 15, 2026</span>
+                            </div>
+                        </div>
+                        <div class="alert-content">
+                            <h3>Spring Wildflower Planting Season</h3>
+                            <p>Optimal time to plant crocus, daffodils, and early blooming flowers. These provide essential early-season nectar for emerging queen bumblebees.</p>
+                            <div class="alert-actions">
+                                <button class="alert-btn primary">View Planting Guide</button>
+                                <button class="alert-btn secondary">Add to Calendar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert-card info">
+                        <div class="alert-header">
+                            <div class="alert-icon">🐝</div>
+                            <div class="alert-meta">
+                                <span class="alert-type">Activity Alert</span>
+                                <span class="alert-date">March 10, 2026</span>
+                            </div>
+                        </div>
+                        <div class="alert-content">
+                            <h3>Bumblebee Emergence Peak</h3>
+                            <p>Queen bumblebees are emerging from hibernation. Ensure nesting sites are available and avoid pesticide application in flowering areas.</p>
+                            <div class="alert-actions">
+                                <button class="alert-btn primary">Nesting Site Guide</button>
+                                <button class="alert-btn secondary">Monitor Activity</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert-card warning">
+                        <div class="alert-header">
+                            <div class="alert-icon">⚠️</div>
+                            <div class="alert-meta">
+                                <span class="alert-type">Weather Alert</span>
+                                <span class="alert-date">March 8, 2026</span>
+                            </div>
+                        </div>
+                        <div class="alert-content">
+                            <h3>Cold Snap Warning</h3>
+                            <p>Temperatures dropping below 5°C may affect early-emerging pollinators. Consider providing supplemental feeding stations.</p>
+                            <div class="alert-actions">
+                                <button class="alert-btn primary">Feeding Guide</button>
+                                <button class="alert-btn secondary">Weather Details</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert-card success">
+                        <div class="alert-header">
+                            <div class="alert-icon">✅</div>
+                            <div class="alert-meta">
+                                <span class="alert-type">Success Alert</span>
+                                <span class="alert-date">March 5, 2026</span>
+                            </div>
+                        </div>
+                        <div class="alert-content">
+                            <h3>Habitat Improvement Complete</h3>
+                            <p>Wildflower meadow restoration in Zone A is complete. Pollinator activity has increased by 34% in the area.</p>
+                            <div class="alert-actions">
+                                <button class="alert-btn primary">View Results</button>
+                                <button class="alert-btn secondary">Share Success</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="seasonal-calendar">
+                    <h3>Seasonal Planting Calendar</h3>
+                    <div class="calendar-grid">
+                        <div class="calendar-month">
+                            <h4>March</h4>
+                            <ul class="planting-list">
+                                <li class="planting-item active">Crocus (Early)</li>
+                                <li class="planting-item active">Daffodils</li>
+                                <li class="planting-item upcoming">Tulips</li>
+                                <li class="planting-item upcoming">Hyacinths</li>
+                            </ul>
+                        </div>
+                        <div class="calendar-month">
+                            <h4>April</h4>
+                            <ul class="planting-list">
+                                <li class="planting-item upcoming">Lavender</li>
+                                <li class="planting-item upcoming">Poppies</li>
+                                <li class="planting-item">Butterfly Bush</li>
+                                <li class="planting-item">Coneflowers</li>
+                            </ul>
+                        </div>
+                        <div class="calendar-month">
+                            <h4>May</h4>
+                            <ul class="planting-list">
+                                <li class="planting-item">Black-eyed Susans</li>
+                                <li class="planting-item">Milkweed</li>
+                                <li class="planting-item">Bee Balm</li>
+                                <li class="planting-item">Sunflowers</li>
+                            </ul>
+                        </div>
+                        <div class="calendar-month">
+                            <h4>June</h4>
+                            <ul class="planting-list">
+                                <li class="planting-item">Zinnias</li>
+                                <li class="planting-item">Marigolds</li>
+                                <li class="planting-item">Cosmos</li>
+                                <li class="planting-item">Asters</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="recommendations" class="recommendations-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Habitat Improvement Recommendations</h2>
+                    <p>Personalized suggestions to enhance pollinator habitats and increase biodiversity</p>
+                </div>
+
+                <div class="recommendations-grid">
+                    <div class="recommendation-card priority-high">
+                        <div class="recommendation-header">
+                            <div class="priority-badge high">High Priority</div>
+                            <h3>Install Bee Hotels</h3>
+                        </div>
+                        <div class="recommendation-content">
+                            <p>Add solitary bee nesting sites to areas with limited natural cavities. Bee hotels provide safe nesting opportunities for mason bees and leafcutter bees.</p>
+                            <div class="recommendation-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Impact:</span>
+                                    <span class="detail-value">High</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Cost:</span>
+                                    <span class="detail-value">Low</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Time:</span>
+                                    <span class="detail-value">1-2 hours</span>
+                                </div>
+                            </div>
+                            <button class="recommendation-btn">Get Installation Guide</button>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-card priority-medium">
+                        <div class="recommendation-header">
+                            <div class="priority-badge medium">Medium Priority</div>
+                            <h3>Create Wildflower Meadow</h3>
+                        </div>
+                        <div class="recommendation-content">
+                            <p>Convert lawn areas to wildflower meadows using native pollinator-friendly plants. This provides diverse nectar sources throughout the season.</p>
+                            <div class="recommendation-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Impact:</span>
+                                    <span class="detail-value">Very High</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Cost:</span>
+                                    <span class="detail-value">Medium</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Time:</span>
+                                    <span class="detail-value">2-3 weeks</span>
+                                </div>
+                            </div>
+                            <button class="recommendation-btn">View Seed Mix Guide</button>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-card priority-medium">
+                        <div class="recommendation-header">
+                            <div class="priority-badge medium">Medium Priority</div>
+                            <h3>Reduce Pesticide Use</h3>
+                        </div>
+                        <div class="recommendation-content">
+                            <p>Implement integrated pest management practices and avoid broad-spectrum pesticides during bloom periods. Use targeted treatments when necessary.</p>
+                            <div class="recommendation-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Impact:</span>
+                                    <span class="detail-value">High</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Cost:</span>
+                                    <span class="detail-value">Low</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Time:</span>
+                                    <span class="detail-value">Ongoing</span>
+                                </div>
+                            </div>
+                            <button class="recommendation-btn">IPM Resources</button>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-card priority-low">
+                        <div class="recommendation-header">
+                            <div class="priority-badge low">Low Priority</div>
+                            <h3>Install Water Features</h3>
+                        </div>
+                        <div class="recommendation-content">
+                            <p>Add shallow water sources with landing areas for pollinators. Clean water is essential for bee survival, especially during hot, dry periods.</p>
+                            <div class="recommendation-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Impact:</span>
+                                    <span class="detail-value">Medium</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Cost:</span>
+                                    <span class="detail-value">Low</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Time:</span>
+                                    <span class="detail-value">2-4 hours</span>
+                                </div>
+                            </div>
+                            <button class="recommendation-btn">Water Feature Guide</button>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-card priority-high">
+                        <div class="recommendation-header">
+                            <div class="priority-badge high">High Priority</div>
+                            <h3>Plant Native Species</h3>
+                        </div>
+                        <div class="recommendation-content">
+                            <p>Focus on native plants that have co-evolved with local pollinators. These provide better nutrition and support more diverse pollinator communities.</p>
+                            <div class="recommendation-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Impact:</span>
+                                    <span class="detail-value">Very High</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Cost:</span>
+                                    <span class="detail-value">Medium</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Time:</span>
+                                    <span class="detail-value">Seasonal</span>
+                                </div>
+                            </div>
+                            <button class="recommendation-btn">Native Plant Database</button>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-card priority-low">
+                        <div class="recommendation-header">
+                            <div class="priority-badge low">Low Priority</div>
+                            <h3>Monitor Pollinator Activity</h3>
+                        </div>
+                        <div class="recommendation-content">
+                            <p>Set up regular monitoring points to track pollinator populations and activity patterns. Use this data to measure the success of habitat improvements.</p>
+                            <div class="recommendation-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Impact:</span>
+                                    <span class="detail-value">Medium</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Cost:</span>
+                                    <span class="detail-value">Low</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Time:</span>
+                                    <span class="detail-value">15-30 min/week</span>
+                                </div>
+                            </div>
+                            <button class="recommendation-btn">Monitoring Guide</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-tracker">
+                    <h3>Habitat Improvement Progress</h3>
+                    <div class="progress-overview">
+                        <div class="progress-item">
+                            <div class="progress-label">Overall Progress</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 67%"></div>
+                            </div>
+                            <div class="progress-value">67%</div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-label">Habitat Quality</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 82%"></div>
+                            </div>
+                            <div class="progress-value">82%</div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-label">Biodiversity Index</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 91%"></div>
+                            </div>
+                            <div class="progress-value">91%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="statistics" class="statistics-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Biodiversity Statistics</h2>
+                    <p>Comprehensive data on pollinator populations, trends, and conservation metrics</p>
+                </div>
+
+                <div class="stats-overview">
+                    <div class="stat-overview-card">
+                        <h3>Population Trends</h3>
+                        <canvas id="population-trends-chart" width="400" height="250"></canvas>
+                    </div>
+                    <div class="stat-overview-card">
+                        <h3>Species Diversity</h3>
+                        <canvas id="species-diversity-chart" width="400" height="250"></canvas>
+                    </div>
+                    <div class="stat-overview-card">
+                        <h3>Habitat Quality Over Time</h3>
+                        <canvas id="habitat-quality-chart" width="400" height="250"></canvas>
+                    </div>
+                </div>
+
+                <div class="detailed-stats">
+                    <div class="stats-table-container">
+                        <h3>Species Monitoring Data</h3>
+                        <table class="stats-table">
+                            <thead>
+                                <tr>
+                                    <th>Species</th>
+                                    <th>Current Count</th>
+                                    <th>Trend</th>
+                                    <th>Conservation Status</th>
+                                    <th>Last Updated</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Honey Bee (Apis mellifera)</td>
+                                    <td>89</td>
+                                    <td><span class="trend stable">Stable</span></td>
+                                    <td><span class="status least-concern">Least Concern</span></td>
+                                    <td>2026-02-26</td>
+                                </tr>
+                                <tr>
+                                    <td>Bumble Bee (Bombus spp.)</td>
+                                    <td>67</td>
+                                    <td><span class="trend increasing">Increasing</span></td>
+                                    <td><span class="status near-threatened">Near Threatened</span></td>
+                                    <td>2026-02-26</td>
+                                </tr>
+                                <tr>
+                                    <td>Monarch Butterfly</td>
+                                    <td>45</td>
+                                    <td><span class="trend decreasing">Decreasing</span></td>
+                                    <td><span class="status endangered">Endangered</span></td>
+                                    <td>2026-02-26</td>
+                                </tr>
+                                <tr>
+                                    <td>Hoverfly (Syrphidae)</td>
+                                    <td>32</td>
+                                    <td><span class="trend increasing">Increasing</span></td>
+                                    <td><span class="status least-concern">Least Concern</span></td>
+                                    <td>2026-02-26</td>
+                                </tr>
+                                <tr>
+                                    <td>Solitary Bees</td>
+                                    <td>14</td>
+                                    <td><span class="trend stable">Stable</span></td>
+                                    <td><span class="status least-concern">Least Concern</span></td>
+                                    <td>2026-02-26</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="conservation-metrics">
+                        <h3>Conservation Metrics</h3>
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <div class="metric-icon">🎯</div>
+                                <div class="metric-content">
+                                    <div class="metric-value">94%</div>
+                                    <div class="metric-label">Habitat Protection</div>
+                                    <div class="metric-description">Percentage of identified habitats under protection</div>
+                                </div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-icon">🌱</div>
+                                <div class="metric-content">
+                                    <div class="metric-value">127</div>
+                                    <div class="metric-label">Restoration Projects</div>
+                                    <div class="metric-description">Active habitat restoration initiatives</div>
+                                </div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-icon">📈</div>
+                                <div class="metric-content">
+                                    <div class="metric-value">+23%</div>
+                                    <div class="metric-label">Population Growth</div>
+                                    <div class="metric-description">Average pollinator population increase over 2 years</div>
+                                </div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-icon">🏆</div>
+                                <div class="metric-content">
+                                    <div class="metric-value">89</div>
+                                    <div class="metric-label">Certified Pollinator Friendly</div>
+                                    <div class="metric-description">Properties certified as pollinator-friendly</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data-export">
+                    <h3>Data Export & Analysis</h3>
+                    <div class="export-options">
+                        <button class="export-btn" data-format="csv">Export CSV</button>
+                        <button class="export-btn" data-format="json">Export JSON</button>
+                        <button class="export-btn" data-format="pdf">Generate Report</button>
+                        <button class="export-btn" data-format="api">API Access</button>
+                    </div>
+                    <p class="export-note">Data is updated daily and includes historical trends for the past 2 years.</p>
+                </div>
+            </div>
+        </section>
+        </main>
+    </div>
+
+    <script src="../js/pollinator-habitat-tracker.js"></script>
+</body>
+</html>

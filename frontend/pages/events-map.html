@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Environmental Events Map | EcoLife</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS (for map) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Header Styles */
+        .events-header {
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .events-header::before {
+            content: "🗺️";
+            position: absolute;
+            font-size: 12rem;
+            opacity: 0.1;
+            right: -2rem;
+            bottom: -2rem;
+            transform: rotate(10deg);
+        }
+
+        .events-header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .events-header h1 i {
+            color: #ff9800;
+        }
+
+        .events-header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            background: white;
+            border-radius: 30px;
+            padding: 1.8rem;
+            margin-top: -2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 0.5rem;
+            border-right: 2px solid #e0e0e0;
+        }
+
+        .stat-item:last-child {
+            border-right: none;
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #2e7d32;
+            display: block;
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .stat-icon {
+            color: #ff9800;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Main Content Layout */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Map Container */
+        .map-container {
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            height: 600px;
+            position: sticky;
+            top: 2rem;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+            z-index: 1;
+        }
+
+        /* Events Panel */
+        .events-panel {
+            background: white;
+            border-radius: 30px;
+            padding: 1.8rem;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.8rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .panel-header h2 {
+            color: #1b5e20;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .event-count {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3.2rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #2e7d32;
+            box-shadow: 0 0 0 3px rgba(46,125,50,0.1);
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .filter-tab {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 30px;
+            background: #f5f5f5;
+            color: #666;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .filter-tab i {
+            font-size: 1rem;
+        }
+
+        .filter-tab:hover {
+            background: #e0e0e0;
+        }
+
+        .filter-tab.active {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .date-filter {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .date-input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 30px;
+            font-family: inherit;
+        }
+
+        /* Events List */
+        .events-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .event-card {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 5px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .event-card.active {
+            border-left-color: #ff9800;
+            background: white;
+            box-shadow: 0 8px 25px rgba(255,152,0,0.15);
+        }
+
+        .event-card.cleanup {
+            border-left-color: #4caf50;
+        }
+
+        .event-card.plantation {
+            border-left-color: #8bc34a;
+        }
+
+        .event-card.workshop {
+            border-left-color: #00bcd4;
+        }
+
+        .event-card.adoption {
+            border-left-color: #ff9800;
+        }
+
+        .event-card.awareness {
+            border-left-color: #9c27b0;
+        }
+
+        .event-date-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #2e7d32;
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .event-title {
+            font-size: 1.2rem;
+            color: #1b5e20;
+            margin-bottom: 0.8rem;
+            padding-right: 5rem;
+        }
+
+        .event-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .event-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .event-detail i {
+            width: 20px;
+            color: #ff9800;
+        }
+
+        .event-organizer {
+            display: inline-block;
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .event-attendees {
+            margin-top: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .attendee-count {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .attendee-count i {
+            color: #ff9800;
+            margin-right: 0.3rem;
+        }
+
+        .attend-btn {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: white;
+            border: none;
+            padding: 0.4rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .attend-btn:hover {
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            transform: scale(1.05);
+        }
+
+        .attend-btn.joined {
+            background: #ff9800;
+            cursor: default;
+        }
+
+        /* Create Event Section */
+        .create-event-section {
+            background: white;
+            border-radius: 30px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .create-event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .create-event-header h2 {
+            color: #1b5e20;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .create-event-btn {
+            background: #ff9800;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .create-event-btn:hover {
+            background: #f57c00;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255,152,0,0.3);
+        }
+
+        .event-form {
+            display: none;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .event-form.show {
+            display: grid;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group label i {
+            color: #ff9800;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2e7d32;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .submit-event-btn {
+            grid-column: span 2;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .submit-event-btn:hover {
+            background: #1b5e20;
+        }
+
+        /* Tips Section */
+        .tips-section {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-radius: 30px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .tips-section h3 {
+            color: #1b5e20;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tip-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .tip-card i {
+            font-size: 2rem;
+            color: #ff9800;
+            margin-bottom: 1rem;
+        }
+
+        .tip-card h4 {
+            color: #1b5e20;
+            margin-bottom: 0.5rem;
+        }
+
+        .tip-card p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 40px;
+            max-width: 500px;
+            width: 100%;
+            padding: 2.5rem;
+            position: relative;
+            text-align: center;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            color: #4caf50;
+            margin-bottom: 1rem;
+        }
+
+        .modal h3 {
+            color: #1b5e20;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-btn {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-btn:hover {
+            background: #1b5e20;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .map-container {
+                position: relative;
+                top: 0;
+                height: 400px;
+            }
+            
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stat-item {
+                border-right: none;
+                border-bottom: 2px solid #e0e0e0;
+                padding-bottom: 1rem;
+            }
+            
+            .stat-item:last-child {
+                border-bottom: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .events-header h1 {
+                font-size: 2rem;
+            }
+            
+            .event-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+            
+            .submit-event-btn {
+                grid-column: span 1;
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="events-header">
+        <h1>
+            <i class="fas fa-map-marked-alt"></i>
+            Local Environmental Events Map
+        </h1>
+        <p>Discover and join eco-events in your community! Clean-ups, plantations, workshops and more 🌍</p>
+    </header>
+
+    <div class="container">
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                <span class="stat-number" id="total-events">24</span>
+                <span class="stat-label">Total Events</span>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <span class="stat-number" id="total-attendees">342</span>
+                <span class="stat-label">Attendees</span>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-tree"></i></div>
+                <span class="stat-number" id="total-cleanups">8</span>
+                <span class="stat-label">Clean-ups</span>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-seedling"></i></div>
+                <span class="stat-number" id="total-plantations">6</span>
+                <span class="stat-label">Plantations</span>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Map Container -->
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+
+            <!-- Events Panel -->
+            <div class="events-panel">
+                <div class="panel-header">
+                    <h2>
+                        <i class="fas fa-list"></i>
+                        Upcoming Events
+                    </h2>
+                    <span class="event-count" id="event-count">12 events</span>
+                </div>
+
+                <!-- Filter Section -->
+                <div class="filter-section">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search events...">
+                    </div>
+
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" data-type="all">
+                            <i class="fas fa-globe"></i> All
+                        </button>
+                        <button class="filter-tab" data-type="cleanup">
+                            <i class="fas fa-broom"></i> Clean-ups
+                        </button>
+                        <button class="filter-tab" data-type="plantation">
+                            <i class="fas fa-tree"></i> Plantations
+                        </button>
+                        <button class="filter-tab" data-type="workshop">
+                            <i class="fas fa-chalkboard-teacher"></i> Workshops
+                        </button>
+                        <button class="filter-tab" data-type="adoption">
+                            <i class="fas fa-paw"></i> Adoptions
+                        </button>
+                        <button class="filter-tab" data-type="awareness">
+                            <i class="fas fa-bullhorn"></i> Awareness
+                        </button>
+                    </div>
+
+                    <div class="date-filter">
+                        <input type="date" id="dateFrom" class="date-input" placeholder="From">
+                        <input type="date" id="dateTo" class="date-input" placeholder="To">
+                    </div>
+                </div>
+
+                <!-- Events List -->
+                <div class="events-list" id="eventsList"></div>
+            </div>
+        </div>
+
+        <!-- Create Event Section -->
+        <div class="create-event-section">
+            <div class="create-event-header">
+                <h2>
+                    <i class="fas fa-plus-circle"></i>
+                    Organize an Event
+                </h2>
+                <button class="create-event-btn" id="toggleFormBtn">
+                    <i class="fas fa-calendar-plus"></i>
+                    Create New Event
+                </button>
+            </div>
+
+            <div class="event-form" id="eventForm">
+                <div class="form-group full-width">
+                    <label><i class="fas fa-tag"></i> Event Title</label>
+                    <input type="text" id="eventTitle" placeholder="e.g., Beach Clean-up Drive">
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-calendar"></i> Date</label>
+                    <input type="date" id="eventDate">
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-clock"></i> Time</label>
+                    <input type="time" id="eventTime">
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-tag"></i> Event Type</label>
+                    <select id="eventType">
+                        <option value="cleanup">Clean-up Drive</option>
+                        <option value="plantation">Tree Plantation</option>
+                        <option value="workshop">Eco Workshop</option>
+                        <option value="adoption">Animal Adoption</option>
+                        <option value="awareness">Awareness Campaign</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-users"></i> Max Attendees</label>
+                    <input type="number" id="eventMaxAttendees" placeholder="e.g., 50" min="1">
+                </div>
+
+                <div class="form-group full-width">
+                    <label><i class="fas fa-map-pin"></i> Location</label>
+                    <input type="text" id="eventLocation" placeholder="Enter address or click on map">
+                </div>
+
+                <div class="form-row full-width">
+                    <div class="form-group">
+                        <label><i class="fas fa-latitude"></i> Latitude</label>
+                        <input type="text" id="eventLat" readonly placeholder="Click on map">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-longitude"></i> Longitude</label>
+                        <input type="text" id="eventLng" readonly placeholder="Click on map">
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label><i class="fas fa-align-left"></i> Description</label>
+                    <textarea id="eventDescription" placeholder="Describe your event..."></textarea>
+                </div>
+
+                <div class="form-group full-width">
+                    <label><i class="fas fa-hand"></i> Organizer Name</label>
+                    <input type="text" id="eventOrganizer" placeholder="Your name or organization">
+                </div>
+
+                <div class="form-group full-width">
+                    <label><i class="fas fa-envelope"></i> Contact Email</label>
+                    <input type="email" id="eventEmail" placeholder="contact@example.com">
+                </div>
+
+                <button class="submit-event-btn" id="submitEvent">
+                    <i class="fas fa-check-circle"></i>
+                    Create Event
+                </button>
+            </div>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="tips-section">
+            <h3>
+                <i class="fas fa-lightbulb"></i>
+                Tips for a Successful Event
+            </h3>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h4>Plan Ahead</h4>
+                    <p>Get necessary permits and inform local authorities about your event.</p>
+                </div>
+                <div class="tip-card">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    <h4>Bring Supplies</h4>
+                    <p>Gloves, bags, water, and first-aid kit are essential for outdoor events.</p>
+                </div>
+                <div class="tip-card">
+                    <i class="fas fa-camera"></i>
+                    <h4>Document</h4>
+                    <p>Take photos to inspire others and share on social media.</p>
+                </div>
+                <div class="tip-card">
+                    <i class="fas fa-heart"></i>
+                    <h4>Have Fun!</h4>
+                    <p>Make it enjoyable - play music, bring snacks, and celebrate your impact!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeSuccessModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Event Created!</h3>
+            <p>Your event has been added to the map. Thank you for organizing!</p>
+            <button class="modal-btn" onclick="closeSuccessModal()">Great!</button>
+        </div>
+    </div>
+
+    <!-- Join Modal -->
+    <div class="modal" id="joinModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeJoinModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>You're In!</h3>
+            <p>You've joined this event. Check your email for details!</p>
+            <button class="modal-btn" onclick="closeJoinModal()">Awesome!</button>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // Initialize map and variables
+        let map;
+        let markers = [];
+        let currentEventId = 1;
+
+        // Sample events data
+        let events = [
+            {
+                id: 1,
+                title: "Beach Clean-up Drive",
+                type: "cleanup",
+                date: "2026-03-15",
+                time: "09:00",
+                location: "Sunset Beach",
+                lat: 34.0522,
+                lng: -118.2437,
+                attendees: 24,
+                maxAttendees: 50,
+                description: "Join us for a morning of cleaning our beautiful beach! Gloves and bags provided.",
+                organizer: "Ocean Guardians",
+                email: "ocean@example.com",
+                icon: "fa-broom"
+            },
+            {
+                id: 2,
+                title: "Community Tree Plantation",
+                type: "plantation",
+                date: "2026-03-20",
+                time: "10:00",
+                location: "Central Park",
+                lat: 34.0622,
+                lng: -118.2337,
+                attendees: 35,
+                maxAttendees: 100,
+                description: "Help us plant 100 native trees in the park! Saplings and tools provided.",
+                organizer: "Green Warriors",
+                email: "green@example.com",
+                icon: "fa-tree"
+            },
+            {
+                id: 3,
+                title: "Recycling Workshop",
+                type: "workshop",
+                date: "2026-03-18",
+                time: "14:00",
+                location: "Community Center",
+                lat: 34.0422,
+                lng: -118.2537,
+                attendees: 15,
+                maxAttendees: 30,
+                description: "Learn how to recycle properly and create art from waste materials.",
+                organizer: "Eco Education",
+                email: "learn@example.com",
+                icon: "fa-recycle"
+            },
+            {
+                id: 4,
+                title: "Pet Adoption Day",
+                type: "adoption",
+                date: "2026-03-25",
+                time: "11:00",
+                location: "Animal Shelter",
+                lat: 34.0722,
+                lng: -118.2237,
+                attendees: 28,
+                maxAttendees: 60,
+                description: "Meet adorable dogs and cats looking for forever homes!",
+                organizer: "Paws & Claws",
+                email: "adopt@example.com",
+                icon: "fa-paw"
+            },
+            {
+                id: 5,
+                title: "Climate Awareness March",
+                type: "awareness",
+                date: "2026-03-22",
+                time: "13:00",
+                location: "City Hall",
+                lat: 34.0822,
+                lng: -118.2137,
+                attendees: 120,
+                maxAttendees: 500,
+                description: "March for climate action and show your support for environmental policies.",
+                organizer: "Climate Youth",
+                email: "climate@example.com",
+                icon: "fa-bullhorn"
+            },
+            {
+                id: 6,
+                title: "River Clean-up",
+                type: "cleanup",
+                date: "2026-03-17",
+                time: "09:30",
+                location: "Riverside Park",
+                lat: 34.0922,
+                lng: -118.2037,
+                attendees: 18,
+                maxAttendees: 40,
+                description: "Help clean the river banks and protect aquatic life!",
+                organizer: "River Keepers",
+                email: "river@example.com",
+                icon: "fa-water"
+            },
+            {
+                id: 7,
+                title: "Composting 101",
+                type: "workshop",
+                date: "2026-03-19",
+                time: "15:00",
+                location: "Library",
+                lat: 34.1022,
+                lng: -118.1937,
+                attendees: 22,
+                maxAttendees: 35,
+                description: "Learn how to turn kitchen waste into garden gold!",
+                organizer: "Garden Club",
+                email: "garden@example.com",
+                icon: "fa-seedling"
+            },
+            {
+                id: 8,
+                title: "Urban Garden Planting",
+                type: "plantation",
+                date: "2026-03-21",
+                time: "10:00",
+                location: "Community Garden",
+                lat: 34.1122,
+                lng: -118.1837,
+                attendees: 12,
+                maxAttendees: 25,
+                description: "Help us plant vegetables and flowers in our community garden!",
+                organizer: "Urban Farmers",
+                email: "urban@example.com",
+                icon: "fa-carrot"
+            },
+            {
+                id: 9,
+                title: "Bird Watching Walk",
+                type: "awareness",
+                date: "2026-03-23",
+                time: "08:00",
+                location: "Bird Sanctuary",
+                lat: 34.1222,
+                lng: -118.1737,
+                attendees: 9,
+                maxAttendees: 20,
+                description: "Learn about local bird species and their habitats.",
+                organizer: "Bird Lovers",
+                email: "birds@example.com",
+                icon: "fa-dove"
+            },
+            {
+                id: 10,
+                title: "Eco-Friendly Product Fair",
+                type: "workshop",
+                date: "2026-03-24",
+                time: "11:00",
+                location: "Convention Center",
+                lat: 34.1322,
+                lng: -118.1637,
+                attendees: 45,
+                maxAttendees: 200,
+                description: "Discover sustainable products and meet eco-friendly businesses.",
+                organizer: "Green Market",
+                email: "market@example.com",
+                icon: "fa-shopping-bag"
+            },
+            {
+                id: 11,
+                title: "Trail Maintenance Day",
+                type: "cleanup",
+                date: "2026-03-26",
+                time: "09:00",
+                location: "Mountain Trail",
+                lat: 34.1422,
+                lng: -118.1537,
+                attendees: 8,
+                maxAttendees: 30,
+                description: "Help maintain hiking trails and clear debris.",
+                organizer: "Trail Keepers",
+                email: "trail@example.com",
+                icon: "fa-hiking"
+            },
+            {
+                id: 12,
+                title: "Bee Conservation Talk",
+                type: "awareness",
+                date: "2026-03-27",
+                time: "14:30",
+                location: "Nature Center",
+                lat: 34.1522,
+                lng: -118.1437,
+                attendees: 14,
+                maxAttendees: 40,
+                description: "Learn why bees are important and how to protect them.",
+                organizer: "Bee Friendly",
+                email: "bees@example.com",
+                icon: "fa-bug"
+            }
+        ];
+
+        // DOM Elements
+        const eventsList = document.getElementById('eventsList');
+        const searchInput = document.getElementById('searchInput');
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        const dateFrom = document.getElementById('dateFrom');
+        const dateTo = document.getElementById('dateTo');
+        const toggleFormBtn = document.getElementById('toggleFormBtn');
+        const eventForm = document.getElementById('eventForm');
+        const submitEvent = document.getElementById('submitEvent');
+        const backToTop = document.getElementById('backToTop');
+        const successModal = document.getElementById('successModal');
+        const joinModal = document.getElementById('joinModal');
+        const eventCount = document.getElementById('event-count');
+        
+        // Stats elements
+        const totalEventsEl = document.getElementById('total-events');
+        const totalAttendeesEl = document.getElementById('total-attendees');
+        const totalCleanupsEl = document.getElementById('total-cleanups');
+        const totalPlantationsEl = document.getElementById('total-plantations');
+
+        // State
+        let currentFilter = 'all';
+        let searchTerm = '';
+        let selectedMarker = null;
+
+        // Initialize map
+        function initMap() {
+            map = L.map('map').setView([34.0922, -118.2037], 11);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Add click handler to map for location selection
+            map.on('click', function(e) {
+                document.getElementById('eventLat').value = e.latlng.lat.toFixed(4);
+                document.getElementById('eventLng').value = e.latlng.lng.toFixed(4);
+                
+                // Remove temporary marker if exists
+                if (selectedMarker) {
+                    map.removeLayer(selectedMarker);
+                }
+                
+                // Add temporary marker
+                selectedMarker = L.marker(e.latlng).addTo(map)
+                    .bindPopup('Selected location')
+                    .openPopup();
+            });
+
+            // Add all event markers
+            updateMarkers();
+        }
+
+        // Update markers on map
+        function updateMarkers() {
+            // Clear existing markers
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+
+            // Add markers for filtered events
+            const filtered = getFilteredEvents();
+            
+            filtered.forEach(event => {
+                const marker = L.marker([event.lat, event.lng]).addTo(map);
+                
+                // Custom popup content
+                const popupContent = `
+                    <div style="font-family: 'Poppins', sans-serif; min-width: 200px;">
+                        <h4 style="color: #2e7d32; margin: 0 0 5px 0;">${event.title}</h4>
+                        <p style="margin: 5px 0;"><i class="fas fa-calendar" style="color: #ff9800;"></i> ${formatDate(event.date)} at ${event.time}</p>
+                        <p style="margin: 5px 0;"><i class="fas fa-users" style="color: #ff9800;"></i> ${event.attendees}/${event.maxAttendees} attendees</p>
+                        <button onclick="showEventDetails(${event.id})" style="background: #2e7d32; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-top: 5px;">View Details</button>
+                    </div>
+                `;
+                
+                marker.bindPopup(popupContent);
+                
+                marker.on('click', () => {
+                    highlightEvent(event.id);
+                });
+                
+                markers.push(marker);
+            });
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+
+        // Get filtered events based on current filters
+        function getFilteredEvents() {
+            return events.filter(event => {
+                // Filter by type
+                const matchesType = currentFilter === 'all' || event.type === currentFilter;
+                
+                // Filter by search
+                const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                     event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                     event.location.toLowerCase().includes(searchTerm.toLowerCase());
+                
+                // Filter by date range
+                let matchesDate = true;
+                if (dateFrom.value) {
+                    matchesDate = matchesDate && event.date >= dateFrom.value;
+                }
+                if (dateTo.value) {
+                    matchesDate = matchesDate && event.date <= dateTo.value;
+                }
+                
+                return matchesType && matchesSearch && matchesDate;
+            });
+        }
+
+        // Render events list
+        function renderEvents() {
+            const filtered = getFilteredEvents();
+            
+            // Update event count
+            eventCount.textContent = `${filtered.length} events`;
+            
+            if (filtered.length === 0) {
+                eventsList.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: #999;">
+                        <i class="fas fa-calendar-times" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>No events found. Try adjusting your filters!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            eventsList.innerHTML = filtered.map(event => `
+                <div class="event-card ${event.type} ${event.id === selectedEventId ? 'active' : ''}" onclick="showEventDetails(${event.id})" data-id="${event.id}">
+                    <span class="event-date-badge">${formatDate(event.date)}</span>
+                    <h3 class="event-title">${event.title}</h3>
+                    <div class="event-details">
+                        <div class="event-detail">
+                            <i class="fas fa-clock"></i>
+                            <span>${event.time}</span>
+                        </div>
+                        <div class="event-detail">
+                            <i class="fas fa-map-pin"></i>
+                            <span>${event.location}</span>
+                        </div>
+                        <div class="event-detail">
+                            <i class="fas fa-users"></i>
+                            <span>${event.attendees} / ${event.maxAttendees} attendees</span>
+                        </div>
+                    </div>
+                    <span class="event-organizer">${event.organizer}</span>
+                    <div class="event-attendees">
+                        <span class="attendee-count">
+                            <i class="fas fa-user-check"></i> ${event.attendees} joined
+                        </span>
+                        <button class="attend-btn" onclick="joinEvent(${event.id}, event)">
+                            <i class="fas fa-hand-peace"></i> Join Event
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Update markers
+            updateMarkers();
+        }
+
+        let selectedEventId = null;
+
+        // Show event details and center map
+        window.showEventDetails = function(id) {
+            selectedEventId = id;
+            const event = events.find(e => e.id === id);
+            if (event) {
+                // Center map on event
+                map.setView([event.lat, event.lng], 14);
+                
+                // Open popup
+                markers.forEach(marker => {
+                    const latLng = marker.getLatLng();
+                    if (latLng.lat === event.lat && latLng.lng === event.lng) {
+                        marker.openPopup();
+                    }
+                });
+                
+                // Highlight in list
+                renderEvents();
+            }
+        };
+
+        // Join event
+        window.joinEvent = function(id, event) {
+            event.stopPropagation();
+            const eventItem = events.find(e => e.id === id);
+            if (eventItem) {
+                eventItem.attendees++;
+                renderEvents();
+                updateStats();
+                joinModal.classList.add('active');
+            }
+        };
+
+        // Update stats
+        function updateStats() {
+            totalEventsEl.textContent = events.length;
+            const totalAttendees = events.reduce((sum, e) => sum + e.attendees, 0);
+            totalAttendeesEl.textContent = totalAttendees;
+            totalCleanupsEl.textContent = events.filter(e => e.type === 'cleanup').length;
+            totalPlantationsEl.textContent = events.filter(e => e.type === 'plantation').length;
+        }
+
+        // Highlight event in list
+        function highlightEvent(id) {
+            selectedEventId = id;
+            renderEvents();
+        }
+
+        // Filter by type
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                filterTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentFilter = tab.dataset.type;
+                renderEvents();
+            });
+        });
+
+        // Search input
+        searchInput.addEventListener('input', (e) => {
+            searchTerm = e.target.value;
+            renderEvents();
+        });
+
+        // Date filters
+        dateFrom.addEventListener('change', renderEvents);
+        dateTo.addEventListener('change', renderEvents);
+
+        // Toggle event form
+        toggleFormBtn.addEventListener('click', () => {
+            eventForm.classList.toggle('show');
+            toggleFormBtn.innerHTML = eventForm.classList.contains('show') ? 
+                '<i class="fas fa-times"></i> Close Form' : 
+                '<i class="fas fa-calendar-plus"></i> Create New Event';
+        });
+
+        // Submit new event
+        submitEvent.addEventListener('click', () => {
+            // Get form values
+            const title = document.getElementById('eventTitle').value;
+            const date = document.getElementById('eventDate').value;
+            const time = document.getElementById('eventTime').value;
+            const type = document.getElementById('eventType').value;
+            const maxAttendees = parseInt(document.getElementById('eventMaxAttendees').value);
+            const location = document.getElementById('eventLocation').value;
+            const lat = parseFloat(document.getElementById('eventLat').value);
+            const lng = parseFloat(document.getElementById('eventLng').value);
+            const description = document.getElementById('eventDescription').value;
+            const organizer = document.getElementById('eventOrganizer').value;
+            const email = document.getElementById('eventEmail').value;
+
+            // Validate
+            if (!title || !date || !time || !maxAttendees || !location || !lat || !lng || !description || !organizer || !email) {
+                alert('Please fill in all fields and select a location on the map!');
+                return;
+            }
+
+            // Create new event
+            const newEvent = {
+                id: events.length + 1,
+                title: title,
+                type: type,
+                date: date,
+                time: time,
+                location: location,
+                lat: lat,
+                lng: lng,
+                attendees: 0,
+                maxAttendees: maxAttendees,
+                description: description,
+                organizer: organizer,
+                email: email,
+                icon: getIconForType(type)
+            };
+
+            events.push(newEvent);
+            
+            // Reset form
+            eventForm.reset();
+            eventForm.classList.remove('show');
+            toggleFormBtn.innerHTML = '<i class="fas fa-calendar-plus"></i> Create New Event';
+            
+            // Remove temporary marker
+            if (selectedMarker) {
+                map.removeLayer(selectedMarker);
+                selectedMarker = null;
+            }
+            
+            // Update display
+            renderEvents();
+            updateStats();
+            
+            // Show success modal
+            successModal.classList.add('active');
+        });
+
+        // Get icon for event type
+        function getIconForType(type) {
+            const icons = {
+                cleanup: 'fa-broom',
+                plantation: 'fa-tree',
+                workshop: 'fa-chalkboard-teacher',
+                adoption: 'fa-paw',
+                awareness: 'fa-bullhorn'
+            };
+            return icons[type] || 'fa-calendar';
+        }
+
+        // Close modals
+        window.closeSuccessModal = function() {
+            successModal.classList.remove('active');
+        };
+
+        window.closeJoinModal = function() {
+            joinModal.classList.remove('active');
+        };
+
+        // Back to top
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            initMap();
+            renderEvents();
+            updateStats();
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target === successModal) {
+                closeSuccessModal();
+            }
+            if (event.target === joinModal) {
+                closeJoinModal();
+            }
+        };
+    </script>
+</body>
+</html>

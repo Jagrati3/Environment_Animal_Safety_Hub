@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compost Quality Analyzer - Environment & Animal Safety Hub</title>
+    <link rel="stylesheet" href="../css/compost-quality-analyzer.css">
+    <link rel="icon" href="../assets/icons/compost-icon.png" type="image/png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <img src="../assets/icons/compost-icon.png" alt="Compost Icon" class="nav-icon">
+                <span>Compost Quality Analyzer</span>
+            </div>
+            <div class="nav-links">
+                <a href="#dashboard" class="nav-link active">Dashboard</a>
+                <a href="#analysis" class="nav-link">Quality Analysis</a>
+                <a href="#tracking" class="nav-link">Progress Tracking</a>
+                <a href="#tips" class="nav-link">Improvement Tips</a>
+                <a href="#calculator" class="nav-link">C:N Calculator</a>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section id="dashboard" class="dashboard-section">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h1>Compost Quality Analyzer</h1>
+                    <p class="dashboard-subtitle">Assess and optimize your compost quality for maximum soil fertility</p>
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon">🌱</div>
+                            <div class="stat-content">
+                                <div class="stat-value" id="quality-score">8.2</div>
+                                <div class="stat-label">Quality Score</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⚖️</div>
+                            <div class="stat-content">
+                                <div class="stat-value" id="cn-ratio">24:1</div>
+                                <div class="stat-label">C:N Ratio</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">💧</div>
+                            <div class="stat-content">
+                                <div class="stat-value" id="moisture-level">62%</div>
+                                <div class="stat-label">Moisture</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🔄</div>
+                            <div class="stat-content">
+                                <div class="stat-value" id="decomp-stage">Active</div>
+                                <div class="stat-label">Decomposition</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-card quality-gauge">
+                        <div class="card-header">
+                            <h3>Compost Quality Gauge</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="gauge-container">
+                                <canvas id="quality-gauge-chart" width="200" height="200"></canvas>
+                                <div class="gauge-info">
+                                    <div class="gauge-value" id="gauge-value">82%</div>
+                                    <div class="gauge-label">Overall Quality</div>
+                                </div>
+                            </div>
+                            <div class="quality-indicators">
+                                <div class="indicator excellent">
+                                    <span class="indicator-dot"></span>
+                                    <span>Excellent (85-100%)</span>
+                                </div>
+                                <div class="indicator good">
+                                    <span class="indicator-dot"></span>
+                                    <span>Good (70-84%)</span>
+                                </div>
+                                <div class="indicator fair">
+                                    <span class="indicator-dot"></span>
+                                    <span>Fair (55-69%)</span>
+                                </div>
+                                <div class="indicator poor">
+                                    <span class="indicator-dot"></span>
+                                    <span>Poor (0-54%)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card parameter-analysis">
+                        <div class="card-header">
+                            <h3>Parameter Analysis</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="parameter-grid">
+                                <div class="parameter-item">
+                                    <div class="parameter-header">
+                                        <span class="parameter-name">Carbon:Nitrogen Ratio</span>
+                                        <span class="parameter-value" id="cn-ratio-value">24:1</span>
+                                    </div>
+                                    <div class="parameter-bar">
+                                        <div class="parameter-fill optimal" style="width: 85%"></div>
+                                    </div>
+                                    <div class="parameter-status optimal">Optimal</div>
+                                </div>
+                                <div class="parameter-item">
+                                    <div class="parameter-header">
+                                        <span class="parameter-name">Moisture Content</span>
+                                        <span class="parameter-value" id="moisture-value">62%</span>
+                                    </div>
+                                    <div class="parameter-bar">
+                                        <div class="parameter-fill optimal" style="width: 78%"></div>
+                                    </div>
+                                    <div class="parameter-status optimal">Optimal</div>
+                                </div>
+                                <div class="parameter-item">
+                                    <div class="parameter-header">
+                                        <span class="parameter-name">Temperature</span>
+                                        <span class="parameter-value" id="temperature-value">58°C</span>
+                                    </div>
+                                    <div class="parameter-bar">
+                                        <div class="parameter-fill good" style="width: 72%"></div>
+                                    </div>
+                                    <div class="parameter-status good">Good</div>
+                                </div>
+                                <div class="parameter-item">
+                                    <div class="parameter-header">
+                                        <span class="parameter-name">pH Level</span>
+                                        <span class="parameter-value" id="ph-value">7.2</span>
+                                    </div>
+                                    <div class="parameter-bar">
+                                        <div class="parameter-fill optimal" style="width: 80%"></div>
+                                    </div>
+                                    <div class="parameter-status optimal">Optimal</div>
+                                </div>
+                                <div class="parameter-item">
+                                    <div class="parameter-header">
+                                        <span class="parameter-name">Oxygen Level</span>
+                                        <span class="parameter-value" id="oxygen-value">12%</span>
+                                    </div>
+                                    <div class="parameter-bar">
+                                        <div class="parameter-fill fair" style="width: 60%"></div>
+                                    </div>
+                                    <div class="parameter-status fair">Fair</div>
+                                </div>
+                                <div class="parameter-item">
+                                    <div class="parameter-header">
+                                        <span class="parameter-name">Pathogen Risk</span>
+                                        <span class="parameter-value" id="pathogen-value">Low</span>
+                                    </div>
+                                    <div class="parameter-bar">
+                                        <div class="parameter-fill optimal" style="width: 90%"></div>
+                                    </div>
+                                    <div class="parameter-status optimal">Optimal</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card decomposition-stage">
+                        <div class="card-header">
+                            <h3>Decomposition Stage</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="stage-visualization">
+                                <div class="stage-timeline">
+                                    <div class="stage-point active" data-stage="1">
+                                        <div class="stage-circle"></div>
+                                        <span class="stage-label">Fresh</span>
+                                    </div>
+                                    <div class="stage-point active" data-stage="2">
+                                        <div class="stage-circle"></div>
+                                        <span class="stage-label">Mesophilic</span>
+                                    </div>
+                                    <div class="stage-point active" data-stage="3">
+                                        <div class="stage-circle"></div>
+                                        <span class="stage-label">Thermophilic</span>
+                                    </div>
+                                    <div class="stage-point active" data-stage="4">
+                                        <div class="stage-circle"></div>
+                                        <span class="stage-label">Cooling</span>
+                                    </div>
+                                    <div class="stage-point" data-stage="5">
+                                        <div class="stage-circle"></div>
+                                        <span class="stage-label">Maturing</span>
+                                    </div>
+                                    <div class="stage-point" data-stage="6">
+                                        <div class="stage-circle"></div>
+                                        <span class="stage-label">Finished</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="stage-description">
+                                <h4>Current Stage: Active Thermophilic</h4>
+                                <p>Your compost is in the high-heat phase where beneficial bacteria break down organic matter rapidly. This is the optimal stage for pathogen destruction and weed seed elimination.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card quick-actions">
+                        <div class="card-header">
+                            <h3>Quick Actions</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="action-buttons">
+                                <button class="action-btn primary" id="analyze-sample">
+                                    <span class="action-icon">🔬</span>
+                                    Analyze Sample
+                                </button>
+                                <button class="action-btn secondary" id="log-reading">
+                                    <span class="action-icon">📝</span>
+                                    Log Reading
+                                </button>
+                                <button class="action-btn secondary" id="get-recommendations">
+                                    <span class="action-icon">💡</span>
+                                    Get Tips
+                                </button>
+                                <button class="action-btn secondary" id="schedule-reminder">
+                                    <span class="action-icon">⏰</span>
+                                    Set Reminder
+                                </button>
+                            </div>
+                            <div class="last-analysis">
+                                <p><strong>Last Analysis:</strong> February 26, 2026 at 14:30</p>
+                                <p><strong>Next Recommended Check:</strong> February 28, 2026</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analysis" class="analysis-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Detailed Quality Analysis</h2>
+                    <p>Comprehensive assessment of your compost parameters and recommendations</p>
+                </div>
+
+                <div class="analysis-tools">
+                    <div class="tool-card">
+                        <h3>Parameter Scanner</h3>
+                        <p>Use our interactive scanner to input your compost measurements</p>
+                        <div class="scanner-inputs">
+                            <div class="input-group">
+                                <label for="carbon-input">Carbon Content (%)</label>
+                                <input type="number" id="carbon-input" step="0.1" min="0" max="100" placeholder="45.2">
+                            </div>
+                            <div class="input-group">
+                                <label for="nitrogen-input">Nitrogen Content (%)</label>
+                                <input type="number" id="nitrogen-input" step="0.1" min="0" max="100" placeholder="1.8">
+                            </div>
+                            <div class="input-group">
+                                <label for="moisture-input">Moisture Content (%)</label>
+                                <input type="number" id="moisture-input" step="0.1" min="0" max="100" placeholder="62.0">
+                            </div>
+                            <div class="input-group">
+                                <label for="temperature-input">Temperature (°C)</label>
+                                <input type="number" id="temperature-input" step="0.1" min="0" max="100" placeholder="58.0">
+                            </div>
+                            <button class="scan-btn" id="run-analysis">Run Analysis</button>
+                        </div>
+                    </div>
+
+                    <div class="tool-card">
+                        <h3>Visual Assessment</h3>
+                        <p>Upload a photo of your compost for AI-powered analysis</p>
+                        <div class="photo-upload">
+                            <div class="upload-area" id="upload-area">
+                                <div class="upload-icon">📷</div>
+                                <p>Drag & drop a photo or click to browse</p>
+                                <input type="file" id="photo-input" accept="image/*" hidden>
+                            </div>
+                            <button class="upload-btn" id="analyze-photo">Analyze Photo</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analysis-results" id="analysis-results" style="display: none;">
+                    <div class="results-header">
+                        <h3>Analysis Results</h3>
+                        <div class="results-score">
+                            <div class="score-circle">
+                                <span class="score-value" id="results-score">82</span>
+                                <span class="score-label">Quality</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="results-details">
+                        <div class="result-item">
+                            <div class="result-header">
+                                <span class="result-name">Carbon:Nitrogen Ratio</span>
+                                <span class="result-value" id="result-cn">24:1</span>
+                            </div>
+                            <div class="result-status optimal">Optimal for decomposition</div>
+                            <div class="result-description">Your C:N ratio is in the ideal range for microbial activity.</div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-header">
+                                <span class="result-name">Moisture Content</span>
+                                <span class="result-value" id="result-moisture">62%</span>
+                            </div>
+                            <div class="result-status optimal">Perfect moisture level</div>
+                            <div class="result-description">Moisture content supports aerobic decomposition without waterlogging.</div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-header">
+                                <span class="result-name">Temperature</span>
+                                <span class="result-value" id="result-temp">58°C</span>
+                            </div>
+                            <div class="result-status good">Good thermophilic activity</div>
+                            <div class="result-description">Temperature indicates active decomposition and pathogen destruction.</div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-header">
+                                <span class="result-name">Overall Assessment</span>
+                                <span class="result-value" id="result-overall">Excellent</span>
+                            </div>
+                            <div class="result-status optimal">Ready for use in 2-3 weeks</div>
+                            <div class="result-description">Your compost is developing well and should be ready for garden use soon.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tracking" class="tracking-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Progress Tracking</h2>
+                    <p>Monitor your compost quality improvements over time</p>
+                </div>
+
+                <div class="tracking-controls">
+                    <div class="time-selector">
+                        <button class="time-btn active" data-period="7d">7 Days</button>
+                        <button class="time-btn" data-period="30d">30 Days</button>
+                        <button class="time-btn" data-period="90d">90 Days</button>
+                        <button class="time-btn" data-period="1y">1 Year</button>
+                    </div>
+                    <button class="export-btn" id="export-tracking">Export Data</button>
+                </div>
+
+                <div class="tracking-charts">
+                    <div class="chart-container">
+                        <h3>Quality Score Trend</h3>
+                        <canvas id="quality-trend-chart" width="400" height="200"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>C:N Ratio Over Time</h3>
+                        <canvas id="cn-trend-chart" width="400" height="200"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Temperature & Moisture</h3>
+                        <canvas id="temp-moisture-chart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <div class="progress-milestones">
+                    <h3>Compost Development Milestones</h3>
+                    <div class="milestones-timeline">
+                        <div class="milestone completed">
+                            <div class="milestone-marker"></div>
+                            <div class="milestone-content">
+                                <h4>Initial Setup</h4>
+                                <p>Compost pile established with proper layering</p>
+                                <span class="milestone-date">Feb 1, 2026</span>
+                            </div>
+                        </div>
+                        <div class="milestone completed">
+                            <div class="milestone-marker"></div>
+                            <div class="milestone-content">
+                                <h4>Mesophilic Phase</h4>
+                                <p>Bacteria established, temperature rising</p>
+                                <span class="milestone-date">Feb 8, 2026</span>
+                            </div>
+                        </div>
+                        <div class="milestone completed">
+                            <div class="milestone-marker"></div>
+                            <div class="milestone-content">
+                                <h4>Thermophilic Phase</h4>
+                                <p>High temperatures reached, active decomposition</p>
+                                <span class="milestone-date">Feb 15, 2026</span>
+                            </div>
+                        </div>
+                        <div class="milestone active">
+                            <div class="milestone-marker"></div>
+                            <div class="milestone-content">
+                                <h4>Cooling Phase</h4>
+                                <p>Temperature decreasing, maturation beginning</p>
+                                <span class="milestone-date">Current</span>
+                            </div>
+                        </div>
+                        <div class="milestone upcoming">
+                            <div class="milestone-marker"></div>
+                            <div class="milestone-content">
+                                <h4>Maturation</h4>
+                                <p>Compost stabilizing, ready for use</p>
+                                <span class="milestone-date">Mar 5, 2026</span>
+                            </div>
+                        </div>
+                        <div class="milestone upcoming">
+                            <div class="milestone-marker"></div>
+                            <div class="milestone-content">
+                                <h4>Finished Compost</h4>
+                                <p>Ready for garden application</p>
+                                <span class="milestone-date">Mar 15, 2026</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tips" class="tips-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Improvement Tips</h2>
+                    <p>Expert recommendations to optimize your compost quality</p>
+                </div>
+
+                <div class="tips-grid">
+                    <div class="tip-card priority-high">
+                        <div class="tip-header">
+                            <div class="tip-priority high">High Priority</div>
+                            <h3>Balance Your Carbon:Nitrogen Ratio</h3>
+                        </div>
+                        <div class="tip-content">
+                            <p>Maintain a C:N ratio between 25:1 and 30:1 for optimal microbial activity. Add more carbon-rich materials like dry leaves or straw if your ratio is too low.</p>
+                            <div class="tip-actions">
+                                <button class="tip-btn">Learn More</button>
+                                <button class="tip-btn secondary">Calculate Ratio</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tip-card priority-medium">
+                        <div class="tip-header">
+                            <div class="tip-priority medium">Medium Priority</div>
+                            <h3>Monitor Moisture Levels</h3>
+                        </div>
+                        <div class="tip-content">
+                            <p>Keep moisture content between 50-60% for best results. Squeeze a handful of compost - it should feel like a wrung-out sponge. Add water if too dry, more carbon if too wet.</p>
+                            <div class="tip-actions">
+                                <button class="tip-btn">Moisture Guide</button>
+                                <button class="tip-btn secondary">Set Reminder</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tip-card priority-medium">
+                        <div class="tip-header">
+                            <div class="tip-priority medium">Medium Priority</div>
+                            <h3>Ensure Proper Aeration</h3>
+                        </div>
+                        <div class="tip-content">
+                            <p>Turn your compost pile every 1-2 weeks to provide oxygen for aerobic bacteria. Poor aeration leads to anaerobic decomposition and unpleasant odors.</p>
+                            <div class="tip-actions">
+                                <button class="tip-btn">Aeration Tips</button>
+                                <button class="tip-btn secondary">Schedule Turn</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tip-card priority-low">
+                        <div class="tip-header">
+                            <div class="tip-priority low">Low Priority</div>
+                            <h3>Avoid Problem Materials</h3>
+                        </div>
+                        <div class="tip-content">
+                            <p>Don't add meat, dairy, oils, or pet waste to your compost pile. These materials can attract pests and create odors. Stick to plant-based materials only.</p>
+                            <div class="tip-actions">
+                                <button class="tip-btn">Material Guide</button>
+                                <button class="tip-btn secondary">Safe Alternatives</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tip-card priority-high">
+                        <div class="tip-header">
+                            <div class="tip-priority high">High Priority</div>
+                            <h3>Maintain Pile Size</h3>
+                        </div>
+                        <div class="tip-content">
+                            <p>Keep your compost pile at least 3 feet x 3 feet x 3 feet for proper heat retention. Smaller piles cool down too quickly and decomposition slows significantly.</p>
+                            <div class="tip-actions">
+                                <button class="tip-btn">Size Calculator</button>
+                                <button class="tip-btn secondary">Expansion Tips</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tip-card priority-low">
+                        <div class="tip-header">
+                            <div class="tip-priority low">Low Priority</div>
+                            <h3>Layer Materials Properly</h3>
+                        </div>
+                        <div class="tip-content">
+                            <p>Alternate layers of carbon-rich (brown) and nitrogen-rich (green) materials. This creates air pockets and provides a balanced food source for microorganisms.</p>
+                            <div class="tip-actions">
+                                <button class="tip-btn">Layering Guide</button>
+                                <button class="tip-btn secondary">Material List</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="troubleshooting">
+                    <h3>Common Issues & Solutions</h3>
+                    <div class="issue-grid">
+                        <div class="issue-item">
+                            <h4>🐛 Attracting Pests</h4>
+                            <p>Cover food scraps with carbon materials and turn pile regularly.</p>
+                        </div>
+                        <div class="issue-item">
+                            <h4>💨 Bad Odors</h4>
+                            <p>Add more carbon materials and turn to improve aeration.</p>
+                        </div>
+                        <div class="issue-item">
+                            <h4>🐌 Too Slow</h4>
+                            <p>Check moisture, add nitrogen-rich materials, and ensure proper size.</p>
+                        </div>
+                        <div class="issue-item">
+                            <h4>🔥 Too Hot</h4>
+                            <p>Turn pile to release heat and add carbon materials to cool down.</p>
+                        </div>
+                        <div class="issue-item">
+                            <h4>🧊 Not Heating Up</h4>
+                            <p>Add nitrogen materials, ensure proper moisture, and check pile size.</p>
+                        </div>
+                        <div class="issue-item">
+                            <h4>🌧️ Too Wet</h4>
+                            <p>Add dry carbon materials and turn to improve drainage.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="calculator" class="calculator-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>C:N Ratio Calculator</h2>
+                    <p>Calculate the carbon-to-nitrogen ratio of your compost materials</p>
+                </div>
+
+                <div class="calculator-container">
+                    <div class="calculator-inputs">
+                        <h3>Material Inputs</h3>
+                        <div class="material-list">
+                            <div class="material-item">
+                                <label for="leaves">Dry Leaves</label>
+                                <input type="number" id="leaves" placeholder="0" min="0">
+                                <span class="unit">lbs</span>
+                                <span class="cn-ratio">60:1</span>
+                            </div>
+                            <div class="material-item">
+                                <label for="grass">Grass Clippings</label>
+                                <input type="number" id="grass" placeholder="0" min="0">
+                                <span class="unit">lbs</span>
+                                <span class="cn-ratio">17:1</span>
+                            </div>
+                            <div class="material-item">
+                                <label for="vegetable">Vegetable Scraps</label>
+                                <input type="number" id="vegetable" placeholder="0" min="0">
+                                <span class="unit">lbs</span>
+                                <span class="cn-ratio">12:1</span>
+                            </div>
+                            <div class="material-item">
+                                <label for="coffee">Coffee Grounds</label>
+                                <input type="number" id="coffee" placeholder="0" min="0">
+                                <span class="unit">lbs</span>
+                                <span class="cn-ratio">20:1</span>
+                            </div>
+                            <div class="material-item">
+                                <label for="straw">Straw</label>
+                                <input type="number" id="straw" placeholder="0" min="0">
+                                <span class="unit">lbs</span>
+                                <span class="cn-ratio">80:1</span>
+                            </div>
+                            <div class="material-item">
+                                <label for="manure">Well-aged Manure</label>
+                                <input type="number" id="manure" placeholder="0" min="0">
+                                <span class="unit">lbs</span>
+                                <span class="cn-ratio">15:1</span>
+                            </div>
+                        </div>
+                        <button class="calculate-btn" id="calculate-cn">Calculate C:N Ratio</button>
+                    </div>
+
+                    <div class="calculator-results">
+                        <h3>Results</h3>
+                        <div class="result-display">
+                            <div class="result-item">
+                                <span class="result-label">Total Carbon:</span>
+                                <span class="result-value" id="total-carbon">0 lbs</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Total Nitrogen:</span>
+                                <span class="result-value" id="total-nitrogen">0 lbs</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">C:N Ratio:</span>
+                                <span class="result-value" id="calculated-ratio">--:--</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Assessment:</span>
+                                <span class="result-value" id="ratio-assessment">Enter materials above</span>
+                            </div>
+                        </div>
+
+                        <div class="ratio-gauge">
+                            <div class="gauge-background">
+                                <div class="gauge-fill" id="ratio-gauge-fill" style="width: 0%"></div>
+                                <div class="gauge-marker optimal"></div>
+                            </div>
+                            <div class="gauge-labels">
+                                <span>Too Low</span>
+                                <span>Optimal (25-30:1)</span>
+                                <span>Too High</span>
+                            </div>
+                        </div>
+
+                        <div class="recommendations-panel" id="cn-recommendations" style="display: none;">
+                            <h4>Recommendations</h4>
+                            <ul id="recommendations-list"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="material-database">
+                    <h3>Material C:N Ratios Reference</h3>
+                    <div class="material-table">
+                        <div class="table-header">
+                            <span>Material</span>
+                            <span>C:N Ratio</span>
+                            <span>Category</span>
+                        </div>
+                        <div class="table-row">
+                            <span>Sawdust</span>
+                            <span>400:1</span>
+                            <span>High Carbon</span>
+                        </div>
+                        <div class="table-row">
+                            <span>Cardboard</span>
+                            <span>350:1</span>
+                            <span>High Carbon</span>
+                        </div>
+                        <div class="table-row">
+                            <span>Dry Leaves</span>
+                            <span>60:1</span>
+                            <span>Carbon</span>
+                        </div>
+                        <div class="table-row">
+                            <span>Straw</span>
+                            <span>80:1</span>
+                            <span>Carbon</span>
+                        </div>
+                        <div class="table-row">
+                            <span>Grass Clippings</span>
+                            <span>17:1</span>
+                            <span>Nitrogen</span>
+                        </div>
+                        <div class="table-row">
+                            <span>Vegetable Scraps</span>
+                            <span>12:1</span>
+                            <span>High Nitrogen</span>
+                        </div>
+                        <div class="table-row">
+                            <span>Coffee Grounds</span>
+                            <span>20:1</span>
+                            <span>Nitrogen</span>
+                        </div>
+                        <div class="table-row">
+                            <span>Fresh Manure</span>
+                            <span>15:1</span>
+                            <span>High Nitrogen</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>About Compost Quality Analyzer</h4>
+                    <p>Optimize your composting process with scientific analysis and expert recommendations. Transform waste into nutrient-rich soil amendment.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#dashboard">Dashboard</a></li>
+                        <li><a href="#analysis">Quality Analysis</a></li>
+                        <li><a href="#tracking">Progress Tracking</a></li>
+                        <li><a href="#tips">Improvement Tips</a></li>
+                        <li><a href="#calculator">C:N Calculator</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Composting Guide</a></li>
+                        <li><a href="#">Material Database</a></li>
+                        <li><a href="#">Troubleshooting</a></li>
+                        <li><a href="#">Success Stories</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support & Tools</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Experts</a></li>
+                        <li><a href="#">Community Forum</a></li>
+                        <li><a href="#">Download App</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Environment & Animal Safety Hub. All rights reserved. | Turning waste into wealth through smart composting.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/compost-quality-analyzer.js"></script>
+</body>
+</html>

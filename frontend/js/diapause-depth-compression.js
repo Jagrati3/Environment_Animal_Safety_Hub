@@ -1,0 +1,149 @@
+// Demo data for Diapause Depth Compression Dashboard
+const demoStratificationData = [
+  { depth: 0, density: 1000 },
+  { depth: 10, density: 1002 },
+  { depth: 20, density: 1005 },
+  { depth: 30, density: 1010 },
+  { depth: 40, density: 1015 },
+  { depth: 50, density: 1020 }
+];
+
+const demoDiapauseData = [
+  { depth: 10, organisms: 500 },
+  { depth: 20, organisms: 800 },
+  { depth: 30, organisms: 600 },
+  { depth: 40, organisms: 300 },
+  { depth: 50, organisms: 100 }
+];
+
+const demoPredationData = [
+  { depth: 10, risk: 80 },
+  { depth: 20, risk: 60 },
+  { depth: 30, risk: 40 },
+  { depth: 40, risk: 20 },
+  { depth: 50, risk: 10 }
+];
+
+const demoThermalData = [
+  { depth: 10, variability: 5 },
+  { depth: 20, variability: 3 },
+  { depth: 30, variability: 2 },
+  { depth: 40, variability: 1 },
+  { depth: 50, variability: 0.5 }
+];
+
+const recommendations = [
+  'Stratification weakening compresses optimal diapause depths to 20-30m range.',
+  'Predation risk increases by 50% in compressed bands due to higher visibility.',
+  'Thermal variability rises 2-3x in shallower compressed depths.',
+  'Conservation: Monitor stratification changes and protect deeper refuges.',
+  'Model implication: Overwintering survival may decline with stratification shifts.'
+];
+
+document.addEventListener('DOMContentLoaded', () => {
+  const stratificationDataDiv = document.getElementById('stratification-data');
+  const diapauseDataDiv = document.getElementById('diapause-data');
+  const predationDataDiv = document.getElementById('predation-data');
+  const thermalDataDiv = document.getElementById('thermal-data');
+  const recommendationsList = document.getElementById('recommendations-list');
+
+  // Display stratification data
+  stratificationDataDiv.innerHTML = '<h3>Density (kg/m³)</h3>' +
+    demoStratificationData.map(d => `<p>Depth ${d.depth}m: ${d.density}</p>`).join('');
+
+  // Display diapause data
+  diapauseDataDiv.innerHTML = '<h3>Organisms Count</h3>' +
+    demoDiapauseData.map(d => `<p>Depth ${d.depth}m: ${d.organisms}</p>`).join('');
+
+  // Display predation data
+  predationDataDiv.innerHTML = '<h3>Predation Risk (%)</h3>' +
+    demoPredationData.map(d => `<p>Depth ${d.depth}m: ${d.risk}%</p>`).join('');
+
+  // Display thermal data
+  thermalDataDiv.innerHTML = '<h3>Temperature Variability (°C)</h3>' +
+    demoThermalData.map(d => `<p>Depth ${d.depth}m: ${d.variability}°C</p>`).join('');
+
+  // Display recommendations
+  recommendationsList.innerHTML = recommendations.map(r => `<li>${r}</li>`).join('');
+
+  // Charts using Chart.js
+  const stratificationCtx = document.getElementById('stratification-chart').getContext('2d');
+  new Chart(stratificationCtx, {
+    type: 'line',
+    data: {
+      labels: demoStratificationData.map(d => d.depth + 'm'),
+      datasets: [{
+        label: 'Water Density',
+        data: demoStratificationData.map(d => d.density),
+        borderColor: '#00695c',
+        backgroundColor: 'rgba(0, 105, 92, 0.1)',
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: false }
+      }
+    }
+  });
+
+  const diapauseCtx = document.getElementById('diapause-chart').getContext('2d');
+  new Chart(diapauseCtx, {
+    type: 'bar',
+    data: {
+      labels: demoDiapauseData.map(d => d.depth + 'm'),
+      datasets: [{
+        label: 'Diapause Organisms',
+        data: demoDiapauseData.map(d => d.organisms),
+        backgroundColor: '#26a69a'
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+
+  const predationCtx = document.getElementById('predation-chart').getContext('2d');
+  new Chart(predationCtx, {
+    type: 'line',
+    data: {
+      labels: demoPredationData.map(d => d.depth + 'm'),
+      datasets: [{
+        label: 'Predation Risk (%)',
+        data: demoPredationData.map(d => d.risk),
+        borderColor: '#d32f2f',
+        backgroundColor: 'rgba(211, 47, 47, 0.1)',
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true, max: 100 }
+      }
+    }
+  });
+
+  const thermalCtx = document.getElementById('thermal-chart').getContext('2d');
+  new Chart(thermalCtx, {
+    type: 'bar',
+    data: {
+      labels: demoThermalData.map(d => d.depth + 'm'),
+      datasets: [{
+        label: 'Thermal Variability (°C)',
+        data: demoThermalData.map(d => d.variability),
+        backgroundColor: '#ff9800'
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+});

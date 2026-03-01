@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪴 Plant Personality Quiz · find your green match</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Google Fonts: friendly, fresh, approachable -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Fredoka+One&display=swap" rel="stylesheet">
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #e7f5de;
+            background: radial-gradient(circle at 20% 30%, #d9f0cf, #c0e0b2);
+            min-height: 100vh;
+            color: #1d5430;
+        }
+
+        /* quiz header – playful & leafy */
+        .quiz-header {
+            background: linear-gradient(145deg, #3f8053, #2a6a41);
+            padding: 5rem 2rem 4.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+            border-bottom: 8px solid #fbeba0;
+            box-shadow: 0 20px 30px #2a6a4180;
+        }
+
+        .quiz-header::before {
+            content: '🪴';
+            position: absolute;
+            font-size: 18rem;
+            opacity: 0.12;
+            left: -3rem;
+            bottom: -5rem;
+            transform: rotate(-20deg);
+        }
+
+        .quiz-header h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 4.2rem;
+            color: #fcf9cf;
+            text-shadow: 5px 5px 0 #1d6236;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .quiz-header h1 i {
+            color: #ffefb0;
+            filter: drop-shadow(0 0 8px #ffeeaa);
+        }
+
+        .quiz-header p {
+            font-size: 1.5rem;
+            max-width: 700px;
+            margin: 1.2rem auto;
+            background: #e5fad6c0;
+            padding: 0.8rem 2.2rem;
+            border-radius: 60px;
+            color: #124d27;
+            font-weight: 700;
+            backdrop-filter: blur(5px);
+            border: 3px solid #fbeba0;
+        }
+
+        .leaf-decoration {
+            margin-top: 1.5rem;
+            font-size: 2rem;
+            color: #fbf0b2;
+        }
+
+        /* container */
+        .container {
+            max-width: 1300px;
+            margin: -3.5rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* intro card / start quiz */
+        .intro-card {
+            background: #f9ffecee;
+            backdrop-filter: blur(6px);
+            border-radius: 70px;
+            padding: 2.8rem;
+            margin-bottom: 4rem;
+            box-shadow: 0 30px 40px #26663e70, 0 0 0 3px #daefc5 inset;
+            border: 4px solid #fbe9a2;
+            text-align: center;
+        }
+
+        .intro-card h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #246b3a;
+        }
+
+        .intro-card p {
+            font-size: 1.4rem;
+            margin: 1.5rem 0;
+        }
+
+        .start-quiz-btn {
+            background: #56a26b;
+            border: none;
+            color: white;
+            font-weight: 800;
+            font-size: 2rem;
+            padding: 1.2rem 4rem;
+            border-radius: 80px;
+            display: inline-flex;
+            align-items: center;
+            gap: 1.2rem;
+            cursor: pointer;
+            border: 4px solid #feefb0;
+            box-shadow: 0 8px 0 #2d6a41;
+            transition: 0.1s;
+        }
+
+        .start-quiz-btn:active {
+            transform: translateY(8px);
+            box-shadow: none;
+        }
+
+        /* quiz container (hidden until start) */
+        .quiz-container {
+            background: #f6ffecee;
+            border-radius: 80px;
+            padding: 3rem;
+            margin: 2rem 0 4rem;
+            border: 6px solid #fceba6;
+            box-shadow: 0 25px 40px #3c7e4e;
+            display: none;
+        }
+
+        .quiz-container.active {
+            display: block;
+        }
+
+        .question {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #195f2c;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .option-card {
+            background: #efffdf;
+            border-radius: 60px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            border: 4px solid #bde0b0;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .option-card:hover {
+            background: #fbffcf;
+            border-color: #fbce72;
+            transform: scale(1.02);
+        }
+
+        .option-card.selected {
+            background: #fdebb3;
+            border-color: #cf9f4a;
+            box-shadow: 0 0 0 3px #ffe283;
+        }
+
+        .option-card i {
+            font-size: 2.2rem;
+            color: #dd9630;
+        }
+
+        .quiz-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+        }
+
+        .quiz-btn {
+            background: #9bbf8b;
+            border: none;
+            color: white;
+            font-weight: 700;
+            padding: 1rem 3rem;
+            border-radius: 60px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            border: 3px solid #fbe38e;
+        }
+
+        .quiz-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .result-container {
+            background: #fbffe3;
+            border-radius: 80px;
+            padding: 3rem;
+            margin: 3rem 0;
+            border: 8px solid #fbe183;
+            display: none;
+            text-align: center;
+        }
+
+        .result-container.show {
+            display: block;
+        }
+
+        .result-plant {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-name {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #19522b;
+        }
+
+        .result-desc {
+            font-size: 1.5rem;
+            margin: 1.5rem 0 2rem;
+        }
+
+        .reset-btn {
+            background: #f3c26b;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.4rem;
+            cursor: pointer;
+            border: 3px solid white;
+        }
+
+        /* plant cards grid (all personalities) */
+        .personality-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .plant-card {
+            background: #f6ffee;
+            border-radius: 60px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px #3e7e5170;
+            transition: all 0.3s;
+            border: 4px solid #d2f0be;
+            cursor: pointer;
+        }
+
+        .plant-card:hover {
+            transform: translateY(-10px);
+            border-color: #fad479;
+        }
+
+        .plant-image {
+            height: 160px;
+            background: linear-gradient(145deg, #98cb92, #69aa6b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #feffd2;
+        }
+
+        .plant-content {
+            padding: 1.8rem;
+        }
+
+        .plant-name {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #236635;
+        }
+
+        .plant-personality {
+            color: #bf8c3d;
+            font-weight: 700;
+        }
+
+        /* modal */
+        .modal {
+            display: none; position: fixed; inset:0; background: #1d5e32e0;
+            align-items: center; justify-content: center; z-index:2000;
+            backdrop-filter: blur(6px);
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #faffef;
+            border-radius: 80px;
+            max-width: 700px;
+            width:100%;
+            border: 8px solid #fee792;
+            color: #1b612b;
+        }
+
+        .back-to-top {
+            position: fixed; bottom:2rem; right:2rem;
+            background: #f3bd5c; width:70px; height:70px; border-radius:50%;
+            display: none; align-items:center; justify-content:center;
+            font-size:2.2rem; color:#1f5529; border:5px solid #ffffbb;
+            cursor:pointer; z-index:1000;
+        }
+        .back-to-top.visible { display: flex; }
+
+        @media (max-width:700px){
+            .options-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- header -->
+    <header class="quiz-header">
+        <h1>
+            <i class="fas fa-seedling"></i> Plant Personality Quiz
+            <i class="fas fa-leaf"></i>
+        </h1>
+        <p>what's your plant soulmate? answer 5 questions 🌱</p>
+        <div class="leaf-decoration"><i class="fas fa-spa"></i> <i class="fas fa-feather"></i></div>
+    </header>
+
+    <div class="container">
+        <!-- intro card (visible first) -->
+        <div class="intro-card" id="introCard" data-aos="fade-up">
+            <h2>🌿 discover your plant twin</h2>
+            <p>take the quiz and meet the plant that matches your vibe. from low‑maintenance to wild & free.</p>
+            <button class="start-quiz-btn" onclick="startQuiz()"><i class="fas fa-play"></i> start quiz</button>
+        </div>
+
+        <!-- quiz container (hidden initially) -->
+        <div class="quiz-container" id="quizContainer">
+            <div class="question" id="questionText">question 1</div>
+            <div class="options-grid" id="optionsContainer"></div>
+            <div class="quiz-footer">
+                <button class="quiz-btn" id="prevBtn" onclick="prevQuestion()" disabled><i class="fas fa-arrow-left"></i> previous</button>
+                <button class="quiz-btn" id="nextBtn" onclick="nextQuestion()">next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <!-- result container -->
+        <div class="result-container" id="resultContainer">
+            <div class="result-plant" id="resultEmoji">🌵</div>
+            <div class="result-name" id="resultName">desert dweller</div>
+            <div class="result-desc" id="resultDesc">you're resilient, low‑maintenance, and love sunshine.</div>
+            <button class="reset-btn" onclick="resetQuiz()"><i class="fas fa-redo-alt"></i> take again</button>
+        </div>
+
+        <!-- all plant personalities grid -->
+        <h2 style="font-size:2.5rem; margin-top:3rem;"><i class="fas fa-leaf"></i> meet the plant personalities</h2>
+        <div class="personality-grid" id="plantGrid"></div>
+    </div>
+
+    <!-- modal (plant details) -->
+    <div class="modal" id="plantModal">
+        <div class="modal-content" style="padding:2.5rem;">
+            <button style="float:right; background:none; border:none; font-size:3rem; color:#2f7542;" onclick="closeModal()">✕</button>
+            <div style="text-align:center;">
+                <div style="font-size:5rem;" id="modalEmoji">🌿</div>
+                <h2 id="modalPlantName" style="font-size:2.8rem;">snake plant</h2>
+                <p id="modalPlantDesc" style="margin:2rem 0;">low light? no problem. you're independent and stylish.</p>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({duration:800,once:true});
+
+        // ---------- QUIZ DATA ----------
+        const questions = [
+            { text: "How do you start your day?", options: [
+                { text: "slowly with coffee & sun", value: "calm", icon:"fa-sun" },
+                { text: "energetic, plan ahead", value: "active", icon:"fa-bolt" },
+                { text: "hitting snooze...", value: "chill", icon:"fa-bed" },
+                { text: "meditate & stretch", value: "zen", icon:"fa-spa" }
+            ]},
+            { text: "your ideal weekend?", options: [
+                { text: "hiking / outdoors", value: "wild", icon:"fa-tree" },
+                { text: "cozy home with book", value: "cozy", icon:"fa-book" },
+                { text: "social gatherings", value: "social", icon:"fa-users" },
+                { text: "creative project", value: "artsy", icon:"fa-paint-brush" }
+            ]},
+            { text: "what's your light preference?", options: [
+                { text: "bright direct sun", value: "sun", icon:"fa-sun" },
+                { text: "partial shade", value: "partial", icon:"fa-cloud-sun" },
+                { text: "low light / shade", value: "shade", icon:"fa-moon" },
+                { text: "all of the above", value: "flex", icon:"fa-star" }
+            ]},
+            { text: "how often do you water plants?", options: [
+                { text: "weekly, routine", value: "regular", icon:"fa-calendar-check" },
+                { text: "when i remember", value: "forgetful", icon:"fa-clock" },
+                { text: "check soil first", value: "careful", icon:"fa-hand" },
+                { text: "spray daily", value: "mist", icon:"fa-shower" }
+            ]},
+            { text: "choose a shape that speaks to you:", options: [
+                { text: "tall & upright", value: "tall", icon:"fa-arrow-up" },
+                { text: "round & full", value: "bushy", icon:"fa-circle" },
+                { text: "trailing/vine", value: "vine", icon:"fa-leaf" },
+                { text: "sculptural", value: "art", icon:"fa-cube" }
+            ]}
+        ];
+
+        // plant results mapping (simplified)
+        const plantResults = [
+            { name:"Snake Plant", personality:"resilient minimalist", desc:"low light? no problem. you're independent and hard to kill.", emoji:"🌱", match:"chill,forgetful,shade" },
+            { name:"Fiddle Leaf Fig", personality:"dramatic & trendy", desc:"you love attention and need bright light to thrive.", emoji:"🌿", match:"active,sun,regular,tall" },
+            { name:"Monstera", personality:"wild swiss cheese", desc:"adventurous, fenestrated soul. you love a statement.", emoji:"🪴", match:"wild,partial,careful,art" },
+            { name:"Aloe Vera", personality:"healing & chill", desc":"you're useful, calm, and love sunshine. low maintenance.", emoji:"🌵", match:"zen,sun,forgetful,sculptural" },
+            { name:"Pothos", personality:"trailing optimist", desc:"easygoing, adaptable. you thrive anywhere and help others.", emoji:"🍃", match:"cozy,shade,forgetful,vine" },
+            { name:"Calathea", personality:"prayer plant", desc:"you're sensitive, artistic, and like routine & humidity.", emoji:"🌙", match:"zen,partial,careful,round" }
+        ];
+
+        // ---------- QUIZ STATE ----------
+        let currentQuestion = 0;
+        let answers = new Array(questions.length).fill(null);
+        let quizStarted = false;
+
+        function startQuiz() {
+            document.getElementById('introCard').style.display = 'none';
+            document.getElementById('quizContainer').classList.add('active');
+            currentQuestion = 0;
+            answers.fill(null);
+            renderQuestion();
+            updateNavButtons();
+        }
+
+        function renderQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('questionText').innerText = q.text;
+            let html = '';
+            q.options.forEach((opt, idx) => {
+                const isSelected = answers[currentQuestion] === opt.value;
+                html += `<div class="option-card ${isSelected ? 'selected' : ''}" onclick="selectOption('${opt.value}')">
+                    <i class="fas ${opt.icon}"></i> ${opt.text}
+                </div>`;
+            });
+            document.getElementById('optionsContainer').innerHTML = html;
+        }
+
+        window.selectOption = (value) => {
+            answers[currentQuestion] = value;
+            renderQuestion(); // refresh to show selected
+            updateNavButtons();
+        };
+
+        function updateNavButtons() {
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            // enable next only if answer selected
+            const nextBtn = document.getElementById('nextBtn');
+            if (answers[currentQuestion] !== null) {
+                nextBtn.disabled = false;
+            } else {
+                nextBtn.disabled = true;
+            }
+        }
+
+        window.nextQuestion = () => {
+            if (answers[currentQuestion] === null) {
+                alert("🌱 pick an option to continue");
+                return;
+            }
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+                updateNavButtons();
+            } else {
+                // quiz finished – compute result
+                computeResult();
+            }
+        };
+
+        window.prevQuestion = () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+                updateNavButtons();
+            }
+        };
+
+        function computeResult() {
+            // very simple matching: count occurrences of each match string
+            const answerStr = answers.join(',');
+            let bestMatch = plantResults[0];
+            let highest = 0;
+            plantResults.forEach(p => {
+                let score = 0;
+                p.match.split(',').forEach(tag => {
+                    if (answerStr.includes(tag)) score += 2;
+                });
+                if (score > highest) { highest = score; bestMatch = p; }
+            });
+            // show result
+            document.getElementById('quizContainer').classList.remove('active');
+            document.getElementById('resultContainer').classList.add('show');
+            document.getElementById('resultEmoji').innerText = bestMatch.emoji;
+            document.getElementById('resultName').innerText = bestMatch.name;
+            document.getElementById('resultDesc').innerText = bestMatch.desc + " ("+bestMatch.personality+")";
+        }
+
+        window.resetQuiz = () => {
+            document.getElementById('resultContainer').classList.remove('show');
+            document.getElementById('introCard').style.display = 'block';
+        };
+
+        // plant grid (all personalities)
+        function renderPlantGrid() {
+            const grid = document.getElementById('plantGrid');
+            grid.innerHTML = plantResults.map(p => `
+                <div class="plant-card" onclick="showPlantModal('${p.name}','${p.desc} (${p.personality})','${p.emoji}')">
+                    <div class="plant-image">${p.emoji}</div>
+                    <div class="plant-content">
+                        <div class="plant-name">${p.name}</div>
+                        <div class="plant-personality">${p.personality}</div>
+                    </div>
+                </div>`).join('');
+        }
+        renderPlantGrid();
+
+        window.showPlantModal = (name, desc, emoji) => {
+            document.getElementById('modalPlantName').innerText = name;
+            document.getElementById('modalPlantDesc').innerText = desc;
+            document.getElementById('modalEmoji').innerText = emoji;
+            document.getElementById('plantModal').classList.add('active');
+        };
+        window.closeModal = () => document.getElementById('plantModal').classList.remove('active');
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // escape modal
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('plantModal')) closeModal(); };
+    </script>
+</body>
+</html>

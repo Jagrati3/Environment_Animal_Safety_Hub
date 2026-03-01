@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Crop Rotation Planner - Environment Animal Safety Hub</title>
+    <meta name="description" content="Plan optimal crop rotations based on soil type, climate, and farm goals. Create seasonal rotation plans and visualize crop sequences for maximum soil health.">
+    <meta name="keywords" content="crop rotation, soil health, sustainable farming, agriculture, farm planning, nitrogen fixing crops, cover crops">
+    <link rel="stylesheet" href="../css/dynamic-crop-rotation-planner.css">
+    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@3.0.0"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html" class="brand-link">
+                    <img src="../assets/icons/logo.png" alt="Environment Animal Safety Hub Logo" class="brand-logo">
+                    <span class="brand-text">Environment Animal Safety Hub</span>
+                </a>
+            </div>
+            <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+            <div class="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="../index.html" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="eco-home-audit.html" class="nav-link">Eco Audit</a></li>
+                    <li class="nav-item"><a href="eco-product-finder.html" class="nav-link">Product Finder</a></li>
+                    <li class="nav-item"><a href="energy-bill-predictor.html" class="nav-link">Energy Predictor</a></li>
+                    <li class="nav-item"><a href="impact-calculator.html" class="nav-link">Impact Calculator</a></li>
+                    <li class="nav-item"><a href="wildlife-reporting.html" class="nav-link">Wildlife Reporting</a></li>
+                    <li class="nav-item"><a href="dynamic-crop-rotation-planner.html" class="nav-link active">Crop Rotation</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1 class="hero-title">Dynamic Crop Rotation Planner</h1>
+                    <p class="hero-subtitle">Optimize your farm's productivity and soil health with intelligent crop rotation planning</p>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">85%</div>
+                            <div class="stat-label">Soil Health Improvement</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">60%</div>
+                            <div class="stat-label">Pest Reduction</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">40%</div>
+                            <div class="stat-label">Yield Increase</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="rotation-wheel">
+                        <div class="crop-segment corn">Corn</div>
+                        <div class="crop-segment soybean">Soybean</div>
+                        <div class="crop-segment wheat">Wheat</div>
+                        <div class="crop-segment alfalfa">Alfalfa</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Farm Setup Section -->
+        <section class="setup-section" id="farm-setup">
+            <div class="container">
+                <h2 class="section-title">Farm Configuration</h2>
+                <p class="section-description">Configure your farm parameters to get personalized crop rotation recommendations</p>
+
+                <div class="setup-grid">
+                    <div class="setup-card">
+                        <h3 class="card-title">Location & Climate</h3>
+                        <div class="form-group">
+                            <label for="farm-location" class="form-label">Farm Location</label>
+                            <select id="farm-location" class="form-select">
+                                <option value="">Select your region...</option>
+                                <option value="midwest">Midwest (Corn Belt)</option>
+                                <option value="south">Southern US</option>
+                                <option value="west">Western US</option>
+                                <option value="northeast">Northeast</option>
+                                <option value="pacific-northwest">Pacific Northwest</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="soil-type" class="form-label">Primary Soil Type</label>
+                            <select id="soil-type" class="form-select">
+                                <option value="">Select soil type...</option>
+                                <option value="clay">Clay Soil</option>
+                                <option value="sandy">Sandy Soil</option>
+                                <option value="loam">Loam Soil</option>
+                                <option value="silt">Silt Soil</option>
+                                <option value="chalky">Chalky Soil</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="climate-zone" class="form-label">Climate Zone</label>
+                            <select id="climate-zone" class="form-select">
+                                <option value="">Select climate zone...</option>
+                                <option value="temperate">Temperate</option>
+                                <option value="continental">Continental</option>
+                                <option value="subtropical">Subtropical</option>
+                                <option value="mediterranean">Mediterranean</option>
+                                <option value="desert">Desert/Arid</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="setup-card">
+                        <h3 class="card-title">Farm Goals & Constraints</h3>
+                        <div class="form-group">
+                            <label for="primary-goal" class="form-label">Primary Goal</label>
+                            <select id="primary-goal" class="form-select">
+                                <option value="">Select primary goal...</option>
+                                <option value="soil-health">Soil Health Improvement</option>
+                                <option value="yield-maximization">Yield Maximization</option>
+                                <option value="pest-control">Pest & Disease Control</option>
+                                <option value="sustainability">Sustainability</option>
+                                <option value="profit">Profit Optimization</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="farm-size" class="form-label">Farm Size (acres)</label>
+                            <input type="number" id="farm-size" class="form-input" placeholder="Enter farm size" min="1" max="10000">
+                        </div>
+                        <div class="form-group">
+                            <label for="equipment" class="form-label">Available Equipment</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="has-tillage" class="form-checkbox">
+                                    <span class="checkmark"></span>
+                                    Tillage Equipment
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="has-irrigation" class="form-checkbox">
+                                    <span class="checkmark"></span>
+                                    Irrigation System
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="has-organic" class="form-checkbox">
+                                    <span class="checkmark"></span>
+                                    Organic Certification
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setup-card">
+                        <h3 class="card-title">Current Crops & History</h3>
+                        <div class="form-group">
+                            <label for="current-crops" class="form-label">Current Crops</label>
+                            <div class="crop-selector">
+                                <div class="crop-tag" data-crop="corn">Corn <span class="remove-tag">×</span></div>
+                                <div class="crop-tag" data-crop="soybean">Soybean <span class="remove-tag">×</span></div>
+                                <input type="text" id="crop-input" class="form-input" placeholder="Add crop..." list="crop-list">
+                                <datalist id="crop-list">
+                                    <option value="Wheat">
+                                    <option value="Rice">
+                                    <option value="Barley">
+                                    <option value="Oats">
+                                    <option value="Cotton">
+                                    <option value="Sugarcane">
+                                    <option value="Potatoes">
+                                    <option value="Tomatoes">
+                                    <option value="Lettuce">
+                                    <option value="Carrots">
+                                </datalist>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="rotation-history" class="form-label">Previous Rotation</label>
+                            <textarea id="rotation-history" class="form-textarea" placeholder="Describe your last 3 years of crop rotation..." rows="4"></textarea>
+                        </div>
+                        <button id="generate-plan" class="btn btn-primary btn-large">Generate Rotation Plan</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Rotation Plan Section -->
+        <section class="plan-section" id="rotation-plan">
+            <div class="container">
+                <h2 class="section-title">Your Rotation Plan</h2>
+                <p class="section-description">Visualize and customize your optimal crop rotation schedule</p>
+
+                <div class="plan-controls">
+                    <div class="control-group">
+                        <label for="rotation-years" class="control-label">Planning Period</label>
+                        <select id="rotation-years" class="form-select">
+                            <option value="3">3 Years</option>
+                            <option value="4">4 Years</option>
+                            <option value="5">5 Years</option>
+                            <option value="6">6 Years</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="seasons" class="control-label">Seasons per Year</label>
+                        <select id="seasons" class="form-select">
+                            <option value="2">2 Seasons</option>
+                            <option value="3">3 Seasons</option>
+                            <option value="4">4 Seasons</option>
+                        </select>
+                    </div>
+                    <button id="simulate-scenarios" class="btn btn-secondary">Simulate Scenarios</button>
+                    <button id="export-plan" class="btn btn-outline">Export Plan</button>
+                </div>
+
+                <div class="rotation-visualization">
+                    <div class="rotation-timeline">
+                        <div class="timeline-header">
+                            <div class="year-column">Year</div>
+                            <div class="season-column">Spring</div>
+                            <div class="season-column">Summer</div>
+                            <div class="season-column">Fall</div>
+                            <div class="season-column">Winter</div>
+                        </div>
+                        <div id="rotation-grid" class="rotation-grid">
+                            <!-- Rotation plan will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="plan-details">
+                    <div class="detail-card">
+                        <h3 class="detail-title">Soil Health Benefits</h3>
+                        <div id="soil-benefits" class="benefit-list">
+                            <!-- Benefits will be populated here -->
+                        </div>
+                    </div>
+                    <div class="detail-card">
+                        <h3 class="detail-title">Pest & Disease Control</h3>
+                        <div id="pest-control" class="benefit-list">
+                            <!-- Pest control info will be populated here -->
+                        </div>
+                    </div>
+                    <div class="detail-card">
+                        <h3 class="detail-title">Nutrient Management</h3>
+                        <div id="nutrient-management" class="benefit-list">
+                            <!-- Nutrient management will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scenario Simulation Section -->
+        <section class="simulation-section" id="scenario-simulation">
+            <div class="container">
+                <h2 class="section-title">Scenario Simulation</h2>
+                <p class="section-description">Compare different rotation scenarios and their environmental impacts</p>
+
+                <div class="simulation-controls">
+                    <div class="scenario-tabs">
+                        <button class="scenario-tab active" data-scenario="current">Current Practice</button>
+                        <button class="scenario-tab" data-scenario="recommended">Recommended Plan</button>
+                        <button class="scenario-tab" data-scenario="alternative">Alternative A</button>
+                        <button class="scenario-tab" data-scenario="alternative-b">Alternative B</button>
+                    </div>
+                    <div class="simulation-metrics">
+                        <div class="metric-selector">
+                            <label for="primary-metric" class="metric-label">Primary Metric</label>
+                            <select id="primary-metric" class="form-select">
+                                <option value="yield">Crop Yield</option>
+                                <option value="soil-health">Soil Health</option>
+                                <option value="profit">Profit Margin</option>
+                                <option value="carbon">Carbon Sequestration</option>
+                                <option value="biodiversity">Biodiversity</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="simulation-results">
+                    <div class="simulation-chart">
+                        <canvas id="simulation-chart"></canvas>
+                    </div>
+                    <div class="simulation-summary">
+                        <div class="summary-card">
+                            <h3 class="summary-title">Yield Impact</h3>
+                            <div class="summary-value" id="yield-impact">+15%</div>
+                            <div class="summary-description">Projected yield increase over 5 years</div>
+                        </div>
+                        <div class="summary-card">
+                            <h3 class="summary-title">Soil Health Score</h3>
+                            <div class="summary-value" id="soil-health-score">85/100</div>
+                            <div class="summary-description">Overall soil health improvement</div>
+                        </div>
+                        <div class="summary-card">
+                            <h3 class="summary-title">Cost Savings</h3>
+                            <div class="summary-value" id="cost-savings">$2,400</div>
+                            <div class="summary-description">Annual savings on inputs</div>
+                        </div>
+                        <div class="summary-card">
+                            <h3 class="summary-title">Carbon Impact</h3>
+                            <div class="summary-value" id="carbon-impact">+1.2 tons</div>
+                            <div class="summary-description">CO2 sequestration per acre</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Crop Recommendations Section -->
+        <section class="recommendations-section" id="crop-recommendations">
+            <div class="container">
+                <h2 class="section-title">Crop Recommendations</h2>
+                <p class="section-description">Discover optimal crops for your rotation based on your farm conditions</p>
+
+                <div class="recommendations-grid">
+                    <div class="recommendation-card featured">
+                        <div class="crop-header">
+                            <div class="crop-icon">🌽</div>
+                            <h3 class="crop-name">Corn</h3>
+                            <div class="crop-type">Grain Crop</div>
+                        </div>
+                        <div class="crop-details">
+                            <div class="crop-benefit">
+                                <span class="benefit-label">Soil Health:</span>
+                                <span class="benefit-value">Medium</span>
+                            </div>
+                            <div class="crop-benefit">
+                                <span class="benefit-label">Nutrient Demand:</span>
+                                <span class="benefit-value">High</span>
+                            </div>
+                            <div class="crop-benefit">
+                                <span class="benefit-label">Pest Resistance:</span>
+                                <span class="benefit-value">Low</span>
+                            </div>
+                        </div>
+                        <div class="crop-timing">
+                            <div class="timing-item">
+                                <span class="timing-label">Planting:</span>
+                                <span class="timing-value">April-May</span>
+                            </div>
+                            <div class="timing-item">
+                                <span class="timing-label">Harvest:</span>
+                                <span class="timing-value">September-October</span>
+                            </div>
+                        </div>
+                        <div class="crop-followers">
+                            <h4>Good Followers:</h4>
+                            <div class="follower-tags">
+                                <span class="follower-tag">Soybean</span>
+                                <span class="follower-tag">Wheat</span>
+                                <span class="follower-tag">Alfalfa</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-card">
+                        <div class="crop-header">
+                            <div class="crop-icon">🌱</div>
+                            <h3 class="crop-name">Soybean</h3>
+                            <div class="crop-type">Legume</div>
+                        </div>
+                        <div class="crop-details">
+                            <div class="crop-benefit">
+                                <span class="benefit-label">Soil Health:</span>
+                                <span class="benefit-value">High</span>
+                            </div>
+                            <div class="crop-benefit">
+                                <span class="benefit-label">Nutrient Demand:</span>
+                                <span class="benefit-value">Medium</span>
+                            </div>
+                            <div class="crop-benefit">
+                                <span class="benefit-label">Pest Resistance:</span>
+                                <span class="benefit-value">Medium</span>
+                            </div>
+                        </div>
+                        <div class="crop-timing">
+                            <div class="timing-item">
+                                <span class="timing-label">Planting:</span>
+                                <span class="timing-value">May-June</span>
+                            </div>
+                            <div class="timing-item">
+                                <span class="timing-label">Harvest:</span>
+                                <span class="timing-value">September-October</span>
+                            </div>
+                        </div>
+                        <div class="crop-followers">
+                            <h4>Good Followers:</h4>
+                            <div class="follower-tags">
+                                <span class="follower-tag">Corn</span>
+                                <span class="follower-tag">Wheat</span>
+                                <span class="follower-tag">Barley</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-card">
+                        <div class="crop-header">
+                            <div class="crop-icon">🌾</div>
+                            <h3 class="crop-name">Wheat</h3>
+                            <div class="crop-type">Grain Crop</div>
+                        </div>
+                        <div class="crop-details">
+                            <div class="crop-benefit">
+                                <span class="benefit-label">Soil Health:</span>
+                                <span class="benefit-value">Medium</span>
+                            </div>
+                            <div class="crop-benefit">
+                                <span class="benefit-label">Nutrient Demand:</span>
+                                <span class="benefit-value">Medium</span>
+                            </div>
+                            <div class="crop-benefit">
+                                <span class="benefit-label">Pest Resistance:</span>
+                                <span class="benefit-value">High</span>
+                            </div>
+                        </div>
+                        <div class="crop-timing">
+                            <div class="timing-item">
+                                <span class="timing-label">Planting:</span>
+                                <span class="timing-value">September-October</span>
+                            </div>
+                            <div class="timing-item">
+                                <span class="timing-label">Harvest:</span>
+                                <span class="timing-value">June-July</span>
+                            </div>
+                        </div>
+                        <div class="crop-followers">
+                            <h4>Good Followers:</h4>
+                            <div class="follower-tags">
+                                <span class="follower-tag">Soybean</span>
+                                <span class="follower-tag">Corn</span>
+                                <span class="follower-tag">Cotton</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-card">
+                        <div class="crop-header">
+                            <div class="crop-icon">🌿</div>
+                            <h3 class="crop-name">Alfalfa</h3>
+                            <div class="crop-type">Forage/Legume</div>
+                        </div>
+                        <div class="crop-details">
+                            <div class="crop-benefit">
+                                <span class="benefit-label">Soil Health:</span>
+                                <span class="benefit-value">Very High</span>
+                            </div>
+                            <div class="crop-benefit">
+                                <span class="benefit-label">Nutrient Demand:</span>
+                                <span class="benefit-value">Low</span>
+                            </div>
+                            <div class="crop-benefit">
+                                <span class="benefit-label">Pest Resistance:</span>
+                                <span class="benefit-value">High</span>
+                            </div>
+                        </div>
+                        <div class="crop-timing">
+                            <div class="timing-item">
+                                <span class="timing-label">Planting:</span>
+                                <span class="timing-value">March-May</span>
+                            </div>
+                            <div class="timing-item">
+                                <span class="timing-label">Harvest:</span>
+                                <span class="timing-value">Multiple cuts</span>
+                            </div>
+                        </div>
+                        <div class="crop-followers">
+                            <h4>Good Followers:</h4>
+                            <div class="follower-tags">
+                                <span class="follower-tag">Corn</span>
+                                <span class="follower-tag">Wheat</span>
+                                <span class="follower-tag">Barley</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nitrogen-fixers-section">
+                    <h3 class="subsection-title">Nitrogen-Fixing Crops</h3>
+                    <p class="subsection-description">These crops naturally add nitrogen to the soil, reducing fertilizer needs</p>
+                    <div class="nitrogen-fixers-grid">
+                        <div class="fixer-card">
+                            <div class="fixer-icon">🌱</div>
+                            <h4 class="fixer-name">Clover</h4>
+                            <p class="fixer-description">Excellent cover crop that fixes up to 100 lbs of nitrogen per acre</p>
+                        </div>
+                        <div class="fixer-card">
+                            <div class="fixer-icon">🌿</div>
+                            <h4 class="fixer-name">Vetch</h4>
+                            <p class="fixer-description">Winter cover crop that adds nitrogen and improves soil structure</p>
+                        </div>
+                        <div class="fixer-card">
+                            <div class="fixer-icon">🌾</div>
+                            <h4 class="fixer-name">Field Peas</h4>
+                            <p class="fixer-description">Cool-season legume that fixes nitrogen and suppresses weeds</p>
+                        </div>
+                        <div class="fixer-card">
+                            <div class="fixer-icon">🌰</div>
+                            <h4 class="fixer-name">Lupins</h4>
+                            <p class="fixer-description">Deep-rooted legume that fixes nitrogen and breaks up compacted soil</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seasonal Alerts Section -->
+        <section class="alerts-section" id="seasonal-alerts">
+            <div class="container">
+                <h2 class="section-title">Seasonal Planting Alerts</h2>
+                <p class="section-description">Stay on track with timely reminders for planting and field operations</p>
+
+                <div class="alerts-container">
+                    <div class="alert-card urgent">
+                        <div class="alert-icon">🚨</div>
+                        <div class="alert-content">
+                            <h3 class="alert-title">Spring Planting Window Opening</h3>
+                            <p class="alert-message">Optimal soil temperature reached for corn planting in your region. Plant within the next 2 weeks for best yields.</p>
+                            <div class="alert-date">March 15, 2026</div>
+                        </div>
+                        <button class="alert-action">Set Reminder</button>
+                    </div>
+
+                    <div class="alert-card info">
+                        <div class="alert-icon">ℹ️</div>
+                        <div class="alert-content">
+                            <h3 class="alert-title">Soil Test Recommended</h3>
+                            <p class="alert-message">Last soil test was over 2 years ago. Consider testing before planting to optimize fertilizer application.</p>
+                            <div class="alert-date">Ongoing</div>
+                        </div>
+                        <button class="alert-action">Schedule Test</button>
+                    </div>
+
+                    <div class="alert-card warning">
+                        <div class="alert-icon">⚠️</div>
+                        <div class="alert-content">
+                            <h3 class="alert-title">Pest Monitoring Alert</h3>
+                            <p class="alert-message">Corn borer populations are high in your area. Monitor fields regularly and consider preventative measures.</p>
+                            <div class="alert-date">April 1, 2026</div>
+                        </div>
+                        <button class="alert-action">View Details</button>
+                    </div>
+
+                    <div class="alert-card success">
+                        <div class="alert-icon">✅</div>
+                        <div class="alert-content">
+                            <h3 class="alert-title">Cover Crop Success</h3>
+                            <p class="alert-message">Your winter rye cover crop has established well. Excellent biomass for soil protection and nutrient cycling.</p>
+                            <div class="alert-date">February 20, 2026</div>
+                        </div>
+                        <button class="alert-action">View Photos</button>
+                    </div>
+                </div>
+
+                <div class="alerts-calendar">
+                    <h3 class="subsection-title">2026 Crop Calendar</h3>
+                    <div class="calendar-grid">
+                        <div class="calendar-month">
+                            <h4>March</h4>
+                            <div class="calendar-events">
+                                <div class="calendar-event planting">Corn Planting: 15-30</div>
+                                <div class="calendar-event maintenance">Soil Test: 1-15</div>
+                            </div>
+                        </div>
+                        <div class="calendar-month">
+                            <h4>April</h4>
+                            <div class="calendar-events">
+                                <div class="calendar-event planting">Soybean Planting: 1-15</div>
+                                <div class="calendar-event maintenance">Fertilizer Application: 10-20</div>
+                            </div>
+                        </div>
+                        <div class="calendar-month">
+                            <h4>May</h4>
+                            <div class="calendar-events">
+                                <div class="calendar-event planting">Wheat Harvest: 15-30</div>
+                                <div class="calendar-event maintenance">Pest Scouting: Weekly</div>
+                            </div>
+                        </div>
+                        <div class="calendar-month">
+                            <h4>June</h4>
+                            <div class="calendar-events">
+                                <div class="calendar-event maintenance">Irrigation Start: As needed</div>
+                                <div class="calendar-event monitoring">Growth Monitoring: Bi-weekly</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources Section -->
+        <section class="resources-section" id="resources">
+            <div class="container">
+                <h2 class="section-title">Resources & Guides</h2>
+                <p class="section-description">Learn more about crop rotation principles and best practices</p>
+
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <div class="resource-icon">📚</div>
+                        <h3 class="resource-title">Crop Rotation Fundamentals</h3>
+                        <p class="resource-description">Comprehensive guide to understanding crop rotation principles and their benefits for soil health.</p>
+                        <a href="#" class="resource-link">Read Guide →</a>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-icon">🧪</div>
+                        <h3 class="resource-title">Soil Health Testing</h3>
+                        <p class="resource-description">Learn how to test your soil and interpret results for better crop rotation planning.</p>
+                        <a href="#" class="resource-link">View Tests →</a>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-icon">🌱</div>
+                        <h3 class="resource-title">Cover Crop Selection</h3>
+                        <p class="resource-description">Choose the right cover crops for your climate and soil type to maximize benefits.</p>
+                        <a href="#" class="resource-link">Browse Crops →</a>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-icon">📊</div>
+                        <h3 class="resource-title">Yield Data Analysis</h3>
+                        <p class="resource-description">Analyze historical yield data to optimize your rotation sequences and timing.</p>
+                        <a href="#" class="resource-link">Analyze Data →</a>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-icon">🐛</div>
+                        <h3 class="resource-title">Integrated Pest Management</h3>
+                        <p class="resource-description">Use crop rotation as part of an integrated approach to pest and disease management.</p>
+                        <a href="#" class="resource-link">Learn More →</a>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-icon">💰</div>
+                        <h3 class="resource-title">Economic Analysis</h3>
+                        <p class="resource-description">Calculate the economic benefits of different crop rotation strategies.</p>
+                        <a href="#" class="resource-link">Calculate ROI →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Sources Section -->
+        <section class="data-sources-section" id="data-sources">
+            <div class="container">
+                <h2 class="section-title">Data Sources & Methodology</h2>
+                <p class="section-description">Understanding the science behind our crop rotation recommendations</p>
+
+                <div class="methodology-content">
+                    <div class="methodology-intro">
+                        <h3>How We Calculate Rotation Plans</h3>
+                        <p>Our crop rotation planner uses a combination of scientific research, regional climate data, and soil science principles to generate optimal rotation sequences. The algorithm considers:</p>
+                        <ul class="methodology-list">
+                            <li><strong>Nutrient Cycling:</strong> Crops have different nutrient requirements and contributions</li>
+                            <li><strong>Pest Management:</strong> Breaking pest and disease cycles through crop diversity</li>
+                            <li><strong>Soil Structure:</strong> Root systems that improve or maintain soil health</li>
+                            <li><strong>Climate Adaptation:</strong> Seasonal timing and weather considerations</li>
+                            <li><strong>Economic Factors:</strong> Market prices and input costs</li>
+                        </ul>
+                    </div>
+
+                    <div class="data-sources-grid">
+                        <div class="data-source-card">
+                            <h4 class="source-title">USDA Soil Data</h4>
+                            <p class="source-description">Comprehensive soil classification and fertility data from the United States Department of Agriculture.</p>
+                            <div class="source-link">
+                                <a href="https://www.nrcs.usda.gov/" target="_blank">nrcs.usda.gov</a>
+                            </div>
+                        </div>
+
+                        <div class="data-source-card">
+                            <h4 class="source-title">NOAA Climate Data</h4>
+                            <p class="source-description">Historical weather patterns and climate projections for agricultural planning.</p>
+                            <div class="source-link">
+                                <a href="https://www.noaa.gov/" target="_blank">noaa.gov</a>
+                            </div>
+                        </div>
+
+                        <div class="data-source-card">
+                            <h4 class="source-title">Extension Services</h4>
+                            <p class="source-description">Regional agricultural research and recommendations from land-grant universities.</p>
+                            <div class="source-link">
+                                <a href="https://extension.org/" target="_blank">extension.org</a>
+                            </div>
+                        </div>
+
+                        <div class="data-source-card">
+                            <h4 class="source-title">Research Publications</h4>
+                            <p class="source-description">Peer-reviewed studies on crop rotation effectiveness and soil health improvements.</p>
+                            <div class="source-link">
+                                <a href="https://www.sciencedirect.com/" target="_blank">sciencedirect.com</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="footer-title">Environment Animal Safety Hub</h3>
+                    <p class="footer-description">Promoting sustainable agriculture and environmental stewardship through innovative technology and data-driven insights.</p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-subtitle">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="eco-home-audit.html">Eco Audit</a></li>
+                        <li><a href="eco-product-finder.html">Product Finder</a></li>
+                        <li><a href="energy-bill-predictor.html">Energy Predictor</a></li>
+                        <li><a href="impact-calculator.html">Impact Calculator</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-subtitle">Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="../docs/API_DOCUMENTATION.md">API Documentation</a></li>
+                        <li><a href="../docs/CONTRIBUTING.md">Contributing</a></li>
+                        <li><a href="../docs/PERFORMANCE_OPTIMIZATION_README.md">Performance Guide</a></li>
+                        <li><a href="../docs/ROADMAP.md">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-subtitle">Connect</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="GitHub">🐙</a>
+                        <a href="#" class="social-link" aria-label="Twitter">🐦</a>
+                        <a href="#" class="social-link" aria-label="LinkedIn">💼</a>
+                        <a href="#" class="social-link" aria-label="Email">📧</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="copyright">&copy; 2026 Environment Animal Safety Hub. All rights reserved.</p>
+                <div class="footer-legal">
+                    <a href="../docs/CODE_OF_CONDUCT.md">Code of Conduct</a>
+                    <a href="../docs/PRIVACY_POLICY.md">Privacy Policy</a>
+                    <a href="../LICENSE">License</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/dynamic-crop-rotation-planner.js"></script>
+</body>
+</html>

@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satellite Earth Watch | Live Views | EcoLife</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Leaflet CSS for Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a0f1a, #1a1f2a);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Animated Stars Background */
+        .stars-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Header */
+        .satellite-header {
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            background: linear-gradient(180deg, rgba(0,0,0,0.8), transparent);
+        }
+
+        .satellite-header h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            text-shadow: 0 0 20px rgba(0,255,255,0.5);
+        }
+
+        .satellite-header h1 i {
+            color: #00ffff;
+            animation: orbit 10s linear infinite;
+        }
+
+        @keyframes orbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .satellite-header p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+            background: rgba(255,255,255,0.1);
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* Live Badge */
+        .live-badge {
+            display: inline-block;
+            background: #ff4444;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 60px;
+            font-weight: 700;
+            margin-top: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Live Earth View */
+        .earth-view {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 1.5rem;
+            border: 2px solid rgba(255,255,255,0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .view-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .view-title {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .view-title i {
+            color: #00ffff;
+        }
+
+        .satellite-info {
+            background: rgba(0,255,255,0.1);
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+            border: 1px solid #00ffff;
+            color: #00ffff;
+        }
+
+        .earth-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            border-radius: 30px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        #earthMap {
+            width: 100%;
+            height: 100%;
+            background: #0a1a2a;
+        }
+
+        .earth-overlay {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            background: rgba(0,0,0,0.7);
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            border: 1px solid #00ffff;
+        }
+
+        .coordinates {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            padding: 1rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 40px;
+        }
+
+        .coord-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .coord-item i {
+            color: #00ffff;
+        }
+
+        /* Satellite Panel */
+        .satellite-panel {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 1.5rem;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .panel-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .panel-title i {
+            color: #00ffff;
+        }
+
+        /* Satellite List */
+        .satellite-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .satellite-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 30px;
+            padding: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .satellite-card:hover {
+            background: rgba(0,255,255,0.1);
+            border-color: #00ffff;
+            transform: translateX(10px);
+        }
+
+        .satellite-card.active {
+            background: rgba(0,255,255,0.15);
+            border-color: #00ffff;
+        }
+
+        .satellite-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #00ffff, #0088ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .satellite-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .satellite-info p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .satellite-status {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .status-dot.online {
+            background: #4caf50;
+            box-shadow: 0 0 10px #4caf50;
+        }
+
+        .status-dot.offline {
+            background: #f44336;
+        }
+
+        /* Layer Controls */
+        .layer-controls {
+            background: rgba(0,0,0,0.3);
+            border-radius: 40px;
+            padding: 1.5rem;
+        }
+
+        .layer-title {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .layer-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .layer-btn {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .layer-btn:hover {
+            background: rgba(0,255,255,0.1);
+            border-color: #00ffff;
+        }
+
+        .layer-btn.active {
+            background: #00ffff;
+            color: #0a0f1a;
+            border-color: #00ffff;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            border-color: #00ffff;
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            color: #00ffff;
+            margin-bottom: 1rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* Data Layers Grid */
+        .layers-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .layer-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .layer-card:hover {
+            border-color: #00ffff;
+            transform: translateY(-5px);
+        }
+
+        .layer-card.active {
+            background: rgba(0,255,255,0.1);
+            border-color: #00ffff;
+        }
+
+        .layer-icon {
+            font-size: 3rem;
+            color: #00ffff;
+            margin-bottom: 1rem;
+        }
+
+        .layer-card h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .layer-card p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* Timeline */
+        .timeline-section {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .timeline-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .timeline-btn:hover {
+            background: #00ffff;
+            color: #0a0f1a;
+        }
+
+        .timeline-slider {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .timeline-progress {
+            width: 30%;
+            height: 100%;
+            background: #00ffff;
+            border-radius: 4px;
+            position: relative;
+            box-shadow: 0 0 20px #00ffff;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            top: -8px;
+            width: 20px;
+            height: 20px;
+            background: #00ffff;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .timeline-labels {
+            display: flex;
+            justify-content: space-between;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+
+        /* Alerts Section */
+        .alerts-section {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .alerts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .alerts-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .alert-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 30px;
+            padding: 1.5rem;
+            border-left: 6px solid;
+        }
+
+        .alert-card.warning { border-color: #ff4444; }
+        .alert-card.info { border-color: #00ffff; }
+        .alert-card.success { border-color: #4caf50; }
+
+        .alert-time {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .alert-location {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 1rem;
+        }
+
+        .alert-severity {
+            display: inline-block;
+            padding: 0.2rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .severity-high {
+            background: rgba(255,68,68,0.2);
+            color: #ff8888;
+        }
+
+        /* Satellite Passes */
+        .passes-section {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .passes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .pass-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 30px;
+        }
+
+        .pass-time {
+            min-width: 100px;
+            font-weight: 700;
+            color: #00ffff;
+        }
+
+        .pass-satellite {
+            flex: 1;
+        }
+
+        .pass-duration {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .pass-btn {
+            background: transparent;
+            border: 2px solid #00ffff;
+            color: #00ffff;
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pass-btn:hover {
+            background: #00ffff;
+            color: #0a0f1a;
+        }
+
+        /* Data Export */
+        .export-section {
+            background: linear-gradient(135deg, #00ffff, #0088ff);
+            border-radius: 40px;
+            padding: 2rem;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .export-text h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #0a0f1a;
+        }
+
+        .export-text p {
+            color: #1a2a3a;
+        }
+
+        .export-btn {
+            background: #0a0f1a;
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .export-btn:hover {
+            background: white;
+            color: #0a0f1a;
+            transform: translateY(-5px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a2a3a, #0a1a2a);
+            border-radius: 60px;
+            max-width: 600px;
+            width: 100%;
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+            border: 3px solid #00ffff;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #00ffff;
+            cursor: pointer;
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            color: #00ffff;
+            margin-bottom: 1rem;
+        }
+
+        .modal h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal p {
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .modal-btn {
+            background: #00ffff;
+            color: #0a0f1a;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: #00ffff;
+            color: #0a0f1a;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,255,255,0.3);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        .back-to-top:hover {
+            background: white;
+            transform: translateY(-5px);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .layers-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .alerts-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .satellite-header h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .layers-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .alerts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pass-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .coordinates {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .export-section {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Stars Background -->
+    <div class="stars-bg" id="stars"></div>
+
+    <!-- Header -->
+    <header class="satellite-header">
+        <h1>
+            <i class="fas fa-satellite"></i>
+            Satellite Earth Watch
+        </h1>
+        <p>Live satellite imagery • Real-time environmental monitoring • Track our changing planet</p>
+        <div class="live-badge">
+            <i class="fas fa-circle"></i> LIVE DATA STREAM
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Live Earth View -->
+            <div class="earth-view" data-aos="fade-right">
+                <div class="view-header">
+                    <h2 class="view-title">
+                        <i class="fas fa-globe-americas"></i>
+                        Live Earth View
+                    </h2>
+                    <div class="satellite-info">
+                        <i class="fas fa-satellite"></i> Sentinel-2 • 4K
+                    </div>
+                </div>
+                
+                <div class="earth-container">
+                    <div id="earthMap"></div>
+                    <div class="earth-overlay">
+                        <i class="fas fa-video"></i> Real-time • Updated every 10 min
+                    </div>
+                </div>
+
+                <div class="coordinates">
+                    <div class="coord-item">
+                        <i class="fas fa-latitude"></i>
+                        <span>Latitude: <span id="latitude">34.0522° N</span></span>
+                    </div>
+                    <div class="coord-item">
+                        <i class="fas fa-longitude"></i>
+                        <span>Longitude: <span id="longitude">118.2437° W</span></span>
+                    </div>
+                    <div class="coord-item">
+                        <i class="fas fa-eye"></i>
+                        <span>Zoom: <span id="zoomLevel">10x</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Satellite Panel -->
+            <div class="satellite-panel" data-aos="fade-left">
+                <h2 class="panel-title">
+                    <i class="fas fa-satellite"></i>
+                    Active Satellites
+                </h2>
+
+                <div class="satellite-list">
+                    <div class="satellite-card active" onclick="selectSatellite('sentinel2')">
+                        <div class="satellite-icon">
+                            <i class="fas fa-satellite"></i>
+                        </div>
+                        <div class="satellite-info">
+                            <h3>Sentinel-2</h3>
+                            <p>ESA • Optical Imaging</p>
+                        </div>
+                        <div class="satellite-status">
+                            <span class="status-dot online"></span>
+                            <span>Online</span>
+                        </div>
+                    </div>
+                    <div class="satellite-card" onclick="selectSatellite('landsat9')">
+                        <div class="satellite-icon">
+                            <i class="fas fa-satellite"></i>
+                        </div>
+                        <div class="satellite-info">
+                            <h3>Landsat 9</h3>
+                            <p>NASA/USGS • Thermal Imaging</p>
+                        </div>
+                        <div class="satellite-status">
+                            <span class="status-dot online"></span>
+                            <span>Online</span>
+                        </div>
+                    </div>
+                    <div class="satellite-card" onclick="selectSatellite('modis')">
+                        <div class="satellite-icon">
+                            <i class="fas fa-satellite"></i>
+                        </div>
+                        <div class="satellite-info">
+                            <h3>MODIS Aqua</h3>
+                            <p>NASA • Atmosphere Monitoring</p>
+                        </div>
+                        <div class="satellite-status">
+                            <span class="status-dot online"></span>
+                            <span>Online</span>
+                        </div>
+                    </div>
+                    <div class="satellite-card" onclick="selectSatellite('goes')">
+                        <div class="satellite-icon">
+                            <i class="fas fa-cloud-sun"></i>
+                        </div>
+                        <div class="satellite-info">
+                            <h3>GOES-16</h3>
+                            <p>NOAA • Weather Satellite</p>
+                        </div>
+                        <div class="satellite-status">
+                            <span class="status-dot online"></span>
+                            <span>Online</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layer-controls">
+                    <h3 class="layer-title">
+                        <i class="fas fa-layer-group"></i>
+                        Map Layers
+                    </h3>
+                    <div class="layer-buttons">
+                        <button class="layer-btn active" onclick="changeLayer('satellite')">
+                            <i class="fas fa-satellite"></i> Satellite
+                        </button>
+                        <button class="layer-btn" onclick="changeLayer('thermal')">
+                            <i class="fas fa-fire"></i> Thermal
+                        </button>
+                        <button class="layer-btn" onclick="changeLayer('vegetation')">
+                            <i class="fas fa-leaf"></i> Vegetation
+                        </button>
+                        <button class="layer-btn" onclick="changeLayer('clouds')">
+                            <i class="fas fa-cloud"></i> Clouds
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid" data-aos="fade-up">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-satellite"></i>
+                </div>
+                <div class="stat-value" id="satelliteCount">24</div>
+                <div class="stat-label">Active Satellites</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-image"></i>
+                </div>
+                <div class="stat-value" id="imageCount">1,234</div>
+                <div class="stat-label">Images Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <div class="stat-value" id="coverage">98%</div>
+                <div class="stat-label">Earth Coverage</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="stat-value" id="updates">10m</div>
+                <div class="stat-label">Update Frequency</div>
+            </div>
+        </div>
+
+        <!-- Data Layers -->
+        <h2 class="panel-title" style="margin-top: 2rem;" data-aos="fade-right">
+            <i class="fas fa-database"></i>
+            Environmental Data Layers
+        </h2>
+        <div class="layers-grid" data-aos="fade-up">
+            <div class="layer-card active" onclick="toggleDataLayer('temperature')">
+                <div class="layer-icon">
+                    <i class="fas fa-temperature-high"></i>
+                </div>
+                <h3>Sea Surface Temperature</h3>
+                <p>Real-time ocean temperature monitoring</p>
+            </div>
+            <div class="layer-card" onclick="toggleDataLayer('vegetation')">
+                <div class="layer-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h3>Vegetation Index</h3>
+                <p>NDVI - Plant health monitoring</p>
+            </div>
+            <div class="layer-card" onclick="toggleDataLayer('fires')">
+                <div class="layer-icon">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <h3>Active Fires</h3>
+                <p>Global fire detection hotspots</p>
+            </div>
+            <div class="layer-card" onclick="toggleDataLayer('airquality')">
+                <div class="layer-icon">
+                    <i class="fas fa-wind"></i>
+                </div>
+                <h3>Air Quality</h3>
+                <p>Aerosol optical depth monitoring</p>
+            </div>
+            <div class="layer-card" onclick="toggleDataLayer('chlorophyll')">
+                <div class="layer-icon">
+                    <i class="fas fa-water"></i>
+                </div>
+                <h3>Chlorophyll Concentration</h3>
+                <p>Ocean phytoplankton levels</p>
+            </div>
+            <div class="layer-card" onclick="toggleDataLayer('snow')">
+                <div class="layer-icon">
+                    <i class="fas fa-snowflake"></i>
+                </div>
+                <h3>Snow Cover</h3>
+                <p>Global snow and ice extent</p>
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline-section" data-aos="fade-up">
+            <div class="timeline-header">
+                <h3><i class="fas fa-history"></i> Historical Data Timeline</h3>
+                <div class="timeline-controls">
+                    <button class="timeline-btn"><i class="fas fa-play"></i></button>
+                    <button class="timeline-btn"><i class="fas fa-pause"></i></button>
+                    <button class="timeline-btn"><i class="fas fa-stop"></i></button>
+                </div>
+            </div>
+            <div class="timeline-slider">
+                <div class="timeline-progress" style="width: 30%;">
+                    <div class="timeline-marker" style="left: 100%;"></div>
+                </div>
+            </div>
+            <div class="timeline-labels">
+                <span>2020</span>
+                <span>2021</span>
+                <span>2022</span>
+                <span>2023</span>
+                <span>2024</span>
+                <span>2025</span>
+                <span>2026</span>
+            </div>
+        </div>
+
+        <!-- Alerts Section -->
+        <div class="alerts-section" data-aos="fade-up">
+            <div class="alerts-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> Environmental Alerts</h3>
+                <span>Last updated: 2 min ago</span>
+            </div>
+            <div class="alerts-grid">
+                <div class="alert-card warning">
+                    <div class="alert-time">2 minutes ago</div>
+                    <div class="alert-title">
+                        <i class="fas fa-fire"></i> Wildfire Detection
+                    </div>
+                    <div class="alert-location">Amazon Rainforest, Brazil</div>
+                    <span class="alert-severity severity-high">High Severity</span>
+                </div>
+                <div class="alert-card info">
+                    <div class="alert-time">15 minutes ago</div>
+                    <div class="alert-title">
+                        <i class="fas fa-wind"></i> Dust Storm
+                    </div>
+                    <div class="alert-location">Sahara Desert</div>
+                    <span class="alert-severity">Medium Severity</span>
+                </div>
+                <div class="alert-card success">
+                    <div class="alert-time">1 hour ago</div>
+                    <div class="alert-title">
+                        <i class="fas fa-snowflake"></i> Ice Melt Alert
+                    </div>
+                    <div class="alert-location">Greenland Ice Sheet</div>
+                    <span class="alert-severity">Monitoring</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Satellite Passes -->
+        <div class="passes-section" data-aos="fade-up">
+            <h3><i class="fas fa-clock"></i> Upcoming Satellite Passes - Your Location</h3>
+            <div class="passes-list">
+                <div class="pass-item">
+                    <div class="pass-time">07:45 PM</div>
+                    <div class="pass-satellite">ISS (International Space Station)</div>
+                    <div class="pass-duration">Duration: 6 min</div>
+                    <button class="pass-btn" onclick="notifyPass('ISS')">Notify Me</button>
+                </div>
+                <div class="pass-item">
+                    <div class="pass-time">09:12 PM</div>
+                    <div class="pass-satellite">Sentinel-2</div>
+                    <div class="pass-duration">Duration: 8 min</div>
+                    <button class="pass-btn" onclick="notifyPass('Sentinel-2')">Notify Me</button>
+                </div>
+                <div class="pass-item">
+                    <div class="pass-time">11:30 PM</div>
+                    <div class="pass-satellite">Landsat 9</div>
+                    <div class="pass-duration">Duration: 7 min</div>
+                    <button class="pass-btn" onclick="notifyPass('Landsat 9')">Notify Me</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Export -->
+        <div class="export-section" data-aos="fade-up">
+            <div class="export-text">
+                <h3>📊 Download Satellite Data</h3>
+                <p>Export current view as GeoTIFF, JPEG, or PNG</p>
+            </div>
+            <button class="export-btn" onclick="exportData()">
+                <i class="fas fa-download"></i>
+                Export Imagery
+            </button>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-icon">
+                <i class="fas fa-bell"></i>
+            </div>
+            <h3>Notification Set!</h3>
+            <p>We'll remind you when the satellite passes over your location.</p>
+            <button class="modal-btn" onclick="closeModal()">Great!</button>
+        </div>
+    </div>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- AOS Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Initialize Map
+        let map;
+        let currentLayer = 'satellite';
+
+        function initMap() {
+            map = L.map('earthMap').setView([34.0522, -118.2437], 3);
+            
+            // Satellite layer (ESRI World Imagery)
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+            }).addTo(map);
+
+            // Add sample markers for environmental events
+            const events = [
+                { lat: -3.4653, lng: -62.2159, type: 'fire', name: 'Amazon Fire' },
+                { lat: 25.0, lng: -80.0, type: 'hurricane', name: 'Tropical Storm' },
+                { lat: 60.0, lng: -45.0, type: 'ice', name: 'Ice Melt' }
+            ];
+
+            events.forEach(event => {
+                const marker = L.circleMarker([event.lat, event.lng], {
+                    radius: 8,
+                    color: event.type === 'fire' ? '#ff4444' : '#00ffff',
+                    fillColor: event.type === 'fire' ? '#ff4444' : '#00ffff',
+                    fillOpacity: 0.5
+                }).addTo(map);
+                
+                marker.bindPopup(`<b>${event.name}</b><br>Detected by satellite`);
+            });
+
+            // Update coordinates on map move
+            map.on('move', updateCoordinates);
+        }
+
+        // Update coordinates display
+        function updateCoordinates() {
+            const center = map.getCenter();
+            document.getElementById('latitude').textContent = center.lat.toFixed(4) + '° ' + (center.lat >= 0 ? 'N' : 'S');
+            document.getElementById('longitude').textContent = center.lng.toFixed(4) + '° ' + (center.lng >= 0 ? 'E' : 'W');
+            document.getElementById('zoomLevel').textContent = map.getZoom() + 'x';
+        }
+
+        // Change map layer
+        function changeLayer(layer) {
+            currentLayer = layer;
+            
+            // Update button states
+            document.querySelectorAll('.layer-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            // In a real app, this would change the tile layer
+            console.log(`Changing to ${layer} layer`);
+            
+            // Show visual feedback
+            alert(`🛰️ Switching to ${layer} view (simulation)`);
+        }
+
+        // Select satellite
+        function selectSatellite(satellite) {
+            document.querySelectorAll('.satellite-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            console.log(`Selected satellite: ${satellite}`);
+            
+            // Update satellite info
+            document.querySelector('.satellite-info').innerHTML = `<i class="fas fa-satellite"></i> ${satellite.toUpperCase()} • 4K`;
+        }
+
+        // Toggle data layer
+        function toggleDataLayer(layer) {
+            const cards = document.querySelectorAll('.layer-card');
+            cards.forEach(card => {
+                if (card.classList.contains('active') && card !== event.currentTarget) {
+                    card.classList.remove('active');
+                }
+            });
+            event.currentTarget.classList.toggle('active');
+            
+            console.log(`Toggled layer: ${layer}`);
+            
+            // Update map overlay (simulated)
+            if (event.currentTarget.classList.contains('active')) {
+                alert(`🌍 ${layer} data layer activated`);
+            }
+        }
+
+        // Notify for satellite pass
+        function notifyPass(satellite) {
+            document.getElementById('successModal').classList.add('active');
+            console.log(`Notification set for ${satellite}`);
+        }
+
+        // Export data
+        function exportData() {
+            alert('📥 Downloading satellite imagery... (Demo - would export GeoTIFF)');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('active');
+        }
+
+        // Generate stars background
+        function generateStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Back to top
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Close modal on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('successModal').classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // Initialize stars and map
+        generateStars();
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            initMap();
+            
+            // Simulate real-time updates
+            setInterval(() => {
+                const stats = document.getElementById('imageCount');
+                const current = parseInt(stats.textContent.replace(',', ''));
+                stats.textContent = (current + 1).toLocaleString();
+            }, 30000); // Update every 30 seconds
+        });
+    </script>
+</body>
+</html>

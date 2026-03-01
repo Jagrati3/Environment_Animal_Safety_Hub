@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Energy Tracker Dashboard</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f4f8f6;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      padding: 32px 24px 24px 24px;
+    }
+    h1 {
+      text-align: center;
+      color: #2e7d32;
+      margin-bottom: 8px;
+    }
+    h2 {
+      color: #388e3c;
+      margin-top: 32px;
+      margin-bottom: 12px;
+    }
+    .dashboard-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+    .dashboard-col {
+      flex: 1 1 320px;
+      min-width: 320px;
+      background: #f9fbe7;
+      border-radius: 10px;
+      padding: 18px 16px;
+      box-shadow: 0 1px 4px rgba(60,80,60,0.06);
+    }
+    .energy-value {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #43a047;
+      margin-bottom: 6px;
+    }
+    .goal-section {
+      margin-top: 18px;
+      background: #e8f5e9;
+      border-radius: 8px;
+      padding: 14px 12px;
+    }
+    .goal-section label {
+      font-weight: 500;
+      margin-right: 8px;
+    }
+    .goal-section input[type="number"] {
+      width: 90px;
+      padding: 6px;
+      border-radius: 5px;
+      border: 1px solid #bdbdbd;
+      font-size: 1rem;
+      margin-right: 8px;
+    }
+    .goal-section button {
+      background: #388e3c;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 7px 18px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .goal-section button:hover {
+      background: #2e7d32;
+    }
+    .progress-bar {
+      width: 100%;
+      background: #e0e0e0;
+      border-radius: 8px;
+      margin: 12px 0 18px 0;
+      height: 14px;
+      overflow: hidden;
+    }
+    .progress-bar-inner {
+      height: 100%;
+      background: linear-gradient(90deg, #66bb6a, #43a047);
+      width: 0%;
+      transition: width 0.6s;
+    }
+    .badges-section {
+      margin-top: 18px;
+      background: #e3f2fd;
+      border-radius: 8px;
+      padding: 14px 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+    }
+    .badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #fff;
+      border: 2px solid #90caf9;
+      border-radius: 10px;
+      padding: 10px 16px;
+      min-width: 90px;
+      min-height: 90px;
+      box-shadow: 0 1px 4px rgba(60,80,120,0.06);
+      font-size: 1.1em;
+      color: #1976d2;
+    }
+    .badge.earned {
+      border-color: #43a047;
+      color: #43a047;
+      background: #e8f5e9;
+    }
+    .badge-icon {
+      font-size: 2.2em;
+      margin-bottom: 6px;
+    }
+    .charts-section {
+      margin-top: 32px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      justify-content: space-between;
+    }
+    .chart-container {
+      flex: 1 1 420px;
+      min-width: 320px;
+      background: #f1f8e9;
+      border-radius: 10px;
+      padding: 18px 16px;
+      box-shadow: 0 1px 4px rgba(60,80,60,0.06);
+    }
+    @media (max-width: 1200px) {
+      .dashboard-row, .charts-section { flex-direction: column; gap: 18px; }
+      .dashboard-col, .chart-container { min-width: 0; }
+    }
+    @media (max-width: 700px) {
+      .container { padding: 8px 1vw; }
+      .dashboard-col, .chart-container { padding: 10px 4px; }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Smart Energy Tracker Dashboard</h1>
+    <div class="dashboard-row">
+      <div class="dashboard-col">
+        <div>Current Energy Consumption</div>
+        <div class="energy-value" id="currentEnergy">0 kWh</div>
+        <div>Today's Usage</div>
+        <div class="energy-value" id="todaysUsage">0 kWh</div>
+        <div class="goal-section">
+          <form id="goalForm">
+            <label for="goalInput">Set Daily Goal (kWh):</label>
+            <input type="number" id="goalInput" min="1" max="100" required>
+            <button type="submit">Set Goal</button>
+          </form>
+          <div class="progress-bar">
+            <div class="progress-bar-inner" id="goalProgress"></div>
+          </div>
+          <div id="goalStatus"></div>
+        </div>
+      </div>
+      <div class="dashboard-col">
+        <div>Eco Badges</div>
+        <div class="badges-section" id="badgesSection">
+          <!-- Badges will be injected here -->
+        </div>
+      </div>
+    </div>
+    <div class="charts-section">
+      <div class="chart-container">
+        <h2>Real-Time Energy Usage</h2>
+        <canvas id="realtimeChart" height="120"></canvas>
+      </div>
+      <div class="chart-container">
+        <h2>Daily Usage (Last 7 Days)</h2>
+        <canvas id="dailyChart" height="120"></canvas>
+      </div>
+    </div>
+  </div>
+  <script>
+    // --- Data Model ---
+    let energyData = {
+      current: 0, // kWh
+      today: 0, // kWh
+      goal: 20, // default daily goal
+      history: [], // [{date, usage}]
+      realtime: [] // [{time, value}]
+    };
+    let badges = [
+      { id: 'starter', label: 'Starter', icon: '🌱', desc: 'Set your first goal', earned: false },
+      { id: 'goal1', label: 'Goal Achiever', icon: '🏅', desc: 'Meet your daily goal', earned: false },
+      { id: 'streak3', label: '3-Day Streak', icon: '🔥', desc: '3 days in a row under goal', earned: false },
+      { id: 'streak7', label: 'Eco Hero', icon: '🌟', desc: '7 days in a row under goal', earned: false },
+      { id: 'saver', label: 'Energy Saver', icon: '💡', desc: 'Reduce usage by 20% week-over-week', earned: false }
+    ];
+    // --- Initialization ---
+    function initData() {
+      // Simulate 7 days of history
+      let base = 22;
+      let streak = true;
+      for (let i = 6; i >= 0; i--) {
+        let usage = base + Math.round((Math.random()-0.5)*4);
+        if (i === 0) usage = 0; // today will be filled live
+        energyData.history.push({
+          date: new Date(Date.now() - i*86400000).toISOString().slice(0,10),
+          usage: usage
+        });
+        if (usage > energyData.goal) streak = false;
+      }
+      // Simulate real-time data (last 60 min)
+      let now = Date.now();
+      for (let i = 59; i >= 0; i--) {
+        let value = 0.2 + Math.random()*0.2;
+        energyData.realtime.push({
+          time: new Date(now - i*60000),
+          value: value
+        });
+        if (i === 0) energyData.current = value;
+      }
+      energyData.today = energyData.realtime.reduce((sum, d) => sum + d.value, 0).toFixed(2)*1;
+    }
+    initData();
+
+    // --- Chart.js Setup ---
+    let realtimeChart, dailyChart;
+    function renderCharts() {
+      // Real-time chart
+      const ctx1 = document.getElementById('realtimeChart').getContext('2d');
+      if (realtimeChart) realtimeChart.destroy();
+      realtimeChart = new Chart(ctx1, {
+        type: 'line',
+        data: {
+          labels: energyData.realtime.map(d => d.time.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})),
+          datasets: [{
+            label: 'kWh (per min)',
+            data: energyData.realtime.map(d => d.value),
+            borderColor: '#43a047',
+            backgroundColor: 'rgba(67,160,71,0.08)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 0
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { display: true, title: { display: false } },
+            y: { display: true, min: 0, max: 1, title: { display: true, text: 'kWh' } }
+          }
+        }
+      });
+      // Daily chart
+      const ctx2 = document.getElementById('dailyChart').getContext('2d');
+      if (dailyChart) dailyChart.destroy();
+      dailyChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: energyData.history.map(d => d.date),
+          datasets: [{
+            label: 'Daily Usage (kWh)',
+            data: energyData.history.map(d => d.usage),
+            backgroundColor: energyData.history.map(d => d.usage <= energyData.goal ? '#66bb6a' : '#ef5350')
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { display: true, title: { display: false } },
+            y: { display: true, min: 0, max: 40, title: { display: true, text: 'kWh' } }
+          }
+        }
+      });
+    }
+
+    // --- UI Rendering ---
+    function renderDashboard() {
+      document.getElementById('currentEnergy').textContent = energyData.current.toFixed(2) + ' kWh';
+      document.getElementById('todaysUsage').textContent = energyData.today.toFixed(2) + ' kWh';
+      // Progress bar
+      let percent = Math.min(100, (energyData.today/energyData.goal)*100);
+      document.getElementById('goalProgress').style.width = percent + '%';
+      // Goal status
+      let status = '';
+      if (energyData.today <= energyData.goal) {
+        status = `<span style='color:#43a047;font-weight:600;'>On Track! 🎉</span>`;
+      } else {
+        status = `<span style='color:#c62828;font-weight:600;'>Over Goal</span>`;
+      }
+      document.getElementById('goalStatus').innerHTML = status;
+      // Badges
+      updateBadges();
+      renderBadges();
+      // Charts
+      renderCharts();
+    }
+
+    // --- Goal Setting ---
+    document.getElementById('goalForm').onsubmit = function(e) {
+      e.preventDefault();
+      let val = Number(document.getElementById('goalInput').value);
+      if (val < 1 || val > 100) {
+        alert('Goal must be between 1 and 100 kWh.');
+        return;
+      }
+      energyData.goal = val;
+      badges.find(b => b.id==='starter').earned = true;
+      renderDashboard();
+    };
+
+    // --- Real-Time Simulation ---
+    function simulateRealtime() {
+      setInterval(() => {
+        let value = 0.15 + Math.random()*0.25;
+        energyData.current = value;
+        energyData.realtime.push({
+          time: new Date(),
+          value: value
+        });
+        if (energyData.realtime.length > 60) energyData.realtime.shift();
+        energyData.today = energyData.realtime.reduce((sum, d) => sum + d.value, 0).toFixed(2)*1;
+        // Update today's usage in history
+        energyData.history[energyData.history.length-1].usage = energyData.today;
+        renderDashboard();
+      }, 5000); // update every 5 seconds
+    }
+
+    // --- Badges Logic ---
+    function updateBadges() {
+      // Goal Achiever
+      badges.find(b => b.id==='goal1').earned = energyData.today <= energyData.goal;
+      // 3-day streak
+      let streak3 = energyData.history.slice(-3).every(d => d.usage <= energyData.goal);
+      badges.find(b => b.id==='streak3').earned = streak3;
+      // 7-day streak
+      let streak7 = energyData.history.every(d => d.usage <= energyData.goal);
+      badges.find(b => b.id==='streak7').earned = streak7;
+      // Saver: reduce usage by 20% week-over-week
+      if (energyData.history.length >= 7) {
+        let lastWeek = energyData.history.slice(0, -7).reduce((sum, d) => sum + d.usage, 0);
+        let thisWeek = energyData.history.slice(-7).reduce((sum, d) => sum + d.usage, 0);
+        if (lastWeek > 0 && thisWeek < lastWeek*0.8) {
+          badges.find(b => b.id==='saver').earned = true;
+        }
+      }
+    }
+    function renderBadges() {
+      const section = document.getElementById('badgesSection');
+      section.innerHTML = '';
+      badges.forEach(b => {
+        const div = document.createElement('div');
+        div.className = 'badge' + (b.earned ? ' earned' : '');
+        div.innerHTML = `<span class='badge-icon'>${b.icon}</span><span>${b.label}</span><small>${b.desc}</small>`;
+        section.appendChild(div);
+      });
+    }
+
+    // --- Initial Render ---
+    renderDashboard();
+    simulateRealtime();
+  </script>
+</body>
+</html>

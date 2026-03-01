@@ -1,0 +1,78 @@
+// Street Lighting Planner JS
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('recommend-lighting').addEventListener('click', (e) => {
+        e.preventDefault();
+        const location = document.getElementById('location').value.trim();
+        const brightness = parseInt(document.getElementById('brightness').value);
+        const colorTemp = parseInt(document.getElementById('color-temp').value);
+        const timing = document.getElementById('timing').value;
+        if (!location || isNaN(brightness) || isNaN(colorTemp)) return;
+        const recommendation = getLightingRecommendation(brightness, colorTemp, timing);
+        renderRecommendationSummary(location, brightness, colorTemp, timing, recommendation);
+        renderRiskVisualization(brightness, colorTemp, timing, recommendation.riskScore);
+    });
+    function getLightingRecommendation(brightness, colorTemp, timing) {
+        // Wildlife-friendly: low brightness (<30 lux), warm color (<3000K), motion/curfew timing
+        let riskScore = 0;
+        let advice = [];
+        if (brightness > 30) {
+            riskScore += 2;
+            advice.push('Reduce brightness below 30 lux for wildlife safety.');
+        } else {
+            advice.push('Brightness is wildlife-friendly.');
+        }
+        if (colorTemp > 3000) {
+            riskScore += 2;
+            advice.push('Use warm color temperature (<3000K) to minimize disruption.');
+        } else {
+            advice.push('Color temperature is wildlife-friendly.');
+        }
+        if (timing === 'dusk-dawn') {
+            riskScore += 2;
+            advice.push('Consider motion-activated or curfew controls to reduce night disruption.');
+        } else {
+            advice.push('Timing control is wildlife-friendly.');
+        }
+        let riskLevel = 'Low';
+        if (riskScore >= 4) riskLevel = 'Moderate';
+        if (riskScore >= 6) riskLevel = 'High';
+        return { riskScore, riskLevel, advice };
+    }
+    function renderRecommendationSummary(location, brightness, colorTemp, timing, recommendation) {
+        const summaryDiv = document.getElementById('recommendation-summary');
+        summaryDiv.innerHTML = `<strong>Location:</strong> ${location}<br>
+            <strong>Brightness:</strong> ${brightness} lux<br>
+            <strong>Color Temperature:</strong> ${colorTemp}K<br>
+            <strong>Timing:</strong> ${timing.replace('-', ' ')}<br>
+            <hr>
+            <strong>Ecological Risk Level:</strong> <span style="font-size:1.3em;color:#6a1b9a;">${recommendation.riskLevel}</span><br>
+            <ul>${recommendation.advice.map(a => `<li>${a}</li>`).join('')}</ul>`;
+    }
+    function renderRiskVisualization(brightness, colorTemp, timing, riskScore) {
+        const vizDiv = document.getElementById('risk-visualization');
+        vizDiv.innerHTML = '';
+        // Simple risk bar visualization
+        const bar = document.createElement('div');
+        bar.style.width = '320px';
+        bar.style.height = '32px';
+        bar.style.background = '#e1bee7';
+        bar.style.borderRadius = '8px';
+        bar.style.position = 'relative';
+        const fill = document.createElement('div');
+        fill.style.width = `${riskScore * 50}px`;
+        fill.style.height = '32px';
+        fill.style.background = riskScore >= 6 ? '#d32f2f' : riskScore >= 4 ? '#fbc02d' : '#388e3c';
+        fill.style.borderRadius = '8px';
+        bar.appendChild(fill);
+        const label = document.createElement('span');
+        label.textContent = riskScore >= 6 ? 'High Risk' : riskScore >= 4 ? 'Moderate Risk' : 'Low Risk';
+        label.style.position = 'absolute';
+        label.style.left = '140px';
+        label.style.top = '6px';
+        label.style.fontWeight = 'bold';
+        label.style.color = '#6a1b9a';
+        bar.appendChild(label);
+        vizDiv.appendChild(bar);
+    }
+});

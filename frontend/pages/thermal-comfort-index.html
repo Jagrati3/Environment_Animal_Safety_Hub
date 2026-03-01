@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thermal Comfort Index - EcoLife</title>
+    <link rel="stylesheet" href="../css/thermal-comfort.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <header class="comfort-header">
+        <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back</a>
+        <div class="header-center">
+            <i class="fas fa-sun"></i>
+            <h1>Public Space Thermal Comfort Index</h1>
+            <p>Heat Safety Assessment for Public Areas</p>
+        </div>
+    </header>
+
+    <main class="main-grid">
+        <aside class="sidebar">
+            <div class="section">
+                <h3><i class="fas fa-filter"></i> Filters</h3>
+                <label>Comfort Score
+                    <input type="range" id="score-filter" min="0" max="100" value="50">
+                    <span id="score-val">50+</span>
+                </label>
+                <label>Space Type
+                    <select id="type-filter">
+                        <option value="all">All Types</option>
+                        <option value="park">Parks</option>
+                        <option value="market">Markets</option>
+                        <option value="busstop">Bus Stops</option>
+                        <option value="plaza">Plazas</option>
+                    </select>
+                </label>
+                <button id="assess-btn" class="btn-primary">
+                    <i class="fas fa-search"></i> Find Spaces
+                </button>
+            </div>
+
+            <div class="section legend">
+                <h3><i class="fas fa-palette"></i> Comfort Levels</h3>
+                <div class="legend-item"><span class="dot excellent"></span> Excellent (80-100)</div>
+                <div class="legend-item"><span class="dot good"></span> Good (60-80)</div>
+                <div class="legend-item"><span class="dot fair"></span> Fair (40-60)</div>
+                <div class="legend-item"><span class="dot poor"></span> Poor (&lt;40)</div>
+            </div>
+
+            <div class="section stats">
+                <h3><i class="fas fa-chart-bar"></i> Stats</h3>
+                <div class="stat-box">
+                    <div class="stat-val" id="total-spaces">0</div>
+                    <div class="stat-label">Total Spaces</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-val" id="avg-score">0</div>
+                    <div class="stat-label">Avg Score</div>
+                </div>
+            </div>
+        </aside>
+
+        <section class="map-section">
+            <div id="comfort-map"></div>
+        </section>
+
+        <aside class="sidebar">
+            <div class="tabs">
+                <button class="tab active" data-tab="spaces">Spaces</button>
+                <button class="tab" data-tab="details">Details</button>
+            </div>
+
+            <div class="tab-panel active" id="spaces">
+                <div class="placeholder">
+                    <i class="fas fa-search"></i>
+                    <p>Search to find public spaces</p>
+                </div>
+            </div>
+
+            <div class="tab-panel" id="details">
+                <div class="placeholder">
+                    <i class="fas fa-mouse-pointer"></i>
+                    <p>Click a space for details</p>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script src="../js/thermal-comfort.js"></script>
+</body>
+</html>

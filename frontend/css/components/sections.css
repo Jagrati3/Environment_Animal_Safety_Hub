@@ -849,35 +849,69 @@
 }
 
 .eco-challenge-card {
-  background: var(--card-bg);
-  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 18px;
   padding: 30px 24px;
   text-align: center;
-  box-shadow: var(--shadow-md);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 8px 20px rgba(0, 0, 0, 0.06),
+    0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: 
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s ease,
+    border 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Soft spotlight glow */
+.eco-challenge-card::before {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(34, 197, 94, 0.15),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
 
 .eco-challenge-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-10px);
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.12),
+    0 10px 25px rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.3);
 }
 
+.eco-challenge-card:hover::before {
+  opacity: 1;
+}
+
+/* Icon animation */
 .eco-challenge-card i {
   font-size: 36px;
-  color: var(--heading-color);
   margin-bottom: 16px;
+  transition: transform 0.4s ease, color 0.4s ease;
 }
 
-.eco-challenge-card h3 {
-  font-size: 20px;
-  margin-bottom: 10px;
-  color: var(--text-color);
+.eco-challenge-card:hover i {
+  transform: scale(1.15) rotate(-5deg);
+  color: #22c55e;
 }
 
-.eco-challenge-card p {
-  font-size: 14px;
-  color: var(--text-secondary);
-  margin-bottom: 20px;
+/* Keep content above glow */
+.eco-challenge-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .challenge-btn {

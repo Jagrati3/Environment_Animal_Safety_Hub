@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco-Friendly Product Finder</title>
+    <link rel="stylesheet" href="css/pages/eco-product-finder.css">
+
+    <style>
+        /* Modal Base */
+#modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Hide Modal Properly */
+.hidden {
+  display: none !important;
+}
+
+/* Modal Box */
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 400px;
+  max-width: 90%;
+}
+
+/* ==============================
+   PRODUCT LIST GRID
+============================== */
+
+#product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 40px;
+  padding: 40px;
+  align-items: start;
+}
+
+/* ==============================
+   PRODUCT CARD
+============================== */
+
+.product-card {
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  transition: 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+}
+
+/* ==============================
+   REVIEWS SECTION
+============================== */
+
+.reviews {
+  background: #f2f7f2;
+  padding: 20px;
+  border-radius: 14px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Review item */
+.review {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.review:last-child {
+  border-bottom: none;
+}
+
+.review-user {
+  font-weight: 600;
+  color: #1b5e20;
+}
+
+.review-rating {
+  color: #f4b400;
+  margin-left: 6px;
+}
+
+.review-text {
+  color: #444;
+  display: block;
+  margin-top: 4px;
+}
+
+/* ==============================
+   REVIEW FORM
+============================== */
+
+.review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.review-form input,
+.review-form select {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #cfd8dc;
+  font-size: 14px;
+}
+
+.review-form button {
+  padding: 12px;
+  border: none;
+  background: #2e7d32;
+  color: white;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.review-form button:hover {
+  background: #1b5e20;
+}
+
+/* ==============================
+   RESPONSIVE FIX
+============================== */
+
+@media (max-width: 1200px) {
+  #product-list {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  #product-list {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+}
+/* ==============================
+   ACTIVITY LOG SECTION
+============================== */
+
+#activity-section {
+  max-width: 650px;
+  margin: 80px auto;
+  background: #f4f9f4;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+/* Title */
+#activity-section h2 {
+  font-size: 28px;
+  margin-bottom: 30px;
+  color: #2e7d32;
+  font-weight: 700;
+}
+
+/* ==============================
+   FORM
+============================== */
+
+#activity-form {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 25px;
+}
+
+#activity-form input,
+#activity-form select {
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid #cfd8dc;
+  font-size: 14px;
+  min-width: 220px;
+  flex: 1;
+  outline: none;
+  transition: 0.3s ease;
+}
+
+#activity-form input:focus,
+#activity-form select:focus {
+  border-color: #2e7d32;
+  box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.1);
+}
+
+/* Button */
+#activity-form button {
+  padding: 12px 22px;
+  background: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+  white-space: nowrap;
+}
+
+#activity-form button:hover {
+  background: #1b5e20;
+  transform: translateY(-2px);
+}
+
+/* ==============================
+   ACTIVITY LIST
+============================== */
+
+#activity-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+#activity-list li {
+  background: #ffffff;
+  padding: 14px 18px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  border-left: 4px solid #2e7d32;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+#activity-list li strong {
+  color: #2e7d32;
+}
+
+/* Empty state */
+#activity-list li:first-child:only-child {
+  text-align: center;
+  border-left: none;
+  color: #777;
+  background: #eef3ee;
+}
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Eco-Friendly Product Finder</h1>
+        <p>Discover sustainable products and services. Read reviews, rate, and support green businesses!</p>
+    </header>
+    <section id="search-section">
+        <input type="text" id="search-bar" placeholder="Search eco-friendly products or services...">
+        <select id="category-filter">
+            <option value="all">All Categories</option>
+            <option value="reusable">Reusable Items</option>
+            <option value="energy">Green Energy Providers</option>
+            <option value="brands">Sustainable Brands</option>
+            <option value="services">Eco Services</option>
+        </select>
+        <button id="add-product-btn">Add Product/Service</button>
+    </section>
+    <section id="product-list">
+        <!-- Product cards will be rendered here -->
+    </section>
+    <section id="activity-section">
+        <h2>Eco-Friendly Activity Log</h2>
+        <form id="activity-form">
+            <input type="text" id="activity-desc" placeholder="Describe your eco-friendly activity..." required>
+            <select id="activity-type">
+                <option value="purchase">Product Purchase</option>
+                <option value="switch">Switched to Green Energy</option>
+                <option value="event">Attended Eco Event</option>
+                <option value="review">Wrote a Review</option>
+                <option value="other">Other</option>
+            </select>
+            <button type="submit">Log Activity</button>
+        </form>
+        <ul id="activity-list"></ul>
+    </section>
+    <div id="modal" class="hidden">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Add Eco-Friendly Product/Service</h2>
+            <form id="add-product-form">
+                <input type="text" id="product-name" placeholder="Name" required>
+                <input type="text" id="product-category" placeholder="Category" required>
+                <input type="text" id="product-description" placeholder="Description" required>
+                <input type="url" id="product-link" placeholder="Website/Link">
+                <button type="submit">Add</button>
+            </form>
+        </div>
+    </div>
+    <script src="js/pages/eco-product-finder.js"></script>
+</body>
+</html>

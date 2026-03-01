@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Food Waste Tracker | EcoLife - Reduce Food Waste, Save the Planet</title>
+    <link rel="icon" type="image/png" href="/envirnoment-logo.png">
+    <meta name="description"
+        content="Track your household food waste, get insights, and learn tips to reduce waste and save money." />
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../css/global/variables.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/components/navbar.css" />
+    <link rel="stylesheet" href="../css/components/footer.css" />
+    <link rel="stylesheet" href="../css/pages/sustainability/food-waste-tracker.css" />
+    <link rel="stylesheet" href="../css/components/scrollBar.css" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="cursor-container"></div>
+    <script src="../js/components/loadComponents.js"></script>
+
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <div id="navbar-container"></div>
+
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Hero Section -->
+    <section class="waste-hero">
+        <div class="waste-hero-bg">
+            <div class="hero-shape shape-1"></div>
+            <div class="hero-shape shape-2"></div>
+            <div class="hero-shape shape-3"></div>
+            <div class="floating-leaf leaf-1"><i class="fa-solid fa-leaf"></i></div>
+            <div class="floating-leaf leaf-2"><i class="fa-solid fa-leaf"></i></div>
+            <div class="floating-leaf leaf-3"><i class="fa-solid fa-leaf"></i></div>
+            <div class="floating-recycle recycle-1"><i class="fa-solid fa-recycle"></i></div>
+        </div>
+
+        <div class="waste-hero-container">
+            <div class="waste-hero-content" data-aos="fade-right" data-aos-duration="1000">
+                <span class="hero-badge">
+                    <i class="fa-solid fa-chart-simple"></i> Track. Reduce. Save.
+                </span>
+                <h1>
+                    Track Your <span class="gradient-text">Food Waste</span> & Make a Difference
+                </h1>
+                <p>
+                    Join thousands of households reducing food waste, saving money, and helping the planet. 
+                    Start tracking today and see your impact grow.
+                </p>
+
+                <div class="hero-stats">
+                    <div class="hero-stat" data-aos="fade-up" data-aos-delay="0">
+                        <span class="hero-stat-number" data-count="15000">0</span>
+                        <span class="stat-label">Active Trackers</span>
+                    </div>
+                    <div class="hero-stat" data-aos="fade-up" data-aos-delay="100">
+                        <span class="hero-stat-number" data-count="500000">0</span>
+                        <span class="stat-label">KG Waste Reduced</span>
+                    </div>
+                    <div class="hero-stat" data-aos="fade-up" data-aos-delay="200">
+                        <span class="hero-stat-number" data-count="2.5">0</span>
+                        <span class="stat-label">M KG CO₂ Saved</span>
+                    </div>
+                </div>
+
+                <div class="hero-cta">
+                    <a href="#tracker" class="btn btn-primary">
+                        <i class="fa-solid fa-chart-line"></i> Start Tracking
+                    </a>
+                    <a href="#tips" class="btn btn-secondary">
+                        <i class="fa-solid fa-lightbulb"></i> Reduce Waste Tips
+                    </a>
+                </div>
+            </div>
+
+            <div class="waste-hero-visual" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+                <div class="earth-stats-card">
+                    <div class="stat-circle">
+                        <svg viewBox="0 0 100 100" class="progress-ring">
+                            <circle cx="50" cy="50" r="45" class="progress-ring-bg" />
+                            <circle cx="50" cy="50" r="45" class="progress-ring-fill" 
+                                style="stroke-dasharray: 283; stroke-dashoffset: 85;" />
+                        </svg>
+                        <div class="stat-circle-content">
+                            <span class="stat-big">30%</span>
+                            <span class="stat-label">Global Food Waste</span>
+                        </div>
+                    </div>
+                    <div class="stat-footer">
+                        <p>1/3 of all food produced is wasted</p>
+                    </div>
+                </div>
+                <div class="floating-badge badge-1">
+                    <i class="fa-solid fa-trash-can"></i>
+                    <span>₹15,000 saved/year</span>
+                </div>
+                <div class="floating-badge badge-2">
+                    <i class="fa-solid fa-tree"></i>
+                    <span>1.5 trees saved</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wave Divider -->
+        <div class="wave-divider">
+            <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z"
+                    fill="var(--bg-color)" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- Quick Stats Dashboard -->
+    <section class="stats-dashboard">
+        <div class="section-container">
+            <div class="stats-grid" data-aos="fade-up">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-weight-scale"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="totalWaste">0</span>
+                        <span class="stat-label">Total Waste (kg)</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-indian-rupee-sign"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="moneySaved">₹0</span>
+                        <span class="stat-label">Money Saved</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-cloud"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="co2Saved">0</span>
+                        <span class="stat-label">CO₂ Saved (kg)</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-calendar-week"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="streakDays">0</span>
+                        <span class="stat-label">Day Streak</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Tracker Section -->
+    <section id="tracker" class="tracker-section">
+        <div class="section-container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-tag">
+                    <i class="fa-solid fa-chart-line"></i> Daily Tracker
+                </span>
+                <h2 class="section-title">Track Your Daily Food Waste</h2>
+                <p class="section-subtitle">
+                    Log what you throw away each day and watch your impact grow. Every bit counts!
+                </p>
+            </div>
+
+            <div class="tracker-container">
+                <!-- Add Entry Form -->
+                <div class="add-entry-card" data-aos="fade-up" data-aos-delay="100">
+                    <h3><i class="fa-solid fa-plus-circle"></i> Add Today's Waste</h3>
+                    
+                    <form id="wasteEntryForm" class="waste-entry-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="foodCategory">Food Category *</label>
+                                <select id="foodCategory" required>
+                                    <option value="">Select category</option>
+                                    <option value="vegetables">🥬 Vegetables</option>
+                                    <option value="fruits">🍎 Fruits</option>
+                                    <option value="grains">🌾 Grains & Cereals</option>
+                                    <option value="dairy">🥛 Dairy Products</option>
+                                    <option value="meat">🍖 Meat & Fish</option>
+                                    <option value="leftovers">🍲 Leftovers</option>
+                                    <option value="bread">🥖 Bread & Bakery</option>
+                                    <option value="other">📦 Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="wasteAmount">Amount (kg) *</label>
+                                <input type="number" id="wasteAmount" step="0.01" min="0" max="100" required placeholder="e.g., 0.5">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="wasteReason">Reason for Waste</label>
+                                <select id="wasteReason">
+                                    <option value="">Select reason (optional)</option>
+                                    <option value="expired">Expired</option>
+                                    <option value="spoiled">Spoiled</option>
+                                    <option value="too-much">Cooked too much</option>
+                                    <option value="didnt-use">Didn't use in time</option>
+                                    <option value="not-fresh">Not fresh</option>
+                                    <option value="other-reason">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="wasteDate">Date *</label>
+                                <input type="date" id="wasteDate" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="wasteNotes">Notes (optional)</label>
+                            <textarea id="wasteNotes" rows="2" placeholder="Add any additional details..."></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-plus"></i> Add Entry
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                                <i class="fa-solid fa-rotate"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Today's Summary -->
+                <div class="today-summary" data-aos="fade-up" data-aos-delay="200">
+                    <div class="summary-header">
+                        <h3><i class="fa-solid fa-calendar-day"></i> Today's Summary</h3>
+                        <span class="today-date" id="todayDate"></span>
+                    </div>
+                    
+                    <div class="summary-stats">
+                        <div class="summary-stat">
+                            <span class="stat-value" id="todayWaste">0 kg</span>
+                            <span class="stat-label">Total Waste</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span class="stat-value" id="todayCost">₹0</span>
+                            <span class="stat-label">Money Lost</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span class="stat-value" id="todayCO2">0 kg</span>
+                            <span class="stat-label">CO₂ Footprint</span>
+                        </div>
+                    </div>
+
+                    <div class="waste-tip">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        <p id="dailyTip">Store vegetables in the fridge to keep them fresh longer!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Entries -->
+            <div class="recent-entries-section" data-aos="fade-up" data-aos-delay="300">
+                <div class="section-header">
+                    <h3 class="section-subtitle"><i class="fa-solid fa-clock-rotate-left"></i> Recent Entries</h3>
+                </div>
+
+                <div class="entries-table-wrapper">
+                    <table class="entries-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Category</th>
+                                <th>Amount (kg)</th>
+                                <th>Reason</th>
+                                <th>Cost (₹)</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="entriesTableBody">
+                            <!-- Entries will be populated by JavaScript -->
+                            <tr class="no-entries">
+                                <td colspan="6">
+                                    <i class="fa-solid fa-chart-line"></i>
+                                    <p>No entries yet. Start tracking your food waste today!</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-actions">
+                    <button class="btn btn-outline" onclick="exportData()">
+                        <i class="fa-solid fa-download"></i> Export Data
+                    </button>
+                    <button class="btn btn-outline" onclick="clearAllData()">
+                        <i class="fa-solid fa-trash-can"></i> Clear All
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analytics Section -->
+    <section class="analytics-section">
+        <div class="section-container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-tag">
+                    <i class="fa-solid fa-chart-pie"></i> Insights
+                </span>
+                <h2 class="section-title">Understand Your Waste Patterns</h2>
+                <p class="section-subtitle">
+                    Visualize your food waste data and identify areas for improvement.
+                </p>
+            </div>
+
+            <div class="charts-grid">
+                <!-- Category Breakdown Chart -->
+                <div class="chart-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="chart-header">
+                        <h3>Waste by Category</h3>
+                        <div class="chart-legend" id="categoryLegend"></div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Weekly Trend Chart -->
+                <div class="chart-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="chart-header">
+                        <h3>Weekly Trend</h3>
+                        <select id="weekRange" class="chart-select" onchange="updateWeeklyChart()">
+                            <option value="7">Last 7 days</option>
+                            <option value="14">Last 14 days</option>
+                            <option value="30">Last 30 days</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="weeklyChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Reason Breakdown Chart -->
+                <div class="chart-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="chart-header">
+                        <h3>Reasons for Waste</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="reasonsChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Impact Metrics -->
+                <div class="impact-card" data-aos="fade-up" data-aos-delay="400">
+                    <h3>Your Environmental Impact</h3>
+                    
+                    <div class="impact-metrics">
+                        <div class="impact-item">
+                            <div class="impact-icon">
+                                <i class="fa-solid fa-droplet"></i>
+                            </div>
+                            <div class="impact-details">
+                                <span class="impact-value" id="waterSaved">0 L</span>
+                                <span class="impact-label">Water Saved</span>
+                            </div>
+                        </div>
+                        
+                        <div class="impact-item">
+                            <div class="impact-icon">
+                                <i class="fa-solid fa-car"></i>
+                            </div>
+                            <div class="impact-details">
+                                <span class="impact-value" id="carEmissions">0 km</span>
+                                <span class="impact-label">Car Emissions Equivalent</span>
+                            </div>
+                        </div>
+                        
+                        <div class="impact-item">
+                            <div class="impact-icon">
+                                <i class="fa-solid fa-bolt"></i>
+                            </div>
+                            <div class="impact-details">
+                                <span class="impact-value" id="energySaved">0 kWh</span>
+                                <span class="impact-label">Energy Saved</span>
+                            </div>
+                        </div>
+                        
+                        <div class="impact-item">
+                            <div class="impact-icon">
+                                <i class="fa-solid fa-seedling"></i>
+                            </div>
+                            <div class="impact-details">
+                                <span class="impact-value" id="landSaved">0 m²</span>
+                                <span class="impact-label">Land Use Saved</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tips & Resources Section -->
+    <section id="tips" class="tips-section">
+        <div class="section-container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-tag">
+                    <i class="fa-solid fa-lightbulb"></i> Smart Tips
+                </span>
+                <h2 class="section-title">Reduce Food Waste Like a Pro</h2>
+                <p class="section-subtitle">
+                    Simple, actionable tips to help you waste less and save more.
+                </p>
+            </div>
+
+            <div class="tips-grid">
+                <div class="tip-card" data-aos="fade-up" data-aos-delay="0">
+                    <div class="tip-icon">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                    </div>
+                    <h3>Plan Your Meals</h3>
+                    <p>Create a weekly meal plan and shopping list. Buy only what you need to avoid impulse purchases.</p>
+                    <a href="#" class="tip-link">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="tip-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="tip-icon">
+                        <i class="fa-solid fa-box-open"></i>
+                    </div>
+                    <h3>Proper Storage</h3>
+                    <p>Store fruits and vegetables correctly. Use airtight containers and keep your fridge organized.</p>
+                    <a href="#" class="tip-link">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="tip-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="tip-icon">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </div>
+                    <h3>First In, First Out</h3>
+                    <p>Arrange your pantry and fridge so older items are used first. Check expiry dates regularly.</p>
+                    <a href="#" class="tip-link">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="tip-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="tip-icon">
+                        <i class="fa-solid fa-utensils"></i>
+                    </div>
+                    <h3>Love Your Leftovers</h3>
+                    <p>Get creative with leftovers. Turn yesterday's dinner into today's lunch or freeze for later.</p>
+                    <a href="#" class="tip-link">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="tip-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="tip-icon">
+                        <i class="fa-solid fa-compost"></i>
+                    </div>
+                    <h3>Start Composting</h3>
+                    <p>Turn unavoidable food scraps into nutrient-rich compost for your garden or potted plants.</p>
+                    <a href="#" class="tip-link">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="tip-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="tip-icon">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                    </div>
+                    <h3>Smart Shopping</h3>
+                    <p>Shop with a full stomach, avoid bulk buying perishables, and embrace imperfect produce.</p>
+                    <a href="#" class="tip-link">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="resources-section">
+        <div class="section-container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-tag">
+                    <i class="fa-solid fa-book-open"></i> Resources
+                </span>
+                <h2 class="section-title">Helpful Tools & Guides</h2>
+                <p class="section-subtitle">
+                    Everything you need to become a food waste warrior.
+                </p>
+            </div>
+
+            <div class="resources-grid">
+                <div class="resource-card" data-aos="fade-up" data-aos-delay="0">
+                    <div class="resource-icon">
+                        <i class="fa-solid fa-apple-whole"></i>
+                    </div>
+                    <h3>Storage Guide</h3>
+                    <p>Complete guide on how to store different foods to maximize freshness.</p>
+                    <a href="#" class="resource-link">Download PDF <i class="fa-solid fa-download"></i></a>
+                </div>
+
+                <div class="resource-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="resource-icon">
+                        <i class="fa-solid fa-receipt"></i>
+                    </div>
+                    <h3>Meal Planner</h3>
+                    <p>Printable weekly meal planner template to organize your meals.</p>
+                    <a href="#" class="resource-link">Download PDF <i class="fa-solid fa-download"></i></a>
+                </div>
+
+                <div class="resource-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="resource-icon">
+                        <i class="fa-solid fa-bowl-food"></i>
+                    </div>
+                    <h3>Recipe Book</h3>
+                    <p>50+ recipes using common leftovers and soon-to-expire ingredients.</p>
+                    <a href="#" class="resource-link">Download PDF <i class="fa-solid fa-download"></i></a>
+                </div>
+
+                <div class="resource-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="resource-icon">
+                        <i class="fa-solid fa-chart-gantt"></i>
+                    </div>
+                    <h3>Challenge Calendar</h3>
+                    <p>30-day food waste reduction challenge with daily tasks.</p>
+                    <a href="#" class="resource-link">Download PDF <i class="fa-solid fa-download"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Challenge Section -->
+    <section class="challenge-section">
+        <div class="section-container">
+            <div class="challenge-card" data-aos="zoom-in">
+                <div class="challenge-content">
+                    <span class="challenge-badge">
+                        <i class="fa-solid fa-trophy"></i> Active Challenge
+                    </span>
+                    <h2>Zero Food Waste Week</h2>
+                    <p>Join thousands of households committing to zero food waste for one week. Track your progress, share tips, and win prizes!</p>
+                    
+                    <div class="challenge-stats">
+                        <div class="challenge-stat">
+                            <span class="stat-number">2,847</span>
+                            <span class="stat-label">Participants</span>
+                        </div>
+                        <div class="challenge-stat">
+                            <span class="stat-number">12,450</span>
+                            <span class="stat-label">KG Saved</span>
+                        </div>
+                        <div class="challenge-stat">
+                            <span class="stat-number">5</span>
+                            <span class="stat-label">Days Left</span>
+                        </div>
+                    </div>
+
+                    <div class="challenge-actions">
+                        <button class="btn btn-primary btn-large">
+                            <i class="fa-solid fa-right-to-bracket"></i> Join Challenge
+                        </button>
+                        <button class="btn btn-secondary btn-large">
+                            <i class="fa-solid fa-users"></i> View Leaderboard
+                        </button>
+                    </div>
+                </div>
+                <div class="challenge-image">
+                    <img src="https://images.unsplash.com/photo-1589923188900-85dae523342b?w=600" alt="Food Waste Challenge">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/global/theme-toggle.js"></script>
+    <script src="../js/pages/sustainability/food-waste-tracker.js"></script>
+    
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+    </script>
+</body>
+
+</html>

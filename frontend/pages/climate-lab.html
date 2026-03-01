@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 Interactive Climate Lab · experiment with earth</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Google Fonts: clean, technical, approachable -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Chart.js for interactive graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #132c3c;
+            background: radial-gradient(circle at 20% 30%, #245b6e, #0a1e2b);
+            min-height: 100vh;
+            color: #e0f2fe;
+            line-height: 1.6;
+        }
+
+        /* lab header – scientific & cool */
+        .lab-header {
+            background: linear-gradient(145deg, #1a4b60, #0b2c3b);
+            padding: 5rem 2rem 4.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+            border-bottom: 6px solid #7ad0f0;
+            box-shadow: 0 20px 40px #03131f;
+        }
+
+        .lab-header::before {
+            content: '🧪🌍';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.08;
+            left: -3rem;
+            bottom: -6rem;
+            transform: rotate(-15deg);
+        }
+
+        .lab-header h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 4rem;
+            font-weight: 700;
+            color: #ecfeff;
+            text-shadow: 0 0 20px #3fc0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .lab-header h1 i {
+            color: #ffd966;
+            filter: drop-shadow(0 0 10px #ffdb8c);
+        }
+
+        .lab-header p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 1.5rem auto;
+            background: #1c4e64c0;
+            padding: 0.8rem 2.5rem;
+            border-radius: 60px;
+            color: #f0fdff;
+            backdrop-filter: blur(6px);
+            border: 2px solid #7ad0f0;
+        }
+
+        .lab-badge {
+            margin-top: 2rem;
+            display: inline-block;
+            background: #3c93b0;
+            color: #f2ffff;
+            padding: 0.5rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 600;
+            border: 2px solid #b6ecff;
+        }
+
+        /* container */
+        .container {
+            max-width: 1500px;
+            margin: -3rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* control panel – sliders & params */
+        .control-panel {
+            background: #17485fe0;
+            backdrop-filter: blur(10px);
+            border-radius: 80px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 40px #031e2b, 0 0 0 3px #6bc0e0 inset;
+            border: 3px solid #90e0f0;
+        }
+
+        .panel-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            color: #f9ffd6;
+        }
+
+        .slider-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem 2.5rem;
+        }
+
+        .slider-item {
+            background: #1e607bb0;
+            border-radius: 50px;
+            padding: 1.5rem 2rem;
+            border: 2px solid #8ad0f0;
+        }
+
+        .slider-item label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 600;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .slider-item label i {
+            color: #ffde8d;
+            font-size: 1.8rem;
+        }
+
+        input[type=range] {
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(90deg, #a0d8f0, #50a0c0);
+            border-radius: 20px;
+            -webkit-appearance: none;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 28px; height: 28px;
+            background: #ffdb7c;
+            border-radius: 50%;
+            border: 3px solid #ffffc0;
+            cursor: pointer;
+            box-shadow: 0 4px 8px #0b2c38;
+        }
+
+        .value-indicator {
+            float: right;
+            background: #236f8f;
+            color: white;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+
+        .run-btn {
+            background: #fecf5e;
+            border: none;
+            color: #124d61;
+            font-weight: 800;
+            font-size: 2rem;
+            padding: 1.3rem 4rem;
+            border-radius: 70px;
+            display: inline-flex;
+            align-items: center;
+            gap: 1.5rem;
+            cursor: pointer;
+            border: 4px solid #ffffcc;
+            box-shadow: 0 8px 0 #7f9540;
+            margin-top: 3rem;
+            transition: 0.1s;
+        }
+
+        .run-btn:active {
+            transform: translateY(8px);
+            box-shadow: none;
+        }
+
+        /* experiment result row */
+        .result-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .result-card {
+            background: #174e68e0;
+            border-radius: 60px;
+            padding: 2rem;
+            border: 3px solid #70c8e8;
+        }
+
+        .result-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .result-number {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #fde482;
+        }
+
+        .chart-container {
+            height: 250px;
+            position: relative;
+        }
+
+        /* experiment log */
+        .log-panel {
+            background: #0f4057e0;
+            border-radius: 70px;
+            padding: 2rem;
+            margin: 3rem 0;
+            border: 3px solid #7ad0f0;
+        }
+
+        .log-entry {
+            background: #266886;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            margin-bottom: 1rem;
+            border-left: 8px solid #fedb7c;
+        }
+
+        /* modal */
+        .modal {
+            display: none; position: fixed; inset:0; background: #0e3142e6;
+            align-items: center; justify-content: center; z-index:2000;
+            backdrop-filter: blur(6px);
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #19536e;
+            border-radius: 80px;
+            max-width: 700px;
+            width:100%;
+            border: 8px solid #9ae0ff;
+            color: #f0fcff;
+            padding: 2.5rem;
+        }
+
+        .back-to-top {
+            position: fixed; bottom:2rem; right:2rem;
+            background: #389dc0; width:70px; height:70px; border-radius:50%;
+            display: none; align-items:center; justify-content:center;
+            font-size:2.2rem; color:#ffffd3; border:5px solid #baeaff;
+            cursor:pointer; z-index:1000;
+        }
+        .back-to-top.visible { display: flex; }
+
+        @media (max-width:1000px){
+            .slider-group { grid-template-columns:1fr; }
+            .result-row { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- header -->
+    <header class="lab-header">
+        <h1>
+            <i class="fas fa-flask"></i> Interactive Climate Lab
+            <i class="fas fa-temperature-low"></i>
+        </h1>
+        <p>adjust variables · see real‑time climate response</p>
+        <div class="lab-badge"><i class="fas fa-microchip"></i> simulation core v2.4</div>
+    </header>
+
+    <div class="container">
+        <!-- main control panel -->
+        <div class="control-panel" data-aos="fade-up">
+            <div class="panel-title"><i class="fas fa-sliders-h"></i> climate parameter实验室</div>
+            <div class="slider-group" id="sliderGroup">
+                <!-- js populated -->
+            </div>
+            <div style="text-align:center;">
+                <button class="run-btn" id="runExperimentBtn"><i class="fas fa-play"></i> run experiment</button>
+            </div>
+        </div>
+
+        <!-- experiment results (live) -->
+        <div class="result-row">
+            <div class="result-card">
+                <div class="result-title"><i class="fas fa-temperature-high"></i> projected temperature change</div>
+                <div class="result-number" id="tempResult">+2.3 °C</div>
+                <div>since pre-industrial</div>
+            </div>
+            <div class="result-card">
+                <div class="result-title"><i class="fas fa-chart-line"></i> sea level rise (2100)</div>
+                <div class="result-number" id="seaLvlResult">0.48 m</div>
+                <div>above 2000 baseline</div>
+            </div>
+        </div>
+
+        <!-- interactive chart -->
+        <div class="control-panel" style="padding:2rem;">
+            <div class="panel-title"><i class="fas fa-chart-area"></i> emission scenario · CO₂ projection</div>
+            <div class="chart-container" style="height:260px;">
+                <canvas id="climateChart"></canvas>
+            </div>
+        </div>
+
+        <!-- experiment log -->
+        <div class="log-panel" data-aos="fade-up">
+            <h2 style="margin-bottom:1.5rem;"><i class="fas fa-clipboard-list"></i> lab notebook</h2>
+            <div id="logContainer">
+                <div class="log-entry"><i class="fas fa-flask"></i> baseline: CO₂ 350ppm · temp +1.0°C</div>
+                <div class="log-entry"><i class="fas fa-flask"></i> experiment #12: high emissions → +3.2°C</div>
+            </div>
+        </div>
+
+        <!-- call to action -->
+        <div style="background:#176180; border-radius:60px; padding:2rem; text-align:center; margin:3rem 0;">
+            <p style="font-size:1.8rem;">⚡ every experiment helps us understand our future.</p>
+        </div>
+    </div>
+
+    <!-- modal for detailed report -->
+    <div class="modal" id="labModal">
+        <div class="modal-content">
+            <button style="float:right; background:none; border:none; font-size:3rem; color:#b2f0ff;" onclick="closeModal()">✕</button>
+            <div style="text-align:center;">
+                <i class="fas fa-dna" style="font-size:4rem;"></i>
+                <h2 style="margin:1.5rem;">🔬 climate model output</h2>
+                <p id="modalLabText">detailed scenario analysis would appear here.</p>
+                <button class="run-btn" onclick="downloadLabData()" style="font-size:1.2rem;">📊 download dataset</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({duration:800,once:true});
+
+        // ---------- interactive sliders ----------
+        const params = [
+            { name:"CO₂ emissions", id:"co2", min:0, max:150, value:65, unit:"GtCO₂/yr", icon:"fa-smog" },
+            { name:"methane", id:"ch4", min:0, max:50, value:22, unit:"Mt", icon:"fa-fire" },
+            { name:"aerosols", id:"aer", min:0, max:100, value:30, unit:"index", icon:"fa-wind" },
+            { name:"deforestation", id:"forest", min:0, max:100, value:45, unit:"% loss", icon:"fa-tree" },
+            { name:"renewable energy", id:"renew", min:0, max:100, value:28, unit:"% share", icon:"fa-solar-panel" },
+            { name:"ocean uptake", id:"ocean", min:0, max:100, value:55, unit:"%", icon:"fa-water" }
+        ];
+
+        function renderSliders() {
+            const container = document.getElementById('sliderGroup');
+            container.innerHTML = params.map(p => `
+                <div class="slider-item">
+                    <label><i class="fas ${p.icon}"></i> ${p.name} <span class="value-indicator" id="val_${p.id}">${p.value}</span></label>
+                    <input type="range" id="${p.id}" min="${p.min}" max="${p.max}" value="${p.value}" step="1" oninput="updateParam('${p.id}')">
+                    <div style="display:flex; justify-content:space-between;"><span>low</span><span>high</span></div>
+                </div>`).join('');
+        }
+
+        window.updateParam = (id) => {
+            const slider = document.getElementById(id);
+            document.getElementById(`val_${id}`).innerText = slider.value;
+        };
+
+        // simple climate model (demo)
+        function computeClimate() {
+            const co2 = parseFloat(document.getElementById('co2')?.value || 65);
+            const ch4 = parseFloat(document.getElementById('ch4')?.value || 22);
+            const forest = parseFloat(document.getElementById('forest')?.value || 45);
+            const renew = parseFloat(document.getElementById('renew')?.value || 28);
+            // crude formula
+            let tempAnomaly = 1.0 + (co2-30)*0.012 + (ch4-10)*0.01 - (renew-20)*0.005 + (forest-30)*0.006;
+            if (tempAnomaly < 0.5) tempAnomaly = 0.5;
+            if (tempAnomaly > 5.0) tempAnomaly = 5.0;
+
+            let seaLevel = 0.2 + (tempAnomaly-1.0)*0.18;
+            if (seaLevel < 0.1) seaLevel = 0.1;
+            if (seaLevel > 1.5) seaLevel = 1.5;
+
+            document.getElementById('tempResult').innerText = '+' + tempAnomaly.toFixed(2) + ' °C';
+            document.getElementById('seaLvlResult').innerText = seaLevel.toFixed(2) + ' m';
+
+            // update chart dynamically
+            updateChart(tempAnomaly);
+            addLogEntry(`experiment: CO₂ ${co2} → temp +${tempAnomaly.toFixed(2)}°C · sea +${seaLevel.toFixed(2)}m`);
+        }
+
+        // chart instance
+        let climateChart;
+        function initChart() {
+            const ctx = document.getElementById('climateChart').getContext('2d');
+            climateChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['2000','2025','2050','2075','2100'],
+                    datasets: [{
+                        label: 'CO₂ concentration (ppm)',
+                        data: [370, 420, 480, 550, 620],
+                        borderColor: '#ffd966',
+                        backgroundColor: '#ffd96620',
+                        tension: 0.2,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color:'#e0f0ff' } } },
+                    scales: { y: { grid: { color:'#307090' } } }
+                }
+            });
+        }
+
+        function updateChart(temp) {
+            // adjust co2 trajectory based on temp (demo)
+            if (climateChart) {
+                let base = [370, 420, 480, 550, 620];
+                let factor = 1.0 + (temp-1.5)*0.15;
+                if (factor < 0.7) factor = 0.7;
+                if (factor > 1.8) factor = 1.8;
+                let newData = base.map(v => Math.round(v * factor));
+                climateChart.data.datasets[0].data = newData;
+                climateChart.update();
+            }
+        }
+
+        // log
+        function addLogEntry(text) {
+            const log = document.getElementById('logContainer');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `<i class="fas fa-flask"></i> ${text}`;
+            log.prepend(entry);
+            if (log.children.length > 5) log.removeChild(log.lastElementChild);
+        }
+
+        // event listener
+        document.getElementById('runExperimentBtn').addEventListener('click', ()=>{
+            computeClimate();
+        });
+
+        // modal actions
+        window.openLabModal = () => {
+            document.getElementById('modalLabText').innerText = 'detailed outputs: climate sensitivity = 3.1°C · ocean heat uptake ...';
+            document.getElementById('labModal').classList.add('active');
+        };
+        window.closeModal = () => document.getElementById('labModal').classList.remove('active');
+        window.downloadLabData = () => alert('📥 climate dataset download started (demo).');
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // escape modal
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('labModal')) closeModal(); };
+
+        // initial render
+        renderSliders();
+        initChart();
+        computeClimate(); // set initial values
+    </script>
+</body>
+</html>

@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zoonotic Diseases & Environmental Impact | Human-Animal Health Nexus</title>
+  <meta name="description" content="Scientific guide to zoonotic diseases: How environmental changes increase spillover risks, climate-disease connections, and prevention strategies.">
+  <meta name="keywords" content="zoonotic diseases, environmental health, One Health, disease spillover, climate change diseases, wildlife health">
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/icons/favicon.ico" type="image/x-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/pwa.css">
+  
+  <!-- Component Styles -->
+  <link rel="stylesheet" href="css/components/navbar.css">
+  <link rel="stylesheet" href="css/components/footer.css">
+
+  <!-- Page-specific Styles -->
+  <style>
+    :root {
+      --zoonotic-red: #E74C3C;
+      --environment-green: #27AE60;
+      --warning-yellow: #F39C12;
+      --vector-brown: #8B4513;
+      --pathogen-purple: #8E44AD;
+      --dark-bg: #0A1E2C;
+      --card-bg: rgba(255, 255, 255, 0.05);
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: var(--dark-bg);
+      color: white;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Hero Section */
+    .zoonotic-hero {
+      background: linear-gradient(135deg, #0A1E2C 0%, #1A5276 100%);
+      color: white;
+      padding: 120px 20px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .zoonotic-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(39, 174, 96, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(231, 76, 60, 0.2) 0%, transparent 50%);
+      animation: pathogenFloat 15s ease-in-out infinite;
+    }
+
+    @keyframes pathogenFloat {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.05); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .zoonotic-hero h1 {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 4.5rem;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 0 30px rgba(39, 174, 96, 0.5);
+      background: linear-gradient(to right, #27AE60, #3498DB);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 1.5rem;
+      max-width: 800px;
+      margin: 0 auto 50px;
+      color: #A9DFBF;
+      font-weight: 300;
+    }
+
+    /* Spillover Risk Indicators */
+    .risk-indicators {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 40px auto;
+      max-width: 800px;
+      flex-wrap: wrap;
+    }
+
+    .risk-card {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 25px;
+      border-radius: 20px;
+      border: 2px solid;
+      min-width: 200px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease;
+    }
+
+    .risk-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .risk-card.low { border-color: var(--environment-green); }
+    .risk-card.medium { border-color: var(--warning-yellow); }
+    .risk-card.high { border-color: var(--zoonotic-red); }
+
+    .risk-value {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .risk-label {
+      display: inline-block;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .low .risk-label { background: var(--environment-green); color: #333; }
+    .medium .risk-label { background: var(--warning-yellow); color: #333; }
+    .high .risk-label { background: var(--zoonotic-red); color: white; }
+
+    /* Content Container */
+    .content-container {
+      max-width: 1400px;
+      margin: -50px auto 100px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Section Titles */
+    .section-title {
+      text-align: center;
+      margin-bottom: 60px;
+      position: relative;
+    }
+
+    .section-title h2 {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 3.2rem;
+      display: inline-block;
+      padding-bottom: 15px;
+      position: relative;
+    }
+
+    .section-title h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 4px;
+      background: linear-gradient(to right, var(--environment-green), var(--zoonotic-red));
+      border-radius: 2px;
+    }
+
+    /* Disease Transmission Pathways */
+    .transmission-pathways {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 40px;
+      margin-bottom: 100px;
+    }
+
+    .pathway-card {
+      background: var(--card-bg);
+      border-radius: 25px;
+      padding: 40px;
+      backdrop-filter: blur(10px);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pathway-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 60px rgba(39, 174, 96, 0.2);
+    }
+
+    .pathway-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+    }
+
+    .direct-transmission::before { background: linear-gradient(to right, var(--zoonotic-red), #C0392B); }
+    .vector-borne::before { background: linear-gradient(to right, var(--vector-brown), #A04000); }
+    .environmental::before { background: linear-gradient(to right, var(--environment-green), #229954); }
+
+    .pathway-icon {
+      font-size: 3.5rem;
+      margin-bottom: 25px;
+      display: inline-block;
+    }
+
+    .direct-transmission .pathway-icon { color: var(--zoonotic-red); }
+    .vector-borne .pathway-icon { color: var(--vector-brown); }
+    .environmental .pathway-icon { color: var(--environment-green); }
+
+    /* Transmission Chain Visualization */
+    .transmission-chain {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 30px 0;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .chain-node {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .chain-node:hover {
+      transform: scale(1.1);
+      z-index: 10;
+    }
+
+    .chain-arrow {
+      font-size: 1.5rem;
+      color: #7F8C8D;
+    }
+
+    /* Climate-Disease Connection */
+    .climate-disease-section {
+      background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(52, 152, 219, 0.1));
+      padding: 80px 40px;
+      border-radius: 30px;
+      margin: 100px auto;
+    }
+
+    .climate-factors {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 50px;
+    }
+
+    .climate-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 30px;
+      border-left: 5px solid;
+      transition: all 0.3s ease;
+    }
+
+    .climate-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .temperature { border-color: var(--zoonotic-red); }
+    .rainfall { border-color: var(--environment-green); }
+    .deforestation { border-color: var(--vector-brown); }
+
+    /* High-Risk Diseases Grid */
+    .diseases-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 35px;
+      margin-top: 80px;
+    }
+
+    .disease-card {
+      background: var(--card-bg);
+      border-radius: 25px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .disease-card:hover {
+      transform: translateY(-15px);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+    }
+
+    .disease-header {
+      padding: 30px;
+      color: white;
+      position: relative;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .disease-rabies { background: linear-gradient(135deg, #E74C3C, #C0392B); }
+    .disease-lyme { background: linear-gradient(135deg, #8B4513, #A04000); }
+    .disease-hanta { background: linear-gradient(135deg, #27AE60, #229954); }
+    .disease-avian { background: linear-gradient(135deg, #F39C12, #D68910); }
+
+    .disease-icon {
+      position: absolute;
+      top: 25px;
+      right: 25px;
+      font-size: 3rem;
+      opacity: 0.8;
+    }
+
+    .risk-level {
+      display: inline-block;
+      padding: 8px 20px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 20px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.1rem;
+      margin-top: 15px;
+      align-self: flex-start;
+    }
+
+    .disease-details {
+      padding: 30px;
+    }
+
+    .transmission-method {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 15px 0;
+      padding: 15px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 15px;
+    }
+
+    /* Prevention Strategies */
+    .prevention-section {
+      background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(155, 89, 182, 0.1));
+      padding: 80px 40px;
+      border-radius: 30px;
+      margin: 100px auto;
+    }
+
+    .prevention-pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 35px;
+      margin-top: 50px;
+    }
+
+    .pillar-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 35px;
+      transition: all 0.3s ease;
+      border-top: 5px solid var(--environment-green);
+      position: relative;
+    }
+
+    .pillar-card:hover {
+      transform: translateY(-10px);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .pillar-number {
+      position: absolute;
+      top: -20px;
+      left: 30px;
+      width: 40px;
+      height: 40px;
+      background: var(--environment-green);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Roboto Mono', monospace;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .pillar-icon {
+      font-size: 2.5rem;
+      color: var(--environment-green);
+      margin-bottom: 20px;
+    }
+
+    /* Interactive Risk Map */
+    .risk-map-section {
+      max-width: 1000px;
+      margin: 100px auto;
+      padding: 50px;
+      background: linear-gradient(135deg, #0A1E2C, #1C2833);
+      border-radius: 30px;
+      border: 3px solid var(--zoonotic-red);
+      text-align: center;
+    }
+
+    .map-title {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+      color: #A9DFBF;
+    }
+
+    .map-container {
+      width: 100%;
+      height: 400px;
+      background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(231, 76, 60, 0.1));
+      border-radius: 20px;
+      margin: 30px auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hotspot {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--zoonotic-red), transparent);
+      cursor: pointer;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.2); opacity: 1; }
+    }
+
+    .hotspot-info {
+      display: none;
+      position: absolute;
+      background: rgba(0,0,0,0.9);
+      padding: 20px;
+      border-radius: 15px;
+      border: 2px solid var(--zoonotic-red);
+      max-width: 300px;
+      z-index: 100;
+    }
+
+    /* One Health Approach */
+    .one-health-section {
+      text-align: center;
+      padding: 100px 20px;
+      background: linear-gradient(135deg, #0A1E2C, #1C2833);
+      border-top: 4px solid var(--environment-green);
+    }
+
+    .one-health-title {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 3rem;
+      margin-bottom: 40px;
+      color: #A9DFBF;
+    }
+
+    .health-triangle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 50px;
+      margin: 60px auto;
+      max-width: 900px;
+      flex-wrap: wrap;
+    }
+
+    .triangle-node {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .triangle-node:hover {
+      transform: scale(1.1);
+    }
+
+    .human-health { background: linear-gradient(135deg, #3498DB, #2980B9); }
+    .animal-health { background: linear-gradient(135deg, #27AE60, #229954); }
+    .environment-health { background: linear-gradient(135deg, #F39C12, #D68910); }
+
+    .node-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    /* Action Section */
+    .action-section {
+      text-align: center;
+      padding: 80px 20px;
+      margin-top: 50px;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 40px;
+    }
+
+    .action-btn {
+      padding: 18px 35px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.1rem;
+    }
+
+    .action-btn.primary {
+      background: linear-gradient(135deg, var(--environment-green), #229954);
+      color: white;
+      border: none;
+    }
+
+    .action-btn.secondary {
+      background: transparent;
+      color: white;
+      border: 3px solid var(--zoonotic-red);
+    }
+
+    .action-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .health-triangle {
+        gap: 30px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .zoonotic-hero {
+        padding: 100px 20px 60px;
+        min-height: auto;
+      }
+      
+      .zoonotic-hero h1 {
+        font-size: 3rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.2rem;
+      }
+      
+      .risk-indicators {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+      
+      .section-title h2 {
+        font-size: 2.5rem;
+      }
+      
+      .diseases-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+      
+      .action-btn {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .climate-disease-section,
+      .prevention-section {
+        padding: 50px 20px;
+      }
+      
+      .triangle-node {
+        width: 150px;
+        height: 150px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .zoonotic-hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .risk-value {
+        font-size: 2rem;
+      }
+      
+      .one-health-title {
+        font-size: 2.5rem;
+      }
+      
+      .pathway-card,
+      .disease-card,
+      .pillar-card {
+        padding: 25px;
+      }
+      
+      .risk-map-section {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <div id="navbar-container"></div>
+
+  <!-- Hero Section -->
+  <section class="zoonotic-hero">
+    <div class="hero-content">
+      <h1><i class="fas fa-virus"></i> ZOONOTIC DISEASES & ENVIRONMENT</h1>
+      <p class="hero-subtitle">Understanding the complex links between environmental change, wildlife health, and emerging infectious diseases</p>
+      
+      <div class="risk-indicators">
+        <div class="risk-card low">
+          <div style="font-size: 0.9rem; color: #BDC3C7;">Disease Spillover Risk</div>
+          <div class="risk-value">+300%</div>
+          <div style="color: var(--environment-green);">Since 1980</div>
+          <div class="risk-label">High Risk</div>
+        </div>
+        
+        <div class="risk-card medium">
+          <div style="font-size: 0.9rem; color: #BDC3C7;">Climate Influence</div>
+          <div class="risk-value">58%</div>
+          <div style="color: var(--warning-yellow);">Of infectious diseases</div>
+          <div class="risk-label">Medium Risk</div>
+        </div>
+        
+        <div class="risk-card high">
+          <div style="font-size: 0.9rem; color: #BDC3C7;">Habitat Loss Impact</div>
+          <div class="risk-value">+40%</div>
+          <div style="color: var(--zoonotic-red);">Spillover events</div>
+          <div class="risk-label">Critical Risk</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scientific Content -->
+  <div class="content-container">
+    <!-- Transmission Pathways Section -->
+    <section class="transmission-section">
+      <div class="section-title">
+        <h2>Disease Transmission Pathways</h2>
+      </div>
+      <p style="text-align: center; max-width: 800px; margin: 0 auto 50px; color: #BDC3C7;">
+        How pathogens jump between species and reach human populations through environmental interfaces
+      </p>
+      
+      <div class="transmission-pathways">
+        <div class="pathway-card direct-transmission">
+          <div class="pathway-icon">
+            <i class="fas fa-handshake"></i>
+          </div>
+          <h3 style="color: var(--zoonotic-red); margin-bottom: 20px;">Direct Transmission</h3>
+          <p>Close contact with infected animals through bites, scratches, or handling. Includes saliva, blood, and bodily fluids.</p>
+          
+          <div class="transmission-chain">
+            <div class="chain-node" style="background: var(--vector-brown);" title="Wildlife Reservoir">
+              <i class="fas fa-paw"></i>
+            </div>
+            <div class="chain-arrow">→</div>
+            <div class="chain-node" style="background: var(--warning-yellow);" title="Intermediate Host">
+              <i class="fas fa-dog"></i>
+            </div>
+            <div class="chain-arrow">→</div>
+            <div class="chain-node" style="background: var(--zoonotic-red);" title="Human Infection">
+              <i class="fas fa-user"></i>
+            </div>
+          </div>
+          
+          <div style="margin-top: 25px; padding: 20px; background: rgba(231, 76, 60, 0.1); border-radius: 15px;">
+            <strong>Examples:</strong> Rabies (animal bites), Avian Influenza (poultry handling), Brucellosis (livestock contact)
+          </div>
+        </div>
+        
+        <div class="pathway-card vector-borne">
+          <div class="pathway-icon">
+            <i class="fas fa-mosquito"></i>
+          </div>
+          <h3 style="color: var(--vector-brown); margin-bottom: 20px;">Vector-Borne Transmission</h3>
+          <p>Pathogens transmitted by arthropod vectors like mosquitoes, ticks, and fleas. Climate change expands vector ranges.</p>
+          
+          <div style="margin: 25px 0;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+              <span style="color: var(--environment-green);">Historical Range</span>
+              <span style="color: var(--zoonotic-red);">Expanded Range</span>
+            </div>
+            <div style="height: 10px; background: linear-gradient(to right, var(--environment-green), var(--warning-yellow), var(--zoonotic-red)); border-radius: 5px;"></div>
+          </div>
+          
+          <ul style="list-style: none; padding: 0; margin-top: 25px;">
+            <li style="margin-bottom: 15px; display: flex; align-items: start; gap: 10px;">
+              <i class="fas fa-temperature-high" style="color: var(--warning-yellow);"></i>
+              <span><strong>Temperature sensitive:</strong> Vector reproduction rates increase with warming</span>
+            </li>
+            <li style="margin-bottom: 15px; display: flex; align-items: start; gap: 10px;">
+              <i class="fas fa-map-marker-alt" style="color: var(--zoonotic-red);"></i>
+              <span><strong>Range expansion:</strong> Moving into previously temperate zones</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="pathway-card environmental">
+          <div class="pathway-icon">
+            <i class="fas fa-water"></i>
+          </div>
+          <h3 style="color: var(--environment-green); margin-bottom: 20px;">Environmental Transmission</h3>
+          <p>Pathogens in soil, water, or air. Includes contaminated water supplies, aerosolized particles, and food sources.</p>
+          
+          <div style="margin-top: 25px; padding: 25px; background: rgba(39, 174, 96, 0.1); border-radius: 15px;">
+            <h4 style="margin-bottom: 15px; color: #A9DFBF;">Climate Change Impacts:</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+              <div style="text-align: center;">
+                <div style="font-size: 2rem; color: var(--zoonotic-red);"><i class="fas fa-flood"></i></div>
+                <div style="font-size: 0.9rem;">Flooding spreads pathogens</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-size: 2rem; color: var(--warning-yellow);"><i class="fas fa-wind"></i></div>
+                <div style="font-size: 0.9rem;">Wind dispersal increases</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Climate-Disease Connection -->
+    <section class="climate-disease-section">
+      <div class="section-title">
+        <h2 style="color: white;">Climate-Disease Nexus</h2>
+      </div>
+      <p style="text-align: center; max-width: 800px; margin: 0 auto 30px; color: #A9DFBF;">
+        How environmental changes create perfect conditions for disease emergence and spread
+      </p>
+      
+      <div class="climate-factors">
+        <div class="climate-card temperature" onclick="showClimateDetail('temperature')">
+          <h4 style="margin-bottom: 15px; color: #FFEAA7;"><i class="fas fa-thermometer-full"></i> Temperature Rise</h4>
+          <p>Warmer temperatures accelerate pathogen replication, expand vector ranges, and stress animal immune systems.</p>
+          <div style="margin-top: 15px; font-size: 0.9rem; color: #BDC3C7;">
+            <i class="fas fa-chart-line"></i> +1°C = 5-10% vector reproduction rate increase
+          </div>
+        </div>
+        
+        <div class="climate-card rainfall" onclick="showClimateDetail('rainfall')">
+          <h4 style="margin-bottom: 15px; color: #FFEAA7;"><i class="fas fa-cloud-rain"></i> Precipitation Changes</h4>
+          <p>Heavy rainfall and flooding create breeding sites for vectors and spread contaminants through water systems.</p>
+          <div style="margin-top: 15px; font-size: 0.9rem; color: #BDC3C7;">
+            <i class="fas fa-exclamation-triangle"></i> Flooding increases leptospirosis risk 300%
+          </div>
+        </div>
+        
+        <div class="climate-card deforestation" onclick="showClimateDetail('deforestation')">
+          <h4 style="margin-bottom: 15px; color: #FFEAA7;"><i class="fas fa-tree"></i> Habitat Destruction</h4>
+          <p>Deforestation forces wildlife into human areas, increasing contact rates and creating new transmission pathways.</p>
+          <div style="margin-top: 15px; font-size: 0.9rem; color: #BDC3C7;">
+            <i class="fas fa-animal"></i> 31% of disease outbreaks linked to land use change
+          </div>
+        </div>
+      </div>
+      
+      <div style="margin-top: 50px; padding: 25px; background: rgba(0,0,0,0.3); border-radius: 15px; max-width: 800px; margin-left: auto; margin-right: auto;">
+        <h4 style="color: #FFEAA7; margin-bottom: 15px;"><i class="fas fa-link"></i> Environmental-Disease Linkages</h4>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center;">
+          <div>
+            <div style="font-family: 'Roboto Mono', monospace; font-size: 1.2rem; color: var(--environment-green);">71%</div>
+            <div style="font-size: 0.9rem;">Of emerging diseases originate in wildlife</div>
+          </div>
+          <div>
+            <div style="font-family: 'Roboto Mono', monospace; font-size: 1.2rem; color: var(--warning-yellow);">2x</div>
+            <div style="font-size: 0.9rem;">Faster disease emergence since 1980</div>
+          </div>
+          <div>
+            <div style="font-family: 'Roboto Mono', monospace; font-size: 1.2rem; color: var(--zoonotic-red);">$1T</div>
+            <div style="font-size: 0.9rem;">Annual economic impact of zoonoses</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- High-Risk Diseases -->
+    <section class="diseases-section">
+      <div class="section-title">
+        <h2>High-Risk Zoonotic Diseases</h2>
+      </div>
+      <p style="text-align: center; max-width: 800px; margin: 0 auto 30px; color: #BDC3C7;">
+        Diseases with significant environmental connections and increasing threat levels
+      </p>
+      
+      <div class="diseases-grid">
+        <!-- Rabies -->
+        <div class="disease-card">
+          <div class="disease-header disease-rabies">
+            <div class="disease-icon">🦇</div>
+            <h3 style="margin: 0 0 10px; color: white;">Rabies</h3>
+            <div class="risk-level">Risk: High</div>
+          </div>
+          <div class="disease-details">
+            <p><strong>Environmental link:</strong> Urbanization brings bats and wildlife into closer contact with humans and pets.</p>
+            <div class="transmission-method">
+              <i class="fas fa-teeth" style="color: var(--zoonotic-red);"></i>
+              <div>
+                <div style="font-weight: bold;">Transmission:</div>
+                <div style="font-size: 0.9rem;">Animal bites (dogs, bats, raccoons)</div>
+              </div>
+            </div>
+            <ul style="list-style: none; padding: 0; margin-top: 20px;">
+              <li style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-globe-americas" style="color: var(--zoonotic-red);"></i>
+                <span>59,000 human deaths/year worldwide</span>
+              </li>
+              <li style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-home" style="color: var(--warning-yellow);"></i>
+                <span>Habitat fragmentation increases risk</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Lyme Disease -->
+        <div class="disease-card">
+          <div class="disease-header disease-lyme">
+            <div class="disease-icon">🕷️</div>
+            <h3 style="margin: 0 0 10px; color: white;">Lyme Disease</h3>
+            <div class="risk-level">Risk: Increasing</div>
+          </div>
+          <div class="disease-details">
+            <p><strong>Environmental link:</strong> Warmer winters allow tick populations to expand northward and survive year-round.</p>
+            <div class="transmission-method">
+              <i class="fas fa-bug" style="color: var(--vector-brown);"></i>
+              <div>
+                <div style="font-weight: bold;">Transmission:</div>
+                <div style="font-size: 0.9rem;">Tick bites (Ixodes species)</div>
+              </div>
+            </div>
+            <ul style="list-style: none; padding: 0; margin-top: 20px;">
+              <li style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-chart-line" style="color: var(--zoonotic-red);"></i>
+                <span>300% increase in US since 1990</span>
+              </li>
+              <li style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-deer" style="color: var(--vector-brown);"></i>
+                <span>Deer population growth amplifies risk</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Hantavirus -->
+        <div class="disease-card">
+          <div class="disease-header disease-hanta">
+            <div class="disease-icon">🐀</div>
+            <h3 style="margin: 0 0 10px; color: white;">Hantavirus</h3>
+            <div class="risk-level">Risk: Moderate</div>
+          </div>
+          <div class="disease-details">
+            <p><strong>Environmental link:</strong> Rodent populations boom after wet winters, increasing human-rodent contact.</p>
+            <div class="transmission-method">
+              <i class="fas fa-wind" style="color: var(--environment-green);"></i>
+              <div>
+                <div style="font-weight: bold;">Transmission:</div>
+                <div style="font-size: 0.9rem;">Aerosolized rodent droppings</div>
+              </div>
+            </div>
+            <ul style="list-style: none; padding: 0; margin-top: 20px;">
+              <li style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-tint" style="color: var(--environment-green);"></i>
+                <span>Linked to heavy rainfall patterns</span>
+              </li>
+              <li style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-seedling" style="color: var(--warning-yellow);"></i>
+                <span>Increased with plant growth after rains</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Avian Influenza -->
+        <div class="disease-card">
+          <div class="disease-header disease-avian">
+            <div class="disease-icon">🦆</div>
+            <h3 style="margin: 0 0 10px; color: white;">Avian Influenza</h3>
+            <div class="risk-level">Risk: High</div>
+          </div>
+          <div class="disease-details">
+            <p><strong>Environmental link:</strong> Climate-altered migration patterns mix wild and domestic bird populations.</p>
+            <div class="transmission-method">
+              <i class="fas fa-feather" style="color: var(--warning-yellow);"></i>
+              <div>
+                <div style="font-weight: bold;">Transmission:</div>
+                <div style="font-size: 0.9rem;">Direct contact with birds/secretions</div>
+              </div>
+            </div>
+            <ul style="list-style: none; padding: 0; margin-top: 20px;">
+              <li style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-exchange-alt" style="color: var(--zoonotic-red);"></i>
+                <span>Mixing of wild and domestic flocks</span>
+              </li>
+              <li style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-route" style="color: var(--warning-yellow);"></i>
+                <span>Altered bird migration routes</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Prevention Strategies -->
+    <section class="prevention-section">
+      <div class="section-title">
+        <h2 style="color: white;">Prevention & One Health Approach</h2>
+      </div>
+      <p style="text-align: center; max-width: 800px; margin: 0 auto 30px; color: #A9DFBF;">
+        Integrated strategies that protect human, animal, and environmental health simultaneously
+      </p>
+      
+      <div class="prevention-pillars">
+        <div class="pillar-card">
+          <div class="pillar-number">1</div>
+          <div class="pillar-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h4 style="color: white; margin-bottom: 15px;">Ecosystem Protection</h4>
+          <p>Preserve natural habitats to maintain biodiversity and reduce wildlife-human contact. Buffer zones between wild and populated areas.</p>
+          <ul style="list-style: none; padding: 0; margin-top: 20px;">
+            <li style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-check" style="color: var(--environment-green);"></i>
+              <span>Maintain wildlife corridors</span>
+            </li>
+            <li style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-check" style="color: var(--environment-green);"></i>
+              <span>Protect natural predators</span>
+            </li>
+            <li style="display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-check" style="color: var(--environment-green);"></i>
+              <span>Sustainable land use planning</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="pillar-card">
+          <div class="pillar-number">2</div>
+          <div class="pillar-icon">
+            <i class="fas fa-clinic-medical"></i>
+          </div>
+          <h4 style="color: white; margin-bottom: 15px;">Animal Health Surveillance</h4>
+          <p>Monitor wildlife and livestock health for early detection of emerging diseases. One Health surveillance networks.</p>
+          <ul style="list-style: none; padding: 0; margin-top: 20px;">
+            <li style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-check" style="color: var(--environment-green);"></i>
+              <span>Wildlife disease monitoring</span>
+            </li>
+            <li style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-check" style="color: var(--environment-green);"></i>
+              <span>Livestock vaccination programs</span>
+            </li>
+            <li style="display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-check" style="color: var(--environment-green);"></i>
+              <span>Community reporting systems</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="pillar-card">
+          <div class="pillar-number">3</div>
+          <div class="pillar-icon">
+            <i class="fas fa-user-md"></i>
+          </div>
+          <h4 style="color: white; margin-bottom: 15px;">Human Behavioral Changes</h4>
+          <p>Reduce high-risk activities and improve hygiene practices. Education on safe interactions with wildlife and domestic animals.</p>
+          <ul style="list-style: none; padding: 0; margin-top: 20px;">
+            <li style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-check" style="color: var(--environment-green);"></i>
+              <span>Safe food handling practices</span>
+            </li>
+            <li style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-check" style="color: var(--environment-green);"></i>
+              <span>Vector bite prevention</span>
+            </li>
+            <li style="display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-check" style="color: var(--environment-green);"></i>
+              <span>Responsible pet ownership</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Risk Map -->
+    <section class="risk-map-section">
+      <h3 class="map-title">Global Zoonotic Disease Hotspots</h3>
+      <p style="max-width: 700px; margin: 0 auto 40px; color: #BDC3C7;">
+        Interactive map showing regions with high zoonotic disease emergence risk due to environmental factors
+      </p>
+      
+      <div class="map-container" id="diseaseMap">
+        <div class="hotspot" style="top: 30%; left: 25%;" data-disease="Amazon Basin - Deforestation diseases">
+          <i class="fas fa-tree"></i>
+        </div>
+        <div class="hotspot" style="top: 40%; left: 60%;" data-disease="Congo Basin - Ebola, Marburg viruses">
+          <i class="fas fa-virus"></i>
+        </div>
+        <div class="hotspot" style="top: 60%; left: 45%;" data-disease="Southeast Asia - Avian Influenza hotspot">
+          <i class="fas fa-feather-alt"></i>
+        </div>
+        <div class="hotspot" style="top: 50%; left: 75%;" data-disease="North America - Expanding Lyme disease range">
+          <i class="fas fa-bug"></i>
+        </div>
+        <div class="hotspot" style="top: 35%; left: 50%;" data-disease="Europe - West Nile virus expansion">
+          <i class="fas fa-mosquito"></i>
+        </div>
+      </div>
+      
+      <div id="hotspotInfo" class="hotspot-info"></div>
+      
+      <div style="margin-top: 40px;">
+        <h4 style="color: #A9DFBF; margin-bottom: 20px;">Key Environmental Risk Factors:</h4>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center;">
+          <div>
+            <div style="font-size: 2rem; color: var(--vector-brown);"><i class="fas fa-forest"></i></div>
+            <div style="font-size: 0.9rem;">Deforestation Rate</div>
+          </div>
+          <div>
+            <div style="font-size: 2rem; color: var(--zoonotic-red);"><i class="fas fa-temperature-high"></i></div>
+            <div style="font-size: 0.9rem;">Temperature Increase</div>
+          </div>
+          <div>
+            <div style="font-size: 2rem; color: var(--warning-yellow);"><i class="fas fa-city"></i></div>
+            <div style="font-size: 0.9rem;">Urban Encroachment</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- One Health Approach -->
+    <section class="one-health-section">
+      <h2 class="one-health-title">The One Health Framework</h2>
+      <p style="max-width: 800px; margin: 0 auto 30px; color: #BDC3C7; font-size: 1.2rem;">
+        Recognizing that human health, animal health, and environmental health are inextricably linked
+      </p>
+      
+      <div class="health-triangle">
+        <div class="triangle-node human-health">
+          <div class="node-icon">
+            <i class="fas fa-user-md"></i>
+          </div>
+          <h4 style="margin: 0 0 10px; color: white;">Human Health</h4>
+          <p style="font-size: 0.9rem;">Disease prevention, treatment, and public health infrastructure</p>
+        </div>
+        
+        <div class="triangle-node animal-health">
+          <div class="node-icon">
+            <i class="fas fa-paw"></i>
+          </div>
+          <h4 style="margin: 0 0 10px; color: white;">Animal Health</h4>
+          <p style="font-size: 0.9rem;">Wildlife conservation, livestock health, and veterinary medicine</p>
+        </div>
+        
+        <div class="triangle-node environment-health">
+          <div class="node-icon">
+            <i class="fas fa-leaf"></i>
+          </div>
+          <h4 style="margin: 0 0 10px; color: white;">Environmental Health</h4>
+          <p style="font-size: 0.9rem;">Ecosystem integrity, climate stability, and sustainable practices</p>
+        </div>
+      </div>
+      
+      <div style="max-width: 800px; margin: 60px auto 0; padding: 40px; background: rgba(52, 152, 219, 0.1); border-radius: 25px; border: 2px solid rgba(52, 152, 219, 0.3);">
+        <h3 style="color: #A9DFBF; margin-bottom: 25px;"><i class="fas fa-handshake"></i> Integrated Solutions</h3>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px;">
+          <div>
+            <h4 style="color: #FFEAA7; margin-bottom: 15px;">Success Stories</h4>
+            <ul style="list-style: none; padding: 0;">
+              <li style="margin-bottom: 10px; display: flex; align-items: start; gap: 10px;">
+                <i class="fas fa-check-circle" style="color: var(--environment-green);"></i>
+                <span>Rabies elimination through dog vaccination + human education</span>
+              </li>
+              <li style="display: flex; align-items: start; gap: 10px;">
+                <i class="fas fa-check-circle" style="color: var(--environment-green);"></i>
+                <span>Malaria reduction via wetland management + vector control</span>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 style="color: #FFEAA7; margin-bottom: 15px;">Future Priorities</h4>
+            <ul style="list-style: none; padding: 0;">
+              <li style="margin-bottom: 10px; display: flex; align-items: start; gap: 10px;">
+                <i class="fas fa-bullseye" style="color: var(--warning-yellow);"></i>
+                <span>Early warning systems using environmental data</span>
+              </li>
+              <li style="display: flex; align-items: start; gap: 10px;">
+                <i class="fas fa-users" style="color: var(--environment-green);"></i>
+                <span>Community-based surveillance networks</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Action Section -->
+    <section class="action-section">
+      <h2 style="font-family: 'Roboto Mono', monospace; font-size: 3rem; margin-bottom: 40px; color: #A9DFBF;">
+        Join the One Health Movement
+      </h2>
+      <p style="max-width: 800px; margin: 0 auto 30px; color: #BDC3C7; font-size: 1.2rem;">
+        Protecting our shared health requires collective action across disciplines and communities
+      </p>
+      
+      <div class="action-buttons">
+        <a href="../pages/education.html" class="action-btn primary">
+          <i class="fas fa-book-medical"></i> Learn One Health Principles
+        </a>
+        <a href="../pages/community-action-hub.html" class="action-btn secondary">
+          <i class="fas fa-hands-helping"></i> Join Surveillance Network
+        </a>
+        <a href="../pages/resources.html" class="action-btn secondary">
+          <i class="fas fa-download"></i> Download Disease Prevention Guide
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <!-- Scripts -->
+  <script>
+
+
+      // Load Navbar and Footer
+      document.addEventListener('DOMContentLoaded', function() {
+        // Load Navbar
+        fetch('components/navbar.html')
+          .then(response => {
+            if (!response.ok) throw new Error('Navbar not found');
+            return response.text();
+          })
+          .then(html => {
+            document.getElementById('navbar-container').innerHTML = html;
+            // Remove the temporary navbar styles
+            const tempNav = document.querySelector('.temp-navbar');
+            if (tempNav) tempNav.style.display = 'none';
+          })
+          .catch(error => {
+            console.warn('Using fallback navbar:', error);
+            // Keep the fallback navbar visible
+          });
+
+        // Load Footer
+        fetch('components/footer.html')
+          .then(response => {
+            if (!response.ok) throw new Error('Footer not found');
+            return response.text();
+          })
+          .then(html => {
+            document.getElementById('footer-container').innerHTML = html;
+            // Remove the temporary footer styles
+            const tempFooter = document.querySelector('.temp-footer');
+            if (tempFooter) tempFooter.style.display = 'none';
+          })
+          .catch(error => {
+            console.warn('Using fallback footer:', error);
+            // Keep the fallback footer visible
+          });
+      });
+      
+    // Interactive map functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const hotspots = document.querySelectorAll('.hotspot');
+      const hotspotInfo = document.getElementById('hotspotInfo');
+      
+      hotspots.forEach(hotspot => {
+        hotspot.addEventListener('mouseenter', function(e) {
+          const diseaseInfo = this.getAttribute('data-disease');
+          const rect = this.getBoundingClientRect();
+          
+          hotspotInfo.innerHTML = `
+            <h4 style="margin: 0 0 10px; color: var(--zoonotic-red);">
+              <i class="fas fa-exclamation-triangle"></i> Disease Hotspot
+            </h4>
+            <p style="margin: 0; color: #BDC3C7;">${diseaseInfo}</p>
+            <div style="margin-top: 10px; font-size: 0.9rem; color: var(--warning-yellow);">
+              <i class="fas fa-info-circle"></i> Click for prevention strategies
+            </div>
+          `;
+          
+          hotspotInfo.style.display = 'block';
+          hotspotInfo.style.left = rect.left + 'px';
+          hotspotInfo.style.top = (rect.top - 150) + 'px';
+        });
+        
+        hotspot.addEventListener('mouseleave', function() {
+          hotspotInfo.style.display = 'none';
+        });
+        
+        hotspot.addEventListener('click', function() {
+          const disease = this.getAttribute('data-disease').split(' - ')[1];
+          alert(`Prevention strategies for ${disease}:\n\n1. Habitat protection\n2. Wildlife monitoring\n3. Community education\n4. Early detection systems\n\nClick "Learn One Health Principles" for detailed information.`);
+        });
+      });
+      
+      // Close hotspot info when clicking elsewhere
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.hotspot') && !e.target.closest('.hotspot-info')) {
+          hotspotInfo.style.display = 'none';
+        }
+      });
+    });
+    
+    function showClimateDetail(factor) {
+      const details = {
+        temperature: "Temperature increases pathogen replication rates, expand vector ranges into new areas, and stress animal immune systems making them more susceptible to infections.",
+        rainfall: "Extreme rainfall events create breeding sites for mosquitoes and other vectors, while flooding spreads pathogens through water systems and increases human-vector contact.",
+        deforestation: "Habitat destruction forces wildlife into closer contact with humans and domestic animals, creating new interfaces for disease transmission and disrupting ecological balances that normally suppress pathogens."
+      };
+      
+      alert(`Climate Impact: ${factor.toUpperCase()}\n\n${details[factor]}\n\nMitigation: Reduce emissions, protect natural habitats, implement early warning systems.`);
+    }
+  </script>
+</body>
+</html>
