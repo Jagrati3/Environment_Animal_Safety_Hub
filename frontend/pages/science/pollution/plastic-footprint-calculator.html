@@ -6,6 +6,8 @@
   <title>Plastic Footprint Calculator</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../js/plastic-footprint-calculator.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     body {
       font-family: 'Montserrat', Arial, sans-serif;
@@ -172,6 +174,36 @@
       </form>
       <div class="calc-result" id="calcResult"></div>
     </div>
+    <div class="chart-section">
+      <h2>Category Breakdown</h2>
+      <canvas id="plasticChart"></canvas>
+    </div>
+    <div class="comparison-section">
+      <h2>How You Compare</h2>
+      <div class="comparison-grid">
+        <div class="comparison-card">
+          <div class="comparison-label">Your Weekly Usage</div>
+          <div class="comparison-value" id="yourUsage">-</div>
+        </div>
+        <div class="comparison-card">
+          <div class="comparison-label">National Average</div>
+          <div class="comparison-value" id="nationalAvg">45</div>
+        </div>
+        <div class="comparison-card">
+          <div class="comparison-label">Difference</div>
+          <div class="comparison-value" id="difference">-</div>
+        </div>
+      </div>
+    </div>
+    <div class="badges-section">
+      <h2>Your Achievements</h2>
+      <div class="badges-grid" id="badgesGrid"></div>
+    </div>
+    <div class="timeline-section">
+      <h2>Monthly Progress Timeline</h2>
+      <div class="timeline-grid" id="timelineGrid"></div>
+    </div>
+    <div class="notification" id="notification" style="display:none;"></div>
     <div class="progress-section">
       <div class="progress-title">Your Reduction Progress</div>
       <div class="progress-label" id="progressLabel">Set a reduction goal to start tracking!</div>
@@ -184,6 +216,46 @@
         <button type="submit" class="calc-btn" style="background:#fbc02d;color:#263238;">Set Goal</button>
       </form>
     </div>
+    <div class="chart-section">
+      <h2>Category Breakdown</h2>
+      <div class="chart-container">
+        <canvas id="plasticChart"></canvas>
+      </div>
+      <div class="category-legend" id="categoryLegend"></div>
+    </div>
+    <div class="comparison-section">
+      <h2>Your Score vs. Average</h2>
+      <div class="comparison-grid">
+        <div class="comparison-card">
+          <div class="comparison-label">Your Weekly Usage</div>
+          <div class="comparison-value" id="userScore">-</div>
+          <div class="comparison-unit">items/week</div>
+        </div>
+        <div class="comparison-card">
+          <div class="comparison-label">National Average</div>
+          <div class="comparison-value" id="nationalScore">22</div>
+          <div class="comparison-unit">items/week</div>
+        </div>
+        <div class="comparison-card">
+          <div class="comparison-label">Difference</div>
+          <div class="comparison-value" id="scoreDiff">-</div>
+          <div class="comparison-unit">vs average</div>
+        </div>
+        <div class="comparison-card">
+          <div class="comparison-label">Eco Status</div>
+          <div class="comparison-value eco-badge" id="ecoStatus">-</div>
+        </div>
+      </div>
+    </div>
+    <div class="badges-section">
+      <h2>Achievements & Milestones</h2>
+      <div class="badges-grid" id="badgesGrid"></div>
+      <div id="achievementNotification" class="notification" style="display:none;"></div>
+    </div>
+    <div class="timeline-section">
+      <h2>Monthly Tracking</h2>
+      <div class="timeline-container" id="timelineContainer"></div>
+    </div>
     <div class="tips-section">
       <div class="tips-title">Tips to Reduce Plastic Waste</div>
       <ul class="tips-list" id="tipsList">
@@ -191,6 +263,6 @@
       </ul>
     </div>
   </div>
-  <script src="../js/plastic-footprint-calculator.js"></script>
+  <script src="../js/plastic-footprint-calculator.js" defer></script>
 </body>
 </html>
