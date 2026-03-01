@@ -6,26 +6,82 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Heat Inequality Mapper</title>
   <link rel="stylesheet" href="heat-inequality-mapper.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
   <div class="heat-mapper-container">
     <h1>Heat Inequality Mapper</h1>
+    <div class="controls-section">
+      <div class="filter-group">
+        <label for="urgencyFilter">Filter by Urgency:</label>
+        <select id="urgencyFilter">
+          <option value="all">All Neighborhoods</option>
+          <option value="urgent">Urgent Only</option>
+          <option value="non-urgent">Non-Urgent Only</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="incomeFilter">Filter by Income:</label>
+        <select id="incomeFilter">
+          <option value="all">All Income Levels</option>
+          <option value="low">Low (&lt; $40k)</option>
+          <option value="medium">Medium ($40k - $70k)</option>
+          <option value="high">High (&gt; $70k)</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="treeCoverFilter">Filter by Tree Cover:</label>
+        <select id="treeCoverFilter">
+          <option value="all">All Tree Cover</option>
+          <option value="low">Low (&lt; 20%)</option>
+          <option value="medium">Medium (20% - 40%)</option>
+          <option value="high">High (&gt; 40%)</option>
+        </select>
+      </div>
+      <div class="sort-group">
+        <label for="sortBy">Sort by:</label>
+        <select id="sortBy">
+          <option value="temp-desc">Highest Temperature</option>
+          <option value="temp-asc">Lowest Temperature</option>
+          <option value="urgency">Urgency</option>
+          <option value="income-asc">Lowest Income</option>
+          <option value="treeCover-asc">Lowest Tree Cover</option>
+        </select>
+      </div>
+    </div>
     <div class="heat-mapper-map" id="heatMapperMap">
-      <span>Neighborhood Heat Map Visualization</span>
+      <canvas id="heatmapChart"></canvas>
+    </div>
+    <div class="legend-section">
+      <h3>Heat Severity Legend</h3>
+      <div class="legend-items">
+        <div class="legend-item"><span class="legend-color" style="background: #d84315;"></span> Extreme (35°C+)</div>
+        <div class="legend-item"><span class="legend-color" style="background: #ff7043;"></span> High (32-34°C)</div>
+        <div class="legend-item"><span class="legend-color" style="background: #ffb74d;"></span> Moderate (28-31°C)</div>
+        <div class="legend-item"><span class="legend-color" style="background: #66bb6a;"></span> Low (&lt; 28°C)</div>
+      </div>
+    </div>
+    <div class="timeline-section">
+      <h3>Historical Heat Timeline</h3>
+      <div class="timeline-controls">
+        <input type="range" id="yearSlider" min="2020" max="2026" value="2026" class="year-slider">
+        <span id="yearDisplay">2026</span>
+      </div>
+      <div class="timeline-data" id="timelineData"></div>
     </div>
     <div class="heat-mapper-visual" id="heatMapperVisual"></div>
     <div class="heat-mapper-actions" id="heatMapperActions"></div>
     <div class="heat-mapper-impact" id="heatMapperImpact"></div>
     <div class="heat-mapper-history" id="heatMapperHistory"></div>
     <div class="heat-mapper-feedback" id="heatMapperFeedback">
-      <h2>Feedback</h2>
+      <h2>Community Feedback & Reports</h2>
       <form id="heatFeedbackForm">
-        <textarea id="heatFeedbackInput" placeholder="Share your thoughts..."></textarea>
-        <button type="submit">Submit Feedback</button>
+        <textarea id="heatFeedbackInput" placeholder="Share your heat safety concerns or insights..."></textarea>
+        <button type="submit">Submit Report</button>
       </form>
       <div id="heatFeedbackList"></div>
     </div>
   </div>
-  <script src="heat-inequality-mapper.js"></script>
+  <script src="heat-inequality-mapper.js" defer></script>
 </body>
 </html>
