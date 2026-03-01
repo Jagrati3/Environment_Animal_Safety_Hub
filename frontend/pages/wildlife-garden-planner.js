@@ -2,6 +2,16 @@
 // Handles plant selection and habitat tips
 
 document.addEventListener('DOMContentLoaded', function() {
+    // --- Map UI Initialization ---
+    const gardenMapDiv = document.getElementById('gardenMap');
+    if (gardenMapDiv) {
+      // Initialize Leaflet map
+      const map = L.map('gardenMap').setView([51.505, -0.09], 2);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+      // Optionally, add a marker or other features here
+    }
   // --- Plant Selection ---
   const plants = [
     { icon: '🌻', title: 'Sunflower', desc: 'Attracts pollinators and birds.' },

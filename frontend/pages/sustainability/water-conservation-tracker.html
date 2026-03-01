@@ -6,6 +6,7 @@
   <title>Water Conservation Tracker</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../js/water-conservation-tracker.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     body {
       font-family: 'Montserrat', Arial, sans-serif;
@@ -134,11 +135,125 @@
       margin: 0;
       padding-left: 18px;
     }
+    .chart-section {
+      background: #fff3e0;
+      border-radius: 14px;
+      padding: 28px 20px;
+      margin-bottom: 36px;
+      box-shadow: 0 2px 8px rgba(255, 152, 0, 0.07);
+    }
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .chart-header h2 {
+      margin: 0;
+      font-size: 1.4rem;
+      color: #e65100;
+    }
+    .chart-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .view-toggle {
+      background: #ffb74d;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .view-toggle.active {
+      background: #e65100;
+      box-shadow: 0 2px 6px rgba(230, 81, 0, 0.3);
+    }
+    .view-toggle:hover {
+      background: #e65100;
+    }
+    .export-btn {
+      background: #66bb6a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .export-btn:hover {
+      background: #43a047;
+    }
+    .chart-date-range {
+      font-size: 0.9rem;
+      color: #555;
+      margin-top: 12px;
+      text-align: center;
+    }
+    .comparison-section {
+      background: #ede7f6;
+      border-radius: 14px;
+      padding: 28px 20px;
+      margin-bottom: 36px;
+      box-shadow: 0 2px 8px rgba(103, 58, 183, 0.07);
+    }
+    .comparison-section h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: #673ab7;
+      font-size: 1.4rem;
+    }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .metric-card {
+      background: white;
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(103, 58, 183, 0.1);
+    }
+    .metric-label {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .metric-value {
+      font-size: 1.8rem;
+      color: #673ab7;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .metric-unit {
+      font-size: 0.8rem;
+      color: #999;
+    }
     @media (max-width: 700px) {
       .container { padding: 18px 4vw; }
       h1 { font-size: 2rem; }
-      .tracker-section, .goal-section, .education-section { padding: 18px 6px; }
+      .tracker-section, .goal-section, .education-section, .chart-section, .comparison-section { padding: 18px 6px; }
       .tracker-form { flex-direction: column; gap: 12px; }
+      .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .chart-controls {
+        width: 100%;
+      }
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -171,6 +286,43 @@
         <button type="submit" class="tracker-btn">Track</button>
       </form>
       <div class="tracker-result" id="trackerResult"></div>
+    </div>
+    <div class="chart-section">
+      <div class="chart-header">
+        <h2>Usage Trends & History</h2>
+        <div class="chart-controls">
+          <button class="view-toggle active" data-view="weekly">Weekly View</button>
+          <button class="view-toggle" data-view="monthly">Monthly View</button>
+          <button class="export-btn" id="exportDataBtn">📥 Export Data</button>
+        </div>
+      </div>
+      <canvas id="waterTrendChart" style="max-height: 300px;"></canvas>
+      <div class="chart-date-range" id="dateRange"></div>
+    </div>
+    <div class="comparison-section">
+      <h2>Comparison & Analytics</h2>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">Your Avg Weekly Usage</div>
+          <div class="metric-value" id="avgUsage">-</div>
+          <div class="metric-unit">liters/week</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">National Average</div>
+          <div class="metric-value" id="nationalAvg">500</div>
+          <div class="metric-unit">liters/week</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Your vs Average</div>
+          <div class="metric-value" id="comparison">-</div>
+          <div class="metric-unit">difference</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Total Savings</div>
+          <div class="metric-value" id="totalSavings">-</div>
+          <div class="metric-unit">liters saved</div>
+        </div>
+      </div>
     </div>
     <div class="goal-section">
       <div class="goal-title">Your Conservation Goal</div>
