@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Energy Bill Predictor</title>
+  <link rel="stylesheet" href="energy-bill-predictor.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="predictor-container">
+    <h1>Energy Bill Predictor</h1>
+    <form id="billForm">
+      <label for="billUpload">Upload Past Utility Bills (CSV):</label>
+      <input type="file" id="billUpload" accept=".csv">
+      <div class="manual-entry">
+        <label>Or enter bills manually:</label>
+        <div id="manualBills">
+          <div class="bill-row">
+            <input type="month" class="bill-month" value="2025-09" required>
+            <input type="number" class="bill-amount" placeholder="Amount ($)" value="120" min="0" required>
+          </div>
+          <div class="bill-row">
+            <input type="month" class="bill-month" value="2025-10" required>
+            <input type="number" class="bill-amount" placeholder="Amount ($)" value="135" min="0" required>
+          </div>
+          <div class="bill-row">
+            <input type="month" class="bill-month" value="2025-11" required>
+            <input type="number" class="bill-amount" placeholder="Amount ($)" value="150" min="0" required>
+          </div>
+          <div class="bill-row">
+            <input type="month" class="bill-month" value="2025-12" required>
+            <input type="number" class="bill-amount" placeholder="Amount ($)" value="180" min="0" required>
+          </div>
+          <div class="bill-row">
+            <input type="month" class="bill-month" value="2026-01" required>
+            <input type="number" class="bill-amount" placeholder="Amount ($)" value="175" min="0" required>
+          </div>
+          <div class="bill-row">
+            <input type="month" class="bill-month" value="2026-02" required>
+            <input type="number" class="bill-amount" placeholder="Amount ($)" value="165" min="0" required>
+          </div>
+        </div>
+        <button type="button" id="addBillRow">Add Row</button>
+      </div>
+      <button type="submit">Predict & Analyze</button>
+    </form>
+    <div id="predictionResults" class="results-section" style="display:none;">
+      <div class="results-header">
+        <h2>Prediction & Analysis Results</h2>
+        <button id="exportCsvBtn" class="export-btn">📥 Export Data</button>
+      </div>
+      <div class="prediction-cards">
+        <div class="prediction-card">
+          <div class="card-label">Predicted Next Bill</div>
+          <div class="card-value" id="nextBillDisplay">-</div>
+        </div>
+        <div class="prediction-card">
+          <div class="card-label">Average Monthly Bill</div>
+          <div class="card-value" id="avgBillDisplay">-</div>
+        </div>
+        <div class="prediction-card">
+          <div class="card-label">Linear Regression Prediction</div>
+          <div class="card-value" id="regressionDisplay">-</div>
+        </div>
+        <div class="prediction-card">
+          <div class="card-label">Moving Average (3-month)</div>
+          <div class="card-value" id="movingAvgDisplay">-</div>
+        </div>
+      </div>
+      <div class="chart-container">
+        <h3>Bill History & Predictions</h3>
+        <canvas id="billChart"></canvas>
+      </div>
+      <div class="seasonal-breakdown">
+        <h3>Seasonal Breakdown</h3>
+        <div class="seasonal-grid" id="seasonalGrid"></div>
+      </div>
+      <div class="recommendations-section">
+        <h3>Energy-Saving Recommendations</h3>
+        <div class="recommendations-grid" id="recommendationsGrid"></div>
+      </div>
+    </div>
+  </div>
+  <script src="energy-bill-predictor.js" defer></script>
+</body>
+</html>

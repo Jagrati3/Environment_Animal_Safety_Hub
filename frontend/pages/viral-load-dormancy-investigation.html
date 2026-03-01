@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Winter dormancy · viral load investigation</title>
+  <!-- Font & Icons (Font Awesome for clean icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at 10% 30%, #f0f4fa, #d9e2ec);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      line-height: 1.5;
+      color: #1e293b;
+    }
+
+    .card {
+      max-width: 1000px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 2.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 20, 40, 0.35), inset 0 1px 2px rgba(255,255,255,0.6);
+      padding: 2.8rem 3rem;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.2s ease;
+    }
+
+    /* header without badge/issue number */
+    .title-block {
+      margin-bottom: 2.2rem;
+    }
+
+    .title-block h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(145deg, #0b2b44, #1b4a6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.4rem;
+      line-height: 1.2;
+      border-left: 8px solid #2b6f9e;
+      padding-left: 1.5rem;
+    }
+
+    .title-block .sub-header {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      color: #2c4e6e;
+      margin-top: 0.5rem;
+      font-weight: 500;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .title-block .sub-header i {
+      color: #3b7fb0;
+      font-size: 1.1rem;
+    }
+
+    /* section styling – softer, airy */
+    .section {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(4px);
+      border-radius: 2rem;
+      padding: 1.8rem 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 6px 14px rgba(0, 20, 30, 0.05);
+      transition: all 0.2s;
+    }
+
+    .section:hover {
+      background: rgba(255, 255, 255, 0.8);
+      border-color: #bcd6ed;
+    }
+
+    .section h2 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #153e5a;
+      margin-bottom: 1.3rem;
+      border-bottom: 2px solid rgba(52, 152, 219, 0.3);
+      padding-bottom: 0.6rem;
+    }
+
+    .section h2 i {
+      color: #2c7cb0;
+      font-size: 1.7rem;
+      width: 2rem;
+    }
+
+    .section p {
+      font-size: 1.08rem;
+      color: #1e3a5f;
+      margin-bottom: 0.8rem;
+      font-weight: 400;
+    }
+
+    /* highlight cards */
+    .context-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      margin-top: 1rem;
+    }
+
+    .context-item {
+      background: white;
+      padding: 1.2rem 1.6rem;
+      border-radius: 1.5rem;
+      flex: 1 1 180px;
+      border-left: 5px solid;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.02);
+      font-weight: 500;
+    }
+
+    .context-item:nth-child(1) { border-left-color: #2e86c1; }
+    .context-item:nth-child(2) { border-left-color: #28b463; }
+    .context-item:nth-child(3) { border-left-color: #ca6f1e; }
+
+    .context-item i {
+      margin-right: 10px;
+      color: #3a6f9e;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    ul li {
+      margin-bottom: 0.9rem;
+      padding-left: 2rem;
+      position: relative;
+      font-size: 1.06rem;
+      font-weight: 400;
+      color: #193e5c;
+    }
+
+    ul li:before {
+      content: "▹";
+      position: absolute;
+      left: 0;
+      color: #2b6f9e;
+      font-weight: 700;
+      font-size: 1.3rem;
+    }
+
+    /* simulation area */
+    .sim-panel {
+      background: linear-gradient(115deg, #eef5fb, #ffffff);
+      border-radius: 1.8rem;
+      padding: 2rem 2rem 1.8rem;
+      margin-top: 1.5rem;
+      box-shadow: inset 0 1px 4px rgba(255,255,255,0.9), 0 12px 20px -12px rgba(0,40,70,0.2);
+    }
+
+    .sim-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 2rem;
+    }
+
+    .sim-header i {
+      font-size: 2.2rem;
+      color: #206694;
+      background: rgba(255,255,255,0.6);
+      padding: 8px;
+      border-radius: 18px;
+    }
+
+    .sim-header h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #10364b;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn {
+      background: white;
+      border: 1px solid #b7d5ed;
+      padding: 0.9rem 2rem;
+      border-radius: 3rem;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #1f577b;
+      cursor: pointer;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 6px 12px -6px rgba(0,60,100,0.2);
+    }
+
+    .btn i {
+      font-size: 1.2rem;
+    }
+
+    .btn-primary {
+      background: #1f6190;
+      border-color: #134572;
+      color: white;
+      box-shadow: 0 8px 16px -6px #1f619070;
+    }
+
+    .btn-primary:hover {
+      background: #184f78;
+      transform: scale(1.02);
+    }
+
+    .btn-outline:hover {
+      background: #e4effa;
+      border-color: #7fafd2;
+    }
+
+    #simulation-result {
+      margin-top: 2rem;
+      background: rgba(0,0,0,0.02);
+      border-radius: 2rem;
+      padding: 1.6rem 2rem;
+      border: 1px dashed #9bc0db;
+      font-size: 1.05rem;
+      transition: all 0.2s;
+      display: none;
+    }
+
+    #simulation-result.show {
+      display: block;
+    }
+
+    .metric-badge {
+      background: #1b3b55;
+      color: white;
+      border-radius: 40px;
+      padding: 0.5rem 1.2rem;
+      font-weight: 500;
+      font-size: 0.95rem;
+      display: inline-block;
+      margin-right: 1rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0a3146;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .footnote {
+      font-size: 0.95rem;
+      color: #446c88;
+      margin-top: 1.2rem;
+      border-top: 1px solid rgba(96, 139, 177, 0.25);
+      padding-top: 1.2rem;
+    }
+
+    /* responsive */
+    @media (max-width: 600px) {
+      .card { padding: 1.8rem; }
+      .title-block h1 { font-size: 2.1rem; }
+      .section { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <!-- issue #2866 badge completely removed -->
+    <div class="title-block">
+      <h1>Increased Viral Load During Winter Dormancy</h1>
+      <div class="sub-header">
+        <i class="fas fa-microscope"></i>
+        <span>metabolic immunology · low‑temperature dynamics</span>
+        <i class="fas fa-snowflake" style="margin-left:auto; opacity:0.7;"></i>
+      </div>
+    </div>
+
+    <!-- Description section -->
+    <div class="section">
+      <h2><i class="fas fa-pen"></i> Description</h2>
+      <p>Investigate immune suppression thresholds in low‑temperature metabolic states. Study how viral load dynamics change during winter dormancy periods in relevant organisms — from amphibians to mammalian hibernators.</p>
+    </div>
+
+    <!-- Problem statement -->
+    <div class="section">
+      <h2><i class="fas fa-exclamation-triangle"></i> Problem statement</h2>
+      <p>During winter dormancy, metabolic rate drops substantially, often accompanied by immune modulation. Suppressed immunity may allow enhanced viral replication and prolonged persistence. Understanding this threshold is critical for predicting seasonal outbreaks and designing interventions.</p>
+    </div>
+
+    <!-- Proposed investigation (clean list) -->
+    <div class="section">
+      <h2><i class="fas fa-flask"></i> Proposed investigation</h2>
+      <ul>
+        <li><strong>Measure viral loads</strong> in dormant hosts under controlled hypothermic conditions (4 °C → 10 °C).</li>
+        <li><strong>Quantify immune markers</strong> (cytokines, toll‑like receptors) to pinpoint suppression thresholds.</li>
+        <li><strong>Compare with active metabolic states</strong> to isolate dormancy‑specific effects.</li>
+      </ul>
+    </div>
+
+    <!-- Expected outcome (list) -->
+    <div class="section">
+      <h2><i class="fas fa-chart-line"></i> Expected outcome</h2>
+      <ul>
+        <li>Identify temperature–metabolism thresholds where viral proliferation accelerates.</li>
+        <li>Provide insights into host–pathogen dynamics during hibernation / winter dormancy.</li>
+        <li>Suggest intervention windows (e.g., immune adjuvants before dormancy).</li>
+      </ul>
+    </div>
+
+    <!-- Additional context reimagined as highlight cards -->
+    <div class="section">
+      <h2><i class="fas fa-link"></i> Additional context</h2>
+      <div class="context-grid">
+        <div class="context-item"><i class="fas fa-book-open"></i> Winter immunology · dormancy reviews</div>
+        <div class="context-item"><i class="fas fa-database"></i> Historical viral loads (bat, ground squirrel)</div>
+        <div class="context-item"><i class="fas fa-temperature-low"></i> Microclimate & metabolic suppression</div>
+      </div>
+    </div>
+
+    <!-- Research status + simulation block (enhanced UI) -->
+    <div class="section" style="padding-bottom: 1.2rem;">
+      <h2><i class="fas fa-hourglass-half"></i> Research status</h2>
+      <p style="margin-bottom: 1.8rem;"><i class="fas fa-clipboard-list" style="color:#2b6f9e; margin-right:10px;"></i>Planning phase — protocols under review. Preliminary model below simulates viral load based on metabolic suppression.</p>
+
+      <!-- simulation panel -->
+      <div class="sim-panel">
+        <div class="sim-header">
+          <i class="fas fa-viruses"></i>
+          <h3>viral load · winter dormancy simulator</h3>
+        </div>
+
+        <div class="button-group">
+          <button class="btn btn-primary" id="simulateBtn"><i class="fas fa-play"></i> run simulation (winter conditions)</button>
+          <button class="btn btn-outline" id="resetBtn"><i class="fas fa-undo-alt"></i> reset</button>
+        </div>
+
+        <!-- dynamic result container -->
+        <div id="simulation-result">
+          <!-- filled by js -->
+        </div>
+
+        <div class="footnote">
+          <i class="fas fa-info-circle" style="margin-right: 6px;"></i> based on preliminary Q³ model: temperature 4°C, metabolic rate 22% of active state.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const resultDiv = document.getElementById('simulation-result');
+      const simulateBtn = document.getElementById('simulateBtn');
+      const resetBtn = document.getElementById('resetBtn');
+
+      // helper to generate realistic viral load metrics
+      function generateViralLoad() {
+        // randomise within plausible ranges
+        const baseLoad = (Math.random() * 3.2e5 + 4.8e5).toFixed(0); // 480k - 800k copies/mL
+        const suppressionIndex = (Math.random() * 35 + 60).toFixed(1); // 60% - 95% 
+        const thresholdMet = Math.random() > 0.15 ? 'exceeded' : 'below'; // 85% chance threshold exceeded
+        const riskLevel = thresholdMet === 'exceeded' ? 'high' : 'moderate';
+
+        let colorClass = '#a12b2b';
+        if (riskLevel === 'high') colorClass = '#b13e3e';
+        else colorClass = '#d98c2e';
+
+        return `
+          <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center;">
+            <div>
+              <span class="metric-badge"><i class="fas fa-dna"></i> peak load</span>
+              <span class="metric-value">${Number(baseLoad).toLocaleString()}</span> <span style="font-size:1rem; color:#2f4a66;">copies/mL</span>
+            </div>
+            <div>
+              <span class="metric-badge"><i class="fas fa-thermometer-half"></i> immune suppression</span>
+              <span class="metric-value">${suppressionIndex}%</span>
+            </div>
+            <div style="background:${colorClass}20; padding:0.6rem 1.3rem; border-radius:3rem;">
+              <span style="font-weight:700; color:${colorClass};"><i class="fas fa-exclamation-circle"></i> threshold ${thresholdMet}</span>
+            </div>
+          </div>
+          <div style="margin-top: 1.5rem; background:rgba(0,60,110,0.05); border-radius:1.5rem; padding:1rem;">
+            <i class="fas fa-chart-simple" style="margin-right:10px; color:#20618b;"></i> 
+            <strong>interpretation:</strong> In this simulated dormant state, viral load ${thresholdMet === 'exceeded' ? 'surges above winter proliferation threshold' : 'remains near baseline, but suppression index is significant'}. 
+            ${thresholdMet === 'exceeded' ? '⛄ Dormancy amplifies replication risk.' : '❄️ Partial immune function still contains virus.'}
+          </div>
+        `;
+      }
+
+      // show simulation with fresh data
+      function runSimulation() {
+        resultDiv.innerHTML = generateViralLoad();
+        resultDiv.classList.add('show');
+      }
+
+      // reset: hide and clear content (optional but nice)
+      function resetSimulation() {
+        resultDiv.classList.remove('show');
+        resultDiv.innerHTML = ''; 
+      }
+
+      simulateBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        runSimulation();
+      });
+
+      resetBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        resetSimulation();
+      });
+
+      // optionally run a first simulation so the page is not empty (but we respect "display: none" initially, so left empty)
+      // we keep it hidden until user clicks – per original behaviour.
+      // however if you'd like to show a preview, uncomment next line:
+      // setTimeout(runSimulation, 200);  (but would be visible without click)
+      // we follow original: hidden until click.
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meet the Animals | EcoLife Animal Gallery</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f7f0 0%, #e1f0e1 100%);
+            min-height: 100vh;
+            color: #2d3e2d;
+            overflow-x: hidden;
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #ff9800;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.1s ease;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+        }
+
+        /* Header with Parallax */
+        .gallery-header {
+            background: linear-gradient(135deg, #1b4d1b, #2d6a2d);
+            color: white;
+            padding: 5rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+
+        .gallery-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 L0,100 Z" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/><circle cx="20" cy="30" r="3" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="60" r="4" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header-icon {
+            font-size: 4rem;
+            color: #ff9800;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .gallery-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+        }
+
+        .gallery-header p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+        }
+
+        .header-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .header-stat {
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .header-stat .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ff9800;
+        }
+
+        .header-stat .label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: -3rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Animal Categories */
+        .categories-section {
+            margin-bottom: 3rem;
+        }
+
+        .categories-title {
+            text-align: center;
+            font-size: 2rem;
+            color: #1b4d1b;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .categories-slider {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: #ff9800 #e0e0e0;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .categories-slider::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .categories-slider::-webkit-scrollbar-track {
+            background: #e0e0e0;
+            border-radius: 10px;
+        }
+
+        .categories-slider::-webkit-scrollbar-thumb {
+            background: #ff9800;
+            border-radius: 10px;
+        }
+
+        .category-card {
+            flex: 0 0 auto;
+            background: white;
+            border-radius: 60px;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255,152,0,0.2);
+        }
+
+        .category-card.active {
+            background: #ff9800;
+            color: white;
+            border-color: #f57c00;
+        }
+
+        .category-card i {
+            font-size: 1.5rem;
+        }
+
+        .category-card span {
+            font-weight: 600;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            background: white;
+            border-radius: 80px;
+            padding: 1rem 2rem;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 1rem;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.95);
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 4rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 60px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #ff9800;
+            box-shadow: 0 0 0 4px rgba(255,152,0,0.1);
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.8rem 2rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 40px;
+            font-family: inherit;
+            font-weight: 500;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .filter-select:hover {
+            border-color: #ff9800;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #ff9800;
+        }
+
+        /* Animals Grid */
+        .animals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        /* Animal Card */
+        .animal-card {
+            background: white;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            cursor: pointer;
+            transform-origin: center;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animal-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(255,152,0,0.3);
+        }
+
+        .animal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff9800, #f57c00, #ff9800);
+            background-size: 200% 100%;
+            animation: gradientMove 3s linear infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        .animal-badge {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: rgba(255,255,255,0.95);
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .badge.critical {
+            background: #ff4444;
+            color: white;
+        }
+
+        .badge.endangered {
+            background: #ff9800;
+            color: white;
+        }
+
+        .badge.vulnerable {
+            background: #ffbb33;
+            color: white;
+        }
+
+        .badge.near-threatened {
+            background: #ffd966;
+            color: #333;
+        }
+
+        .badge.least-concern {
+            background: #4caf50;
+            color: white;
+        }
+
+        .animal-image {
+            height: 250px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .animal-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+        }
+
+        .animal-image i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 6rem;
+            color: rgba(255,255,255,0.3);
+            z-index: 1;
+        }
+
+        .animal-content {
+            padding: 2rem;
+            position: relative;
+            background: white;
+        }
+
+        .animal-name {
+            font-size: 1.8rem;
+            color: #1b4d1b;
+            margin-bottom: 0.3rem;
+            font-weight: 700;
+        }
+
+        .animal-scientific {
+            font-size: 0.9rem;
+            color: #999;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .animal-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem;
+        }
+
+        .animal-tag {
+            background: #f0f7f0;
+            color: #1b4d1b;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .animal-facts {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 20px;
+        }
+
+        .fact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .fact-item i {
+            color: #ff9800;
+            width: 20px;
+        }
+
+        .animal-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding: 1rem 0;
+            border-top: 2px solid #f0f0f0;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            display: block;
+            font-weight: 700;
+            color: #1b4d1b;
+            font-size: 1.2rem;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: #999;
+            text-transform: uppercase;
+        }
+
+        .animal-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+        }
+
+        .action-btn.primary:hover {
+            background: linear-gradient(135deg, #f57c00, #ff9800);
+            transform: scale(1.05);
+        }
+
+        .action-btn.secondary {
+            background: #e8f5e9;
+            color: #1b4d1b;
+        }
+
+        .action-btn.secondary:hover {
+            background: #c8e6c9;
+            transform: scale(1.05);
+        }
+
+        /* Featured Animal Section */
+        .featured-section {
+            background: white;
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 3rem 0;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-section::before {
+            content: '🐾';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.03;
+            bottom: -2rem;
+            right: -2rem;
+            transform: rotate(-15deg);
+        }
+
+        .featured-title {
+            font-size: 2.2rem;
+            color: #1b4d1b;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .featured-image {
+            height: 400px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .featured-image i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            color: rgba(255,255,255,0.3);
+        }
+
+        .featured-content h3 {
+            font-size: 2.5rem;
+            color: #1b4d1b;
+            margin-bottom: 0.5rem;
+        }
+
+        .featured-scientific {
+            font-size: 1.1rem;
+            color: #999;
+            font-style: italic;
+            margin-bottom: 1.5rem;
+        }
+
+        .featured-description {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .featured-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .featured-stat {
+            text-align: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 20px;
+        }
+
+        .featured-stat .number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ff9800;
+            display: block;
+        }
+
+        .featured-stat .label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .featured-btn {
+            background: #ff9800;
+            color: white;
+            border: none;
+            padding: 1.2rem 3rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .featured-btn:hover {
+            background: #f57c00;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255,152,0,0.3);
+        }
+
+        /* Fun Facts Slider */
+        .funfacts-section {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 3rem 0;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .funfacts-section::before {
+            content: '✨';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.1;
+            top: -3rem;
+            left: -3rem;
+        }
+
+        .funfacts-title {
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .facts-slider {
+            position: relative;
+            height: 150px;
+            overflow: hidden;
+        }
+
+        .fact-slide {
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.5s ease;
+            font-size: 1.3rem;
+            line-height: 1.8;
+            padding: 1rem 3rem;
+            text-align: center;
+        }
+
+        .fact-slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .fact-slide i {
+            margin-right: 1rem;
+            font-size: 2rem;
+        }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 2rem;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .slider-dot.active {
+            background: white;
+            transform: scale(1.3);
+        }
+
+        /* Quiz Teaser */
+        .quiz-teaser {
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .quiz-teaser h3 {
+            color: #1b4d1b;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-teaser p {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-btn {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quiz-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255,152,0,0.3);
+        }
+
+        /* Animal Sound Modal */
+        .sound-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .sound-modal.active {
+            display: flex;
+        }
+
+        .sound-content {
+            background: white;
+            border-radius: 60px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .sound-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+            transition: all 0.3s;
+        }
+
+        .sound-close:hover {
+            color: #333;
+            transform: rotate(90deg);
+        }
+
+        .sound-icon {
+            font-size: 5rem;
+            color: #ff9800;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .sound-title {
+            font-size: 2rem;
+            color: #1b4d1b;
+            margin-bottom: 1rem;
+        }
+
+        .sound-player {
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 30px;
+        }
+
+        .sound-wave {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            height: 60px;
+            margin: 1rem 0;
+        }
+
+        .wave-bar {
+            width: 8px;
+            height: 30px;
+            background: #ff9800;
+            border-radius: 10px;
+            animation: wave 1s ease-in-out infinite;
+        }
+
+        .wave-bar:nth-child(2) { animation-delay: 0.1s; }
+        .wave-bar:nth-child(3) { animation-delay: 0.2s; }
+        .wave-bar:nth-child(4) { animation-delay: 0.3s; }
+        .wave-bar:nth-child(5) { animation-delay: 0.4s; }
+
+        @keyframes wave {
+            0%, 100% { height: 30px; }
+            50% { height: 60px; }
+        }
+
+        .play-sound-btn {
+            background: #ff9800;
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .play-sound-btn:hover {
+            background: #f57c00;
+            transform: scale(1.05);
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(255,152,0,0.3);
+            z-index: 1000;
+            transition: all 0.3s;
+            animation: bounce 2s infinite;
+        }
+
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        .back-to-top:hover {
+            background: #f57c00;
+            transform: translateY(-5px);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .featured-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery-header h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .filter-bar {
+                flex-direction: column;
+                border-radius: 30px;
+            }
+            
+            .header-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .categories-slider {
+                padding: 1rem;
+            }
+            
+            .featured-section,
+            .funfacts-section {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="customCursor"></div>
+
+    <!-- Header -->
+    <header class="gallery-header">
+        <div class="header-content" data-aos="fade-up">
+            <div class="header-icon">
+                <i class="fas fa-paw"></i>
+            </div>
+            <h1>Meet the Animals</h1>
+            <p>Discover amazing animals, learn their stories, and find out how you can help protect them</p>
+            <div class="header-stats">
+                <div class="header-stat" data-aos="fade-up" data-aos-delay="100">
+                    <span class="number" id="totalAnimals">45+</span>
+                    <span class="label">Species</span>
+                </div>
+                <div class="header-stat" data-aos="fade-up" data-aos-delay="200">
+                    <span class="number" id="endangeredCount">12</span>
+                    <span class="label">Endangered</span>
+                </div>
+                <div class="header-stat" data-aos="fade-up" data-aos-delay="300">
+                    <span class="number" id="conservationCount">8</span>
+                    <span class="label">Projects</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Categories Slider -->
+        <section class="categories-section">
+            <h2 class="categories-title" data-aos="fade-right">
+                <i class="fas fa-tags"></i>
+                Explore by Category
+            </h2>
+            <div class="categories-slider" id="categoriesSlider">
+                <div class="category-card active" data-category="all">
+                    <i class="fas fa-globe"></i>
+                    <span>All Animals</span>
+                </div>
+                <div class="category-card" data-category="mammals">
+                    <i class="fas fa-paw"></i>
+                    <span>Mammals</span>
+                </div>
+                <div class="category-card" data-category="birds">
+                    <i class="fas fa-dove"></i>
+                    <span>Birds</span>
+                </div>
+                <div class="category-card" data-category="reptiles">
+                    <i class="fas fa-lizard"></i>
+                    <span>Reptiles</span>
+                </div>
+                <div class="category-card" data-category="amphibians">
+                    <i class="fas fa-frog"></i>
+                    <span>Amphibians</span>
+                </div>
+                <div class="category-card" data-category="fish">
+                    <i class="fas fa-fish"></i>
+                    <span>Fish</span>
+                </div>
+                <div class="category-card" data-category="insects">
+                    <i class="fas fa-bug"></i>
+                    <span>Insects</span>
+                </div>
+                <div class="category-card" data-category="marine">
+                    <i class="fas fa-water"></i>
+                    <span>Marine Life</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar" data-aos="fade-up">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search animals by name...">
+            </div>
+            <div class="filter-options">
+                <select class="filter-select" id="statusFilter">
+                    <option value="all">All Conservation Status</option>
+                    <option value="critical">Critically Endangered</option>
+                    <option value="endangered">Endangered</option>
+                    <option value="vulnerable">Vulnerable</option>
+                    <option value="near-threatened">Near Threatened</option>
+                    <option value="least-concern">Least Concern</option>
+                </select>
+                <select class="filter-select" id="habitatFilter">
+                    <option value="all">All Habitats</option>
+                    <option value="forest">Forest</option>
+                    <option value="grassland">Grassland</option>
+                    <option value="desert">Desert</option>
+                    <option value="tundra">Tundra</option>
+                    <option value="ocean">Ocean</option>
+                    <option value="freshwater">Freshwater</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Animals Grid -->
+        <div class="animals-grid" id="animalsGrid"></div>
+
+        <!-- Featured Animal Section -->
+        <section class="featured-section" data-aos="fade-up">
+            <h2 class="featured-title">
+                <i class="fas fa-star"></i>
+                Animal of the Month
+            </h2>
+            <div class="featured-grid" id="featuredAnimal"></div>
+        </section>
+
+        <!-- Fun Facts Slider -->
+        <section class="funfacts-section" data-aos="fade-up">
+            <h2 class="funfacts-title">
+                <i class="fas fa-lightbulb"></i>
+                Amazing Animal Facts
+            </h2>
+            <div class="facts-slider" id="factsSlider">
+                <div class="fact-slide active">
+                    <i class="fas fa-paw"></i>
+                    A group of flamingos is called a "flamboyance"!
+                </div>
+                <div class="fact-slide">
+                    <i class="fas fa-fish"></i>
+                    Seahorses mate for life and the male carries the babies!
+                </div>
+                <div class="fact-slide">
+                    <i class="fas fa-dove"></i>
+                    Pigeons can recognize themselves in a mirror!
+                </div>
+                <div class="fact-slide">
+                    <i class="fas fa-bug"></i>
+                    Butterflies taste with their feet!
+                </div>
+                <div class="fact-slide">
+                    <i class="fas fa-water"></i>
+                    Octopuses have three hearts and blue blood!
+                </div>
+            </div>
+            <div class="slider-dots" id="sliderDots">
+                <span class="slider-dot active"></span>
+                <span class="slider-dot"></span>
+                <span class="slider-dot"></span>
+                <span class="slider-dot"></span>
+                <span class="slider-dot"></span>
+            </div>
+        </section>
+
+        <!-- Quiz Teaser -->
+        <div class="quiz-teaser" data-aos="zoom-in">
+            <h3>🐘 Think You Know Animals?</h3>
+            <p>Test your knowledge with our fun animal quiz!</p>
+            <button class="quiz-btn" onclick="window.location.href='../quiz.html'">
+                <i class="fas fa-gamepad"></i>
+                Take the Quiz
+            </button>
+        </div>
+    </div>
+
+    <!-- Animal Sound Modal -->
+    <div class="sound-modal" id="soundModal">
+        <div class="sound-content">
+            <button class="sound-close" onclick="closeSoundModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="sound-icon">
+                <i class="fas fa-volume-up"></i>
+            </div>
+            <h3 class="sound-title" id="soundAnimalName">Animal Sound</h3>
+            <div class="sound-player">
+                <div class="sound-wave">
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                </div>
+                <button class="play-sound-btn" id="playSoundBtn">
+                    <i class="fas fa-play"></i> Play Sound
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- AOS Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Custom cursor
+        const cursor = document.getElementById('customCursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Animals Data
+        const animals = [
+            {
+                id: 1,
+                name: "African Elephant",
+                scientific: "Loxodonta africana",
+                category: "mammals",
+                habitat: "grassland",
+                status: "vulnerable",
+                population: "415,000",
+                lifespan: "60-70 years",
+                diet: "Herbivore",
+                size: "3-4 meters",
+                weight: "4,000-7,000 kg",
+                fact: "Elephants can recognize themselves in a mirror!",
+                sound: "elephant.mp3",
+                icon: "fa-elephant",
+                description: "The African elephant is the largest land animal on Earth. They have highly complex social structures and show empathy, grief, and altruism.",
+                conservation: "Threatened by poaching for ivory and habitat loss.",
+                howToHelp: "Support anti-poaching efforts and avoid buying ivory products."
+            },
+            {
+                id: 2,
+                name: "Bengal Tiger",
+                scientific: "Panthera tigris tigris",
+                category: "mammals",
+                habitat: "forest",
+                status: "endangered",
+                population: "2,500",
+                lifespan: "8-10 years",
+                diet: "Carnivore",
+                size: "2.5-3 meters",
+                weight: "180-250 kg",
+                fact: "No two tigers have the same stripe pattern!",
+                icon: "fa-paw",
+                description: "The Bengal tiger is the national animal of India and Bangladesh. They are powerful swimmers and excellent hunters.",
+                conservation: "Habitat loss and poaching for traditional medicine are major threats.",
+                howToHelp: "Support tiger reserves and say no to tiger products."
+            },
+            {
+                id: 3,
+                name: "Blue Whale",
+                scientific: "Balaenoptera musculus",
+                category: "marine",
+                habitat: "ocean",
+                status: "endangered",
+                population: "10,000-25,000",
+                lifespan: "80-90 years",
+                diet: "Krill",
+                size: "25-30 meters",
+                weight: "150-200 tons",
+                fact: "A blue whale's heart is as big as a small car!",
+                icon: "fa-water",
+                description: "Blue whales are the largest animals ever known to have existed. Their calls can be heard for thousands of miles underwater.",
+                conservation: "Threatened by ship strikes, ocean noise, and climate change.",
+                howToHelp: "Reduce ocean pollution and support marine protected areas."
+            },
+            {
+                id: 4,
+                name: "Red Panda",
+                scientific: "Ailurus fulgens",
+                category: "mammals",
+                habitat: "forest",
+                status: "endangered",
+                population: "10,000",
+                lifespan: "8-10 years",
+                diet: "Bamboo",
+                size: "50-60 cm",
+                weight: "3-6 kg",
+                fact: "Red pandas have a false thumb to grip bamboo!",
+                icon: "fa-paw",
+                description: "Red pandas are not closely related to giant pandas. They are mostly solitary and arboreal.",
+                conservation: "Habitat loss and poaching are major threats.",
+                howToHelp: "Adopt a red panda through conservation programs."
+            },
+            {
+                id: 5,
+                name: "Emperor Penguin",
+                scientific: "Aptenodytes forsteri",
+                category: "birds",
+                habitat: "tundra",
+                status: "near-threatened",
+                population: "595,000",
+                lifespan: "20 years",
+                diet: "Fish",
+                size: "1.1-1.3 meters",
+                weight: "22-45 kg",
+                fact: "Male emperors incubate eggs for 65 days without eating!",
+                icon: "fa-dove",
+                description: "Emperor penguins are the tallest and heaviest of all penguins. They breed during the Antarctic winter.",
+                conservation: "Climate change and sea ice loss threaten their habitat.",
+                howToHelp: "Support climate action and reduce your carbon footprint."
+            },
+            {
+                id: 6,
+                name: "Green Sea Turtle",
+                scientific: "Chelonia mydas",
+                category: "reptiles",
+                habitat: "ocean",
+                status: "endangered",
+                population: "85,000-90,000",
+                lifespan: "80 years",
+                diet: "Seagrass",
+                size: "1-1.2 meters",
+                weight: "150-200 kg",
+                fact: "Sea turtles can hold their breath for up to 5 hours!",
+                icon: "fa-fish",
+                description: "Green sea turtles are named for the green color of their fat. They migrate long distances to nest.",
+                conservation: "Threatened by bycatch, plastic pollution, and poaching.",
+                howToHelp: "Reduce plastic use and support turtle conservation."
+            },
+            {
+                id: 7,
+                name: "Monarch Butterfly",
+                scientific: "Danaus plexippus",
+                category: "insects",
+                habitat: "forest",
+                status: "vulnerable",
+                population: "Declining",
+                lifespan: "2-6 weeks",
+                diet: "Nectar",
+                size: "8-10 cm wingspan",
+                weight: "0.5g",
+                fact: "Monarchs migrate up to 3,000 miles each year!",
+                icon: "fa-bug",
+                description: "Monarch butterflies are famous for their spectacular migration to Mexico.",
+                conservation: "Habitat loss and climate change threaten their migration.",
+                howToHelp: "Plant milkweed and native flowers in your garden."
+            },
+            {
+                id: 8,
+                name: "Orangutan",
+                scientific: "Pongo pygmaeus",
+                category: "mammals",
+                habitat: "forest",
+                status: "critical",
+                population: "104,700",
+                lifespan: "30-40 years",
+                diet: "Fruit",
+                size: "1.2-1.5 meters",
+                weight: "50-90 kg",
+                fact: "Orangutans build new nests in trees every night!",
+                icon: "fa-tree",
+                description: "Orangutans are great apes native to Indonesia and Malaysia. They share 97% of their DNA with humans.",
+                conservation: "Deforestation for palm oil plantations is their biggest threat.",
+                howToHelp: "Choose sustainable palm oil products."
+            },
+            {
+                id: 9,
+                name: "Arctic Fox",
+                scientific: "Vulpes lagopus",
+                category: "mammals",
+                habitat: "tundra",
+                status: "least-concern",
+                population: "Stable",
+                lifespan: "3-6 years",
+                diet: "Omnivore",
+                size: "45-70 cm",
+                weight: "3-8 kg",
+                fact: "Their fur changes color with seasons - white in winter, brown in summer!",
+                icon: "fa-paw",
+                description: "Arctic foxes have incredible adaptations for cold environments, including fur on their paws.",
+                conservation: "Population stable but threatened by climate change.",
+                howToHelp: "Support arctic conservation efforts."
+            },
+            {
+                id: 10,
+                name: "Komodo Dragon",
+                scientific: "Varanus komodoensis",
+                category: "reptiles",
+                habitat: "grassland",
+                status: "vulnerable",
+                population: "3,000",
+                lifespan: "30 years",
+                diet: "Carnivore",
+                size: "2-3 meters",
+                weight: "70-90 kg",
+                fact: "Komodo dragons have venomous bites that prevent blood clotting!",
+                icon: "fa-lizard",
+                description: "Komodo dragons are the largest living lizards on Earth.",
+                conservation: "Threatened by habitat loss and natural disasters.",
+                howToHelp: "Support Komodo National Park conservation."
+            },
+            {
+                id: 11,
+                name: "Humpback Whale",
+                scientific: "Megaptera novaeangliae",
+                category: "marine",
+                habitat: "ocean",
+                status: "least-concern",
+                population: "80,000",
+                lifespan: "80-90 years",
+                diet: "Krill",
+                size: "15-16 meters",
+                weight: "40 tons",
+                fact: "Humpback whales sing complex songs that can last for hours!",
+                icon: "fa-water",
+                description: "Humpbacks are known for their acrobatic breaches and beautiful songs.",
+                conservation: "Recovering from whaling but face ship strike threats.",
+                howToHelp: "Support responsible whale watching."
+            },
+            {
+                id: 12,
+                name: "Poison Dart Frog",
+                scientific: "Dendrobatidae",
+                category: "amphibians",
+                habitat: "forest",
+                status: "vulnerable",
+                population: "Declining",
+                lifespan: "3-15 years",
+                diet: "Insects",
+                size: "1-6 cm",
+                weight: "2-10g",
+                fact: "Their bright colors warn predators of their toxicity!",
+                icon: "fa-frog",
+                description: "These tiny frogs get their poison from the insects they eat.",
+                conservation: "Threatened by habitat loss and climate change.",
+                howToHelp: "Protect rainforest habitats."
+            }
+        ];
+
+        // DOM Elements
+        const animalsGrid = document.getElementById('animalsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const statusFilter = document.getElementById('statusFilter');
+        const habitatFilter = document.getElementById('habitatFilter');
+        const categories = document.querySelectorAll('.category-card');
+        const backToTop = document.getElementById('backToTop');
+        const soundModal = document.getElementById('soundModal');
+        const soundAnimalName = document.getElementById('soundAnimalName');
+        const featuredAnimal = document.getElementById('featuredAnimal');
+
+        // State
+        let currentCategory = 'all';
+        let currentStatus = 'all';
+        let currentHabitat = 'all';
+        let searchTerm = '';
+
+        // Update stats
+        function updateStats() {
+            document.getElementById('totalAnimals').textContent = animals.length + '+';
+            document.getElementById('endangeredCount').textContent = animals.filter(a => 
+                a.status === 'critical' || a.status === 'endangered').length;
+            document.getElementById('conservationCount').textContent = '8';
+        }
+
+        // Get filtered animals
+        function getFilteredAnimals() {
+            return animals.filter(animal => {
+                // Category filter
+                const matchesCategory = currentCategory === 'all' || animal.category === currentCategory;
+                
+                // Status filter
+                const matchesStatus = currentStatus === 'all' || animal.status === currentStatus;
+                
+                // Habitat filter
+                const matchesHabitat = currentHabitat === 'all' || animal.habitat === currentHabitat;
+                
+                // Search filter
+                const matchesSearch = animal.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                     animal.scientific.toLowerCase().includes(searchTerm.toLowerCase());
+                
+                return matchesCategory && matchesStatus && matchesHabitat && matchesSearch;
+            });
+        }
+
+        // Render animals
+        function renderAnimals() {
+            const filtered = getFilteredAnimals();
+
+            if (filtered.length === 0) {
+                animalsGrid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 5rem;">
+                        <i class="fas fa-paw" style="font-size: 5rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <h3 style="color: #666;">No animals found</h3>
+                        <p style="color: #999;">Try adjusting your filters</p>
+                    </div>
+                `;
+                return;
+            }
+
+            animalsGrid.innerHTML = filtered.map(animal => `
+                <div class="animal-card" data-aos="fade-up" onclick="showAnimalDetails(${animal.id})">
+                    <div class="animal-badge badge ${animal.status}">
+                        ${animal.status.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                    </div>
+                    <div class="animal-image">
+                        <i class="fas ${animal.icon}"></i>
+                    </div>
+                    <div class="animal-content">
+                        <h3 class="animal-name">${animal.name}</h3>
+                        <p class="animal-scientific">${animal.scientific}</p>
+                        <div class="animal-tags">
+                            <span class="animal-tag"><i class="fas fa-tag"></i> ${animal.category}</span>
+                            <span class="animal-tag"><i class="fas fa-home"></i> ${animal.habitat}</span>
+                        </div>
+                        <div class="animal-facts">
+                            <div class="fact-item">
+                                <i class="fas fa-utensils"></i>
+                                <span>${animal.diet}</span>
+                            </div>
+                            <div class="fact-item">
+                                <i class="fas fa-weight-scale"></i>
+                                <span>${animal.weight}</span>
+                            </div>
+                            <div class="fact-item">
+                                <i class="fas fa-clock"></i>
+                                <span>Lifespan: ${animal.lifespan}</span>
+                            </div>
+                        </div>
+                        <div class="animal-stats">
+                            <div class="stat">
+                                <span class="stat-value">${animal.population}</span>
+                                <span class="stat-label">Population</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">${animal.size}</span>
+                                <span class="stat-label">Size</span>
+                            </div>
+                        </div>
+                        <div class="animal-actions">
+                            <button class="action-btn primary" onclick="playAnimalSound('${animal.name}', event)">
+                                <i class="fas fa-volume-up"></i> Sound
+                            </button>
+                            <button class="action-btn secondary" onclick="showAnimalDetails(${animal.id}, event)">
+                                <i class="fas fa-info-circle"></i> Learn More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Show animal details (expandable)
+        window.showAnimalDetails = function(id, event) {
+            if (event) event.stopPropagation();
+            const animal = animals.find(a => a.id === id);
+            if (!animal) return;
+
+            // Create modal for details
+            alert(`
+                🦁 ${animal.name}
+                
+                📊 Conservation Status: ${animal.status}
+                🌍 Habitat: ${animal.habitat}
+                📏 Size: ${animal.size}
+                ⚖️ Weight: ${animal.weight}
+                🍽️ Diet: ${animal.diet}
+                ⏰ Lifespan: ${animal.lifespan}
+                👥 Population: ${animal.population}
+                
+                📝 Description:
+                ${animal.description}
+                
+                ⚠️ Threats:
+                ${animal.conservation}
+                
+                💚 How You Can Help:
+                ${animal.howToHelp}
+                
+                🎯 Fun Fact:
+                ${animal.fact}
+            `);
+        };
+
+        // Play animal sound
+        window.playAnimalSound = function(animalName, event) {
+            event.stopPropagation();
+            soundAnimalName.textContent = animalName;
+            soundModal.classList.add('active');
+            
+            // Simulate sound play
+            const playBtn = document.getElementById('playSoundBtn');
+            playBtn.onclick = () => {
+                alert(`🔊 Playing ${animalName} sound! (Sound feature coming soon)`);
+            };
+        };
+
+        // Close sound modal
+        window.closeSoundModal = function() {
+            soundModal.classList.remove('active');
+        };
+
+        // Category click
+        categories.forEach(cat => {
+            cat.addEventListener('click', () => {
+                categories.forEach(c => c.classList.remove('active'));
+                cat.classList.add('active');
+                currentCategory = cat.dataset.category;
+                renderAnimals();
+            });
+        });
+
+        // Search input
+        searchInput.addEventListener('input', (e) => {
+            searchTerm = e.target.value;
+            renderAnimals();
+        });
+
+        // Status filter
+        statusFilter.addEventListener('change', (e) => {
+            currentStatus = e.target.value;
+            renderAnimals();
+        });
+
+        // Habitat filter
+        habitatFilter.addEventListener('change', (e) => {
+            currentHabitat = e.target.value;
+            renderAnimals();
+        });
+
+        // Featured animal
+        function updateFeaturedAnimal() {
+            const featured = animals[Math.floor(Math.random() * animals.length)];
+            featuredAnimal.innerHTML = `
+                <div class="featured-image" data-aos="fade-right">
+                    <i class="fas ${featured.icon}"></i>
+                </div>
+                <div class="featured-content" data-aos="fade-left">
+                    <h3>${featured.name}</h3>
+                    <p class="featured-scientific">${featured.scientific}</p>
+                    <p class="featured-description">${featured.description}</p>
+                    <div class="featured-stats">
+                        <div class="featured-stat">
+                            <span class="number">${featured.population}</span>
+                            <span class="label">Population</span>
+                        </div>
+                        <div class="featured-stat">
+                            <span class="number">${featured.lifespan}</span>
+                            <span class="label">Lifespan</span>
+                        </div>
+                        <div class="featured-stat">
+                            <span class="number">${featured.size}</span>
+                            <span class="label">Size</span>
+                        </div>
+                    </div>
+                    <button class="featured-btn" onclick="playAnimalSound('${featured.name}', event)">
+                        <i class="fas fa-volume-up"></i>
+                        Hear ${featured.name.split(' ')[0]} Sound
+                    </button>
+                </div>
+            `;
+        }
+
+        // Fun facts slider
+        let currentFact = 0;
+        const facts = document.querySelectorAll('.fact-slide');
+        const dots = document.querySelectorAll('.slider-dot');
+
+        function showFact(index) {
+            facts.forEach((fact, i) => {
+                fact.classList.toggle('active', i === index);
+            });
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        function nextFact() {
+            currentFact = (currentFact + 1) % facts.length;
+            showFact(currentFact);
+        }
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentFact = index;
+                showFact(currentFact);
+            });
+        });
+
+        setInterval(nextFact, 5000);
+
+        // Back to top
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && soundModal.classList.contains('active')) {
+                closeSoundModal();
+            }
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target === soundModal) {
+                closeSoundModal();
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateStats();
+            renderAnimals();
+            updateFeaturedAnimal();
+        });
+    </script>
+</body>
+</html>

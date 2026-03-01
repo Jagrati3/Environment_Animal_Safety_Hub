@@ -1,0 +1,143 @@
+        AOS.init({duration:800,once:true});
+
+        // ---------- ROLE DATA ----------
+        const roles = [
+            { id: "fox", name: "🦊 Fox", desc: "cunning, swift, forest dweller", emoji: "🦊", icon:"fa-fox" },
+            { id: "wolf", name: "🐺 Wolf", desc: "loyal pack hunter, wild spirit", emoji: "🐺", icon:"fa-wolf" },
+            { id: "deer", name: "🦌 Deer", desc: "gentle, alert, grazer", emoji: "🦌", icon:"fa-deer" },
+            { id: "owl", name: "🦉 Owl", desc: "wise, silent, night hunter", emoji: "🦉", icon:"fa-owl" },
+            { id: "bear", name: "🐻 Bear", desc: "strong, solitary, forager", emoji: "🐻", icon:"fa-bear" },
+            { id: "raven", name: "🐦‍⬛ Raven", desc: "clever, trickster, storyteller", emoji: "🐦‍⬛", icon:"fa-crow" }
+        ];
+
+        // ---------- STORY STATE ----------
+        let currentRole = "fox";       // default
+        let step = 0;                  // 0 = intro, etc.
+
+        // role-specific story branches (simplified)
+        const stories = {
+            fox: [
+                { scene: "🌲 dawn in the forest", desc: "You are a fox. Your den is warm, but hunger stirs.", choices: ["hunt a mouse", "explore the stream"] },
+                { scene: "🪹 edge of the meadow", desc: "You spot a rabbit. Also a rustling in the bushes.", choices: ["stalk rabbit", "investigate rustling"] }
+            ],
+            wolf: [
+                { scene: "🐺 pack waking", desc: "You howl – the pack responds. A elk herd is near.", choices: ["lead the hunt", "scout alone"] },
+                { scene: "🏔️ ridge", desc: "Scent of elk. But also a rival pack in distance.", choices: ["confront rivals", "circle around"] }
+            ],
+            deer: [
+                { scene: "🦌 morning graze", desc: "Sun rays filter through leaves. You nibble dewy grass.", choices: ["move to open field", "stay near thicket"] },
+                { scene: "🌿警觉", desc: "A twig snaps. Could be a predator.", choices: ["freeze & listen", "bound away"] }
+            ],
+            owl: [
+                { scene: "🦉 twilight", desc: "You launch from your oak. Mice below.", choices: ["silent dive", "scan from branch"] },
+                { scene: "🌌 moonlit hunt", desc: "A rustling below – a vole or maybe a snake.", choices: ["swoop", "wait"] }
+            ],
+            bear: [
+                { scene: "🐻 emerging", desc: "You wake, hungry. Berries or fish?", choices: ["head to stream", "search for berries"] },
+                { scene: "🍓 berry patch", desc: "Sweet scent. But a rustle – another bear?", choices: ["assert dominance", "share the patch"] }
+            ],
+            raven: [
+                { scene: "🐦‍⬛ treetop", desc: "You spot a shiny object near the hikers' trail.", choices: ["investigate shiny", "tease the hikers"] },
+                { scene: "🎭 clever trick", desc: "A campfire – you can steal food or perform.", choices: ["steal sandwich", "do a dance"] }
+            ]
+        };
+
+        // render role selector buttons
+        function renderRoleSelector() {
+            const container = document.getElementById('roleSelector');
+            container.innerHTML = roles.map(r => `
+                <button class="role-btn ${r.id === currentRole ? 'active' : ''}" onclick="setRole('${r.id}')">
+                    <i class="fas ${r.icon || 'fa-paw'}"></i> ${r.name}
+                </button>
+            `).join('');
+        }
+
+        // set current role and reset story
+        window.setRole = (roleId) => {
+            currentRole = roleId;
+            step = 0;
+            renderRoleSelector();
+            updateStory();
+        };
+
+        // update story based on role & step
+        function updateStory() {
+            const story = stories[currentRole] || stories.fox;
+            const current = story[step] || story[0];
+            document.getElementById('sceneTitle').innerText = current.scene;
+            document.getElementById('sceneDesc').innerText = current.desc;
+
+            let choicesHtml = '';
+            current.choices.forEach((ch, idx) => {
+                choicesHtml += `<div class="choice-card" onclick="makeChoice(${idx})"><i class="fas fa-paw"></i> ${ch}</div>`;
+            });
+            document.getElementById('choiceContainer').innerHTML = choicesHtml;
+
+            // journal update
+            document.getElementById('journalText').innerText = `you are playing as ${roles.find(r=>r.id===currentRole)?.name}. step ${step+1}`;
+        }
+
+        window.makeChoice = (choiceIdx) => {
+            const story = stories[currentRole] || stories.fox;
+            if (step < story.length - 1) {
+                step++;
+                updateStory();
+                // journal entry flavor
+                const journal = document.getElementById('journalText');
+                journal.innerText = `you chose option ${choiceIdx+1} and continued your journey.`;
+            } else {
+                // end of branch
+                document.getElementById('sceneDesc').innerText = "✨ the story continues in the wild... (demo limit)";
+                document.getElementById('choiceContainer').innerHTML = `<div class="choice-card" onclick="resetGame()"><i class="fas fa-undo"></i> play again</div>`;
+            }
+        };
+
+        window.resetGame = () => {
+            step = 0;
+            updateStory();
+        };
+
+        // character grid
+        function renderCharacterGrid() {
+            const grid = document.getElementById('characterGrid');
+            grid.innerHTML = roles.map(r => `
+                <div class="character-card" onclick="showRoleModal('${r.name}','${r.desc}','${r.emoji}','${r.id}')">
+                    <div class="character-image">${r.emoji}</div>
+                    <div class="character-content">
+                        <div class="character-name">${r.name}</div>
+                        <div class="character-desc">${r.desc}</div>
+                    </div>
+                </div>`).join('');
+        }
+
+        window.showRoleModal = (name, desc, emoji, roleId) => {
+            document.getElementById('modalRoleName').innerText = name;
+            document.getElementById('modalRoleDesc').innerText = desc;
+            document.getElementById('modalRoleEmoji').innerText = emoji;
+            document.getElementById('roleModal').classList.add('active');
+            // store roleId for modal selection
+            window.modalRoleId = roleId;
+        };
+
+        window.selectRoleFromModal = () => {
+            if (window.modalRoleId) {
+                setRole(window.modalRoleId);
+            }
+            closeModal();
+        };
+
+        window.closeModal = () => document.getElementById('roleModal').classList.remove('active');
+
+        // initial render
+        renderRoleSelector();
+        renderCharacterGrid();
+        updateStory();
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // modal escape
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('roleModal')) closeModal(); };

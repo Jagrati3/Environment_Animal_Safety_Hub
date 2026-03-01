@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Shade Deficit Index - EcoLife</title>
+    <link rel="stylesheet" href="../css/urban-shade-deficit.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <header class="shade-header">
+        <div class="header-container">
+            <div class="header-left">
+                <a href="../index.html" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+            </div>
+            <div class="header-center">
+                <i class="fas fa-umbrella-beach header-icon"></i>
+                <h1>Urban Shade Deficit Index</h1>
+                <p class="subtitle">Mapping Heat Corridors & Walkability Safety</p>
+            </div>
+            <div class="header-right">
+                <button id="help-btn" class="icon-btn" title="Help">
+                    <i class="fas fa-question-circle"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="shade-main">
+        <!-- Control Panel -->
+        <aside class="control-panel">
+            <div class="panel-section">
+                <h3><i class="fas fa-sliders-h"></i> Analysis Controls</h3>
+                
+                <div class="control-group">
+                    <label for="time-slider">
+                        <i class="fas fa-clock"></i> Time of Day
+                        <span id="time-display">12:00 PM</span>
+                    </label>
+                    <input type="range" id="time-slider" min="6" max="20" value="12" step="0.5">
+                    <div class="time-markers">
+                        <span>6 AM</span>
+                        <span>12 PM</span>
+                        <span>8 PM</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="season-select">
+                        <i class="fas fa-calendar-alt"></i> Season
+                    </label>
+                    <select id="season-select">
+                        <option value="summer">Summer (Peak Heat)</option>
+                        <option value="spring">Spring</option>
+                        <option value="fall">Fall</option>
+                        <option value="winter">Winter</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="temperature-input">
+                        <i class="fas fa-temperature-high"></i> Temperature (°F)
+                    </label>
+                    <input type="number" id="temperature-input" value="95" min="60" max="120">
+                </div>
+
+                <div class="control-group">
+                    <label>
+                        <i class="fas fa-layer-group"></i> Map Layers
+                    </label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="shade-coverage" checked>
+                            <span>Shade Coverage</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="heat-corridors" checked>
+                            <span>Heat Corridors</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="tree-canopy">
+                            <span>Tree Canopy</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="building-shadows">
+                            <span>Building Shadows</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="pedestrian-routes">
+                            <span>Pedestrian Routes</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="cooling-stations">
+                            <span>Cooling Stations</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button id="analyze-btn" class="primary-btn">
+                    <i class="fas fa-chart-line"></i> Run Analysis
+                </button>
+            </div>
+
+            <div class="panel-section legend-section">
+                <h3><i class="fas fa-palette"></i> Shade Deficit Legend</h3>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #006400;"></span>
+                        <span>Excellent (80-100% shade)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #32CD32;"></span>
+                        <span>Good (60-80% shade)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #FFD700;"></span>
+                        <span>Moderate (40-60% shade)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #FF8C00;"></span>
+                        <span>Poor (20-40% shade)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #DC143C;"></span>
+                        <span>Critical (&lt;20% shade)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-section stats-section">
+                <h3><i class="fas fa-chart-bar"></i> Quick Stats</h3>
+                <div class="stat-card">
+                    <div class="stat-value" id="avg-shade">--</div>
+                    <div class="stat-label">Avg Shade Coverage</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="critical-streets">--</div>
+                    <div class="stat-label">Critical Streets</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="heat-index">--</div>
+                    <div class="stat-label">Heat Index</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Map Container -->
+        <section class="map-container">
+            <div id="shade-map"></div>
+            <div class="map-overlay">
+                <button id="locate-btn" class="map-control-btn" title="Find My Location">
+                    <i class="fas fa-crosshairs"></i>
+                </button>
+                <button id="fullscreen-btn" class="map-control-btn" title="Fullscreen">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+            <div id="loading-overlay" class="loading-overlay hidden">
+                <div class="spinner"></div>
+                <p>Analyzing shade patterns...</p>
+            </div>
+        </section>
+
+        <!-- Analysis Panel -->
+        <aside class="analysis-panel">
+            <div class="panel-tabs">
+                <button class="tab-btn active" data-tab="street-details">
+                    <i class="fas fa-road"></i> Street Details
+                </button>
+                <button class="tab-btn" data-tab="recommendations">
+                    <i class="fas fa-lightbulb"></i> Solutions
+                </button>
+                <button class="tab-btn" data-tab="analytics">
+                    <i class="fas fa-chart-pie"></i> Analytics
+                </button>
+            </div>
+
+            <div class="tab-content active" id="street-details">
+                <div id="street-info" class="info-placeholder">
+                    <i class="fas fa-mouse-pointer"></i>
+                    <p>Click on a street to view shade analysis</p>
+                </div>
+            </div>
+
+            <div class="tab-content" id="recommendations">
+                <div class="recommendations-list">
+                    <h4>Improvement Strategies</h4>
+                    <div id="solutions-container">
+                        <p class="placeholder-text">Select a critical street to see improvement recommendations</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="analytics">
+                <div class="analytics-container">
+                    <h4>Coverage Distribution</h4>
+                    <canvas id="shade-chart"></canvas>
+                    <h4 style="margin-top: 20px;">Hourly Shade Pattern</h4>
+                    <canvas id="hourly-chart"></canvas>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Modal for Help -->
+    <div id="help-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2><i class="fas fa-info-circle"></i> How to Use</h2>
+            <div class="help-content">
+                <div class="help-section">
+                    <h3>Understanding the Index</h3>
+                    <p>The Urban Shade Deficit Index measures the percentage of shade coverage on streets during peak heat hours. Streets with less than 20% shade are marked as critical heat corridors.</p>
+                </div>
+                <div class="help-section">
+                    <h3>Interactive Features</h3>
+                    <ul>
+                        <li>Adjust time slider to see shade patterns throughout the day</li>
+                        <li>Click streets to view detailed shade analysis</li>
+                        <li>Toggle layers to customize your view</li>
+                        <li>View improvement recommendations for critical areas</li>
+                    </ul>
+                </div>
+                <div class="help-section">
+                    <h3>Color Coding</h3>
+                    <p>Streets are color-coded from green (excellent shade) to red (critical deficit). Focus on red and orange streets for intervention priorities.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/urban-shade-deficit.js"></script>
+</body>
+</html>

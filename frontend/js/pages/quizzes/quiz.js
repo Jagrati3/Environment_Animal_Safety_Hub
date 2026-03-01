@@ -1,0 +1,226 @@
+// ---------------------------
+// Kids Eco Quiz - Standalone
+// ---------------------------
+
+let currentQuestion = 0;
+let score = 0;
+let selectedAnswer = null;
+let timer;
+let timeLeft = 120;
+let userAnswers = [];
+
+// ---------------------------
+// QUESTIONS
+// ---------------------------
+const questions = [
+{
+question: "Which gas do plants absorb?",
+options: ["Oxygen","Carbon Dioxide","Nitrogen","Hydrogen"],
+answer: 1
+},
+{
+question: "Which of these saves water?",
+options: ["Leaving tap open","Fixing leaks","Wasting water","Overflow tanks"],
+answer: 1
+},
+{
+question: "Which is renewable energy?",
+options: ["Coal","Petrol","Solar","Diesel"],
+answer: 2
+},
+{
+question: "Which color dustbin is for wet waste?",
+options: ["Blue","Green","Red","Black"],
+answer: 1
+},
+{
+question: "Cutting trees causes?",
+options: ["More oxygen","Deforestation","Rainfall increase","Cleaner air"],
+answer: 1
+},
+{
+question: "Which helps reduce plastic pollution?",
+options: ["Cloth bags","Plastic bags","Thermocol","Foil"],
+answer: 0
+},
+{
+question: "Noise pollution affects?",
+options: ["Ears","Eyes","Skin","Hands"],
+answer: 0
+},
+{
+question: "Which saves electricity?",
+options: ["Switch off lights","Keep lights ON","Use old bulbs","Waste power"],
+answer: 0
+},
+{
+question: "Which animal is endangered?",
+options: ["Tiger","Dog","Cat","Cow"],
+answer: 0
+},
+{
+question: "Best way to protect Earth?",
+options: ["Reduce Reuse Recycle","Waste resources","Cut forests","Pollute air"],
+answer: 0
+}
+];
+
+
+// ---------------------------
+// START QUIZ
+// ---------------------------
+function startQuiz(){
+
+timeLeft = parseInt(document.getElementById("timeSelect").value);
+
+document.getElementById("startScreen").style.display="none";
+document.getElementById("quizScreen").style.display="block";
+
+startTimer();
+loadQuestion();
+}
+
+
+// ---------------------------
+// TIMER
+// ---------------------------
+function startTimer(){
+
+timer = setInterval(()=>{
+
+timeLeft--;
+
+let min = Math.floor(timeLeft/60);
+let sec = timeLeft%60;
+
+document.getElementById("time").innerText =
+`${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+
+if(timeLeft<=0){
+clearInterval(timer);
+showResult();
+}
+
+},1000);
+}
+
+
+// ---------------------------
+// LOAD QUESTION
+// ---------------------------
+function loadQuestion(){
+
+selectedAnswer=null;
+
+const q = questions[currentQuestion];
+
+document.getElementById("question").innerText =
+`${currentQuestion+1}. ${q.question}`;
+
+document.getElementById("progressText").innerText =
+`Question ${currentQuestion+1}/${questions.length}`;
+
+document.querySelector(".progress-fill").style.width =
+((currentQuestion)/questions.length)*100 + "%";
+
+const optionsHTML = q.options.map((opt,i)=>`
+<div class="option-card" onclick="selectOption(${i},this)">
+${opt}
+</div>
+`).join("");
+
+document.getElementById("options").innerHTML = optionsHTML;
+}
+
+
+// ---------------------------
+// SELECT OPTION
+// ---------------------------
+function selectOption(index,element){
+
+selectedAnswer=index;
+
+document.querySelectorAll(".option-card")
+.forEach(opt=>opt.classList.remove("selected"));
+
+element.classList.add("selected");
+}
+
+
+// ---------------------------
+// NEXT
+// ---------------------------
+function nextQuestion(){
+
+if(selectedAnswer===null){
+alert("Select an option first!");
+return;
+}
+
+userAnswers.push(selectedAnswer);
+
+if(selectedAnswer === questions[currentQuestion].answer){
+score++;
+}
+
+currentQuestion++;
+
+if(currentQuestion < questions.length){
+loadQuestion();
+}else{
+showResult();
+}
+}
+
+
+// ---------------------------
+// RESULT
+// ---------------------------
+function showResult(){
+
+clearInterval(timer);
+
+document.getElementById("quizScreen").style.display="none";
+document.getElementById("resultScreen").style.display="block";
+
+document.getElementById("finalScore").innerText = score;
+
+let remark="Good Job!";
+if(score==10) remark="Eco Champion! 🌍";
+else if(score<5) remark="Keep Learning 🌱";
+
+document.getElementById("remark").innerText = remark;
+}
+
+
+// ---------------------------
+// REVIEW (optional)
+
+function showReview(){
+
+document.getElementById("resultScreen").style.display="none";
+document.getElementById("reviewScreen").style.display="block";
+
+let html="";
+
+questions.forEach((q,i)=>{
+
+html+=`
+<div class="review-item">
+<p><b>Q${i+1}. ${q.question}</b></p>
+<p>Your Answer: ${q.options[userAnswers[i]] || "Not answered"}</p>
+<p>Correct Answer: ${q.options[q.answer]}</p>
+</div>
+`;
+});
+
+document.getElementById("reviewList").innerHTML = html;
+}
+
+
+// ---------------------------
+// MAKE FUNCTIONS GLOBAL
+// ---------------------------
+window.startQuiz = startQuiz;
+window.nextQuestion = nextQuestion;
+window.showReview = showReview;

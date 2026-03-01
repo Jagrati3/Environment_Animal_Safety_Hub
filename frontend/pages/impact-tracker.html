@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Impact Tracker | Your Environmental Journey | EcoLife</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f7f0 0%, #d4eed4 100%);
+            min-height: 100vh;
+            color: #1b4d1b;
+        }
+
+        /* Header */
+        .impact-header {
+            background: linear-gradient(135deg, #1b4d1b, #2e7d32);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+
+        .impact-header::before {
+            content: '🌱';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.1;
+            right: -2rem;
+            bottom: -3rem;
+            transform: rotate(15deg);
+        }
+
+        .impact-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .impact-header h1 i {
+            color: #ffd700;
+        }
+
+        .impact-header p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: -2rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background: white;
+            border-radius: 60px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .user-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #1b4d1b;
+            border: 4px solid #2e7d32;
+        }
+
+        .user-details h2 {
+            font-size: 2rem;
+            color: #1b4d1b;
+            margin-bottom: 0.3rem;
+        }
+
+        .user-details p {
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .join-date {
+            background: #e8f5e9;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        .impact-motto {
+            background: #2e7d32;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            box-shadow: 0 10px 20px rgba(46,125,50,0.3);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 40px;
+            padding: 1.8rem;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(46,125,50,0.2);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: #e8f5e9;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #2e7d32;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1b4d1b;
+            line-height: 1;
+            margin-bottom: 0.3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat-trend {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #4caf50;
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .stat-trend.up { background: #4caf50; }
+        .stat-trend.down { background: #f44336; }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Chart Section */
+        .chart-section {
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .chart-header h2 {
+            color: #1b4d1b;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chart-btn {
+            padding: 0.5rem 1.5rem;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .chart-btn:hover {
+            border-color: #ffd700;
+        }
+
+        .chart-btn.active {
+            background: #2e7d32;
+            border-color: #2e7d32;
+            color: white;
+        }
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        /* Impact Breakdown */
+        .breakdown-section {
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .breakdown-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .breakdown-header h2 {
+            color: #1b4d1b;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .impact-list {
+            margin-bottom: 2rem;
+        }
+
+        .impact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .impact-icon {
+            width: 50px;
+            height: 50px;
+            background: #e8f5e9;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2e7d32;
+            font-size: 1.3rem;
+        }
+
+        .impact-info {
+            flex: 1;
+        }
+
+        .impact-info h4 {
+            color: #333;
+            margin-bottom: 0.2rem;
+        }
+
+        .impact-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .impact-value {
+            font-weight: 700;
+            color: #2e7d32;
+        }
+
+        .impact-bar {
+            width: 150px;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .impact-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2e7d32, #ffd700);
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+
+        /* Milestones Section */
+        .milestones-section {
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .milestones-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .milestones-header h2 {
+            color: #1b4d1b;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .milestone-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .milestone-card {
+            background: #f8f9fa;
+            border-radius: 40px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .milestone-card.completed {
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            color: white;
+        }
+
+        .milestone-card.completed .milestone-icon {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .milestone-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(46,125,50,0.2);
+        }
+
+        .milestone-icon {
+            width: 80px;
+            height: 80px;
+            background: #e8f5e9;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: #2e7d32;
+            margin: 0 auto 1rem;
+        }
+
+        .milestone-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .milestone-date {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .milestone-badge {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            background: #ffd700;
+            color: #1b4d1b;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .milestone-locked {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            backdrop-filter: blur(3px);
+            border-radius: 40px;
+        }
+
+        /* Activity Timeline */
+        .timeline-section {
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #2e7d32, #ffd700);
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.4rem;
+            top: 0.3rem;
+            width: 15px;
+            height: 15px;
+            background: #ffd700;
+            border: 3px solid #2e7d32;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .timeline-date {
+            font-size: 0.9rem;
+            color: #999;
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-title {
+            font-size: 1.2rem;
+            color: #1b4d1b;
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .timeline-title i {
+            color: #ffd700;
+        }
+
+        .timeline-description {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .timeline-points {
+            display: inline-block;
+            background: #e8f5e9;
+            padding: 0.2rem 1rem;
+            border-radius: 30px;
+            color: #2e7d32;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Badges Section */
+        .badges-section {
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .badges-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .badge-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 30px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .badge-card:hover {
+            transform: translateY(-10px);
+            background: #e8f5e9;
+        }
+
+        .badge-card.locked {
+            opacity: 0.6;
+            filter: grayscale(1);
+        }
+
+        .badge-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            margin: 0 auto 1rem;
+            box-shadow: 0 10px 20px rgba(255,215,0,0.3);
+        }
+
+        .badge-card.locked .badge-icon {
+            background: #ccc;
+            box-shadow: none;
+        }
+
+        .badge-name {
+            font-weight: 600;
+            color: #1b4d1b;
+            margin-bottom: 0.3rem;
+        }
+
+        .badge-desc {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* Impact Equivalencies */
+        .equivalencies-section {
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            border-radius: 40px;
+            padding: 2rem;
+            margin: 2rem 0;
+            color: white;
+        }
+
+        .equivalencies-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        .equivalencies-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .equivalency-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .equivalency-icon {
+            font-size: 3rem;
+            color: #ffd700;
+            margin-bottom: 1rem;
+        }
+
+        .equivalency-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .equivalency-label {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        /* Goals Section */
+        .goals-section {
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .goals-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .goal-card {
+            background: #f8f9fa;
+            border-radius: 30px;
+            padding: 1.5rem;
+            border-left: 6px solid;
+        }
+
+        .goal-card.in-progress { border-color: #ffd700; }
+        .goal-card.completed { border-color: #4caf50; }
+        .goal-card.failed { border-color: #f44336; }
+
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .goal-title {
+            font-size: 1.2rem;
+            color: #1b4d1b;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .goal-deadline {
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        .goal-progress {
+            margin: 1rem 0;
+        }
+
+        .goal-progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.3rem;
+            color: #666;
+        }
+
+        .goal-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .goal-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2e7d32, #ffd700);
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+
+        .goal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .goal-points {
+            background: #e8f5e9;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            color: #2e7d32;
+            font-weight: 600;
+        }
+
+        .goal-btn {
+            background: none;
+            border: 2px solid #2e7d32;
+            color: #2e7d32;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .goal-btn:hover {
+            background: #2e7d32;
+            color: white;
+        }
+
+        /* Share Section */
+        .share-section {
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .share-title {
+            color: #1b4d1b;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-10px) scale(1.1);
+        }
+
+        .share-btn.facebook { background: #3b5998; }
+        .share-btn.twitter { background: #1da1f2; }
+        .share-btn.linkedin { background: #0077b5; }
+        .share-btn.whatsapp { background: #25d366; }
+        .share-btn.email { background: #ea4335; }
+
+        .impact-quote {
+            margin-top: 2rem;
+            font-size: 1.2rem;
+            font-style: italic;
+            color: #666;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 60px;
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(46,125,50,0.3);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        .back-to-top:hover {
+            background: #1b5e20;
+            transform: translateY(-5px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 60px;
+            max-width: 500px;
+            width: 100%;
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+            animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            color: #ffd700;
+            margin-bottom: 1rem;
+        }
+
+        .modal h3 {
+            color: #1b4d1b;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .modal p {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .modal-btn {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .equivalencies-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .goals-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .impact-header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .equivalencies-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome-banner {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .user-info {
+                flex-direction: column;
+            }
+            
+            .chart-controls {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="impact-header">
+        <h1>
+            <i class="fas fa-chart-line"></i>
+            Life Impact Tracker
+        </h1>
+        <p>See the positive change you're making - one action at a time. Track your environmental journey!</p>
+    </header>
+
+    <div class="container">
+        <!-- Welcome Banner -->
+        <div class="welcome-banner" data-aos="fade-up">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <div class="user-details">
+                    <h2>Green Warrior</h2>
+                    <p><i class="fas fa-map-pin"></i> Making a difference since March 2026</p>
+                    <span class="join-date">🌱 Level 8 Eco Hero</span>
+                </div>
+            </div>
+            <div class="impact-motto">
+                <i class="fas fa-quote-left"></i>
+                Small actions, BIG impact
+                <i class="fas fa-quote-right"></i>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="stat-icon"><i class="fas fa-leaf"></i></div>
+                <div class="stat-value" id="totalCO2">1,247</div>
+                <div class="stat-label">kg CO₂ Saved</div>
+                <span class="stat-trend up">↑ 12%</span>
+            </div>
+            <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="stat-icon"><i class="fas fa-tree"></i></div>
+                <div class="stat-value" id="treesPlanted">24</div>
+                <div class="stat-label">Trees Equivalent</div>
+                <span class="stat-trend up">↑ 3 this month</span>
+            </div>
+            <div class="stat-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="stat-icon"><i class="fas fa-bottle-water"></i></div>
+                <div class="stat-value" id="plasticSaved">156</div>
+                <div class="stat-label">kg Plastic Reduced</div>
+                <span class="stat-trend up">↑ 8%</span>
+            </div>
+            <div class="stat-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="stat-icon"><i class="fas fa-bolt"></i></div>
+                <div class="stat-value" id="energySaved">3,456</div>
+                <div class="stat-label">kWh Energy Saved</div>
+                <span class="stat-trend up">↑ 15%</span>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Progress Chart -->
+            <div class="chart-section" data-aos="fade-right">
+                <div class="chart-header">
+                    <h2><i class="fas fa-chart-line"></i> Your Impact Over Time</h2>
+                    <div class="chart-controls">
+                        <button class="chart-btn active" data-period="week">Week</button>
+                        <button class="chart-btn" data-period="month">Month</button>
+                        <button class="chart-btn" data-period="year">Year</button>
+                        <button class="chart-btn" data-period="all">All Time</button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="impactChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Impact Breakdown -->
+            <div class="breakdown-section" data-aos="fade-left">
+                <div class="breakdown-header">
+                    <h2><i class="fas fa-pie-chart"></i> Impact Breakdown</h2>
+                    <span class="join-date">This Month</span>
+                </div>
+                <div class="impact-list">
+                    <div class="impact-item">
+                        <div class="impact-icon"><i class="fas fa-car"></i></div>
+                        <div class="impact-info">
+                            <h4>Transportation</h4>
+                            <p>Biked instead of drove</p>
+                        </div>
+                        <div class="impact-value">156 kg</div>
+                        <div class="impact-bar">
+                            <div class="impact-bar-fill" style="width: 65%"></div>
+                        </div>
+                    </div>
+                    <div class="impact-item">
+                        <div class="impact-icon"><i class="fas fa-bolt"></i></div>
+                        <div class="impact-info">
+                            <h4>Energy</h4>
+                            <p>Reduced electricity use</p>
+                        </div>
+                        <div class="impact-value">234 kg</div>
+                        <div class="impact-bar">
+                            <div class="impact-bar-fill" style="width: 80%"></div>
+                        </div>
+                    </div>
+                    <div class="impact-item">
+                        <div class="impact-icon"><i class="fas fa-utensils"></i></div>
+                        <div class="impact-info">
+                            <h4>Food</h4>
+                            <p>Meatless meals</p>
+                        </div>
+                        <div class="impact-value">98 kg</div>
+                        <div class="impact-bar">
+                            <div class="impact-bar-fill" style="width: 45%"></div>
+                        </div>
+                    </div>
+                    <div class="impact-item">
+                        <div class="impact-icon"><i class="fas fa-recycle"></i></div>
+                        <div class="impact-info">
+                            <h4>Waste</h4>
+                            <p>Recycled & composted</p>
+                        </div>
+                        <div class="impact-value">67 kg</div>
+                        <div class="impact-bar">
+                            <div class="impact-bar-fill" style="width: 55%"></div>
+                        </div>
+                    </div>
+                    <div class="impact-item">
+                        <div class="impact-icon"><i class="fas fa-shopping-bag"></i></div>
+                        <div class="impact-info">
+                            <h4>Consumption</h4>
+                            <p>Reduced purchases</p>
+                        </div>
+                        <div class="impact-value">45 kg</div>
+                        <div class="impact-bar">
+                            <div class="impact-bar-fill" style="width: 35%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Milestones -->
+        <div class="milestones-section" data-aos="fade-up">
+            <div class="milestones-header">
+                <h2><i class="fas fa-trophy"></i> Your Milestones</h2>
+                <span class="join-date">8 of 12 completed</span>
+            </div>
+            <div class="milestone-grid">
+                <div class="milestone-card completed">
+                    <div class="milestone-icon"><i class="fas fa-seedling"></i></div>
+                    <h3>First Step</h3>
+                    <div class="milestone-date">Completed Mar 1, 2026</div>
+                    <span class="milestone-badge">+100 pts</span>
+                </div>
+                <div class="milestone-card completed">
+                    <div class="milestone-icon"><i class="fas fa-bicycle"></i></div>
+                    <h3>100 Miles Biked</h3>
+                    <div class="milestone-date">Completed Mar 15, 2026</div>
+                    <span class="milestone-badge">+250 pts</span>
+                </div>
+                <div class="milestone-card completed">
+                    <div class="milestone-icon"><i class="fas fa-tree"></i></div>
+                    <h3>Tree Planter</h3>
+                    <div class="milestone-date">Completed Mar 20, 2026</div>
+                    <span class="milestone-badge">+500 pts</span>
+                </div>
+                <div class="milestone-card">
+                    <div class="milestone-icon"><i class="fas fa-solar-panel"></i></div>
+                    <h3>Energy Saver</h3>
+                    <div class="milestone-date">500 kWh saved</div>
+                    <span class="milestone-badge">75% complete</span>
+                    <div class="milestone-locked">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Impact Equivalencies -->
+        <div class="equivalencies-section" data-aos="fade-up">
+            <div class="equivalencies-header">
+                <h2><i class="fas fa-balance-scale"></i> Your Impact In Real Terms</h2>
+            </div>
+            <div class="equivalencies-grid">
+                <div class="equivalency-card">
+                    <div class="equivalency-icon"><i class="fas fa-tree"></i></div>
+                    <div class="equivalency-value" id="treeEquiv">24</div>
+                    <div class="equivalency-label">Trees grown for 10 years</div>
+                </div>
+                <div class="equivalency-card">
+                    <div class="equivalency-icon"><i class="fas fa-car"></i></div>
+                    <div class="equivalency-value" id="carEquiv">3,118</div>
+                    <div class="equivalency-label">Miles not driven</div>
+                </div>
+                <div class="equivalency-card">
+                    <div class="equivalency-icon"><i class="fas fa-home"></i></div>
+                    <div class="equivalency-value" id="homeEquiv">124</div>
+                    <div class="equivalency-label">Homes powered for a day</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Timeline & Badges Grid -->
+        <div class="main-grid">
+            <!-- Timeline -->
+            <div class="timeline-section" data-aos="fade-right">
+                <div class="timeline-header">
+                    <h2><i class="fas fa-clock"></i> Recent Activity</h2>
+                    <span class="join-date">Last 7 days</span>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">Today, 9:30 AM</div>
+                        <div class="timeline-title">
+                            <i class="fas fa-bicycle"></i>
+                            Biked to work
+                        </div>
+                        <div class="timeline-description">5 miles round trip - saved 2.5 kg CO₂</div>
+                        <span class="timeline-points">+50 pts</span>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">Yesterday, 6:15 PM</div>
+                        <div class="timeline-title">
+                            <i class="fas fa-recycle"></i>
+                            Recycled electronics
+                        </div>
+                        <div class="timeline-description">Old phone and laptop at e-waste center</div>
+                        <span class="timeline-points">+75 pts</span>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">Mar 25, 2026</div>
+                        <div class="timeline-title">
+                            <i class="fas fa-seedling"></i>
+                            Planted 2 trees
+                        </div>
+                        <div class="timeline-description">Community garden event</div>
+                        <span class="timeline-points">+200 pts</span>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">Mar 23, 2026</div>
+                        <div class="timeline-title">
+                            <i class="fas fa-solar-panel"></i>
+                            Installed LED bulbs
+                        </div>
+                        <div class="timeline-description">Replaced 10 bulbs throughout house</div>
+                        <span class="timeline-points">+100 pts</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Badges -->
+            <div class="badges-section" data-aos="fade-left">
+                <div class="badges-header">
+                    <h2><i class="fas fa-medal"></i> Achievement Badges</h2>
+                    <span class="join-date">12 earned</span>
+                </div>
+                <div class="badges-grid">
+                    <div class="badge-card">
+                        <div class="badge-icon"><i class="fas fa-seedling"></i></div>
+                        <div class="badge-name">Green Start</div>
+                        <div class="badge-desc">First 5 actions</div>
+                    </div>
+                    <div class="badge-card">
+                        <div class="badge-icon"><i class="fas fa-bicycle"></i></div>
+                        <div class="badge-name">Cycle Commuter</div>
+                        <div class="badge-desc">50 miles biked</div>
+                    </div>
+                    <div class="badge-card">
+                        <div class="badge-icon"><i class="fas fa-tree"></i></div>
+                        <div class="badge-name">Tree Hugger</div>
+                        <div class="badge-desc">Planted 5 trees</div>
+                    </div>
+                    <div class="badge-card locked">
+                        <div class="badge-icon"><i class="fas fa-solar-panel"></i></div>
+                        <div class="badge-name">Solar Champion</div>
+                        <div class="badge-desc">1,000 kWh saved</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Goals Section -->
+        <div class="goals-section" data-aos="fade-up">
+            <div class="goals-header">
+                <h2><i class="fas fa-bullseye"></i> Active Goals</h2>
+                <button class="goal-btn" onclick="addNewGoal()">+ Add Goal</button>
+            </div>
+            <div class="goals-grid">
+                <div class="goal-card in-progress">
+                    <div class="goal-header">
+                        <h3 class="goal-title"><i class="fas fa-bicycle"></i> Bike 500 Miles</h3>
+                        <span class="goal-deadline">Due Jun 30</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div class="goal-progress-text">
+                            <span>327 miles</span>
+                            <span>65%</span>
+                        </div>
+                        <div class="goal-bar">
+                            <div class="goal-bar-fill" style="width: 65%"></div>
+                        </div>
+                    </div>
+                    <div class="goal-footer">
+                        <span class="goal-points">🏆 500 pts</span>
+                        <button class="goal-btn" onclick="updateGoal()">Update</button>
+                    </div>
+                </div>
+                <div class="goal-card in-progress">
+                    <div class="goal-header">
+                        <h3 class="goal-title"><i class="fas fa-trash"></i> Zero Waste Month</h3>
+                        <span class="goal-deadline">Due Apr 30</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div class="goal-progress-text">
+                            <span>18 days</span>
+                            <span>60%</span>
+                        </div>
+                        <div class="goal-bar">
+                            <div class="goal-bar-fill" style="width: 60%"></div>
+                        </div>
+                    </div>
+                    <div class="goal-footer">
+                        <span class="goal-points">🏆 300 pts</span>
+                        <button class="goal-btn" onclick="updateGoal()">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Share Section -->
+        <div class="share-section" data-aos="fade-up">
+            <h3 class="share-title">Share Your Impact</h3>
+            <p style="color: #666; margin-bottom: 2rem;">Inspire others by sharing your environmental journey!</p>
+            <div class="share-buttons">
+                <div class="share-btn facebook" onclick="share('facebook')"><i class="fab fa-facebook-f"></i></div>
+                <div class="share-btn twitter" onclick="share('twitter')"><i class="fab fa-twitter"></i></div>
+                <div class="share-btn linkedin" onclick="share('linkedin')"><i class="fab fa-linkedin-in"></i></div>
+                <div class="share-btn whatsapp" onclick="share('whatsapp')"><i class="fab fa-whatsapp"></i></div>
+                <div class="share-btn email" onclick="share('email')"><i class="fas fa-envelope"></i></div>
+            </div>
+            <div class="impact-quote">
+                <i class="fas fa-quote-left" style="color: #2e7d32;"></i>
+                I've saved 1,247 kg of CO₂ with @EcoLife! Join me in making a difference! 🌍
+                <i class="fas fa-quote-right" style="color: #2e7d32;"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-icon">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <h3>Achievement Unlocked!</h3>
+            <p>You've earned the "Green Warrior" badge for reaching 1,000 kg CO₂ saved!</p>
+            <button class="modal-btn" onclick="closeModal()">Awesome!</button>
+        </div>
+    </div>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- AOS Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Initialize Chart
+        const ctx = document.getElementById('impactChart').getContext('2d');
+        let impactChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
+                datasets: [{
+                    label: 'CO₂ Saved (kg)',
+                    data: [45, 60, 75, 90, 110, 130, 155, 180],
+                    borderColor: '#2e7d32',
+                    backgroundColor: 'rgba(46,125,50,0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#ffd700',
+                    pointBorderColor: '#2e7d32',
+                    pointBorderWidth: 2,
+                    pointRadius: 6,
+                    pointHoverRadius: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart period buttons
+        document.querySelectorAll('.chart-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const period = this.dataset.period;
+                let newData = [];
+                let newLabels = [];
+                
+                if (period === 'week') {
+                    newLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                    newData = [15, 22, 18, 25, 30, 20, 28];
+                } else if (period === 'month') {
+                    newLabels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+                    newData = [85, 110, 135, 158];
+                } else if (period === 'year') {
+                    newLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    newData = [320, 345, 380, 410, 395, 420, 450, 480, 510, 495, 520, 550];
+                } else {
+                    newLabels = ['2022', '2023', '2024', '2025', '2026'];
+                    newData = [450, 680, 890, 1120, 1247];
+                }
+                
+                impactChart.data.labels = newLabels;
+                impactChart.data.datasets[0].data = newData;
+                impactChart.update();
+            });
+        });
+
+        // Share function
+        function share(platform) {
+            const text = "I've saved 1,247 kg of CO₂ with @EcoLife! Join me in making a difference! 🌍";
+            const url = window.location.href;
+            
+            let shareUrl = '';
+            
+            switch(platform) {
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`;
+                    break;
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+                    break;
+                case 'linkedin':
+                    shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+                    break;
+                case 'whatsapp':
+                    shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
+                    break;
+                case 'email':
+                    shareUrl = `mailto:?subject=My Eco Impact&body=${encodeURIComponent(text + '\n\n' + url)}`;
+                    break;
+            }
+            
+            if (shareUrl) {
+                window.open(shareUrl, '_blank', 'width=600,height=400');
+            }
+        }
+
+        // Update goal
+        function updateGoal() {
+            alert('📝 Update your progress! (Feature coming soon)');
+        }
+
+        // Add new goal
+        function addNewGoal() {
+            alert('✨ Create a new goal! (Feature coming soon)');
+        }
+
+        // Show achievement modal (demo)
+        setTimeout(() => {
+            document.getElementById('successModal').classList.add('active');
+        }, 3000);
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('active');
+        }
+
+        // Back to top
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Close modal on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('successModal').classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // Update stats periodically (demo)
+        function updateStats() {
+            // This would connect to a backend in production
+            console.log('Stats updated');
+        }
+
+        setInterval(updateStats, 30000);
+    </script>
+</body>
+</html>

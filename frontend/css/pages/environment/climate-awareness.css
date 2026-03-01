@@ -926,6 +926,110 @@
   margin-bottom: 10px;
 }
 
+/* Interactive infographic */
+.climate-infographic-section {
+  max-width: 1200px;
+  margin: 40px auto 20px;
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.infographic-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.infographic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.infographic-card {
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.infographic-card-title {
+  font-size: 1.3rem;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.infographic-card-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+}
+
+.chart-shell {
+  position: relative;
+  min-height: 280px;
+}
+
+.hotspot-map {
+  position: relative;
+  min-height: 280px;
+  border-radius: 16px;
+  border: 1px dashed var(--border-color);
+  background: radial-gradient(circle at 20% 30%, rgba(33, 150, 243, 0.22), transparent 45%),
+              radial-gradient(circle at 70% 60%, rgba(76, 175, 80, 0.2), transparent 50%),
+              var(--bg-secondary);
+}
+
+.hotspot-point {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: var(--accent-red);
+  box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.45);
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  animation: hotspotPulse 2s infinite;
+}
+
+.hotspot-point::after {
+  content: attr(data-label) ' — ' attr(data-detail);
+  position: absolute;
+  left: 50%;
+  bottom: 140%;
+  transform: translateX(-50%);
+  min-width: 220px;
+  max-width: 260px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease;
+}
+
+.hotspot-point:hover::after,
+.hotspot-point:focus-visible::after,
+.hotspot-point.is-active::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+@keyframes hotspotPulse {
+  0% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.45); }
+  70% { box-shadow: 0 0 0 14px rgba(244, 67, 54, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0); }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .weather-title {
@@ -943,6 +1047,19 @@
 
   .weather-widget {
     padding: 20px;
+  }
+
+  .chart-shell,
+  .hotspot-map {
+    min-height: 240px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }
   

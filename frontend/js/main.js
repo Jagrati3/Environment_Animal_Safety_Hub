@@ -1811,10 +1811,10 @@ function showEmergencyNotification() {
 
   notification.innerHTML = `
     <div style="display: flex; align-items: center; gap: 10px;">
-      <i class="fas fa-fire" style="font-size: 1.2rem; animation: urgentFlash 1s infinite;"></i>
+      <i class="fas fa-snowflake" style="font-size: 1.2rem; animation: urgentFlash 1s infinite;"></i>
       <div>
         <strong>URGENT ACTION NEEDED</strong><br>
-        <small>Level 3 Fire Crisis - Wildlife at Risk</small>
+        <small>Level 3 Polar Albedo Crisis - Global Heat Feedback Risk</small>
       </div>
       <button onclick="this.parentElement.parentElement.remove()" style="background:none; border:none; color:white; font-size:1.2rem; cursor:pointer; padding: 5px;">×</button>
     </div>
@@ -1829,7 +1829,7 @@ function showEmergencyNotification() {
     }
   }, 10000);
 
-  console.log('🔥 Emergency notification displayed - Level 3 Crisis requires immediate attention');
+  console.log('🧊 Emergency notification displayed - Level 3 Polar Albedo crisis requires immediate attention');
 }
 
 // Initialize crisis alert on page load
@@ -1848,20 +1848,4 @@ function initFlipCards() {
 
 // ===========================================
 // END OF MAIN.JS
-// ===========================================function closeNoiseCrisisAlert() {
-function closeNoiseCrisisAlert() {
-  const banner = document.getElementById("noise-crisis-alert-banner");
-
-  if (banner) {
-    banner.style.display = "none";
-
-    // Move navbar to top after alert closes
-    const navbar = document.querySelector(".navbar");
-    if (navbar) {
-      navbar.style.top = "0px";
-    }
-
-    // Adjust body padding after alert removal
-    document.body.style.paddingTop = "80px";
-  }
-}
+// ===========================================

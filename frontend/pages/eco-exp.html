@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏞️ Virtual Eco Expedition · explore from home</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Google Fonts: adventurous, clean -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #d4eed7;
+            background: radial-gradient(circle at 10% 30%, #c0e6c5, #a8d9b5);
+            min-height: 100vh;
+            color: #1b4d2b;
+            line-height: 1.6;
+        }
+
+        /* expedition header – adventurous */
+        .expedition-header {
+            background: linear-gradient(145deg, #2a7852, #1b5438);
+            padding: 5rem 2rem 4.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+            border-bottom: 8px solid #f9e281;
+            box-shadow: 0 20px 40px #1b5438;
+        }
+
+        .expedition-header::before {
+            content: '🏞️🌲';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.12;
+            left: -3rem;
+            bottom: -6rem;
+            transform: rotate(-15deg);
+        }
+
+        .expedition-header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 4.2rem;
+            color: #fcf9cf;
+            text-shadow: 6px 6px 0 #1a6237;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .expedition-header h1 i {
+            color: #ffecaa;
+            filter: drop-shadow(0 0 8px #ffeeaa);
+        }
+
+        .expedition-header p {
+            font-size: 1.6rem;
+            max-width: 800px;
+            margin: 1.5rem auto;
+            background: #deffd6c0;
+            padding: 0.8rem 2.5rem;
+            border-radius: 60px;
+            color: #0d4b29;
+            font-weight: 700;
+            backdrop-filter: blur(4px);
+            border: 3px solid #f9e281;
+        }
+
+        .expedition-badge {
+            margin-top: 2rem;
+            display: inline-block;
+            background: #f9cf7c;
+            color: #1b5e31;
+            padding: 0.6rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #fff2b5;
+        }
+
+        /* container */
+        .container {
+            max-width: 1400px;
+            margin: -3rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* search / filter bar */
+        .expedition-bar {
+            background: #fafff2e0;
+            backdrop-filter: blur(8px);
+            border-radius: 80px;
+            padding: 1.5rem 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 30px #2b754b70, 0 0 0 3px #dcf5c0 inset;
+            border: 3px solid #daf0c0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3e9462;
+            font-size: 1.3rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 5rem;
+            border: 3px solid #cef0b5;
+            border-radius: 60px;
+            font-size: 1rem;
+            background: white;
+            color: #1e5a30;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.8rem 2rem;
+            border: 3px solid #c8eab2;
+            border-radius: 60px;
+            background: white;
+            font-weight: 600;
+            color: #1b6839;
+            cursor: pointer;
+        }
+
+        /* biome chips */
+        .biome-chips {
+            margin-bottom: 2.5rem;
+        }
+
+        .chip-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: #fad676 #c0e8b0;
+        }
+
+        .chip-scroll::-webkit-scrollbar { height: 8px; }
+        .chip-scroll::-webkit-scrollbar-track { background: #d6f0ca; border-radius: 10px; }
+        .chip-scroll::-webkit-scrollbar-thumb { background: #fad676; border-radius: 10px; }
+
+        .biome-chip {
+            flex: 0 0 auto;
+            background: #faffea;
+            padding: 1rem 2.5rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 6px 14px #4d986d70;
+            cursor: pointer;
+            font-weight: 600;
+            border: 3px solid transparent;
+            transition: 0.2s;
+            font-size: 1.1rem;
+        }
+
+        .biome-chip i { color: #d68d2c; font-size: 1.5rem; }
+        .biome-chip:hover { transform: translateY(-5px); border-color: #f7c468; background: #ffffdf; }
+        .biome-chip.active { background: #ffeaaf; border-color: #be9539; }
+
+        /* featured expedition */
+        .featured-expedition {
+            background: linear-gradient(145deg, #39855c, #1f6a42);
+            border-radius: 80px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            border: 8px solid #fbe38a;
+            box-shadow: 0 30px 40px #1f603a;
+            color: #fcfae6;
+            position: relative;
+        }
+
+        .featured-expedition::before {
+            content: '🏕️';
+            font-size: 14rem;
+            opacity: 0.1;
+            position: absolute;
+            bottom: -2rem;
+            right: 2rem;
+            transform: rotate(5deg);
+        }
+
+        .expedition-ribbon {
+            position: absolute;
+            top: 2rem;
+            right: 2.5rem;
+            background: #fecf5e;
+            color: #17582b;
+            padding: 0.6rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #fff8b0;
+        }
+
+        .expedition-grid {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .expedition-text h2 {
+            font-size: 2rem;
+            color: #fff2b0;
+            letter-spacing: 2px;
+        }
+
+        .expedition-text h3 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin: 0.5rem 0;
+        }
+
+        .expedition-meta {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .meta-item {
+            background: #2f885fb0;
+            padding: 0.6rem 2rem;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border: 2px solid #ffea8f;
+        }
+
+        .meta-item i { color: #ffe684; }
+
+        .expedition-desc {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+
+        .explore-btn {
+            background: #fecf5e;
+            border: none;
+            color: #1a6232;
+            font-weight: 800;
+            font-size: 1.6rem;
+            padding: 1.2rem 3.5rem;
+            border-radius: 60px;
+            display: inline-flex;
+            align-items: center;
+            gap: 1.2rem;
+            cursor: pointer;
+            border: 4px solid #ffffcc;
+            box-shadow: 0 8px 0 #8f9440;
+            transition: 0.1s;
+        }
+
+        .explore-btn:active {
+            transform: translateY(8px);
+            box-shadow: none;
+        }
+
+        .expedition-image {
+            height: 260px;
+            background: #67b384;
+            border-radius: 70px;
+            border: 6px solid #fbe38a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            color: #fffed0;
+        }
+
+        /* expedition grid */
+        .expedition-grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .expedition-card {
+            background: #fafff0;
+            border-radius: 70px;
+            overflow: hidden;
+            box-shadow: 0 20px 30px #2a784d80;
+            transition: all 0.3s;
+            border: 5px solid #ccf0b5;
+            cursor: pointer;
+            color: #1e562e;
+        }
+
+        .expedition-card:hover {
+            transform: translateY(-15px);
+            border-color: #faca6b;
+            box-shadow: 0 35px 45px #175a32;
+        }
+
+        .card-image {
+            height: 180px;
+            background: linear-gradient(145deg, #74b386, #4d9a65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4.5rem;
+            color: #fcfcd2;
+            position: relative;
+        }
+
+        .biome-tag {
+            position: absolute;
+            bottom: 0.8rem;
+            left: 1rem;
+            background: #1e5837;
+            color: #ffea9e;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            border: 2px solid #fdd67a;
+        }
+
+        .card-content {
+            padding: 1.8rem;
+        }
+
+        .card-location {
+            background: #cbeac0;
+            padding: 0.3rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .card-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0.7rem 0;
+        }
+
+        .card-desc {
+            color: #366f49;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .duration {
+            background: #f1cba5;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+
+        .virtual-btn {
+            background: #5daf7c;
+            border: none;
+            color: white;
+            padding: 0.6rem 1.8rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            border: 2px solid #fde287;
+        }
+
+        /* 360 preview */
+        .preview-section {
+            background: #15482fe0;
+            border-radius: 80px;
+            padding: 3rem;
+            margin: 4rem 0;
+            border: 6px solid #fad676;
+        }
+
+        .preview-placeholder {
+            background: #1e633e;
+            height: 250px;
+            border-radius: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #ffffdd;
+            border: 5px dashed #fad676;
+        }
+
+        /* modal */
+        .modal {
+            display: none; position: fixed; inset:0; background: #1d6139e6;
+            align-items: center; justify-content: center; z-index:2000;
+            backdrop-filter: blur(6px);
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #f6ffe6;
+            border-radius: 80px;
+            max-width: 700px;
+            width:100%;
+            border: 8px solid #ffe28b;
+            color: #195a2c;
+        }
+
+        .back-to-top {
+            position: fixed; bottom:2rem; right:2rem;
+            background: #f8bd48; width:70px; height:70px; border-radius:50%;
+            display: none; align-items:center; justify-content:center;
+            font-size:2.2rem; color:#1c5c28; border:5px solid #fff3b0;
+            cursor:pointer; z-index:1000;
+        }
+        .back-to-top.visible { display: flex; }
+
+        @media (max-width:800px){
+            .expedition-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- header -->
+    <header class="expedition-header">
+        <h1>
+            <i class="fas fa-binoculars"></i> Virtual Eco Expedition
+            <i class="fas fa-leaf"></i>
+        </h1>
+        <p>explore earth's wild places · 360° · from home</p>
+        <div class="expedition-badge"><i class="fas fa-globe"></i> 24 destinations</div>
+    </header>
+
+    <div class="container">
+        <!-- search / filter bar -->
+        <div class="expedition-bar" data-aos="fade-up">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="search expeditions, biomes, countries...">
+            </div>
+            <div class="filter-options">
+                <select class="filter-select"><option>all biomes</option><option>rainforest</option><option>desert</option><option>ocean</option><option>mountains</option></select>
+                <select class="filter-select"><option>by duration</option></select>
+            </div>
+        </div>
+
+        <!-- biome chips -->
+        <div class="biome-chips" data-aos="fade-up">
+            <div class="chip-scroll">
+                <div class="biome-chip active"><i class="fas fa-globe"></i> all biomes</div>
+                <div class="biome-chip"><i class="fas fa-tree"></i> rainforest</div>
+                <div class="biome-chip"><i class="fas fa-mountain"></i> mountains</div>
+                <div class="biome-chip"><i class="fas fa-water"></i> oceans</div>
+                <div class="biome-chip"><i class="fas fa-sun"></i> desert</div>
+                <div class="biome-chip"><i class="fas fa-snowflake"></i> polar</div>
+                <div class="biome-chip"><i class="fas fa-feather"></i> wetlands</div>
+            </div>
+        </div>
+
+        <!-- featured expedition -->
+        <div class="featured-expedition" data-aos="zoom-in">
+            <span class="expedition-ribbon"><i class="fas fa-star"></i> featured journey</span>
+            <div class="expedition-grid">
+                <div class="expedition-text">
+                    <h2>🌿 biome: amazon rainforest</h2>
+                    <h3>river of clouds</h3>
+                    <div class="expedition-meta">
+                        <span class="meta-item"><i class="fas fa-clock"></i> 45 min</span>
+                        <span class="meta-item"><i class="fas fa-vr-cardboard"></i> 360° audio</span>
+                    </div>
+                    <p class="expedition-desc">Fly over the canopy, listen to howler monkeys, and descend to the forest floor. Guided by local naturalists.</p>
+                    <button class="explore-btn" onclick="startExpedition('amazon')"><i class="fas fa-play"></i> start expedition</button>
+                </div>
+                <div class="expedition-image"><i class="fas fa-tree"></i></div>
+            </div>
+        </div>
+
+        <!-- expedition grid (js) -->
+        <div class="expedition-grid-cards" id="expeditionGrid"></div>
+
+        <!-- 360 preview -->
+        <div class="preview-section" data-aos="fade-up">
+            <h2 style="font-size:2.5rem; margin-bottom:1.5rem;"><i class="fas fa-360-degrees"></i> 360° preview</h2>
+            <div class="preview-placeholder" id="previewPlaceholder">
+                <i class="fas fa-play-circle"></i> click to experience
+            </div>
+        </div>
+    </div>
+
+    <!-- modal -->
+    <div class="modal" id="expeditionModal">
+        <div class="modal-content" style="padding:2.5rem;">
+            <button style="float:right; background:none; border:none; font-size:3rem; color:#1b6735;" onclick="closeModal()">✕</button>
+            <div style="text-align:center;">
+                <div style="font-size:5rem;" id="modalExpeditionEmoji">🏞️</div>
+                <h2 id="modalExpeditionTitle" style="font-size:2.8rem;">amazon</h2>
+                <p id="modalExpeditionDesc" style="margin:2rem 0;">full expedition details</p>
+                <button class="explore-btn" onclick="launchExpedition()" style="font-size:1.4rem;">▶️ launch virtual tour</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({duration:800,once:true});
+
+        // expeditions data
+        const expeditions = [
+            { name:"Amazon Canopy", biome:"rainforest", location:"Brazil", duration:"45 min", desc:"Walk among treetops, sloths, macaws.", icon:"fa-tree", long:"immerse in the world's largest rainforest." },
+            { name:"Great Barrier Reef", biome:"ocean", location:"Australia", duration:"60 min", desc:"Snorkel with turtles, colorful corals.", icon:"fa-fish", long:"360° underwater adventure." },
+            { name:"Himalayan Trek", biome:"mountains", location:"Nepal", duration:"75 min", desc:"Everest base camp, monasteries.", icon:"fa-mountain", long:"breathtaking mountain views." },
+            { name:"Sahara Dunes", biome:"desert", location:"Morocco", duration:"50 min", desc:"Camel ride, starry nights, Berber camps.", icon:"fa-sun", long:"endless golden sand." },
+            { name:"Arctic Aurora", biome:"polar", location:"Norway", duration:"55 min", desc:"Northern lights, ice fjords, polar bears.", icon:"fa-snowflake", long:"magical polar night." },
+            { name:"Okavango Delta", biome:"wetlands", location:"Botswana", duration:"70 min", desc:"Elephants, hippos, mokoro canoe.", icon:"fa-feather", long:"african oasis." },
+            { name:"Borneo Jungle", biome:"rainforest", location:"Malaysia", duration:"65 min", desc:"Orangutans, pygmy elephants.", icon:"fa-paw", long:"ancient jungle." },
+            { name:"Patagonia", biome:"mountains", location:"Chile", duration:"80 min", desc:"Glaciers, condors, turquoise lakes.", icon:"fa-mountain", long:"southern wilderness." },
+        ];
+
+        function renderExpeditions() {
+            const grid = document.getElementById('expeditionGrid');
+            grid.innerHTML = expeditions.map(e => `
+                <div class="expedition-card" onclick="showExpedition('${e.name}','${e.biome} · ${e.location} · ${e.desc}','${e.icon}')">
+                    <div class="card-image"><i class="fas ${e.icon}"></i><span class="biome-tag">${e.biome}</span></div>
+                    <div class="card-content">
+                        <span class="card-location">${e.location}</span>
+                        <div class="card-title">${e.name}</div>
+                        <p class="card-desc">${e.desc}</p>
+                        <div class="card-footer">
+                            <span class="duration"><i class="far fa-clock"></i> ${e.duration}</span>
+                            <button class="virtual-btn" onclick="event.stopPropagation(); startExpedition('${e.name}')">explore</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+        renderExpeditions();
+
+        window.showExpedition = (title, desc, icon) => {
+            document.getElementById('modalExpeditionTitle').innerText = title;
+            document.getElementById('modalExpeditionDesc').innerText = desc;
+            document.getElementById('modalExpeditionEmoji').innerHTML = `<i class="fas ${icon}"></i>`;
+            document.getElementById('expeditionModal').classList.add('active');
+        };
+
+        window.closeModal = () => document.getElementById('expeditionModal').classList.remove('active');
+        window.startExpedition = (name) => { alert(`🏞️ launching virtual expedition: ${name || 'featured'} · 360° experience`); };
+        window.launchExpedition = () => { alert('🎧 immersive 360° video would start now.'); closeModal(); };
+
+        // preview placeholder click
+        document.getElementById('previewPlaceholder').addEventListener('click', ()=>{
+            alert('🎥 360° preview · drag to look around (simulated).');
+        });
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // modal escape
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('expeditionModal')) closeModal(); };
+    </script>
+</body>
+</html>

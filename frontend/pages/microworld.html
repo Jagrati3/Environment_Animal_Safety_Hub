@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧬 Micro World Explorer · hidden universe</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Google Fonts: clean, scientific, slightly playful -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #081c28;
+            background: radial-gradient(circle at 30% 30%, #1d3f4f, #031016);
+            min-height: 100vh;
+            color: #d0ecf5;
+            line-height: 1.6;
+        }
+
+        /* header – microscopic vibe */
+        .micro-header {
+            background: linear-gradient(145deg, #0d3345, #05212f);
+            padding: 5rem 2rem 4.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+            border-bottom: 3px solid #3fb4d0;
+            box-shadow: 0 20px 40px #010f1a;
+        }
+
+        .micro-header::before {
+            content: '🧬🔬';
+            position: absolute;
+            font-size: 18rem;
+            opacity: 0.08;
+            right: -2rem;
+            bottom: -5rem;
+            transform: rotate(10deg);
+            filter: blur(4px);
+        }
+
+        .micro-header h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 4rem;
+            font-weight: 700;
+            color: #b9f3ff;
+            text-shadow: 0 0 20px #1eb0d0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .micro-header h1 i {
+            color: #b7f0b0;
+            filter: drop-shadow(0 0 12px #84c5e0);
+        }
+
+        .micro-header p {
+            font-size: 1.5rem;
+            max-width: 750px;
+            margin: 1.5rem auto;
+            background: #113946c0;
+            padding: 0.8rem 2.2rem;
+            border-radius: 60px;
+            color: #e2faff;
+            backdrop-filter: blur(6px);
+            border: 2px solid #48c0d4;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .scope-badge {
+            margin-top: 1.8rem;
+            display: inline-block;
+            background: #175571;
+            color: #dbf5ff;
+            padding: 0.5rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            border: 2px solid #66d9f0;
+        }
+
+        /* container */
+        .container {
+            max-width: 1400px;
+            margin: -3rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* control panel – filter / search */
+        .control-panel {
+            background: #102f40e0;
+            backdrop-filter: blur(12px);
+            border-radius: 70px;
+            padding: 1.5rem 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 30px #04131f, 0 0 0 2px #329bb5 inset;
+            border: 2px solid #45c2dc;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #73d4f0;
+            font-size: 1.3rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 5rem;
+            border: 2px solid #348fae;
+            border-radius: 60px;
+            font-size: 1rem;
+            background: #0d2435;
+            color: #ecfaff;
+        }
+
+        .search-box input::placeholder {
+            color: #90c8dd;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .filter-select {
+            padding: 0.8rem 2rem;
+            border: 2px solid #2f9bb8;
+            border-radius: 50px;
+            background: #0f3145;
+            color: #e2f5ff;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* micro categories – organisms */
+        .micro-categories {
+            margin-bottom: 3rem;
+        }
+
+        .category-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: #6dcde0 #123c52;
+        }
+
+        .category-scroll::-webkit-scrollbar { height: 8px; }
+        .category-scroll::-webkit-scrollbar-track { background: #1a4b62; border-radius: 10px; }
+        .category-scroll::-webkit-scrollbar-thumb { background: #6dcde0; border-radius: 10px; }
+
+        .micro-chip {
+            flex: 0 0 auto;
+            background: #103f57e0;
+            padding: 1rem 2.5rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 6px 16px #00000080;
+            cursor: pointer;
+            font-weight: 600;
+            border: 2px solid transparent;
+            transition: 0.2s;
+            color: #dffbff;
+            border: 1px solid #3fbfdc;
+        }
+
+        .micro-chip i { color: #caf0a0; font-size: 1.5rem; }
+        .micro-chip:hover { border-color: #a3e5f0; background: #1c6180; transform: translateY(-4px); }
+        .micro-chip.active { background: #247b9e; border-color: #caf2ff; }
+
+        /* featured specimen */
+        .featured-specimen {
+            background: linear-gradient(145deg, #134c61, #07323f);
+            border-radius: 80px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            border: 4px solid #4ad0e8;
+            box-shadow: 0 30px 50px #00131e;
+            position: relative;
+        }
+
+        .featured-specimen::before {
+            content: '🔬';
+            font-size: 14rem;
+            opacity: 0.1;
+            position: absolute;
+            bottom: -2rem;
+            left: 0;
+            transform: rotate(-15deg);
+        }
+
+        .specimen-ribbon {
+            position: absolute;
+            top: 2rem;
+            right: 2.5rem;
+            background: #206482;
+            color: #e0fdff;
+            padding: 0.6rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 700;
+            border: 2px solid #97e6ff;
+        }
+
+        .specimen-grid {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .specimen-text h2 {
+            font-size: 2rem;
+            color: #a1f0ff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .specimen-text h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 3.2rem;
+            color: #f0ffe2;
+        }
+
+        .micro-meta {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .micro-meta-item {
+            background: #0d5875b0;
+            padding: 0.5rem 2rem;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border: 2px solid #7bd0e8;
+        }
+
+        .micro-meta-item i { color: #b9f0a0; }
+
+        .specimen-desc {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+            color: #d4f2ff;
+        }
+
+        .explore-micro-btn {
+            background: #2e95b3;
+            border: none;
+            color: white;
+            font-weight: 700;
+            font-size: 1.5rem;
+            padding: 1.2rem 3.5rem;
+            border-radius: 60px;
+            display: inline-flex;
+            align-items: center;
+            gap: 1.2rem;
+            cursor: pointer;
+            border: 3px solid #b3f2ff;
+            box-shadow: 0 8px 0 #0b485e;
+            transition: 0.1s;
+        }
+
+        .explore-micro-btn:active {
+            transform: translateY(8px);
+            box-shadow: none;
+        }
+
+        .specimen-image {
+            height: 280px;
+            background: #185977;
+            border-radius: 70px;
+            border: 5px solid #7fd9f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            color: #efffd2;
+        }
+
+        /* micro world grid */
+        .micro-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .micro-card {
+            background: #10384de0;
+            backdrop-filter: blur(4px);
+            border-radius: 70px;
+            overflow: hidden;
+            box-shadow: 0 20px 30px #001d30;
+            transition: all 0.3s;
+            border: 3px solid #3188a8;
+            cursor: pointer;
+        }
+
+        .micro-card:hover {
+            transform: translateY(-14px) scale(1.02);
+            border-color: #a8ecff;
+            box-shadow: 0 30px 50px #002a40;
+        }
+
+        .micro-card-image {
+            height: 160px;
+            background: linear-gradient(145deg, #1f708b, #0b445a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4.5rem;
+            color: #f6ffda;
+            position: relative;
+        }
+
+        .size-badge {
+            position: absolute;
+            bottom: 0.8rem;
+            left: 1rem;
+            background: #051f2e;
+            color: #cdf2ff;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            border: 2px solid #54b3d0;
+        }
+
+        .micro-card-content {
+            padding: 2rem;
+        }
+
+        .micro-type {
+            background: #1d6883;
+            padding: 0.3rem 1.2rem;
+            border-radius: 30px;
+            display: inline-block;
+            color: white;
+            font-weight: 600;
+        }
+
+        .micro-card-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0.8rem 0 0.5rem;
+            color: #eafdff;
+        }
+
+        .micro-card-desc {
+            color: #c1e3f0;
+            margin-bottom: 1.5rem;
+        }
+
+        .micro-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .habitat {
+            background: #175570;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+        }
+
+        .view-btn {
+            background: #267e9e;
+            border: none;
+            color: white;
+            padding: 0.5rem 1.8rem;
+            border-radius: 40px;
+            cursor: pointer;
+            border: 2px solid #a7eaff;
+        }
+
+        /* microscope simulator */
+        .scope-sim {
+            background: #0b3142;
+            border-radius: 80px;
+            padding: 3rem;
+            margin: 4rem 0;
+            border: 4px solid #58c0dd;
+        }
+
+        .scope-placeholder {
+            background: #021722;
+            height: 200px;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #9acfdf;
+            border: 3px dashed #2da0c0;
+        }
+
+        /* modal */
+        .modal {
+            display: none; position: fixed; inset:0; background: #04222fe6;
+            align-items: center; justify-content: center; z-index:2000;
+            backdrop-filter: blur(8px);
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #0f3c51;
+            border-radius: 80px;
+            max-width: 700px;
+            width:100%;
+            border: 6px solid #81e2ff;
+            color: #f0ffff;
+        }
+
+        .back-to-top {
+            position: fixed; bottom:2rem; right:2rem;
+            background: #1e8eb0; width:70px; height:70px; border-radius:50%;
+            display: none; align-items:center; justify-content:center;
+            font-size:2.2rem; color:#e0fffa; border:5px solid #a6ecff;
+            cursor:pointer; z-index:1000;
+        }
+        .back-to-top.visible { display: flex; }
+
+        @media (max-width:800px){
+            .specimen-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- header -->
+    <header class="micro-header">
+        <h1>
+            <i class="fas fa-microscope"></i> Micro World Explorer
+            <i class="fas fa-dna"></i>
+        </h1>
+        <p>see the invisible · cells · microbes · tiny marvels</p>
+        <div class="scope-badge"><i class="fas fa-search"></i> magnification x2500</div>
+    </header>
+
+    <div class="container">
+        <!-- control panel -->
+        <div class="control-panel" data-aos="fade-up">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="search organisms, structures, habitats...">
+            </div>
+            <div class="filter-options">
+                <select class="filter-select"><option>all domains</option><option>bacteria</option><option>protists</option><option>fungi</option></select>
+                <select class="filter-select"><option>by size</option></select>
+            </div>
+        </div>
+
+        <!-- micro categories -->
+        <div class="micro-categories" data-aos="fade-up">
+            <div class="category-scroll">
+                <div class="micro-chip active"><i class="fas fa-circle"></i> all micro</div>
+                <div class="micro-chip"><i class="fas fa-bolt"></i> bacteria</div>
+                <div class="micro-chip"><i class="fas fa-water"></i> protists</div>
+                <div class="micro-chip"><i class="fas fa-seedling"></i> fungi</div>
+                <div class="micro-chip"><i class="fas fa-virus"></i> viruses</div>
+                <div class="micro-chip"><i class="fas fa-feather"></i> diatoms</div>
+                <div class="micro-chip"><i class="fas fa-dna"></i> cells</div>
+            </div>
+        </div>
+
+        <!-- featured specimen -->
+        <div class="featured-specimen" data-aos="zoom-in">
+            <span class="specimen-ribbon"><i class="fas fa-star"></i> organism of the day</span>
+            <div class="specimen-grid">
+                <div class="specimen-text">
+                    <h2>🔬 extremophile</h2>
+                    <h3>Tardigrade · water bear</h3>
+                    <div class="micro-meta">
+                        <span class="micro-meta-item"><i class="fas fa-ruler"></i> 0.5 mm</span>
+                        <span class="micro-meta-item"><i class="fas fa-globe"></i> everywhere</span>
+                    </div>
+                    <p class="specimen-desc">Microscopic, eight-legged, and nearly indestructible. Can survive space, radiation, and decades without water. A true marvel.</p>
+                    <button class="explore-micro-btn" onclick="exploreMicro()"><i class="fas fa-eye"></i> view under scope</button>
+                </div>
+                <div class="specimen-image"><i class="fas fa-bear"></i></div>
+            </div>
+        </div>
+
+        <!-- micro world grid (js) -->
+        <div class="micro-grid" id="microGrid"></div>
+
+        <!-- microscope simulator -->
+        <div class="scope-sim" data-aos="fade-up">
+            <h2 style="font-size:2.5rem; margin-bottom:1.5rem;"><i class="fas fa-adjust"></i> live feed · microscope view</h2>
+            <div class="scope-placeholder" id="scopePlaceholder">
+                <i class="fas fa-circle-notch"></i>  adjusting focus ...
+            </div>
+        </div>
+    </div>
+
+    <!-- modal -->
+    <div class="modal" id="microModal">
+        <div class="modal-content" style="padding:2.5rem;">
+            <button style="float:right; background:none; border:none; font-size:3rem; color:#b2f0ff;" onclick="closeModal()">✕</button>
+            <div style="text-align:center;">
+                <div style="font-size:5rem;" id="modalMicroEmoji">🦠</div>
+                <h2 id="modalMicroTitle" style="font-size:2.8rem;">diatom</h2>
+                <p id="modalMicroDesc" style="margin:2rem 0;">glass-like cell wall · oxygen producer</p>
+                <button class="explore-micro-btn" onclick="zoomIn()" style="font-size:1.3rem;">🔍 zoom in</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({duration:800,once:true});
+
+        const microOrganisms = [
+            { name:"E. coli", type:"bacteria", size:"2 µm", desc:"rod-shaped, gut dweller", icon:"fa-bolt", habitat:"intestine" },
+            { name:"Paramecium", type:"protist", size:"120 µm", desc:"slipper-shaped, ciliate", icon:"fa-water", habitat:"ponds" },
+            { name:"Diatom", type:"algae", size:"50 µm", desc:"silica shell, oxygen", icon:"fa-snowflake", habitat:"oceans" },
+            { name:"Amoeba", type:"protist", size:"300 µm", desc:"shape-shifter, pseudopods", icon:"fa-circle", habitat:"soil" },
+            { name:"Saccharomyces", type:"fungi", size:"5 µm", desc:"yeast, fermentation", icon:"fa-seedling", habitat:"sugar" },
+            { name:"Mitochondrion", type:"organelle", size:"1 µm", desc:"powerhouse of cell", icon:"fa-bolt", habitat:"cytoplasm" },
+            { name:"T4 phage", type:"virus", size:"90 nm", desc:"bacteria virus", icon:"fa-virus", habitat:"host" },
+            { name:"Pollen grain", type:"plant cell", size:"30 µm", desc:"allergen, reproduction", icon:"fa-feather", habitat:"air" }
+        ];
+
+        function renderMicro() {
+            const grid = document.getElementById('microGrid');
+            grid.innerHTML = microOrganisms.map(m => `
+                <div class="micro-card" onclick="showMicro('${m.name}','${m.type} · ${m.size} · ${m.desc}','${m.icon}')">
+                    <div class="micro-card-image"><i class="fas ${m.icon}"></i><span class="size-badge">${m.size}</span></div>
+                    <div class="micro-card-content">
+                        <span class="micro-type">${m.type}</span>
+                        <div class="micro-card-title">${m.name}</div>
+                        <p class="micro-card-desc">${m.desc}</p>
+                        <div class="micro-card-footer">
+                            <span class="habitat"><i class="fas fa-map-pin"></i> ${m.habitat}</span>
+                            <button class="view-btn" onclick="event.stopPropagation(); showMicro('${m.name}','${m.type} · ${m.size} · ${m.desc}','${m.icon}')">view</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+        renderMicro();
+
+        window.showMicro = (title, desc, icon) => {
+            document.getElementById('modalMicroTitle').innerText = title;
+            document.getElementById('modalMicroDesc').innerText = desc;
+            document.getElementById('modalMicroEmoji').innerHTML = `<i class="fas ${icon}"></i>`;
+            document.getElementById('microModal').classList.add('active');
+        };
+
+        window.closeModal = () => document.getElementById('microModal').classList.remove('active');
+        window.exploreMicro = () => { alert('🔬 focusing on tardigrade ... visible under electron microscope.'); };
+        window.zoomIn = () => { document.getElementById('scopePlaceholder').innerHTML = '<i class="fas fa-circle"></i> 🔬 magnification increased · details emerging'; };
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // escape modal
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('microModal')) closeModal(); };
+    </script>
+</body>
+</html>

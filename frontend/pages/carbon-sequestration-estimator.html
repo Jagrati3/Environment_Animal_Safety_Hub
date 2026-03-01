@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carbon Sequestration Estimator - Environment & Animal Safety Hub</title>
+  <meta name="description" content="Estimate carbon sequestration from regenerative farming practices. Calculate soil carbon storage from cover cropping, compost application, and reduced tillage.">
+  <meta name="keywords" content="carbon sequestration, soil carbon, regenerative agriculture, climate impact, farming practices">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Carbon Sequestration Estimator">
+  <meta property="og:description" content="Calculate the climate impact of your farming practices and estimate carbon storage in soil.">
+  <meta property="og:image" content="/assets/images/carbon-sequestration-og.jpg">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:title" content="Carbon Sequestration Estimator">
+  <meta property="twitter:description" content="Calculate the climate impact of your farming practices and estimate carbon storage in soil.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/assets/icons/favicon.ico">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Chart.js for data visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="../css/carbon-sequestration-estimator.css">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Carbon Sequestration Estimator",
+    "description": "Calculate carbon sequestration from regenerative farming practices",
+    "applicationCategory": "Environmental Tool",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "creator": {
+      "@type": "Organization",
+      "name": "Environment & Animal Safety Hub"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="/" class="brand-link" aria-label="Environment & Animal Safety Hub Home">
+        <img src="/assets/icons/leaf-icon.svg" alt="Environment Hub Logo" class="brand-logo">
+        <span class="brand-text">Environment Hub</span>
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <ul class="nav-menu" role="menubar">
+        <li class="nav-item" role="none">
+          <a href="/" class="nav-link" role="menuitem">Home</a>
+        </li>
+        <li class="nav-item" role="none">
+          <a href="/pages/" class="nav-link" role="menuitem">Dashboards</a>
+        </li>
+        <li class="nav-item" role="none">
+          <a href="/community/" class="nav-link" role="menuitem">Community</a>
+        </li>
+        <li class="nav-item" role="none">
+          <a href="/docs/" class="nav-link" role="menuitem">Resources</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section" aria-labelledby="hero-title">
+    <div class="container">
+      <div class="hero-container">
+        <div class="hero-content">
+          <h1 id="hero-title">Carbon Sequestration Estimator</h1>
+          <p class="hero-subtitle">
+            Calculate the climate impact of your regenerative farming practices and estimate
+            how much carbon dioxide your soil can capture and store.
+          </p>
+
+          <div class="hero-stats">
+            <div class="stat-item">
+              <div class="stat-number" id="globalCarbonStored">1.5</div>
+              <div class="stat-label">Billion Tons CO₂</div>
+              <div class="stat-description">Stored in soils annually</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number" id="avgSequestration">2.2</div>
+              <div class="stat-label">Tons CO₂/Ha/Year</div>
+              <div class="stat-description">Average sequestration rate</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number" id="potentialIncrease">50</div>
+              <div class="stat-label">%</div>
+              <div class="stat-description">Potential increase with best practices</div>
+            </div>
+          </div>
+
+          <div class="hero-actions">
+            <button class="btn btn-primary btn-lg" onclick="estimator.scrollToCalculator()">
+              Start Estimating
+            </button>
+            <button class="btn btn-outline btn-lg" onclick="estimator.showTutorial()">
+              How It Works
+            </button>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="carbon-gauge">
+            <div class="gauge-container">
+              <svg class="gauge-svg" viewBox="0 0 200 120" aria-hidden="true">
+                <defs>
+                  <linearGradient id="carbonGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#4caf50;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#ff9800;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#f44336;stop-opacity:1" />
+                  </linearGradient>
+                </defs>
+                <path d="M20,100 A80,80 0 0,1 180,100" fill="none" stroke="#e0e0e0" stroke-width="8"/>
+                <path id="carbonArc" d="M20,100 A80,80 0 0,1 180,100" fill="none" stroke="url(#carbonGradient)" stroke-width="8" stroke-linecap="round"/>
+              </svg>
+              <div class="gauge-center">
+                <div class="gauge-value" id="heroCarbonValue">0.0</div>
+                <div class="gauge-unit">tons CO₂/ha</div>
+              </div>
+            </div>
+            <div class="gauge-label">Current Sequestration Rate</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Calculator Section -->
+  <section id="calculator" class="calculator-section section" aria-labelledby="calculator-title">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="calculator-title">Carbon Sequestration Calculator</h2>
+        <p class="section-description">
+          Select your farming practices and input your field parameters to estimate carbon sequestration potential.
+        </p>
+      </div>
+
+      <div class="calculator-container">
+        <div class="calculator-inputs">
+          <!-- Farm Information -->
+          <div class="input-group">
+            <h3 class="input-group-title">Farm Information</h3>
+            <div class="input-grid">
+              <div class="input-item">
+                <label for="farmSize" class="input-label">Field Size (hectares)</label>
+                <input type="number" id="farmSize" class="form-input" min="0.1" step="0.1" value="10" aria-describedby="farmSizeHelp">
+                <div id="farmSizeHelp" class="input-help">Total area of your field in hectares</div>
+              </div>
+              <div class="input-item">
+                <label for="soilType" class="input-label">Soil Type</label>
+                <select id="soilType" class="form-select" aria-describedby="soilTypeHelp">
+                  <option value="clay">Clay</option>
+                  <option value="silt" selected>Silt</option>
+                  <option value="sand">Sand</option>
+                  <option value="loam">Loam</option>
+                </select>
+                <div id="soilTypeHelp" class="input-help">Affects carbon sequestration capacity</div>
+              </div>
+              <div class="input-item">
+                <label for="climate" class="input-label">Climate Zone</label>
+                <select id="climate" class="form-select" aria-describedby="climateHelp">
+                  <option value="temperate" selected>Temperate</option>
+                  <option value="tropical">Tropical</option>
+                  <option value="arid">Arid</option>
+                  <option value="continental">Continental</option>
+                </select>
+                <div id="climateHelp" class="input-help">Influences decomposition rates</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Farming Practices -->
+          <div class="input-group">
+            <h3 class="input-group-title">Regenerative Practices</h3>
+            <div class="practices-grid">
+              <div class="practice-card">
+                <div class="practice-header">
+                  <input type="checkbox" id="coverCropping" class="practice-checkbox" checked>
+                  <label for="coverCropping" class="practice-label">
+                    <div class="practice-icon">🌱</div>
+                    <div class="practice-info">
+                      <h4>Cover Cropping</h4>
+                      <p>Planting cover crops between main crops</p>
+                    </div>
+                  </label>
+                </div>
+                <div class="practice-controls">
+                  <label for="coverCropType" class="control-label">Cover Crop Type</label>
+                  <select id="coverCropType" class="form-select form-select-sm">
+                    <option value="legumes" selected>Legumes (clover, peas)</option>
+                    <option value="grasses">Grasses (rye, oats)</option>
+                    <option value="brassicas">Brassicas (mustard, radish)</option>
+                    <option value="mixed">Mixed species</option>
+                  </select>
+                  <label for="coverCropDuration" class="control-label">Coverage Duration (months)</label>
+                  <input type="range" id="coverCropDuration" class="form-range" min="2" max="12" value="6" step="1">
+                  <div class="range-value"><span id="coverCropDurationValue">6</span> months</div>
+                </div>
+              </div>
+
+              <div class="practice-card">
+                <div class="practice-header">
+                  <input type="checkbox" id="compostApplication" class="practice-checkbox" checked>
+                  <label for="compostApplication" class="practice-label">
+                    <div class="practice-icon">♻️</div>
+                    <div class="practice-info">
+                      <h4>Compost Application</h4>
+                      <p>Adding organic compost to soil</p>
+                    </div>
+                  </label>
+                </div>
+                <div class="practice-controls">
+                  <label for="compostRate" class="control-label">Application Rate (tons/ha/year)</label>
+                  <input type="range" id="compostRate" class="form-range" min="0" max="20" value="5" step="0.5">
+                  <div class="range-value"><span id="compostRateValue">5</span> tons/ha/year</div>
+                  <label for="compostQuality" class="control-label">Compost Quality</label>
+                  <select id="compostQuality" class="form-select form-select-sm">
+                    <option value="high" selected>High (stable, mature)</option>
+                    <option value="medium">Medium (partially decomposed)</option>
+                    <option value="low">Low (fresh, unstable)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="practice-card">
+                <div class="practice-header">
+                  <input type="checkbox" id="reducedTillage" class="practice-checkbox" checked>
+                  <label for="reducedTillage" class="practice-label">
+                    <div class="practice-icon">🚜</div>
+                    <div class="practice-info">
+                      <h4>Reduced Tillage</h4>
+                      <p>Minimizing soil disturbance</p>
+                    </div>
+                  </label>
+                </div>
+                <div class="practice-controls">
+                  <label for="tillageIntensity" class="control-label">Tillage Intensity</label>
+                  <select id="tillageIntensity" class="form-select form-select-sm">
+                    <option value="no-till">No-till</option>
+                    <option value="minimum" selected>Minimum tillage</option>
+                    <option value="reduced">Reduced tillage</option>
+                    <option value="conventional">Conventional</option>
+                  </select>
+                  <label for="tillageDepth" class="control-label">Tillage Depth (cm)</label>
+                  <input type="range" id="tillageDepth" class="form-range" min="0" max="30" value="10" step="1">
+                  <div class="range-value"><span id="tillageDepthValue">10</span> cm</div>
+                </div>
+              </div>
+
+              <div class="practice-card">
+                <div class="practice-header">
+                  <input type="checkbox" id="cropRotation" class="practice-checkbox">
+                  <label for="cropRotation" class="practice-label">
+                    <div class="practice-icon">🔄</div>
+                    <div class="practice-info">
+                      <h4>Crop Rotation</h4>
+                      <p>Rotating different crops annually</p>
+                    </div>
+                  </label>
+                </div>
+                <div class="practice-controls">
+                  <label for="rotationDiversity" class="control-label">Crop Diversity</label>
+                  <select id="rotationDiversity" class="form-select form-select-sm">
+                    <option value="low">Low (2-3 crops)</option>
+                    <option value="medium" selected>Medium (4-6 crops)</option>
+                    <option value="high">High (7+ crops)</option>
+                  </select>
+                  <label for="rotationYears" class="control-label">Rotation Cycle (years)</label>
+                  <input type="range" id="rotationYears" class="form-range" min="2" max="10" value="4" step="1">
+                  <div class="range-value"><span id="rotationYearsValue">4</span> years</div>
+                </div>
+              </div>
+
+              <div class="practice-card">
+                <div class="practice-header">
+                  <input type="checkbox" id="agroforestry" class="practice-checkbox">
+                  <label for="agroforestry" class="practice-label">
+                    <div class="practice-icon">🌳</div>
+                    <div class="practice-info">
+                      <h4>Agroforestry</h4>
+                      <p>Integrating trees with crops</p>
+                    </div>
+                  </label>
+                </div>
+                <div class="practice-controls">
+                  <label for="treeDensity" class="control-label">Tree Density (trees/ha)</label>
+                  <input type="range" id="treeDensity" class="form-range" min="10" max="200" value="50" step="10">
+                  <div class="range-value"><span id="treeDensityValue">50</span> trees/ha</div>
+                  <label for="treeType" class="control-label">Tree Species</label>
+                  <select id="treeType" class="form-select form-select-sm">
+                    <option value="hardwood" selected>Hardwood (oak, maple)</option>
+                    <option value="softwood">Softwood (pine, spruce)</option>
+                    <option value="fruit">Fruit trees</option>
+                    <option value="nitrogen-fixing">Nitrogen-fixing</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Time Period -->
+          <div class="input-group">
+            <h3 class="input-group-title">Time Period</h3>
+            <div class="input-grid">
+              <div class="input-item">
+                <label for="timeYears" class="input-label">Years to Project</label>
+                <input type="range" id="timeYears" class="form-range" min="1" max="50" value="10" step="1">
+                <div class="range-value"><span id="timeYearsValue">10</span> years</div>
+              </div>
+              <div class="input-item">
+                <label for="startYear" class="input-label">Starting Year</label>
+                <input type="number" id="startYear" class="form-input" min="2020" max="2030" value="2024">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="calculator-results">
+          <div class="results-header">
+            <h3>Carbon Sequestration Results</h3>
+            <button class="btn btn-secondary" onclick="estimator.resetCalculator()">Reset</button>
+          </div>
+
+          <div class="results-summary">
+            <div class="summary-card">
+              <div class="summary-icon">📊</div>
+              <div class="summary-content">
+                <div class="summary-value" id="totalCarbon">0.00</div>
+                <div class="summary-label">Total CO₂ Sequestered (tons)</div>
+              </div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-icon">📈</div>
+              <div class="summary-content">
+                <div class="summary-value" id="annualRate">0.00</div>
+                <div class="summary-label">Annual Rate (tons CO₂/ha/year)</div>
+              </div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-icon">🌍</div>
+              <div class="summary-content">
+                <div class="summary-value" id="equivalentCars">0</div>
+                <div class="summary-label">Car Emissions Offset (cars/year)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="results-breakdown">
+            <h4>Breakdown by Practice</h4>
+            <div class="breakdown-chart">
+              <canvas id="practiceBreakdownChart" width="400" height="300" aria-label="Carbon sequestration breakdown by farming practice"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trends Section -->
+  <section class="trends-section section" aria-labelledby="trends-title">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="trends-title">Carbon Storage Trends</h2>
+        <p class="section-description">
+          Visualize how carbon sequestration accumulates over time and varies by season.
+        </p>
+      </div>
+
+      <div class="trends-container">
+        <div class="trends-controls">
+          <div class="control-group">
+            <label for="trendView" class="control-label">View Type</label>
+            <select id="trendView" class="form-select">
+              <option value="cumulative">Cumulative Storage</option>
+              <option value="annual">Annual Rate</option>
+              <option value="seasonal">Seasonal Variation</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label for="baselineComparison" class="control-label">Compare with Baseline</label>
+            <input type="checkbox" id="baselineComparison" checked>
+          </div>
+        </div>
+
+        <div class="trends-chart">
+          <canvas id="carbonTrendsChart" width="800" height="400" aria-label="Carbon sequestration trends over time"></canvas>
+        </div>
+
+        <div class="trends-insights">
+          <div class="insight-card">
+            <h4>Key Insights</h4>
+            <ul class="insights-list">
+              <li id="peakSeason">Peak sequestration occurs in <strong>summer months</strong> due to optimal growing conditions</li>
+              <li id="longTermTrend">Carbon storage shows <strong>diminishing returns</strong> after 10-15 years as soil reaches saturation</li>
+              <li id="practiceImpact">Cover cropping contributes <strong>40-60%</strong> of total sequestration in most systems</li>
+              <li id="climateEffect">Climate zone affects sequestration rates by <strong>20-50%</strong> depending on temperature and rainfall</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scenarios Section -->
+  <section class="scenarios-section section" aria-labelledby="scenarios-title">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="scenarios-title">Scenario Simulation</h2>
+        <p class="section-description">
+          Compare different farming scenarios to understand the long-term impact of various practices.
+        </p>
+      </div>
+
+      <div class="scenarios-container">
+        <div class="scenario-builder">
+          <h3>Build Your Scenarios</h3>
+          <div class="scenario-presets">
+            <button class="scenario-preset active" data-scenario="conventional">
+              <h4>Conventional</h4>
+              <p>Traditional tillage, no cover crops</p>
+            </button>
+            <button class="scenario-preset" data-scenario="basic-regenerative">
+              <h4>Basic Regenerative</h4>
+              <p>Cover crops + reduced tillage</p>
+            </button>
+            <button class="scenario-preset" data-scenario="advanced-regenerative">
+              <h4>Advanced Regenerative</h4>
+              <p>All practices + agroforestry</p>
+            </button>
+            <button class="scenario-preset" data-scenario="custom">
+              <h4>Custom</h4>
+              <p>Build your own scenario</p>
+            </button>
+          </div>
+        </div>
+
+        <div class="scenario-comparison">
+          <div class="comparison-controls">
+            <button class="btn btn-primary" onclick="estimator.addScenario()">Add Scenario</button>
+            <button class="btn btn-outline" onclick="estimator.clearScenarios()">Clear All</button>
+          </div>
+
+          <div class="comparison-chart">
+            <canvas id="scenarioComparisonChart" width="800" height="400" aria-label="Comparison of different carbon sequestration scenarios"></canvas>
+          </div>
+
+          <div class="scenario-summary">
+            <div class="summary-table">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Scenario</th>
+                    <th>10-Year Total (tons CO₂)</th>
+                    <th>Annual Rate (tons CO₂/ha)</th>
+                    <th>Break-even Year</th>
+                  </tr>
+                </thead>
+                <tbody id="scenarioTableBody">
+                  <!-- Scenario data will be populated here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Impact Section -->
+  <section class="impact-section section" aria-labelledby="impact-title">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="impact-title">Climate Impact & Benefits</h2>
+        <p class="section-description">
+          Understand the broader environmental and economic benefits of carbon sequestration.
+        </p>
+      </div>
+
+      <div class="impact-grid">
+        <div class="impact-card">
+          <div class="impact-icon">🌡️</div>
+          <h3>Climate Change Mitigation</h3>
+          <p>Every ton of CO₂ sequestered in soil helps combat climate change by removing greenhouse gases from the atmosphere.</p>
+          <div class="impact-metric">
+            <span class="metric-value" id="climateImpact">0</span>
+            <span class="metric-unit">tons CO₂ offset</span>
+          </div>
+        </div>
+
+        <div class="impact-card">
+          <div class="impact-icon">💰</div>
+          <h3>Economic Benefits</h3>
+          <p>Carbon credits and improved soil health can provide additional income streams for farmers.</p>
+          <div class="impact-metric">
+            <span class="metric-value" id="economicValue">$0</span>
+            <span class="metric-unit">potential annual revenue</span>
+          </div>
+        </div>
+
+        <div class="impact-card">
+          <div class="impact-icon">🌱</div>
+          <h3>Soil Health Improvement</h3>
+          <p>Better soil structure, increased water retention, and enhanced nutrient cycling.</p>
+          <div class="impact-metric">
+            <span class="metric-value" id="soilHealthScore">0</span>
+            <span class="metric-unit">soil health index</span>
+          </div>
+        </div>
+
+        <div class="impact-card">
+          <div class="impact-icon">🌊</div>
+          <h3>Water Conservation</h3>
+          <p>Improved soil structure reduces erosion and increases water infiltration rates.</p>
+          <div class="impact-metric">
+            <span class="metric-value" id="waterRetention">0</span>
+            <span class="metric-unit">mm additional water retention</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Resources Section -->
+  <section class="resources-section section" aria-labelledby="resources-title">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="resources-title">Resources & Methodology</h2>
+        <p class="section-description">
+          Learn more about carbon sequestration science and access additional tools and resources.
+        </p>
+      </div>
+
+      <div class="resources-grid">
+        <div class="resource-card">
+          <div class="resource-icon">📚</div>
+          <h3>Scientific Methodology</h3>
+          <p>Our calculations are based on peer-reviewed research from USDA, FAO, and academic institutions.</p>
+          <a href="#methodology" class="resource-link" onclick="estimator.showMethodology()">View Methodology</a>
+        </div>
+
+        <div class="resource-card">
+          <div class="resource-icon">🧮</div>
+          <h3>Carbon Credit Programs</h3>
+          <p>Learn about programs that compensate farmers for carbon sequestration efforts.</p>
+          <a href="https://www.nrcs.usda.gov/programs-initiatives/eqip-environmental-quality-incentives-program" class="resource-link" target="_blank" rel="noopener">USDA EQIP Program</a>
+        </div>
+
+        <div class="resource-card">
+          <div class="resource-icon">🌾</div>
+          <h3>Regenerative Practices Guide</h3>
+          <p>Comprehensive guide to implementing carbon-positive farming practices.</p>
+          <a href="/docs/regenerative-practices-guide.pdf" class="resource-link">Download Guide</a>
+        </div>
+
+        <div class="resource-card">
+          <div class="resource-icon">📊</div>
+          <h3>Research Papers</h3>
+          <p>Access the latest research on soil carbon sequestration and climate-smart agriculture.</p>
+          <a href="https://www.sciencedirect.com/science/article/pii/S0016706119300474" class="resource-link" target="_blank" rel="noopener">Recent Studies</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Methodology Modal -->
+  <div id="methodologyModal" class="modal" role="dialog" aria-labelledby="methodologyTitle" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="methodologyTitle">Carbon Sequestration Methodology</h2>
+        <button class="modal-close" aria-label="Close methodology modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="methodology-content">
+          <h3>Calculation Methods</h3>
+          <p>Carbon sequestration rates are calculated using empirical models based on:</p>
+          <ul>
+            <li><strong>IPCC Guidelines:</strong> International standards for greenhouse gas inventories</li>
+            <li><strong>USDA COMET-Farm:</strong> Comprehensive farm-level carbon accounting</li>
+            <li><strong>Scientific Literature:</strong> Meta-analyses of field studies and long-term experiments</li>
+          </ul>
+
+          <h3>Key Assumptions</h3>
+          <ul>
+            <li>Soil organic carbon saturation occurs at 1-3% depending on soil type</li>
+            <li>Decomposition rates vary by climate zone and soil conditions</li>
+            <li>Practice effects are additive but may have interaction effects</li>
+            <li>Long-term sequestration rates decline as soil approaches saturation</li>
+          </ul>
+
+          <h3>Data Sources</h3>
+          <div class="data-sources">
+            <div class="source-item">
+              <h4>USDA Natural Resources Conservation Service</h4>
+              <p>National soil carbon data and sequestration rate estimates</p>
+            </div>
+            <div class="source-item">
+              <h4>FAO Global Soil Partnership</h4>
+              <p>International soil carbon monitoring and assessment</p>
+            </div>
+            <div class="source-item">
+              <h4>Peer-reviewed Research</h4>
+              <p>Meta-analyses from journals like Soil Science Society of America</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Environment & Animal Safety Hub</h3>
+          <p class="footer-description">
+            Empowering farmers and communities with data-driven tools for sustainable agriculture
+            and environmental stewardship.
+          </p>
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="Follow us on Twitter">🐦</a>
+            <a href="#" class="social-link" aria-label="Follow us on Facebook">📘</a>
+            <a href="#" class="social-link" aria-label="Follow us on LinkedIn">💼</a>
+            <a href="#" class="social-link" aria-label="Follow us on YouTube">📺</a>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <h4>Tools & Dashboards</h4>
+          <ul class="footer-links">
+            <li><a href="/pages/carbon-flux-decline.html">Carbon Flux Decline</a></li>
+            <li><a href="/pages/arctic-amplification.html">Arctic Amplification</a></li>
+            <li><a href="/pages/soil-microbiome-visualization.html">Soil Microbiome</a></li>
+            <li><a href="/pages/real-time-soil-moisture-alerts.html">Soil Moisture Alerts</a></li>
+            <li><a href="/pages/dynamic-crop-rotation-planner.html">Crop Rotation Planner</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Resources</h4>
+          <ul class="footer-links">
+            <li><a href="/docs/">Documentation</a></li>
+            <li><a href="/guides/">Guides</a></li>
+            <li><a href="/api/">API Reference</a></li>
+            <li><a href="/research/">Research Papers</a></li>
+            <li><a href="/community/">Community Forum</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Support</h4>
+          <ul class="footer-links">
+            <li><a href="/help/">Help Center</a></li>
+            <li><a href="/contact/">Contact Us</li>
+            <li><a href="/feedback/">Feedback</a></li>
+            <li><a href="/privacy/">Privacy Policy</a></li>
+            <li><a href="/terms/">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="copyright">
+          © 2024 Environment & Animal Safety Hub. All rights reserved.
+        </div>
+        <div class="footer-legal">
+          <a href="/privacy/">Privacy</a>
+          <a href="/terms/">Terms</a>
+          <a href="/accessibility/">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../js/carbon-sequestration-estimator.js"></script>
+
+  <!-- Analytics (if needed) -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script> -->
+</body>
+</html>

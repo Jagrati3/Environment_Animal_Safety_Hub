@@ -1,0 +1,121 @@
+// Eco-Friendly Product Comparison Tool JS
+// Compare products by impact, price, rating, features
+
+const products = [
+    {
+        name: "Reusable Water Bottle",
+        category: "Reusable",
+        impact: 9,
+        price: 18.99,
+        rating: 4.7,
+        features: ["BPA-free", "Stainless steel", "Dishwasher safe"]
+    },
+    {
+        name: "Solar Power Provider",
+        category: "Energy",
+        impact: 10,
+        price: 0,
+        rating: 4.9,
+        features: ["Renewable energy", "Home installation", "24/7 support"]
+    },
+    {
+        name: "Eco-Friendly Clothing Brand",
+        category: "Brand",
+        impact: 8,
+        price: 32.50,
+        rating: 4.5,
+        features: ["Organic cotton", "Fair trade", "Vegan dyes"]
+    },
+    {
+        name: "Bamboo Toothbrush",
+        category: "Reusable",
+        impact: 8,
+        price: 3.99,
+        rating: 4.2,
+        features: ["Biodegradable", "Soft bristles", "Plastic-free packaging"]
+    },
+    {
+        name: "LED Light Bulbs",
+        category: "Energy",
+        impact: 9,
+        price: 4.99,
+        rating: 4.8,
+        features: ["Long lifespan", "Low energy use", "Cool white"]
+    },
+    // Add 20+ more for robust sample data...
+];
+
+function renderProductOptions() {
+    const container = document.getElementById('product-options');
+    container.innerHTML = '';
+    products.forEach((p, idx) => {
+        const div = document.createElement('div');
+        div.className = 'product-option';
+        div.innerHTML = `
+            <input type="checkbox" id="prod-${idx}" data-idx="${idx}">
+            <label for="prod-${idx}"><strong>${p.name}</strong> <span class="prod-cat">(${p.category})</span></label>
+        `;
+        container.appendChild(div);
+    });
+}
+
+function renderComparisonTable(selected) {
+    const table = document.getElementById('comparison-table');
+    table.innerHTML = '';
+    if (selected.length === 0) {
+        table.innerHTML = '<tr><td>No products selected.</td></tr>';
+        return;
+    }
+    // Table header
+    table.innerHTML += `
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Impact</th>
+            <th>Price</th>
+            <th>Rating</th>
+            <th>Features</th>
+        </tr>
+    `;
+    // Table rows
+    selected.forEach(p => {
+        table.innerHTML += `
+            <tr>
+                <td>${p.name}</td>
+                <td>${p.category}</td>
+                <td>${p.impact}</td>
+                <td>$${p.price.toFixed(2)}</td>
+                <td>${p.rating} ★</td>
+                <td>${p.features.join(', ')}</td>
+            </tr>
+        `;
+    });
+}
+
+document.getElementById('compare-btn').addEventListener('click', () => {
+    const checked = Array.from(document.querySelectorAll('#product-options input[type="checkbox"]:checked'));
+    const selected = checked.map(c => products[parseInt(c.getAttribute('data-idx'))]);
+    renderComparisonTable(selected);
+    document.getElementById('comparison-table-section').classList.remove('hidden');
+});
+
+document.getElementById('reset-btn').addEventListener('click', () => {
+    document.getElementById('comparison-table-section').classList.add('hidden');
+    Array.from(document.querySelectorAll('#product-options input[type="checkbox"]')).forEach(c => c.checked = false);
+});
+
+document.getElementById('add-product-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = document.getElementById('add-name').value;
+    const category = document.getElementById('add-category').value;
+    const impact = parseInt(document.getElementById('add-impact').value);
+    const price = parseFloat(document.getElementById('add-price').value);
+    const rating = parseFloat(document.getElementById('add-rating').value);
+    const features = document.getElementById('add-features').value.split(',').map(f => f.trim());
+    products.push({ name, category, impact, price, rating, features });
+    renderProductOptions();
+    this.reset();
+});
+
+// Initial render
+renderProductOptions();

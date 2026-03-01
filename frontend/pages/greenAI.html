@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌱 Green AI Advisor · intelligent sustainability</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts: modern + clean -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #ebf8f2;
+            background: radial-gradient(circle at 10% 30%, #d2f0da, #b7e3c1);
+            min-height: 100vh;
+            color: #0f3b2a;
+        }
+
+        /* header – green tech */
+        .ai-header {
+            background: linear-gradient(145deg, #0f4f3a, #1b6e4f);
+            padding: 4.5rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+            border-bottom: 4px solid #c7f0b8;
+            box-shadow: 0 25px 30px -10px #1b4e3d;
+        }
+
+        .ai-header::before {
+            content: '🌿';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.1;
+            left: -3rem;
+            bottom: -5rem;
+            transform: rotate(25deg);
+        }
+
+        .ai-header h1 {
+            font-weight: 700;
+            font-size: 4.2rem;
+            color: #efffda;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            text-shadow: 0 4px 10px #103d2b;
+        }
+
+        .ai-header h1 i {
+            color: #c3f2b0;
+            filter: drop-shadow(0 0 8px #a0e084);
+        }
+
+        .ai-header p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 1rem auto 0;
+            background: #daf5ce90;
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            color: #0b462f;
+            font-weight: 500;
+            backdrop-filter: blur(6px);
+            border: 1px solid #acf099;
+        }
+
+        .badge-ai {
+            margin-top: 1.5rem;
+            display: inline-block;
+            background: #1c352a;
+            color: #ccf5c0;
+            padding: 0.5rem 2rem;
+            border-radius: 60px;
+            font-weight: 500;
+            border: 1px solid #9cd68b;
+        }
+
+        /* container */
+        .container {
+            max-width: 1400px;
+            margin: -2.5rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* advisor toolbar – glassmorphism */
+        .advisor-toolbar {
+            background: #fffff2e0;
+            backdrop-filter: blur(8px);
+            border-radius: 80px;
+            padding: 1.5rem 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 30px #28654260, 0 0 0 2px #b6e5a4 inset;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            border: 2px solid #c0f0b0;
+        }
+
+        .search-box {
+            flex: 2;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #0f6b47;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 4rem;
+            border: 3px solid #c0e6b4;
+            border-radius: 60px;
+            font-size: 1rem;
+            background: white;
+            color: #0c462b;
+        }
+
+        .search-box input:focus {
+            border-color: #4ac78e;
+            outline: none;
+            box-shadow: 0 0 0 5px #bcf0cf;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .filter-select {
+            padding: 0.8rem 2rem;
+            border: 3px solid #b8e3ac;
+            border-radius: 60px;
+            background: white;
+            font-weight: 600;
+            color: #0f4f3a;
+            cursor: pointer;
+        }
+
+        .filter-select:hover {
+            border-color: #35b56b;
+        }
+
+        /* insight categories – chips */
+        .insight-chips {
+            margin-bottom: 3rem;
+        }
+
+        .chip-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: #35b56b #bef0cf;
+        }
+
+        .chip-scroll::-webkit-scrollbar { height: 8px; }
+        .chip-scroll::-webkit-scrollbar-track { background: #caf0d7; border-radius: 10px; }
+        .chip-scroll::-webkit-scrollbar-thumb { background: #35b56b; border-radius: 10px; }
+
+        .chip {
+            flex: 0 0 auto;
+            background: #f0ffee;
+            padding: 1rem 2.2rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 6px 16px #276d4750;
+            cursor: pointer;
+            font-weight: 600;
+            border: 3px solid transparent;
+            transition: 0.2s;
+            color: #1b5e3a;
+        }
+
+        .chip i { color: #2e9e63; font-size: 1.4rem; }
+
+        .chip:hover {
+            transform: translateY(-5px);
+            border-color: #4bc086;
+            background: #e1ffd6;
+        }
+        .chip.active {
+            background: #b8f0b0;
+            border-color: #178547;
+        }
+
+        /* featured insight – ai card */
+        .featured-insight {
+            background: linear-gradient(145deg, #1b553b, #0e402d);
+            border-radius: 70px;
+            padding: 2.8rem;
+            margin-bottom: 4rem;
+            border: 6px solid #b2f0a0;
+            box-shadow: 0 25px 40px #1f543c;
+            color: #f4ffe8;
+            position: relative;
+        }
+
+        .featured-insight::before {
+            content: '🤖';
+            font-size: 14rem;
+            opacity: 0.1;
+            position: absolute;
+            bottom: -2rem;
+            right: 1rem;
+        }
+
+        .ai-tag {
+            position: absolute;
+            top: 2rem;
+            right: 2.5rem;
+            background: #d2ffb0;
+            color: #15562f;
+            padding: 0.5rem 2rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .insight-grid {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .insight-text h2 {
+            color: #d2ffbe;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .insight-text h3 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin: 1rem 0;
+        }
+
+        .insight-metrics {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .metric-bubble {
+            background: #2d7653b0;
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            border: 2px solid #c0f0b0;
+        }
+
+        .metric-bubble i { color: #d0ffb0; font-size: 1.5rem; }
+
+        .insight-desc {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+        }
+
+        .btn-advisor {
+            background: #abeb8e;
+            border: none;
+            padding: 1.3rem 3.5rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #154e2b;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            border: 3px solid #f9ffdd;
+            transition: 0.1s ease;
+            box-shadow: 0 6px 0 #4d8f5f;
+        }
+
+        .btn-advisor:active {
+            transform: translateY(6px);
+            box-shadow: none;
+        }
+
+        .featured-image-ai {
+            height: 280px;
+            background: #559c75;
+            border-radius: 50px;
+            border: 5px solid #b4f0a0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 7rem;
+            color: #efffcf;
+        }
+
+        /* AI cards grid */
+        .advisor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2.2rem;
+            margin: 4rem 0;
+        }
+
+        .advisor-card {
+            background: #f4fff0;
+            border-radius: 60px;
+            overflow: hidden;
+            box-shadow: 0 20px 30px #1f543c70;
+            transition: all 0.3s;
+            border: 4px solid #afdfa2;
+        }
+
+        .advisor-card:hover {
+            transform: translateY(-14px) scale(1.01);
+            border-color: #62cc8c;
+            box-shadow: 0 30px 40px #175a31;
+        }
+
+        .card-image {
+            height: 170px;
+            background: linear-gradient(145deg, #509e6f, #377755);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .card-image i {
+            font-size: 4.5rem;
+            color: #ffffd4;
+        }
+
+        .confidence {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            background: #062011cc;
+            color: #b5f5ac;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+            border: 2px solid #aae89c;
+        }
+
+        .card-content {
+            padding: 2rem;
+        }
+
+        .card-category {
+            background: #cef0c0;
+            padding: 0.3rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #196335;
+            display: inline-block;
+        }
+
+        .card-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #12502e;
+            margin: 0.5rem 0;
+        }
+
+        .card-desc {
+            color: #2e5d42;
+            margin: 0.5rem 0 1.5rem;
+            line-height: 1.6;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .impact {
+            font-weight: 700;
+            background: #daf5d0;
+            padding: 0.5rem 1.2rem;
+            border-radius: 60px;
+        }
+
+        .advise-btn {
+            background: #42976b;
+            border: none;
+            color: white;
+            padding: 0.7rem 2rem;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 2px solid #bcf5ac;
+        }
+
+        .advise-btn:hover {
+            background: #1c6d43;
+        }
+
+        /* live dashboard - mini */
+        .dashboard {
+            background: #ecfde8;
+            border-radius: 70px;
+            padding: 3rem;
+            margin: 4rem 0;
+            border: 5px solid #acf099;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat {
+            background: #cff5c0;
+            border-radius: 60px;
+            padding: 2rem;
+        }
+
+        .stat i { font-size: 3rem; color: #1b7943; }
+
+        /* modal */
+        .modal {
+            display: none; position: fixed; inset:0; background: #1b4632e6;
+            align-items: center; justify-content: center; z-index:2000;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #edffe3;
+            border-radius: 70px;
+            max-width:700px;
+            width:100%;
+            border: 6px solid #8ae89c;
+            color:#1c4a2d;
+        }
+
+        .back-to-top {
+            position: fixed; bottom:2rem; right:2rem;
+            background: #48b87a; width:70px; height:70px; border-radius:50%;
+            display: none; align-items:center; justify-content:center;
+            font-size:2rem; color:#0b341d; border:4px solid #d2ffb0;
+            cursor:pointer;
+        }
+        .back-to-top.visible { display: flex; }
+
+        @media (max-width:900px){
+            .insight-grid { grid-template-columns:1fr; }
+            .dashboard-stats { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- header -->
+    <header class="ai-header">
+        <h1>
+            <i class="fas fa-brain"></i> Green AI Advisor
+            <i class="fas fa-leaf"></i>
+        </h1>
+        <p>intelligent recommendations for a lower carbon footprint</p>
+        <div class="badge-ai"><i class="fas fa-microchip"></i> v2.6 · sustainability core</div>
+    </header>
+
+    <div class="container">
+        <!-- toolbar -->
+        <div class="advisor-toolbar" data-aos="fade-up">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="ask AI: reduce emissions, save energy, green diet...">
+            </div>
+            <div class="filter-options">
+                <select class="filter-select"><option>all sectors</option><option>home</option><option>transport</option><option>diet</option></select>
+                <select class="filter-select"><option>by impact</option><option>high</option><option>medium</option></select>
+            </div>
+        </div>
+
+        <!-- insight chips -->
+        <div class="insight-chips" data-aos="fade-up">
+            <div class="chip-scroll">
+                <div class="chip active"><i class="fas fa-chart-line"></i> all insights</div>
+                <div class="chip"><i class="fas fa-home"></i> home efficiency</div>
+                <div class="chip"><i class="fas fa-car"></i> mobility</div>
+                <div class="chip"><i class="fas fa-utensils"></i> foodprint</div>
+                <div class="chip"><i class="fas fa-solar-panel"></i> renewable</div>
+                <div class="chip"><i class="fas fa-recycle"></i> circular</div>
+            </div>
+        </div>
+
+        <!-- featured AI insight -->
+        <div class="featured-insight" data-aos="zoom-in">
+            <span class="ai-tag"><i class="fas fa-star"></i> AI · top recommendation</span>
+            <div class="insight-grid">
+                <div class="insight-text">
+                    <h2>⚡ SMART HOME OPTIMIZER</h2>
+                    <h3>reduce energy 34%</h3>
+                    <div class="insight-metrics">
+                        <span class="metric-bubble"><i class="fas fa-bolt"></i> 2.1 MWh/year</span>
+                        <span class="metric-bubble"><i class="fas fa-co2"></i> -1.2 t CO₂</span>
+                    </div>
+                    <p class="insight-desc">By shifting consumption to solar peak hours and upgrading insulation, AI estimates you could save $410 annually. Personalized schedule ready.</p>
+                    <button class="btn-advisor" onclick="advise()"><i class="fas fa-robot"></i> apply AI advice</button>
+                </div>
+                <div class="featured-image-ai"><i class="fas fa-solar-panel"></i></div>
+            </div>
+        </div>
+
+        <!-- advisor cards grid (js) -->
+        <div class="advisor-grid" id="advisorGrid"></div>
+
+        <!-- live sustainability dashboard -->
+        <div class="dashboard" data-aos="fade-up">
+            <h2 style="font-size:2.5rem; color:#0b4828; margin-bottom:2rem;"><i class="fas fa-dashboard"></i> live carbon dashboard</h2>
+            <div class="dashboard-stats">
+                <div class="stat"><i class="fas fa-tree"></i><h3>284 kg</h3><p>CO₂ saved this week</p></div>
+                <div class="stat"><i class="fas fa-sun"></i><h3>68%</h3><p>renewable share</p></div>
+                <div class="stat"><i class="fas fa-recycle"></i><h3>15</h3><p>green actions taken</p></div>
+            </div>
+        </div>
+
+        <!-- sustainability tip -->
+        <div style="background:#deffd6; border-radius:70px; padding:2rem; margin:4rem 0; border:4px solid #80cf96;">
+            <p style="font-size:1.8rem; text-align:center;">🌎 “every action matters — AI is here to guide you.”</p>
+        </div>
+    </div>
+
+    <!-- modal -->
+    <div class="modal" id="adviseModal">
+        <div class="modal-content" style="padding:2.5rem;">
+            <button style="float:right; background:none; border:none; font-size:2.8rem;" onclick="closeModal()">✕</button>
+            <div style="text-align:center;">
+                <i class="fas fa-leaf" style="font-size:5rem;color:#2f9e5a;"></i>
+                <h2 id="modalAdviceTitle" style="font-size:2.5rem;">AI advice</h2>
+                <p id="modalAdviceText" style="margin:2rem 0;">detailed insight will appear</p>
+                <button class="btn-advisor" onclick="applyAdvice()"><i class="fas fa-check-circle"></i> adopt recommendation</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({duration:900,once:true});
+
+        const insights = [
+            { title:"smart thermostat", category:"home", impact:"high", desc:"AI schedule reduces HVAC run 22%", co2:"-0.8t", icon:"fa-thermometer-half" },
+            { title:"EV charging optimizer", category:"mobility", impact:"high", desc:"shift to off-peak, solar match", co2:"-1.1t", icon:"fa-car" },
+            { title:"plant-forward meals", category:"diet", impact:"medium", desc:"replace 3 meat meals/week", co2:"-0.5t", icon:"fa-carrot" },
+            { title:"LED + smart plugs", category:"home", impact:"medium", desc:"cut standby & lighting 15%", co2:"-0.3t", icon:"fa-lightbulb" },
+            { title:"bike/transit shift", category:"mobility", impact:"high", desc:"15 car-free days/month", co2:"-1.4t", icon:"fa-bicycle" },
+            { title:"solar panel sizing", category:"renewable", impact:"high", desc:"rooftop potential 6.2kW", co2:"-3.2t", icon:"fa-sun" }
+        ];
+
+        function renderCards() {
+            const grid = document.getElementById('advisorGrid');
+            grid.innerHTML = insights.map(i => `
+                <div class="advisor-card" onclick="showAdvice('${i.title}','${i.desc} · estimated ${i.co2} CO₂e/year · impact: ${i.impact}')">
+                    <div class="card-image"><i class="fas ${i.icon}"></i><span class="confidence">AI confidence ${Math.floor(85+Math.random()*10)}%</span></div>
+                    <div class="card-content">
+                        <span class="card-category">${i.category}</span>
+                        <div class="card-title">${i.title}</div>
+                        <p class="card-desc">${i.desc}</p>
+                        <div class="card-footer">
+                            <span class="impact"><i class="fas fa-leaf"></i> ${i.co2}</span>
+                            <button class="advise-btn" onclick="event.stopPropagation(); showAdvice('${i.title}','${i.desc} · ${i.co2} CO₂e/year · impact: ${i.impact}')">advise me</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+        renderCards();
+
+        window.showAdvice = (title, desc) => {
+            document.getElementById('modalAdviceTitle').innerText = title;
+            document.getElementById('modalAdviceText').innerText = desc;
+            document.getElementById('adviseModal').classList.add('active');
+        };
+        window.closeModal = () => document.getElementById('adviseModal').classList.remove('active');
+        window.advise = () => { alert('🤖 AI advisor: recommendation applied (simulated). your dashboard updates.'); };
+        window.applyAdvice = () => { alert('✅ green action recorded! +5 impact points.'); closeModal(); };
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // escape modal
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('adviseModal')) closeModal(); };
+    </script>
+</body>
+</html>

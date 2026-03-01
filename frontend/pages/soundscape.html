@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nature Soundscape Mixer | Relax & Create | EcoLife</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a3f2a, #2a5f3a);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .forest-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .tree {
+            position: absolute;
+            color: rgba(255,255,255,0.03);
+            font-size: 15rem;
+            animation: treeSway 20s infinite ease-in-out;
+        }
+
+        @keyframes treeSway {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(2deg); }
+        }
+
+        .tree-1 { bottom: -50px; left: -50px; }
+        .tree-2 { top: -50px; right: -50px; font-size: 20rem; }
+
+        /* Header */
+        .soundscape-header {
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .soundscape-header h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            text-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .soundscape-header h1 i {
+            color: #ffd966;
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .soundscape-header p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+            background: rgba(255,255,255,0.1);
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Main Mixer Grid */
+        .mixer-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Mixer Console */
+        .mixer-console {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 60px;
+            padding: 2.5rem;
+            border: 2px solid rgba(255,255,255,0.2);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+        }
+
+        .console-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .console-title i {
+            color: #ffd966;
+        }
+
+        /* Sound Channels */
+        .sound-channels {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .channel {
+            background: rgba(0,0,0,0.3);
+            border-radius: 40px;
+            padding: 1.2rem 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .channel:hover {
+            border-color: #ffd966;
+            background: rgba(0,0,0,0.4);
+            transform: translateX(10px);
+        }
+
+        .channel-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ffd966, #ffaa00);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: #1a3f2a;
+            flex-shrink: 0;
+        }
+
+        .channel-info {
+            flex: 1;
+        }
+
+        .channel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .channel-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .channel-name i {
+            color: #ffd966;
+            font-size: 1rem;
+        }
+
+        .volume-value {
+            color: #ffd966;
+            font-weight: 600;
+        }
+
+        /* Volume Slider */
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .volume-slider {
+            flex: 1;
+            height: 8px;
+            -webkit-appearance: none;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            background: #ffd966;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 0 15px #ffd966;
+        }
+
+        .volume-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            background: #ffd966;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .mute-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mute-btn:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: #ffd966;
+        }
+
+        .mute-btn.muted {
+            background: #ff4444;
+            border-color: #ff4444;
+        }
+
+        /* Playback Controls */
+        .playback-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem 0;
+            border-top: 2px solid rgba(255,255,255,0.2);
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+            margin-bottom: 1.5rem;
+        }
+
+        .main-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: transparent;
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .control-btn:hover {
+            background: #ffd966;
+            border-color: #ffd966;
+            color: #1a3f2a;
+            transform: scale(1.1);
+        }
+
+        .control-btn.play {
+            background: #ffd966;
+            border-color: #ffd966;
+            color: #1a3f2a;
+        }
+
+        .timer-display {
+            font-size: 1.5rem;
+            font-family: monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px;
+            letter-spacing: 2px;
+        }
+
+        /* Master Volume */
+        .master-control {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1rem 0;
+        }
+
+        .master-icon {
+            width: 50px;
+            height: 50px;
+            background: #ffd966;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1a3f2a;
+            font-size: 1.3rem;
+        }
+
+        .master-slider {
+            flex: 1;
+            height: 10px;
+            -webkit-appearance: none;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+
+        .master-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 25px;
+            height: 25px;
+            background: #ffd966;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .master-value {
+            min-width: 60px;
+            text-align: right;
+            color: #ffd966;
+            font-weight: 600;
+        }
+
+        /* Sound Presets */
+        .presets-panel {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 60px;
+            padding: 2.5rem;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .presets-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .presets-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .preset-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 40px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .preset-card:hover {
+            transform: translateY(-10px);
+            border-color: #ffd966;
+            background: rgba(0,0,0,0.4);
+        }
+
+        .preset-card.active {
+            border-color: #ffd966;
+            background: rgba(255,217,102,0.1);
+        }
+
+        .preset-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .preset-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .preset-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Visualization */
+        .visualization-section {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 60px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .vis-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .visualizer {
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .vis-bar {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(180deg, #ffd966, #ffaa00);
+            border-radius: 20px 20px 0 0;
+            animation: soundWave 1s infinite ease-in-out;
+            transform-origin: bottom;
+        }
+
+        @keyframes soundWave {
+            0%, 100% { height: 30px; }
+            50% { height: 120px; }
+        }
+
+        .vis-bar:nth-child(2) { animation-delay: 0.1s; }
+        .vis-bar:nth-child(3) { animation-delay: 0.2s; }
+        .vis-bar:nth-child(4) { animation-delay: 0.3s; }
+        .vis-bar:nth-child(5) { animation-delay: 0.4s; }
+        .vis-bar:nth-child(6) { animation-delay: 0.5s; }
+        .vis-bar:nth-child(7) { animation-delay: 0.6s; }
+        .vis-bar:nth-child(8) { animation-delay: 0.7s; }
+
+        /* Nature Facts */
+        .facts-section {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 60px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .facts-slider {
+            position: relative;
+            min-height: 150px;
+        }
+
+        .fact-slide {
+            position: absolute;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.5s;
+            padding: 1.5rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 40px;
+            width: 100%;
+        }
+
+        .fact-slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .fact-icon {
+            font-size: 2.5rem;
+            color: #ffd966;
+            margin-bottom: 1rem;
+        }
+
+        .fact-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            font-style: italic;
+        }
+
+        .fact-source {
+            margin-top: 1rem;
+            color: #ffd966;
+            font-weight: 600;
+        }
+
+        .fact-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 2rem;
+        }
+
+        .fact-dot {
+            width: 12px;
+            height: 12px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .fact-dot.active {
+            background: #ffd966;
+            transform: scale(1.3);
+        }
+
+        /* Soundscapes Gallery */
+        .gallery-section {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 60px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .gallery-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            border-radius: 40px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            height: 200px;
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3a5f3a, #1a3f1a);
+            transition: all 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: rgba(255,217,102,0.3);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 1.5rem;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        .gallery-item:hover .gallery-image {
+            transform: scale(1.1);
+        }
+
+        .gallery-location {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .gallery-sound {
+            color: #ffd966;
+            font-size: 0.9rem;
+        }
+
+        /* Timer Section */
+        .timer-section {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 60px;
+            padding: 2rem;
+            margin: 3rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .timer-btn {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .timer-btn:hover {
+            background: #ffd966;
+            border-color: #ffd966;
+            color: #1a3f2a;
+        }
+
+        .timer-btn.active {
+            background: #ffd966;
+            border-color: #ffd966;
+            color: #1a3f2a;
+        }
+
+        .timer-display-large {
+            font-size: 3rem;
+            font-family: monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 1rem 3rem;
+            border-radius: 60px;
+            letter-spacing: 5px;
+        }
+
+        /* Save Mix Section */
+        .save-section {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 60px;
+            padding: 2rem;
+            margin: 3rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .save-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .save-input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .save-btn {
+            background: #ffd966;
+            color: #1a3f2a;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .save-btn:hover {
+            background: white;
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255,217,102,0.3);
+        }
+
+        /* Meditation Guide */
+        .meditation-section {
+            background: linear-gradient(135deg, #4a7a4a, #2a5a2a);
+            border-radius: 60px;
+            padding: 3rem;
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .meditation-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .meditation-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .meditation-btn {
+            background: #ffd966;
+            color: #1a3f2a;
+            border: none;
+            padding: 1.2rem 3rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .meditation-btn:hover {
+            background: white;
+            transform: translateY(-5px);
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: #ffd966;
+            color: #1a3f2a;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(255,217,102,0.3);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        .back-to-top:hover {
+            background: white;
+            transform: translateY(-5px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #2a5f3a, #1a3f2a);
+            border-radius: 60px;
+            max-width: 400px;
+            width: 100%;
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+            border: 3px solid #ffd966;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #ffd966;
+            cursor: pointer;
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            color: #ffd966;
+            margin-bottom: 1rem;
+        }
+
+        .modal h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal p {
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .modal-btn {
+            background: #ffd966;
+            color: #1a3f2a;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .mixer-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .soundscape-header h1 {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .presets-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .channel {
+                flex-wrap: wrap;
+            }
+            
+            .playback-controls {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .timer-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .timer-display-large {
+                font-size: 2rem;
+            }
+            
+            .visualizer {
+                height: 100px;
+            }
+            
+            .vis-bar {
+                width: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="forest-bg">
+        <div class="tree tree-1">🌳</div>
+        <div class="tree tree-2">🌲</div>
+    </div>
+
+    <!-- Header -->
+    <header class="soundscape-header">
+        <h1>
+            <i class="fas fa-headphones"></i>
+            Nature Soundscape Mixer
+        </h1>
+        <p>Mix your own peaceful nature sounds • Relax • Meditate • Sleep 🌙</p>
+    </header>
+
+    <div class="container">
+        <!-- Main Mixer Grid -->
+        <div class="mixer-grid">
+            <!-- Mixer Console -->
+            <div class="mixer-console" data-aos="fade-right">
+                <h2 class="console-title">
+                    <i class="fas fa-sliders-h"></i>
+                    Sound Mixer
+                </h2>
+
+                <!-- Sound Channels -->
+                <div class="sound-channels">
+                    <!-- Rain Channel -->
+                    <div class="channel" id="channel-rain">
+                        <div class="channel-icon">
+                            <i class="fas fa-cloud-rain"></i>
+                        </div>
+                        <div class="channel-info">
+                            <div class="channel-header">
+                                <span class="channel-name">
+                                    <i class="fas fa-droplet"></i> Rain
+                                </span>
+                                <span class="volume-value" id="rain-value">75%</span>
+                            </div>
+                            <div class="slider-container">
+                                <input type="range" class="volume-slider" id="rain-slider" min="0" max="100" value="75" oninput="updateVolume('rain', this.value)">
+                                <button class="mute-btn" id="rain-mute" onclick="toggleMute('rain')">
+                                    <i class="fas fa-volume-up"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Forest Channel -->
+                    <div class="channel" id="channel-forest">
+                        <div class="channel-icon">
+                            <i class="fas fa-tree"></i>
+                        </div>
+                        <div class="channel-info">
+                            <div class="channel-header">
+                                <span class="channel-name">
+                                    <i class="fas fa-leaf"></i> Forest
+                                </span>
+                                <span class="volume-value" id="forest-value">60%</span>
+                            </div>
+                            <div class="slider-container">
+                                <input type="range" class="volume-slider" id="forest-slider" min="0" max="100" value="60" oninput="updateVolume('forest', this.value)">
+                                <button class="mute-btn" id="forest-mute" onclick="toggleMute('forest')">
+                                    <i class="fas fa-volume-up"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ocean Channel -->
+                    <div class="channel" id="channel-ocean">
+                        <div class="channel-icon">
+                            <i class="fas fa-water"></i>
+                        </div>
+                        <div class="channel-info">
+                            <div class="channel-header">
+                                <span class="channel-name">
+                                    <i class="fas fa-fish"></i> Ocean
+                                </span>
+                                <span class="volume-value" id="ocean-value">45%</span>
+                            </div>
+                            <div class="slider-container">
+                                <input type="range" class="volume-slider" id="ocean-slider" min="0" max="100" value="45" oninput="updateVolume('ocean', this.value)">
+                                <button class="mute-btn" id="ocean-mute" onclick="toggleMute('ocean')">
+                                    <i class="fas fa-volume-up"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Birds Channel -->
+                    <div class="channel" id="channel-birds">
+                        <div class="channel-icon">
+                            <i class="fas fa-dove"></i>
+                        </div>
+                        <div class="channel-info">
+                            <div class="channel-header">
+                                <span class="channel-name">
+                                    <i class="fas fa-feather"></i> Birds
+                                </span>
+                                <span class="volume-value" id="birds-value">30%</span>
+                            </div>
+                            <div class="slider-container">
+                                <input type="range" class="volume-slider" id="birds-slider" min="0" max="100" value="30" oninput="updateVolume('birds', this.value)">
+                                <button class="mute-btn" id="birds-mute" onclick="toggleMute('birds')">
+                                    <i class="fas fa-volume-up"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wind Channel -->
+                    <div class="channel" id="channel-wind">
+                        <div class="channel-icon">
+                            <i class="fas fa-wind"></i>
+                        </div>
+                        <div class="channel-info">
+                            <div class="channel-header">
+                                <span class="channel-name">
+                                    <i class="fas fa-feather"></i> Wind
+                                </span>
+                                <span class="volume-value" id="wind-value">20%</span>
+                            </div>
+                            <div class="slider-container">
+                                <input type="range" class="volume-slider" id="wind-slider" min="0" max="100" value="20" oninput="updateVolume('wind', this.value)">
+                                <button class="mute-btn" id="wind-mute" onclick="toggleMute('wind')">
+                                    <i class="fas fa-volume-up"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Playback Controls -->
+                <div class="playback-controls">
+                    <div class="main-controls">
+                        <button class="control-btn" onclick="previousTrack()">
+                            <i class="fas fa-backward"></i>
+                        </button>
+                        <button class="control-btn play" id="playPauseBtn" onclick="togglePlayPause()">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button class="control-btn" onclick="nextTrack()">
+                            <i class="fas fa-forward"></i>
+                        </button>
+                    </div>
+                    <div class="timer-display" id="timer">00:00</div>
+                </div>
+
+                <!-- Master Volume -->
+                <div class="master-control">
+                    <div class="master-icon">
+                        <i class="fas fa-volume-up"></i>
+                    </div>
+                    <input type="range" class="master-slider" id="master-slider" min="0" max="100" value="80" oninput="updateMasterVolume(this.value)">
+                    <span class="master-value" id="master-value">80%</span>
+                </div>
+            </div>
+
+            <!-- Presets Panel -->
+            <div class="presets-panel" data-aos="fade-left">
+                <h2 class="presets-title">
+                    <i class="fas fa-magic"></i>
+                    Sound Presets
+                </h2>
+                <div class="presets-grid">
+                    <div class="preset-card active" onclick="loadPreset('rainy')">
+                        <div class="preset-icon">🌧️</div>
+                        <div class="preset-name">Rainy Day</div>
+                        <div class="preset-desc">Rain + Light thunder</div>
+                    </div>
+                    <div class="preset-card" onclick="loadPreset('forest')">
+                        <div class="preset-icon">🌲</div>
+                        <div class="preset-name">Deep Forest</div>
+                        <div class="preset-desc">Birds + Wind + Stream</div>
+                    </div>
+                    <div class="preset-card" onclick="loadPreset('ocean')">
+                        <div class="preset-icon">🌊</div>
+                        <div class="preset-name">Ocean Waves</div>
+                        <div class="preset-desc">Waves + Seagulls</div>
+                    </div>
+                    <div class="preset-card" onclick="loadPreset('night')">
+                        <div class="preset-icon">🦉</div>
+                        <div class="preset-name">Night Forest</div>
+                        <div class="preset-desc">Crickets + Owl</div>
+                    </div>
+                    <div class="preset-card" onclick="loadPreset('desert')">
+                        <div class="preset-icon">🏜️</div>
+                        <div class="preset-name">Desert Wind</div>
+                        <div class="preset-desc">Wind + Sand</div>
+                    </div>
+                    <div class="preset-card" onclick="loadPreset('river')">
+                        <div class="preset-icon">🏞️</div>
+                        <div class="preset-name">Mountain River</div>
+                        <div class="preset-desc">Flowing water</div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <p style="opacity: 0.8;">Click a preset to instantly change the mix</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visualization -->
+        <div class="visualization-section" data-aos="fade-up">
+            <h3 class="vis-title">
+                <i class="fas fa-wave-square"></i>
+                Sound Visualizer
+            </h3>
+            <div class="visualizer" id="visualizer">
+                <div class="vis-bar"></div>
+                <div class="vis-bar"></div>
+                <div class="vis-bar"></div>
+                <div class="vis-bar"></div>
+                <div class="vis-bar"></div>
+                <div class="vis-bar"></div>
+                <div class="vis-bar"></div>
+                <div class="vis-bar"></div>
+            </div>
+        </div>
+
+        <!-- Nature Facts Slider -->
+        <div class="facts-section" data-aos="fade-up">
+            <h3 class="vis-title">
+                <i class="fas fa-lightbulb"></i>
+                Nature Sound Facts
+            </h3>
+            <div class="facts-slider" id="factsSlider">
+                <div class="fact-slide active">
+                    <div class="fact-icon">🌧️</div>
+                    <div class="fact-text">The sound of rain is actually millions of tiny bubbles popping when raindrops hit surfaces.</div>
+                    <div class="fact-source">- Nature Sound Lab</div>
+                </div>
+                <div class="fact-slide">
+                    <div class="fact-icon">🌊</div>
+                    <div class="fact-text">Ocean waves produce negative ions which can improve your mood and reduce stress.</div>
+                    <div class="fact-source">- Marine Biology Institute</div>
+                </div>
+                <div class="fact-slide">
+                    <div class="fact-icon">🦉</div>
+                    <div class="fact-text">Bird songs are most complex and beautiful just before sunrise - called the dawn chorus.</div>
+                    <div class="fact-source">- Audubon Society</div>
+                </div>
+                <div class="fact-slide">
+                    <div class="fact-icon">🌲</div>
+                    <div class="fact-text">Listening to forest sounds can lower blood pressure and reduce cortisol levels.</div>
+                    <div class="fact-source">- Environmental Psychology</div>
+                </div>
+            </div>
+            <div class="fact-dots">
+                <span class="fact-dot active" onclick="showFact(0)"></span>
+                <span class="fact-dot" onclick="showFact(1)"></span>
+                <span class="fact-dot" onclick="showFact(2)"></span>
+                <span class="fact-dot" onclick="showFact(3)"></span>
+            </div>
+        </div>
+
+        <!-- Soundscapes Gallery -->
+        <div class="gallery-section" data-aos="fade-up">
+            <h2 class="gallery-title">
+                <i class="fas fa-images"></i>
+                Featured Soundscapes
+            </h2>
+            <div class="gallery-grid">
+                <div class="gallery-item" onclick="loadGallerySound('amazon')">
+                    <div class="gallery-image">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <div class="gallery-overlay">
+                        <div class="gallery-location">Amazon Rainforest</div>
+                        <div class="gallery-sound">Howler monkeys • Birds • Rain</div>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="loadGallerySound('pacific')">
+                    <div class="gallery-image">
+                        <i class="fas fa-water"></i>
+                    </div>
+                    <div class="gallery-overlay">
+                        <div class="gallery-location">Pacific Ocean</div>
+                        <div class="gallery-sound">Waves • Seagulls • Distant whales</div>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="loadGallerySound('alps')">
+                    <div class="gallery-image">
+                        <i class="fas fa-mountain"></i>
+                    </div>
+                    <div class="gallery-overlay">
+                        <div class="gallery-location">Swiss Alps</div>
+                        <div class="gallery-sound">Wind • Cowbells • Streams</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timer Section -->
+        <div class="timer-section" data-aos="fade-up">
+            <div class="timer-controls">
+                <button class="timer-btn" onclick="setTimer(5)">5 min</button>
+                <button class="timer-btn" onclick="setTimer(15)">15 min</button>
+                <button class="timer-btn" onclick="setTimer(30)">30 min</button>
+                <button class="timer-btn" onclick="setTimer(60)">60 min</button>
+                <button class="timer-btn active" onclick="setTimer(0)">∞</button>
+            </div>
+            <div class="timer-display-large" id="timerDisplay">∞</div>
+        </div>
+
+        <!-- Save Mix Section -->
+        <div class="save-section" data-aos="fade-up">
+            <input type="text" class="save-input" id="mixName" placeholder="Name your soundscape... (e.g., 'My Relaxing Evening')">
+            <button class="save-btn" onclick="saveMix()">
+                <i class="fas fa-heart"></i>
+                Save This Mix
+            </button>
+        </div>
+
+        <!-- Meditation Guide -->
+        <div class="meditation-section" data-aos="fade-up">
+            <h2 class="meditation-title">🧘 Guided Meditation</h2>
+            <div class="meditation-text" id="meditationText">
+                Close your eyes. Breathe deeply. Listen to the sounds of nature...
+            </div>
+            <button class="meditation-btn" onclick="startMeditation()">
+                <i class="fas fa-play"></i> Start 5-Minute Meditation
+            </button>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-icon">
+                <i class="fas fa-heart"></i>
+            </div>
+            <h3>Mix Saved!</h3>
+            <p>Your soundscape has been saved to your favorites.</p>
+            <button class="modal-btn" onclick="closeModal()">Continue Listening</button>
+        </div>
+    </div>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- AOS Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Sound state
+        const soundState = {
+            rain: { volume: 75, muted: false },
+            forest: { volume: 60, muted: false },
+            ocean: { volume: 45, muted: false },
+            birds: { volume: 30, muted: false },
+            wind: { volume: 20, muted: false },
+            master: 80,
+            isPlaying: false
+        };
+
+        // Timer
+        let timerInterval;
+        let timerSeconds = 0;
+        let timerActive = false;
+        let timerDuration = 0; // 0 = infinite
+
+        // Update volume display
+        function updateVolume(channel, value) {
+            soundState[channel].volume = value;
+            document.getElementById(`${channel}-value`).textContent = value + '%';
+            
+            // In a real app, this would adjust the audio volume
+            console.log(`Setting ${channel} volume to ${value}%`);
+            
+            // Update visualizer animation
+            updateVisualizer();
+        }
+
+        // Toggle mute
+        function toggleMute(channel) {
+            const muteBtn = document.getElementById(`${channel}-mute`);
+            soundState[channel].muted = !soundState[channel].muted;
+            
+            if (soundState[channel].muted) {
+                muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                muteBtn.classList.add('muted');
+            } else {
+                muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                muteBtn.classList.remove('muted');
+            }
+            
+            console.log(`${channel} muted: ${soundState[channel].muted}`);
+        }
+
+        // Update master volume
+        function updateMasterVolume(value) {
+            soundState.master = value;
+            document.getElementById('master-value').textContent = value + '%';
+            console.log(`Master volume: ${value}%`);
+        }
+
+        // Toggle play/pause
+        function togglePlayPause() {
+            const playBtn = document.getElementById('playPauseBtn');
+            soundState.isPlaying = !soundState.isPlaying;
+            
+            if (soundState.isPlaying) {
+                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                playBtn.classList.add('play');
+                startTimer();
+            } else {
+                playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                playBtn.classList.add('play');
+                pauseTimer();
+            }
+            
+            // Animate visualizer
+            updateVisualizer();
+        }
+
+        // Previous track
+        function previousTrack() {
+            console.log('Previous track');
+            // Shuffle effect on visualizer
+            document.querySelectorAll('.vis-bar').forEach(bar => {
+                bar.style.animationDelay = Math.random() + 's';
+            });
+        }
+
+        // Next track
+        function nextTrack() {
+            console.log('Next track');
+            // Shuffle effect on visualizer
+            document.querySelectorAll('.vis-bar').forEach(bar => {
+                bar.style.animationDelay = Math.random() + 's';
+            });
+        }
+
+        // Update visualizer based on sound levels
+        function updateVisualizer() {
+            const bars = document.querySelectorAll('.vis-bar');
+            const avgVolume = (
+                (soundState.rain.muted ? 0 : soundState.rain.volume) +
+                (soundState.forest.muted ? 0 : soundState.forest.volume) +
+                (soundState.ocean.muted ? 0 : soundState.ocean.volume) +
+                (soundState.birds.muted ? 0 : soundState.birds.volume) +
+                (soundState.wind.muted ? 0 : soundState.wind.volume)
+            ) / 5 * soundState.master / 100;
+
+            bars.forEach((bar, index) => {
+                const height = 30 + (avgVolume * index * 2);
+                bar.style.height = height + 'px';
+            });
+        }
+
+        // Load preset
+        function loadPreset(preset) {
+            // Update active state
+            document.querySelectorAll('.preset-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            // Set volumes based on preset
+            switch(preset) {
+                case 'rainy':
+                    setChannel('rain', 90);
+                    setChannel('forest', 20);
+                    setChannel('ocean', 0);
+                    setChannel('birds', 0);
+                    setChannel('wind', 30);
+                    break;
+                case 'forest':
+                    setChannel('rain', 20);
+                    setChannel('forest', 80);
+                    setChannel('ocean', 0);
+                    setChannel('birds', 70);
+                    setChannel('wind', 40);
+                    break;
+                case 'ocean':
+                    setChannel('rain', 0);
+                    setChannel('forest', 10);
+                    setChannel('ocean', 85);
+                    setChannel('birds', 30);
+                    setChannel('wind', 20);
+                    break;
+                case 'night':
+                    setChannel('rain', 10);
+                    setChannel('forest', 30);
+                    setChannel('ocean', 0);
+                    setChannel('birds', 50);
+                    setChannel('wind', 20);
+                    break;
+                case 'desert':
+                    setChannel('rain', 0);
+                    setChannel('forest', 0);
+                    setChannel('ocean', 0);
+                    setChannel('birds', 10);
+                    setChannel('wind', 80);
+                    break;
+                case 'river':
+                    setChannel('rain', 30);
+                    setChannel('forest', 60);
+                    setChannel('ocean', 0);
+                    setChannel('birds', 40);
+                    setChannel('wind', 20);
+                    break;
+            }
+            
+            console.log(`Loaded preset: ${preset}`);
+        }
+
+        // Helper to set channel volume
+        function setChannel(channel, volume) {
+            soundState[channel].volume = volume;
+            document.getElementById(`${channel}-slider`).value = volume;
+            document.getElementById(`${channel}-value`).textContent = volume + '%';
+            
+            // Unmute if was muted
+            if (soundState[channel].muted) {
+                toggleMute(channel);
+            }
+        }
+
+        // Timer functions
+        function setTimer(minutes) {
+            timerDuration = minutes;
+            
+            // Update active button
+            document.querySelectorAll('.timer-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            if (minutes === 0) {
+                document.getElementById('timerDisplay').textContent = '∞';
+                timerSeconds = 0;
+            } else {
+                timerSeconds = minutes * 60;
+                updateTimerDisplay();
+            }
+            
+            console.log(`Timer set to ${minutes} minutes`);
+        }
+
+        function startTimer() {
+            if (timerActive || timerDuration === 0) return;
+            
+            timerActive = true;
+            timerInterval = setInterval(() => {
+                if (timerSeconds > 0) {
+                    timerSeconds--;
+                    updateTimerDisplay();
+                    
+                    if (timerSeconds === 0) {
+                        stopTimer();
+                        alert('⏰ Timer finished! Your soundscape will now fade out.');
+                        togglePlayPause(); // Auto-stop
+                    }
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            timerActive = false;
+            clearInterval(timerInterval);
+        }
+
+        function stopTimer() {
+            timerActive = false;
+            clearInterval(timerInterval);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timerSeconds / 60);
+            const seconds = timerSeconds % 60;
+            document.getElementById('timerDisplay').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Save mix
+        function saveMix() {
+            const mixName = document.getElementById('mixName').value || 'My Soundscape';
+            document.getElementById('successModal').classList.add('active');
+            console.log(`Saved mix: ${mixName}`);
+        }
+
+        // Load gallery sound
+        function loadGallerySound(location) {
+            switch(location) {
+                case 'amazon':
+                    setChannel('rain', 70);
+                    setChannel('forest', 80);
+                    setChannel('birds', 60);
+                    setChannel('wind', 20);
+                    break;
+                case 'pacific':
+                    setChannel('ocean', 90);
+                    setChannel('birds', 40);
+                    setChannel('wind', 30);
+                    break;
+                case 'alps':
+                    setChannel('wind', 60);
+                    setChannel('forest', 40);
+                    setChannel('birds', 30);
+                    break;
+            }
+            console.log(`Loaded ${location} soundscape`);
+        }
+
+        // Fact slider
+        let currentFact = 0;
+        const facts = document.querySelectorAll('.fact-slide');
+        const factDots = document.querySelectorAll('.fact-dot');
+
+        function showFact(index) {
+            facts.forEach((fact, i) => {
+                fact.classList.toggle('active', i === index);
+            });
+            factDots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+            currentFact = index;
+        }
+
+        function nextFact() {
+            currentFact = (currentFact + 1) % facts.length;
+            showFact(currentFact);
+        }
+
+        // Auto-advance facts
+        setInterval(nextFact, 8000);
+
+        // Meditation
+        function startMeditation() {
+            const meditationTexts = [
+                "🌿 Breathe in the fresh forest air...",
+                "💧 Listen to the gentle rain...",
+                "🌊 Feel the ocean waves washing away stress...",
+                "🕊️ Your mind is calm like a still lake...",
+                "🌅 You are one with nature..."
+            ];
+            
+            let i = 0;
+            const meditationInterval = setInterval(() => {
+                document.getElementById('meditationText').textContent = meditationTexts[i % meditationTexts.length];
+                i++;
+                
+                if (i > 5) {
+                    clearInterval(meditationInterval);
+                    document.getElementById('meditationText').textContent = "✨ Return gently to the present moment...";
+                }
+            }, 30000); // Change every 30 seconds
+            
+            alert('🧘 5-minute meditation started. Find a comfortable position and close your eyes.');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('active');
+        }
+
+        // Back to top
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Initialize timer display
+        setTimer(0);
+
+        // Update visualizer periodically
+        setInterval(updateVisualizer, 100);
+
+        // Close modal on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('successModal').classList.contains('active')) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

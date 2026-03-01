@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wildlife Protection Laws | Environment & Animal Safety Hub</title>
+  <meta name="description" content="Interactive guide to global wildlife protection laws. Search, compare, and understand conservation legislation across countries.">
+  <meta name="keywords" content="wildlife laws, animal protection, conservation legislation, endangered species act, CITES, international treaties">
+
+  <!-- Favicon -->
+  <link rel="icon" href="../../../assets/icons/favicon.ico" type="image/x-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="../../../css/style.css">
+  
+  <!-- Component Styles -->
+  <link rel="stylesheet" href="../../../css/components/navbar.css">
+  <link rel="stylesheet" href="../../../css/components/footer.css">
+
+  <!-- Page-specific Styles -->
+  <style>
+    :root {
+      --law-blue: #2980B9;
+      --treaty-green: #27AE60;
+      --enforcement-red: #E74C3C;
+      --policy-purple: #8E44AD;
+      --dark-bg: #0A1E2C;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --highlight-yellow: #F1C40F;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: var(--dark-bg);
+      color: white;
+      line-height: 1.6;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #0A1E2C 0%, #1B4F72 100%);
+      color: white;
+      padding: 100px 20px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(41, 128, 185, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(39, 174, 96, 0.1) 0%, transparent 50%);
+    }
+
+    .hero-content {
+      max-width: 1000px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, #2980B9, #27AE60, #8E44AD);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 1.3rem;
+      max-width: 700px;
+      margin: 0 auto 40px;
+      color: #AED6F1;
+    }
+
+    .law-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      max-width: 900px;
+      margin: 40px auto;
+    }
+
+    .stat-card {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 25px 20px;
+      border-radius: 15px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(41, 128, 185, 0.2);
+    }
+
+    .stat-number {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin: 10px 0;
+      color: #3498DB;
+    }
+
+    /* Search & Filter Bar */
+    .search-section {
+      max-width: 1200px;
+      margin: -30px auto 40px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 3;
+    }
+
+    .search-container {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .search-box {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 250px;
+      padding: 15px 20px;
+      border: 2px solid rgba(41, 128, 185, 0.3);
+      border-radius: 50px;
+      background: rgba(0,0,0,0.3);
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--law-blue);
+      box-shadow: 0 0 0 3px rgba(41, 128, 185, 0.1);
+    }
+
+    .search-btn {
+      padding: 15px 30px;
+      background: var(--law-blue);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .search-btn:hover {
+      background: #21618C;
+      transform: translateY(-2px);
+    }
+
+    .filter-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .filter-tag {
+      padding: 8px 20px;
+      background: rgba(41, 128, 185, 0.1);
+      border: 1px solid rgba(41, 128, 185, 0.3);
+      border-radius: 20px;
+      color: #AED6F1;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .filter-tag:hover,
+    .filter-tag.active {
+      background: var(--law-blue);
+      color: white;
+      border-color: var(--law-blue);
+    }
+
+    /* Main Content */
+    .main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    .section-title {
+      margin: 60px 0 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .section-title h2 {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 2.5rem;
+      margin: 0;
+    }
+
+    .view-controls {
+      display: flex;
+      gap: 15px;
+    }
+
+    .view-btn {
+      padding: 10px 20px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .view-btn.active {
+      background: var(--law-blue);
+      border-color: var(--law-blue);
+    }
+
+    /* Laws Grid/List */
+    .laws-container {
+      transition: all 0.3s ease;
+    }
+
+    .laws-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 30px;
+    }
+
+    .laws-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Law Card */
+    .law-card {
+      background: var(--card-bg);
+      border-radius: 15px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .laws-grid .law-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      border-color: var(--law-blue);
+    }
+
+    .laws-list .law-card {
+      display: flex;
+      min-height: 180px;
+    }
+
+    .law-header {
+      padding: 25px;
+      background: linear-gradient(135deg, rgba(41, 128, 185, 0.2), transparent);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      position: relative;
+    }
+
+    .laws-list .law-header {
+      flex: 0 0 200px;
+      border-bottom: none;
+      border-right: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .law-type {
+      display: inline-block;
+      padding: 6px 15px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .law-type.international { background: rgba(39, 174, 96, 0.2); color: #27AE60; border: 1px solid rgba(39, 174, 96, 0.3); }
+    .law-type.national { background: rgba(41, 128, 185, 0.2); color: #2980B9; border: 1px solid rgba(41, 128, 185, 0.3); }
+    .law-type.regional { background: rgba(142, 68, 173, 0.2); color: #8E44AD; border: 1px solid rgba(142, 68, 173, 0.3); }
+
+    .law-title {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.5rem;
+      margin: 0 0 10px 0;
+      color: white;
+    }
+
+    .law-countries {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 15px;
+      color: #BDC3C7;
+      font-size: 0.9rem;
+    }
+
+    .law-body {
+      padding: 25px;
+    }
+
+    .laws-list .law-body {
+      flex: 1;
+    }
+
+    .law-description {
+      color: #D5DBDB;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .law-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #7F8C8D;
+      font-size: 0.9rem;
+    }
+
+    .meta-item i {
+      color: var(--law-blue);
+    }
+
+    .law-status {
+      display: inline-block;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .status-active { background: rgba(39, 174, 96, 0.2); color: #27AE60; }
+    .status-pending { background: rgba(243, 156, 18, 0.2); color: #F39C12; }
+    .status-weak { background: rgba(231, 76, 60, 0.2); color: #E74C3C; }
+
+    /* Law Details Modal */
+    .law-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .modal-content {
+      background: var(--dark-bg);
+      max-width: 800px;
+      margin: 50px auto;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      animation: modalSlide 0.3s ease;
+    }
+
+    @keyframes modalSlide {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 30px;
+      background: linear-gradient(135deg, rgba(41, 128, 185, 0.3), transparent);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .modal-close:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .modal-body {
+      padding: 30px;
+    }
+
+    .law-details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin: 25px 0;
+    }
+
+    .detail-card {
+      background: rgba(255,255,255,0.05);
+      padding: 20px;
+      border-radius: 10px;
+      border-left: 4px solid var(--law-blue);
+    }
+
+    /* Treaty Timeline */
+    .timeline-section {
+      background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), transparent);
+      border-radius: 20px;
+      padding: 40px;
+      margin: 60px 0;
+    }
+
+    .timeline {
+      position: relative;
+      max-width: 800px;
+      margin: 40px auto 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 100%;
+      background: var(--treaty-green);
+    }
+
+    .timeline-item {
+      margin: 40px 0;
+      position: relative;
+      width: 50%;
+      padding: 20px;
+    }
+
+    .timeline-item:nth-child(odd) {
+      left: 0;
+    }
+
+    .timeline-item:nth-child(even) {
+      left: 50%;
+    }
+
+    .timeline-content {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      position: relative;
+    }
+
+    .timeline-year {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--treaty-green);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    .timeline-item:nth-child(odd) .timeline-year {
+      right: -70px;
+    }
+
+    .timeline-item:nth-child(even) .timeline-year {
+      left: -70px;
+    }
+
+    /* Comparison Tool */
+    .comparison-tool {
+      background: linear-gradient(135deg, rgba(142, 68, 173, 0.1), transparent);
+      border-radius: 20px;
+      padding: 40px;
+      margin: 60px 0;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .comparison-card {
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 15px;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .comparison-card:hover {
+      border-color: var(--policy-purple);
+      transform: translateY(-5px);
+    }
+
+    .comparison-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .comparison-header i {
+      font-size: 2rem;
+      color: var(--policy-purple);
+    }
+
+    /* Action Section */
+    .action-section {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, #0A1E2C, #1C2833);
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .action-title {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #FFEAA7;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      max-width: 1000px;
+      margin: 40px auto;
+    }
+
+    .action-card {
+      background: rgba(255,255,255,0.05);
+      padding: 30px;
+      border-radius: 15px;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .action-card:hover {
+      background: rgba(41, 128, 185, 0.1);
+      border-color: var(--law-blue);
+      transform: translateY(-5px);
+    }
+
+    .action-card i {
+      font-size: 2.5rem;
+      color: var(--law-blue);
+      margin-bottom: 20px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .law-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .section-title {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .laws-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .laws-list .law-card {
+        flex-direction: column;
+      }
+      
+      .laws-list .law-header {
+        flex: none;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+      }
+      
+      .timeline::before {
+        left: 30px;
+      }
+      
+      .timeline-item {
+        width: 100%;
+        left: 0 !important;
+        padding-left: 60px;
+      }
+      
+      .timeline-year {
+        left: 0 !important;
+        right: auto !important;
+        transform: translateY(-50%);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .law-stats {
+        grid-template-columns: 1fr;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .search-box {
+        flex-direction: column;
+      }
+      
+      .search-input {
+        min-width: 100%;
+      }
+      
+      .filter-tags {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <div id="navbar-container"></div>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Wildlife Protection Laws</h1>
+      <p class="hero-subtitle">Interactive database of global conservation legislation. Search, compare, and understand wildlife protection laws across 180+ countries.</p>
+      
+      <div class="law-stats">
+        <div class="stat-card">
+          <i class="fas fa-globe-americas" style="font-size: 2rem; color: #3498DB;"></i>
+          <div class="stat-number">183</div>
+          <p>Countries with wildlife laws</p>
+        </div>
+        
+        <div class="stat-card">
+          <i class="fas fa-scale-balanced" style="font-size: 2rem; color: #27AE60;"></i>
+          <div class="stat-number">47K+</div>
+          <p>Protected species listed</p>
+        </div>
+        
+        <div class="stat-card">
+          <i class="fas fa-file-contract" style="font-size: 2rem; color: #8E44AD;"></i>
+          <div class="stat-number">120+</div>
+          <p>International treaties</p>
+        </div>
+        
+        <div class="stat-card">
+          <i class="fas fa-shield-alt" style="font-size: 2rem; color: #E74C3C;"></i>
+          <div class="stat-number">64%</div>
+          <p>Laws actively enforced</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Search & Filter -->
+  <section class="search-section">
+    <div class="search-container">
+      <div class="search-box">
+        <input type="text" class="search-input" placeholder="Search laws by name, country, or species..." id="lawSearch">
+        <button class="search-btn" onclick="searchLaws()">
+          <i class="fas fa-search"></i> Search Laws
+        </button>
+        <button class="search-btn" onclick="resetFilters()" style="background: rgba(255,255,255,0.1);">
+          <i class="fas fa-redo"></i> Reset
+        </button>
+      </div>
+      
+      <div class="filter-tags">
+        <span class="filter-tag active" onclick="filterLaws('all')">All Laws</span>
+        <span class="filter-tag" onclick="filterLaws('international')">International Treaties</span>
+        <span class="filter-tag" onclick="filterLaws('national')">National Laws</span>
+        <span class="filter-tag" onclick="filterLaws('regional')">Regional Agreements</span>
+        <span class="filter-tag" onclick="filterLaws('endangered')">Endangered Species</span>
+        <span class="filter-tag" onclick="filterLaws('habitat')">Habitat Protection</span>
+        <span class="filter-tag" onclick="filterLaws('trade')">Wildlife Trade</span>
+        <span class="filter-tag" onclick="filterLaws('marine')">Marine Protection</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Laws Section -->
+    <section class="laws-section">
+      <div class="section-title">
+        <h2 style="color: wheat;">Wildlife Protection Legislation</h2>
+        <div class="view-controls">
+          <button class="view-btn active" onclick="setView('grid')">
+            <i class="fas fa-th-large"></i> Grid View
+          </button>
+          <button class="view-btn" onclick="setView('list')">
+            <i class="fas fa-list"></i> List View
+          </button>
+          <button class="view-btn" onclick="sortLaws('date')">
+            <i class="fas fa-calendar-alt"></i> Sort by Date
+          </button>
+        </div>
+      </div>
+      
+      <div class="laws-container laws-grid" id="lawsContainer">
+        <!-- Laws will be populated by JavaScript -->
+      </div>
+    </section>
+
+    <!-- Treaty Timeline -->
+    <section class="timeline-section">
+      <h2 style="text-align: center; margin-bottom: 30px; font-family: 'Roboto Mono', monospace; font-size: 2.5rem;">Key Treaty Timeline</h2>
+      <p style="text-align: center; max-width: 700px; margin: 0 auto 40px; color: #D5DBDB;">Major milestones in international wildlife protection legislation</p>
+      
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-year">1916</div>
+          <div class="timeline-content">
+            <h4>Migratory Bird Treaty Act (US/Canada)</h4>
+            <p>First major international agreement to protect migratory birds between United States and Canada</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-year">1973</div>
+          <div class="timeline-content">
+            <h4>CITES Convention</h4>
+            <p>Convention on International Trade in Endangered Species signed by 183 countries</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-year">1973</div>
+          <div class="timeline-content">
+            <h4>US Endangered Species Act</h4>
+            <p>Landmark legislation providing protection for endangered and threatened species</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-year">1992</div>
+          <div class="timeline-content">
+            <h4>Convention on Biological Diversity</h4>
+            <p>International treaty for conservation, sustainable use, and equitable sharing of genetic resources</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-year">2000</div>
+          <div class="timeline-content">
+            <h4>EU Habitats Directive</h4>
+            <p>European Union's cornerstone legislation for biodiversity conservation</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Law Comparison -->
+    <section class="comparison-tool">
+      <h2 style="margin-bottom: 30px; font-family: 'Roboto Mono', monospace; font-size: 2.5rem;">Law Comparison Tool</h2>
+      <p style="color: #D5DBDB; margin-bottom: 30px;">Compare key features of major wildlife protection laws</p>
+      
+      <div class="comparison-grid">
+        <div class="comparison-card">
+          <div class="comparison-header">
+            <i class="fas fa-paw"></i>
+            <div>
+              <h3 style="margin: 0; color: white;">Scope of Protection</h3>
+              <p style="color: #7F8C8D; margin: 5px 0 0 0;">Which species are covered</p>
+            </div>
+          </div>
+          <div class="law-details-grid">
+            <div class="detail-card">
+              <strong>CITES</strong>
+              <p style="margin: 10px 0 0 0; color: #D5DBDB;">~5,800 animal species, ~30,000 plant species</p>
+            </div>
+            <div class="detail-card">
+              <strong>US ESA</strong>
+              <p style="margin: 10px 0 0 0; color: #D5DBDB;">1,662 species (US and foreign)</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="comparison-card">
+          <div class="comparison-header">
+            <i class="fas fa-gavel"></i>
+            <div>
+              <h3 style="margin: 0; color: white;">Enforcement Power</h3>
+              <p style="color: #7F8C8D; margin: 5px 0 0 0;">Legal authority and penalties</p>
+            </div>
+          </div>
+          <div class="law-details-grid">
+            <div class="detail-card">
+              <strong>CITES</strong>
+              <p style="margin: 10px 0 0 0; color: #D5DBDB;">Trade sanctions, permit systems</p>
+            </div>
+            <div class="detail-card">
+              <strong>US ESA</strong>
+              <p style="margin: 10px 0 0 0; color: #D5DBDB;">Criminal penalties up to $50,000 and 1 year imprisonment</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="comparison-card">
+          <div class="comparison-header">
+            <i class="fas fa-chart-line"></i>
+            <div>
+              <h3 style="margin: 0; color: white;">Success Rate</h3>
+              <p style="color: #7F8C8D; margin: 5px 0 0 0;">Species recovery statistics</p>
+            </div>
+          </div>
+          <div class="law-details-grid">
+            <div class="detail-card">
+              <strong>CITES</strong>
+              <p style="margin: 10px 0 0 0; color: #D5DBDB;">Reduced illegal trade by 66% for listed species</p>
+            </div>
+            <div class="detail-card">
+              <strong>US ESA</strong>
+              <p style="margin: 10px 0 0 0; color: #D5DBDB;">99% of listed species still exist, 54 species recovered</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Action Section -->
+    <section class="action-section">
+      <h2 class="action-title">Take Action for Wildlife</h2>
+      <p style="max-width: 700px; margin: 0 auto 30px; color: #BDC3C7;">
+        Understanding laws is the first step. Here's how you can help strengthen wildlife protection:
+      </p>
+      
+      <div class="action-grid">
+        <div class="action-card">
+          <i class="fas fa-vote-yea"></i>
+          <h3>Advocate for Stronger Laws</h3>
+          <p>Contact legislators, sign petitions, and support organizations working on wildlife law reform</p>
+        </div>
+        
+        <div class="action-card">
+          <i class="fas fa-graduation-cap"></i>
+          <h3>Report Violations</h3>
+          <p>Learn how to report wildlife crimes in your area through proper legal channels</p>
+        </div>
+        
+        <div class="action-card">
+          <i class="fas fa-hands-helping"></i>
+          <h3>Support Enforcement</h3>
+          <p>Donate to organizations that help enforce wildlife protection laws globally</p>
+        </div>
+        
+        <div class="action-card">
+          <i class="fas fa-book"></i>
+          <h3>Stay Informed</h3>
+          <p>Subscribe to updates on wildlife legislation changes and conservation news</p>
+        </div>
+      </div>
+      
+      <div style="margin-top: 40px;">
+        <a href="../pages/community-action-hub.html" class="search-btn" style="display: inline-flex; text-decoration: none;">
+          <i class="fas fa-external-link-alt"></i> Visit Action Hub
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <!-- Law Details Modal -->
+  <div class="law-modal" id="lawModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <h2 id="modalTitle">CITES Convention</h2>
+        <div style="margin-top: 15px;">
+          <span class="law-type international" id="modalType">International Treaty</span>
+          <span class="law-status status-active" id="modalStatus" style="margin-left: 10px;">Actively Enforced</span>
+        </div>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Content populated by JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <!-- Scripts -->
+  <script src="../../../js/wildlifelaws.js">
+  </script>
+</body>
+</html>

@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>♻️ Circular Economy & Zero Waste Hub · close the loop</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Google Fonts: clean, modern, approachable -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #e8f3e0;
+            background: radial-gradient(circle at 10% 20%, #daf0d0, #c0e2bc);
+            min-height: 100vh;
+            color: #1d5430;
+            line-height: 1.6;
+        }
+
+        /* header – fresh, circular */
+        .circular-header {
+            background: linear-gradient(145deg, #4f8a63, #356b48);
+            padding: 5rem 2rem 4.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+            border-bottom: 8px solid #fbeba0;
+            box-shadow: 0 20px 40px #356b48;
+        }
+
+        .circular-header::before {
+            content: '♻️🌱';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.1;
+            left: -4rem;
+            bottom: -6rem;
+            transform: rotate(-10deg);
+        }
+
+        .circular-header h1 {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 800;
+            font-size: 4rem;
+            color: #fcf9cf;
+            text-shadow: 6px 6px 0 #1d6236;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .circular-header h1 i {
+            color: #ffecaa;
+            filter: drop-shadow(0 0 8px #ffeeaa);
+        }
+
+        .circular-header p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 1.5rem auto;
+            background: #deffd6c0;
+            padding: 0.8rem 2.5rem;
+            border-radius: 60px;
+            color: #0d4b29;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            border: 3px solid #fbeba0;
+        }
+
+        .hub-badge {
+            margin-top: 1.8rem;
+            display: inline-block;
+            background: #fedb86;
+            color: #1b6133;
+            padding: 0.6rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #fff2b5;
+        }
+
+        /* container */
+        .container {
+            max-width: 1400px;
+            margin: -3rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* filter/search bar */
+        .filter-bar {
+            background: #fafff2e0;
+            backdrop-filter: blur(8px);
+            border-radius: 80px;
+            padding: 1.5rem 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 30px #2b754b70, 0 0 0 3px #dcf5c0 inset;
+            border: 3px solid #daf0c0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3e9462;
+            font-size: 1.3rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 5rem;
+            border: 3px solid #cef0b5;
+            border-radius: 60px;
+            font-size: 1rem;
+            background: white;
+            color: #1e5a30;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.8rem 2rem;
+            border: 3px solid #c8eab2;
+            border-radius: 60px;
+            background: white;
+            font-weight: 600;
+            color: #1b6839;
+            cursor: pointer;
+        }
+
+        /* category chips */
+        .category-chips {
+            margin-bottom: 2.5rem;
+        }
+
+        .chip-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: #fad676 #c0e8b0;
+        }
+
+        .chip-scroll::-webkit-scrollbar { height: 8px; }
+        .chip-scroll::-webkit-scrollbar-track { background: #d6f0ca; border-radius: 10px; }
+        .chip-scroll::-webkit-scrollbar-thumb { background: #fad676; border-radius: 10px; }
+
+        .category-chip {
+            flex: 0 0 auto;
+            background: #faffea;
+            padding: 1rem 2.5rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 6px 14px #4d986d70;
+            cursor: pointer;
+            font-weight: 600;
+            border: 3px solid transparent;
+            transition: 0.2s;
+            font-size: 1.1rem;
+        }
+
+        .category-chip i { color: #d68d2c; font-size: 1.5rem; }
+        .category-chip:hover { transform: translateY(-5px); border-color: #f7c468; background: #ffffdf; }
+        .category-chip.active { background: #ffeaaf; border-color: #be9539; }
+
+        /* featured topic / guide */
+        .featured-topic {
+            background: linear-gradient(145deg, #568f64, #3b734b);
+            border-radius: 80px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            border: 8px solid #ecd996;
+            box-shadow: 0 30px 40px #1f603a;
+            color: #fcfae6;
+            position: relative;
+        }
+
+        .featured-topic::before {
+            content: '📦';
+            font-size: 14rem;
+            opacity: 0.1;
+            position: absolute;
+            bottom: -2rem;
+            right: 2rem;
+            transform: rotate(5deg);
+        }
+
+        .topic-ribbon {
+            position: absolute;
+            top: 2rem;
+            right: 2.5rem;
+            background: #ecd259;
+            color: #17582b;
+            padding: 0.6rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #fff8b0;
+        }
+
+        .topic-grid {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .topic-text h2 {
+            font-size: 2rem;
+            color: #fff2b0;
+            letter-spacing: 2px;
+        }
+
+        .topic-text h3 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 0.5rem 0;
+        }
+
+        .topic-meta {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            background: #479d6bb0;
+            padding: 0.6rem 2rem;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border: 2px solid #ffea8f;
+        }
+
+        .meta-item i { color: #ffe684; }
+
+        .topic-desc {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+
+        .guide-btn {
+            background: #ecd259;
+            border: none;
+            color: #1a6232;
+            font-weight: 800;
+            font-size: 1.6rem;
+            padding: 1.2rem 3.5rem;
+            border-radius: 60px;
+            display: inline-flex;
+            align-items: center;
+            gap: 1.2rem;
+            cursor: pointer;
+            border: 4px solid #ffffcc;
+            box-shadow: 0 8px 0 #8f9440;
+            transition: 0.1s;
+        }
+
+        .guide-btn:active {
+            transform: translateY(8px);
+            box-shadow: none;
+        }
+
+        .topic-image {
+            height: 260px;
+            background: #67b384;
+            border-radius: 70px;
+            border: 6px solid #ecd996;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            color: #fffed0;
+        }
+
+        /* resources grid */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .resource-card {
+            background: #fafff0;
+            border-radius: 70px;
+            overflow: hidden;
+            box-shadow: 0 20px 30px #2a784d80;
+            transition: all 0.3s;
+            border: 5px solid #ccf0b5;
+            cursor: pointer;
+            color: #1e562e;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-15px);
+            border-color: #faca6b;
+            box-shadow: 0 35px 45px #175a32;
+        }
+
+        .card-image {
+            height: 140px;
+            background: linear-gradient(145deg, #74b386, #4d9a65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #fcfcd2;
+            position: relative;
+        }
+
+        .type-tag {
+            position: absolute;
+            bottom: 0.8rem;
+            left: 1rem;
+            background: #1e5837;
+            color: #ffea9e;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            border: 2px solid #fdd67a;
+        }
+
+        .card-content {
+            padding: 1.8rem;
+        }
+
+        .card-category {
+            background: #cbeac0;
+            padding: 0.3rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 0.7rem 0;
+        }
+
+        .card-source {
+            color: #4b7a55;
+            margin-bottom: 0.8rem;
+        }
+
+        .card-description {
+            color: #366f49;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .format {
+            background: #f1cba5;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+
+        .access-btn {
+            background: #5daf7c;
+            border: none;
+            color: white;
+            padding: 0.6rem 1.8rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            border: 2px solid #fde287;
+        }
+
+        /* circular principles */
+        .principles-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .principle-card {
+            background: #ebf7e0;
+            border-radius: 70px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 4px solid #ecd996;
+        }
+
+        .principle-icon {
+            font-size: 3rem;
+            color: #1f6e39;
+        }
+
+        /* modal */
+        .modal {
+            display: none; position: fixed; inset:0; background: #1d6139e6;
+            align-items: center; justify-content: center; z-index:2000;
+            backdrop-filter: blur(6px);
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #f6ffe6;
+            border-radius: 80px;
+            max-width: 700px;
+            width:100%;
+            border: 8px solid #ffe28b;
+            color: #195a2c;
+        }
+
+        .back-to-top {
+            position: fixed; bottom:2rem; right:2rem;
+            background: #f8bd48; width:70px; height:70px; border-radius:50%;
+            display: none; align-items:center; justify-content:center;
+            font-size:2.2rem; color:#1c5c28; border:5px solid #fff3b0;
+            cursor:pointer; z-index:1000;
+        }
+        .back-to-top.visible { display: flex; }
+
+        @media (max-width:800px){
+            .topic-grid { grid-template-columns:1fr; }
+            .principles-row { grid-template-columns:repeat(2,1fr); }
+        }
+        @media (max-width:500px){
+            .principles-row { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- header -->
+    <header class="circular-header">
+        <h1>
+            <i class="fas fa-recycle"></i> Circular Economy & Zero Waste
+            <i class="fas fa-leaf"></i>
+        </h1>
+        <p>redesign · reduce · reuse · regenerate</p>
+        <div class="hub-badge"><i class="fas fa-book-open"></i> 24 practical guides</div>
+    </header>
+
+    <div class="container">
+        <!-- filter bar -->
+        <div class="filter-bar" data-aos="fade-up">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="search guides, case studies, tools...">
+            </div>
+            <div class="filter-options">
+                <select class="filter-select"><option>all categories</option><option>household</option><option>business</option><option>policy</option><option>innovation</option></select>
+                <select class="filter-select"><option>by format</option></select>
+            </div>
+        </div>
+
+        <!-- category chips -->
+        <div class="category-chips" data-aos="fade-up">
+            <div class="chip-scroll">
+                <div class="category-chip active"><i class="fas fa-layer-group"></i> all resources</div>
+                <div class="category-chip"><i class="fas fa-house-chimney"></i> at home</div>
+                <div class="category-chip"><i class="fas fa-briefcase"></i> for business</div>
+                <div class="category-chip"><i class="fas fa-gavel"></i> policy & law</div>
+                <div class="category-chip"><i class="fas fa-lightbulb"></i> innovation</div>
+                <div class="category-chip"><i class="fas fa-school"></i> education</div>
+            </div>
+        </div>
+
+        <!-- featured topic -->
+        <div class="featured-topic" data-aos="zoom-in">
+            <span class="topic-ribbon"><i class="fas fa-star"></i> beginner's guide</span>
+            <div class="topic-grid">
+                <div class="topic-text">
+                    <h2>📘 zero waste home</h2>
+                    <h3>5 simple swaps</h3>
+                    <div class="topic-meta">
+                        <span class="meta-item"><i class="fas fa-clock"></i> 10 min read</span>
+                        <span class="meta-item"><i class="fas fa-leaf"></i> beginner friendly</span>
+                    </div>
+                    <p class="topic-desc">Replace disposables with reusables, start composting, and shop bulk. Save money and the planet.</p>
+                    <button class="guide-btn" onclick="readGuide('zero waste home')"><i class="fas fa-book-open"></i> read guide</button>
+                </div>
+                <div class="topic-image"><i class="fas fa-house-chimney"></i></div>
+            </div>
+        </div>
+
+        <!-- principles row -->
+        <div class="principles-row" data-aos="fade-up">
+            <div class="principle-card"><div class="principle-icon"><i class="fas fa-ban"></i></div><h3>refuse</h3><p>say no to what you don't need</p></div>
+            <div class="principle-card"><div class="principle-icon"><i class="fas fa-arrow-down"></i></div><h3>reduce</h3><p>consume less</p></div>
+            <div class="principle-card"><div class="principle-icon"><i class="fas fa-repeat"></i></div><h3>reuse</h3><p>choose durable & repairable</p></div>
+            <div class="principle-card"><div class="principle-icon"><i class="fas fa-rotate-left"></i></div><h3>recycle</h3><p>close the loop</p></div>
+        </div>
+
+        <!-- resources grid (js) -->
+        <div class="resources-grid" id="resourcesGrid"></div>
+    </div>
+
+    <!-- modal -->
+    <div class="modal" id="resourceModal">
+        <div class="modal-content" style="padding:2.5rem;">
+            <button style="float:right; background:none; border:none; font-size:3rem; color:#1b6735;" onclick="closeModal()">✕</button>
+            <div style="text-align:center;">
+                <div style="font-size:5rem;" id="modalResourceEmoji">📄</div>
+                <h2 id="modalResourceTitle" style="font-size:2.8rem;">composting 101</h2>
+                <p id="modalResourceDesc" style="margin:2rem 0;">turn food scraps into garden gold</p>
+                <button class="guide-btn" onclick="accessResource()" style="font-size:1.2rem;">📥 download PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({duration:800,once:true});
+
+        // resources data
+        const resources = [
+            { name:"Composting 101", category:"household", source:"EPA", description:"turn scraps into soil", format:"PDF", icon:"fa-leaf" },
+            { name:"Plastic Free Kitchen", category:"household", source:"Story of Stuff", description:"30-day challenge", format:"guide", icon:"fa-kitchen-set" },
+            { name:"Circular Business Models", category:"business", source:"Ellen MacArthur", description:"case studies", format:"report", icon:"fa-briefcase" },
+            { name:"EU Right to Repair", category:"policy", source:"EU Commission", description:"law explained", format:"summary", icon:"fa-file-lines" },
+            { name:"Biomaterials Database", category:"innovation", source:"Open Source", description:"materials for designers", format:"tool", icon:"fa-flask" },
+            { name:"School Zero Waste Kit", category:"education", source:"Green Schools", description:"curriculum", format:"kit", icon:"fa-school" },
+            { name:"Textile Recycling Map", category:"household", source:"Recycle Now", description:"find drop-off points", format:"map", icon:"fa-map" },
+            { name:"Repair Café Directory", category:"community", source:"Repair Café", description:"fix don't toss", format:"map", icon:"fa-screwdriver-wrench" },
+        ];
+
+        function renderResources() {
+            const grid = document.getElementById('resourcesGrid');
+            grid.innerHTML = resources.map(r => `
+                <div class="resource-card" onclick="showResource('${r.name}','${r.category} · ${r.source} · ${r.description} · format: ${r.format}','${r.icon}')">
+                    <div class="card-image"><i class="fas ${r.icon}"></i><span class="type-tag">${r.format}</span></div>
+                    <div class="card-content">
+                        <span class="card-category">${r.category}</span>
+                        <div class="card-title">${r.name}</div>
+                        <div class="card-source"><i class="fas fa-building"></i> ${r.source}</div>
+                        <div class="card-description">${r.description}</div>
+                        <div class="card-footer">
+                            <span class="format">${r.format}</span>
+                            <button class="access-btn" onclick="event.stopPropagation(); accessResourceDirect('${r.name}')">access</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+        renderResources();
+
+        window.showResource = (title, desc, icon) => {
+            document.getElementById('modalResourceTitle').innerText = title;
+            document.getElementById('modalResourceDesc').innerText = desc;
+            document.getElementById('modalResourceEmoji').innerHTML = `<i class="fas ${icon}"></i>`;
+            document.getElementById('resourceModal').classList.add('active');
+        };
+
+        window.closeModal = () => document.getElementById('resourceModal').classList.remove('active');
+        window.readGuide = (name) => alert(`📖 opening guide: ${name || 'zero waste'} (demo).`);
+        window.accessResource = () => { alert('📥 resource download started (demo).'); closeModal(); };
+        window.accessResourceDirect = (name) => alert(`🔍 accessing ${name} ...`);
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // modal escape
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('resourceModal')) closeModal(); };
+    </script>
+</body>
+</html>

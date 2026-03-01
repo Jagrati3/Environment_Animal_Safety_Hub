@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soil Microbiome Visualization</title>
+  <link rel="stylesheet" href="../css/soil-microbiome-visualization.css">
+  <!-- Additional meta tags for SEO and performance -->
+  <meta name="description" content="Interactive visualization of soil microbiome diversity and health, showing impacts of farming practices.">
+  <meta name="keywords" content="soil microbiome, microbial diversity, farming practices, nutrient cycling, soil health">
+  <meta name="author" content="Environment Animal Safety Hub">
+  <link rel="icon" href="../assets/icons/microbe.ico" type="image/x-icon">
+  <!-- Preload critical resources -->
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js" as="script">
+  <!-- Open Graph for social sharing -->
+  <meta property="og:title" content="Soil Microbiome Visualization">
+  <meta property="og:description" content="Explore soil microbial diversity and population health with interactive charts.">
+  <meta property="og:image" content="../assets/images/soil-microbiome.jpg">
+  <meta property="og:url" content="https://example.com/soil-microbiome-visualization.html">
+  <meta property="og:type" content="website">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Soil Microbiome Visualization">
+  <meta name="twitter:description" content="Interactive charts of soil microbial diversity and health.">
+  <meta name="twitter:image" content="../assets/images/soil-microbiome.jpg">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Soil Microbiome Visualization</h1>
+      <p>Interactive charts of soil microbial diversity and population health based on farming practices.</p>
+      <nav>
+        <ul>
+          <li><a href="#microbial-diversity">Diversity</a></li>
+          <li><a href="#population-health">Health</a></li>
+          <li><a href="#farming-impact">Impact</a></li>
+          <li><a href="#recommendations">Recommendations</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section id="introduction" class="card">
+        <h2>Introduction to Soil Microbiome</h2>
+        <p>The soil microbiome consists of a vast array of microorganisms including bacteria, fungi, archaea, and viruses that play essential roles in soil health. These microbes are responsible for nutrient cycling, organic matter decomposition, disease suppression, and overall soil fertility. Understanding microbial diversity and population health is crucial for sustainable agriculture and ecosystem management.</p>
+        <p>This visualization tool allows users to explore how different farming practices affect soil microbial communities over time. By analyzing trends in microbial diversity and health indicators, farmers and researchers can make informed decisions to optimize soil management strategies.</p>
+        <div class="key-facts">
+          <h3>Key Facts</h3>
+          <ul>
+            <li>One gram of soil can contain up to 10 billion microorganisms.</li>
+            <li>Microbial diversity is highest in healthy, undisturbed soils.</li>
+            <li>Farming practices like tillage can reduce microbial populations by up to 50%.</li>
+            <li>Beneficial microbes improve plant nutrient uptake and disease resistance.</li>
+          </ul>
+        </div>
+      </section>
+      <section id="microbial-diversity" class="card">
+        <h2>Microbial Diversity Over Time</h2>
+        <p>This chart shows the Shannon diversity index for soil microbial communities over a 5-year period. Higher values indicate greater diversity, which is generally associated with healthier soils.</p>
+        <div class="chart-controls">
+          <label for="diversity-practice">Select Farming Practice:</label>
+          <select id="diversity-practice">
+            <option value="conventional">Conventional Tillage</option>
+            <option value="no-till">No-Till</option>
+            <option value="organic">Organic Farming</option>
+            <option value="cover-crops">Cover Crops</option>
+          </select>
+        </div>
+        <div id="diversity-chart-container">
+          <canvas id="diversity-chart" width="600" height="250"></canvas>
+        </div>
+        <div id="diversity-data">
+          <h3>Diversity Metrics</h3>
+          <table id="diversity-table">
+            <thead>
+              <tr>
+                <th>Year</th>
+                <th>Shannon Index</th>
+                <th>Species Richness</th>
+                <th>Evenness</th>
+              </tr>
+            </thead>
+            <tbody id="diversity-table-body">
+              <!-- Data will be populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+        <div class="interpretation">
+          <h3>Interpretation</h3>
+          <p>Diversity trends can reveal the long-term impacts of farming practices. No-till and organic methods typically maintain higher diversity compared to conventional tillage, which can disrupt soil structure and microbial habitats.</p>
+        </div>
+      </section>
+      <section id="population-health" class="card">
+        <h2>Population Health Trends</h2>
+        <p>Population health is measured by the abundance of key microbial groups and their metabolic activity. This chart displays trends in bacterial and fungal populations, as well as overall microbial biomass.</p>
+        <div class="chart-controls">
+          <label for="health-metric">Select Metric:</label>
+          <select id="health-metric">
+            <option value="bacteria">Bacterial Population</option>
+            <option value="fungi">Fungal Population</option>
+            <option value="biomass">Total Biomass</option>
+            <option value="activity">Metabolic Activity</option>
+          </select>
+        </div>
+        <div id="health-chart-container">
+          <canvas id="health-chart" width="600" height="250"></canvas>
+        </div>
+        <div id="health-data">
+          <h3>Health Indicators</h3>
+          <div id="health-indicators">
+            <!-- Indicators will be populated by JavaScript -->
+          </div>
+        </div>
+        <div class="interpretation">
+          <h3>Interpretation</h3>
+          <p>Healthy microbial populations are characterized by balanced bacterial-to-fungal ratios and high metabolic activity. Declines in these indicators may signal soil degradation or the need for management interventions.</p>
+        </div>
+      </section>
+      <section id="farming-impact" class="card">
+        <h2>Impact of Farming Practices</h2>
+        <p>This section compares the effects of different farming practices on soil microbial communities. The radar chart shows how various practices influence different aspects of microbial health.</p>
+        <div class="chart-controls">
+          <label for="impact-comparison">Compare Practices:</label>
+          <select id="impact-comparison">
+            <option value="all">All Practices</option>
+            <option value="tillage">Tillage Methods</option>
+            <option value="amendments">Soil Amendments</option>
+            <option value="crop-rotation">Crop Rotation</option>
+          </select>
+        </div>
+        <div id="impact-chart-container">
+          <canvas id="impact-chart" width="600" height="250"></canvas>
+        </div>
+        <div id="impact-data">
+          <h3>Practice Impact Summary</h3>
+          <div id="impact-summary">
+            <!-- Summary will be populated by JavaScript -->
+          </div>
+        </div>
+        <div class="interpretation">
+          <h3>Interpretation</h3>
+          <p>Different farming practices have varying impacts on soil microbes. Practices that minimize soil disturbance and promote organic matter inputs generally support healthier microbial communities.</p>
+        </div>
+      </section>
+      <section id="recommendations" class="card">
+        <h2>Recommendations to Boost Microbial Activity</h2>
+        <p>Based on current soil conditions and farming practices, here are evidence-based recommendations to enhance microbial diversity and activity.</p>
+        <div id="recommendations-list">
+          <div class="recommendation-category">
+            <h3>Organic Amendments</h3>
+            <ul>
+              <li><strong>Compost Application:</strong> Add 2-4 inches of well-aged compost annually to increase microbial biomass by 20-50%.</li>
+              <li><strong>Manure Incorporation:</strong> Use composted manure to introduce beneficial microbes and improve soil structure.</li>
+              <li><strong>Biochar Addition:</strong> Incorporate biochar to create stable habitats for microbes and improve water retention.</li>
+            </ul>
+          </div>
+          <div class="recommendation-category">
+            <h3>Cover Crops and Crop Rotation</h3>
+            <ul>
+              <li><strong>Legume Cover Crops:</strong> Plant nitrogen-fixing legumes to increase microbial diversity through root exudates.</li>
+              <li><strong>Diverse Crop Rotations:</strong> Rotate crops to prevent pathogen buildup and promote varied microbial communities.</li>
+              <li><strong>Perennial Crops:</strong> Establish perennial systems to build stable microbial populations over time.</li>
+            </ul>
+          </div>
+          <div class="recommendation-category">
+            <h3>Tillage and Soil Management</h3>
+            <ul>
+              <li><strong>Reduced Tillage:</strong> Minimize tillage to preserve soil structure and microbial habitats.</li>
+              <li><strong>No-Till Farming:</strong> Adopt no-till practices to maintain fungal networks and soil aggregation.</li>
+              <li><strong>Mulching:</strong> Apply organic mulches to regulate soil temperature and moisture for microbial activity.</li>
+            </ul>
+          </div>
+          <div class="recommendation-category">
+            <h3>Natural Amendments and Practices</h3>
+            <ul>
+              <li><strong>Mycorrhizal Inoculants:</strong> Introduce beneficial fungi to enhance nutrient uptake and plant health.</li>
+              <li><strong>Biofertilizers:</strong> Use microbial-based fertilizers to stimulate soil microbial activity.</li>
+              <li><strong>Integrated Pest Management:</strong> Avoid broad-spectrum pesticides that harm beneficial microbes.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="implementation-tips">
+          <h3>Implementation Tips</h3>
+          <ul>
+            <li>Start with small test plots to monitor microbial responses to changes.</li>
+            <li>Regular soil testing can help track improvements in microbial health.</li>
+            <li>Combine multiple practices for synergistic benefits to soil microbes.</li>
+            <li>Be patient – microbial communities may take 1-3 years to fully respond to management changes.</li>
+          </ul>
+        </div>
+      </section>
+      <section id="resources" class="card">
+        <h2>Additional Resources</h2>
+        <p>For more information on soil microbiology and sustainable farming practices:</p>
+        <ul>
+          <li><a href="https://www.soilhealthinstitute.org/" target="_blank">Soil Health Institute</a></li>
+          <li><a href="https://www.nrcs.usda.gov/wps/portal/nrcs/main/soils/health/" target="_blank">USDA Soil Health</a></li>
+          <li><a href="https://www.sciencedirect.com/topics/agricultural-and-biological-sciences/soil-microbiome" target="_blank">Soil Microbiome Research</a></li>
+          <li><a href="https://www.extension.org/topics/soil-health/" target="_blank">Extension Soil Health Resources</a></li>
+        </ul>
+      </section>
+      <section id="data-sources" class="card">
+        <h2>Data Sources and Methodology</h2>
+        <p>This visualization is based on aggregated data from multiple soil microbiology studies and long-term farming systems research. Data includes:</p>
+        <ul>
+          <li>High-throughput sequencing of soil microbial communities</li>
+          <li>Phospholipid fatty acid (PLFA) analysis for microbial biomass</li>
+          <li>Enzyme activity assays for functional microbial diversity</li>
+          <li>Long-term agricultural experiment station data</li>
+        </ul>
+        <p>Charts are generated using Chart.js library with responsive design for various screen sizes. Data is presented for educational purposes and should be validated with local soil testing.</p>
+      </section>
+    </main>
+    <footer>
+      <p>&copy; 2026 Environment Animal Safety Hub. All rights reserved.</p>
+      <p>Data visualization powered by Chart.js. For research purposes only.</p>
+    </footer>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="../js/soil-microbiome-visualization.js"></script>
+</body>
+</html>

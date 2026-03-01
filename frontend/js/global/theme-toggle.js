@@ -12,12 +12,19 @@
 (function () {
   'use strict';
 
+  // Prevent duplicate initialization (some pages load this script more than once)
+  if (window.__ECO_THEME_TOGGLE_SCRIPT_LOADED__) return;
+  window.__ECO_THEME_TOGGLE_SCRIPT_LOADED__ = true;
+
+  let isInitialized = false;
+  let unsubscribeTheme = null;
+
   /**
    * Get the theme toggle button element
    * @returns {HTMLElement|null} Theme toggle button
    */
-  function getToggleBtn() {
-    return document.getElementById('themeToggle');
+  function getToggleBtns() {
+    return Array.from(document.querySelectorAll('#themeToggle'));
   }
 
   /**
@@ -25,19 +32,25 @@
    * @param {string} theme - Current theme ('light' | 'dark')
    */
   function updateIcon(theme) {
-    const toggleBtn = getToggleBtn();
-    if (!toggleBtn) return;
+    const toggleBtns = getToggleBtns();
+    if (!toggleBtns.length) return;
 
-    const icon = toggleBtn.querySelector('i');
-    if (!icon) return;
+    toggleBtns.forEach((toggleBtn) => {
+      let icon = toggleBtn.querySelector('i');
+      if (!icon) {
+        icon = document.createElement('i');
+        toggleBtn.innerHTML = '';
+        toggleBtn.appendChild(icon);
+      }
 
-    icon.classList.remove('fa-sun', 'fa-moon');
-    icon.classList.add(theme === 'dark' ? 'fa-sun' : 'fa-moon');
+      icon.classList.remove('fa-sun', 'fa-moon');
+      icon.classList.add('fa-solid', theme === 'dark' ? 'fa-sun' : 'fa-moon');
 
-    toggleBtn.setAttribute(
-      'aria-label',
-      theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
-    );
+      toggleBtn.setAttribute(
+        'aria-label',
+        theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+      );
+    });
   }
 
   /**
@@ -66,6 +79,16 @@
    * Initialize theme toggle functionality
    */
   function init() {
+    if (isInitialized) {
+      const currentTheme = window.PreferencesManager
+        ? window.PreferencesManager.getTheme()
+        : (localStorage.getItem('ecolife_theme') || 'light');
+      updateIcon(currentTheme);
+      return;
+    }
+
+    isInitialized = true;
+
     // Get current theme from PreferencesManager or fallback
     const currentTheme = window.PreferencesManager
       ? window.PreferencesManager.getTheme()
@@ -76,7 +99,7 @@
 
     // Subscribe to theme changes from PreferencesManager
     if (window.PreferencesManager) {
-      window.PreferencesManager.subscribe('theme', (newTheme) => {
+      unsubscribeTheme = window.PreferencesManager.subscribe('theme', (newTheme) => {
         updateIcon(newTheme);
       });
     }
@@ -86,6 +109,9 @@
       const btn = e.target.closest('#themeToggle');
       if (btn) handleToggleClick();
     });
+
+    // Mark binding so legacy page-specific scripts can avoid double-binding
+    window.__ECO_THEME_TOGGLE_BOUND__ = true;
   }
 
   // Wait for DOM and PreferencesManager to be ready
@@ -98,5 +124,15 @@
 
   // Expose init function globally for component-loader
   window.initThemeToggle = init;
+
+  // Optional cleanup hook for tests/debugging
+  window.destroyThemeToggle = function destroyThemeToggle() {
+    if (typeof unsubscribeTheme === 'function') {
+      unsubscribeTheme();
+      unsubscribeTheme = null;
+    }
+    isInitialized = false;
+    window.__ECO_THEME_TOGGLE_BOUND__ = false;
+  };
 
 })();

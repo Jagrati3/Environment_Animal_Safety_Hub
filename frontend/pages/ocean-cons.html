@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪸 Ocean Conservation · protect marine life</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Google Fonts: fluid, modern, clear -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #d0ecf0;
+            background: radial-gradient(circle at 10% 30%, #c0e4ec, #a8d0da);
+            min-height: 100vh;
+            color: #024d6e;
+            line-height: 1.6;
+        }
+
+        /* header – ocean depths, hopeful */
+        .ocean-header {
+            background: linear-gradient(145deg, #1f7a9c, #0d5270);
+            padding: 5rem 2rem 4.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+            border-bottom: 8px solid #a5e8f0;
+            box-shadow: 0 20px 40px #0d5270;
+        }
+
+        .ocean-header::before {
+            content: '🪸🌊';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.1;
+            left: -4rem;
+            bottom: -6rem;
+            transform: rotate(-10deg);
+        }
+
+        .ocean-header h1 {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 800;
+            font-size: 4rem;
+            color: #fcf9cf;
+            text-shadow: 6px 6px 0 #024d6e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .ocean-header h1 i {
+            color: #fef7b6;
+            filter: drop-shadow(0 0 8px #ffe48f);
+        }
+
+        .ocean-header p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 1.5rem auto;
+            background: #daf5ffc0;
+            padding: 0.8rem 2.5rem;
+            border-radius: 60px;
+            color: #015d82;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            border: 3px solid #a5e8f0;
+        }
+
+        .ocean-badge {
+            margin-top: 1.8rem;
+            display: inline-block;
+            background: #f5d889;
+            color: #025a7e;
+            padding: 0.6rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #fff2b5;
+        }
+
+        /* container */
+        .container {
+            max-width: 1400px;
+            margin: -3rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* filter/search bar */
+        .filter-bar {
+            background: #fafff2e0;
+            backdrop-filter: blur(8px);
+            border-radius: 80px;
+            padding: 1.5rem 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 30px #2b8ba070, 0 0 0 3px #a1e0f0 inset;
+            border: 3px solid #a5e0f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #1f7a9c;
+            font-size: 1.3rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 5rem;
+            border: 3px solid #b0e7f0;
+            border-radius: 60px;
+            font-size: 1rem;
+            background: white;
+            color: #024d6e;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.8rem 2rem;
+            border: 3px solid #b0e7f0;
+            border-radius: 60px;
+            background: white;
+            font-weight: 600;
+            color: #024d6e;
+            cursor: pointer;
+        }
+
+        /* topic chips */
+        .topic-chips {
+            margin-bottom: 2.5rem;
+        }
+
+        .chip-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: #60b8d0 #b0e7f0;
+        }
+
+        .chip-scroll::-webkit-scrollbar { height: 8px; }
+        .chip-scroll::-webkit-scrollbar-track { background: #c0eaf0; border-radius: 10px; }
+        .chip-scroll::-webkit-scrollbar-thumb { background: #60b8d0; border-radius: 10px; }
+
+        .topic-chip {
+            flex: 0 0 auto;
+            background: #f0fcfc;
+            padding: 1rem 2.5rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 6px 14px #2b8ba070;
+            cursor: pointer;
+            font-weight: 600;
+            border: 3px solid transparent;
+            transition: 0.2s;
+            font-size: 1.1rem;
+            color: #024d6e;
+        }
+
+        .topic-chip i { color: #026b94; font-size: 1.5rem; }
+        .topic-chip:hover { transform: translateY(-5px); border-color: #60b8d0; background: #e0f7ff; }
+        .topic-chip.active { background: #b0e7f0; border-color: #026b94; }
+
+        /* featured topic */
+        .featured-topic {
+            background: linear-gradient(145deg, #1f7a9c, #0d5270);
+            border-radius: 80px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            border: 8px solid #a5e8f0;
+            box-shadow: 0 30px 40px #0d5270;
+            color: #fcfae6;
+            position: relative;
+        }
+
+        .featured-topic::before {
+            content: '🐠';
+            font-size: 14rem;
+            opacity: 0.1;
+            position: absolute;
+            bottom: -2rem;
+            right: 2rem;
+            transform: rotate(5deg);
+        }
+
+        .topic-ribbon {
+            position: absolute;
+            top: 2rem;
+            right: 2.5rem;
+            background: #f5d889;
+            color: #024d6e;
+            padding: 0.6rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #fff8b0;
+        }
+
+        .topic-grid {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .topic-text h2 {
+            font-size: 2rem;
+            color: #fef7b6;
+            letter-spacing: 2px;
+        }
+
+        .topic-text h3 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 0.5rem 0;
+        }
+
+        .topic-meta {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            background: #479dbb;
+            padding: 0.6rem 2rem;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border: 2px solid #fef7b6;
+            color: #f0f9ff;
+        }
+
+        .meta-item i { color: #ffe684; }
+
+        .topic-desc {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+
+        .explore-btn {
+            background: #f5d889;
+            border: none;
+            color: #024d6e;
+            font-weight: 800;
+            font-size: 1.6rem;
+            padding: 1.2rem 3.5rem;
+            border-radius: 60px;
+            display: inline-flex;
+            align-items: center;
+            gap: 1.2rem;
+            cursor: pointer;
+            border: 4px solid #ffffcc;
+            box-shadow: 0 8px 0 #7f9940;
+            transition: 0.1s;
+        }
+
+        .explore-btn:active {
+            transform: translateY(8px);
+            box-shadow: none;
+        }
+
+        .topic-image {
+            height: 260px;
+            background: #67b3b0;
+            border-radius: 70px;
+            border: 6px solid #a5e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            color: #fffed0;
+        }
+
+        /* resources grid */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .resource-card {
+            background: #f0fcfc;
+            border-radius: 70px;
+            overflow: hidden;
+            box-shadow: 0 20px 30px #2b8ba070;
+            transition: all 0.3s;
+            border: 5px solid #a5e8f0;
+            cursor: pointer;
+            color: #024d6e;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-15px);
+            border-color: #f5d889;
+            box-shadow: 0 35px 45px #024d6e;
+        }
+
+        .card-image {
+            height: 140px;
+            background: linear-gradient(145deg, #70b8c0, #479dbb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #fcfcd2;
+            position: relative;
+        }
+
+        .type-tag {
+            position: absolute;
+            bottom: 0.8rem;
+            left: 1rem;
+            background: #024d6e;
+            color: #f5e7a0;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            border: 2px solid #f5d889;
+        }
+
+        .card-content {
+            padding: 1.8rem;
+        }
+
+        .card-category {
+            background: #b0e7f0;
+            padding: 0.3rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 0.7rem 0;
+        }
+
+        .card-source {
+            color: #026b94;
+            margin-bottom: 0.8rem;
+        }
+
+        .card-description {
+            color: #026b94;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .focus {
+            background: #f5d889;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+
+        .learn-btn {
+            background: #479dbb;
+            border: none;
+            color: white;
+            padding: 0.6rem 1.8rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            border: 2px solid #f5d889;
+        }
+
+        /* key indicators */
+        .indicators-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .indicator-card {
+            background: #f0fcfc;
+            border-radius: 70px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 4px solid #a5e8f0;
+        }
+
+        .indicator-number {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #024d6e;
+        }
+
+        /* modal */
+        .modal {
+            display: none; position: fixed; inset:0; background: #024d6ee6;
+            align-items: center; justify-content: center; z-index:2000;
+            backdrop-filter: blur(6px);
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #f0fcfc;
+            border-radius: 80px;
+            max-width: 700px;
+            width:100%;
+            border: 8px solid #f5d889;
+            color: #024d6e;
+        }
+
+        .back-to-top {
+            position: fixed; bottom:2rem; right:2rem;
+            background: #60b8d0; width:70px; height:70px; border-radius:50%;
+            display: none; align-items:center; justify-content:center;
+            font-size:2.2rem; color:#024d6e; border:5px solid #f5d889;
+            cursor:pointer; z-index:1000;
+        }
+        .back-to-top.visible { display: flex; }
+
+        @media (max-width:800px){
+            .topic-grid { grid-template-columns:1fr; }
+            .indicators-row { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- header -->
+    <header class="ocean-header">
+        <h1>
+            <i class="fas fa-water"></i> Ocean Conservation & Marine Life
+            <i class="fas fa-fish"></i>
+        </h1>
+        <p>protect the blue heart of our planet</p>
+        <div class="ocean-badge"><i class="fas fa-heart"></i> 30x30 target</div>
+    </header>
+
+    <div class="container">
+        <!-- filter bar -->
+        <div class="filter-bar" data-aos="fade-up">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="search marine species, threats, solutions...">
+            </div>
+            <div class="filter-options">
+                <select class="filter-select"><option>all topics</option><option>coral reefs</option><option>marine mammals</option><option>plastic pollution</option><option>MPAs</option></select>
+                <select class="filter-select"><option>by region</option></select>
+            </div>
+        </div>
+
+        <!-- topic chips -->
+        <div class="topic-chips" data-aos="fade-up">
+            <div class="chip-scroll">
+                <div class="topic-chip active"><i class="fas fa-water"></i> all</div>
+                <div class="topic-chip"><i class="fas fa-coral"></i> coral reefs</div>
+                <div class="topic-chip"><i class="fas fa-fish"></i> fish & sharks</div>
+                <div class="topic-chip"><i class="fas fa-dolphin"></i> marine mammals</div>
+                <div class="topic-chip"><i class="fas fa-turtle"></i> sea turtles</div>
+                <div class="topic-chip"><i class="fas fa-trash"></i> pollution</div>
+            </div>
+        </div>
+
+        <!-- featured topic -->
+        <div class="featured-topic" data-aos="zoom-in">
+            <span class="topic-ribbon"><i class="fas fa-star"></i> critical ecosystem</span>
+            <div class="topic-grid">
+                <div class="topic-text">
+                    <h2>🪸 tropical rainforests of the sea</h2>
+                    <h3>Coral Reefs</h3>
+                    <div class="topic-meta">
+                        <span class="meta-item"><i class="fas fa-fish"></i> 25% marine species</span>
+                        <span class="meta-item"><i class="fas fa-exclamation-triangle"></i> 50% lost since 1950</span>
+                    </div>
+                    <p class="topic-desc">Coral reefs support more species per unit area than any other marine environment. They protect coastlines and provide food for millions.</p>
+                    <button class="explore-btn" onclick="exploreTopic('coral reefs')"><i class="fas fa-ship"></i> explore</button>
+                </div>
+                <div class="topic-image"><i class="fas fa-coral"></i></div>
+            </div>
+        </div>
+
+        <!-- key indicators -->
+        <div class="indicators-row" data-aos="fade-up">
+            <div class="indicator-card"><span class="indicator-number">8M</span> <br>tons plastic enter ocean/year</div>
+            <div class="indicator-card"><span class="indicator-number">90%</span> <br>large fish populations depleted</div>
+            <div class="indicator-card"><span class="indicator-number">17%</span> <br>of ocean protected (target 30%)</div>
+        </div>
+
+        <!-- resources grid (js) -->
+        <div class="resources-grid" id="resourcesGrid"></div>
+    </div>
+
+    <!-- modal -->
+    <div class="modal" id="oceanModal">
+        <div class="modal-content" style="padding:2.5rem;">
+            <button style="float:right; background:none; border:none; font-size:3rem; color:#024d6e;" onclick="closeModal()">✕</button>
+            <div style="text-align:center;">
+                <div style="font-size:5rem;" id="modalOceanEmoji">🐋</div>
+                <h2 id="modalOceanTitle" style="font-size:2.8rem;">blue whale</h2>
+                <p id="modalOceanDesc" style="margin:2rem 0;">endangered · largest animal on Earth</p>
+                <button class="explore-btn" onclick="viewMarine()" style="font-size:1.2rem;">🔍 learn more</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({duration:800,once:true});
+
+        // marine resources data
+        const marineResources = [
+            { name:"Coral Restoration Guide", type:"reef", org:"Reef Life", description:"step-by-step coral gardening", focus:"restoration", icon:"fa-coral" },
+            { name:"Whale Shark Tracker", type:"species", org:"Marine Megafauna", description:"migration patterns", focus:"conservation", icon:"fa-fish" },
+            { name:"Plastic Pollution Primer", type:"pollution", org:"Ocean Cleanup", description:"sources and solutions", focus:"awareness", icon:"fa-trash" },
+            { name:"Marine Protected Areas", type:"policy", org:"MPA Atlas", description:"global database", focus:"policy", icon:"fa-map" },
+            { name:"Sea Turtle Survival", type:"species", org:"WWF", description:"threats and nesting beaches", focus:"endangered", icon:"fa-turtle" },
+            { name:"Deep Sea Mining", type:"threat", org:"Greenpeace", description:"risks to abyssal plains", focus:"advocacy", icon:"fa-mountain" },
+            { name:"Ocean Acidification", type:"climate", org:"NOAA", description:"chemistry and impacts", focus:"research", icon:"fa-flask" },
+            { name:"Sustainable Seafood Guide", type:"consumption", org:"Monterey Bay", description:"choose ocean-friendly fish", focus:"consumer", icon:"fa-fish" },
+        ];
+
+        function renderResources() {
+            const grid = document.getElementById('resourcesGrid');
+            grid.innerHTML = marineResources.map(r => `
+                <div class="resource-card" onclick="showOceanResource('${r.name}','${r.type} · ${r.org} · ${r.description} · focus: ${r.focus}','${r.icon}')">
+                    <div class="card-image"><i class="fas ${r.icon}"></i><span class="type-tag">${r.type}</span></div>
+                    <div class="card-content">
+                        <span class="card-category">${r.focus}</span>
+                        <div class="card-title">${r.name}</div>
+                        <div class="card-source"><i class="fas fa-building"></i> ${r.org}</div>
+                        <div class="card-description">${r.description}</div>
+                        <div class="card-footer">
+                            <span class="focus">✨ ${r.focus}</span>
+                            <button class="learn-btn" onclick="event.stopPropagation(); learnOcean('${r.name}')">learn</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+        renderResources();
+
+        window.showOceanResource = (title, desc, icon) => {
+            document.getElementById('modalOceanTitle').innerText = title;
+            document.getElementById('modalOceanDesc').innerText = desc;
+            document.getElementById('modalOceanEmoji').innerHTML = `<i class="fas ${icon}"></i>`;
+            document.getElementById('oceanModal').classList.add('active');
+        };
+
+        window.closeModal = () => document.getElementById('oceanModal').classList.remove('active');
+        window.exploreTopic = (name) => alert(`🧭 exploring ${name || 'marine topic'}...`);
+        window.learnOcean = (name) => alert(`📘 opening resource: ${name}`);
+        window.viewMarine = () => { alert('🐋 marine species profile (demo).'); closeModal(); };
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // modal escape
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('oceanModal')) closeModal(); };
+    </script>
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧭 Eco Decision Simulator · see your impact</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts: clear + readable -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #dcf0e6;
+            background: radial-gradient(circle at 80% 20%, #c5ecd4, #b1decf);
+            min-height: 100vh;
+            color: #043b27;
+        }
+
+        /* simulator header – compass / future */
+        .sim-header {
+            background: linear-gradient(135deg, #115c45, #0b3d2f);
+            padding: 5rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+            border-bottom: 6px solid #a1e6c0;
+            box-shadow: 0 20px 40px #0d513e;
+        }
+
+        .sim-header::before {
+            content: '🧭';
+            position: absolute;
+            font-size: 18rem;
+            opacity: 0.12;
+            right: -2rem;
+            top: -3rem;
+            transform: rotate(20deg);
+        }
+
+        .sim-header h1 {
+            font-weight: 800;
+            font-size: 4.2rem;
+            color: #eaffdc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            text-shadow: 5px 5px 0 #1d5e47;
+        }
+
+        .sim-header h1 i {
+            color: #ffde8d;
+            filter: drop-shadow(0 0 10px #fcedb3);
+        }
+
+        .sim-header p {
+            font-size: 1.6rem;
+            max-width: 750px;
+            margin: 1rem auto;
+            background: #c4f0d7c0;
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            color: #043e28;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+            border: 2px solid #abf5cc;
+        }
+
+        .version-pill {
+            margin-top: 1.8rem;
+            background: #266e54;
+            display: inline-block;
+            padding: 0.5rem 2.2rem;
+            border-radius: 60px;
+            color: #f2ffe6;
+            font-weight: 600;
+            border: 2px solid #b5f5d1;
+        }
+
+        /* container */
+        .container {
+            max-width: 1400px;
+            margin: -3rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* control panel – glass + sliders */
+        .control-panel {
+            background: #f6fff0e2;
+            backdrop-filter: blur(10px);
+            border-radius: 80px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 30px #226d5080, 0 0 0 2px #bef5d0 inset;
+            border: 3px solid #b0f5c0;
+        }
+
+        .panel-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            color: #145f41;
+        }
+
+        .slider-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem 3rem;
+        }
+
+        .slider-item {
+            background: #eafff0;
+            border-radius: 60px;
+            padding: 1.5rem 2rem;
+            box-shadow: inset 0 2px 8px #9fd8b9;
+        }
+
+        .slider-item label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: #0a563a;
+        }
+
+        .slider-item label i {
+            color: #09804c;
+            font-size: 1.8rem;
+        }
+
+        input[type=range] {
+            width: 100%;
+            height: 12px;
+            background: linear-gradient(90deg, #ccf0dd, #60c48c);
+            border-radius: 20px;
+            -webkit-appearance: none;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 28px; height: 28px;
+            background: #146b3a;
+            border-radius: 50%;
+            border: 4px solid #d6ffb0;
+            cursor: pointer;
+            box-shadow: 0 4px 8px #0e4d2e;
+        }
+
+        .value-badge {
+            float: right;
+            background: #197a4d;
+            color: white;
+            padding: 0.3rem 1.3rem;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+
+        /* impact meter */
+        .impact-meter {
+            background: #e0f7e6;
+            border-radius: 70px;
+            padding: 2.5rem;
+            margin: 3rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+            border: 5px solid #a3e0b3;
+        }
+
+        .meter-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .meter-left i {
+            font-size: 4rem;
+            color: #0f7542;
+        }
+
+        .co2-gauge {
+            background: #2f8f64;
+            padding: 1rem 3rem;
+            border-radius: 60px;
+            color: white;
+            font-weight: 700;
+            font-size: 2rem;
+        }
+
+        .simulate-btn {
+            background: #09804c;
+            border: none;
+            color: white;
+            font-weight: 800;
+            font-size: 1.8rem;
+            padding: 1.3rem 3.5rem;
+            border-radius: 60px;
+            display: inline-flex;
+            align-items: center;
+            gap: 1.2rem;
+            cursor: pointer;
+            border: 3px solid #d3ffbe;
+            box-shadow: 0 8px 0 #1b5a40;
+            transition: 0.1s ease;
+        }
+
+        .simulate-btn:active {
+            transform: translateY(8px);
+            box-shadow: none;
+        }
+
+        /* scenario cards grid */
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .scenario-card {
+            background: #f5fff0;
+            border-radius: 60px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px #18583d;
+            transition: all 0.3s;
+            border: 4px solid #b7e6c5;
+            cursor: pointer;
+        }
+
+        .scenario-card:hover {
+            transform: translateY(-12px);
+            border-color: #f7d86c;
+            box-shadow: 0 30px 40px #0a5a3a;
+        }
+
+        .scenario-image {
+            height: 150px;
+            background: linear-gradient(145deg, #71b58b, #3d9565);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #fbffe2;
+            position: relative;
+        }
+
+        .scenario-impact-badge {
+            position: absolute;
+            bottom: 0.8rem;
+            right: 1rem;
+            background: #0e2e1e;
+            color: #c3ffb0;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+
+        .scenario-content {
+            padding: 1.8rem;
+        }
+
+        .scenario-title {
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: #115f38;
+        }
+
+        .scenario-desc {
+            color: #2b6949;
+            margin: 0.5rem 0 1.2rem;
+        }
+
+        .scenario-footprint {
+            display: inline-block;
+            background: #cff0d0;
+            padding: 0.3rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+
+        /* future forecast */
+        .forecast {
+            background: #f2ffe9;
+            border-radius: 70px;
+            padding: 3rem;
+            margin: 4rem 0;
+            border: 6px solid #a4e0b0;
+        }
+
+        .forecast-stats {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .stat-circle {
+            background: #b0efc2;
+            width: 150px; height: 150px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            border: 6px solid #328a55;
+        }
+
+        .stat-circle span { font-size: 2.5rem; color: #044e29; }
+
+        /* modal */
+        .modal {
+            display: none; position: fixed; inset:0; background: #0c462ed9;
+            align-items: center; justify-content: center; z-index:2000;
+            padding:1.5rem;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #f2ffee;
+            border-radius: 70px;
+            max-width: 700px;
+            width:100%;
+            border: 8px solid #b4f5b0;
+            color:#175a32;
+        }
+
+        .back-to-top {
+            position: fixed; bottom:2rem; right:2rem;
+            background: #289f62; width:70px; height:70px; border-radius:50%;
+            display: none; align-items:center; justify-content:center;
+            font-size:2.2rem; color:#ebffd3; border:5px solid #c3ffb0;
+            cursor:pointer; z-index:1000;
+        }
+        .back-to-top.visible { display: flex; }
+
+        @media (max-width:800px){
+            .slider-grid { grid-template-columns:1fr; }
+            .impact-meter { flex-direction: column; align-items: start; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- header -->
+    <header class="sim-header">
+        <h1>
+            <i class="fas fa- compass"></i> Eco Decision Simulator
+            <i class="fas fa-leaf"></i>
+        </h1>
+        <p>adjust your choices · see the future impact · change the planet</p>
+        <div class="version-pill"><i class="fas fa-flask"></i> scenario model v2.1</div>
+    </header>
+
+    <div class="container">
+        <!-- main interactive panel -->
+        <div class="control-panel" data-aos="fade-up">
+            <div class="panel-title"><i class="fas fa-sliders-h"></i> choose your levers</div>
+            <div class="slider-grid">
+                <div class="slider-item">
+                    <label><i class="fas fa-car"></i> transport shift <span class="value-badge" id="transportVal">45%</span></label>
+                    <input type="range" id="transportSlider" min="0" max="100" value="45" step="1">
+                    <div style="display:flex; justify-content:space-between; margin-top:0.5rem;"><span>more cars</span><span>EV / transit</span></div>
+                </div>
+                <div class="slider-item">
+                    <label><i class="fas fa-plug"></i> renewable energy <span class="value-badge" id="energyVal">30%</span></label>
+                    <input type="range" id="energySlider" min="0" max="100" value="30" step="1">
+                    <div><span>fossil ⇢ green</span></div>
+                </div>
+                <div class="slider-item">
+                    <label><i class="fas fa-utensils"></i> plant‑based diet <span class="value-badge" id="dietVal">20%</span></label>
+                    <input type="range" id="dietSlider" min="0" max="100" value="20" step="1">
+                    <div><span>meat heavy ⇢ vegan</span></div>
+                </div>
+                <div class="slider-item">
+                    <label><i class="fas fa-recycle"></i> circular economy <span class="value-badge" id="circularVal">25%</span></label>
+                    <input type="range" id="circularSlider" min="0" max="100" value="25" step="1">
+                    <div><span>linear ⇢ circular</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- live impact meter -->
+        <div class="impact-meter" data-aos="fade-up" id="impactMeter">
+            <div class="meter-left">
+                <i class="fas fa-cloud-sun"></i>
+                <div style="font-weight:600; font-size:1.8rem;">total CO₂e / year</div>
+            </div>
+            <div class="co2-gauge" id="co2Display">6.8 t</div>
+            <button class="simulate-btn" id="runSimBtn"><i class="fas fa-play"></i> simulate</button>
+        </div>
+
+        <!-- scenario cards (quick presets) -->
+        <h2 style="font-size:2.2rem; margin: 2rem 0 1rem; color:#115f38;"><i class="fas fa-bolt"></i> explore scenarios</h2>
+        <div class="scenario-grid" id="scenarioGrid"></div>
+
+        <!-- future forecast dashboard -->
+        <div class="forecast" data-aos="fade-up">
+            <h2 style="font-size:2.5rem; margin-bottom:2rem;"><i class="fas fa-chart-line"></i> 2050 forecast based on your mix</h2>
+            <div class="forecast-stats">
+                <div class="stat-circle"><span id="tempAnomaly">+1.8</span>°C</div>
+                <div class="stat-circle"><span id="sealevel">0.24</span>m</div>
+                <div class="stat-circle"><span id="forests">-12</span>%</div>
+            </div>
+            <p style="margin-top:2rem; font-style:italic; color:#0b4f2f;">*simulated using AI earth model v2.8</p>
+        </div>
+
+        <!-- call to action -->
+        <div style="background:#c4f0cf; border-radius:70px; padding:2.5rem; text-align:center; margin:3rem 0;">
+            <p style="font-size:2rem;">⚡ every decision shapes tomorrow ⚡</p>
+        </div>
+    </div>
+
+    <!-- modal for deeper dive -->
+    <div class="modal" id="scenarioModal">
+        <div class="modal-content" style="padding:2.5rem;">
+            <button style="float:right; background:none; border:none; font-size:3rem;" onclick="closeModal()">✕</button>
+            <div style="text-align:center;">
+                <i class="fas fa-globe-asia" style="font-size:5rem;color:#187a4b;"></i>
+                <h2 id="modalScenarioTitle" style="font-size:2.8rem;">scenario</h2>
+                <p id="modalScenarioDesc" style="margin:2rem 0;">details</p>
+                <button class="simulate-btn" onclick="applyScenario()" style="font-size:1.4rem;">apply this scenario</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({duration:800, once:true});
+
+        // sliders UI
+        const transport = document.getElementById('transportSlider');
+        const energy = document.getElementById('energySlider');
+        const diet = document.getElementById('dietSlider');
+        const circular = document.getElementById('circularSlider');
+
+        const transportVal = document.getElementById('transportVal');
+        const energyVal = document.getElementById('energyVal');
+        const dietVal = document.getElementById('dietVal');
+        const circularVal = document.getElementById('circularVal');
+
+        function updateSliderReadouts() {
+            transportVal.innerText = transport.value + '%';
+            energyVal.innerText = energy.value + '%';
+            dietVal.innerText = diet.value + '%';
+            circularVal.innerText = circular.value + '%';
+            updateCO2();
+        }
+
+        transport.addEventListener('input', updateSliderReadouts);
+        energy.addEventListener('input', updateSliderReadouts);
+        diet.addEventListener('input', updateSliderReadouts);
+        circular.addEventListener('input', updateSliderReadouts);
+
+        // co2 calculation (simple model)
+        function computeCO2() {
+            const t = 100 - parseInt(transport.value);   // lower cars => less CO2
+            const e = 100 - parseInt(energy.value);      // more renewables => less
+            const d = 100 - parseInt(diet.value);        // plant-based reduction
+            const c = parseInt(circular.value);           // circularity helps
+
+            // base 10t, each factor reduces
+            let co2 = 10.0;
+            co2 -= (t / 100) * 2.3;       // transport max -2.3t
+            co2 -= (e / 100) * 2.5;        // energy max -2.5t
+            co2 -= (d / 100) * 1.7;        // diet max -1.7t
+            co2 -= (c / 100) * 1.2;         // circular max -1.2t
+            if (co2 < 1.2) co2 = 1.2;
+            return co2.toFixed(1);
+        }
+
+        function updateCO2() {
+            const co2 = computeCO2();
+            document.getElementById('co2Display').innerText = co2 + ' t';
+
+            // update forecast numbers
+            const co2num = parseFloat(co2);
+            // rough models
+            let temp = 1.5 + (co2num - 2.0) * 0.15;
+            if (temp > 3.5) temp = 3.5;
+            document.getElementById('tempAnomaly').innerText = '+' + temp.toFixed(1);
+            let sea = 0.18 + (co2num - 2.0) * 0.04;
+            if (sea > 0.7) sea = 0.7;
+            document.getElementById('sealevel').innerText = sea.toFixed(2);
+            let forestLoss = 5 + (co2num - 2.0) * 3;
+            if (forestLoss > 25) forestLoss = 25;
+            document.getElementById('forests').innerText = '-' + Math.floor(forestLoss);
+        }
+
+        // simulate button
+        document.getElementById('runSimBtn').addEventListener('click', ()=>{
+            alert('🧮 running full earth simulation with your mix... \nCO₂ = ' + computeCO2() + 't · check 2050 forecast.');
+            updateCO2();
+        });
+
+        // scenario cards
+        const scenarios = [
+            { name:"green新政", desc:"40% renewables, 40% plant-based, 30% circular", transport:60, energy:70, diet:50, circular:60, co2:"3.2t" },
+            { name:"fossil heavy", desc:"low adoption, high emissions", transport:15, energy:10, diet:10, circular:10, co2:"8.9t" },
+            { name:"circular leap", desc:"strong recycling + sharing economy", transport:30, energy:30, diet:20, circular:90, co2:"5.1t" },
+            { name:"ultra green", desc:"ambitious 80% green everywhere", transport:85, energy:90, diet:70, circular:80, co2:"2.1t" },
+        ];
+
+        function renderScenarios() {
+            const grid = document.getElementById('scenarioGrid');
+            grid.innerHTML = scenarios.map(s => `
+                <div class="scenario-card" onclick="showScenario('${s.name}','${s.desc} · estimated CO₂: ${s.co2} · transport ${s.transport}% · energy ${s.energy}% · diet ${s.diet}% · circular ${s.circular}%')">
+                    <div class="scenario-image"><i class="fas fa-leaf"></i><span class="scenario-impact-badge">${s.co2}</span></div>
+                    <div class="scenario-content">
+                        <div class="scenario-title">${s.name}</div>
+                        <p class="scenario-desc">${s.desc.substring(0,30)}…</p>
+                        <span class="scenario-footprint">footprint ${s.co2}</span>
+                    </div>
+                </div>`).join('');
+        }
+        renderScenarios();
+
+        window.showScenario = (title, desc) => {
+            document.getElementById('modalScenarioTitle').innerText = title;
+            document.getElementById('modalScenarioDesc').innerText = desc;
+            document.getElementById('scenarioModal').classList.add('active');
+        };
+
+        window.applyScenario = () => {
+            // find scenario by title? for demo we just set moderate
+            transport.value = 60; energy.value = 60; diet.value = 40; circular.value = 50;
+            updateSliderReadouts();
+            updateCO2();
+            closeModal();
+            alert('✅ scenario applied · sliders updated');
+        };
+
+        window.closeModal = () => document.getElementById('scenarioModal').classList.remove('active');
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0, behavior:'smooth'});
+
+        // escape modal
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('scenarioModal')) closeModal(); };
+
+        // initial update
+        updateSliderReadouts();
+    </script>
+</body>
+</html>

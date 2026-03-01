@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🕯️ Digital Tree of Memories · ancestral archive</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f0e17;
+            min-height: 100vh;
+            color: #e4dbc9;
+            line-height: 1.6;
+        }
+
+        /* main header – poetic, memorial */
+        .memorial-header {
+            background: linear-gradient(145deg, #1a1a2a, #16213e);
+            padding: 6rem 2rem 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid #aa8c5e;
+            box-shadow: 0 20px 40px -10px #00000055;
+        }
+
+        .memorial-header::before {
+            content: '🌳';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.05;
+            left: 0;
+            bottom: -4rem;
+            transform: rotate(-5deg);
+        }
+
+        .memorial-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 50%, #5f4b32 0%, transparent 50%);
+            opacity: 0.2;
+        }
+
+        .candle-icon {
+            font-size: 3.5rem;
+            color: #e0b07f;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 15px #f5b34277);
+            animation: flicker 4s infinite;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; text-shadow: 0 0 8px #f5b342; }
+            25% { opacity: 0.8; text-shadow: 0 0 15px #f5b342; }
+            50% { opacity: 1; text-shadow: 0 0 5px #f5b342; }
+            75% { opacity: 0.9; text-shadow: 0 0 12px #f5b342; }
+        }
+
+        .memorial-header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4.5rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #edd9b0, #c5a582);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            letter-spacing: 4px;
+        }
+
+        .memorial-header h1 i {
+            font-size: 3rem;
+            color: #b38b60;
+            margin: 0 0.5rem;
+        }
+
+        .memorial-header p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0.5rem auto 0;
+            color: #c7b59e;
+            font-style: italic;
+        }
+
+        .scroll-quote {
+            margin-top: 2rem;
+            font-size: 1.2rem;
+            background: #2c2539b0;
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            backdrop-filter: blur(6px);
+            border: 1px solid #aa8c5e;
+            color: #efdecb;
+        }
+
+        /* container */
+        .container {
+            max-width: 1400px;
+            margin: -3rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* memory lantern / filter bar */
+        .ritual-bar {
+            background: #1e1a2b;
+            border-radius: 70px;
+            padding: 1.5rem 2.5rem;
+            margin-bottom: 4rem;
+            box-shadow: 0 15px 30px #00000050, 0 0 0 1px #aa8c5e inset;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            backdrop-filter: blur(4px);
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #b38b60;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 4rem;
+            border: 2px solid #3f3a4a;
+            border-radius: 60px;
+            font-size: 1rem;
+            background: #0d0b14;
+            color: #ebdcc8;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #c2a27f;
+            box-shadow: 0 0 0 4px #6d5b4770;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .filter-select {
+            padding: 0.8rem 2rem;
+            border: 2px solid #3f3a4a;
+            border-radius: 40px;
+            background: #0d0b14;
+            color: #e4dbc9;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .filter-select:hover {
+            border-color: #c2a27f;
+        }
+
+        /* branches = categories */
+        .branches-section {
+            margin-bottom: 3rem;
+        }
+
+        .branches-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: #b38b60 #282336;
+        }
+
+        .branches-scroll::-webkit-scrollbar {
+            height: 8px;
+        }
+        .branches-scroll::-webkit-scrollbar-track { background: #282336; border-radius: 10px; }
+        .branches-scroll::-webkit-scrollbar-thumb { background: #b38b60; border-radius: 10px; }
+
+        .branch-pill {
+            flex: 0 0 auto;
+            background: #1f1b2c;
+            padding: 1rem 2.2rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 8px 20px #00000055;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            color: #e4dbc9;
+            font-size: 1.1rem;
+        }
+
+        .branch-pill i {
+            color: #d9b382;
+            font-size: 1.3rem;
+        }
+
+        .branch-pill:hover {
+            transform: translateY(-5px);
+            border-color: #d9b382;
+            background: #2d2642;
+            box-shadow: 0 15px 25px #b38b6030;
+        }
+
+        .branch-pill.active {
+            background: #3d2e43;
+            border: 2px solid #e3b185;
+            color: #fae4c6;
+        }
+
+        /* featured memory – like an old shrine */
+        .featured-memory {
+            background: linear-gradient(145deg, #1d192b, #141122);
+            border-radius: 70px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            border: 2px solid #aa8c5e;
+            box-shadow: 0 20px 40px #00000080, 0 0 0 2px #7f6242 inset;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-memory::before {
+            content: '🕯️';
+            position: absolute;
+            font-size: 18rem;
+            opacity: 0.04;
+            right: -1rem;
+            bottom: -3rem;
+            transform: rotate(10deg);
+        }
+
+        .memory-badge {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: #966f48;
+            color: #fcf0e0;
+            padding: 0.6rem 2rem;
+            border-radius: 60px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            font-size: 1rem;
+            border: 1px solid #e2b58b;
+        }
+
+        .featured-content {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .memory-text h2 {
+            color: #cfa776;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+        }
+
+        .memory-text h3 {
+            font-size: 3rem;
+            font-family: 'Cormorant Garamond', serif;
+            color: #f5dec9;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .memory-meta {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .memory-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #cfb595;
+        }
+
+        .memory-meta-item i {
+            color: #d9b382;
+            font-size: 1.3rem;
+        }
+
+        .memory-description {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #dbcbb8;
+            margin-bottom: 2.5rem;
+            font-style: italic;
+        }
+
+        .light-candle-btn {
+            background: #6f4f35;
+            color: #fcf3e4;
+            border: none;
+            padding: 1.2rem 3rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid #d9b382;
+        }
+
+        .light-candle-btn:hover {
+            background: #8b6847;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px #d9b38260;
+            border-color: #fad6a3;
+        }
+
+        .memory-image {
+            height: 320px;
+            background: linear-gradient(145deg, #4f4236, #2f281f);
+            border-radius: 60px;
+            border: 3px solid #b5956b;
+            box-shadow: 0 0 40px #b38b6040;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 7rem;
+            color: #d9b38290;
+        }
+
+        /* memories grid — like leaves */
+        .memories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 2.5rem;
+            margin: 4rem 0;
+        }
+
+        .memory-card {
+            background: #1b1727;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 20px 30px #00000070;
+            transition: all 0.4s;
+            cursor: pointer;
+            border: 2px solid transparent;
+            border-bottom: 4px solid #6f4f35;
+            animation: emerge 0.6s;
+        }
+
+        @keyframes emerge {
+            0% { opacity:0; transform:translateY(20px); }
+            100% { opacity:1; transform:translateY(0); }
+        }
+
+        .memory-card:hover {
+            transform: translateY(-12px);
+            border-color: #cfa776;
+            box-shadow: 0 25px 45px #000000b0, 0 0 0 2px #aa8c5e inset;
+        }
+
+        .memory-image-sm {
+            height: 200px;
+            background: linear-gradient(145deg, #423d33, #2a231c);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .memory-image-sm i {
+            font-size: 4.5rem;
+            color: #b5956b90;
+            transition: all 0.3s;
+        }
+
+        .memory-card:hover .memory-image-sm i {
+            transform: scale(1.1);
+            color: #d9b382;
+        }
+
+        .memory-year {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            background: #0e0b16e0;
+            padding: 0.4rem 1.5rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(4px);
+            border: 1px solid #b38b60;
+            color: #efd7ba;
+        }
+
+        .memory-card-content {
+            padding: 2rem;
+        }
+
+        .memory-tag {
+            background: #2d253d;
+            color: #cfa776;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .memory-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: #edd9c2;
+            margin-bottom: 0.3rem;
+        }
+
+        .memory-relation {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #b79e82;
+            margin-bottom: 0.8rem;
+        }
+
+        .memory-relation i {
+            color: #cfa776;
+        }
+
+        .memory-excerpt {
+            color: #b9aa99;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .candle-count {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #a4815f;
+        }
+
+        .candle-count i {
+            color: #f5b342;
+        }
+
+        .memory-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+        }
+
+        .candle-btn {
+            background: transparent;
+            border: 2px solid #6f4f35;
+            color: #f0dcc8;
+            padding: 0.6rem 2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .candle-btn:hover {
+            background: #8b6847;
+            border-color: #e3b185;
+        }
+
+        /* candle ritual section */
+        .ritual-section {
+            background: #151122;
+            border-radius: 70px;
+            padding: 4rem;
+            margin: 4rem 0;
+            border: 1px solid #aa8c5e;
+            box-shadow: inset 0 0 30px #000000;
+        }
+
+        .candle-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .candle-ritual-card {
+            background: #221e30;
+            border-radius: 50px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid #826b4b;
+            transition: 0.3s;
+        }
+
+        .candle-ritual-card:hover {
+            background: #2e2745;
+            border-color: #e0b07f;
+        }
+
+        .candle-icon-large {
+            font-size: 4rem;
+            color: #ecc590;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 12px orange);
+        }
+
+        .candle-ritual-card h3 {
+            font-size: 1.8rem;
+            font-family: 'Cormorant Garamond', serif;
+            color: #edd1b3;
+            margin-bottom: 1rem;
+        }
+
+        /* testimony / memories whispers */
+        .whispers-section {
+            background: #1e192b;
+            border-radius: 70px;
+            padding: 3rem;
+        }
+
+        .whisper-slide {
+            background: #151122;
+            padding: 2rem;
+            border-radius: 50px;
+            border-left: 6px solid #b38b60;
+        }
+
+        .slider-dot {
+            background: #4a3f33;
+        }
+        .slider-dot.active {
+            background: #b38b60;
+        }
+
+        /* modal — lightbox for memory */
+        .modal {
+            display: none;
+            position: fixed;
+            top:0;left:0;width:100%;height:100%;
+            background: #000000e6;
+            z-index:2000;
+            align-items: center;
+            justify-content: center;
+            padding:2rem;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #1d192b;
+            border-radius: 70px;
+            max-width: 800px;
+            width:100%;
+            border: 3px solid #aa8c5e;
+            color:#efdecb;
+        }
+        .modal-close {
+            position:absolute; top:2rem; right:2rem;
+            background:#6f4f35; border:none; color:white; width:50px; height:50px; border-radius:50%; font-size:1.8rem; cursor:pointer;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem; right: 2rem;
+            background: #6f4f35;
+            color: white;
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            border: 2px solid #e0b07f;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        .back-to-top.visible { display: flex; }
+
+        @media (max-width:900px){
+            .featured-content { grid-template-columns:1fr; }
+            .candle-grid { grid-template-columns:1fr; }
+            .memorial-header h1 { font-size:3rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- header -->
+    <header class="memorial-header">
+        <div class="candle-icon"><i class="fas fa-candle-holder"></i></div>
+        <h1><i class="fas fa-tree"></i> Digital Tree of Memories <i class="fas fa-tree"></i></h1>
+        <p>each leaf a story · each candle a prayer</p>
+        <div class="scroll-quote"><i class="fas fa-feather"></i> "those we love never truly leave us"</div>
+    </header>
+
+    <div class="container">
+        <!-- ritual bar -->
+        <div class="ritual-bar" data-aos="fade-up">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="search for a name, memory, year...">
+            </div>
+            <div class="filter-options">
+                <select class="filter-select"><option>all generations</option><option>elders</option><option>children</option><option>ancestors</option></select>
+                <select class="filter-select"><option>most candles</option><option>recently added</option></select>
+            </div>
+        </div>
+
+        <!-- branches (categories) -->
+        <div class="branches-section" data-aos="fade-up">
+            <div class="branches-scroll">
+                <div class="branch-pill active"><i class="fas fa-tree"></i> all memories</div>
+                <div class="branch-pill"><i class="fas fa-hand-holding-heart"></i> grandparents</div>
+                <div class="branch-pill"><i class="fas fa-feather"></i> poets & thinkers</div>
+                <div class="branch-pill"><i class="fas fa-dove"></i> lost too soon</div>
+                <div class="branch-pill"><i class="fas fa-crown"></i> matriarchs</div>
+                <div class="branch-pill"><i class="fas fa-star-and-crescent"></i> guardians</div>
+            </div>
+        </div>
+
+        <!-- featured memory (always lit) -->
+        <div class="featured-memory" data-aos="fade-up">
+            <div class="memory-badge"><i class="fas fa-candle-holder"></i> 1,248 candles lit</div>
+            <div class="featured-content">
+                <div class="memory-text">
+                    <h2>🕯️ memory of the grove</h2>
+                    <h3>Eleanor Rose Vancouver<br>1927–2022</h3>
+                    <div class="memory-meta">
+                        <div class="memory-meta-item"><i class="fas fa-calendar-alt"></i> 95 years</div>
+                        <div class="memory-meta-item"><i class="fas fa-leaf"></i> storyteller</div>
+                        <div class="memory-meta-item"><i class="fas fa-book-open"></i> 312 stories</div>
+                    </div>
+                    <p class="memory-description">“She planted this tree fifty years ago. Now her stories blossom on every branch. Her laughter still echoes through the leaves.”</p>
+                    <button class="light-candle-btn" onclick="lightCandle(0)"><i class="fas fa-candle-holder"></i> light a candle</button>
+                </div>
+                <div class="memory-image"><i class="fas fa-tree"></i></div>
+            </div>
+        </div>
+
+        <!-- memories grid -->
+        <div class="memories-grid" id="memoriesGrid"></div>
+
+        <!-- candle ritual section -->
+        <div class="ritual-section" data-aos="fade-up">
+            <h2 style="font-family:'Cormorant Garamond',serif; font-size:3rem; text-align:center; color:#e7cba9;"><i class="fas fa-candle-holder"></i> lighting rituals</h2>
+            <div class="candle-grid">
+                <div class="candle-ritual-card">
+                    <div class="candle-icon-large"><i class="fas fa-candle-holder"></i></div>
+                    <h3>remembrance candle</h3>
+                    <p>light a candle for a name, it joins the tree’s glow</p>
+                </div>
+                <div class="candle-ritual-card">
+                    <div class="candle-icon-large"><i class="fas fa-calendar-alt"></i></div>
+                    <h3>death anniversary</h3>
+                    <p>today 7 people lit candles for ancestors</p>
+                </div>
+                <div class="candle-ritual-card">
+                    <div class="candle-icon-large"><i class="fas fa-dove"></i></div>
+                    <h3>peace light</h3>
+                    <p>collective meditation every full moon</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- whispers (testimonials) -->
+        <div class="whispers-section" data-aos="fade-up">
+            <h2 style="font-family:'Cormorant Garamond',serif; font-size:2.5rem; margin-bottom:2rem; color:#e7cba9;"><i class="fas fa-quote-right"></i> whispers from the tree</h2>
+            <div class="whisper-slide">
+                <i class="fas fa-candle-holder" style="color:#cfa776; font-size:2rem;"></i>
+                <p style="font-size:1.3rem; margin:1rem 0;">“I lit a candle for my grandfather and felt his presence. The tree remembers.”</p>
+                <p>— Clara, granddaughter</p>
+            </div>
+            <div style="display:flex; gap:0.8rem; justify-content:center; margin-top:2rem;">
+                <span class="slider-dot active"></span><span class="slider-dot"></span><span class="slider-dot"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal -->
+    <div class="modal" id="memoryModal">
+        <div class="modal-content" style="padding:2rem;">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div style="text-align:center;">
+                <i class="fas fa-tree" style="font-size:5rem; color:#cfa776;"></i>
+                <h2 id="modalName" style="font-size:2.8rem; font-family:'Cormorant Garamond';">Eleanor Rose</h2>
+                <p id="modalYears">1927–2022</p>
+                <p style="margin:2rem 0;" id="modalStory">full memory appears here...</p>
+                <button class="light-candle-btn" onclick="lightCandle(1)"><i class="fas fa-candle-holder"></i> light a candle</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+
+        // memory data
+        const memories = [
+            { name:"Eleanor Rose", birth:"1927", death:"2022", relation:"grandmother", desc:"Storyteller, gardener, heart of the family.", candles:1248, icon:"fa-tree", tag:"matriarch" },
+            { name:"James Carter", birth:"1950", death:"2015", relation:"father", desc:"Taught me to see the stars. Miss his laugh.", candles:876, icon:"fa-star", tag:"guardian" },
+            { name:"Liliane Dubois", birth:"1932", death:"2020", relation:"great-aunt", desc:"Parisian artist, painted gardens full of light.", candles:523, icon:"fa-paint-brush", tag:"poet" },
+            { name:"Amara Okafor", birth:"1945", death:"2021", relation:"matriarch", desc:"kept the family stories. her voice was honey.", candles:1450, icon:"fa-crown", tag:"matriarch" },
+            { name:"Theo Chen", birth:"1988", death:"2021", relation:"brother", desc:"adventurer, kind soul. forever young.", candles:2100, icon:"fa-dove", tag:"lost too soon" },
+            { name:"Miriam Goldstein", birth:"1915", death:"2008", relation:"grandmother", desc:"fled war, built home. her courage blooms.", candles:932, icon:"fa-feather", tag:"guardian" }
+        ];
+
+        function renderMemories() {
+            const grid = document.getElementById('memoriesGrid');
+            grid.innerHTML = memories.map(m => `
+                <div class="memory-card" onclick="showMemory('${m.name}', '${m.birth}', '${m.death}', '${m.desc}')">
+                    <div class="memory-image-sm"><i class="fas ${m.icon}"></i><span class="memory-year">${m.birth} – ${m.death}</span></div>
+                    <div class="memory-card-content">
+                        <span class="memory-tag"><i class="fas fa-candle-holder"></i> ${m.tag}</span>
+                        <div class="memory-name">${m.name}</div>
+                        <div class="memory-relation"><i class="fas fa-heart"></i> ${m.relation}</div>
+                        <p class="memory-excerpt">${m.desc}</p>
+                        <div class="memory-footer">
+                            <span class="candle-count"><i class="fas fa-candle-holder"></i> ${m.candles} candles</span>
+                            <button class="candle-btn" onclick="lightCandle(event, '${m.name}')"><i class="fas fa-candle-holder"></i> light</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+        renderMemories();
+
+        window.showMemory = (name,birth,death,desc) => {
+            document.getElementById('modalName').innerText = name;
+            document.getElementById('modalYears').innerText = birth+' – '+death;
+            document.getElementById('modalStory').innerText = desc;
+            document.getElementById('memoryModal').classList.add('active');
+        };
+        window.closeModal = () => document.getElementById('memoryModal').classList.remove('active');
+        window.lightCandle = (e, name) => {
+            if(e) e.stopPropagation();
+            alert(`🕯️ A candle has been lit for ${name || 'your memory'}. The tree glows brighter.`);
+        };
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.addEventListener('click', ()=> window.scrollTo({top:0,behavior:'smooth'}));
+
+        // close modal on esc
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target === document.getElementById('memoryModal')) closeModal(); };
+    </script>
+</body>
+</html>

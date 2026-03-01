@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌿 Nature Quest · adventure awaits</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts: outdoor + friendly -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
+    
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #eaf7e1;
+            background-image: radial-gradient(circle at 20% 30%, #d2e8c0 0%, #b8d9a6 100%);
+            min-height: 100vh;
+            color: #1e3f2f;
+        }
+
+        /* adventure header – forest vibe */
+        .quest-header {
+            background: linear-gradient(145deg, #2a5c3e, #1a4a2d);
+            padding: 5rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+            border-bottom: 6px solid #ffc857;
+            box-shadow: 0 20px 30px #2a5c3e60;
+        }
+
+        .quest-header::before {
+            content: '🏕️';
+            position: absolute;
+            font-size: 18rem;
+            opacity: 0.1;
+            left: -2rem;
+            bottom: -4rem;
+            transform: rotate(-10deg);
+        }
+
+        .quest-header::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="0,100 100,80 100,100 0,100" fill="%23eaf7e1" opacity="0.2"/></svg>');
+            background-size: cover;
+        }
+
+        .quest-header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: #f9e7b3;
+            text-shadow: 5px 5px 0 #1f4d2e;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .quest-header h1 i {
+            color: #ffc857;
+            filter: drop-shadow(2px 4px 4px #00000040);
+        }
+
+        .quest-header p {
+            font-size: 1.6rem;
+            max-width: 750px;
+            margin: 0.5rem auto;
+            background: #fbf5e3d0;
+            padding: 0.7rem 2rem;
+            border-radius: 60px;
+            color: #1a4a2d;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            border: 2px solid #ffcf8a;
+        }
+
+        .compass-icon {
+            font-size: 2.5rem;
+            margin-right: 0.3rem;
+            animation: spin 12s infinite linear;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* container */
+        .container {
+            max-width: 1400px;
+            margin: -3rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* expedition filter bar – like a trail sign */
+        .trail-bar {
+            background: #fcf9ef;
+            border-radius: 80px;
+            padding: 1.5rem 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 30px #2b573b60, 0 0 0 2px #aac7a2 inset;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            border: 2px solid #9bbc87;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #538e5b;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 4rem;
+            border: 3px solid #bfdec2;
+            border-radius: 60px;
+            font-size: 1.1rem;
+            background: white;
+            color: #1e4628;
+            transition: 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: #f4b740;
+            outline: none;
+            box-shadow: 0 0 0 6px #ffcf8a70;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.8rem 2rem;
+            border: 3px solid #bfdec2;
+            border-radius: 50px;
+            background: white;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            color: #1a4a2d;
+            cursor: pointer;
+        }
+
+        .filter-select:hover {
+            border-color: #f4b740;
+        }
+
+        /* quest categories – like trail markers */
+        .trail-categories {
+            margin-bottom: 3rem;
+        }
+
+        .categories-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: #f4b740 #b3d3a8;
+        }
+
+        .categories-scroll::-webkit-scrollbar { height: 10px; }
+        .categories-scroll::-webkit-scrollbar-track { background: #cbe5c1; border-radius: 10px; }
+        .categories-scroll::-webkit-scrollbar-thumb { background: #f4b740; border-radius: 10px; }
+
+        .category-badge {
+            flex: 0 0 auto;
+            background: #fbffe6;
+            padding: 1rem 2.2rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 8px 12px #3f754a40;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 3px solid transparent;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #1e4a2b;
+        }
+
+        .category-badge i {
+            color: #e68a2e;
+            font-size: 1.4rem;
+        }
+
+        .category-badge:hover {
+            transform: translateY(-6px);
+            border-color: #f4b740;
+            background: #ffeeca;
+        }
+
+        .category-badge.active {
+            background: #f9d77e;
+            border-color: #bd6b1e;
+            color: #2d5720;
+        }
+
+        /* featured quest – hero expedition */
+        .featured-quest {
+            background: linear-gradient(135deg, #3f7849, #25623a);
+            border-radius: 70px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            border: 6px solid #ffcd7e;
+            box-shadow: 0 20px 40px #1e482a;
+            position: relative;
+            color: #fef7e9;
+        }
+
+        .featured-quest::before {
+            content: '⛰️';
+            font-size: 18rem;
+            opacity: 0.1;
+            position: absolute;
+            bottom: -3rem;
+            right: 0;
+        }
+
+        .quest-ribbon {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: #f9b23f;
+            color: #223d1c;
+            padding: 0.7rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1.3rem;
+            box-shadow: 0 8px 0 #9f5d1a;
+            border: 2px solid #ffefc0;
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .featured-text h2 {
+            font-size: 1.8rem;
+            color: #ffdcaa;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .featured-text h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            color: white;
+            text-shadow: 4px 4px 0 #1e5f2e;
+            margin-bottom: 1rem;
+        }
+
+        .featured-details {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: #2e6d3eb0;
+            padding: 0.5rem 1.8rem;
+            border-radius: 40px;
+            backdrop-filter: blur(2px);
+            border: 1px solid #ffcd7e;
+        }
+
+        .detail-item i {
+            color: #ffc857;
+            font-size: 1.5rem;
+        }
+
+        .featured-description {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+
+        .btn-embark {
+            background: #ffb02e;
+            border: none;
+            padding: 1.3rem 4rem;
+            border-radius: 60px;
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: #203d17;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #9f601f;
+            transition: 0.1s ease;
+            border: 2px solid #ffe1a4;
+        }
+
+        .btn-embark:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #9f601f;
+        }
+
+        .featured-image {
+            height: 340px;
+            background: #86aa7d;
+            border-radius: 60px;
+            border: 5px solid #ffcf8a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            color: #fffde6;
+            text-shadow: 0 0 20px #ad6b35;
+        }
+
+        /* adventures grid */
+        .quests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2.5rem;
+            margin: 4rem 0;
+        }
+
+        .quest-card {
+            background: #fefcf0;
+            border-radius: 60px;
+            overflow: hidden;
+            box-shadow: 0 20px 30px #1c4d2d70;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 4px solid #99bb8f;
+            animation: pop 0.5s;
+        }
+
+        @keyframes pop {
+            0% { opacity:0; transform: scale(0.9); }
+            100% { opacity:1; transform: scale(1); }
+        }
+
+        .quest-card:hover {
+            transform: translateY(-16px) rotate(1deg);
+            border-color: #f7b731;
+            box-shadow: 0 30px 40px #2b5f36;
+        }
+
+        .quest-image {
+            height: 210px;
+            background: linear-gradient(145deg, #93ad7c, #6d956b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .quest-image i {
+            font-size: 5rem;
+            color: #ffffdd;
+            transition: 0.3s;
+        }
+
+        .quest-card:hover .quest-image i {
+            transform: scale(1.2) rotate(5deg);
+            color: #ffea9e;
+        }
+
+        .difficulty {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            background: #1e4124;
+            color: #f5d98f;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 700;
+            border: 2px solid #ffc857;
+        }
+
+        .quest-content {
+            padding: 2rem;
+        }
+
+        .quest-type {
+            background: #cae3be;
+            padding: 0.4rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 700;
+            color: #25562b;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .quest-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            color: #1e4f28;
+            margin-bottom: 0.5rem;
+        }
+
+        .quest-location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #5f7e55;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .quest-location i {
+            color: #e68a2e;
+        }
+
+        .quest-description {
+            color: #3f5f41;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .quest-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #e2f0da;
+            padding: 0.3rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+
+        .meta-item i {
+            color: #f4a261;
+        }
+
+        .quest-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quest-price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #346b39;
+        }
+        .quest-price small {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #6d8f68;
+        }
+
+        .join-btn {
+            background: #5ca34d;
+            border: none;
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid #fad05c;
+        }
+
+        .join-btn:hover {
+            background: #418a33;
+            transform: scale(1.1);
+        }
+
+        /* gear checklist */
+        .gear-section {
+            background: #e9f2db;
+            border-radius: 70px;
+            padding: 4rem;
+            margin: 4rem 0;
+            border: 5px solid #b0cf9f;
+        }
+
+        .gear-grid {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .gear-item {
+            background: #f9f9ea;
+            border-radius: 50px;
+            padding: 2rem;
+            text-align: center;
+            border: 3px solid #aac7a2;
+        }
+
+        .gear-item i {
+            font-size: 3.5rem;
+            color: #c57c2a;
+        }
+
+        .gear-item h4 {
+            font-size: 1.8rem;
+            color: #235b2a;
+        }
+
+        /* stories */
+        .stories-section {
+            background: #faf6e9;
+            border-radius: 70px;
+            padding: 3rem;
+            margin: 4rem 0;
+        }
+
+        .story-card {
+            background: #ecf3df;
+            padding: 2rem;
+            border-radius: 50px;
+            border-left: 10px solid #ffb347;
+        }
+
+        /* modal */
+        .modal {
+            display: none; position: fixed; top:0; left:0; width:100%; height:100%;
+            background: #164323db; z-index:2000; align-items:center; justify-content:center;
+            padding:2rem;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #fcf9e7;
+            border-radius: 70px;
+            max-width: 800px;
+            width:100%;
+            border: 5px solid #f4b740;
+            color: #1f4629;
+        }
+
+        .back-to-top {
+            position: fixed; bottom:2rem; right:2rem;
+            background: #ffb347; width:70px; height:70px; border-radius:50%;
+            display: none; align-items:center; justify-content:center;
+            font-size:2rem; color:#254f1d; border:4px solid #ffefb0;
+            cursor:pointer; z-index:1000;
+        }
+        .back-to-top.visible { display: flex; }
+
+        @media (max-width: 1000px){
+            .featured-grid { grid-template-columns:1fr; }
+            .gear-grid { grid-template-columns:1fr 1fr; }
+        }
+        @media (max-width:700px){
+            .gear-grid { grid-template-columns:1fr; }
+            .quest-header h1 { font-size:3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- header -->
+    <header class="quest-header">
+        <h1>
+            <span class="compass-icon"><i class="fas fa-compass"></i></span>
+            Nature Quest <span style="font-size: 0.7em;">⚡</span> Adventure
+        </h1>
+        <p><i class="fas fa-map-signs"></i> find your path · embrace the wild</p>
+        <div style="margin-top: 1.5rem; font-size: 1.5rem; color: #f9eeb3;">🏞️ 48 expeditions · 12 countries</div>
+    </header>
+
+    <div class="container">
+        <!-- trail filter -->
+        <div class="trail-bar" data-aos="fade-up">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="search quests by trail, difficulty, or wildlife...">
+            </div>
+            <div class="filter-options">
+                <select class="filter-select"><option>all difficulties</option><option>easy</option><option>moderate</option><option>strenuous</option></select>
+                <select class="filter-select"><option>any region</option><option>mountains</option><option>forest</option><option>coastal</option></select>
+            </div>
+        </div>
+
+        <!-- categories / trail badges -->
+        <div class="trail-categories" data-aos="fade-up">
+            <div class="categories-scroll">
+                <div class="category-badge active"><i class="fas fa-mountain"></i> all trails</div>
+                <div class="category-badge"><i class="fas fa-tree"></i> forest deep</div>
+                <div class="category-badge"><i class="fas fa-water"></i> river & lake</div>
+                <div class="category-badge"><i class="fas fa-hiking"></i> summit quest</div>
+                <div class="category-badge"><i class="fas fa-campground"></i> basecamp</div>
+                <div class="category-badge"><i class="fas fa-paw"></i> wildlife watch</div>
+                <div class="category-badge"><i class="fas fa-feather"></i> birding</div>
+            </div>
+        </div>
+
+        <!-- featured quest -->
+        <div class="featured-quest" data-aos="zoom-in">
+            <div class="quest-ribbon"><i class="fas fa-crown"></i> legendary</div>
+            <div class="featured-grid">
+                <div class="featured-text">
+                    <h2>⚡ trail of the ancients</h2>
+                    <h3>Misty Pine Traverse</h3>
+                    <div class="featured-details">
+                        <span class="detail-item"><i class="fas fa-clock"></i> 5 days</span>
+                        <span class="detail-item"><i class="fas fa-signal"></i> moderate</span>
+                        <span class="detail-item"><i class="fas fa-users"></i> 12 adventurers</span>
+                    </div>
+                    <p class="featured-description">Follow ancient pine forests, sleep under redwoods, and wake to elk herds. Includes backcountry camping, stargazing, and a hidden waterfall.</p>
+                    <button class="btn-embark" onclick="embark(0)"><i class="fas fa-boot"></i> embark now</button>
+                </div>
+                <div class="featured-image"><i class="fas fa-tree"></i></div>
+            </div>
+        </div>
+
+        <!-- quest grid (javascript generated) -->
+        <div class="quests-grid" id="questsGrid"></div>
+
+        <!-- gear checklist -->
+        <div class="gear-section" data-aos="fade-up">
+            <h2 style="font-size: 3rem; font-family:Montserrat; color:#1e5f2e; text-align:center;">⛺ recommended gear</h2>
+            <div class="gear-grid">
+                <div class="gear-item"><i class="fas fa-boot"></i><h4>hiking boots</h4><p>waterproof, broken-in</p></div>
+                <div class="gear-item"><i class="fas fa-binoculars"></i><h4>binoculars</h4><p>spot wildlife</p></div>
+                <div class="gear-item"><i class="fas fa-campground"></i><h4>tent & bag</h4><p>3-season</p></div>
+                <div class="gear-item"><i class="fas fa-map"></i><h4>topo map</h4><p>+ compass</p></div>
+            </div>
+        </div>
+
+        <!-- adventurers stories -->
+        <div class="stories-section" data-aos="fade-up">
+            <h2 style="font-size: 2.8rem; color:#235f2a;"><i class="fas fa-fire"></i> trail stories</h2>
+            <div class="story-card">
+                <p style="font-size:1.4rem;">“The Misty Pine Traverse changed me. Saw a family of deer at dawn. Our guide knew every plant.” – <strong>Alex R.</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal -->
+    <div class="modal" id="questModal">
+        <div class="modal-content" style="padding:2.5rem;">
+            <button style="float:right; background:none; border:none; font-size:2.5rem;" onclick="closeModal()">✕</button>
+            <div style="text-align:center;">
+                <i class="fas fa-map" style="font-size:5rem;color:#e68a2e;"></i>
+                <h2 id="modalQuestName" style="font-size:3rem;">Misty Pine</h2>
+                <p id="modalQuestDesc">detailed info...</p>
+                <button class="btn-embark" onclick="embark(1)"><i class="fas fa-flag-checkered"></i> join this quest</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({duration:800,once:true});
+
+        const adventures = [
+            { name:"Misty Pine Traverse", difficulty:"moderate", days:5, loc:"Sierra Nevada", desc:"Ancient forest, hot springs, elk.", price:"$299", icon:"fa-tree", type:"backpacking" },
+            { name:"Canyon Dawn", difficulty:"strenuous", days:3, loc:"Zion region", desc:"Slot canyons, sandstone cliffs, camp under stars.", price:"$189", icon:"fa-mountain", type:"hiking" },
+            { name:"River Paddle", difficulty:"easy", days:2, loc:"Boundary Waters", desc:"Canoe, loons, camp on islands.", price:"$149", icon:"fa-water", type:"canoe" },
+            { name:"Wildflower Ridge", difficulty:"easy", days:1, loc:"Blue Ridge", desc:"Wildflower meadows, picnic, easy hike.", price:"$79", icon:"fa-feather", type:"day hike" },
+            { name:"Glacier Outlook", difficulty:"strenuous", days:6, loc:"North Cascades", desc:"Glacier views, ice axe training, alpine lakes.", price:"$499", icon:"fa-snowflake", type:"mountaineering" },
+            { name:"Wolf Tracking", difficulty:"moderate", days:4, loc:"Yellowstone", desc:"Learn tracking, wildlife biology, wolf howls.", price:"$359", icon:"fa-paw", type:"wildlife" }
+        ];
+
+        function renderQuests() {
+            const grid = document.getElementById('questsGrid');
+            grid.innerHTML = adventures.map(a => `
+                <div class="quest-card" onclick="showQuest('${a.name}','${a.desc} · ${a.loc} · ${a.difficulty}')">
+                    <div class="quest-image"><i class="fas ${a.icon}"></i><span class="difficulty">${a.difficulty}</span></div>
+                    <div class="quest-content">
+                        <span class="quest-type">${a.type}</span>
+                        <div class="quest-title">${a.name}</div>
+                        <div class="quest-location"><i class="fas fa-map-pin"></i> ${a.loc}</div>
+                        <p class="quest-description">${a.desc}</p>
+                        <div class="quest-meta">
+                            <span class="meta-item"><i class="fas fa-clock"></i> ${a.days} days</span>
+                            <span class="meta-item"><i class="fas fa-signal"></i> ${a.difficulty}</span>
+                        </div>
+                        <div class="quest-footer">
+                            <span class="quest-price">${a.price} <small>/person</small></span>
+                            <button class="join-btn" onclick="embark(event, '${a.name}')"><i class="fas fa-binoculars"></i> join</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+        renderQuests();
+
+        window.showQuest = (name,desc) => {
+            document.getElementById('modalQuestName').innerText = name;
+            document.getElementById('modalQuestDesc').innerText = desc;
+            document.getElementById('questModal').classList.add('active');
+        };
+        window.closeModal = () => document.getElementById('questModal').classList.remove('active');
+        window.embark = (e, name) => {
+            if(e) e.stopPropagation();
+            alert(`🌲 ready to embark on ${name || 'the quest'}! check your email for trail notes.`);
+        };
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll',()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // escape
+        document.addEventListener('keydown',(e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('questModal')) closeModal(); };
+    </script>
+</body>
+</html>

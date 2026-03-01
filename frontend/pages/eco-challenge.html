@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco-Challenge Tracker | EcoLife</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js for progress visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f7f0 0%, #e1f0e1 100%);
+            min-height: 100vh;
+            color: #2d3e2d;
+        }
+
+        /* Header */
+        .challenge-header {
+            background: linear-gradient(135deg, #1b4d1b, #2d6a2d);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+
+        .challenge-header::before {
+            content: '🏆';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.1;
+            right: -2rem;
+            bottom: -3rem;
+            transform: rotate(15deg);
+        }
+
+        .challenge-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .challenge-header h1 i {
+            color: #ff9800;
+        }
+
+        .challenge-header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: -2rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* User Profile Card */
+        .profile-card {
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            box-shadow: 0 10px 30px rgba(255,152,0,0.3);
+        }
+
+        .profile-text h2 {
+            color: #1b4d1b;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-text p {
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .profile-stat {
+            text-align: center;
+        }
+
+        .profile-stat .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ff9800;
+            display: block;
+        }
+
+        .profile-stat .label {
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 30px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2e7d32;
+            font-size: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .card-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1b4d1b;
+        }
+
+        .card-change {
+            color: #4caf50;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Progress Chart */
+        .chart-container {
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .chart-header h2 {
+            color: #1b4d1b;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chart-btn {
+            padding: 0.5rem 1.2rem;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .chart-btn:hover {
+            border-color: #ff9800;
+        }
+
+        .chart-btn.active {
+            background: #ff9800;
+            border-color: #ff9800;
+            color: white;
+        }
+
+        .chart-wrapper {
+            height: 300px;
+            position: relative;
+        }
+
+        /* Active Challenges Section */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            color: #1b4d1b;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .create-challenge-btn {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .create-challenge-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255,152,0,0.3);
+        }
+
+        /* Challenges Grid */
+        .challenges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .challenge-card {
+            background: white;
+            border-radius: 30px;
+            padding: 1.8rem;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .challenge-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff9800, #4caf50, #ff9800);
+            background-size: 200% 100%;
+            animation: gradientMove 3s linear infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        .challenge-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(255,152,0,0.2);
+        }
+
+        .challenge-badge {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .badge.beginner {
+            background: #4caf50;
+            color: white;
+        }
+
+        .badge.intermediate {
+            background: #ff9800;
+            color: white;
+        }
+
+        .badge.advanced {
+            background: #f44336;
+            color: white;
+        }
+
+        .challenge-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #2e7d32;
+            margin-bottom: 1.5rem;
+        }
+
+        .challenge-title {
+            font-size: 1.5rem;
+            color: #1b4d1b;
+            margin-bottom: 0.5rem;
+            padding-right: 4rem;
+        }
+
+        .challenge-description {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .challenge-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .meta-item i {
+            color: #ff9800;
+        }
+
+        .progress-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: #f0f0f0;
+            border-radius: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #ff9800);
+            border-radius: 30px;
+            transition: width 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, rgba(255,255,255,0.3), rgba(255,255,255,0));
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .challenge-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .challenge-points {
+            background: #fff3e0;
+            color: #ff9800;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .update-progress-btn {
+            background: none;
+            border: 2px solid #ff9800;
+            color: #ff9800;
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .update-progress-btn:hover {
+            background: #ff9800;
+            color: white;
+        }
+
+        /* Completed Challenges */
+        .completed-section {
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            margin: 3rem 0;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .completed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .completed-header h2 {
+            color: #1b4d1b;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .completed-badge {
+            background: #4caf50;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+
+        .completed-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .completed-item {
+            background: #f8f9fa;
+            border-radius: 25px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .completed-item:hover {
+            background: #e8f5e9;
+            transform: translateX(5px);
+        }
+
+        .completed-icon {
+            width: 50px;
+            height: 50px;
+            background: #4caf50;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .completed-info h4 {
+            color: #1b4d1b;
+            margin-bottom: 0.2rem;
+        }
+
+        .completed-info p {
+            color: #666;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        /* Leaderboard */
+        .leaderboard-section {
+            background: linear-gradient(135deg, #1b4d1b, #2d6a2d);
+            border-radius: 40px;
+            padding: 2rem;
+            margin: 3rem 0;
+            color: white;
+        }
+
+        .leaderboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .leaderboard-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .leaderboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .leaderboard-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .leaderboard-rank {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #ff9800;
+            margin-bottom: 0.5rem;
+        }
+
+        .leaderboard-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            border: 3px solid white;
+        }
+
+        .leaderboard-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .leaderboard-points {
+            color: #ff9800;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .leaderboard-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Create Challenge Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 50px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2.5rem;
+            position: relative;
+            animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #333;
+            transform: rotate(90deg);
+        }
+
+        .modal h2 {
+            color: #1b4d1b;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff9800;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255,152,0,0.3);
+        }
+
+        /* Update Progress Modal */
+        .progress-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .progress-modal.active {
+            display: flex;
+        }
+
+        .progress-modal-content {
+            background: white;
+            border-radius: 50px;
+            max-width: 400px;
+            width: 100%;
+            padding: 2.5rem;
+            text-align: center;
+        }
+
+        .progress-value {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #ff9800;
+            margin: 1rem 0;
+        }
+
+        .slider-container {
+            margin: 2rem 0;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 10px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 25px;
+            height: 25px;
+            background: #ff9800;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(255,152,0,0.3);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            background: #f57c00;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .leaderboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .challenge-header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .profile-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-info {
+                flex-direction: column;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .challenges-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Achievements */
+        .achievement-toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 10px 30px rgba(255,152,0,0.3);
+            transform: translateY(200%);
+            transition: transform 0.3s;
+            z-index: 3000;
+        }
+
+        .achievement-toast.show {
+            transform: translateY(0);
+        }
+
+        .achievement-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="challenge-header">
+        <h1>
+            <i class="fas fa-trophy"></i>
+            Eco-Challenge Tracker
+        </h1>
+        <p>Turn eco-friendly actions into achievements! Complete challenges, earn points, and save the planet 🌍</p>
+    </header>
+
+    <div class="container">
+        <!-- User Profile -->
+        <div class="profile-card">
+            <div class="profile-info">
+                <div class="profile-avatar">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <div class="profile-text">
+                    <h2>Eco Warrior</h2>
+                    <p><i class="fas fa-map-pin"></i> Member since March 2026</p>
+                </div>
+            </div>
+            <div class="profile-stats">
+                <div class="profile-stat">
+                    <span class="number" id="totalPoints">2,450</span>
+                    <span class="label">Total Points</span>
+                </div>
+                <div class="profile-stat">
+                    <span class="number" id="completedCount">12</span>
+                    <span class="label">Completed</span>
+                </div>
+                <div class="profile-stat">
+                    <span class="number" id="streakDays">15</span>
+                    <span class="label">Day Streak</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-calendar-check"></i></div>
+                    <div class="card-title">Active Challenges</div>
+                </div>
+                <div class="card-value" id="activeCount">6</div>
+                <div class="card-change"><i class="fas fa-arrow-up"></i> +2 this week</div>
+            </div>
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-tree"></i></div>
+                    <div class="card-title">CO₂ Saved</div>
+                </div>
+                <div class="card-value" id="co2Saved">127 kg</div>
+                <div class="card-change">≈ 3 trees planted</div>
+            </div>
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-bottle-water"></i></div>
+                    <div class="card-title">Plastic Reduced</div>
+                </div>
+                <div class="card-value" id="plasticReduced">45 kg</div>
+                <div class="card-change">≈ 2,250 bottles</div>
+            </div>
+        </div>
+
+        <!-- Progress Chart -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <h2>
+                    <i class="fas fa-chart-line"></i>
+                    Your Impact Over Time
+                </h2>
+                <div class="chart-controls">
+                    <button class="chart-btn active" data-range="week">Week</button>
+                    <button class="chart-btn" data-range="month">Month</button>
+                    <button class="chart-btn" data-range="year">Year</button>
+                </div>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="impactChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Active Challenges Header -->
+        <div class="section-header">
+            <h2>
+                <i class="fas fa-play-circle"></i>
+                Active Challenges
+            </h2>
+            <button class="create-challenge-btn" onclick="openCreateModal()">
+                <i class="fas fa-plus-circle"></i>
+                Create Challenge
+            </button>
+        </div>
+
+        <!-- Challenges Grid -->
+        <div class="challenges-grid" id="challengesGrid"></div>
+
+        <!-- Completed Challenges -->
+        <div class="completed-section">
+            <div class="completed-header">
+                <h2>
+                    <i class="fas fa-check-circle"></i>
+                    Completed Challenges
+                </h2>
+                <div class="completed-badge">12 Completed</div>
+            </div>
+            <div class="completed-list" id="completedList"></div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="leaderboard-section">
+            <div class="leaderboard-header">
+                <h2>
+                    <i class="fas fa-crown"></i>
+                    Top Eco Warriors
+                </h2>
+                <span>This Month</span>
+            </div>
+            <div class="leaderboard-grid" id="leaderboardGrid"></div>
+        </div>
+    </div>
+
+    <!-- Create Challenge Modal -->
+    <div class="modal" id="createModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeCreateModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2>
+                <i class="fas fa-plus-circle"></i>
+                Create New Challenge
+            </h2>
+            <form id="createForm">
+                <div class="form-group">
+                    <label>Challenge Title</label>
+                    <input type="text" id="challengeTitle" placeholder="e.g., Plastic-Free Week" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="challengeDesc" placeholder="Describe your challenge..." required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="challengeCategory">
+                            <option value="plastic">Plastic Free</option>
+                            <option value="energy">Energy Saver</option>
+                            <option value="water">Water Conservation</option>
+                            <option value="transport">Green Transport</option>
+                            <option value="food">Sustainable Food</option>
+                            <option value="waste">Zero Waste</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Difficulty</label>
+                        <select id="challengeDifficulty">
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Duration (days)</label>
+                        <input type="number" id="challengeDuration" min="1" max="90" value="7">
+                    </div>
+                    <div class="form-group">
+                        <label>Points</label>
+                        <input type="number" id="challengePoints" min="10" max="1000" value="100">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Target (e.g., 5 plastic bottles, 10km walked)</label>
+                    <input type="text" id="challengeTarget" placeholder="e.g., 0 single-use plastics">
+                </div>
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-check-circle"></i>
+                    Create Challenge
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Update Progress Modal -->
+    <div class="progress-modal" id="progressModal">
+        <div class="progress-modal-content">
+            <button class="modal-close" onclick="closeProgressModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 id="progressTitle">Update Progress</h2>
+            <div class="progress-value" id="progressValue">50%</div>
+            <div class="slider-container">
+                <input type="range" class="slider" id="progressSlider" min="0" max="100" value="0">
+            </div>
+            <button class="submit-btn" onclick="updateProgress()">
+                <i class="fas fa-check"></i>
+                Update
+            </button>
+        </div>
+    </div>
+
+    <!-- Achievement Toast -->
+    <div class="achievement-toast" id="achievementToast">
+        <div class="achievement-icon">
+            <i class="fas fa-trophy"></i>
+        </div>
+        <div class="achievement-text">
+            <h4 id="achievementTitle">Achievement Unlocked!</h4>
+            <p id="achievementDesc">Challenge Completed</p>
+        </div>
+    </div>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Sample challenges data
+        let challenges = [
+            {
+                id: 1,
+                title: "Plastic-Free Week",
+                description: "Avoid single-use plastics for 7 days. Use reusable bags, bottles, and containers.",
+                category: "plastic",
+                difficulty: "beginner",
+                duration: 7,
+                points: 100,
+                target: "0 single-use plastics",
+                progress: 60,
+                completed: false,
+                icon: "fa-bottle-water",
+                startedAt: "2026-03-01",
+                daily: [0, 2, 0, 1, 0, 0, 0]
+            },
+            {
+                id: 2,
+                title: "30-Day Cycling Challenge",
+                description: "Commute by bike instead of car for 30 days. Save fuel and reduce emissions.",
+                category: "transport",
+                difficulty: "intermediate",
+                duration: 30,
+                points: 300,
+                target: "30 bike commutes",
+                progress: 33,
+                completed: false,
+                icon: "fa-bicycle",
+                startedAt: "2026-02-15",
+                daily: [5, 5, 5, 5, 5, 5, 5]
+            },
+            {
+                id: 3,
+                title: "Zero Food Waste",
+                description: "Plan meals and use all groceries without throwing any food away.",
+                category: "food",
+                difficulty: "intermediate",
+                duration: 14,
+                points: 200,
+                target: "0kg food waste",
+                progress: 75,
+                completed: false,
+                icon: "fa-utensils",
+                startedAt: "2026-03-05",
+                daily: [2, 2, 2, 2, 2, 2, 2]
+            },
+            {
+                id: 4,
+                title: "Energy Saver",
+                description: "Reduce electricity usage by 20%. Turn off lights, unplug devices, use LED bulbs.",
+                category: "energy",
+                difficulty: "beginner",
+                duration: 30,
+                points: 150,
+                target: "20% reduction",
+                progress: 90,
+                completed: false,
+                icon: "fa-bolt",
+                startedAt: "2026-02-20",
+                daily: [3, 3, 3, 3, 3, 3, 3]
+            },
+            {
+                id: 5,
+                title: "Water Conservation",
+                description: "Take shorter showers and fix leaks. Save at least 500 liters this month.",
+                category: "water",
+                difficulty: "beginner",
+                duration: 30,
+                points: 150,
+                target: "500L saved",
+                progress: 45,
+                completed: false,
+                icon: "fa-water",
+                startedAt: "2026-03-10",
+                daily: [1, 1, 1, 1, 1, 1, 1]
+            },
+            {
+                id: 6,
+                title: "Meatless March",
+                description: "Go vegetarian for the entire month. Try new plant-based recipes!",
+                category: "food",
+                difficulty: "advanced",
+                duration: 31,
+                points: 400,
+                target: "31 meat-free days",
+                progress: 35,
+                completed: false,
+                icon: "fa-carrot",
+                startedAt: "2026-03-01",
+                daily: [5, 5, 5, 5, 5, 5, 5]
+            }
+        ];
+
+        // Completed challenges
+        let completedChallenges = [
+            {
+                id: 101,
+                title: "Recycling Champion",
+                points: 150,
+                completedAt: "2026-02-28",
+                icon: "fa-recycle"
+            },
+            {
+                id: 102,
+                title: "Tree Planter",
+                points: 200,
+                completedAt: "2026-02-15",
+                icon: "fa-tree"
+            },
+            {
+                id: 103,
+                title: "Beach Clean-up",
+                points: 300,
+                completedAt: "2026-02-10",
+                icon: "fa-water"
+            }
+        ];
+
+        // Leaderboard data
+        const leaderboard = [
+            {
+                rank: 1,
+                name: "EcoMaster Sarah",
+                points: 3240,
+                badge: "🌱 Plant Guru",
+                avatar: "🌿"
+            },
+            {
+                rank: 2,
+                name: "Green Tom",
+                points: 2890,
+                badge: "♻️ Recycling Hero",
+                avatar: "🍃"
+            },
+            {
+                rank: 3,
+                name: "Nature Lisa",
+                points: 2750,
+                badge: "🚲 Cycling Star",
+                avatar: "🌻"
+            }
+        ];
+
+        // DOM Elements
+        const challengesGrid = document.getElementById('challengesGrid');
+        const completedList = document.getElementById('completedList');
+        const leaderboardGrid = document.getElementById('leaderboardGrid');
+        const backToTop = document.getElementById('backToTop');
+        const createModal = document.getElementById('createModal');
+        const progressModal = document.getElementById('progressModal');
+        const achievementToast = document.getElementById('achievementToast');
+        let currentChallengeId = null;
+
+        // Initialize Chart
+        const ctx = document.getElementById('impactChart').getContext('2d');
+        let impactChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Points Earned',
+                    data: [45, 60, 35, 70, 55, 80, 65],
+                    borderColor: '#ff9800',
+                    backgroundColor: 'rgba(255,152,0,0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#ff9800',
+                    pointBorderColor: 'white',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart period buttons
+        document.querySelectorAll('.chart-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Update chart data based on period
+                const period = btn.dataset.range;
+                if (period === 'week') {
+                    impactChart.data.labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                    impactChart.data.datasets[0].data = [45, 60, 35, 70, 55, 80, 65];
+                } else if (period === 'month') {
+                    impactChart.data.labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+                    impactChart.data.datasets[0].data = [280, 320, 290, 350];
+                } else {
+                    impactChart.data.labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+                    impactChart.data.datasets[0].data = [980, 1250, 1100, 1350, 1420, 1580];
+                }
+                impactChart.update();
+            });
+        });
+
+        // Render active challenges
+        function renderChallenges() {
+            const activeChallenges = challenges.filter(c => !c.completed);
+            
+            challengesGrid.innerHTML = activeChallenges.map(challenge => `
+                <div class="challenge-card">
+                    <span class="challenge-badge badge ${challenge.difficulty}">
+                        ${challenge.difficulty.charAt(0).toUpperCase() + challenge.difficulty.slice(1)}
+                    </span>
+                    <div class="challenge-icon">
+                        <i class="fas ${challenge.icon}"></i>
+                    </div>
+                    <h3 class="challenge-title">${challenge.title}</h3>
+                    <p class="challenge-description">${challenge.description}</p>
+                    <div class="challenge-meta">
+                        <span class="meta-item"><i class="fas fa-clock"></i> ${challenge.duration} days</span>
+                        <span class="meta-item"><i class="fas fa-bullseye"></i> ${challenge.target}</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-header">
+                            <span>Progress</span>
+                            <span>${challenge.progress}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${challenge.progress}%;"></div>
+                        </div>
+                    </div>
+                    <div class="challenge-footer">
+                        <span class="challenge-points">
+                            <i class="fas fa-star"></i> ${challenge.points} pts
+                        </span>
+                        <button class="update-progress-btn" onclick="openProgressModal(${challenge.id})">
+                            <i class="fas fa-plus"></i> Update
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render completed challenges
+        function renderCompleted() {
+            completedList.innerHTML = completedChallenges.map(challenge => `
+                <div class="completed-item">
+                    <div class="completed-icon">
+                        <i class="fas ${challenge.icon}"></i>
+                    </div>
+                    <div class="completed-info">
+                        <h4>${challenge.title}</h4>
+                        <p>
+                            <i class="fas fa-star" style="color: #ff9800;"></i>
+                            ${challenge.points} points
+                        </p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render leaderboard
+        function renderLeaderboard() {
+            leaderboardGrid.innerHTML = leaderboard.map(user => `
+                <div class="leaderboard-card">
+                    <div class="leaderboard-rank">#${user.rank}</div>
+                    <div class="leaderboard-avatar">${user.avatar}</div>
+                    <div class="leaderboard-name">${user.name}</div>
+                    <div class="leaderboard-points">${user.points} pts</div>
+                    <div class="leaderboard-badge">${user.badge}</div>
+                </div>
+            `).join('');
+        }
+
+        // Modal functions
+        window.openCreateModal = function() {
+            createModal.classList.add('active');
+        };
+
+        window.closeCreateModal = function() {
+            createModal.classList.remove('active');
+        };
+
+        window.openProgressModal = function(id) {
+            currentChallengeId = id;
+            const challenge = challenges.find(c => c.id === id);
+            if (challenge) {
+                document.getElementById('progressTitle').textContent = challenge.title;
+                document.getElementById('progressValue').textContent = challenge.progress + '%';
+                document.getElementById('progressSlider').value = challenge.progress;
+                progressModal.classList.add('active');
+            }
+        };
+
+        window.closeProgressModal = function() {
+            progressModal.classList.remove('active');
+        };
+
+        // Update progress
+        window.updateProgress = function() {
+            const newProgress = parseInt(document.getElementById('progressSlider').value);
+            document.getElementById('progressValue').textContent = newProgress + '%';
+            
+            const challenge = challenges.find(c => c.id === currentChallengeId);
+            if (challenge) {
+                challenge.progress = newProgress;
+                
+                // Check if completed
+                if (newProgress >= 100) {
+                    challenge.completed = true;
+                    
+                    // Add to completed challenges
+                    completedChallenges.unshift({
+                        id: Date.now(),
+                        title: challenge.title,
+                        points: challenge.points,
+                        completedAt: new Date().toISOString().split('T')[0],
+                        icon: challenge.icon
+                    });
+                    
+                    // Show achievement toast
+                    showAchievement(challenge.title);
+                    
+                    // Update stats
+                    updateStats();
+                }
+                
+                renderChallenges();
+                renderCompleted();
+                
+                // Update chart with new data point
+                const newData = impactChart.data.datasets[0].data;
+                newData[newData.length - 1] += 10;
+                impactChart.update();
+            }
+            
+            closeProgressModal();
+        };
+
+        // Show achievement
+        function showAchievement(title) {
+            document.getElementById('achievementTitle').textContent = 'Challenge Completed!';
+            document.getElementById('achievementDesc').textContent = title;
+            achievementToast.classList.add('show');
+            
+            setTimeout(() => {
+                achievementToast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Update stats
+        function updateStats() {
+            const totalPoints = completedChallenges.reduce((sum, c) => sum + c.points, 0) + 
+                               challenges.filter(c => !c.completed).reduce((sum, c) => sum + c.points * c.progress / 100, 0);
+            
+            document.getElementById('totalPoints').textContent = Math.round(totalPoints);
+            document.getElementById('completedCount').textContent = completedChallenges.length;
+            document.getElementById('activeCount').textContent = challenges.filter(c => !c.completed).length;
+            
+            // Random values for environmental impact
+            document.getElementById('co2Saved').textContent = (totalPoints * 0.5).toFixed(1) + ' kg';
+            document.getElementById('plasticReduced').textContent = (totalPoints * 0.2).toFixed(1) + ' kg';
+        }
+
+        // Create new challenge
+        document.getElementById('createForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const newChallenge = {
+                id: challenges.length + 1,
+                title: document.getElementById('challengeTitle').value,
+                description: document.getElementById('challengeDesc').value,
+                category: document.getElementById('challengeCategory').value,
+                difficulty: document.getElementById('challengeDifficulty').value,
+                duration: parseInt(document.getElementById('challengeDuration').value),
+                points: parseInt(document.getElementById('challengePoints').value),
+                target: document.getElementById('challengeTarget').value,
+                progress: 0,
+                completed: false,
+                icon: getCategoryIcon(document.getElementById('challengeCategory').value),
+                startedAt: new Date().toISOString().split('T')[0],
+                daily: new Array(7).fill(0)
+            };
+            
+            challenges.push(newChallenge);
+            renderChallenges();
+            updateStats();
+            closeCreateModal();
+            
+            // Show achievement
+            showAchievement('Challenge Created!');
+        });
+
+        // Get icon for category
+        function getCategoryIcon(category) {
+            const icons = {
+                plastic: 'fa-bottle-water',
+                energy: 'fa-bolt',
+                water: 'fa-water',
+                transport: 'fa-bicycle',
+                food: 'fa-carrot',
+                waste: 'fa-recycle'
+            };
+            return icons[category] || 'fa-leaf';
+        }
+
+        // Back to top
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Slider update
+        document.getElementById('progressSlider').addEventListener('input', (e) => {
+            document.getElementById('progressValue').textContent = e.target.value + '%';
+        });
+
+        // Close modals on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeCreateModal();
+                closeProgressModal();
+            }
+        });
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target === createModal) {
+                closeCreateModal();
+            }
+            if (event.target === progressModal) {
+                closeProgressModal();
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderChallenges();
+            renderCompleted();
+            renderLeaderboard();
+            updateStats();
+        });
+    </script>
+</body>
+</html>

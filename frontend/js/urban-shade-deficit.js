@@ -1,0 +1,710 @@
+// Urban Shade Deficit Index - Main JavaScript
+// Comprehensive shade analysis and heat corridor mapping system
+
+class UrbanShadeDeficitIndex {
+    constructor() {
+        this.map = null;
+        this.streetsLayer = null;
+        this.heatCorridorsLayer = null;
+        this.treeCanopyLayer = null;
+        this.buildingShadowsLayer = null;
+        this.pedestrianRoutesLayer = null;
+        this.coolingStationsLayer = null;
+        this.currentTime = 12;
+        this.currentSeason = 'summer';
+        this.currentTemperature = 95;
+        this.selectedStreet = null;
+        this.streetsData = [];
+        this.analysisResults = null;
+        this.charts = {
+            shade: null,
+            hourly: null
+        };
+        
+        this.init();
+    }
+
+    init() {
+        this.initMap();
+        this.generateMockData();
+        this.setupEventListeners();
+        this.runInitialAnalysis();
+        this.initCharts();
+    }
+
+    initMap() {
+        // Initialize Leaflet map
+        this.map = L.map('shade-map').setView([40.7128, -74.0060], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(this.map);
+
+        // Initialize layer groups
+        this.streetsLayer = L.layerGroup().addTo(this.map);
+        this.heatCorridorsLayer = L.layerGroup().addTo(this.map);
+        this.treeCanopyLayer = L.layerGroup();
+        this.buildingShadowsLayer = L.layerGroup();
+        this.pedestrianRoutesLayer = L.layerGroup();
+        this.coolingStationsLayer = L.layerGroup();
+
+        // Add scale control
+        L.control.scale().addTo(this.map);
+    }
+
+    generateMockData() {
+        // Generate realistic street data with shade coverage
+        const streetNames = [
+            'Main Street', 'Oak Avenue', 'Elm Boulevard', 'Maple Drive',
+            'Pine Street', 'Cedar Lane', 'Birch Road', 'Willow Way',
+            'Sunset Boulevard', 'Park Avenue', 'Broadway', 'Market Street',
+            'Washington Street', 'Lincoln Avenue', 'Jefferson Road', 'Madison Drive',
+            'Monroe Street', 'Adams Lane', 'Jackson Boulevard', 'Harrison Way'
+        ];
+
+        const baseCoords = [40.7128, -74.0060];
+        
+        for (let i = 0; i < 50; i++) {
+            const latOffset = (Math.random() - 0.5) * 0.05;
+            const lngOffset = (Math.random() - 0.5) * 0.05;
+            
+            const street = {
+                id: `street_${i}`,
+                name: streetNames[i % streetNames.length] + ` ${Math.floor(i / streetNames.length) + 1}`,
+                coordinates: [
+                    [baseCoords[0] + latOffset, baseCoords[1] + lngOffset],
+                    [baseCoords[0] + latOffset + (Math.random() - 0.5) * 0.01, 
+                     baseCoords[1] + lngOffset + (Math.random() - 0.5) * 0.01]
+                ],
+                length: Math.random() * 500 + 100, // meters
+                width: Math.random() * 10 + 5, // meters
+                treeCount: Math.floor(Math.random() * 30),
+                buildingHeight: Math.random() * 50 + 10, // meters
+                orientation: Math.random() * 360, // degrees
+                surfaceType: ['asphalt', 'concrete', 'brick'][Math.floor(Math.random() * 3)],
+                pedestrianTraffic: Math.floor(Math.random() * 1000),
+                shadeCoverage: this.calculateShadeCoverage(i)
+            };
+
+            this.streetsData.push(street);
+        }
+    }
+
+    calculateShadeCoverage(index) {
+        // Simulate shade coverage based on various factors
+        const baseShade = Math.random() * 100;
+        const timeModifier = this.getTimeModifier(this.currentTime);
+        const seasonModifier = this.getSeasonModifier(this.currentSeason);
+        
+        return Math.max(0, Math.min(100, baseShade * timeModifier * seasonModifier));
+    }
+
+    getTimeModifier(hour) {
+        // Shade is highest at noon (12), lowest at sunrise/sunset
+        if (hour < 8 || hour > 18) return 0.3;
+        if (hour >= 11 && hour <= 13) return 0.6;
+        return 0.8;
+    }
+
+    getSeasonModifier(season) {
+        const modifiers = {
+            summer: 0.7,
+            spring: 0.85,
+            fall: 0.85,
+            winter: 1.2
+        };
+        return modifiers[season] || 1;
+    }
+
+    recalculateShadeForAllStreets() {
+        this.streetsData.forEach((street, index) => {
+            const treeShade = (street.treeCount / 30) * 40;
+            const buildingShade = this.calculateBuildingShadow(street);
+            const timeOfDayFactor = this.getTimeOfDayFactor(this.currentTime);
+            const seasonFactor = this.getSeasonModifier(this.currentSeason);
+            
+            street.shadeCoverage = Math.min(100, 
+                (treeShade + buildingShade) * timeOfDayFactor * seasonFactor
+            );
+        });
+    }
+
+    calculateBuildingShadow(street) {
+        const sunAngle = this.getSunAngle(this.currentTime);
+        const shadowLength = street.buildingHeight / Math.tan(sunAngle * Math.PI / 180);
+        const shadowCoverage = Math.min(50, (shadowLength / street.width) * 100);
+        return shadowCoverage;
+    }
+
+    getSunAngle(hour) {
+        // Simplified sun angle calculation (degrees above horizon)
+        if (hour < 6 || hour > 20) return 0;
+        const noonAngle = 60; // Peak sun angle at noon
+        const hourFromNoon = Math.abs(hour - 12);
+        return Math.max(0, noonAngle - (hourFromNoon * 5));
+    }
+
+    getTimeOfDayFactor(hour) {
+        if (hour < 7 || hour > 19) return 1.5;
+        if (hour >= 11 && hour <= 15) return 0.5;
+        return 0.8;
+    }
+
+    runInitialAnalysis() {
+        this.showLoading(true);
+        
+        setTimeout(() => {
+            this.recalculateShadeForAllStreets();
+            this.analyzeHeatCorridors();
+            this.renderStreets();
+            this.updateStatistics();
+            this.showLoading(false);
+        }, 1000);
+    }
+
+    analyzeHeatCorridors() {
+        this.analysisResults = {
+            criticalStreets: [],
+            poorStreets: [],
+            moderateStreets: [],
+            goodStreets: [],
+            excellentStreets: [],
+            averageShade: 0,
+            heatIndex: 0
+        };
+
+        let totalShade = 0;
+
+        this.streetsData.forEach(street => {
+            totalShade += street.shadeCoverage;
+            
+            if (street.shadeCoverage < 20) {
+                this.analysisResults.criticalStreets.push(street);
+            } else if (street.shadeCoverage < 40) {
+                this.analysisResults.poorStreets.push(street);
+            } else if (street.shadeCoverage < 60) {
+                this.analysisResults.moderateStreets.push(street);
+            } else if (street.shadeCoverage < 80) {
+                this.analysisResults.goodStreets.push(street);
+            } else {
+                this.analysisResults.excellentStreets.push(street);
+            }
+        });
+
+        this.analysisResults.averageShade = totalShade / this.streetsData.length;
+        this.analysisResults.heatIndex = this.calculateHeatIndex();
+    }
+
+    calculateHeatIndex() {
+        const temp = this.currentTemperature;
+        const avgShade = this.analysisResults.averageShade;
+        const criticalCount = this.analysisResults.criticalStreets.length;
+        
+        // Heat index formula considering temperature, shade, and critical streets
+        const baseIndex = (temp - 70) * 2;
+        const shadeModifier = (100 - avgShade) / 10;
+        const criticalModifier = criticalCount * 2;
+        
+        return Math.round(baseIndex + shadeModifier + criticalModifier);
+    }
+
+    renderStreets() {
+        this.streetsLayer.clearLayers();
+        this.heatCorridorsLayer.clearLayers();
+
+        this.streetsData.forEach(street => {
+            const color = this.getShadeColor(street.shadeCoverage);
+            const weight = street.shadeCoverage < 20 ? 6 : 4;
+            
+            const polyline = L.polyline(street.coordinates, {
+                color: color,
+                weight: weight,
+                opacity: 0.8,
+                smoothFactor: 1
+            });
+
+            polyline.on('click', () => this.selectStreet(street));
+            
+            polyline.bindPopup(this.createPopupContent(street));
+            
+            this.streetsLayer.addLayer(polyline);
+
+            // Add heat corridor markers for critical streets
+            if (street.shadeCoverage < 20) {
+                const midpoint = [
+                    (street.coordinates[0][0] + street.coordinates[1][0]) / 2,
+                    (street.coordinates[0][1] + street.coordinates[1][1]) / 2
+                ];
+                
+                const marker = L.circleMarker(midpoint, {
+                    radius: 8,
+                    fillColor: '#DC143C',
+                    color: '#fff',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                });
+                
+                marker.bindPopup(`<strong>⚠️ Critical Heat Corridor</strong><br>${street.name}`);
+                this.heatCorridorsLayer.addLayer(marker);
+            }
+        });
+
+        this.addTreeCanopy();
+        this.addCoolingStations();
+    }
+
+    addTreeCanopy() {
+        this.treeCanopyLayer.clearLayers();
+        
+        // Add tree canopy circles
+        for (let i = 0; i < 20; i++) {
+            const lat = 40.7128 + (Math.random() - 0.5) * 0.05;
+            const lng = -74.0060 + (Math.random() - 0.5) * 0.05;
+            
+            const circle = L.circle([lat, lng], {
+                radius: Math.random() * 30 + 10,
+                fillColor: '#228B22',
+                color: '#006400',
+                weight: 1,
+                opacity: 0.6,
+                fillOpacity: 0.3
+            });
+            
+            circle.bindPopup('<strong>🌳 Tree Canopy</strong><br>Provides natural shade');
+            this.treeCanopyLayer.addLayer(circle);
+        }
+    }
+
+    addCoolingStations() {
+        this.coolingStationsLayer.clearLayers();
+        
+        const stationIcon = L.divIcon({
+            html: '<i class="fas fa-snowflake" style="color: #00bcd4; font-size: 20px;"></i>',
+            className: 'cooling-station-icon',
+            iconSize: [30, 30]
+        });
+
+        const stations = [
+            { name: 'Community Center', coords: [40.7158, -74.0090] },
+            { name: 'Public Library', coords: [40.7098, -74.0030] },
+            { name: 'Recreation Center', coords: [40.7148, -74.0020] },
+            { name: 'Senior Center', coords: [40.7108, -74.0070] }
+        ];
+
+        stations.forEach(station => {
+            const marker = L.marker(station.coords, { icon: stationIcon });
+            marker.bindPopup(`<strong>❄️ Cooling Station</strong><br>${station.name}`);
+            this.coolingStationsLayer.addLayer(marker);
+        });
+    }
+
+    getShadeColor(coverage) {
+        if (coverage >= 80) return '#006400';
+        if (coverage >= 60) return '#32CD32';
+        if (coverage >= 40) return '#FFD700';
+        if (coverage >= 20) return '#FF8C00';
+        return '#DC143C';
+    }
+
+    createPopupContent(street) {
+        const status = this.getShadeStatus(street.shadeCoverage);
+        return `
+            <div class="popup-title">${street.name}</div>
+            <div class="popup-info">
+                <strong>Shade Coverage:</strong> ${street.shadeCoverage.toFixed(1)}%<br>
+                <strong>Status:</strong> ${status}<br>
+                <strong>Trees:</strong> ${street.treeCount}<br>
+                <strong>Length:</strong> ${street.length.toFixed(0)}m<br>
+                <strong>Pedestrians:</strong> ${street.pedestrianTraffic}/day
+            </div>
+        `;
+    }
+
+    getShadeStatus(coverage) {
+        if (coverage >= 80) return '✅ Excellent';
+        if (coverage >= 60) return '👍 Good';
+        if (coverage >= 40) return '⚠️ Moderate';
+        if (coverage >= 20) return '🔶 Poor';
+        return '🚨 Critical';
+    }
+
+    selectStreet(street) {
+        this.selectedStreet = street;
+        this.displayStreetDetails(street);
+        this.generateRecommendations(street);
+    }
+
+    displayStreetDetails(street) {
+        const detailsContainer = document.getElementById('street-details');
+        
+        const html = `
+            <div class="street-detail-card">
+                <h4><i class="fas fa-road"></i> ${street.name}</h4>
+                <div class="shade-bar">
+                    <div class="shade-fill" style="width: ${street.shadeCoverage}%">
+                        ${street.shadeCoverage.toFixed(1)}%
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Status</span>
+                    <span class="detail-value">${this.getShadeStatus(street.shadeCoverage)}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Street Length</span>
+                    <span class="detail-value">${street.length.toFixed(0)} meters</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Street Width</span>
+                    <span class="detail-value">${street.width.toFixed(1)} meters</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Tree Count</span>
+                    <span class="detail-value">${street.treeCount} trees</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Building Height</span>
+                    <span class="detail-value">${street.buildingHeight.toFixed(0)} meters</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Surface Type</span>
+                    <span class="detail-value">${street.surfaceType}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Daily Pedestrians</span>
+                    <span class="detail-value">${street.pedestrianTraffic}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Heat Risk</span>
+                    <span class="detail-value">${this.calculateHeatRisk(street)}</span>
+                </div>
+            </div>
+        `;
+        
+        detailsContainer.innerHTML = html;
+    }
+
+    calculateHeatRisk(street) {
+        const shadeFactor = (100 - street.shadeCoverage) / 100;
+        const trafficFactor = street.pedestrianTraffic / 1000;
+        const risk = (shadeFactor * 0.7 + trafficFactor * 0.3) * 100;
+        
+        if (risk > 70) return '🔴 High';
+        if (risk > 40) return '🟡 Medium';
+        return '🟢 Low';
+    }
+
+    generateRecommendations(street) {
+        const container = document.getElementById('solutions-container');
+        const recommendations = [];
+
+        if (street.shadeCoverage < 40) {
+            if (street.treeCount < 15) {
+                recommendations.push({
+                    icon: 'tree',
+                    title: 'Plant Street Trees',
+                    description: `Add ${20 - street.treeCount} trees along ${street.name} to increase canopy coverage. Focus on fast-growing species like London Plane or Red Maple.`,
+                    impact: '+25-35% shade coverage'
+                });
+            }
+
+            recommendations.push({
+                icon: 'umbrella',
+                title: 'Install Shade Structures',
+                description: 'Deploy retractable awnings or permanent shade sails at high-traffic pedestrian areas.',
+                impact: '+15-20% shade coverage'
+            });
+
+            if (street.surfaceType === 'asphalt') {
+                recommendations.push({
+                    icon: 'paint-roller',
+                    title: 'Cool Pavement Treatment',
+                    description: 'Apply reflective coating to reduce surface temperature by 10-15°F.',
+                    impact: 'Reduces heat absorption'
+                });
+            }
+        }
+
+        if (street.pedestrianTraffic > 500) {
+            recommendations.push({
+                icon: 'water',
+                title: 'Add Misting Stations',
+                description: 'Install pedestrian misting stations at key intersections for immediate cooling relief.',
+                impact: 'Reduces perceived temp by 10°F'
+            });
+        }
+
+        recommendations.push({
+            icon: 'chair',
+            title: 'Shaded Rest Areas',
+            description: 'Create covered seating areas with benches and water fountains.',
+            impact: 'Improves walkability'
+        });
+
+        let html = '';
+        recommendations.forEach(rec => {
+            html += `
+                <div class="solution-card">
+                    <h5><i class="fas fa-${rec.icon}"></i> ${rec.title}</h5>
+                    <p>${rec.description}</p>
+                    <span class="solution-impact">${rec.impact}</span>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+    }
+
+    updateStatistics() {
+        document.getElementById('avg-shade').textContent = 
+            this.analysisResults.averageShade.toFixed(1) + '%';
+        
+        document.getElementById('critical-streets').textContent = 
+            this.analysisResults.criticalStreets.length;
+        
+        document.getElementById('heat-index').textContent = 
+            this.analysisResults.heatIndex;
+    }
+
+    initCharts() {
+        // Shade distribution chart
+        const shadeCtx = document.getElementById('shade-chart').getContext('2d');
+        this.charts.shade = new Chart(shadeCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Excellent', 'Good', 'Moderate', 'Poor', 'Critical'],
+                datasets: [{
+                    data: [0, 0, 0, 0, 0],
+                    backgroundColor: ['#006400', '#32CD32', '#FFD700', '#FF8C00', '#DC143C']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Hourly shade pattern chart
+        const hourlyCtx = document.getElementById('hourly-chart').getContext('2d');
+        this.charts.hourly = new Chart(hourlyCtx, {
+            type: 'line',
+            data: {
+                labels: ['6 AM', '8 AM', '10 AM', '12 PM', '2 PM', '4 PM', '6 PM', '8 PM'],
+                datasets: [{
+                    label: 'Average Shade Coverage',
+                    data: [45, 38, 32, 28, 30, 35, 42, 48],
+                    borderColor: '#2E7D32',
+                    backgroundColor: 'rgba(46, 125, 50, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Shade Coverage (%)'
+                        }
+                    }
+                }
+            }
+        });
+
+        this.updateCharts();
+    }
+
+    updateCharts() {
+        if (this.analysisResults) {
+            this.charts.shade.data.datasets[0].data = [
+                this.analysisResults.excellentStreets.length,
+                this.analysisResults.goodStreets.length,
+                this.analysisResults.moderateStreets.length,
+                this.analysisResults.poorStreets.length,
+                this.analysisResults.criticalStreets.length
+            ];
+            this.charts.shade.update();
+        }
+    }
+
+    setupEventListeners() {
+        // Time slider
+        document.getElementById('time-slider').addEventListener('input', (e) => {
+            this.currentTime = parseFloat(e.target.value);
+            this.updateTimeDisplay();
+            this.runInitialAnalysis();
+        });
+
+        // Season select
+        document.getElementById('season-select').addEventListener('change', (e) => {
+            this.currentSeason = e.target.value;
+            this.runInitialAnalysis();
+        });
+
+        // Temperature input
+        document.getElementById('temperature-input').addEventListener('change', (e) => {
+            this.currentTemperature = parseInt(e.target.value);
+            this.runInitialAnalysis();
+        });
+
+        // Layer toggles
+        document.getElementById('shade-coverage').addEventListener('change', (e) => {
+            if (e.target.checked) {
+                this.map.addLayer(this.streetsLayer);
+            } else {
+                this.map.removeLayer(this.streetsLayer);
+            }
+        });
+
+        document.getElementById('heat-corridors').addEventListener('change', (e) => {
+            if (e.target.checked) {
+                this.map.addLayer(this.heatCorridorsLayer);
+            } else {
+                this.map.removeLayer(this.heatCorridorsLayer);
+            }
+        });
+
+        document.getElementById('tree-canopy').addEventListener('change', (e) => {
+            if (e.target.checked) {
+                this.map.addLayer(this.treeCanopyLayer);
+            } else {
+                this.map.removeLayer(this.treeCanopyLayer);
+            }
+        });
+
+        document.getElementById('building-shadows').addEventListener('change', (e) => {
+            if (e.target.checked) {
+                this.map.addLayer(this.buildingShadowsLayer);
+            } else {
+                this.map.removeLayer(this.buildingShadowsLayer);
+            }
+        });
+
+        document.getElementById('pedestrian-routes').addEventListener('change', (e) => {
+            if (e.target.checked) {
+                this.map.addLayer(this.pedestrianRoutesLayer);
+            } else {
+                this.map.removeLayer(this.pedestrianRoutesLayer);
+            }
+        });
+
+        document.getElementById('cooling-stations').addEventListener('change', (e) => {
+            if (e.target.checked) {
+                this.map.addLayer(this.coolingStationsLayer);
+            } else {
+                this.map.removeLayer(this.coolingStationsLayer);
+            }
+        });
+
+        // Analyze button
+        document.getElementById('analyze-btn').addEventListener('click', () => {
+            this.runInitialAnalysis();
+        });
+
+        // Tab buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                this.switchTab(e.target.closest('.tab-btn').dataset.tab);
+            });
+        });
+
+        // Map controls
+        document.getElementById('locate-btn').addEventListener('click', () => {
+            this.locateUser();
+        });
+
+        document.getElementById('fullscreen-btn').addEventListener('click', () => {
+            this.toggleFullscreen();
+        });
+
+        // Help modal
+        document.getElementById('help-btn').addEventListener('click', () => {
+            document.getElementById('help-modal').classList.remove('hidden');
+        });
+
+        document.querySelector('.close-modal').addEventListener('click', () => {
+            document.getElementById('help-modal').classList.add('hidden');
+        });
+
+        document.getElementById('help-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'help-modal') {
+                document.getElementById('help-modal').classList.add('hidden');
+            }
+        });
+    }
+
+    updateTimeDisplay() {
+        const hour = Math.floor(this.currentTime);
+        const minutes = (this.currentTime % 1) * 60;
+        const period = hour >= 12 ? 'PM' : 'AM';
+        const displayHour = hour > 12 ? hour - 12 : hour;
+        const displayMinutes = minutes === 0 ? '00' : minutes.toFixed(0);
+        
+        document.getElementById('time-display').textContent = 
+            `${displayHour}:${displayMinutes} ${period}`;
+    }
+
+    switchTab(tabName) {
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+
+        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        document.getElementById(tabName).classList.add('active');
+    }
+
+    locateUser() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    this.map.setView([lat, lng], 15);
+                    
+                    L.marker([lat, lng]).addTo(this.map)
+                        .bindPopup('You are here')
+                        .openPopup();
+                },
+                (error) => {
+                    alert('Unable to retrieve your location');
+                }
+            );
+        }
+    }
+
+    toggleFullscreen() {
+        const mapContainer = document.querySelector('.map-container');
+        if (!document.fullscreenElement) {
+            mapContainer.requestFullscreen();
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
+    showLoading(show) {
+        const overlay = document.getElementById('loading-overlay');
+        if (show) {
+            overlay.classList.remove('hidden');
+        } else {
+            overlay.classList.add('hidden');
+        }
+    }
+}
+
+// Initialize the application when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    const app = new UrbanShadeDeficitIndex();
+});

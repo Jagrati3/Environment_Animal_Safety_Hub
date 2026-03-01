@@ -1,186 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>EcoLife | Report Abandoned or Injured Animals</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta name="description"
-    content="Report abandoned, injured, or distressed animals that need help." />
+<title>EcoLife | Report Animal</title>
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="../../assets/FAVICON.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="../../css/global/variables.css" />
-  <link rel="stylesheet" href="../../css/style.css" />
-  <link rel="stylesheet" href="../../css/components/navbar.css" />
-  <link rel="stylesheet" href="../../css/components/footer.css" />
-  <link rel="stylesheet" href="../../css/pages/report/report.css" />
-  <link rel="stylesheet" href="../../css/global/utilities.css" />
+<style>
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet">
+/* BASIC STYLING */
 
-  <!-- Icons -->
-  <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+body{
+font-family:Poppins;
+margin:0;
+background:#f4f7f6;
+}
 
-  <!-- AOS -->
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
+}
+
+.hero{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+align-items:center;
+}
+
+.hero-image{
+background:url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=600');
+height:300px;
+background-size:cover;
+border-radius:20px;
+}
+
+.hero h1{
+font-size:32px;
+color:#ff6b6b;
+}
+
+.steps{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+gap:15px;
+margin-top:30px;
+}
+
+.step-card{
+background:white;
+padding:20px;
+border-radius:15px;
+text-align:center;
+cursor:pointer;
+transition:.3s;
+box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+
+.step-card:hover{
+transform:translateY(-5px);
+background:#4ecdc4;
+color:white;
+}
+
+.form-card{
+background:white;
+padding:30px;
+margin-top:40px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,.1);
+}
+
+.field{
+margin-bottom:20px;
+}
+
+input,select{
+width:100%;
+padding:12px;
+border-radius:10px;
+border:1px solid #ccc;
+font-size:16px;
+}
+
+button{
+background:#ff6b6b;
+color:white;
+padding:15px;
+border:none;
+border-radius:50px;
+font-size:18px;
+cursor:pointer;
+width:100%;
+}
+
+button:hover{
+background:#ff4757;
+}
+
+.file-preview{
+display:flex;
+gap:10px;
+margin-top:10px;
+}
+
+.file-preview img{
+width:80px;
+height:80px;
+object-fit:cover;
+border-radius:10px;
+}
+
+.success-message{
+background:#2ed573;
+color:white;
+padding:15px;
+border-radius:10px;
+margin-top:15px;
+text-align:center;
+}
+
+.location-btn{
+margin-top:10px;
+background:#4ecdc4;
+}
+
+</style>
+
 </head>
-
 <body>
 
-<!-- Scroll Button -->
-<button id="scrollBottomBtn" title="Scroll to Bottom">⬇️</button>
 
-<!-- Cursor Trail Container -->
-<div class="circle-container" id="cursor-container"></div>
+<div class="container">
 
-<!-- Navbar -->
-<div id="navbar-container"></div>
+<div class="hero">
 
-<section class="report-page">
+<div class="hero-image"></div>
 
-  <!-- HERO -->
-  <div class="container hero">
-    <div class="hero-image" data-aos="fade-right"></div>
+<div>
+<h1>🐾 Report Abandoned or Injured Animals</h1>
+<p>Your action can save lives ❤️</p>
+</div>
 
-    <div class="hero-content" data-aos="fade-left">
-      <h1>🐾 Report Abandoned or Injured Animals</h1>
-      <p>
-        Be the voice for animals in distress.
-        Your quick action can save lives 💚
-      </p>
-    </div>
-  </div>
+</div>
 
-  <!-- STEPS -->
-  <div class="container steps-section">
-    <h2 data-aos="fade-up">How It Works</h2>
 
-    <div class="steps">
+<!-- STEPS -->
 
-      <div class="step-card" data-aos="zoom-in">
-        <div class="step-circle">🐕</div>
-        <p>Found an animal</p>
-      </div>
+<div class="steps">
 
-      <div class="step-card" data-aos="zoom-in">
-        <div class="step-circle">📝</div>
-        <p>Fill the form</p>
-      </div>
+<div class="step-card" data-step="petType">🐕<br>Found animal</div>
 
-      <div class="step-card" data-aos="zoom-in">
-        <div class="step-circle">📍</div>
-        <p>Add location</p>
-      </div>
+<div class="step-card" data-step="form">📝<br>Fill form</div>
 
-      <div class="step-card" data-aos="zoom-in">
-        <div class="step-circle">📸</div>
-        <p>Upload photo</p>
-      </div>
+<div class="step-card" data-step="location">📍<br>Add location</div>
 
-      <div class="step-card" data-aos="zoom-in">
-        <div class="step-circle">❤️</div>
-        <p>Submit report</p>
-      </div>
+<div class="step-card" data-step="photos">📸<br>Upload photo</div>
 
-    </div>
-  </div>
+<div class="step-card" data-step="submit">❤️<br>Submit</div>
 
-  <!-- FORM -->
-  <div class="form-bg">
-    <div class="container">
+</div>
 
-      <div class="form-card" data-aos="fade-up">
-        <h2>Report Animal</h2>
 
-        <form id="reportForm">
+<!-- FORM -->
 
-          <div class="field">
-            <label>Pet Type</label>
-            <select name="petType" required>
-              <option value="">Select</option>
-              <option>Dog</option>
-              <option>Cat</option>
-              <option>Other</option>
-            </select>
-          </div>
+<div class="form-card">
 
-          <div class="field">
-            <label>Name</label>
-            <input type="text" name="petName">
-          </div>
+<form id="reportForm">
 
-          <div class="field">
-            <label>Location</label>
-            <input type="text" name="location" required>
-          </div>
+<div class="field">
+<label>Pet Type</label>
+<select name="petType" required>
+<option value="">Select</option>
+<option>Dog</option>
+<option>Cat</option>
+<option>Other</option>
+</select>
+</div>
 
-          <div class="field">
-            <label>Situation</label>
-            <select name="situation" required>
-              <option value="">Select</option>
-              <option>Abandoned</option>
-              <option>Injured</option>
-              <option>Stray</option>
-            </select>
-          </div>
 
-          <div class="field">
-            <label>Photos</label>
-            <input type="file" name="photos" multiple>
-          </div>
+<div class="field">
+<label>Name</label>
+<input type="text" name="petName">
+</div>
 
-          <button type="submit">Submit Report</button>
 
-        </form>
-      </div>
+<div class="field">
+<label>Location</label>
+<input type="text" name="location" required>
 
-    </div>
-  </div>
-
-</section>
-
-<!-- Footer -->
-<div id="footer-placeholder"></div>
-
-<!-- Back to top -->
-<button class="back-to-top" id="backToTop">
-  <i class="fa-solid fa-arrow-up"></i>
+<button type="button" class="location-btn" id="locationBtn">
+Use Current Location
 </button>
 
+</div>
 
-<!-- Scripts -->
 
-<!-- AOS -->
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<div class="field">
+<label>Situation</label>
+<select name="situation" required>
+<option value="">Select</option>
+<option>Abandoned</option>
+<option>Injured</option>
+<option>Stray</option>
+</select>
+</div>
+
+
+<div class="field">
+<label>Photos</label>
+<input type="file" name="photos" multiple accept="image/*">
+<div class="file-preview" id="preview"></div>
+</div>
+
+
+<button type="submit">Submit Report</button>
+
+</form>
+
+<div id="success"></div>
+
+</div>
+
+</div>
+
+
 
 <script>
-AOS.init();
+
+/* STEP BUTTON LOGIC */
+
+const steps=document.querySelectorAll(".step-card");
+
+const form=document.getElementById("reportForm");
+
+const map={
+petType:form.petType,
+form:form,
+location:form.location,
+photos:form.photos,
+submit:form.querySelector("button")
+};
+
+steps.forEach(step=>{
+
+step.onclick=()=>{
+
+const target=map[step.dataset.step];
+
+target.scrollIntoView({behavior:"smooth",block:"center"});
+
+target.style.boxShadow="0 0 20px #4ecdc4";
+
+setTimeout(()=>target.style.boxShadow="none",1000);
+
+if(target.focus) target.focus();
+
+};
+
+});
+
+
+
+/* IMAGE PREVIEW */
+
+const fileInput=form.photos;
+
+const preview=document.getElementById("preview");
+
+fileInput.onchange=()=>{
+
+preview.innerHTML="";
+
+[...fileInput.files].forEach(file=>{
+
+const reader=new FileReader();
+
+reader.onload=e=>{
+
+const img=document.createElement("img");
+
+img.src=e.target.result;
+
+preview.appendChild(img);
+
+};
+
+reader.readAsDataURL(file);
+
+});
+
+};
+
+
+
+/* LOCATION BUTTON */
+
+document.getElementById("locationBtn").onclick=()=>{
+
+navigator.geolocation.getCurrentPosition(pos=>{
+
+form.location.value=
+
+pos.coords.latitude.toFixed(5)+","+
+
+pos.coords.longitude.toFixed(5);
+
+});
+
+};
+
+
+
+/* FORM SUBMIT */
+
+form.onsubmit=e=>{
+
+e.preventDefault();
+
+const data={
+
+id:Date.now(),
+
+petType:form.petType.value,
+
+petName:form.petName.value,
+
+location:form.location.value,
+
+situation:form.situation.value,
+
+date:new Date().toLocaleString()
+
+};
+
+let reports=JSON.parse(localStorage.getItem("reports")||"[]");
+
+reports.push(data);
+
+localStorage.setItem("reports",JSON.stringify(reports));
+
+document.getElementById("success").innerHTML=
+
+'<div class="success-message">Report submitted successfully ❤️</div>';
+
+form.reset();
+
+preview.innerHTML="";
+
+};
+
 </script>
 
-<!-- Core -->
-<script src="../../js/main.js"></script>
-<script src="../../js/global/theme-toggle.js"></script>
-
-<!-- Components -->
-<script src="../../js/components/component-loader.js"></script>
-<script src="../../js/components/navbar-loader.js"></script>
-<script src="../../js/components/footer-loader.js"></script>
-
-<!-- Page -->
-<script type="module" src="../../js/pages/report/report.js"></script>
-
-<!-- Error handler (KEEP LAST) -->
-<script type="module" src="../../js/utils/global-error-handler.js"></script>
 
 </body>
 </html>

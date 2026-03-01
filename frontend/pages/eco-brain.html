@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧩 Eco Brain Games · play & learn green</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Google Fonts: playful, clear -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Fredoka+One&display=swap" rel="stylesheet">
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #daf1d4;
+            background: radial-gradient(circle at 30% 30%, #c7f0c0, #a8ddb0);
+            min-height: 100vh;
+            color: #174d2c;
+            line-height: 1.6;
+        }
+
+        /* header – game zone */
+        .games-header {
+            background: linear-gradient(145deg, #3f8b5c, #256a42);
+            padding: 5rem 2rem 4.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+            border-bottom: 8px solid #fbeba0;
+            box-shadow: 0 20px 40px #256a42;
+        }
+
+        .games-header::before {
+            content: '🧩🌱';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.12;
+            left: -4rem;
+            bottom: -6rem;
+            transform: rotate(-10deg);
+        }
+
+        .games-header h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 4.2rem;
+            color: #fcf9cf;
+            text-shadow: 6px 6px 0 #1b6b40;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .games-header h1 i {
+            color: #ffecaa;
+            filter: drop-shadow(0 0 8px #ffeeaa);
+        }
+
+        .games-header p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 1.5rem auto;
+            background: #deffd6c0;
+            padding: 0.8rem 2.5rem;
+            border-radius: 60px;
+            color: #0d4b29;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            border: 3px solid #fbeba0;
+        }
+
+        .brain-badge {
+            margin-top: 1.8rem;
+            display: inline-block;
+            background: #fedb86;
+            color: #1b6133;
+            padding: 0.6rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #fff2b5;
+        }
+
+        /* container */
+        .container {
+            max-width: 1400px;
+            margin: -3rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* filter bar */
+        .filter-bar {
+            background: #fafff2e0;
+            backdrop-filter: blur(8px);
+            border-radius: 80px;
+            padding: 1.5rem 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 30px #2b754b70, 0 0 0 3px #dcf5c0 inset;
+            border: 3px solid #daf0c0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3e9462;
+            font-size: 1.3rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 5rem;
+            border: 3px solid #cef0b5;
+            border-radius: 60px;
+            font-size: 1rem;
+            background: white;
+            color: #1e5a30;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.8rem 2rem;
+            border: 3px solid #c8eab2;
+            border-radius: 60px;
+            background: white;
+            font-weight: 600;
+            color: #1b6839;
+            cursor: pointer;
+        }
+
+        /* game category chips */
+        .game-chips {
+            margin-bottom: 2.5rem;
+        }
+
+        .chip-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: #fad676 #c0e8b0;
+        }
+
+        .chip-scroll::-webkit-scrollbar { height: 8px; }
+        .chip-scroll::-webkit-scrollbar-track { background: #d6f0ca; border-radius: 10px; }
+        .chip-scroll::-webkit-scrollbar-thumb { background: #fad676; border-radius: 10px; }
+
+        .game-chip {
+            flex: 0 0 auto;
+            background: #faffea;
+            padding: 1rem 2.5rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 6px 14px #4d986d70;
+            cursor: pointer;
+            font-weight: 600;
+            border: 3px solid transparent;
+            transition: 0.2s;
+            font-size: 1.1rem;
+        }
+
+        .game-chip i { color: #d68d2c; font-size: 1.5rem; }
+        .game-chip:hover { transform: translateY(-5px); border-color: #f7c468; background: #ffffdf; }
+        .game-chip.active { background: #ffeaaf; border-color: #be9539; }
+
+        /* featured game */
+        .featured-game {
+            background: linear-gradient(145deg, #39855c, #1f6a42);
+            border-radius: 80px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            border: 8px solid #fbe38a;
+            box-shadow: 0 30px 40px #1f603a;
+            color: #fcfae6;
+            position: relative;
+        }
+
+        .featured-game::before {
+            content: '🧠';
+            font-size: 14rem;
+            opacity: 0.1;
+            position: absolute;
+            bottom: -2rem;
+            right: 2rem;
+            transform: rotate(5deg);
+        }
+
+        .game-ribbon {
+            position: absolute;
+            top: 2rem;
+            right: 2.5rem;
+            background: #fecf5e;
+            color: #17582b;
+            padding: 0.6rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #fff8b0;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .game-text h2 {
+            font-size: 2rem;
+            color: #fff2b0;
+            letter-spacing: 2px;
+        }
+
+        .game-text h3 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin: 0.5rem 0;
+        }
+
+        .game-meta {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .meta-item {
+            background: #2f885fb0;
+            padding: 0.6rem 2rem;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border: 2px solid #ffea8f;
+        }
+
+        .meta-item i { color: #ffe684; }
+
+        .game-desc {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+
+        .play-btn {
+            background: #fecf5e;
+            border: none;
+            color: #1a6232;
+            font-weight: 800;
+            font-size: 1.6rem;
+            padding: 1.2rem 3.5rem;
+            border-radius: 60px;
+            display: inline-flex;
+            align-items: center;
+            gap: 1.2rem;
+            cursor: pointer;
+            border: 4px solid #ffffcc;
+            box-shadow: 0 8px 0 #8f9440;
+            transition: 0.1s;
+        }
+
+        .play-btn:active {
+            transform: translateY(8px);
+            box-shadow: none;
+        }
+
+        .game-image {
+            height: 260px;
+            background: #67b384;
+            border-radius: 70px;
+            border: 6px solid #fbe38a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            color: #fffed0;
+        }
+
+        /* games grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .game-card {
+            background: #fafff0;
+            border-radius: 70px;
+            overflow: hidden;
+            box-shadow: 0 20px 30px #2a784d80;
+            transition: all 0.3s;
+            border: 5px solid #ccf0b5;
+            cursor: pointer;
+            color: #1e562e;
+        }
+
+        .game-card:hover {
+            transform: translateY(-15px);
+            border-color: #faca6b;
+            box-shadow: 0 35px 45px #175a32;
+        }
+
+        .card-image {
+            height: 160px;
+            background: linear-gradient(145deg, #74b386, #4d9a65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #fcfcd2;
+            position: relative;
+        }
+
+        .difficulty-tag {
+            position: absolute;
+            bottom: 0.8rem;
+            left: 1rem;
+            background: #1e5837;
+            color: #ffea9e;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            border: 2px solid #fdd67a;
+        }
+
+        .card-content {
+            padding: 1.8rem;
+        }
+
+        .card-category {
+            background: #cbeac0;
+            padding: 0.3rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .card-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0.7rem 0;
+        }
+
+        .card-desc {
+            color: #366f49;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .time {
+            background: #f1cba5;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+
+        .start-btn {
+            background: #5daf7c;
+            border: none;
+            color: white;
+            padding: 0.6rem 1.8rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            border: 2px solid #fde287;
+        }
+
+        /* leaderboard */
+        .leaderboard {
+            background: #ebf7e0;
+            border-radius: 70px;
+            padding: 2rem;
+            margin: 4rem 0;
+            border: 6px solid #fad97a;
+        }
+
+        .leaderboard-item {
+            background: #daf0ca;
+            border-radius: 60px;
+            padding: 1rem 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        /* modal */
+        .modal {
+            display: none; position: fixed; inset:0; background: #1d6139e6;
+            align-items: center; justify-content: center; z-index:2000;
+            backdrop-filter: blur(6px);
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #f6ffe6;
+            border-radius: 80px;
+            max-width: 700px;
+            width:100%;
+            border: 8px solid #ffe28b;
+            color: #195a2c;
+        }
+
+        .back-to-top {
+            position: fixed; bottom:2rem; right:2rem;
+            background: #f8bd48; width:70px; height:70px; border-radius:50%;
+            display: none; align-items:center; justify-content:center;
+            font-size:2.2rem; color:#1c5c28; border:5px solid #fff3b0;
+            cursor:pointer; z-index:1000;
+        }
+        .back-to-top.visible { display: flex; }
+
+        @media (max-width:800px){
+            .game-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- header -->
+    <header class="games-header">
+        <h1>
+            <i class="fas fa-puzzle-piece"></i> Eco Brain Games
+            <i class="fas fa-leaf"></i>
+        </h1>
+        <p>puzzles · quizzes · memory · train your green mind</p>
+        <div class="brain-badge"><i class="fas fa-trophy"></i> 8 brain challenges</div>
+    </header>
+
+    <div class="container">
+        <!-- filter bar -->
+        <div class="filter-bar" data-aos="fade-up">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="search games, topics, difficulty...">
+            </div>
+            <div class="filter-options">
+                <select class="filter-select"><option>all categories</option><option>puzzle</option><option>quiz</option><option>memory</option></select>
+                <select class="filter-select"><option>difficulty</option></select>
+            </div>
+        </div>
+
+        <!-- game chips -->
+        <div class="game-chips" data-aos="fade-up">
+            <div class="chip-scroll">
+                <div class="game-chip active"><i class="fas fa-brain"></i> all games</div>
+                <div class="game-chip"><i class="fas fa-puzzle-piece"></i> puzzles</div>
+                <div class="game-chip"><i class="fas fa-question-circle"></i> quizzes</div>
+                <div class="game-chip"><i class="fas fa-cards"></i> memory</div>
+                <div class="game-chip"><i class="fas fa-sort-amount-down"></i> sorting</div>
+                <div class="game-chip"><i class="fas fa-search"></i> word search</div>
+            </div>
+        </div>
+
+        <!-- featured game -->
+        <div class="featured-game" data-aos="zoom-in">
+            <span class="game-ribbon"><i class="fas fa-star"></i> most played</span>
+            <div class="game-grid">
+                <div class="game-text">
+                    <h2>🌿 daily challenge</h2>
+                    <h3>Species Match-Up</h3>
+                    <div class="game-meta">
+                        <span class="meta-item"><i class="fas fa-users"></i> 3.2k plays</span>
+                        <span class="meta-item"><i class="fas fa-clock"></i> 5 min</span>
+                    </div>
+                    <p class="game-desc">Match endangered animals to their habitats and threats. Train your conservation knowledge!</p>
+                    <button class="play-btn" onclick="playGame('species match')"><i class="fas fa-play"></i> play now</button>
+                </div>
+                <div class="game-image"><i class="fas fa-paw"></i></div>
+            </div>
+        </div>
+
+        <!-- games grid (js) -->
+        <div class="games-grid" id="gamesGrid"></div>
+
+        <!-- leaderboard preview -->
+        <div class="leaderboard" data-aos="fade-up">
+            <h2 style="font-size:2.2rem; margin-bottom:1.5rem;"><i class="fas fa-crown"></i> top players this week</h2>
+            <div class="leaderboard-item"><i class="fas fa-medal" style="color:gold;"></i> <span>GreenWizard42</span> <span style="margin-left:auto;">2,450 pts</span></div>
+            <div class="leaderboard-item"><i class="fas fa-medal" style="color:silver;"></i> <span>EcoRanger</span> <span style="margin-left:auto;">2,120 pts</span></div>
+            <div class="leaderboard-item"><i class="fas fa-medal" style="color:#cd7f32;"></i> <span>PlantMom</span> <span style="margin-left:auto;">1,980 pts</span></div>
+        </div>
+    </div>
+
+    <!-- modal -->
+    <div class="modal" id="gameModal">
+        <div class="modal-content" style="padding:2.5rem;">
+            <button style="float:right; background:none; border:none; font-size:3rem; color:#1b6735;" onclick="closeModal()">✕</button>
+            <div style="text-align:center;">
+                <div style="font-size:5rem;" id="modalGameEmoji">🧩</div>
+                <h2 id="modalGameTitle" style="font-size:2.8rem;">recycle rush</h2>
+                <p id="modalGameDesc" style="margin:2rem 0;">sort items into correct bins</p>
+                <button class="play-btn" onclick="launchGame()" style="font-size:1.3rem;">▶️ start game</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({duration:800,once:true});
+
+        // games data
+        const games = [
+            { name:"Recycle Rush", category:"puzzle", desc:"sort items into correct bins", difficulty:"easy", time:"3 min", icon:"fa-recycle", plays:"5.2k" },
+            { name:"Carbon Quiz", category:"quiz", desc:"test your climate IQ", difficulty:"medium", time:"5 min", icon:"fa-question", plays:"3.8k" },
+            { name:"Endangered Match", category:"memory", desc:"match species to threats", difficulty:"hard", time:"4 min", icon:"fa-paw", plays:"2.9k" },
+            { name:"Foodprint", category:"puzzle", desc:"build a low-carbon meal", difficulty:"medium", time:"6 min", icon:"fa-utensils", plays:"1.7k" },
+            { name:"Water Saver", category:"sorting", desc:"choose water-wise actions", difficulty:"easy", time:"4 min", icon:"fa-water", plays:"2.1k" },
+            { name:"Green Word Search", category:"word", desc:"find hidden eco terms", difficulty:"easy", time:"8 min", icon:"fa-search", plays:"1.4k" },
+            { name:"Energy Mix", category:"puzzle", desc:"balance renewable grid", difficulty:"hard", time:"7 min", icon:"fa-bolt", plays:"1.1k" },
+            { name:"Forest Match", category:"memory", desc:"remember tree species", difficulty:"medium", time:"5 min", icon:"fa-tree", plays:"2.3k" },
+        ];
+
+        function renderGames() {
+            const grid = document.getElementById('gamesGrid');
+            grid.innerHTML = games.map(g => `
+                <div class="game-card" onclick="showGame('${g.name}','${g.category} · ${g.desc} · ${g.difficulty} · ${g.plays} plays','${g.icon}')">
+                    <div class="card-image"><i class="fas ${g.icon}"></i><span class="difficulty-tag">${g.difficulty}</span></div>
+                    <div class="card-content">
+                        <span class="card-category">${g.category}</span>
+                        <div class="card-title">${g.name}</div>
+                        <p class="card-desc">${g.desc}</p>
+                        <div class="card-footer">
+                            <span class="time"><i class="far fa-clock"></i> ${g.time}</span>
+                            <button class="start-btn" onclick="event.stopPropagation(); playGame('${g.name}')">play</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+        renderGames();
+
+        window.showGame = (title, desc, icon) => {
+            document.getElementById('modalGameTitle').innerText = title;
+            document.getElementById('modalGameDesc').innerText = desc;
+            document.getElementById('modalGameEmoji').innerHTML = `<i class="fas ${icon}"></i>`;
+            document.getElementById('gameModal').classList.add('active');
+        };
+
+        window.closeModal = () => document.getElementById('gameModal').classList.remove('active');
+        window.playGame = (name) => { alert(`🧠 starting game: ${name || 'featured'}! let's learn.`); };
+        window.launchGame = () => { alert('🎮 game would load here. have fun!'); closeModal(); };
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // modal escape
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('gameModal')) closeModal(); };
+    </script>
+</body>
+</html>

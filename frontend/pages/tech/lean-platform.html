@@ -6,7 +6,7 @@
   <title>LEAN - Local Environmental Action Network</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-  <link rel="stylesheet" href="../css/lean-platform.css">
+  <link rel="stylesheet" href="../../css/lean-platform.css">
 </head>
 <body>
   <!-- Navigation -->
@@ -26,7 +26,7 @@
       <div class="nav-actions">
         <button class="btn-primary" id="reportIssueBtn"><i class="fas fa-flag"></i> Report Issue</button>
         <div class="user-info">
-          <img src="https://via.placeholder.com/40" alt="Profile">
+          <img src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_rp_progressive&w=740&q=80" alt="Profile">
           <span id="userName">Eco Reporter</span>
         </div>
       </div>
@@ -348,6 +348,56 @@
   <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="../js/pages/lean-platform.js"></script>
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  /* ======================
+     TAB SWITCHING
+  ====================== */
+
+  const tabLinks = document.querySelectorAll(".tab-link");
+  const tabContents = document.querySelectorAll(".tab-content");
+
+  tabLinks.forEach(link => {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      // remove active class
+      tabLinks.forEach(l => l.classList.remove("active"));
+      tabContents.forEach(c => c.classList.remove("active"));
+
+      // activate clicked tab
+      this.classList.add("active");
+
+      const target = this.getAttribute("data-tab");
+      document.getElementById(target).classList.add("active");
+    });
+  });
+
+
+  /* ======================
+     REPORT MODAL
+  ====================== */
+
+  const reportBtn = document.getElementById("reportIssueBtn");
+  const reportModal = document.getElementById("reportModal");
+
+  if (reportBtn) {
+    reportBtn.addEventListener("click", function () {
+      reportModal.classList.add("active");
+    });
+  }
+
+});
+
+/* Close Functions */
+function closeReportModal() {
+  document.getElementById("reportModal").classList.remove("active");
+}
+
+function closeDetailModal() {
+  document.getElementById("detailModal").classList.remove("active");
+}
+</script>
 </body>
 </html>

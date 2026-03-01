@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🕵️ Eco Detective · solve nature's mysteries</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Google Fonts: mysterious, clean, slightly noir -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #1a2f28;
+            background: radial-gradient(circle at 10% 20%, #2d4f3a, #1a3427);
+            min-height: 100vh;
+            color: #e2eedb;
+            line-height: 1.6;
+        }
+
+        /* detective header – moody, intriguing */
+        .detective-header {
+            background: linear-gradient(145deg, #2f6045, #1f4230);
+            padding: 5rem 2rem 4.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+            border-bottom: 6px solid #c0a56b;
+            box-shadow: 0 20px 40px #1f4230;
+        }
+
+        .detective-header::before {
+            content: '🕵️🔍';
+            position: absolute;
+            font-size: 18rem;
+            opacity: 0.1;
+            left: -4rem;
+            bottom: -6rem;
+            transform: rotate(-10deg);
+        }
+
+        .detective-header h1 {
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 4rem;
+            color: #f0e6cf;
+            text-shadow: 6px 6px 0 #1e5a38;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .detective-header h1 i {
+            color: #e6c384;
+            filter: drop-shadow(0 0 8px #dbb45c);
+        }
+
+        .detective-header p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 1.5rem auto;
+            background: #d5efd0c0;
+            padding: 0.8rem 2.5rem;
+            border-radius: 60px;
+            color: #124523;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            border: 3px solid #c0a56b;
+        }
+
+        .case-badge {
+            margin-top: 1.8rem;
+            display: inline-block;
+            background: #b89b5e;
+            color: #102f1c;
+            padding: 0.6rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #ecdba0;
+        }
+
+        /* container */
+        .container {
+            max-width: 1400px;
+            margin: -3rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* case file bar */
+        .case-bar {
+            background: #233f30e0;
+            backdrop-filter: blur(8px);
+            border-radius: 80px;
+            padding: 1.5rem 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 30px #0d2b1d, 0 0 0 3px #6f8f72 inset;
+            border: 2px solid #b89b5e;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .case-number {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.5rem;
+            background: #3b5e47;
+            padding: 0.5rem 2rem;
+            border-radius: 60px;
+            border: 2px solid #c0a56b;
+        }
+
+        .evidence-tag {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .evidence-btn {
+            background: #3f604a;
+            border: none;
+            color: #f2e6c9;
+            padding: 0.6rem 2rem;
+            border-radius: 60px;
+            cursor: pointer;
+            border: 2px solid #c0a56b;
+            font-weight: 600;
+        }
+
+        /* mystery chips – case types */
+        .mystery-chips {
+            margin-bottom: 2.5rem;
+        }
+
+        .chip-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: #b89b5e #3f604a;
+        }
+
+        .chip-scroll::-webkit-scrollbar { height: 8px; }
+        .chip-scroll::-webkit-scrollbar-track { background: #2d4f3a; border-radius: 10px; }
+        .chip-scroll::-webkit-scrollbar-thumb { background: #b89b5e; border-radius: 10px; }
+
+        .mystery-chip {
+            flex: 0 0 auto;
+            background: #2b4d38;
+            padding: 1rem 2.5rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 6px 14px #0e2b1b;
+            cursor: pointer;
+            font-weight: 600;
+            border: 3px solid transparent;
+            transition: 0.2s;
+            color: #f0e6cf;
+            border: 2px solid #7f9a76;
+        }
+
+        .mystery-chip i { color: #e6c384; font-size: 1.5rem; }
+        .mystery-chip:hover { transform: translateY(-5px); border-color: #e6c384; background: #386a4b; }
+        .mystery-chip.active { background: #4d7a59; border-color: #e6c384; }
+
+        /* featured cold case */
+        .featured-case {
+            background: linear-gradient(145deg, #2f6045, #1f4230);
+            border-radius: 80px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            border: 6px solid #b89b5e;
+            box-shadow: 0 30px 40px #102f1c;
+            color: #fcfae6;
+            position: relative;
+        }
+
+        .featured-case::before {
+            content: '🔎';
+            font-size: 14rem;
+            opacity: 0.1;
+            position: absolute;
+            bottom: -2rem;
+            right: 2rem;
+            transform: rotate(5deg);
+        }
+
+        .case-ribbon {
+            position: absolute;
+            top: 2rem;
+            right: 2.5rem;
+            background: #b89b5e;
+            color: #102f1c;
+            padding: 0.6rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #ecdba0;
+        }
+
+        .case-grid {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .case-text h2 {
+            font-size: 2rem;
+            color: #f0e0aa;
+            letter-spacing: 2px;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .case-text h3 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 0.5rem 0;
+        }
+
+        .case-meta {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            background: #3f7a5bb0;
+            padding: 0.6rem 2rem;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border: 2px solid #e6c384;
+        }
+
+        .meta-item i { color: #ffe684; }
+
+        .case-desc {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+
+        .investigate-btn {
+            background: #b89b5e;
+            border: none;
+            color: #102f1c;
+            font-weight: 800;
+            font-size: 1.6rem;
+            padding: 1.2rem 3.5rem;
+            border-radius: 60px;
+            display: inline-flex;
+            align-items: center;
+            gap: 1.2rem;
+            cursor: pointer;
+            border: 4px solid #ecdba0;
+            box-shadow: 0 8px 0 #6d4f2c;
+            transition: 0.1s;
+        }
+
+        .investigate-btn:active {
+            transform: translateY(8px);
+            box-shadow: none;
+        }
+
+        .case-image {
+            height: 260px;
+            background: #4f735b;
+            border-radius: 70px;
+            border: 6px solid #b89b5e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            color: #f0e6cf;
+        }
+
+        /* mystery cases grid */
+        .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .case-card {
+            background: #2f4a39;
+            border-radius: 70px;
+            overflow: hidden;
+            box-shadow: 0 20px 30px #102f1c;
+            transition: all 0.3s;
+            border: 4px solid #7f9a76;
+            cursor: pointer;
+            color: #f0e6cf;
+        }
+
+        .case-card:hover {
+            transform: translateY(-15px);
+            border-color: #e6c384;
+            box-shadow: 0 35px 45px #0b2b18;
+        }
+
+        .card-image {
+            height: 160px;
+            background: linear-gradient(145deg, #4f735b, #3b5e47);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #f0e6cf;
+            position: relative;
+        }
+
+        .status-tag {
+            position: absolute;
+            bottom: 0.8rem;
+            left: 1rem;
+            background: #1a3427;
+            color: #e6c384;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            border: 2px solid #b89b5e;
+        }
+
+        .card-content {
+            padding: 1.8rem;
+        }
+
+        .card-type {
+            background: #3b5e47;
+            padding: 0.3rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            display: inline-block;
+            border: 2px solid #7f9a76;
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 0.7rem 0;
+        }
+
+        .card-location {
+            color: #c0d9b0;
+            margin-bottom: 0.8rem;
+        }
+
+        .card-clues {
+            color: #b0c9a0;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .difficulty {
+            background: #3f604a;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+
+        .solve-btn {
+            background: #5daf7c;
+            border: none;
+            color: white;
+            padding: 0.6rem 1.8rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            border: 2px solid #e6c384;
+        }
+
+        /* clue board */
+        .clue-board {
+            background: #233f30;
+            border-radius: 70px;
+            padding: 2.5rem;
+            margin: 4rem 0;
+            border: 6px solid #b89b5e;
+        }
+
+        .clue-item {
+            background: #2f4a39;
+            border-radius: 60px;
+            padding: 1rem 2rem;
+            margin-bottom: 1rem;
+            border-left: 8px solid #e6c384;
+        }
+
+        /* modal */
+        .modal {
+            display: none; position: fixed; inset:0; background: #1d3b2be6;
+            align-items: center; justify-content: center; z-index:2000;
+            backdrop-filter: blur(6px);
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #2f4a39;
+            border-radius: 80px;
+            max-width: 700px;
+            width:100%;
+            border: 8px solid #e6c384;
+            color: #f0e6cf;
+        }
+
+        .back-to-top {
+            position: fixed; bottom:2rem; right:2rem;
+            background: #b89b5e; width:70px; height:70px; border-radius:50%;
+            display: none; align-items:center; justify-content:center;
+            font-size:2.2rem; color:#1c3b22; border:5px solid #ecdba0;
+            cursor:pointer; z-index:1000;
+        }
+        .back-to-top.visible { display: flex; }
+
+        @media (max-width:800px){
+            .case-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- header -->
+    <header class="detective-header">
+        <h1>
+            <i class="fas fa-magnifying-glass"></i> Eco Detective & Mystery
+            <i class="fas fa-leaf"></i>
+        </h1>
+        <p>examine clues · uncover environmental crimes · solve the case</p>
+        <div class="case-badge"><i class="fas fa-fingerprint"></i> 6 active cases</div>
+    </header>
+
+    <div class="container">
+        <!-- case file bar -->
+        <div class="case-bar" data-aos="fade-up">
+            <span class="case-number"><i class="fas fa-folder-open"></i> case file #2805</span>
+            <div class="evidence-tag">
+                <button class="evidence-btn" onclick="openEvidence()"><i class="fas fa-microscope"></i> evidence log</button>
+                <button class="evidence-btn" onclick="openNotebook()"><i class="fas fa-book"></i> detective notes</button>
+            </div>
+        </div>
+
+        <!-- mystery chips (case categories) -->
+        <div class="mystery-chips" data-aos="fade-up">
+            <div class="chip-scroll">
+                <div class="mystery-chip active"><i class="fas fa-skull"></i> all cold cases</div>
+                <div class="mystery-chip"><i class="fas fa-droplet"></i> water pollution</div>
+                <div class="mystery-chip"><i class="fas fa-tree"></i> illegal logging</div>
+                <div class="mystery-chip"><i class="fas fa-fish"></i> poaching</div>
+                <div class="mystery-chip"><i class="fas fa-trash"></i> waste dumping</div>
+                <div class="mystery-chip"><i class="fas fa-industry"></i> corporate</div>
+            </div>
+        </div>
+
+        <!-- featured case -->
+        <div class="featured-case" data-aos="zoom-in">
+            <span class="case-ribbon"><i class="fas fa-clock"></i> cold case · 2024</span>
+            <div class="case-grid">
+                <div class="case-text">
+                    <h2>🕵️‍♂️ the poisoned stream</h2>
+                    <h3>mystery of mill creek</h3>
+                    <div class="case-meta">
+                        <span class="meta-item"><i class="fas fa-map-pin"></i> blue ridge mountains</span>
+                        <span class="meta-item"><i class="fas fa-skull"></i> 3 evidence</span>
+                    </div>
+                    <p class="case-desc">Sudden fish kill. pH anomalies. Traces of industrial solvent. Who is responsible? Follow the clues.</p>
+                    <button class="investigate-btn" onclick="investigate('mill creek')"><i class="fas fa-search"></i> investigate</button>
+                </div>
+                <div class="case-image"><i class="fas fa-water"></i></div>
+            </div>
+        </div>
+
+        <!-- mystery cases grid (js) -->
+        <div class="cases-grid" id="casesGrid"></div>
+
+        <!-- clue board -->
+        <div class="clue-board" data-aos="fade-up">
+            <h2 style="font-size:2.2rem; margin-bottom:1.5rem;"><i class="fas fa-clipboard-list"></i> current clues</h2>
+            <div class="clue-item"><i class="fas fa-paw"></i> unusual animal tracks near dump site</div>
+            <div class="clue-item"><i class="fas fa-flask"></i> water sample: heavy metals detected</div>
+            <div class="clue-item"><i class="fas fa-truck"></i> midnight truck spotted by witness</div>
+        </div>
+    </div>
+
+    <!-- modal -->
+    <div class="modal" id="mysteryModal">
+        <div class="modal-content" style="padding:2.5rem;">
+            <button style="float:right; background:none; border:none; font-size:3rem; color:#e6c384;" onclick="closeModal()">✕</button>
+            <div style="text-align:center;">
+                <div style="font-size:5rem;" id="modalCaseEmoji">🕵️</div>
+                <h2 id="modalCaseTitle" style="font-size:2.8rem;">the poisoned stream</h2>
+                <p id="modalCaseDesc" style="margin:2rem 0;">gather clues and name the culprit</p>
+                <button class="investigate-btn" onclick="solveCase()" style="font-size:1.2rem;">🔎 present findings</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({duration:800,once:true});
+
+        // mystery cases data
+        const cases = [
+            { name:"Mill Creek Poisoning", type:"water", location:"Blue Ridge", clues:"pH anomaly, dead fish, solvent traces", difficulty:"hard", icon:"fa-water", status:"cold" },
+            { name:"Redwood Heist", type:"logging", location:"California", clues:"fresh stumps, tire tracks, helicopter noise", difficulty:"medium", icon:"fa-tree", status:"active" },
+            { name:"Desert Dumping", type:"waste", location:"Mojave", clues:"barrels, chemical smell, raven activity", difficulty:"easy", icon:"fa-trash", status:"active" },
+            { name:"Ivory Coast Poaching", type:"poaching", location:"Kenya", clues:"carcasses, snares, footprints", difficulty:"hard", icon:"fa-paw", status:"cold" },
+            { name:"River Acid Spill", type:"water", location:"Poland", clues:"dead fish, low pH, factory upstream", difficulty:"medium", icon:"fa-flask", status:"active" },
+            { name:"Smokestack Cover-up", type:"corporate", location:"Ohio", clues:"black smoke, health complaints, night operation", difficulty:"hard", icon:"fa-industry", status:"cold" },
+        ];
+
+        function renderCases() {
+            const grid = document.getElementById('casesGrid');
+            grid.innerHTML = cases.map(c => `
+                <div class="case-card" onclick="showCase('${c.name}','${c.type} · ${c.location} · clues: ${c.clues} · difficulty ${c.difficulty}','${c.icon}')">
+                    <div class="card-image"><i class="fas ${c.icon}"></i><span class="status-tag">${c.status}</span></div>
+                    <div class="card-content">
+                        <span class="card-type">${c.type}</span>
+                        <div class="card-title">${c.name}</div>
+                        <div class="card-location"><i class="fas fa-map-pin"></i> ${c.location}</div>
+                        <div class="card-clues">🔎 ${c.clues.substring(0,35)}…</div>
+                        <div class="card-footer">
+                            <span class="difficulty">${c.difficulty}</span>
+                            <button class="solve-btn" onclick="event.stopPropagation(); examine('${c.name}')">examine</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+        renderCases();
+
+        window.showCase = (title, desc, icon) => {
+            document.getElementById('modalCaseTitle').innerText = title;
+            document.getElementById('modalCaseDesc').innerText = desc;
+            document.getElementById('modalCaseEmoji').innerHTML = `<i class="fas ${icon}"></i>`;
+            document.getElementById('mysteryModal').classList.add('active');
+        };
+
+        window.closeModal = () => document.getElementById('mysteryModal').classList.remove('active');
+        window.investigate = (name) => alert(`🕵️ investigating ${name || 'the case'}... clues revealed.`);
+        window.solveCase = () => { alert('🔍 you present your findings. case closed (demo).'); closeModal(); };
+        window.examine = (name) => alert(`examining evidence for ${name}`);
+        window.openEvidence = () => alert('📦 evidence locker: hair samples, water tests, photos.');
+        window.openNotebook = () => alert('📓 detective notes: witness interviews, timeline.');
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // modal escape
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('mysteryModal')) closeModal(); };
+    </script>
+</body>
+</html>

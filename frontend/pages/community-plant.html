@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌳 Community Planting Map · grow together</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Google Fonts: friendly, grounded, clear -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Leaflet (open-source map) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #e5f3e0;
+            background: radial-gradient(circle at 10% 20%, #d1efcf, #b8dfb8);
+            min-height: 100vh;
+            color: #1a4b2e;
+            line-height: 1.6;
+        }
+
+        /* header – earthy, community */
+        .planting-header {
+            background: linear-gradient(145deg, #3f7a5c, #20563b);
+            padding: 4.5rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+            border-bottom: 8px solid #fbeba0;
+            box-shadow: 0 20px 40px #1e5438;
+        }
+
+        .planting-header::before {
+            content: '🌳🌱';
+            position: absolute;
+            font-size: 18rem;
+            opacity: 0.12;
+            left: -3rem;
+            bottom: -6rem;
+            transform: rotate(-10deg);
+        }
+
+        .planting-header h1 {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 800;
+            font-size: 4rem;
+            color: #fcf9cf;
+            text-shadow: 6px 6px 0 #256d42;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .planting-header h1 i {
+            color: #ffecaa;
+            filter: drop-shadow(0 0 8px #ffeeaa);
+        }
+
+        .planting-header p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 1.5rem auto;
+            background: #deffd6c0;
+            padding: 0.8rem 2.5rem;
+            border-radius: 60px;
+            color: #0d4b29;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            border: 3px solid #fbeba0;
+        }
+
+        .stats-badge {
+            margin-top: 1.5rem;
+            display: inline-block;
+            background: #fedb86;
+            color: #1e5f31;
+            padding: 0.5rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #fff2b5;
+        }
+
+        /* container */
+        .container {
+            max-width: 1500px;
+            margin: -2.5rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* filter bar */
+        .filter-bar {
+            background: #fafff2e0;
+            backdrop-filter: blur(8px);
+            border-radius: 80px;
+            padding: 1.5rem 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 30px #2b754b70, 0 0 0 3px #dcf5c0 inset;
+            border: 3px solid #daf0c0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3e9462;
+            font-size: 1.3rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 5rem;
+            border: 3px solid #cef0b5;
+            border-radius: 60px;
+            font-size: 1rem;
+            background: white;
+            color: #1e5a30;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.8rem 2rem;
+            border: 3px solid #c8eab2;
+            border-radius: 60px;
+            background: white;
+            font-weight: 600;
+            color: #1b6839;
+            cursor: pointer;
+        }
+
+        /* map + sidebar layout */
+        .map-dashboard {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        #map {
+            height: 500px;
+            border-radius: 60px;
+            border: 6px solid #b7e0a8;
+            box-shadow: 0 25px 35px #266342;
+            z-index: 5;
+        }
+
+        .stats-sidebar {
+            background: #f2ffeae0;
+            backdrop-filter: blur(6px);
+            border-radius: 60px;
+            padding: 2rem;
+            border: 5px solid #c0e8b0;
+            box-shadow: 0 20px 30px #2b754b70;
+        }
+
+        .stat-card {
+            background: #e4fad8;
+            border-radius: 50px;
+            padding: 1.5rem;
+            margin-bottom: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            border: 3px solid #a9dc9a;
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            color: #36804b;
+        }
+
+        .stat-content h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #29663c;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1f6e39;
+            line-height: 1.2;
+        }
+
+        .event-list {
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .event-item {
+            background: #cceec0;
+            border-radius: 50px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 8px solid #f5b342;
+            font-weight: 600;
+        }
+
+        .join-btn {
+            background: #fecf5e;
+            border: none;
+            color: #1a6232;
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            cursor: pointer;
+            border: 3px solid #ffffb0;
+            transition: 0.1s;
+            box-shadow: 0 4px 0 #9f9f40;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .join-btn:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        /* upcoming events grid */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.8rem;
+            margin: 3rem 0;
+        }
+
+        .event-card {
+            background: #f2ffea;
+            border-radius: 60px;
+            overflow: hidden;
+            border: 4px solid #c0e8b0;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .event-card:hover {
+            transform: translateY(-8px);
+            border-color: #fad479;
+        }
+
+        .event-image {
+            height: 120px;
+            background: #86bb7c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #fcf9cf;
+        }
+
+        .event-content {
+            padding: 1.5rem;
+        }
+
+        .event-date {
+            background: #e2f0c0;
+            padding: 0.3rem 1.2rem;
+            border-radius: 30px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .event-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+
+        /* modal */
+        .modal {
+            display: none; position: fixed; inset:0; background: #1d6139e6;
+            align-items: center; justify-content: center; z-index:2000;
+            backdrop-filter: blur(6px);
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #f6ffe6;
+            border-radius: 80px;
+            max-width: 700px;
+            width:100%;
+            border: 8px solid #ffe28b;
+            color: #195a2c;
+        }
+
+        .back-to-top {
+            position: fixed; bottom:2rem; right:2rem;
+            background: #f8bd48; width:70px; height:70px; border-radius:50%;
+            display: none; align-items:center; justify-content:center;
+            font-size:2.2rem; color:#1c5c28; border:5px solid #fff3b0;
+            cursor:pointer; z-index:1000;
+        }
+        .back-to-top.visible { display: flex; }
+
+        @media (max-width:1000px){
+            .map-dashboard { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- header -->
+    <header class="planting-header">
+        <h1>
+            <i class="fas fa-map-marked-alt"></i> Community Planting Map
+            <i class="fas fa-seedling"></i>
+        </h1>
+        <p>find local tree‑planting events · track our collective impact</p>
+        <div class="stats-badge"><i class="fas fa-tree"></i> 12,480 trees planted this month</div>
+    </header>
+
+    <div class="container">
+        <!-- filter bar -->
+        <div class="filter-bar" data-aos="fade-up">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="search city, park, event...">
+            </div>
+            <div class="filter-options">
+                <select class="filter-select"><option>this week</option><option>this month</option><option>any time</option></select>
+                <select class="filter-select"><option>all species</option></select>
+            </div>
+        </div>
+
+        <!-- main map + stats -->
+        <div class="map-dashboard" data-aos="fade-up">
+            <div id="map"></div>
+            <div class="stats-sidebar">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-tree"></i></div>
+                    <div class="stat-content">
+                        <h3>trees planted</h3>
+                        <div class="stat-number">12,480</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-content">
+                        <h3>active volunteers</h3>
+                        <div class="stat-number">1,247</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                    <div class="stat-content">
+                        <h3>upcoming events</h3>
+                        <div class="stat-number">15</div>
+                    </div>
+                </div>
+                <h3 style="margin: 1rem 0 0.5rem;">📅 next events</h3>
+                <div class="event-list" id="eventList"></div>
+                <button class="join-btn" onclick="joinCommunity()"><i class="fas fa-hand-holding-heart"></i> join a planting</button>
+            </div>
+        </div>
+
+        <!-- events grid (near you) -->
+        <h2 style="font-size:2.2rem; margin: 2rem 0 1rem;"><i class="fas fa-calendar-alt"></i> upcoming planting days</h2>
+        <div class="events-grid" id="eventsGrid"></div>
+    </div>
+
+    <!-- modal -->
+    <div class="modal" id="plantModal">
+        <div class="modal-content" style="padding:2.5rem;">
+            <button style="float:right; background:none; border:none; font-size:3rem; color:#1b6735;" onclick="closeModal()">✕</button>
+            <div style="text-align:center;">
+                <div style="font-size:4rem;">🌳</div>
+                <h2 id="modalEventTitle" style="font-size:2.5rem;">river park planting</h2>
+                <p id="modalEventDesc" style="margin:2rem 0;">join us to plant 200 native trees.</p>
+                <button class="join-btn" onclick="rsvpEvent()" style="font-size:1.2rem;">✅ confirm attendance</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({duration:800,once:true});
+
+        // ---------- leaflet map ----------
+        const map = L.map('map').setView([40.7128, -74.0060], 12); // NYC demo
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // sample planting markers
+        const plantings = [
+            { lat: 40.78, lng: -73.97, name: "Central Park", trees: 120 },
+            { lat: 40.69, lng: -73.99, name: "Brooklyn Bridge Park", trees: 85 },
+            { lat: 40.85, lng: -73.93, name: "Highbridge Park", trees: 200 },
+            { lat: 40.73, lng: -74.03, name: "Liberty State Park", trees: 60 },
+        ];
+
+        plantings.forEach(p => {
+            L.marker([p.lat, p.lng]).addTo(map)
+                .bindPopup(`<b>${p.name}</b><br>🌱 ${p.trees} trees planned`);
+        });
+
+        // ---------- upcoming events data ----------
+        const events = [
+            { name:"Riverside Planting", date:"May 25, 9am", location:"East River Park", trees:150, icon:"fa-tree" },
+            { name:"School Grove", date:"May 28, 10am", location:"PS 123", trees:80, icon:"fa-school" },
+            { name:"Urban Forest", date:"June 2, 8am", location:"Queens", trees:300, icon:"fa-city" },
+            { name:"Community Garden", date:"June 5, 9am", location:"Brooklyn", trees:40, icon:"fa-seedling" },
+            { name:"Park Restoration", date:"June 8, 9am", location:"The Bronx", trees:220, icon:"fa-tree" },
+        ];
+
+        // render event list in sidebar
+        function renderEventList() {
+            const container = document.getElementById('eventList');
+            container.innerHTML = events.slice(0,3).map(e => `
+                <div class="event-item" onclick="showEvent('${e.name}','${e.date} at ${e.location} · planting ${e.trees} trees')">
+                    <i class="fas ${e.icon}"></i> ${e.name} · ${e.date}
+                </div>`).join('');
+        }
+
+        // render events grid
+        function renderEventsGrid() {
+            const grid = document.getElementById('eventsGrid');
+            grid.innerHTML = events.map(e => `
+                <div class="event-card" onclick="showEvent('${e.name}','${e.date} · ${e.location} · ${e.trees} native trees to plant')">
+                    <div class="event-image"><i class="fas ${e.icon}"></i></div>
+                    <div class="event-content">
+                        <span class="event-date">${e.date}</span>
+                        <div class="event-title">${e.name}</div>
+                        <div><i class="fas fa-map-pin"></i> ${e.location}</div>
+                        <div style="margin-top:0.8rem;">🌲 ${e.trees} trees</div>
+                    </div>
+                </div>`).join('');
+        }
+
+        window.showEvent = (title, desc) => {
+            document.getElementById('modalEventTitle').innerText = title;
+            document.getElementById('modalEventDesc').innerText = desc;
+            document.getElementById('plantModal').classList.add('active');
+        };
+
+        window.closeModal = () => document.getElementById('plantModal').classList.remove('active');
+        window.joinCommunity = () => alert('🌍 thank you for joining! you’ll receive updates about local plantings.');
+        window.rsvpEvent = () => { alert('✅ you’re registered! see you there.'); closeModal(); };
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // modal escape
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('plantModal')) closeModal(); };
+
+        // initial render
+        renderEventList();
+        renderEventsGrid();
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌳 Community Planting Map · grow together</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Google Fonts: friendly, grounded, clear -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Leaflet (open-source map) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #e5f3e0;
+            background: radial-gradient(circle at 10% 20%, #d1efcf, #b8dfb8);
+            min-height: 100vh;
+            color: #1a4b2e;
+            line-height: 1.6;
+        }
+
+        /* header – earthy, community */
+        .planting-header {
+            background: linear-gradient(145deg, #3f7a5c, #20563b);
+            padding: 4.5rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+            border-bottom: 8px solid #fbeba0;
+            box-shadow: 0 20px 40px #1e5438;
+        }
+
+        .planting-header::before {
+            content: '🌳🌱';
+            position: absolute;
+            font-size: 18rem;
+            opacity: 0.12;
+            left: -3rem;
+            bottom: -6rem;
+            transform: rotate(-10deg);
+        }
+
+        .planting-header h1 {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 800;
+            font-size: 4rem;
+            color: #fcf9cf;
+            text-shadow: 6px 6px 0 #256d42;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .planting-header h1 i {
+            color: #ffecaa;
+            filter: drop-shadow(0 0 8px #ffeeaa);
+        }
+
+        .planting-header p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 1.5rem auto;
+            background: #deffd6c0;
+            padding: 0.8rem 2.5rem;
+            border-radius: 60px;
+            color: #0d4b29;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            border: 3px solid #fbeba0;
+        }
+
+        .stats-badge {
+            margin-top: 1.5rem;
+            display: inline-block;
+            background: #fedb86;
+            color: #1e5f31;
+            padding: 0.5rem 2.5rem;
+            border-radius: 60px;
+            font-weight: 800;
+            border: 3px solid #fff2b5;
+        }
+
+        /* container */
+        .container {
+            max-width: 1500px;
+            margin: -2.5rem auto 0;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* filter bar */
+        .filter-bar {
+            background: #fafff2e0;
+            backdrop-filter: blur(8px);
+            border-radius: 80px;
+            padding: 1.5rem 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 30px #2b754b70, 0 0 0 3px #dcf5c0 inset;
+            border: 3px solid #daf0c0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3e9462;
+            font-size: 1.3rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 5rem;
+            border: 3px solid #cef0b5;
+            border-radius: 60px;
+            font-size: 1rem;
+            background: white;
+            color: #1e5a30;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.8rem 2rem;
+            border: 3px solid #c8eab2;
+            border-radius: 60px;
+            background: white;
+            font-weight: 600;
+            color: #1b6839;
+            cursor: pointer;
+        }
+
+        /* map + sidebar layout */
+        .map-dashboard {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        #map {
+            height: 500px;
+            border-radius: 60px;
+            border: 6px solid #b7e0a8;
+            box-shadow: 0 25px 35px #266342;
+            z-index: 5;
+        }
+
+        .stats-sidebar {
+            background: #f2ffeae0;
+            backdrop-filter: blur(6px);
+            border-radius: 60px;
+            padding: 2rem;
+            border: 5px solid #c0e8b0;
+            box-shadow: 0 20px 30px #2b754b70;
+        }
+
+        .stat-card {
+            background: #e4fad8;
+            border-radius: 50px;
+            padding: 1.5rem;
+            margin-bottom: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            border: 3px solid #a9dc9a;
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            color: #36804b;
+        }
+
+        .stat-content h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #29663c;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1f6e39;
+            line-height: 1.2;
+        }
+
+        .event-list {
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .event-item {
+            background: #cceec0;
+            border-radius: 50px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 8px solid #f5b342;
+            font-weight: 600;
+        }
+
+        .join-btn {
+            background: #fecf5e;
+            border: none;
+            color: #1a6232;
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            cursor: pointer;
+            border: 3px solid #ffffb0;
+            transition: 0.1s;
+            box-shadow: 0 4px 0 #9f9f40;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .join-btn:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        /* upcoming events grid */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.8rem;
+            margin: 3rem 0;
+        }
+
+        .event-card {
+            background: #f2ffea;
+            border-radius: 60px;
+            overflow: hidden;
+            border: 4px solid #c0e8b0;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .event-card:hover {
+            transform: translateY(-8px);
+            border-color: #fad479;
+        }
+
+        .event-image {
+            height: 120px;
+            background: #86bb7c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #fcf9cf;
+        }
+
+        .event-content {
+            padding: 1.5rem;
+        }
+
+        .event-date {
+            background: #e2f0c0;
+            padding: 0.3rem 1.2rem;
+            border-radius: 30px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .event-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+
+        /* modal */
+        .modal {
+            display: none; position: fixed; inset:0; background: #1d6139e6;
+            align-items: center; justify-content: center; z-index:2000;
+            backdrop-filter: blur(6px);
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #f6ffe6;
+            border-radius: 80px;
+            max-width: 700px;
+            width:100%;
+            border: 8px solid #ffe28b;
+            color: #195a2c;
+        }
+
+        .back-to-top {
+            position: fixed; bottom:2rem; right:2rem;
+            background: #f8bd48; width:70px; height:70px; border-radius:50%;
+            display: none; align-items:center; justify-content:center;
+            font-size:2.2rem; color:#1c5c28; border:5px solid #fff3b0;
+            cursor:pointer; z-index:1000;
+        }
+        .back-to-top.visible { display: flex; }
+
+        @media (max-width:1000px){
+            .map-dashboard { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- header -->
+    <header class="planting-header">
+        <h1>
+            <i class="fas fa-map-marked-alt"></i> Community Planting Map
+            <i class="fas fa-seedling"></i>
+        </h1>
+        <p>find local tree‑planting events · track our collective impact</p>
+        <div class="stats-badge"><i class="fas fa-tree"></i> 12,480 trees planted this month</div>
+    </header>
+
+    <div class="container">
+        <!-- filter bar -->
+        <div class="filter-bar" data-aos="fade-up">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="search city, park, event...">
+            </div>
+            <div class="filter-options">
+                <select class="filter-select"><option>this week</option><option>this month</option><option>any time</option></select>
+                <select class="filter-select"><option>all species</option></select>
+            </div>
+        </div>
+
+        <!-- main map + stats -->
+        <div class="map-dashboard" data-aos="fade-up">
+            <div id="map"></div>
+            <div class="stats-sidebar">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-tree"></i></div>
+                    <div class="stat-content">
+                        <h3>trees planted</h3>
+                        <div class="stat-number">12,480</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-content">
+                        <h3>active volunteers</h3>
+                        <div class="stat-number">1,247</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                    <div class="stat-content">
+                        <h3>upcoming events</h3>
+                        <div class="stat-number">15</div>
+                    </div>
+                </div>
+                <h3 style="margin: 1rem 0 0.5rem;">📅 next events</h3>
+                <div class="event-list" id="eventList"></div>
+                <button class="join-btn" onclick="joinCommunity()"><i class="fas fa-hand-holding-heart"></i> join a planting</button>
+            </div>
+        </div>
+
+        <!-- events grid (near you) -->
+        <h2 style="font-size:2.2rem; margin: 2rem 0 1rem;"><i class="fas fa-calendar-alt"></i> upcoming planting days</h2>
+        <div class="events-grid" id="eventsGrid"></div>
+    </div>
+
+    <!-- modal -->
+    <div class="modal" id="plantModal">
+        <div class="modal-content" style="padding:2.5rem;">
+            <button style="float:right; background:none; border:none; font-size:3rem; color:#1b6735;" onclick="closeModal()">✕</button>
+            <div style="text-align:center;">
+                <div style="font-size:4rem;">🌳</div>
+                <h2 id="modalEventTitle" style="font-size:2.5rem;">river park planting</h2>
+                <p id="modalEventDesc" style="margin:2rem 0;">join us to plant 200 native trees.</p>
+                <button class="join-btn" onclick="rsvpEvent()" style="font-size:1.2rem;">✅ confirm attendance</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({duration:800,once:true});
+
+        // ---------- leaflet map ----------
+        const map = L.map('map').setView([40.7128, -74.0060], 12); // NYC demo
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // sample planting markers
+        const plantings = [
+            { lat: 40.78, lng: -73.97, name: "Central Park", trees: 120 },
+            { lat: 40.69, lng: -73.99, name: "Brooklyn Bridge Park", trees: 85 },
+            { lat: 40.85, lng: -73.93, name: "Highbridge Park", trees: 200 },
+            { lat: 40.73, lng: -74.03, name: "Liberty State Park", trees: 60 },
+        ];
+
+        plantings.forEach(p => {
+            L.marker([p.lat, p.lng]).addTo(map)
+                .bindPopup(`<b>${p.name}</b><br>🌱 ${p.trees} trees planned`);
+        });
+
+        // ---------- upcoming events data ----------
+        const events = [
+            { name:"Riverside Planting", date:"May 25, 9am", location:"East River Park", trees:150, icon:"fa-tree" },
+            { name:"School Grove", date:"May 28, 10am", location:"PS 123", trees:80, icon:"fa-school" },
+            { name:"Urban Forest", date:"June 2, 8am", location:"Queens", trees:300, icon:"fa-city" },
+            { name:"Community Garden", date:"June 5, 9am", location:"Brooklyn", trees:40, icon:"fa-seedling" },
+            { name:"Park Restoration", date:"June 8, 9am", location:"The Bronx", trees:220, icon:"fa-tree" },
+        ];
+
+        // render event list in sidebar
+        function renderEventList() {
+            const container = document.getElementById('eventList');
+            container.innerHTML = events.slice(0,3).map(e => `
+                <div class="event-item" onclick="showEvent('${e.name}','${e.date} at ${e.location} · planting ${e.trees} trees')">
+                    <i class="fas ${e.icon}"></i> ${e.name} · ${e.date}
+                </div>`).join('');
+        }
+
+        // render events grid
+        function renderEventsGrid() {
+            const grid = document.getElementById('eventsGrid');
+            grid.innerHTML = events.map(e => `
+                <div class="event-card" onclick="showEvent('${e.name}','${e.date} · ${e.location} · ${e.trees} native trees to plant')">
+                    <div class="event-image"><i class="fas ${e.icon}"></i></div>
+                    <div class="event-content">
+                        <span class="event-date">${e.date}</span>
+                        <div class="event-title">${e.name}</div>
+                        <div><i class="fas fa-map-pin"></i> ${e.location}</div>
+                        <div style="margin-top:0.8rem;">🌲 ${e.trees} trees</div>
+                    </div>
+                </div>`).join('');
+        }
+
+        window.showEvent = (title, desc) => {
+            document.getElementById('modalEventTitle').innerText = title;
+            document.getElementById('modalEventDesc').innerText = desc;
+            document.getElementById('plantModal').classList.add('active');
+        };
+
+        window.closeModal = () => document.getElementById('plantModal').classList.remove('active');
+        window.joinCommunity = () => alert('🌍 thank you for joining! you’ll receive updates about local plantings.');
+        window.rsvpEvent = () => { alert('✅ you’re registered! see you there.'); closeModal(); };
+
+        // back to top
+        const topBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', ()=> { window.scrollY>500 ? topBtn.classList.add('visible') : topBtn.classList.remove('visible'); });
+        topBtn.onclick = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+        // modal escape
+        document.addEventListener('keydown', (e)=> { if(e.key==='Escape') closeModal(); });
+        window.onclick = (e) => { if(e.target===document.getElementById('plantModal')) closeModal(); };
+
+        // initial render
+        renderEventList();
+        renderEventsGrid();
+    </script>
+</body>
+</html>

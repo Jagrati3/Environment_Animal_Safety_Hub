@@ -3,141 +3,1215 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About Us – EcoLife</title>
+  <title>About Us – EcoLife | Protecting Animals & Nature</title>
 
   <!-- Fonts & Icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- AOS -->
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
 
-  <!-- Correct Relative CSS Paths -->
-  <link rel="stylesheet" href="../css/global/variables.css">
-  <link rel="stylesheet" href="../css/global/utilities.css">
-  <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/components/navbar.css">
-  <link rel="stylesheet" href="../css/components/footer.css">
-  <link rel="stylesheet" href="../css/pages/about.css">
+  <style>
+    /* =============================================
+       COMPLETE INLINE CSS FOR ABOUT PAGE
+       Enhanced version with animations, gradients, responsive
+    ============================================= */
+    
+    /* ----- CSS VARIABLES (Light/Dark) ----- */
+    :root {
+      --primary-color: #2ecc71;
+      --primary-dark: #27ae60;
+      --primary-rgb: 46, 204, 113;
+      --secondary-color: #3498db;
+      --accent-color: #e67e22;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-input: #f1f5f9;
+      --text-primary: #1e293b;
+      --text-secondary: #475569;
+      --border-color: #e2e8f0;
+      --bg-hover: #f1f5f9;
+      --shadow-sm: 0 5px 15px rgba(0,0,0,0.1);
+      --shadow-md: 0 10px 30px rgba(0,0,0,0.15);
+      --shadow-lg: 0 20px 50px rgba(0,0,0,0.2);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --max-width: 1400px;
+      --border-radius-lg: 50px;
+      --border-radius-md: 30px;
+      --border-radius-sm: 15px;
+    }
+    
+    [data-theme="dark"] {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-card: #1e293b;
+      --bg-input: #334155;
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --border-color: #334155;
+      --bg-hover: #2d3a4f;
+    }
+    
+    /* ----- RESET & BASE ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html {
+      font-size: 62.5%;
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.6rem;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      transition: var(--transition);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 4rem;
+      width: 100%;
+    }
+    
+    /* ----- NAVBAR (INLINE) ----- */
+    #navbar-container {
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 1.8rem 4rem;
+    }
+    
+    .logo {
+      font-size: 2.6rem;
+      font-weight: 800;
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      letter-spacing: -0.5px;
+    }
+    
+    .logo i {
+      font-size: 3.2rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 4rem;
+    }
+    
+    .nav-links a {
+      color: var(--text-secondary);
+      font-weight: 500;
+      text-decoration: none;
+      transition: var(--transition);
+      font-size: 1.6rem;
+      position: relative;
+    }
+    
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 3px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      transition: var(--transition);
+      border-radius: 2px;
+    }
+    
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+    
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--primary-color);
+    }
+    
+    .theme-toggle {
+      background: var(--bg-secondary);
+      border: 2px solid var(--border-color);
+      color: var(--text-secondary);
+      font-size: 2rem;
+      cursor: pointer;
+      transition: var(--transition);
+      width: 4.5rem;
+      height: 4.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .theme-toggle:hover {
+      color: var(--primary-color);
+      border-color: var(--primary-color);
+      transform: rotate(15deg);
+    }
+    
+    /* ----- FOOTER (INLINE) ----- */
+    #footer-placeholder {
+      background: var(--bg-secondary);
+      border-top: 2px solid var(--border-color);
+      padding: 6rem 0 3rem;
+      margin-top: auto;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    #footer-placeholder::before {
+      content: '🌱';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      font-size: 20rem;
+      opacity: 0.03;
+      transform: rotate(10deg);
+    }
+    
+    .footer-main {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 4rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: 5rem;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .footer-about h3 {
+      font-size: 2.4rem;
+      margin-bottom: 2rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .footer-about h3 i {
+      color: var(--primary-color);
+    }
+    
+    .footer-about p {
+      font-size: 1.5rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      line-height: 1.8;
+    }
+    
+    .footer-newsletter {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .footer-newsletter input {
+      flex: 1;
+      padding: 1.2rem;
+      border: 2px solid var(--border-color);
+      border-radius: var(--border-radius-sm);
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-size: 1.4rem;
+    }
+    
+    .footer-newsletter button {
+      padding: 1.2rem 2rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border: none;
+      border-radius: var(--border-radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 1.6rem;
+    }
+    
+    .footer-newsletter button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(var(--primary-rgb), 0.3);
+    }
+    
+    .footer-links h4 {
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+      color: var(--text-primary);
+      position: relative;
+    }
+    
+    .footer-links h4::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--primary-color);
+      border-radius: 2px;
+    }
+    
+    .footer-links ul {
+      list-style: none;
+    }
+    
+    .footer-links ul li {
+      margin-bottom: 1.2rem;
+    }
+    
+    .footer-links ul li a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 1.5rem;
+      transition: var(--transition);
+      display: inline-block;
+    }
+    
+    .footer-links ul li a:hover {
+      color: var(--primary-color);
+      transform: translateX(5px);
+    }
+    
+    .footer-contact h4 {
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+      color: var(--text-primary);
+    }
+    
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .contact-item i {
+      width: 4rem;
+      height: 4rem;
+      background: rgba(var(--primary-rgb), 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      color: var(--primary-color);
+      transition: var(--transition);
+    }
+    
+    .contact-item:hover i {
+      background: var(--primary-color);
+      color: white;
+      transform: rotate(360deg);
+    }
+    
+    .contact-item span {
+      font-size: 1.5rem;
+      color: var(--text-secondary);
+    }
+    
+    .footer-social {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .footer-social a {
+      width: 4rem;
+      height: 4rem;
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      font-size: 1.8rem;
+      transition: var(--transition);
+    }
+    
+    .footer-social a:hover {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border-color: transparent;
+      transform: translateY(-5px);
+    }
+    
+    .footer-bottom {
+      max-width: var(--max-width);
+      margin: 4rem auto 0;
+      padding: 2rem 4rem 0;
+      border-top: 2px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+      font-size: 1.4rem;
+      color: var(--text-secondary);
+    }
+    
+    .footer-bottom-links {
+      display: flex;
+      gap: 2rem;
+    }
+    
+    .footer-bottom-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .footer-bottom-links a:hover {
+      color: var(--primary-color);
+    }
+    
+    /* ----- ABOUT HERO SECTION ----- */
+    .about-hero {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      padding: 6rem 0;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    }
+    
+    .about-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 10% 20%, rgba(46, 204, 113, 0.08) 0%, transparent 30%),
+        radial-gradient(circle at 90% 50%, rgba(52, 152, 219, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 30% 80%, rgba(230, 126, 34, 0.08) 0%, transparent 30%);
+      z-index: 0;
+      animation: gradientShift 15s infinite alternate;
+    }
+    
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .hero-text .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(var(--primary-rgb), 0.1);
+      padding: 1rem 2rem;
+      border-radius: var(--border-radius-lg);
+      margin-bottom: 2rem;
+      border: 1px solid rgba(var(--primary-rgb), 0.2);
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+    
+    .hero-text h1 {
+      font-size: 5.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 2rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: slideInDown 1s ease;
+    }
+    
+    .hero-text p {
+      font-size: 2rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      animation: slideInUp 1s ease 0.2s both;
+    }
+    
+    .hero-image {
+      position: relative;
+      border-radius: var(--border-radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      animation: slideInRight 1s ease;
+    }
+    
+    .hero-image::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, rgba(46, 204, 113, 0.2), rgba(52, 152, 219, 0.2));
+      z-index: 1;
+      opacity: 0;
+      transition: var(--transition);
+    }
+    
+    .hero-image:hover::before {
+      opacity: 1;
+    }
+    
+    .hero-image:hover img {
+      transform: scale(1.1);
+    }
+    
+    .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition);
+      display: block;
+    }
+    
+    .hero-image::after {
+      content: '❤️';
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      font-size: 4rem;
+      background: rgba(255, 255, 255, 0.9);
+      width: 7rem;
+      height: 7rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      animation: bounce 2s infinite;
+      z-index: 2;
+    }
+    
+    /* ----- SECTION STYLES ----- */
+    .section {
+      padding: 8rem 0;
+      position: relative;
+    }
+    
+    .section:nth-child(even) {
+      background: var(--bg-secondary);
+    }
+    
+    .section-title {
+      font-size: 4rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 2rem;
+      color: var(--text-primary);
+      position: relative;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      border-radius: 2px;
+    }
+    
+    .section-desc {
+      font-size: 2rem;
+      text-align: center;
+      color: var(--text-secondary);
+      max-width: 700px;
+      margin: 0 auto 5rem;
+    }
+    
+    /* ----- MISSION CARDS ----- */
+    .mission-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+    
+    .mission-card {
+      background: var(--bg-card);
+      padding: 4rem 3rem;
+      border-radius: var(--border-radius-md);
+      text-align: center;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-color);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .mission-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      transform: scaleX(0);
+      transition: var(--transition);
+      transform-origin: left;
+    }
+    
+    .mission-card:hover::before {
+      transform: scaleX(1);
+    }
+    
+    .mission-card:hover {
+      transform: translateY(-15px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .mission-icon {
+      width: 100px;
+      height: 100px;
+      background: rgba(var(--primary-rgb), 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 2.5rem;
+      font-size: 4rem;
+      color: var(--primary-color);
+      transition: var(--transition);
+    }
+    
+    .mission-card:hover .mission-icon {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      transform: rotate(360deg);
+    }
+    
+    .mission-card h3 {
+      font-size: 2.2rem;
+      margin-bottom: 1.5rem;
+      color: var(--text-primary);
+    }
+    
+    .mission-card p {
+      font-size: 1.6rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+    
+    /* ----- STORY SECTION ----- */
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+    
+    .story-grid img {
+      width: 100%;
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-lg);
+      transition: var(--transition);
+    }
+    
+    .story-grid img:hover {
+      transform: scale(1.02) translateY(-10px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .story-grid h2 {
+      font-size: 3.5rem;
+      margin-bottom: 2rem;
+      color: var(--text-primary);
+      position: relative;
+    }
+    
+    .story-grid h2::before {
+      content: '🌿';
+      position: absolute;
+      left: -40px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 3rem;
+      opacity: 0.5;
+    }
+    
+    .story-grid p {
+      font-size: 1.8rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+    
+    /* ----- IMPACT SECTION ----- */
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+    
+    .impact-box {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      padding: 4rem 3rem;
+      border-radius: var(--border-radius-md);
+      text-align: center;
+      color: white;
+      box-shadow: var(--shadow-lg);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .impact-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.1);
+      transform: rotate(45deg);
+      transition: var(--transition);
+      opacity: 0;
+    }
+    
+    .impact-box:hover::before {
+      opacity: 1;
+      transform: rotate(45deg) translate(10%, 10%);
+    }
+    
+    .impact-box:hover {
+      transform: translateY(-10px) scale(1.05);
+      box-shadow: 0 30px 60px rgba(var(--primary-rgb), 0.4);
+    }
+    
+    .impact-box h3 {
+      font-size: 4.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+    
+    .impact-box p {
+      font-size: 2rem;
+      font-weight: 500;
+      opacity: 0.9;
+    }
+    
+    /* ----- GALLERY SECTION ----- */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+      margin-top: 3rem;
+    }
+    
+    .gallery-grid img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: var(--border-radius-md);
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    
+    .gallery-grid img:hover {
+      transform: scale(1.05) translateY(-10px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    /* ----- CTA SECTION ----- */
+    .cta {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      padding: 8rem 2rem;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 20px, transparent 20px, transparent 40px);
+    }
+    
+    .cta h2 {
+      font-size: 4rem;
+      font-weight: 800;
+      margin-bottom: 2rem;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .cta p {
+      font-size: 2rem;
+      margin-bottom: 3rem;
+      opacity: 0.9;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .cta a {
+      display: inline-block;
+      padding: 1.8rem 5rem;
+      background: white;
+      color: var(--primary-color);
+      text-decoration: none;
+      border-radius: var(--border-radius-lg);
+      font-weight: 600;
+      font-size: 2rem;
+      transition: var(--transition);
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    
+    .cta a:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    
+    /* ----- BACK TO TOP ----- */
+    .back-to-top {
+      position: fixed;
+      bottom: 3rem;
+      right: 3rem;
+      width: 5rem;
+      height: 5rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      transition: var(--transition);
+      opacity: 0;
+      visibility: hidden;
+      z-index: 99;
+      box-shadow: 0 4px 15px rgba(var(--primary-rgb), 0.3);
+    }
+    
+    .back-to-top.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .back-to-top:hover {
+      transform: translateY(-5px) scale(1.1);
+      box-shadow: 0 8px 25px rgba(var(--primary-rgb), 0.4);
+    }
+    
+    /* ----- ANIMATIONS ----- */
+    @keyframes slideInDown {
+      from { opacity: 0; transform: translateY(-50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes slideInUp {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes gradientShift {
+      0% { opacity: 0.3; transform: scale(1); }
+      100% { opacity: 0.7; transform: scale(1.2); }
+    }
+    
+    /* ----- RESPONSIVE ----- */
+    @media (max-width: 1200px) {
+      .footer-main {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 4rem;
+      }
+    }
+    
+    @media (max-width: 992px) {
+      html { font-size: 58%; }
+      
+      .hero-grid,
+      .story-grid {
+        grid-template-columns: 1fr;
+        gap: 4rem;
+        text-align: center;
+      }
+      
+      .hero-text p {
+        margin: 0 auto;
+      }
+      
+      .story-grid h2::before {
+        display: none;
+      }
+      
+      .mission-grid,
+      .impact-grid,
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+      }
+      
+      .footer-main {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      
+      .footer-links h4::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      
+      .footer-social {
+        justify-content: center;
+      }
+      
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 1.5rem 2rem;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+      }
+      
+      .nav-links {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        gap: 2rem;
+      }
+      
+      .hero-text h1 {
+        font-size: 4rem;
+      }
+      
+      .mission-grid,
+      .impact-grid,
+      .gallery-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+      
+      .section-title {
+        font-size: 3rem;
+      }
+      
+      .cta h2 {
+        font-size: 3rem;
+      }
+      
+      .back-to-top {
+        width: 4rem;
+        height: 4rem;
+        font-size: 1.6rem;
+        bottom: 2rem;
+        right: 2rem;
+      }
+    }
+  </style>
 </head>
 
 <body>
-
-<!-- Navbar Loader -->
-<div id="navbar-container"></div>
-
-<!-- HERO -->
-<section class="about-hero">
-  <div class="container hero-grid">
-    <div class="hero-text" data-aos="fade-right">
-      <span class="badge">🐾 About EcoLife</span>
-      <h1>Caring for Animals & Nature</h1>
-      <p>EcoLife is dedicated to protecting pets, wildlife, plants, and the planet.</p>
-    </div>
-
-    <div class="hero-image" data-aos="zoom-in">
-      <img src="https://icdn.isrgrajan.com/in/2021/01/Guinea-Pigs-playing-pet-animals.jpg" alt="Animals">
-    </div>
+  <!-- Navbar -->
+  <div id="navbar-container">
+    <nav class="navbar">
+      <div class="logo">
+        <i class="fa-solid fa-leaf"></i>
+        EcoLife
+      </div>
+      <div class="nav-links">
+        <a href="#" class="active">Home</a>
+        <a href="#">About</a>
+        <a href="#">Report</a>
+        <a href="#">Contact</a>
+      </div>
+      <button class="theme-toggle" id="themeToggle">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </nav>
   </div>
-</section>
 
-<!-- MISSION -->
-<section class="section">
-  <div class="container">
-    <h2 class="section-title" data-aos="fade-up">Our Mission</h2>
-    <p class="section-desc" data-aos="fade-up">
-      Creating a safer world for animals and a greener planet.
-    </p>
-
-    <div class="mission-grid">
-      <div class="mission-card" data-aos="fade-up">
-        <div class="mission-icon"><i class="fas fa-paw"></i></div>
-        <h3>Pet Welfare</h3>
-        <p>Rescuing, feeding, and caring for stray animals.</p>
+  <!-- HERO SECTION -->
+  <section class="about-hero">
+    <div class="container hero-grid">
+      <div class="hero-text" data-aos="fade-right">
+        <span class="badge">
+          <i class="fa-solid fa-paw"></i>
+          About EcoLife
+        </span>
+        <h1>Caring for Animals & Nature</h1>
+        <p>EcoLife is dedicated to protecting pets, wildlife, plants, and the planet through community action and education.</p>
       </div>
 
-      <div class="mission-card" data-aos="fade-up" data-aos-delay="150">
-        <div class="mission-icon"><i class="fas fa-seedling"></i></div>
-        <h3>Plant Protection</h3>
-        <p>Encouraging tree planting and green living.</p>
-      </div>
-
-      <div class="mission-card" data-aos="fade-up" data-aos-delay="300">
-        <div class="mission-icon"><i class="fas fa-hands-helping"></i></div>
-        <h3>Community Care</h3>
-        <p>Connecting people to protect animals together.</p>
+      <div class="hero-image" data-aos="zoom-in">
+        <img src="https://icdn.isrgrajan.com/in/2021/01/Guinea-Pigs-playing-pet-animals.jpg" alt="Animals">
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- STORY -->
-<section class="section">
-  <div class="container story-grid">
-    <img src="https://www.icphd.org/layout/Stock-Photos/_1024xAUTO_fit_center-center_75_none/close-up-owner-with-cat-dog.jpg" alt="EcoLife Story" data-aos="fade-right">
-    <div data-aos="fade-left">
-      <h2>Why EcoLife?</h2>
-      <p>
-        We believe every animal deserves care and every plant deserves protection.
-        Small actions lead to lasting impact.
+  <!-- MISSION SECTION -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title" data-aos="fade-up">Our Mission</h2>
+      <p class="section-desc" data-aos="fade-up">
+        Creating a safer world for animals and a greener planet for future generations.
       </p>
+
+      <div class="mission-grid">
+        <div class="mission-card" data-aos="fade-up">
+          <div class="mission-icon"><i class="fas fa-paw"></i></div>
+          <h3>Pet Welfare</h3>
+          <p>Rescuing, feeding, and caring for stray animals. Providing medical care and finding loving homes.</p>
+        </div>
+
+        <div class="mission-card" data-aos="fade-up" data-aos-delay="150">
+          <div class="mission-icon"><i class="fas fa-seedling"></i></div>
+          <h3>Plant Protection</h3>
+          <p>Encouraging tree planting, green living, and protecting natural habitats from destruction.</p>
+        </div>
+
+        <div class="mission-card" data-aos="fade-up" data-aos-delay="300">
+          <div class="mission-icon"><i class="fas fa-hands-helping"></i></div>
+          <h3>Community Care</h3>
+          <p>Connecting people to protect animals together through education and volunteer programs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY SECTION -->
+  <section class="section">
+    <div class="container story-grid">
+      <img src="https://www.icphd.org/layout/Stock-Photos/_1024xAUTO_fit_center-center_75_none/close-up-owner-with-cat-dog.jpg" alt="EcoLife Story" data-aos="fade-right">
+      <div data-aos="fade-left">
+        <h2>Why EcoLife?</h2>
+        <p>
+          We believe every animal deserves care and every plant deserves protection.
+          Small actions lead to lasting impact. Since 2020, we've grown from a small group of volunteers to a nationwide movement.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMPACT SECTION -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title" data-aos="fade-up">Our Impact</h2>
+      <div class="impact-grid">
+        <div class="impact-box" data-aos="zoom-in">
+          <h3>1200+</h3>
+          <p>Pets Rescued</p>
+        </div>
+        <div class="impact-box" data-aos="zoom-in" data-aos-delay="150">
+          <h3>800+</h3>
+          <p>Trees Planted</p>
+        </div>
+        <div class="impact-box" data-aos="zoom-in" data-aos-delay="300">
+          <h3>300+</h3>
+          <p>Active Volunteers</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY SECTION -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title" data-aos="fade-up">EcoLife Moments</h2>
+      <div class="gallery-grid">
+        <img src="https://media.istockphoto.com/id/1212900176/vector/young-woman-taking-care-plants.jpg?s=612x612&w=0&k=20&c=yhhkPSSMT3aY0zEfcQdbBJoXeXsNkrh2ZjEpQMGT-qs=" alt="Plant Care" data-aos="zoom-in">
+        <img src="https://media.istockphoto.com/id/1140204204/vector/pet-shelter-vector-flat-illustration-adoption-of-homeless-animals-concept-mom-and-daughter.jpg?s=612x612&w=0&k=20&c=X6niCIiZCWEdAgkPRd07l9W2RY9tPrYjuQA8JEs-wk8=" alt="Pet Shelter" data-aos="zoom-in" data-aos-delay="150">
+        <img src="https://media.istockphoto.com/id/1190122713/vector/vector-illustration-of-two-kids-looking-through-magnifying-glass-at-ladybugs-on-plants.jpg?s=612x612&w=0&k=20&c=pqz7v1W9LFZMS7Xl3KqnebQRMF3gnuwRmsUgui5yU7o=" alt="Kids & Nature" data-aos="zoom-in" data-aos-delay="300">
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="cta" data-aos="fade-up">
+    <h2>Be a Voice for the Voiceless</h2>
+    <p>Join us in protecting animals and nature. Every action counts.</p>
+    <a href="../index.html#report">Get Involved <i class="fa-solid fa-arrow-right"></i></a>
+  </section>
+
+  <!-- FOOTER -->
+  <div id="footer-placeholder">
+    <div class="footer-main">
+      <div class="footer-about">
+        <h3><i class="fa-solid fa-leaf"></i> EcoLife</h3>
+        <p>Dedicated to protecting our environment through community action, education, and advocacy. Together we can make a difference.</p>
+        <div class="footer-newsletter">
+          <input type="email" placeholder="Subscribe to updates">
+          <button><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+      </div>
+      
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Our Mission</a></li>
+          <li><a href="#">Success Stories</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-links">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Report Waste</a></li>
+          <li><a href="#">Volunteer</a></li>
+          <li><a href="#">Donate</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-contact">
+        <h4>Contact Us</h4>
+        <div class="contact-item">
+          <i class="fa-solid fa-phone"></i>
+          <span>+91 123 456 7890</span>
+        </div>
+        <div class="contact-item">
+          <i class="fa-solid fa-envelope"></i>
+          <span>info@ecolife.org</span>
+        </div>
+        <div class="contact-item">
+          <i class="fa-solid fa-location-dot"></i>
+          <span>Mumbai, India</span>
+        </div>
+        
+        <div class="footer-social">
+          <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#"><i class="fa-brands fa-twitter"></i></a>
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="#"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <div>© 2025 EcoLife. All rights reserved. | Protecting nature together 🌍</div>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+      </div>
     </div>
   </div>
-</section>
 
-<!-- IMPACT -->
-<section class="section">
-  <div class="container">
-    <h2 class="section-title" data-aos="fade-up">Our Impact</h2>
-    <div class="impact-grid">
-      <div class="impact-box" data-aos="zoom-in">
-        <h3>1200+</h3>
-        <p>Pets Helped</p>
-      </div>
-      <div class="impact-box" data-aos="zoom-in" data-aos-delay="150">
-        <h3>800+</h3>
-        <p>Trees Planted</p>
-      </div>
-      <div class="impact-box" data-aos="zoom-in" data-aos-delay="300">
-        <h3>300+</h3>
-        <p>Volunteers</p>
-      </div>
-    </div>
-  </div>
-</section>
+  <!-- Back to Top Button -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to Top">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
 
-<!-- GALLERY -->
-<section class="section">
-  <div class="container">
-    <h2 class="section-title" data-aos="fade-up">EcoLife Moments</h2>
-    <div class="gallery-grid">
-      <img src="https://media.istockphoto.com/id/1212900176/vector/young-woman-taking-care-plants.jpg?s=612x612&w=0&k=20&c=yhhkPSSMT3aY0zEfcQdbBJoXeXsNkrh2ZjEpQMGT-qs=" alt="Plant Care" data-aos="zoom-in">
-      <img src="https://media.istockphoto.com/id/1140204204/vector/pet-shelter-vector-flat-illustration-adoption-of-homeless-animals-concept-mom-and-daughter.jpg?s=612x612&w=0&k=20&c=X6niCIiZCWEdAgkPRd07l9W2RY9tPrYjuQA8JEs-wk8=" alt="Pet Shelter" data-aos="zoom-in" data-aos-delay="150">
-      <img src="https://media.istockphoto.com/id/1190122713/vector/vector-illustration-of-two-kids-looking-through-magnifying-glass-at-ladybugs-on-plants.jpg?s=612x612&w=0&k=20&c=pqz7v1W9LFZMS7Xl3KqnebQRMF3gnuwRmsUgui5yU7o=" alt="Kids & Nature" data-aos="zoom-in" data-aos-delay="300">
-    </div>
-  </div>
-</section>
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  
+  <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 900,
+      once: true,
+      offset: 100,
+      easing: 'ease-in-out'
+    });
 
-<!-- CTA -->
-<section class="cta" data-aos="fade-up">
-  <h2>Be a Voice for the Voiceless</h2>
-  <p>Join us in protecting animals and nature.</p>
-  <a href="../index.html#report">Get Involved</a>
-</section>
+    // Theme Toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    
+    if (localStorage.getItem('theme') === 'dark') {
+      html.setAttribute('data-theme', 'dark');
+      themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+    }
+    
+    themeToggle.addEventListener('click', () => {
+      let theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      themeToggle.innerHTML = theme === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+    });
 
-<!-- Footer Loader -->
-<div id="footer-placeholder"></div>
+    // Back to Top
+    const backToTop = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTop.classList.add('show');
+      } else {
+        backToTop.classList.remove('show');
+      }
+    });
+    
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 
-<!-- Scripts -->
-<script src="../js/components/component-loader.js"></script>
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
-<script>
-  AOS.init({
-    duration: 900,
-    once: true
-  });
-</script>
-
+    // Newsletter subscription
+    document.querySelector('.footer-newsletter button').addEventListener('click', function() {
+      const input = document.querySelector('.footer-newsletter input');
+      if (input.value) {
+        alert('Thank you for subscribing to our newsletter!');
+        input.value = '';
+      } else {
+        alert('Please enter your email address.');
+      }
+    });
+  </script>
 </body>
 </html>
