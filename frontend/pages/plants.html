@@ -1,216 +1,467 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Plants | EcoVerse</title>
 
 <style>
+
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:'Segoe UI', sans-serif;
+font-family:'Segoe UI',sans-serif;
 }
 
 body{
-min-height:100vh;
-background:linear-gradient(-45deg,#ffecd2,#fcb69f,#a1ffce,#faffd1);
-background-size:400% 400%;
-animation:bg 15s ease infinite;
-color:#2d3436;
-display:flex;
-flex-direction:column;
-align-items:center;
-overflow-x:hidden;
-}
-
-@keyframes bg{
-0%{background-position:0% 50%;}
-50%{background-position:100% 50%;}
-100%{background-position:0% 50%;}
-}
-
-header{
-text-align:center;
-padding:60px 20px;
-}
-
-header h1{
-font-size:55px;
-animation:fadeIn 2s ease;
-}
-
-header p{
-margin-top:15px;
-opacity:0.8;
-}
-
-@keyframes fadeIn{
-from{opacity:0; transform:translateY(-40px);}
-to{opacity:1;}
-}
-
-/* Growing Plant Animation */
-.plant{
-font-size:60px;
-animation:grow 4s ease-in-out infinite alternate;
-margin:20px 0;
-}
-
-@keyframes grow{
-0%{transform:scale(0.8) translateY(10px);}
-100%{transform:scale(1.2) translateY(-10px);}
-}
-
-/* Floating pollen */
-.pollen{
-position:absolute;
-width:8px;
-height:8px;
-background:rgba(255,255,255,0.6);
-border-radius:50%;
-animation:float 10s linear infinite;
-}
-
-.pollen:nth-child(1){ left:10%; animation-delay:0s;}
-.pollen:nth-child(2){ left:30%; animation-delay:2s;}
-.pollen:nth-child(3){ left:50%; animation-delay:4s;}
-.pollen:nth-child(4){ left:70%; animation-delay:6s;}
-.pollen:nth-child(5){ left:85%; animation-delay:8s;}
-
-@keyframes float{
-0%{top:100vh; opacity:0;}
-50%{opacity:1;}
-100%{top:-10vh; opacity:0;}
-}
-
-/* Oxygen Glow */
-.oxygen{
-margin:20px;
-padding:10px 25px;
-border-radius:30px;
-background:#00ff88;
-color:white;
-font-weight:bold;
-animation:glow 2s infinite alternate;
-}
-
-@keyframes glow{
-from{box-shadow:0 0 10px #00ff88;}
-to{box-shadow:0 0 30px #00ff88;}
-}
-
-/* Cards */
-.container{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:30px;
-padding:40px;
-width:90%;
-max-width:1200px;
-}
-
-.card{
-background:rgba(255,255,255,0.6);
-padding:30px;
-border-radius:20px;
-backdrop-filter:blur(10px);
-transition:0.6s;
-transform-style:preserve-3d;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
-}
-
-.card:hover{
-transform:rotateY(10deg) scale(1.05);
-box-shadow:0 20px 40px rgba(0,0,0,0.3);
-}
-
-.card h2{
-margin-bottom:10px;
-}
-
-.card p{
+background:#f1f8f4;
+color:#1b5e20;
 line-height:1.6;
 }
 
-/* Button */
-.btn{
-margin:40px;
-padding:12px 30px;
-border-radius:30px;
-background:linear-gradient(45deg,#2d3436,#00b894);
+/* HEADER */
+
+header{
+background:#2e7d32;
 color:white;
+text-align:center;
+padding:70px 20px;
+}
+
+header h1{
+font-size:48px;
+margin-bottom:10px;
+}
+
+header p{
+font-size:18px;
+opacity:0.9;
+}
+
+.oxygen{
+display:inline-block;
+margin-top:20px;
+padding:10px 25px;
+border-radius:30px;
+background:#4caf50;
 font-weight:bold;
-text-decoration:none;
+}
+
+/* SECTION */
+
+.section{
+padding:70px 20px;
+text-align:center;
+}
+
+.section h2{
+font-size:32px;
+margin-bottom:15px;
+}
+
+.section p{
+max-width:700px;
+margin:auto;
+color:#444;
+}
+
+/* CARDS */
+
+.cards{
+max-width:1100px;
+margin:40px auto;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:30px;
+}
+
+.card{
+background:white;
+padding:35px;
+border-radius:14px;
+box-shadow:0 10px 25px rgba(0,0,0,0.1);
+text-align:center;
+transition:0.4s;
+position:relative;
+overflow:hidden;
+}
+
+/* Hover animation */
+
+.card::before{
+content:"";
+position:absolute;
+top:0;
+left:-100%;
+height:4px;
+width:100%;
+background:#4caf50;
 transition:0.4s;
 }
 
-.btn:hover{
-transform:scale(1.1);
-box-shadow:0 0 20px #00b894;
+.card:hover::before{
+left:0;
 }
 
+.card:hover{
+transform:translateY(-8px);
+box-shadow:0 20px 40px rgba(0,0,0,0.15);
+}
+
+.card .icon{
+font-size:40px;
+margin-bottom:15px;
+}
+
+.card h3{
+margin-bottom:10px;
+font-size:20px;
+}
+
+.card p{
+font-size:15px;
+color:#555;
+}
+
+/* BUTTON */
+
+.btn-container{
+text-align:center;
+margin:60px 0 40px;
+}
+
+.btn{
+padding:12px 28px;
+background:#2e7d32;
+color:white;
+border-radius:30px;
+text-decoration:none;
+font-weight:bold;
+transition:0.3s;
+}
+
+.btn:hover{
+background:#1b5e20;
+transform:scale(1.08);
+}
+
+/* FOOTER */
+
 footer{
-padding:20px;
-opacity:0.7;
+background:#c8e6c9;
+text-align:center;
+padding:18px;
+font-size:14px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+.cards{
+grid-template-columns:1fr 1fr;
+}
+
 }
 
 @media(max-width:600px){
+
 header h1{
-font-size:40px;
+font-size:36px;
 }
+
+.cards{
+grid-template-columns:1fr;
 }
+
+}
+
 </style>
+
 </head>
 
 <body>
 
-<!-- Floating pollen particles -->
-<div class="pollen"></div>
-<div class="pollen"></div>
-<div class="pollen"></div>
-<div class="pollen"></div>
-<div class="pollen"></div>
-
 <header>
-<h1>🌸 Plants</h1>
-<p>Nature’s oxygen factories</p>
-</header>
 
-<div class="plant">🌱</div>
+<h1>🌿 <br> Plants</h1>
+
+<p>Nature’s Oxygen Factories</p>
 
 <div class="oxygen">🌬 Producing Oxygen</div>
 
-<section class="container">
+</header>
+
+
+<!-- Why Plants Are Important -->
+
+<section class="section">
+
+<h2>Why Plants Are Important</h2>
+
+<p>
+Plants sustain life on Earth by producing oxygen, absorbing carbon dioxide, supporting biodiversity, and providing food and medicine.
+</p>
+
+<div class="cards">
 
 <div class="card">
-<h2>🌞 Photosynthesis</h2>
-<p>Plants convert sunlight into energy while producing oxygen.</p>
+<div class="icon">🌬</div>
+<h3>Oxygen Production</h3>
+<p>Plants release oxygen through photosynthesis which is essential for life.</p>
 </div>
 
 <div class="card">
-<h2>🌿 Medicinal Plants</h2>
-<p>Many plants are used in traditional and modern medicine.</p>
+<div class="icon">🌍</div>
+<h3>Environmental Balance</h3>
+<p>Plants help maintain ecological balance and regulate climate.</p>
 </div>
 
 <div class="card">
-<h2>🌳 Trees</h2>
-<p>Trees absorb carbon dioxide and regulate climate.</p>
+<div class="icon">🐦</div>
+<h3>Wildlife Habitat</h3>
+<p>Forests and plants provide homes and food for many animals.</p>
 </div>
 
-<div class="card">
-<h2>🌺 Flowering Plants</h2>
-<p>Flowering plants support pollination and biodiversity.</p>
 </div>
 
 </section>
 
+
+<!-- Types of Plants -->
+
+<section class="section">
+
+<h2>Types of Plants</h2>
+
+<div class="cards">
+
+<div class="card">
+<div class="icon">🌳</div>
+<h3>Trees</h3>
+<p>Large plants with strong trunks like mango and banyan trees.</p>
+</div>
+
+<div class="card">
+<div class="icon">🌿</div>
+<h3>Shrubs</h3>
+<p>Medium sized woody plants like rose and hibiscus.</p>
+</div>
+
+<div class="card">
+<div class="icon">🌱</div>
+<h3>Herbs</h3>
+<p>Small plants with soft stems like mint and coriander.</p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- Plant Life Cycle -->
+
+<section class="section">
+
+<h2>Plant Life Cycle</h2>
+
+<div class="cards">
+
+<div class="card">
+<div class="icon">🌰</div>
+<h3>Seed</h3>
+<p>Plant life begins from a seed containing nutrients.</p>
+</div>
+
+<div class="card">
+<div class="icon">🌱</div>
+<h3>Germination</h3>
+<p>The seed sprouts and begins to grow into a plant.</p>
+</div>
+
+<div class="card">
+<div class="icon">🌿</div>
+<h3>Mature Plant</h3>
+<p>The plant grows leaves and stems and becomes mature.</p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- Environmental Benefits -->
+
+<section class="section">
+
+<h2>Environmental Benefits</h2>
+
+<div class="cards">
+
+<div class="card">
+<div class="icon">🌎</div>
+<h3>Air Purification</h3>
+<p>Plants absorb pollutants and improve air quality.</p>
+</div>
+
+<div class="card">
+<div class="icon">💧</div>
+<h3>Water Cycle</h3>
+<p>Plants help regulate rainfall and water cycles.</p>
+</div>
+
+<div class="card">
+<div class="icon">🌱</div>
+<h3>Soil Protection</h3>
+<p>Roots prevent soil erosion and maintain soil fertility.</p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- Medicinal Plants -->
+
+<section class="section">
+
+<h2>Medicinal Plants</h2>
+
+<div class="cards">
+
+<div class="card">
+<div class="icon">🌿</div>
+<h3>Neem</h3>
+<p>Neem has antibacterial and medicinal properties.</p>
+</div>
+
+<div class="card">
+<div class="icon">🌱</div>
+<h3>Tulsi</h3>
+<p>Tulsi improves immunity and is widely used in Ayurveda.</p>
+</div>
+
+<div class="card">
+<div class="icon">🌵</div>
+<h3>Aloe Vera</h3>
+<p>Aloe Vera helps in skincare and healing wounds.</p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- Plants as Food -->
+
+<section class="section">
+
+<h2>Plants as Food Sources</h2>
+
+<div class="cards">
+
+<div class="card">
+<div class="icon">🍎</div>
+<h3>Fruits</h3>
+<p>Plants produce fruits like apples, bananas, and mangoes.</p>
+</div>
+
+<div class="card">
+<div class="icon">🥦</div>
+<h3>Vegetables</h3>
+<p>Vegetables like carrots and spinach are essential for health.</p>
+</div>
+
+<div class="card">
+<div class="icon">🌾</div>
+<h3>Grains</h3>
+<p>Grains such as rice and wheat are staple foods worldwide.</p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- Fun Facts -->
+
+<section class="section">
+
+<h2>Fun Facts About Plants</h2>
+
+<div class="cards">
+
+<div class="card">
+<div class="icon">🎋</div>
+<h3>Fast Growing Bamboo</h3>
+<p>Bamboo can grow up to 90 cm in a single day.</p>
+</div>
+
+<div class="card">
+<div class="icon">🌳</div>
+<h3>Old Trees</h3>
+<p>Some trees can live for thousands of years.</p>
+</div>
+
+<div class="card">
+<div class="icon">🌍</div>
+<h3>Rainforests</h3>
+<p>Rainforests produce a large portion of Earth’s oxygen.</p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- Protect Plants -->
+
+<section class="section">
+
+<h2>How to Protect Plants</h2>
+
+<div class="cards">
+
+<div class="card">
+<div class="icon">🌱</div>
+<h3>Plant Trees</h3>
+<p>Planting trees helps restore ecosystems and fight climate change.</p>
+</div>
+
+<div class="card">
+<div class="icon">🌳</div>
+<h3>Protect Forests</h3>
+<p>Reducing deforestation helps preserve biodiversity.</p>
+</div>
+
+<div class="card">
+<div class="icon">🌍</div>
+<h3>Spread Awareness</h3>
+<p>Educating people about plants helps protect nature.</p>
+</div>
+
+</div>
+
+</section>
+
+
+<div class="btn-container">
+
 <a href="index.html" class="btn">⬅ Back to Home</a>
 
+</div>
+
+
 <footer>
-© 2026 EcoVerse | Plants Animated Page
+
+© 2026 EcoVerse | Plants Information Page
+
 </footer>
+
 
 </body>
 </html>
